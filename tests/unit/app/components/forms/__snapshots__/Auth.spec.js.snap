@@ -14,6 +14,7 @@ exports[`Auth render should change submit button text if loading and make it dis
   </form-field-stub>
   <form-controls-stub>
     <google-auth-button-stub></google-auth-button-stub>
+    <git-auth-button-stub></git-auth-button-stub>
   </form-controls-stub>
   <form-controls-stub>
     <v-checkbox-stub value="true" name="checkbox">
@@ -40,6 +41,7 @@ exports[`Auth render should correctly render Auth component 1`] = `
   </form-field-stub>
   <form-controls-stub>
     <google-auth-button-stub></google-auth-button-stub>
+    <git-auth-button-stub></git-auth-button-stub>
   </form-controls-stub>
   <form-controls-stub>
     <v-checkbox-stub value="true" name="checkbox">

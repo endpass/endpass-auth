@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import GoogleAuthButton from '@/components/FormField.vue';
+import GoogleAuthButton from '@/components/GoogleAuthButton.vue';
 
 describe('GoogleAuthButton', () => {
   describe('render', () => {
