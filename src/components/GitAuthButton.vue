@@ -11,11 +11,6 @@ import VSvgIcon from '@/components/VSvgIcon';
 import { mapActions } from 'vuex';
 
 export default {
-  data() {
-    return {
-      appId: ENV.gitClientId,
-    };
-  },
   methods: {
     ...mapActions(['authWithGitHub', 'awaitAuthConfirm']),
     async loginWithGithub() {
