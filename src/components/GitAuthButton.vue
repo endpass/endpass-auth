@@ -1,22 +1,38 @@
 <template>
-  <v-button
-    :href="
-      `https://github.com/login/oauth/authorize?scope=user:email&client_id=${appId}`
-    "
-  >
+  <v-button @click="loginWithGithub">
     <v-svg-icon name="github" width="30px" height="30px" />
   </v-button>
 </template>
 
 <script>
+import { loginWithGithub } from 'github-oauth-popup';
 import VButton from '@/components/VButton';
 import VSvgIcon from '@/components/VSvgIcon';
+import { mapActions } from 'vuex';
 
 export default {
   data() {
     return {
       appId: ENV.gitClientId,
     };
+  },
+  methods: {
+    ...mapActions(['authWithGitHub', 'awaitAuthConfirm']),
+    async loginWithGithub() {
+      try {
+        const response = await loginWithGithub({
+          client_id: ENV.gitClientId,
+          scope: 'user:email',
+        });
+        await this.authWithGitHub(response.code);
+        await this.awaitAuthConfirm();
+      } catch (e) {
+        this.handleAuthError(e);
+      }
+    },
+    handleAuthError(err) {
+      this.$emit('error', err);
+    },
   },
   components: {
     VButton,

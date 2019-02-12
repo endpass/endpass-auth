@@ -7,7 +7,7 @@ const identity = {
 
 const googleClientId = '885568627115-sin32pl0317peotp05r69gbmsb00atcj.apps.googleusercontent.com';
 
-const gitClientId = '48dbe101ad04cbb0326e';
+const gitClientId = '346108128ad51a5eccd1';
 
 module.exports = {
   infura,
