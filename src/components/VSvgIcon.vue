@@ -1,5 +1,6 @@
 <template>
   <svg
+    v-if="iconPath"
     :class="className"
     :width="width"
     :height="height"
@@ -40,8 +41,11 @@ export default {
   },
   computed: {
     iconPath() {
-      const block = require(`@/assets/icons/${this.name}.svg`);
-      const url = get(block, 'default.url');
+      const iconPath = `@/assets/icons/${this.name}.svg`;
+      /* eslint-disable-next-line */
+      const block = require(iconPath);
+      const url = get(block, 'default.url', null);
+
       return url;
     },
     className() {
