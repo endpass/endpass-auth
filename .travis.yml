@@ -15,14 +15,9 @@ jobs:
   include:
     - stage: test
       script: npm test
-    - stage: deploy_npm
-      script:
-        - if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
-          npm run build && npm run semantic-release
-          fi
     - stage: deploy_s3
       script:
-        - npm run build:app:dev
+        - npm run build:dev
       deploy:
         provider: s3
         access_key_id: '$ACCESS_KEY_ID'
