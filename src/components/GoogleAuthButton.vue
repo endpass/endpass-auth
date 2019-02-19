@@ -27,7 +27,7 @@ export default {
     const gapi = window.gapi;
     return {
       auth2Loaded: false,
-      gapi,
+      interval: null,
     };
   },
   methods: {
@@ -55,28 +55,28 @@ export default {
       this.$emit('error', err);
     },
     loadAuth2() {
-      this.gapi.load('auth2', () => {
+      window.gapi.load('auth2', () => {
         this.auth2Loaded = true;
       });
     },
     initGoogle() {
-      if (this.gapi) {
-        console.log('kek1');
+      if (window.gapi) {
         this.loadAuth2();
       } else {
-        const unwatch = this.$watch(
-          () => window.gapi,
-          () => {
-            console.log('kek2');
-            this.initGoogle();
-            this.unwatch();
-          },
-        );
+        this.interval = setInterval(() => {
+          if (window.gapi) {
+            this.loadAuth2();
+            clearInterval(this.interval);
+          }
+        }, 300);
       }
     },
   },
   created() {
     this.initGoogle();
+  },
+  destroyed() {
+    clearInterval(this.interval);
   },
   components: {
     VButton,
@@ -111,6 +111,9 @@ export default {
 }
 .google-button:hover {
   box-shadow: 0 0 3px 3px rgba(66, 133, 244, 0.3);
+}
+.google-button:disabled {
+  opacity: 0.4;
 }
 .google-button__icon {
   margin: 8px;
