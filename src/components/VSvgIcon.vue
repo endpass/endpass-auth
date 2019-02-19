@@ -41,9 +41,7 @@ export default {
   },
   computed: {
     iconPath() {
-      const iconPath = `@/assets/icons/${this.name}.svg`;
-      /* eslint-disable-next-line */
-      const block = require(iconPath);
+      const block = require(`@/assets/icons/${this.name}.svg`);
       const url = get(block, 'default.url', null);
 
       return url;
