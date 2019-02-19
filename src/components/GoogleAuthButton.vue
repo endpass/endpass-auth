@@ -24,7 +24,6 @@ import VSvgIcon from '@/components/VSvgIcon';
 
 export default {
   data() {
-    const gapi = window.gapi;
     return {
       auth2Loaded: false,
       interval: null,
