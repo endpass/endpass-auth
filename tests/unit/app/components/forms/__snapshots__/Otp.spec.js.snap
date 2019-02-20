@@ -9,7 +9,9 @@ exports[`Otp render should correctly render Otp component 1`] = `
   <form-field-stub>
     <v-input-stub placeholder="Enter received code..." name="code" value="" invalid="true" autofocus="true" type="number" data-test="email-input"></v-input-stub>
   </form-field-stub>
-  <form-controls-stub>
+  <form-controls-stub><a href="#" data-test="recovery-link">
+      Don't know code?
+    </a>
     <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
       Submit code
     </v-button-stub>

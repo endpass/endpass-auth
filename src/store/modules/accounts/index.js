@@ -8,6 +8,7 @@ const state = {
   otpEmail: null,
   accounts: null,
   settings: null,
+  recoveryIdentifier: null,
 };
 
 export default {

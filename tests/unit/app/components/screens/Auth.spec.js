@@ -32,6 +32,7 @@ describe('Auth', () => {
       state: {
         linkSent: false,
         accounts: null,
+        otpEmail: null,
       },
       actions: {
         auth: jest.fn(),
@@ -40,6 +41,8 @@ describe('Auth', () => {
         awaitAuthConfirm: jest.fn(),
         awaitAccountCreate: jest.fn(),
         awaitAuthMessage: jest.fn(),
+        getRecoveryIdentifier: jest.fn(),
+        recover: jest.fn(),
       },
     };
     storeData = {
@@ -68,13 +71,26 @@ describe('Auth', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    // TODO: magical thing, doesn't work, fix it as soon as it possible
-    //   it('should render opt form if opt email is not null', () => {
-    //     store.state.accounts.otpEmail = 'foo@bar.baz';
-    //
-    //     expect(wrapper.html()).toBe(1);
-    //     expect(wrapper.find('otp-form-stub').exists()).toBe(true);
-    //   });
+    it('should render opt form', () => {
+      store.state.accounts.otpEmail = 'foo@bar.baz';
+
+      wrapper.setData({
+        recoverAccess: false,
+      });
+
+      expect(wrapper.find('otp-form-stub').exists()).toBe(true);
+    });
+
+    it('should render recovery form', () => {
+      store.state.accounts.otpEmail = 'foo@bar.baz';
+      store.state.accounts.linkSent = false;
+
+      wrapper.setData({
+        recoverAccess: true,
+      });
+
+      expect(wrapper.find('recover-form-stub').exists()).toBe(true);
+    });
 
     it('should render message form if link sent but user is not authorized', () => {
       store.state.accounts.linkSent = true;
@@ -156,6 +172,105 @@ describe('Auth', () => {
         wrapper.vm.handleAuthSubmit('foo@bar.baz');
 
         expect(accountsModule.actions.auth).toBeCalled();
+      });
+    });
+
+    describe('otp form', () => {
+      describe('recover event', () => {
+        beforeEach(() => {
+          store.state.accounts.otpEmail = 'foo@bar.baz';
+
+          wrapper.setData({
+            recoverAccess: false,
+          });
+        });
+
+        it('should handle recover event', async () => {
+          expect.assertions(3);
+
+          wrapper.find('otp-form-stub').vm.$emit('recover');
+
+          await wrapper.vm.$nextTick();
+
+          expect(accountsModule.actions.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
+          expect(accountsModule.actions.getRecoveryIdentifier).toHaveBeenCalledWith(
+            expect.any(Object), undefined, undefined
+          );
+          expect(wrapper.vm.recoverAccess).toBe(true);
+        });
+
+        it('should handle errors', async () => {
+          expect.assertions(3);
+
+          const error = new Error('error message');
+
+          accountsModule.actions.getRecoveryIdentifier.mockRejectedValue(error);
+          global.console.error = jest.fn();
+
+          wrapper.find('otp-form-stub').vm.$emit('recover');
+
+          await wrapper.vm.$nextTick();
+
+          expect(accountsModule.actions.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
+          expect(accountsModule.actions.getRecoveryIdentifier).toHaveBeenCalledWith(
+            expect.any(Object), undefined, undefined
+          );
+          expect(wrapper.vm.error).toBe(error.message);
+        });
+      });
+    });
+
+    describe('recover form', () => {
+      describe('submit event', () => {
+        const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+
+        beforeEach(() => {
+          store.state.accounts.otpEmail = 'foo@bar.baz';
+
+          wrapper.setData({
+            recoverAccess: true,
+          });
+        });
+
+        it('should handle recover event', async () => {
+          expect.assertions(2);
+
+          wrapper.find('recover-form-stub').vm.$emit('submit', seedPhrase);
+
+          await wrapper.vm.$nextTick();
+
+          expect(accountsModule.actions.recover).toHaveBeenCalledTimes(1);
+          expect(accountsModule.actions.recover).toHaveBeenCalledWith(
+            expect.any(Object),
+            {
+              seedPhrase,
+            },
+            undefined,
+          );
+        });
+
+        it('should handle errors', async () => {
+          expect.assertions(3);
+
+          const error = new Error('error message');
+
+          accountsModule.actions.recover.mockRejectedValue(error);
+          global.console.error = jest.fn();
+
+          wrapper.find('recover-form-stub').vm.$emit('submit', seedPhrase);
+
+          await wrapper.vm.$nextTick();
+
+          expect(accountsModule.actions.recover).toHaveBeenCalledTimes(1);
+          expect(accountsModule.actions.recover).toHaveBeenCalledWith(
+            expect.any(Object),
+            {
+              seedPhrase,
+            },
+            undefined,
+          );
+          expect(wrapper.vm.error).toBe(error.message);
+        });
       });
     });
   });

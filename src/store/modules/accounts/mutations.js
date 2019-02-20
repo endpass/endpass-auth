@@ -24,6 +24,10 @@ const setSettings = (state, settings) => {
   state.settings = settings;
 };
 
+const setRecoveryIdentifier = (state, recoveryIdentifier) => {
+  state.recoveryIdentifier = recoveryIdentifier;
+};
+
 export default {
   setAuthParams,
   setAuthStatus,
@@ -31,4 +35,5 @@ export default {
   setAccounts,
   setSentStatus,
   setSettings,
+  setRecoveryIdentifier,
 };

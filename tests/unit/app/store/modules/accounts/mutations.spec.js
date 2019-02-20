@@ -31,4 +31,14 @@ describe('accounts mutations', () => {
       expect(state.linkSent).toBe(true);
     });
   });
+
+  describe('setRecoveryIidentifier', () => {
+    it('should set recovery identifier', () => {
+      const recoveryIdentifier = 'recovery identifier';
+
+      accountsMutations.setRecoveryIdentifier(state, recoveryIdentifier);
+
+      expect(state.recoveryIdentifier).toBe(recoveryIdentifier);
+    });
+  });
 });

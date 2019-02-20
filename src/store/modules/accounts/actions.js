@@ -1,6 +1,11 @@
 import get from 'lodash/get';
+import Bip39 from 'bip39';
+import HDKey from 'ethereumjs-wallet/hdkey';
+import Web3 from 'web3';
+
 import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
+import { NETWORK_URL } from '@/constants';
 
 const auth = async ({ state, dispatch }, email) => {
   const request = IdentityService.auth(
@@ -234,6 +239,51 @@ const logout = async ({ dispatch, commit }) => {
   }
 };
 
+const getRecoveryIdentifier = async ({ state, commit }) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    const identifier = await IdentityService.getRecoveryIdentifier(
+      state.otpEmail,
+    );
+
+    commit('setRecoveryIdentifier', identifier);
+  } catch (err) {
+    throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
+const recover = async ({ state, commit }, { seedPhrase }) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    const seed = Bip39.mnemonicToSeed(seedPhrase);
+    const hdKey = HDKey.fromMasterSeed(seed);
+    const hdWallet = hdKey.derivePath(ENV.hdKeyMnemonic.path);
+    const wallet = hdWallet.deriveChild(0).getWallet();
+    const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
+    const web3 = new Web3(NETWORK_URL.ETH[0]);
+    const { signature } = await web3.eth.accounts.sign(
+      state.recoveryIdentifier,
+      privateKey,
+    );
+    const { success } = await IdentityService.recover(
+      state.otpEmail,
+      signature,
+    );
+
+    commit('setSentStatus', true);
+
+    return success;
+  } catch (err) {
+    throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -254,4 +304,6 @@ export default {
   updateSettings,
   logout,
   closeAccount,
+  getRecoveryIdentifier,
+  recover,
 };
