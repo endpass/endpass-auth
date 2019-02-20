@@ -20,6 +20,14 @@
       />
     </form-field>
     <form-controls>
+      <a
+        href="#"
+        :disabled="loading"
+        @click.prevent="emitRecoverEvent"
+        data-test="recovery-link"
+      >
+        Don't know code?
+      </a>
       <v-button
         :disabled="!isCodeValid || loading"
         :submit="true"
@@ -74,6 +82,11 @@ export default {
         this.$emit('submit', this.code);
       }
     },
+    emitRecoverEvent() {
+      if (!this.loading) {
+        this.$emit('recover');
+      }
+    },
   },
 
   components: {
@@ -85,3 +98,25 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.form-controls a {
+  font-size: 0.85rem;
+  color: #4d4d4d;
+  text-decoration: none;
+  margin-right: 20px;
+
+  &:hover {
+    color: #4b0472;
+  }
+
+  &[disabled] {
+    opacity: 0.5;
+    cursor: default;
+
+    &:hover {
+      color: #4d4d4d;
+    }
+  }
+}
+</style>

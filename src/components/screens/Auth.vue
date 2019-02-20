@@ -6,10 +6,17 @@
         @request="handleAccountRequest"
       />
       <otp-form
-        v-else-if="otpEmail"
+        v-else-if="otpEmail && !recoverAccess"
         :loading="loading"
         :error="error"
         @submit="handleOtpSubmit"
+        @recover="handleOtpRecover"
+      />
+      <recover-form
+        v-else-if="otpEmail && recoverAccess && !sent"
+        :loading="loading"
+        :error="error"
+        @submit="handleRecoverSubmit"
       />
       <message-form
         v-else-if="!authorized && sent"
@@ -41,6 +48,7 @@ import Screen from '../Screen.vue';
 import VFrame from '../VFrame.vue';
 import AuthForm from '../forms/Auth.vue';
 import OtpForm from '../forms/Otp.vue';
+import RecoverForm from '../forms/Recover.vue';
 import MessageForm from '../forms/Message.vue';
 import CreateAccountForm from '../forms/CreateAccount.vue';
 
@@ -50,6 +58,7 @@ export default {
   data: () => ({
     error: null,
     needAccount: false,
+    recoverAccess: false,
   }),
 
   computed: {
@@ -101,6 +110,8 @@ export default {
       'awaitAuthConfirm',
       'awaitAccountCreate',
       'openCreateAccountPage',
+      'getRecoveryIdentifier',
+      'recover',
     ]),
 
     async handleOtpSubmit(code) {
@@ -111,6 +122,25 @@ export default {
         });
       } catch (err) {
         console.error('handle error', err);
+        this.handleAuthError(err);
+      }
+    },
+
+    async handleOtpRecover() {
+      try {
+        await this.getRecoveryIdentifier();
+        this.recoverAccess = true;
+      } catch (err) {
+        console.error(err);
+        this.handleAuthError(err);
+      }
+    },
+
+    async handleRecoverSubmit(seedPhrase) {
+      try {
+        await this.recover({ seedPhrase });
+      } catch (err) {
+        console.error(err);
         this.handleAuthError(err);
       }
     },
@@ -168,6 +198,7 @@ export default {
     VFrame,
     AuthForm,
     OtpForm,
+    RecoverForm,
     MessageForm,
     CreateAccountForm,
   },

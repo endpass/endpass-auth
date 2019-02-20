@@ -146,6 +146,31 @@ export const awaitAccountCreate = () =>
     }, 1500);
   });
 
+export const getRecoveryIdentifier = email =>
+  request
+    .get(
+      `${identityBaseUrl}/api/v1.1/auth/recover?email=${encodeURIComponent(
+        email,
+      )}`,
+    )
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res.message;
+    });
+
+export const recover = (email, signature) =>
+  request
+    .post(`${identityBaseUrl}/api/v1.1/auth/recover`, {
+      email,
+      signature,
+    })
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res;
+    });
+
 export default {
   getSettings,
   getOtpSettings,
@@ -161,4 +186,6 @@ export default {
   logout,
   awaitLogoutConfirm,
   awaitAccountCreate,
+  getRecoveryIdentifier,
+  recover,
 };

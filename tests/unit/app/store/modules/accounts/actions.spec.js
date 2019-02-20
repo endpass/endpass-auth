@@ -1,5 +1,8 @@
+import Web3 from 'web3';
+
 import IdentityService from '@/service/identity';
 import accountsActions from '@/store/modules/accounts/actions';
+import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 
 describe('accounts actions', () => {
   let dispatch;
@@ -391,6 +394,97 @@ describe('accounts actions', () => {
       });
 
       expect(dispatch).toBeCalledWith('getAccounts');
+    });
+  });
+
+  describe('getRecoveryIdentifier', () => {
+    const state = {
+      otpEmail: 'email@email@com',
+    };
+
+    it('should get recovery identifier through the identity service', () => {
+      accountsActions.getRecoveryIdentifier({ state, commit });
+
+      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
+      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledWith(state.otpEmail);
+    });
+
+    it('should set loading status', () => {
+      accountsActions.getRecoveryIdentifier({ state, commit });
+
+      expect(commit).toHaveBeenCalledTimes(1);
+      expect(commit).toHaveBeenCalledWith('changeLoadingStatus', true);
+    });
+
+    it('should set recovery identifier', async () => {
+      expect.assertions(3);
+
+      await accountsActions.getRecoveryIdentifier({ state, commit });
+
+      expect(commit).toHaveBeenCalledTimes(3);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setRecoveryIdentifier', getRecoveryIdentifierResponse.message);
+      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
+    });
+
+    it('should handle errors', async () => {
+      expect.assertions(3);
+
+      const error = new Error();
+
+      IdentityService.getRecoveryIdentifier.mockRejectedValue(error);
+
+      await expect(accountsActions.getRecoveryIdentifier({ state, commit })).rejects.toThrow(error);
+      expect(commit).toHaveBeenCalledTimes(2);
+      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+    });
+  });
+
+  describe('recover', () => {
+    const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+    const state = {
+      otpEmail: 'email@email@com',
+      recoveryIdentifier: getRecoveryIdentifierResponse.message,
+    };
+
+    it('should send recover request', async () => {
+      expect.assertions(2);
+
+      const signature = 'signature';
+
+      Web3.eth.accounts.sign.mockResolvedValue({ signature });
+      await accountsActions.recover({ state, commit }, { seedPhrase });
+
+      expect(IdentityService.recover).toHaveBeenCalledTimes(1);
+      expect(IdentityService.recover).toHaveBeenCalledWith(state.otpEmail, signature);
+    });
+
+    it('should set loading status', () => {
+      accountsActions.recover({ state, commit }, { seedPhrase });
+
+      expect(commit).toHaveBeenCalledTimes(1);
+      expect(commit).toHaveBeenCalledWith('changeLoadingStatus', true);
+    });
+
+    it('should set sent and loading status', async () => {
+      expect.assertions(3);
+
+      await accountsActions.recover({ state, commit }, { seedPhrase });
+
+      expect(commit).toHaveBeenCalledTimes(3);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setSentStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
+    });
+
+    it('should handle errors', async () => {
+      expect.assertions(3);
+
+      const error = new Error();
+
+      IdentityService.recover.mockRejectedValue(error);
+
+      await expect(accountsActions.recover({ state, commit }, { seedPhrase })).rejects.toThrow(error);
+      expect(commit).toHaveBeenCalledTimes(2);
+      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
   });
 });
