@@ -34,6 +34,7 @@
         :inited="inited"
         :loading="loading"
         :error="error"
+        :is-server-mode="isServerMode"
         @submit="handleAuthSubmit"
         @error="handleAuthError"
       />
@@ -59,6 +60,7 @@ export default {
     error: null,
     needAccount: false,
     recoverAccess: false,
+    isServerMode: false,
   }),
 
   computed: {
@@ -188,6 +190,8 @@ export default {
   },
 
   async created() {
+    this.isServerMode = this.$route.query.server;
+
     if (this.isDialog) {
       window.addEventListener('beforeunload', this.handleWindowClose);
     }
