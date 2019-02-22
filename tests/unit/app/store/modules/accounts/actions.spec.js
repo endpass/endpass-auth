@@ -20,18 +20,21 @@ describe('accounts actions', () => {
     const requestFunction = jest.fn();
 
     it('should auth user and change link status', async () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       requestFunction.mockResolvedValueOnce({
-        success: true
+        success: true,
       });
       const request = requestFunction();
-      await accountsActions.handleAuthRequest({ commit }, {email, request, link: true});
 
-      expect(commit).toBeCalledTimes(3);
+      await accountsActions.handleAuthRequest(
+        { commit },
+        { email, request, link: true },
+      );
+
+      expect(commit).toBeCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'setSentStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
     });
 
     it('should set otp email if challenge type equals to otp', async () => {
@@ -45,7 +48,7 @@ describe('accounts actions', () => {
       });
 
       const request = requestFunction();
-      await accountsActions.handleAuthRequest({ commit }, {email, request});
+      await accountsActions.handleAuthRequest({ commit }, { email, request });
 
       expect(commit).toBeCalledTimes(3);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
@@ -53,16 +56,18 @@ describe('accounts actions', () => {
       expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
     });
 
-    it('should throw error if auth response is falsy', async done => {
-      expect.assertions(3);
+    it('should throw error if auth response is falsy', async () => {
+      expect.assertions(4);
 
       requestFunction.mockResolvedValueOnce(false);
       const request = requestFunction();
+
       try {
-        await accountsActions.handleAuthRequest({ commit }, {email, request});
+        await accountsActions.handleAuthRequest({ commit }, { email, request });
       } catch (err) {
-        done();
+        expect(err).toBeInstanceOf(Error);
       }
+
       expect(commit).toBeCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
@@ -76,7 +81,7 @@ describe('accounts actions', () => {
       requestFunction.mockRejectedValueOnce(error);
       const request = requestFunction();
       try {
-        await accountsActions.handleAuthRequest({ commit }, {email, request});
+        await accountsActions.handleAuthRequest({ commit }, { email, request });
       } catch (err) {
         done();
       }
@@ -84,36 +89,84 @@ describe('accounts actions', () => {
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
-  })
+  });
 
   describe('auth', () => {
     const email = 'foo@bar.baz';
-    const request = 'kek'
+    const request = 'kek';
+    const type = 'local';
+    const serverMode = { type };
+    const serverUrl = 'serverUrl';
+    const redirectUrl = 'redirectUrl';
+    const state = {
+      authParams: {
+        redirectUrl,
+      },
+    };
+
     it('should call handleAuthRequest with correct params', async () => {
       expect.assertions(2);
+
       IdentityService.auth.mockReturnValueOnce(request);
-      await accountsActions.auth({dispatch}, email);
+
+      await accountsActions.auth({ dispatch }, { email, serverMode });
+
       expect(dispatch).toBeCalledTimes(1);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'handleAuthRequest', {
-        email, request, link: true
+        email,
+        request,
+        link: true,
       });
-    })
+    });
+
+    it('should call IdentityService.auth with correct email', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}?mode=${type}`;
+
+      IdentityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth({ state, dispatch }, { email, serverMode });
+
+      expect(IdentityService.auth).toBeCalledTimes(1);
+      expect(IdentityService.auth).toBeCalledWith(email, resultUrl);
+    });
+
+    it('should call IdentityService.auth with correct server url', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}?mode=${type}&serverUrl=${serverUrl}`;
+
+      IdentityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth(
+        { state, dispatch },
+        {
+          email,
+          serverMode: { ...serverMode, serverUrl },
+        },
+      );
+
+      expect(IdentityService.auth).toBeCalledTimes(1);
+      expect(IdentityService.auth).toBeCalledWith(email, resultUrl);
+    });
   });
 
   describe('authWithGoogle', () => {
     const email = 'foo@bar.baz';
-    const request = 'kek'
+    const request = 'kek';
 
     it('should call handleAuthRequest with correct params', async () => {
       expect.assertions(2);
 
       IdentityService.authWithGoogle.mockReturnValueOnce(request);
-      await accountsActions.authWithGoogle({dispatch}, {email});
+      await accountsActions.authWithGoogle({ dispatch }, { email });
       expect(dispatch).toBeCalledTimes(1);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'handleAuthRequest', {
-        email, request
+        email,
+        request,
       });
-    })
+    });
   });
 
   describe('authWithGitHub', () => {
@@ -123,7 +176,7 @@ describe('accounts actions', () => {
       expect.assertions(3);
 
       IdentityService.authWithGitHub.mockResolvedValueOnce({
-        success: true
+        success: true,
       });
       await accountsActions.authWithGitHub({ commit }, {});
 
@@ -140,7 +193,7 @@ describe('accounts actions', () => {
         challenge: {
           challengeType: 'otp',
         },
-        email
+        email,
       });
 
       await accountsActions.authWithGitHub({ commit }, {});
@@ -155,7 +208,7 @@ describe('accounts actions', () => {
       expect.assertions(3);
 
       IdentityService.authWithGitHub.mockResolvedValueOnce({
-        success: false
+        success: false,
       });
       try {
         await accountsActions.authWithGitHub({ commit }, {});
