@@ -30,6 +30,8 @@
     </form-field>
     <form-controls>
       <google-auth-button @error="handleOauthError" />
+    </form-controls>
+    <form-controls>
       <git-auth-button @error="handleOauthError" />
     </form-controls>
     <form-controls>
