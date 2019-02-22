@@ -1,17 +1,23 @@
 import get from 'lodash/get';
+import isEmpty from 'lodash/isEmpty';
 import Bip39 from 'bip39';
 import HDKey from 'ethereumjs-wallet/hdkey';
 import Web3 from 'web3';
 
 import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
+import ModeService from '@/service/mode';
 import { NETWORK_URL } from '@/constants';
 
-const auth = async ({ state, dispatch }, email) => {
-  const request = IdentityService.auth(
-    email,
-    get(state, 'authParams.redirectUrl'),
-  );
+const auth = async ({ state, dispatch }, { email, serverMode }) => {
+  const { type, serverUrl } = serverMode;
+  let redirectUrl = `${get(state, 'authParams.redirectUrl')}?mode=${type}`;
+
+  if (serverUrl) {
+    redirectUrl = `${redirectUrl}&serverUrl=${serverUrl}`;
+  }
+
+  const request = IdentityService.auth(email, redirectUrl);
 
   await dispatch('handleAuthRequest', {
     request,
@@ -63,13 +69,13 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     if (type === 'otp') {
       commit('setOtpEmail', email);
+      commit('changeLoadingStatus', false);
     } else if (link) {
       commit('setSentStatus', true);
     }
   } catch (err) {
-    throw err;
-  } finally {
     commit('changeLoadingStatus', false);
+    throw err;
   }
 };
 
@@ -79,15 +85,15 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
   try {
     await IdentityService.otpAuth(email, code);
   } catch (err) {
-    throw err;
-  } finally {
     commit('changeLoadingStatus', false);
+    throw err;
   }
 };
 
-const confirmAuth = ({ dispatch }) => {
+const confirmAuth = ({ dispatch }, serverMode) => {
   dispatch('resolveMessage', {
     status: true,
+    payload: serverMode,
   });
 };
 
@@ -162,8 +168,10 @@ const getAccounts = async ({ commit }) => {
       'setAccounts',
       accounts.filter(account => !/^xpub/.test(account.address)),
     );
+    commit('setAuthStatus', true);
   } catch (err) {
     commit('setAccounts', null);
+    commit('setAuthStatus', false);
   }
 };
 
@@ -174,7 +182,7 @@ const getAccount = async (ctx, address) => {
 };
 
 const getFirstPrivateAccount = async ({ state, dispatch }) => {
-  if (!state.accounts) {
+  if (isEmpty(state.accounts)) {
     await dispatch('getAccounts');
   }
 
@@ -285,6 +293,9 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
   }
 };
 
+const validateCustomServer = (ctx, serverUrl) =>
+  ModeService.validateIdentityServer(serverUrl);
+
 export default {
   auth,
   authWithGoogle,
@@ -307,4 +318,5 @@ export default {
   closeAccount,
   getRecoveryIdentifier,
   recover,
+  validateCustomServer,
 };

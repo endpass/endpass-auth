@@ -93,3 +93,9 @@ export const LAZY_METHODS = [
 ];
 
 export const LS_SETTINGS = 'endpass-connect:settings';
+
+export const IDENTITY_MODE = Object.freeze({
+  DEFAULT: 'default',
+  CUSTOM: 'custom',
+  LOCAL: 'local',
+});
