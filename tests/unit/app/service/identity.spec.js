@@ -67,6 +67,7 @@ describe('identity service', () => {
   describe('recover', () => {
     const email = 'email+test@email.com';
     const signature = 'signature';
+    const redirectUrl = 'https://localhost:8080';
     const url = `${identityBaseUrl}/api/v1.1/auth/recover`;
 
     it('should make correct request', async () => {
@@ -74,12 +75,12 @@ describe('identity service', () => {
 
       axiosMock.onPost(url).reply(config => {
         expect(config.url).toBe(url);
-        expect(config.data).toBe(JSON.stringify({ email, signature }));
+        expect(config.data).toBe(JSON.stringify({ email, signature, redirectUrl }));
 
         return [200, getRecoveryIdentifierResponse];
       });
 
-      await identityService.recover(email, signature);
+      await identityService.recover(email, signature, redirectUrl);
     });
 
     it('should handle successfull POST /auth/recover request', async () => {
@@ -87,7 +88,7 @@ describe('identity service', () => {
 
       axiosMock.onPost(url).reply(200, successResponse);
 
-      const received = await identityService.recover(email, signature);
+      const received = await identityService.recover(email, signature, redirectUrl);
 
       expect(received).toEqual(successResponse);
     });
@@ -98,7 +99,7 @@ describe('identity service', () => {
       axiosMock.onGet(url).reply(200, errorResponse);
 
       await expect(
-        identityService.recover(email, signature),
+        identityService.recover(email, signature, redirectUrl),
       ).rejects.toThrow(expect.any(Error));
     });
 
@@ -108,7 +109,7 @@ describe('identity service', () => {
       axiosMock.onPost(url).reply(500);
 
       await expect(
-        identityService.recover(email, signature),
+        identityService.recover(email, signature, redirectUrl),
       ).rejects.toThrow(expect.any(Error));
     });
   });

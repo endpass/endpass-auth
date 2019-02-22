@@ -272,6 +272,7 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
     const { success } = await IdentityService.recover(
       state.otpEmail,
       signature,
+      state.authParams.redirectUrl,
     );
 
     commit('setSentStatus', true);

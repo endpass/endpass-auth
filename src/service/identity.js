@@ -159,11 +159,12 @@ export const getRecoveryIdentifier = email =>
       return res.message;
     });
 
-export const recover = (email, signature) =>
+export const recover = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/api/v1.1/auth/recover`, {
       email,
       signature,
+      redirectUrl,
     })
     .then(res => {
       if (!res.success) throw new Error(res.message);
