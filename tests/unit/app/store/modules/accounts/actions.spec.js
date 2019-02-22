@@ -442,6 +442,9 @@ describe('accounts actions', () => {
   describe('recover', () => {
     const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
     const state = {
+      authParams: {
+        redirectUrl: 'https://localhost:8080',
+      },
       otpEmail: 'email@email@com',
       recoveryIdentifier: getRecoveryIdentifierResponse.message,
     };
@@ -455,7 +458,7 @@ describe('accounts actions', () => {
       await accountsActions.recover({ state, commit }, { seedPhrase });
 
       expect(IdentityService.recover).toHaveBeenCalledTimes(1);
-      expect(IdentityService.recover).toHaveBeenCalledWith(state.otpEmail, signature);
+      expect(IdentityService.recover).toHaveBeenCalledWith(state.otpEmail, signature, state.authParams.redirectUrl);
     });
 
     it('should set loading status', () => {
