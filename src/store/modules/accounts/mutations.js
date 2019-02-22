@@ -5,7 +5,7 @@ const setAuthParams = (state, params) => {
 };
 
 const setAuthStatus = (state, status) => {
-  state.authorized = status;
+  state.isAuthorized = status;
 };
 
 const setOtpEmail = (state, email) => {
@@ -17,7 +17,7 @@ const setSentStatus = (state, status) => {
 };
 
 const setAccounts = (state, accounts) => {
-  state.accounts = isEmpty(accounts) ? accounts : [...accounts];
+  state.accounts = isEmpty(accounts) ? [] : [...accounts];
 };
 
 const setSettings = (state, settings) => {

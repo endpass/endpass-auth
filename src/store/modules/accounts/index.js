@@ -6,9 +6,10 @@ const state = {
   linkSent: false,
   authParams: null,
   otpEmail: null,
-  accounts: null,
+  accounts: [],
   settings: null,
   recoveryIdentifier: null,
+  isAuthorized: false,
 };
 
 export default {

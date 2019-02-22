@@ -2,7 +2,7 @@
   <screen>
     <v-frame :loading="!inited" :closable="isDialog" @close="handleAuthCancel">
       <create-account-form
-        v-if="authorized && isAccountsEmpty"
+        v-if="isAuthorized && isAccountsEmpty"
         @request="handleAccountRequest"
       />
       <otp-form
@@ -19,13 +19,13 @@
         @submit="handleRecoverSubmit"
       />
       <message-form
-        v-else-if="!authorized && sent"
+        v-else-if="!isAuthorized && sent"
         :closable="isDialog"
         message="An email with authorization link was sent on your address. Open it in the same browser to sign in. Also check spam folder and exclude Endpass from spam filters."
         @cancel="handleAuthCancel"
       />
       <message-form
-        v-else-if="authorized && sent"
+        v-else-if="isAuthorized && sent"
         message="You are successfully authorized. Dialog will be closed in a few seconds."
         @cancel="handleAuthCancel"
       />
@@ -52,6 +52,7 @@ import OtpForm from '../forms/Otp.vue';
 import RecoverForm from '../forms/Recover.vue';
 import MessageForm from '../forms/Message.vue';
 import CreateAccountForm from '../forms/CreateAccount.vue';
+import { IDENTITY_MODE } from '@/constants';
 
 export default {
   name: 'Auth',
@@ -61,6 +62,7 @@ export default {
     needAccount: false,
     recoverAccess: false,
     isServerMode: false,
+    serverMode: null,
   }),
 
   computed: {
@@ -70,15 +72,12 @@ export default {
       sent: state => state.accounts.linkSent,
       otpEmail: state => state.accounts.otpEmail,
       accounts: state => state.accounts.accounts,
+      isAuthorized: state => state.accounts.isAuthorized,
     }),
     ...mapGetters(['isDialog']),
 
-    authorized() {
-      return !!this.accounts;
-    },
-
     confirmed() {
-      return this.authorized && this.sent;
+      return this.isAuthorized && this.sent;
     },
 
     isAccountsEmpty() {
@@ -87,7 +86,7 @@ export default {
   },
 
   watch: {
-    authorized: {
+    isAuthorized: {
       handler() {
         this.handleAuthorizationDataChange();
       },
@@ -98,7 +97,6 @@ export default {
       handler() {
         this.handleAuthorizationDataChange();
       },
-      immediate: true,
     },
   },
 
@@ -147,9 +145,15 @@ export default {
       }
     },
 
-    async handleAuthSubmit(email) {
+    async handleAuthSubmit({ email, serverMode }) {
       try {
-        await this.auth(email);
+        this.serverMode = serverMode;
+
+        if (serverMode.type !== IDENTITY_MODE.DEFAULT) {
+          return this.confirmAuth(serverMode);
+        }
+
+        await this.auth({ email, serverMode });
         await this.awaitAuthConfirm();
       } catch (err) {
         console.error(err);
@@ -159,16 +163,17 @@ export default {
 
     handleAuthorizationDataChange() {
       const {
-        authorized,
+        isAuthorized,
         awaitAccountCreate,
         isAccountsEmpty,
         confirmAuth,
+        serverMode,
       } = this;
 
-      if (authorized && isAccountsEmpty) {
+      if (isAuthorized && isAccountsEmpty) {
         awaitAccountCreate();
-      } else if (authorized && !isAccountsEmpty) {
-        confirmAuth();
+      } else if (isAuthorized && !isAccountsEmpty) {
+        confirmAuth(serverMode);
       }
     },
 
@@ -185,12 +190,12 @@ export default {
     },
 
     handleAuthError(error) {
-      this.error = error.message || 'Unexpected error, try login later';
+      this.error = 'Auth failed. Please, try again';
     },
   },
 
   async created() {
-    this.isServerMode = this.$route.query.server;
+    this.isServerMode = Boolean(this.$route.query.mode);
 
     if (this.isDialog) {
       window.addEventListener('beforeunload', this.handleWindowClose);
