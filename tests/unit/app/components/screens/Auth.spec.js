@@ -1,10 +1,13 @@
 import Vuex from 'vuex';
+import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/Auth.vue';
+import { IDENTITY_MODE } from '@/constants';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+localVue.use(VueRouter);
 
 describe('Auth', () => {
   let store;
@@ -12,6 +15,7 @@ describe('Auth', () => {
   let wrapper;
   let accountsModule;
   let coreModule;
+  const router = new VueRouter();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,6 +36,7 @@ describe('Auth', () => {
       state: {
         linkSent: false,
         accounts: null,
+        isAuthorized: false,
         otpEmail: null,
       },
       actions: {
@@ -55,6 +60,7 @@ describe('Auth', () => {
     wrapper = shallowMount(Auth, {
       localVue,
       store,
+      router,
     });
   });
 
@@ -65,6 +71,7 @@ describe('Auth', () => {
     });
 
     it('should render create account form if user authorized but does not have any account', () => {
+      store.state.accounts.isAuthorized = true;
       store.state.accounts.accounts = [];
 
       expect(wrapper.find('create-account-form-stub').exists()).toBe(true);
@@ -147,6 +154,7 @@ describe('Auth', () => {
     it('should confirm auth if link was sent and authorization status was changed', () => {
       store.state.accounts.linkSent = true;
       store.state.accounts.accounts = ['0x0'];
+      store.state.accounts.isAuthorized = true;
 
       expect(accountsModule.actions.confirmAuth).toBeCalled();
     });
@@ -169,9 +177,21 @@ describe('Auth', () => {
     describe('auth form logic', () => {
       it('should request auth on form submit', () => {
         // TODO Have troubles with triggering event from stub, solve it when possivble
-        wrapper.vm.handleAuthSubmit('foo@bar.baz');
+        const params = {
+          email: 'foo@bar.baz',
+          serverMode: {
+            type: IDENTITY_MODE.DEFAULT,
+          },
+        };
 
-        expect(accountsModule.actions.auth).toBeCalled();
+        wrapper.vm.handleAuthSubmit(params);
+
+        expect(accountsModule.actions.auth).toBeCalledTimes(1);
+        expect(accountsModule.actions.auth).toBeCalledWith(
+          expect.any(Object),
+          params,
+          undefined,
+        );
       });
     });
 

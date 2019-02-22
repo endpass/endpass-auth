@@ -169,7 +169,7 @@ export default {
 
     async handleSubmit() {
       try {
-        // TODO
+        // TODO activate login statistic
         // this.$ga.event({
         //   eventCategory: 'onboarding',
         //   eventAction: 'submit_email',
@@ -178,7 +178,6 @@ export default {
 
         if (this.isCustomMode) {
           serverUrl = this.customIdentityServer.replace(/\/+$/, '');
-          console.log(this.customIdentityServer.replace(/\/+$/, ''), serverUrl);
 
           await this.validateServer(serverUrl);
         }

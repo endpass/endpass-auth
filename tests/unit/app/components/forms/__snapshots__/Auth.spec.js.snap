@@ -2,8 +2,11 @@
 
 exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="auth-form" message="foo">
+  <!---->
   <form-field-stub>
-    <message-stub data-test="form-message">Log in to your Endpass account to access site actions</message-stub>
+    <message-stub data-test="form-message">
+      Log in to your Endpass account to access site actions
+    </message-stub>
   </form-field-stub>
   <!---->
   <form-field-stub>
@@ -31,8 +34,11 @@ exports[`Auth render should change submit button text if loading and make it dis
 
 exports[`Auth render should correctly render Auth component 1`] = `
 <form data-test="auth-form">
+  <!---->
   <form-field-stub>
-    <message-stub data-test="form-message">Log in to your Endpass account to access site actions</message-stub>
+    <message-stub data-test="form-message">
+      Log in to your Endpass account to access site actions
+    </message-stub>
   </form-field-stub>
   <!---->
   <form-field-stub>

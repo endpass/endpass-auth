@@ -12,7 +12,7 @@ describe('accounts mutations', () => {
     it('should set auth status', () => {
       accountsMutations.setAuthStatus(state, true);
 
-      expect(state.authorized).toBe(true);
+      expect(state.isAuthorized).toBe(true);
     });
   });
 

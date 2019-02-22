@@ -194,7 +194,7 @@ export default {
     },
   },
 
-  async created() {
+  created() {
     this.isServerMode = Boolean(this.$route.query.mode);
 
     if (this.isDialog) {

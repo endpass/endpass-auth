@@ -1,5 +1,6 @@
 import { shallowMount, mount } from '@vue/test-utils';
 import Auth from '@/components/forms/Auth.vue';
+import { IDENTITY_MODE } from '@/constants';
 
 describe('Auth', () => {
   describe('render', () => {
@@ -75,16 +76,23 @@ describe('Auth', () => {
     });
 
     it('should allow submit of email is valid', () => {
+      const email = 'foo@bar.baz';
+      const serverMode = {
+        type: IDENTITY_MODE.DEFAULT,
+        serverUrl: undefined,
+      };
+      const params = { email, serverMode };
+
       wrapper.setData({
-        email: 'foo@bar.baz',
-        termsAccepted: false,
+        email,
+        isTermsAccepted: false,
       });
 
       const submitButton = wrapper.find('[data-test=submit-button]');
       expect(submitButton.attributes().disabled).toBe('disabled');
 
       wrapper.setData({
-        termsAccepted: true,
+        isTermsAccepted: true,
       });
 
       expect(
@@ -93,7 +101,7 @@ describe('Auth', () => {
 
       wrapper.find('form').trigger('submit');
 
-      expect(wrapper.emitted().submit).toEqual([['foo@bar.baz']]);
+      expect(wrapper.emitted().submit).toEqual([[params]]);
     });
   });
 });
