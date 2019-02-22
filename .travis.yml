@@ -1,16 +1,16 @@
 language: node_js
 node_js:
-  - '10'
+- '10'
 cache:
   directories:
-    - '~/.cache'
+  - "~/.cache"
 install: yarn install --frozen-lockfile
 stages:
-  - name: test
-  - name: deploy_npm
-    if: branch = release
-  - name: deploy_s3
-    if: branch = master
+- name: test
+- name: deploy_npm
+  if: branch = release
+- name: deploy_s3
+  if: branch = master
 jobs:
   include:
     - stage: test
@@ -28,4 +28,7 @@ jobs:
         local_dir: dist/app
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+  - "/^v\\d+\\.\\d+\\.\\d+$/"
+notifications:
+  slack:
+    secure: nkmuE9/XdAJ/aomaFiyVWrTt7R2cbzXMpEb7TqcuqS1IWGBjaUL9jg0xgq1RlNEjrmz5ONwnVfmebkBZIF5uUXwGVN4vhtjPDe01NytXWCtYQiztyQ3GVe0My0NehXm5KbyydgXT7OftYd1926iIOGHLsX3oZi4rHqFhE9dtFwsEORsdU7JIxaRCAo7MmnhphcQI7SVBYcsUFIGKR1QzIyXw21csOIcEhr/Vb4x9lgA+XdjP40Oysp6V5Ccnkq/OaHXxgqt2AlLRg/t/vqq3qV5vArFvnM+UPw+1or+KUdvWIkhhfD2I33FUV2OGMH1hajpmC7q50HSsSFwJGydRhbJZDTtUGEqaFBt3DZQJ8xhvU/+aABBrqovosWsww727kcrLceznedbVUnrGCbyP0UOlZdfBfP3BrlWO5lgszw8mD6iGJJ6TNsuwaztm1dKAAug1zDFSYHjtPIdZE3TcCcTkOBDwqRHiOybKP4VCYnLKfYS/vNdozCF2idOSlO1fRt/nY/Ve1fDiotYVv244L8QlP9vw5b8FV5wC4tJ4pthChMZgtzcFqWdgKZ3pzwljHPKoQWE5Sl6r9dYD5nLWq8Asv+aPllETSLImzKhwqnhdvn40KnrJGPd9MAsVsSeRag6jajOzckzp1RS0mXZLGdRxHcShxGGK4iLiPr+nJhI=
