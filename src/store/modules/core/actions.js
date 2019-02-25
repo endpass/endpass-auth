@@ -6,7 +6,7 @@ import { DEFAULT_NETWORKS, METHODS, LAZY_METHODS } from '@/constants';
 
 const init = async ({ dispatch, commit }) => {
   try {
-    await dispatch('getAccounts');
+    await dispatch('getOnlyV3Accounts');
     // eslint-disable-next-line
   } catch (err) {
   } finally {

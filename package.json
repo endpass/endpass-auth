@@ -42,6 +42,7 @@
   "dependencies": {
     "@endpass/faucet": "^0.1.1",
     "@endpass/ui": "^0.2.1",
+    "@endpass/utils": "^1.1.2",
     "axios": "^0.18.0",
     "bip39": "^2.5.0",
     "bs58check": "^2.1.2",

@@ -3,6 +3,7 @@ import isEmpty from 'lodash/isEmpty';
 import Bip39 from 'bip39';
 import HDKey from 'ethereumjs-wallet/hdkey';
 import Web3 from 'web3';
+import { keystore } from '@endpass/utils';
 
 import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
@@ -106,8 +107,14 @@ const cancelAuth = ({ dispatch }) => {
 
 const getSettings = async ({ dispatch, commit }) => {
   const settings = await IdentityService.getSettings();
+  const { lastActiveAccount } = settings;
+  let account = null;
 
-  if (!settings.lastActiveAccount) {
+  if (lastActiveAccount) {
+    account = await dispatch('getAccount', lastActiveAccount);
+  }
+
+  if (!lastActiveAccount || !keystore.isV3(account)) {
     const lastAccount = await dispatch('getFirstPrivateAccount');
 
     Object.assign(settings, {
@@ -175,6 +182,29 @@ const getAccounts = async ({ commit }) => {
   }
 };
 
+const getOnlyV3Accounts = async ({ commit, dispatch }) => {
+  try {
+    const res = await IdentityService.getAccounts();
+
+    const accounts = await Promise.all(
+      res
+        .filter(address => !/^xpub/.test(address))
+        .map(address => IdentityService.getAccountWithInfo(address)),
+    );
+
+    commit(
+      'setAccounts',
+      accounts
+        .filter(account => keystore.isV3(account))
+        .map(({ info }) => info),
+    );
+    commit('setAuthStatus', true);
+  } catch (err) {
+    commit('setAccounts', null);
+    commit('setAuthStatus', false);
+  }
+};
+
 const getAccount = async (ctx, address) => {
   const res = await IdentityService.getAccount(address);
 
@@ -183,7 +213,7 @@ const getAccount = async (ctx, address) => {
 
 const getFirstPrivateAccount = async ({ state, dispatch }) => {
   if (isEmpty(state.accounts)) {
-    await dispatch('getAccounts');
+    await dispatch('getOnlyV3Accounts');
   }
 
   const { accounts } = state;
@@ -195,7 +225,7 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
 
 const awaitAuthConfirm = async ({ dispatch }) => {
   await IdentityService.awaitAuthConfirm();
-  await dispatch('getAccounts');
+  await dispatch('getOnlyV3Accounts');
 };
 
 const awaitAccountCreate = async ({ commit }) => {
@@ -308,6 +338,7 @@ export default {
   getAccount,
   getAccounts,
   getFirstPrivateAccount,
+  getOnlyV3Accounts,
   openCreateAccountPage,
   awaitAccountCreate,
   awaitAuthConfirm,

@@ -79,7 +79,7 @@ export default {
 
   methods: {
     ...mapMutations(['changeLoadingStatus']),
-    ...mapActions(['logout', 'closeAccount', 'getAccounts', 'updateSettings']),
+    ...mapActions(['logout', 'closeAccount', 'updateSettings']),
 
     async handleAccountFormSubmit() {
       const { activeAccount, activeNet } = this.formData;

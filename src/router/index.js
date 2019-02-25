@@ -43,7 +43,7 @@ router.beforeEach(async (to, from, next) => {
   );
 
   if (!isPublicRoute) {
-    await store.dispatch('getAccounts');
+    await store.dispatch('getOnlyV3Accounts');
     try {
       await store.dispatch('getSettings');
     } finally {
