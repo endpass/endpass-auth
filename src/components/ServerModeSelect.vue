@@ -13,12 +13,12 @@
         label="Identity Server"
         :value="currentIdentityServerType"
         name="currentIdentityServerType"
+        data-test="mode-select"
       />
     </form-field>
 
-    <form-field>
+    <form-field v-if="isCustomMode">
       <v-input
-        v-if="isCustomMode"
         id="customIdentityServer"
         key="custom-identity-server"
         v-model="customIdentityServer"
@@ -28,6 +28,7 @@
         name="customIdentityServer"
         placeholder="Custom Identity Server"
         help="Example: https://yourserver.com/api"
+        data-test="custom-server-input"
       />
     </form-field>
 
@@ -50,20 +51,14 @@
 </template>
 
 <script>
-// v-validate="'required|url:require_protocol:true'"
-// :error="errors.first('customIdentityServer')"
-import Vue from 'vue';
 import { mapActions, mapState } from 'vuex';
 
-// import VSelect from '@endpass/ui/dist/components/VSelect';
 import VSelect from '@/components/VSelect';
 import VInput from '@/components/VInput';
 import VButton from '@/components/VButton.vue';
 import Message from '@/components/Message.vue';
 import FormField from '@/components/FormField.vue';
 import { IDENTITY_MODE } from '@/constants';
-
-Vue.component(VSelect);
 
 const availableIdentityServerTypes = [
   {
@@ -88,11 +83,11 @@ const availableIdentityServerTypes = [
 // .filter(mode => !(ENV.isProduction && mode.val === IDENTITY_MODE.LOCAL));
 
 export default {
-  name: 'ServerModeSelector',
+  name: 'ServerModeSelect',
   data: () => ({
     availableIdentityServerTypes,
     currentIdentityServerType: availableIdentityServerTypes[0].val,
-    customIdentityServer: null,
+    customIdentityServer: undefined,
     isValidating: false,
     validationError: '',
   }),
