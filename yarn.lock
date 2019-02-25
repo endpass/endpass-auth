@@ -821,6 +821,18 @@
     keythereum "^1.0.4"
     lodash "^4.17.11"
 
+"@endpass/utils@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.1.2.tgz#aa11fbbc5c07fe80d47b600a474f1b31a2840a15"
+  integrity sha512-LgvlxPqtgyD0RqiXTj1/YgrOaZzDI2kwpO44iNgxdxArphBvXyUEWiKhDUjBRmogycJNivb1LQE6F2NvGwkO+g==
+  dependencies:
+    bs58check "^2.1.2"
+    dayjs "^1.7.8"
+    ethereumjs-wallet "^0.6.2"
+    export-files "^2.1.1"
+    keythereum "^1.0.4"
+    lodash "^4.17.11"
+
 "@iamstarkov/listr-update-renderer@0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@iamstarkov/listr-update-renderer/-/listr-update-renderer-0.4.1.tgz#d7c48092a2dcf90fd672b6c8b458649cb350c77e"

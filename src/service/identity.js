@@ -36,6 +36,15 @@ export const getAccount = address =>
 export const getAccountInfo = address =>
   request.get(`${identityBaseUrl}/api/v1.1/account/${address}/info`);
 
+export const getAccountWithInfo = async address => {
+  const [v3keystore, info] = await Promise.all([
+    getAccount(address),
+    getAccountInfo(address),
+  ]);
+
+  return { ...v3keystore, info };
+};
+
 export const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
     ? `${identityBaseUrl}/api/v1.1/auth?redirect_uri=${encodeURIComponent(
@@ -178,6 +187,7 @@ export default {
   getAccount,
   getAccounts,
   getAccountInfo,
+  getAccountWithInfo,
   setSettings,
   auth,
   authWithGoogle,

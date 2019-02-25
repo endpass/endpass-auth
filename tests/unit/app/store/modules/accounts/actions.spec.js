@@ -316,7 +316,7 @@ describe('accounts actions', () => {
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
-      expect(dispatch).toBeCalledWith('getAccounts');
+      expect(dispatch).toBeCalledWith('getOnlyV3Accounts');
     });
   });
 
@@ -446,7 +446,7 @@ describe('accounts actions', () => {
         dispatch,
       });
 
-      expect(dispatch).toBeCalledWith('getAccounts');
+      expect(dispatch).toBeCalledWith('getOnlyV3Accounts');
     });
   });
 
@@ -459,7 +459,9 @@ describe('accounts actions', () => {
       accountsActions.getRecoveryIdentifier({ state, commit });
 
       expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
-      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledWith(state.otpEmail);
+      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledWith(
+        state.otpEmail,
+      );
     });
 
     it('should set loading status', () => {
@@ -475,7 +477,11 @@ describe('accounts actions', () => {
       await accountsActions.getRecoveryIdentifier({ state, commit });
 
       expect(commit).toHaveBeenCalledTimes(3);
-      expect(commit).toHaveBeenNthCalledWith(2, 'setRecoveryIdentifier', getRecoveryIdentifierResponse.message);
+      expect(commit).toHaveBeenNthCalledWith(
+        2,
+        'setRecoveryIdentifier',
+        getRecoveryIdentifierResponse.message,
+      );
       expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
     });
 
@@ -486,7 +492,9 @@ describe('accounts actions', () => {
 
       IdentityService.getRecoveryIdentifier.mockRejectedValue(error);
 
-      await expect(accountsActions.getRecoveryIdentifier({ state, commit })).rejects.toThrow(error);
+      await expect(
+        accountsActions.getRecoveryIdentifier({ state, commit }),
+      ).rejects.toThrow(error);
       expect(commit).toHaveBeenCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
@@ -511,7 +519,11 @@ describe('accounts actions', () => {
       await accountsActions.recover({ state, commit }, { seedPhrase });
 
       expect(IdentityService.recover).toHaveBeenCalledTimes(1);
-      expect(IdentityService.recover).toHaveBeenCalledWith(state.otpEmail, signature, state.authParams.redirectUrl);
+      expect(IdentityService.recover).toHaveBeenCalledWith(
+        state.otpEmail,
+        signature,
+        state.authParams.redirectUrl,
+      );
     });
 
     it('should set loading status', () => {
@@ -538,7 +550,9 @@ describe('accounts actions', () => {
 
       IdentityService.recover.mockRejectedValue(error);
 
-      await expect(accountsActions.recover({ state, commit }, { seedPhrase })).rejects.toThrow(error);
+      await expect(
+        accountsActions.recover({ state, commit }, { seedPhrase }),
+      ).rejects.toThrow(error);
       expect(commit).toHaveBeenCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
