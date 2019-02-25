@@ -12,9 +12,9 @@ const hdKeyMnemonic = {
 };
 
 const googleClientId =
-  '885568627115-sin32pl0317peotp05r69gbmsb00atcj.apps.googleusercontent.com';
+  '40902679276-u58ff6beacnqv4r4in522bgmib6asrkl.apps.googleusercontent.com';
 
-const gitClientId = '346108128ad51a5eccd1';
+const gitClientId = 'cb221235046b6d197ea4';
 
 const isProduction = true;
 
