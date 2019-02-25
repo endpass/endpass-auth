@@ -12,7 +12,7 @@ describe('accounts mutations', () => {
     it('should set auth status', () => {
       accountsMutations.setAuthStatus(state, true);
 
-      expect(state.authorized).toBe(true);
+      expect(state.isAuthorized).toBe(true);
     });
   });
 
@@ -29,6 +29,16 @@ describe('accounts mutations', () => {
       accountsMutations.setSentStatus(state, true);
 
       expect(state.linkSent).toBe(true);
+    });
+  });
+
+  describe('setRecoveryIidentifier', () => {
+    it('should set recovery identifier', () => {
+      const recoveryIdentifier = 'recovery identifier';
+
+      accountsMutations.setRecoveryIdentifier(state, recoveryIdentifier);
+
+      expect(state.recoveryIdentifier).toBe(recoveryIdentifier);
     });
   });
 });

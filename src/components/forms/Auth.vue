@@ -1,48 +1,56 @@
 <template>
-  <form data-test="auth-form" @submit.prevent="emitSubmit">
-    <form-field>
-      <message data-test="form-message"
-        >Log in to your Endpass account to access site actions</message
-      >
+  <form data-test="auth-form" @submit.prevent="handleSubmit">
+    <form-field v-if="isServerMode">
+      <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
     </form-field>
-    <form-field v-if="error">
-      <message :error="true" data-test="error-message">{{ error }}</message>
-    </form-field>
-    <form-field>
-      <div class="auth__fields-as-line">
-        <v-input
-          v-model="email"
-          :invalid="!isEmailValid"
-          :autofocus="true"
-          name="email"
-          type="email"
-          placeholder="Enter your email..."
-          data-test="email-input"
-        />
-        <v-button
-          :disabled="!termsAccepted || !isEmailValid || loading"
-          :submit="true"
-          type="primary"
-          data-test="submit-button"
-          >{{ primaryButtonLabel }}</v-button
-        >
-      </div>
-    </form-field>
-    <form-controls>
-      <google-auth-button @error="handleOauthError" />
-      <!-- <git-auth-button /> -->
-    </form-controls>
-    <form-controls>
-      <v-checkbox v-model="termsAccepted">
-        I accept the
-        <a href="https://endpass.com/terms/" target="_blank"
-          >Terms of Service</a
-        >
-        and
-        <a href="https://endpass.com/privacy/" target="_blank">Privacy Policy</a
-        >.
-      </v-checkbox>
-    </form-controls>
+    <template v-if="isDefaultMode">
+      <form-field>
+        <message data-test="form-message">
+          Log in to your Endpass account to access site actions
+        </message>
+      </form-field>
+      <form-field v-if="error">
+        <message :error="true" data-test="error-message">{{ error }}</message>
+      </form-field>
+      <form-field>
+        <div class="auth__fields-as-line">
+          <v-input
+            v-model="email"
+            :invalid="!isEmailValid"
+            :autofocus="true"
+            name="email"
+            type="email"
+            placeholder="Enter your email..."
+            data-test="email-input"
+          />
+          <v-button
+            :disabled="!isFormValid"
+            :submit="true"
+            type="primary"
+            data-test="submit-button"
+            >{{ primaryButtonLabel }}</v-button
+          >
+        </div>
+      </form-field>
+      <form-controls>
+        <google-auth-button @error="handleOauthError" />
+      </form-controls>
+      <form-controls>
+        <git-auth-button @error="handleOauthError" />
+      </form-controls>
+      <form-controls>
+        <v-checkbox v-model="isTermsAccepted">
+          I accept the
+          <a href="https://endpass.com/terms/" target="_blank"
+            >Terms of Service</a
+          >
+          and
+          <a href="https://endpass.com/privacy/" target="_blank"
+            >Privacy Policy</a
+          >.
+        </v-checkbox>
+      </form-controls>
+    </template>
   </form>
 </template>
 
@@ -50,14 +58,16 @@
 import Vue from 'vue';
 
 import VCheckbox from '@endpass/ui/dist/components/VCheckbox';
-import VFrame from '../VFrame.vue';
-import VInput from '../VInput.vue';
-import VButton from '../VButton.vue';
+import VFrame from '@/components/VFrame.vue';
+import VInput from '@/components/VInput.vue';
+import VButton from '@/components/VButton.vue';
 import GoogleAuthButton from '@/components/GoogleAuthButton.vue';
-// import GitAuthButton from '@/components/GitAuthButton.vue';
-import Message from '../Message.vue';
-import FormField from '../FormField.vue';
-import FormControls from '../FormControls.vue';
+import GitAuthButton from '@/components/GitAuthButton.vue';
+import Message from '@/components/Message.vue';
+import FormField from '@/components/FormField.vue';
+import FormControls from '@/components/FormControls.vue';
+import ServerModeSelect from '@/components/ServerModeSelect';
+import { IDENTITY_MODE } from '@/constants';
 
 Vue.component(VCheckbox);
 
@@ -79,11 +89,20 @@ export default {
       type: String,
       default: null,
     },
+
+    isServerMode: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({
-    termsAccepted: true,
+    isTermsAccepted: true,
     email: '',
+    serverMode: {
+      type: IDENTITY_MODE.DEFAULT,
+      serverUrl: undefined,
+    },
   }),
 
   computed: {
@@ -92,15 +111,43 @@ export default {
     },
 
     isEmailValid() {
-      return /[a-zA-Z._\-0-9]+@[a-z0-9]+\.[a-z]{2,}/g.test(this.email);
+      return /^[a-zA-Z._\-\+0-9]+@[a-z0-9]+\.[a-z]{2,}$/g.test(this.email);
+    },
+
+    isDefaultMode() {
+      return this.serverMode.type === IDENTITY_MODE.DEFAULT;
+    },
+
+    isLocalMode() {
+      return this.serverMode.type === IDENTITY_MODE.LOCAL;
+    },
+
+    isCustomMode() {
+      return this.serverMode.type === IDENTITY_MODE.CUSTOM;
+    },
+
+    isFormValid() {
+      const {
+        isDefaultMode,
+        isLocalMode,
+        isCustomMode,
+        isEmailValid,
+        isTermsAccepted,
+        loading,
+      } = this;
+      const isDefaultValid = isDefaultMode && isEmailValid && isTermsAccepted;
+
+      return (isDefaultValid || isCustomMode || isLocalMode) && !loading;
     },
   },
 
   methods: {
-    emitSubmit() {
-      if (this.isEmailValid) {
-        this.$emit('submit', this.email);
-      }
+    handleSubmit() {
+      if (!this.isFormValid) return;
+
+      const { email, serverMode } = this;
+
+      this.$emit('submit', { email, serverMode });
     },
 
     handleOauthError(err) {
@@ -113,10 +160,11 @@ export default {
     VButton,
     VInput,
     GoogleAuthButton,
-    // GitAuthButton,
+    GitAuthButton,
     Message,
     FormField,
     FormControls,
+    ServerModeSelect,
   },
 };
 </script>

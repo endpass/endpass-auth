@@ -24,13 +24,6 @@ const router = new Router({
       name: 'Bridge',
       component: Bridge,
     },
-    // {
-    //   path: '/git',
-    //   name: 'AuthGitScreen',
-    //   component: AuthGit,
-    //   beforeEnter: (to, from, next) =>
-    //     typeof to.query.code !== 'undefined' ? next() : next('auth'),
-    // },
     {
       path: '/auth',
       name: 'AuthScreen',
@@ -50,7 +43,7 @@ router.beforeEach(async (to, from, next) => {
   );
 
   if (!isPublicRoute) {
-    await store.dispatch('getAccounts');
+    await store.dispatch('getOnlyV3Accounts');
     try {
       await store.dispatch('getSettings');
     } finally {

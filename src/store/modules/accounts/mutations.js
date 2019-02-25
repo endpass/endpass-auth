@@ -5,7 +5,7 @@ const setAuthParams = (state, params) => {
 };
 
 const setAuthStatus = (state, status) => {
-  state.authorized = status;
+  state.isAuthorized = status;
 };
 
 const setOtpEmail = (state, email) => {
@@ -17,11 +17,15 @@ const setSentStatus = (state, status) => {
 };
 
 const setAccounts = (state, accounts) => {
-  state.accounts = isEmpty(accounts) ? accounts : [...accounts];
+  state.accounts = isEmpty(accounts) ? [] : [...accounts];
 };
 
 const setSettings = (state, settings) => {
   state.settings = settings;
+};
+
+const setRecoveryIdentifier = (state, recoveryIdentifier) => {
+  state.recoveryIdentifier = recoveryIdentifier;
 };
 
 export default {
@@ -31,4 +35,5 @@ export default {
   setAccounts,
   setSentStatus,
   setSettings,
+  setRecoveryIdentifier,
 };

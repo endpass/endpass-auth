@@ -36,6 +36,15 @@ export const getAccount = address =>
 export const getAccountInfo = address =>
   request.get(`${identityBaseUrl}/api/v1.1/account/${address}/info`);
 
+export const getAccountWithInfo = async address => {
+  const [v3keystore, info] = await Promise.all([
+    getAccount(address),
+    getAccountInfo(address),
+  ]);
+
+  return { ...v3keystore, info };
+};
+
 export const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
     ? `${identityBaseUrl}/api/v1.1/auth?redirect_uri=${encodeURIComponent(
@@ -146,12 +155,39 @@ export const awaitAccountCreate = () =>
     }, 1500);
   });
 
+export const getRecoveryIdentifier = email =>
+  request
+    .get(
+      `${identityBaseUrl}/api/v1.1/auth/recover?email=${encodeURIComponent(
+        email,
+      )}`,
+    )
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res.message;
+    });
+
+export const recover = (email, signature, redirectUrl) =>
+  request
+    .post(`${identityBaseUrl}/api/v1.1/auth/recover`, {
+      email,
+      signature,
+      redirectUrl,
+    })
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res;
+    });
+
 export default {
   getSettings,
   getOtpSettings,
   getAccount,
   getAccounts,
   getAccountInfo,
+  getAccountWithInfo,
   setSettings,
   auth,
   authWithGoogle,
@@ -161,4 +197,6 @@ export default {
   logout,
   awaitLogoutConfirm,
   awaitAccountCreate,
+  getRecoveryIdentifier,
+  recover,
 };
