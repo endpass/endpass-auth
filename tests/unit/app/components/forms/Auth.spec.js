@@ -62,7 +62,7 @@ describe('Auth', () => {
   });
 
   describe('behavior', () => {
-    const email = 'foo@bar.baz';
+    const email = 'foo+@bar.baz';
     const defaultServerMode = {
       type: IDENTITY_MODE.DEFAULT,
       serverUrl: undefined,
@@ -89,19 +89,26 @@ describe('Auth', () => {
         });
 
         describe('invalid', () => {
-          beforeEach(() => {
-            wrapper.setData({
-              email: 'foo@bar',
-            });
-          });
-
           it('should disable submit button', () => {
-            expect(
-              wrapper.find('[data-test=submit-button]').attributes().disabled,
-            ).toBe('disabled');
+            ['foo@bar', 'foo foo@bar.com', 'foo@bar.com foo'].forEach(
+              badEmail => {
+                wrapper.setData({
+                  email: badEmail,
+                });
+
+                expect(
+                  wrapper.find('[data-test=submit-button]').attributes()
+                    .disabled,
+                ).toBe('disabled');
+              },
+            );
           });
 
           it('should not allow submit form', () => {
+            wrapper.setData({
+              email: 'foo@bar',
+            });
+
             wrapper.find('form').trigger('submit');
 
             expect(wrapper.emitted().submit).toBe(undefined);

@@ -111,7 +111,7 @@ export default {
     },
 
     isEmailValid() {
-      return /[a-zA-Z._\-0-9]+@[a-z0-9]+\.[a-z]{2,}/g.test(this.email);
+      return /^[a-zA-Z._\-\+0-9]+@[a-z0-9]+\.[a-z]{2,}$/g.test(this.email);
     },
 
     isDefaultMode() {
