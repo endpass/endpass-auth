@@ -132,7 +132,7 @@ export default {
         this.recoverAccess = true;
       } catch (err) {
         console.error(err);
-        this.handleAuthError(err);
+        this.handleRecoverError(err);
       }
     },
 
@@ -141,7 +141,7 @@ export default {
         await this.recover({ seedPhrase });
       } catch (err) {
         console.error(err);
-        this.handleAuthError(err);
+        this.handleRecoverError(err);
       }
     },
 
@@ -191,6 +191,11 @@ export default {
 
     handleAuthError(error) {
       this.error = 'Auth failed. Please, try again';
+    },
+
+    handleRecoverError(error) {
+      this.error =
+        (error && error.message) || 'Recover failed. Please, try again';
     },
   },
 

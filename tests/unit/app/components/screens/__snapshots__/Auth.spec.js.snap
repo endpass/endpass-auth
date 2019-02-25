@@ -31,11 +31,3 @@ exports[`Auth render should render message form if link sent but user is not aut
   </v-frame-stub>
 </screen-stub>
 `;
-
-exports[`Auth render should render opt form if opt email is not null 1`] = `
-<screen-stub>
-  <v-frame-stub closable="true">
-    <otp-form-stub></otp-form-stub>
-  </v-frame-stub>
-</screen-stub>
-`;
