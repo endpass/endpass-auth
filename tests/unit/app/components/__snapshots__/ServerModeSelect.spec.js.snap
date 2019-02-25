@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServerModeSelect render should correctly render ServerModeSelect component 1`] = `
+<div class="container">
+  <message-stub>
+    Identity server
+  </message-stub>
+  <form-field-stub>
+    <v-select-stub items="[object Object],[object Object],[object Object]" name="currentIdentityServerType" value="default" options="[object Object],[object Object],[object Object]" label="Identity Server" data-test="mode-select"></v-select-stub>
+  </form-field-stub>
+  <!---->
+  <!---->
+  <!---->
+</div>
+`;
