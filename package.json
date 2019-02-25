@@ -14,9 +14,9 @@
   "homepage": "https://github.com/endpass/endpass-auth",
   "scripts": {
     "dev": "SOURCE_MAP=true NODE_ENV=local vue-cli-service serve ./src/main.js",
-    "build": "rimraf NODE_ENV=production vue-cli-service build ./src/main.js",
-    "build:dev": "NODE_ENV=development vue-cli-service build ./src/main.js",
-    "build:test": "NODE_ENV=test vue-cli-service build ./src/main.js",
+    "build": "rimraf ./dist && NODE_ENV=production vue-cli-service build ./src/main.js",
+    "build:dev": "rimraf ./dist && NODE_ENV=development vue-cli-service build ./src/main.js",
+    "build:test": "rimraf ./dist && NODE_ENV=test vue-cli-service build ./src/main.js",
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watch",
     "format": "prettier --write './src/**/*.{js,vue,json}' && eslint ./src/**/*.{js,vue} --fix",

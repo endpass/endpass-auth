@@ -11,14 +11,18 @@ const hdKeyMnemonic = {
   path: `m/44'/60'/0'/0`, // Derivation path
 };
 
-const googleClientId = '885568627115-2lu9inbk9n7o1hc0me6dip2ac5drprj0.apps.googleusercontent.com';
+const googleClientId =
+  '885568627115-2lu9inbk9n7o1hc0me6dip2ac5drprj0.apps.googleusercontent.com';
 
 const gitClientId = '346108128ad51a5eccd1';
+
+const isProduction = false;
 
 module.exports = {
   infura,
   identity,
   hdKeyMnemonic,
   googleClientId,
-  gitClientId
+  gitClientId,
+  isProduction,
 };

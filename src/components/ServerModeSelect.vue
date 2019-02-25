@@ -30,6 +30,9 @@
         help="Example: https://yourserver.com/api"
         data-test="custom-server-input"
       />
+      <message>
+        Example: https://yourserver.com/api
+      </message>
     </form-field>
 
     <form-field v-if="validationError">
@@ -79,8 +82,7 @@ const availableIdentityServerTypes = [
     value: IDENTITY_MODE.CUSTOM,
     label: 'Custom server',
   },
-];
-// .filter(mode => !(ENV.isProduction && mode.val === IDENTITY_MODE.LOCAL));
+].filter(mode => !(ENV.isProduction && mode.val === IDENTITY_MODE.LOCAL));
 
 export default {
   name: 'ServerModeSelect',
