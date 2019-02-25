@@ -3,17 +3,17 @@ import Auth from '@/components/forms/Auth.vue';
 import { IDENTITY_MODE } from '@/constants';
 
 describe('Auth', () => {
-  describe('render', () => {
-    let wrapper;
+  let wrapper;
 
-    beforeEach(() => {
-      wrapper = shallowMount(Auth, {
-        propsData: {
-          inited: true,
-        },
-      });
+  beforeEach(() => {
+    wrapper = shallowMount(Auth, {
+      propsData: {
+        inited: true,
+      },
     });
+  });
 
+  describe('render', () => {
     it('should correctly render Auth component', () => {
       expect(wrapper.name()).toBe('AuthForm');
       expect(wrapper.find('[data-test=email-input]').exists()).toBe(true);
@@ -45,63 +45,183 @@ describe('Auth', () => {
       expect(submitButton.text()).toBe('Loading...');
       expect(submitButton.attributes().disabled).toBe('true');
     });
+
+    describe('server mode', () => {
+      it('should not render server mode component by default', () => {
+        expect(wrapper.find('server-mode-select-stub').exists()).toBe(false);
+      });
+
+      it('should render server mode component', () => {
+        wrapper.setProps({
+          isServerMode: true,
+        });
+
+        expect(wrapper.find('server-mode-select-stub').exists()).toBe(true);
+      });
+    });
   });
 
   describe('behavior', () => {
-    let wrapper;
+    const email = 'foo@bar.baz';
+    const defaultServerMode = {
+      type: IDENTITY_MODE.DEFAULT,
+      serverUrl: undefined,
+    };
+    const defaultEmitParams = { email, serverMode: defaultServerMode };
 
-    beforeEach(() => {
-      wrapper = mount(Auth, {
-        propsData: {
-          message: 'foo',
-          inited: true,
-        },
+    describe('form', () => {
+      beforeEach(() => {
+        wrapper = mount(Auth, {
+          propsData: {
+            message: 'foo',
+            inited: true,
+          },
+        });
+      });
+
+      describe('email', () => {
+        describe('empty', () => {
+          it('should not allow submit form', () => {
+            wrapper.find('form').trigger('submit');
+
+            expect(wrapper.emitted().submit).toBe(undefined);
+          });
+        });
+
+        describe('invalid', () => {
+          beforeEach(() => {
+            wrapper.setData({
+              email: 'foo@bar',
+            });
+          });
+
+          it('should disable submit button', () => {
+            expect(
+              wrapper.find('[data-test=submit-button]').attributes().disabled,
+            ).toBe('disabled');
+          });
+
+          it('should not allow submit form', () => {
+            wrapper.find('form').trigger('submit');
+
+            expect(wrapper.emitted().submit).toBe(undefined);
+          });
+        });
+
+        describe('valid', () => {
+          beforeEach(() => {
+            wrapper.setData({
+              email,
+            });
+          });
+
+          it('should enable submit button', () => {
+            expect(
+              wrapper.find('[data-test=submit-button]').attributes().disabled,
+            ).not.toBe('disabled');
+          });
+
+          it('should allow submit', () => {
+            wrapper.find('form').trigger('submit');
+
+            expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
+          });
+        });
+      });
+
+      describe('terms', () => {
+        beforeEach(() => {
+          wrapper.setData({
+            email,
+          });
+        });
+
+        describe('isn`t accepted', () => {
+          beforeEach(() => {
+            wrapper.setData({
+              isTermsAccepted: false,
+            });
+          });
+
+          it('should not allow submit form', () => {
+            wrapper.find('form').trigger('submit');
+
+            expect(wrapper.emitted().submit).toBe(undefined);
+          });
+
+          it('should disable submit button', () => {
+            expect(
+              wrapper.find('[data-test=submit-button]').attributes().disabled,
+            ).toBe('disabled');
+          });
+        });
+
+        describe('is accepted', () => {
+          beforeEach(() => {
+            wrapper.setData({
+              isTermsAccepted: true,
+            });
+          });
+
+          it('should allow submit form', () => {
+            wrapper.find('form').trigger('submit');
+
+            expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
+          });
+
+          it('should enable submit button', () => {
+            expect(
+              wrapper.find('[data-test=submit-button]').attributes().disabled,
+            ).not.toBe('disabled');
+          });
+        });
       });
     });
 
-    it('should not allow submit form if email is empty', () => {
-      wrapper.find('form').trigger('submit');
-
-      expect(wrapper.emitted().submit).toBe(undefined);
-    });
-
-    it('should not allow submit form if email is empty', () => {
-      wrapper.setData({
-        email: 'foo@bar',
+    describe('server mode', () => {
+      beforeEach(() => {
+        wrapper.setProps({
+          isServerMode: true,
+        });
       });
 
-      wrapper.find('form').trigger('submit');
+      describe('emit', () => {
+        it('should not render email form when custom event', () => {
+          const customServerMode = {
+            type: IDENTITY_MODE.CUSTOM,
+            serverUrl: 'https://site.com',
+          };
 
-      expect(wrapper.emitted().submit).toBe(undefined);
-    });
+          wrapper
+            .find('server-mode-select-stub')
+            .vm.$emit('input', customServerMode);
 
-    it('should allow submit of email is valid', () => {
-      const email = 'foo@bar.baz';
-      const serverMode = {
-        type: IDENTITY_MODE.DEFAULT,
-        serverUrl: undefined,
-      };
-      const params = { email, serverMode };
+          expect(wrapper.find('[data-test=email-input]').exists()).toBe(false);
+        });
 
-      wrapper.setData({
-        email,
-        isTermsAccepted: false,
+        it('should not render email form when local event', () => {
+          const localServerMode = {
+            type: IDENTITY_MODE.LOCAL,
+            serverUrl: undefined,
+          };
+
+          wrapper
+            .find('server-mode-select-stub')
+            .vm.$emit('input', localServerMode);
+
+          expect(wrapper.find('[data-test=email-input]').exists()).toBe(false);
+        });
+
+        it('should emit submit event when confirm', () => {
+          wrapper.setData({
+            email,
+          });
+
+          wrapper.find('server-mode-select-stub').vm.$emit('confirm');
+
+          expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
+        });
       });
-
-      const submitButton = wrapper.find('[data-test=submit-button]');
-      expect(submitButton.attributes().disabled).toBe('disabled');
-
-      wrapper.setData({
-        isTermsAccepted: true,
-      });
-
-      expect(
-        wrapper.find('[data-test=submit-button]').attributes().disabled,
-      ).not.toBe('disabled');
-
-      wrapper.find('form').trigger('submit');
-
-      expect(wrapper.emitted().submit).toEqual([[params]]);
     });
   });
 });
