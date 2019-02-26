@@ -1,9 +1,12 @@
 const path = require('path');
 const webpack = require('webpack');
+const utils = require('@endpass/utils/build');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { getEnv } = require('./env');
 
 const { NODE_ENV, SOURCE_MAP } = process.env;
 const ENV = getEnv(NODE_ENV);
+
 
 module.exports = {
   productionSourceMap: false,
@@ -15,6 +18,11 @@ module.exports = {
       new webpack.DefinePlugin({
         ENV: JSON.stringify(ENV),
       }),
+      // new HtmlWebpackPlugin({
+      //   meta: {
+      //     build: getCommitHash(),
+      //   },
+      // }),
     ],
   },
 
@@ -50,6 +58,15 @@ module.exports = {
       .rule('svg-sprite')
       .use('svgo-loader')
       .loader('svgo-loader');
+    config.plugin('html')
+      .tap(args => {
+        const options = Object.assign(args[0], {
+          meta: {
+            build: utils.getCommitHash(),
+          }
+        })
+        return [options]
+      });
   },
   devServer: {
     proxy: {
