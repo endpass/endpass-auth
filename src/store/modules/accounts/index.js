@@ -10,6 +10,7 @@ const state = {
   settings: null,
   recoveryIdentifier: null,
   isAuthorized: false,
+  demoData: null,
 };
 
 export default {

@@ -41,4 +41,16 @@ describe('accounts mutations', () => {
       expect(state.recoveryIdentifier).toBe(recoveryIdentifier);
     });
   });
+
+  describe('setDemoData', () => {
+    const demoData = {
+      field: 'field',
+    };
+
+    it('should set demo data', async () => {
+      accountsMutations.setDemoData(state, demoData);
+
+      expect(state.demoData).toBe(demoData);
+    });
+  });
 });

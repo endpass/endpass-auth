@@ -1,6 +1,6 @@
 <template>
   <screen>
-    <v-frame :loading="!request">
+    <v-frame :loading="!request" :closable="isDialog" @close="handleSignCancel">
       <sign-form
         :accounts="accounts"
         :loading="loading"
@@ -29,7 +29,7 @@ export default {
 
   computed: {
     ...mapState({
-      accounts: state => state.accounts.accounts,
+      accounts: state => state.accounts.accounts, // from demo, or from state
       inited: state => state.core.inited,
       loading: state => state.core.loading,
       request: state => state.requests.request,

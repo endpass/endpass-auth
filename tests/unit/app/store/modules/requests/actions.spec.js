@@ -1,7 +1,6 @@
 import Wallet from '@/class/Wallet';
-import { awaitMessageFromOpener, sendMessageToOpener } from '@/util/message';
+import { awaitMessageFromOpener } from '@/util/message';
 import requestsActions from '@/store/modules/requests/actions';
-import { METHODS } from '@/constants';
 
 describe('requests actions', () => {
   const password = 'secret';
@@ -75,19 +74,20 @@ describe('requests actions', () => {
       address: '0x0',
     };
     const signResult = '0x0123';
+    const getters = {};
 
     it('should process request with new wallet instance and send response', async () => {
       expect.assertions(4);
 
-      dispatch.mockResolvedValueOnce(account);
-      dispatch.mockResolvedValueOnce(signResult);
+      dispatch.mockResolvedValueOnce(account).mockResolvedValueOnce(signResult);
 
       await requestsActions.processRequest(
-        { state, commit, dispatch },
+        { state, commit, dispatch, getters },
         password,
       );
 
       expect(dispatch).toBeCalledTimes(3);
+
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
@@ -113,11 +113,12 @@ describe('requests actions', () => {
       dispatch.mockRejectedValueOnce(error);
 
       await requestsActions.processRequest(
-        { state, commit, dispatch },
+        { state, commit, dispatch, getters },
         password,
       );
 
       expect(dispatch).toBeCalledTimes(3);
+
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
