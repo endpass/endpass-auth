@@ -6,7 +6,7 @@ import { DEFAULT_NETWORKS, METHODS, LAZY_METHODS } from '@/constants';
 
 const init = async ({ dispatch, commit }) => {
   try {
-    await dispatch('getOnlyV3Accounts');
+    await dispatch('defineOnlyV3Accounts');
     // eslint-disable-next-line
   } catch (err) {
   } finally {
@@ -40,7 +40,7 @@ const subscribeOnBridge = ({ dispatch, rootState }) => {
         target,
       });
     } else if (message.method === METHODS.GET_SETTINGS) {
-      dispatch('getSettings')
+      dispatch('defineSettings')
         .then(() =>
           dispatch('sendBridgeMessage', {
             payload: {

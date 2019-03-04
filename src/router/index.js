@@ -2,6 +2,7 @@ import { isEmpty } from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
+import queryStringToMap from '@endpass/utils/queryStringToMap';
 
 import Bridge from '@/components/Bridge';
 import Auth from '@/components/screens/Auth';
@@ -42,16 +43,22 @@ router.beforeEach(async (to, from, next) => {
     to.name,
   );
 
-  if (!isPublicRoute) {
-    await store.dispatch('getOnlyV3Accounts');
-    try {
-      await store.dispatch('getSettings');
-    } finally {
-      return !isEmpty(store.state.accounts.accounts) ? next() : next('auth');
-    }
+  const searchString = (window.location.search || '').substring(1);
+  const query = queryStringToMap(searchString);
+  if (query.demoData) {
+    await store.dispatch('setupDemoData', query.demoData);
   }
 
-  return next();
+  if (store.getters.demoData || isPublicRoute) {
+    return next();
+  }
+
+  await store.dispatch('defineOnlyV3Accounts');
+  try {
+    await store.dispatch('defineSettings');
+  } finally {
+    return !isEmpty(store.state.accounts.accounts) ? next() : next('auth');
+  }
 });
 
 export default router;

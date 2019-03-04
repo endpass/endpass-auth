@@ -87,7 +87,7 @@ describe('core actions', () => {
         dispatch,
       });
 
-      expect(dispatch).toBeCalledWith('getOnlyV3Accounts');
+      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
       expect(commit).toBeCalledWith('changeInitStatus', true);
     });
   });
