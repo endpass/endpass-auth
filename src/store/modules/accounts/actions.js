@@ -44,8 +44,9 @@ const authWithGitHub = async ({ commit }, code) => {
 
     if (!res.success) throw new Error(res.message || 'Auth failed!');
 
-    const type = get(res, 'challenge.challengeType');
+    SettingsService.clearLocalSettings();
 
+    const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
       commit('setOtpEmail', res.email);
     }
@@ -66,8 +67,9 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     if (!res.success) throw new Error('Auth failed!');
 
-    const type = get(res, 'challenge.challengeType');
+    SettingsService.clearLocalSettings();
 
+    const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
       commit('setOtpEmail', email);
       commit('changeLoadingStatus', false);
@@ -134,15 +136,14 @@ const defineSettings = async ({ state, dispatch, commit, getters }) => {
 
   SettingsService.setLocalSettings(mergedSettings);
 
-  commit('setSettings', {
-    ...settings,
-    ...mergedSettings,
-  });
-
-  return {
+  const newSettings = {
     ...settings,
     ...mergedSettings,
   };
+
+  commit('setSettings', newSettings);
+
+  return newSettings;
 };
 
 const setSettings = async (ctx, payload) => {
@@ -249,7 +250,7 @@ const awaitAccountCreate = async ({ commit }) => {
 };
 
 const openCreateAccountPage = async () => {
-  window.open('https://wallet-dev.endpass.com/#/');
+  window.open(ENV.wallet.openUrl);
 };
 
 const awaitLogoutConfirm = async ({ commit }) => {
@@ -277,6 +278,7 @@ const logout = async ({ dispatch, commit }) => {
 
   try {
     await IdentityService.logout();
+    SettingsService.clearLocalSettings();
 
     dispatch('resolveMessage', {
       status: true,

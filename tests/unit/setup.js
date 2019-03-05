@@ -1,3 +1,5 @@
+import 'jest-localstorage-mock';
+
 import './mocks/service/identity.mock';
 import './mocks/service/settings.mock';
 import './mocks/util/message.mock';
