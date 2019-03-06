@@ -190,7 +190,9 @@ export default {
     },
 
     handleAuthError(error) {
-      this.error = 'Auth failed. Please, try again';
+      this.error = error.display
+        ? error.message
+        : 'Auth failed. Please, try again';
     },
 
     handleRecoverError(error) {

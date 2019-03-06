@@ -32,6 +32,9 @@ export default {
       }
     },
     handleAuthError(err) {
+      err.message = err.message.replace(/_/g, ' ');
+      err.message = err.message.charAt(0).toUpperCase() + err.message.slice(1);
+      err.display = true;
       this.$emit('error', err);
     },
   },
