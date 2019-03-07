@@ -4,6 +4,8 @@ import IdentityService from '@/service/identity';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 
+import { v3KeyStore } from '@unitFixtures/accounts';
+
 describe('accounts actions', () => {
   let dispatch;
   let commit;
@@ -316,7 +318,7 @@ describe('accounts actions', () => {
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
-      expect(dispatch).toBeCalledWith('getOnlyV3Accounts');
+      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
     });
   });
 
@@ -446,7 +448,7 @@ describe('accounts actions', () => {
         dispatch,
       });
 
-      expect(dispatch).toBeCalledWith('getOnlyV3Accounts');
+      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
     });
   });
 
@@ -555,6 +557,87 @@ describe('accounts actions', () => {
       ).rejects.toThrow(error);
       expect(commit).toHaveBeenCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+    });
+  });
+
+  describe('change settings', () => {
+    it('should change settings without demoData', async () => {
+      expect.assertions(4);
+
+      const getters = {};
+      const state = {
+        settings: {
+          storeSettings: 'storeSettings',
+        },
+      };
+
+      const settings = {
+        lastActiveAccount: '123',
+      };
+
+      dispatch.mockResolvedValueOnce(settings);
+
+      const res = await accountsActions.defineSettings({
+        state,
+        dispatch,
+        commit,
+        getters,
+      });
+
+      expect(res).toEqual(settings);
+      expect(dispatch).toBeCalledTimes(1);
+      expect(dispatch).toHaveBeenNthCalledWith(1, 'getSettings');
+      expect(commit).toHaveBeenCalledWith('setSettings', settings);
+    });
+
+    it('should change settings with demoData', async () => {
+      expect.assertions(3);
+
+      const settings = {
+        lastActiveAccount: '123',
+      };
+
+      const state = {
+        settings: { noData: 'noData' },
+      };
+
+      dispatch.mockResolvedValueOnce(settings);
+
+      const res = await accountsActions.defineSettings({
+        state,
+        dispatch,
+        commit,
+        getters: { demoData: {} },
+      });
+
+      expect(res).toEqual(state.settings);
+      expect(dispatch).toBeCalledTimes(0);
+      expect(commit).toHaveBeenCalledWith('setSettings', state.settings);
+    });
+  });
+
+  describe('demo mode', () => {
+    const demoData = {
+      v3KeyStore,
+      activeNet: 3,
+      password: '12345678',
+    };
+    const query = encodeURIComponent(JSON.stringify(demoData));
+
+    it('should setup demo data', async () => {
+      expect.assertions(4);
+
+      await accountsActions.setupDemoData({ commit }, query);
+
+      expect(commit).toBeCalledTimes(3);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setDemoData', demoData);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setAccounts', [
+        { address: v3KeyStore.address },
+      ]);
+      expect(commit).toHaveBeenNthCalledWith(3, 'setSettings', {
+        lastActiveAccount: v3KeyStore.address,
+        net: demoData.activeNet,
+      });
     });
   });
 });

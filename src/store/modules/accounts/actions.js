@@ -44,8 +44,9 @@ const authWithGitHub = async ({ commit }, code) => {
 
     if (!res.success) throw new Error(res.message || 'Auth failed!');
 
-    const type = get(res, 'challenge.challengeType');
+    SettingsService.clearLocalSettings();
 
+    const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
       commit('setOtpEmail', res.email);
     }
@@ -66,8 +67,9 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     if (!res.success) throw new Error('Auth failed!');
 
-    const type = get(res, 'challenge.challengeType');
+    SettingsService.clearLocalSettings();
 
+    const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
       commit('setOtpEmail', email);
       commit('changeLoadingStatus', false);
@@ -105,7 +107,7 @@ const cancelAuth = ({ dispatch }) => {
   });
 };
 
-const getSettings = async ({ dispatch, commit }) => {
+const getSettings = async ({ dispatch }) => {
   const settings = await IdentityService.getSettings();
   const { lastActiveAccount } = settings;
   let account = null;
@@ -122,19 +124,26 @@ const getSettings = async ({ dispatch, commit }) => {
     });
   }
 
+  return settings;
+};
+
+const defineSettings = async ({ state, dispatch, commit, getters }) => {
+  const demoData = getters.demoData;
+
+  const settings = demoData ? state.settings : await dispatch('getSettings');
+
   const mergedSettings = SettingsService.mergeSettings(settings);
 
   SettingsService.setLocalSettings(mergedSettings);
 
-  commit('setSettings', {
-    ...settings,
-    ...mergedSettings,
-  });
-
-  return {
+  const newSettings = {
     ...settings,
     ...mergedSettings,
   };
+
+  commit('setSettings', newSettings);
+
+  return newSettings;
 };
 
 const setSettings = async (ctx, payload) => {
@@ -147,7 +156,7 @@ const updateSettings = async ({ commit, dispatch }, payload) => {
   try {
     await dispatch('setSettings', payload);
 
-    const res = await dispatch('getSettings');
+    const res = await dispatch('defineSettings');
 
     dispatch('resolveMessage', {
       status: true,
@@ -165,6 +174,7 @@ const updateSettings = async ({ commit, dispatch }, payload) => {
 };
 
 const getAccounts = async ({ commit }) => {
+  // TODO: check `getAccounts` usages
   try {
     const res = await IdentityService.getAccounts();
     const accounts = await Promise.all(
@@ -182,7 +192,12 @@ const getAccounts = async ({ commit }) => {
   }
 };
 
-const getOnlyV3Accounts = async ({ commit, dispatch }) => {
+const defineOnlyV3Accounts = async ({ commit, getters }) => {
+  if (getters.demoData) {
+    commit('setAuthStatus', true);
+    return;
+  }
+
   try {
     const res = await IdentityService.getAccounts();
 
@@ -213,7 +228,7 @@ const getAccount = async (ctx, address) => {
 
 const getFirstPrivateAccount = async ({ state, dispatch }) => {
   if (isEmpty(state.accounts)) {
-    await dispatch('getOnlyV3Accounts');
+    await dispatch('defineOnlyV3Accounts');
   }
 
   const { accounts } = state;
@@ -225,7 +240,7 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
 
 const awaitAuthConfirm = async ({ dispatch }) => {
   await IdentityService.awaitAuthConfirm();
-  await dispatch('getOnlyV3Accounts');
+  await dispatch('defineOnlyV3Accounts');
 };
 
 const awaitAccountCreate = async ({ commit }) => {
@@ -235,7 +250,7 @@ const awaitAccountCreate = async ({ commit }) => {
 };
 
 const openCreateAccountPage = async () => {
-  window.open('https://wallet-dev.endpass.com/#/');
+  window.open(ENV.wallet.openUrl);
 };
 
 const awaitLogoutConfirm = async ({ commit }) => {
@@ -263,6 +278,7 @@ const logout = async ({ dispatch, commit }) => {
 
   try {
     await IdentityService.logout();
+    SettingsService.clearLocalSettings();
 
     dispatch('resolveMessage', {
       status: true,
@@ -326,6 +342,32 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
 const validateCustomServer = (ctx, serverUrl) =>
   ModeService.validateIdentityServer(serverUrl);
 
+const setupDemoData = async ({ commit }, demoDataQuery) => {
+  if (!demoDataQuery) {
+    return;
+  }
+  let demoData;
+  try {
+    demoData = JSON.parse(decodeURIComponent(demoDataQuery));
+  } catch (e) {
+    console.error('setupDemoData parse error', e);
+  }
+
+  if (!demoData || !demoData.v3KeyStore) {
+    return;
+  }
+
+  const { address } = demoData.v3KeyStore;
+  const accounts = [{ address }];
+
+  commit('setDemoData', demoData);
+  commit('setAccounts', accounts);
+  commit('setSettings', {
+    lastActiveAccount: address,
+    net: demoData.activeNet,
+  });
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -334,11 +376,12 @@ export default {
   confirmAuth,
   confirmAuthViaOtp,
   handleAuthRequest,
-  getSettings,
+  defineSettings,
   getAccount,
   getAccounts,
   getFirstPrivateAccount,
-  getOnlyV3Accounts,
+  getSettings,
+  defineOnlyV3Accounts,
   openCreateAccountPage,
   awaitAccountCreate,
   awaitAuthConfirm,
@@ -350,4 +393,6 @@ export default {
   getRecoveryIdentifier,
   recover,
   validateCustomServer,
+
+  setupDemoData,
 };

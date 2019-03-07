@@ -26,6 +26,13 @@ export const clearLocalSettings = () => {
   localStorage.removeItem(getLocalSettingsKey());
 };
 
+/**
+ * Merge stored settings with new.
+ * Stored settings have priority to merge
+ *
+ * @param {Object} settings new settings
+ * @returns {Object}
+ */
 export const mergeSettings = settings => {
   const localSettings = getLocalSettings();
 

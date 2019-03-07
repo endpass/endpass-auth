@@ -28,7 +28,12 @@ const setRecoveryIdentifier = (state, recoveryIdentifier) => {
   state.recoveryIdentifier = recoveryIdentifier;
 };
 
+const setDemoData = (state, demoData) => {
+  state.demoData = demoData;
+};
+
 export default {
+  setDemoData,
   setAuthParams,
   setAuthStatus,
   setOtpEmail,

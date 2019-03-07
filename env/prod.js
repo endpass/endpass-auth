@@ -1,6 +1,10 @@
 const infura = {
   key: 'zU4GTAQ0LjJNKddbyztc',
 };
+const wallet = {
+  openUrl: 'https://wallet.endpass.com/#/',
+};
+
 const identity = {
   url: 'https://identity.endpass.com',
 };
@@ -19,6 +23,7 @@ const gitClientId = 'cb221235046b6d197ea4';
 const isProduction = true;
 
 module.exports = {
+  wallet,
   infura,
   identity,
   hdKeyMnemonic,

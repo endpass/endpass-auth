@@ -5,6 +5,10 @@ const identity = {
   url: 'https://identity-dev.endpass.com',
 };
 
+const wallet = {
+  openUrl: 'https://wallet-dev.endpass.com/#/',
+};
+
 const hdKeyMnemonic = {
   // phrase: '', //BIP39 mnemonic
   // seed: '', //Derived from mnemonic phrase
@@ -19,6 +23,7 @@ const gitClientId = '48dbe101ad04cbb0326e';
 const isProduction = false;
 
 module.exports = {
+  wallet,
   infura,
   identity,
   hdKeyMnemonic,

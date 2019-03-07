@@ -44,7 +44,7 @@
     </v-faucet-button>
     <form-controls>
       <v-button
-        :disabled="loading"
+        :disabled="loading || !canLogout"
         type="danger"
         data-test="logout-button"
         @click="emitLogout"
@@ -81,6 +81,11 @@ export default {
     loading: {
       type: Boolean,
       default: false,
+    },
+
+    canLogout: {
+      type: Boolean,
+      default: true,
     },
 
     error: {

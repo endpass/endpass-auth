@@ -18,12 +18,25 @@ const sendResponse = async ({ dispatch }, payload) => {
   });
 };
 
-const processRequest = async ({ state, commit, dispatch }, password) => {
+const processRequest = async (
+  { state, commit, dispatch, getters },
+  password,
+) => {
   commit('changeLoadingStatus', true);
 
   const { address, request } = state.request;
-  const account = await dispatch('getAccount', address);
-  const wallet = new Wallet(account);
+
+  const demoData = getters.demoData;
+
+  let v3KeyStore;
+  if (demoData) {
+    // eslint-disable-next-line
+    v3KeyStore = demoData.v3KeyStore;
+  } else {
+    v3KeyStore = await dispatch('getAccount', address);
+  }
+
+  const wallet = new Wallet(v3KeyStore);
 
   try {
     const signResult = await dispatch('getSignedRequest', { wallet, password });

@@ -1,12 +1,13 @@
 <template>
   <screen>
-    <v-frame :loading="!inited" :closable="false">
+    <v-frame :loading="!inited" :closable="isDialog" @close="handleCancel">
       <account-form
         :loading="loading"
         :closable="isDialog"
         :accounts="accountsOptions"
         :networks="networksOptions"
         :form-data="formData"
+        :can-logout="!isDemoMode"
         :error="error"
         :message="message"
         @donate-request="handleDonateRequest"
@@ -44,6 +45,7 @@ export default {
       inited: state => state.core.inited,
       loading: state => state.core.loading,
       settings: state => state.accounts.settings,
+      isDemoMode: state => !!state.accounts.demoData,
     }),
     ...mapGetters(['availableAccounts', 'isDialog']),
 
