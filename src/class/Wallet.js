@@ -4,7 +4,7 @@ import Tx from 'ethereumjs-tx';
 import web3 from '@/class/singleton/web3';
 import keystore from '@/util/keystore';
 
-const { isAddress, bytesToHex } = utils;
+const { isAddress, bytesToHex, numberToHex } = utils;
 
 /**
  * A Wallet represents a single Ethereum account that can send transactions
@@ -95,6 +95,7 @@ export default class Wallet {
    * @param {String<Signature>} signature Signature from signing
    * @return {Promise<Address>} Resolve account address
    */
+
   /* eslint-disable-next-line */
   async recover(message, signature) {
     return web3.eth.accounts.recover(message, signature);
@@ -116,10 +117,11 @@ export default class Wallet {
 
   async sendSignedTransaction(transaction, password) {
     const nonce = await this.getNextNonce();
+
     const signedTx = await this.signTransaction(
       {
         ...transaction,
-        nonce,
+        nonce: numberToHex(nonce),
       },
       password,
     );
@@ -127,9 +129,15 @@ export default class Wallet {
     return new Promise((resolve, reject) => {
       const sendEvent = web3.eth.sendSignedTransaction(signedTx);
 
-      sendEvent.then(receipt => resolve(receipt.transactionHash));
-      sendEvent.on('error', error => reject(error));
-      sendEvent.catch(error => reject(error));
+      sendEvent.once('transactionHash', trxHash => {
+        resolve(trxHash);
+      });
+      sendEvent.on('error', error => {
+        reject(error);
+      });
+      sendEvent.catch(error => {
+        reject(error);
+      });
     });
   }
 

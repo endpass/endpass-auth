@@ -77,27 +77,33 @@ describe('requests actions', () => {
     const getters = {};
 
     it('should process request with new wallet instance and send response', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
-      dispatch.mockResolvedValueOnce(account).mockResolvedValueOnce(signResult);
+      dispatch
+        .mockResolvedValueOnce(account)
+        .mockResolvedValueOnce({})
+        .mockResolvedValueOnce(signResult);
 
       await requestsActions.processRequest(
         { state, commit, dispatch, getters },
         password,
       );
 
-      expect(dispatch).toBeCalledTimes(3);
+      expect(dispatch).toBeCalledTimes(4);
 
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
         state.request.address,
       );
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'getSignedRequest', {
+
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'setWeb3NetworkProvider', 1);
+
+      expect(dispatch).toHaveBeenNthCalledWith(3, 'getSignedRequest', {
         wallet: expect.any(Wallet),
         password,
       });
-      expect(dispatch).toHaveBeenNthCalledWith(3, 'sendResponse', {
+      expect(dispatch).toHaveBeenNthCalledWith(4, 'sendResponse', {
         id: state.request.request.id,
         result: signResult,
         jsonrpc: state.request.request.jsonrpc,
@@ -105,11 +111,12 @@ describe('requests actions', () => {
     });
 
     it('should send response with error if error was occured during processing request', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       const error = new Error('foo');
 
       dispatch.mockResolvedValueOnce(account);
+      dispatch.mockResolvedValueOnce({}); // for setWeb3NetworkProvider
       dispatch.mockRejectedValueOnce(error);
 
       await requestsActions.processRequest(
@@ -117,18 +124,20 @@ describe('requests actions', () => {
         password,
       );
 
-      expect(dispatch).toBeCalledTimes(3);
+      expect(dispatch).toBeCalledTimes(4);
 
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
         state.request.address,
       );
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'getSignedRequest', {
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'setWeb3NetworkProvider', 1);
+
+      expect(dispatch).toHaveBeenNthCalledWith(3, 'getSignedRequest', {
         wallet: expect.any(Wallet),
         password,
       });
-      expect(dispatch).toHaveBeenNthCalledWith(3, 'sendResponse', {
+      expect(dispatch).toHaveBeenNthCalledWith(4, 'sendResponse', {
         id: state.request.request.id,
         result: [],
         jsonrpc: state.request.request.jsonrpc,
