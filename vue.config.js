@@ -79,6 +79,7 @@ module.exports = {
         cookieDomainRewrite: 'localhost',
       },
     },
+    // https: true,
   },
 
   outputDir: path.resolve(__dirname, './dist/app'),
