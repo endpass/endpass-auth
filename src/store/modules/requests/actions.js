@@ -1,5 +1,6 @@
 import Wallet from '@/class/Wallet';
 import { awaitMessageFromOpener } from '@/util/message';
+import { NET_ID } from '@/constants';
 
 const awaitRequestMessage = async ({ commit, dispatch }) => {
   const res = await awaitMessageFromOpener();
@@ -24,8 +25,9 @@ const processRequest = async (
 ) => {
   commit('changeLoadingStatus', true);
 
-  const { address, request } = state.request;
+  const { address, request, net = NET_ID.MAIN } = state.request;
 
+  // eslint-disable-next-line
   const demoData = getters.demoData;
 
   let v3KeyStore;
@@ -39,6 +41,7 @@ const processRequest = async (
   const wallet = new Wallet(v3KeyStore);
 
   try {
+    await dispatch('setWeb3NetworkProvider', net);
     const signResult = await dispatch('getSignedRequest', { wallet, password });
 
     dispatch('sendResponse', {
@@ -116,9 +119,16 @@ const getSignedTypedDataRequest = async () => {
 
 const getSignedPlainRequest = async ({ state }, { password, wallet }) => {
   const { request } = state.request;
-  const res = await wallet.sign(request.params[0], password);
+  let res;
+  const passParams = request.params[0];
+  if (request.method === 'eth_sendTransaction') {
+    res = await wallet.sendSignedTransaction(passParams, password);
+  } else {
+    const singRes = await wallet.sign(passParams, password);
+    res = singRes.signature;
+  }
 
-  return res.signature;
+  return res;
 };
 
 const cancelRequest = ({ state, dispatch }) => {
