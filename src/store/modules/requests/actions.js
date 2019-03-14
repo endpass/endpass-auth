@@ -1,6 +1,6 @@
 import Wallet from '@/class/Wallet';
 import { awaitMessageFromOpener } from '@/util/message';
-import { NET_ID } from '@/constants';
+import { Network } from '@endpass/class';
 
 const awaitRequestMessage = async ({ commit, dispatch }) => {
   const res = await awaitMessageFromOpener();
@@ -25,7 +25,7 @@ const processRequest = async (
 ) => {
   commit('changeLoadingStatus', true);
 
-  const { address, request, net = NET_ID.MAIN } = state.request;
+  const { address, request, net = Network.NET_ID.MAIN } = state.request;
 
   // eslint-disable-next-line
   const demoData = getters.demoData;

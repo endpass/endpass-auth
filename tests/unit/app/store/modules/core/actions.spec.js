@@ -1,7 +1,8 @@
 import web3 from '@/class/singleton/web3';
 import { sendMessageToOpener } from '@/util/message';
 import coreActions from '@/store/modules/core/actions';
-import { DEFAULT_NETWORKS, METHODS } from '@/constants';
+import { METHODS } from '@/constants';
+import { Network } from '@endpass/class'
 
 describe('core actions', () => {
   let dispatch;
@@ -97,7 +98,7 @@ describe('core actions', () => {
       await coreActions.setWeb3NetworkProvider(null, 1);
 
       expect(web3.providers.HttpProvider).toBeCalledWith(
-        DEFAULT_NETWORKS[1].url[0],
+        Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0],
       );
       expect(web3.setProvider).toBeCalled();
     });
