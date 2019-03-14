@@ -62,7 +62,7 @@
 
 <script>
 import { VFaucetButton } from '@endpass/faucet';
-import { DEFAULT_NETWORKS } from '@/constants';
+import { Network } from '@endpass/class';
 import VButton from '../VButton.vue';
 import VSelect from '../VSelect.vue';
 import Message from '../Message.vue';
@@ -120,12 +120,8 @@ export default {
     },
 
     isRopsten() {
-      const ropstenNet = Object.values(DEFAULT_NETWORKS).find(
-        net => net.networkType === 'ropsten',
-      );
-
       /* eslint-disable-next-line */
-      return this.formData.activeNet == ropstenNet.id;
+      return this.formData.activeNet == Network.NET_ID.ROPSTEN;
     },
   },
 

@@ -8,7 +8,7 @@ import { keystore } from '@endpass/utils';
 import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
 import ModeService from '@/service/mode';
-import { NETWORK_URL } from '@/constants';
+import { Network } from '@endpass/class';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -318,7 +318,7 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
     const hdWallet = hdKey.derivePath(ENV.hdKeyMnemonic.path);
     const wallet = hdWallet.deriveChild(0).getWallet();
     const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
-    const web3 = new Web3(NETWORK_URL.ETH[0]);
+    const web3 = new Web3(Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0]);
     const { signature } = await web3.eth.accounts.sign(
       state.recoveryIdentifier,
       privateKey,

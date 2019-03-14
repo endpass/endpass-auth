@@ -2,7 +2,8 @@ import get from 'lodash/get';
 import omit from 'lodash/omit';
 import web3 from '@/class/singleton/web3';
 import { createSubscribtion, sendMessageToOpener } from '@/util/message';
-import { DEFAULT_NETWORKS, METHODS, LAZY_METHODS } from '@/constants';
+import { METHODS, LAZY_METHODS } from '@/constants';
+import { Network } from '@endpass/class';
 
 const init = async ({ dispatch, commit }) => {
   try {
@@ -15,7 +16,7 @@ const init = async ({ dispatch, commit }) => {
 };
 
 const setWeb3NetworkProvider = (ctx, netId) => {
-  const netUrl = get(DEFAULT_NETWORKS, `[${netId}].url[0]`);
+  const netUrl = Network.NETWORK_URL_HTTP[netId][0];
   const provider = new web3.providers.HttpProvider(netUrl);
 
   web3.setProvider(provider);
