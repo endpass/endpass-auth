@@ -79,7 +79,11 @@ const subscribeOnBridge = async ({ commit, dispatch, rootState }) => {
   });
 };
 
-const startBridge = async ({ dispatch, commit }) => {
+const startBridge = async ({ dispatch, commit, getters }) => {
+  if (!getters.isDialog) {
+    return;
+  }
+
   const {
     isIdentityMode,
     demoData,
