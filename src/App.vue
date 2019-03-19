@@ -17,7 +17,7 @@ export default {
   },
 
   async created() {
-    await this.init();
+    await this.init(this.$router);
   },
 };
 </script>

@@ -9,6 +9,8 @@ import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
 import ModeService from '@/service/mode';
 import { Network } from '@endpass/class';
+import syncChannel from '@/class/singleton/syncChannel';
+import { Answer } from '@/class';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -88,23 +90,18 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
   try {
     await IdentityService.otpAuth(email, code);
   } catch (err) {
-    commit('changeLoadingStatus', false);
     throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
   }
 };
 
-const confirmAuth = ({ dispatch }, serverMode) => {
-  dispatch('resolveMessage', {
-    status: true,
-    payload: serverMode,
-  });
+const confirmAuth = ({}, serverMode) => {
+  syncChannel.put(Answer.createOk(serverMode));
 };
 
-const cancelAuth = ({ dispatch }) => {
-  dispatch('resolveMessage', {
-    status: false,
-    message: 'Auth was canceled by user!',
-  });
+const cancelAuth = () => {
+  syncChannel.put(Answer.createFail('Auth was canceled by user!'));
 };
 
 const getSettings = async ({ dispatch }) => {
@@ -128,7 +125,7 @@ const getSettings = async ({ dispatch }) => {
 };
 
 const defineSettings = async ({ state, dispatch, commit, getters }) => {
-  const demoData = getters.demoData;
+  const { demoData } = getters;
 
   const settings = demoData ? state.settings : await dispatch('getSettings');
 
@@ -158,14 +155,14 @@ const updateSettings = async ({ commit, dispatch }, payload) => {
 
     const res = await dispatch('defineSettings');
 
-    dispatch('resolveMessage', {
-      status: true,
+    const answer = Answer.createOk({
       type: 'update',
-      payload: {
+      settings: {
         activeAccount: res.lastActiveAccount,
         activeNet: res.net,
       },
     });
+    syncChannel.put(answer);
   } catch (err) {
     throw new Error('Something went wrong, try again later');
   } finally {
@@ -265,25 +262,23 @@ const awaitLogoutConfirm = async ({ commit }) => {
   }
 };
 
-const closeAccount = async ({ dispatch }) => {
-  dispatch('resolveMessage', {
-    status: true,
-    type: 'close',
-  });
-  dispatch('closeDialog');
+const closeAccount = async () => {
+  syncChannel.put(Answer.createOk({ type: 'close' }));
 };
 
-const logout = async ({ dispatch, commit }) => {
+const logout = async ({ commit }) => {
   commit('changeLoadingStatus', true);
 
   try {
     await IdentityService.logout();
     SettingsService.clearLocalSettings();
+    commit('logout');
 
-    dispatch('resolveMessage', {
-      status: true,
-      type: 'logout',
-    });
+    syncChannel.put(
+      Answer.createOk({
+        type: 'logout',
+      }),
+    );
   } catch (err) {
     console.error(err);
 
@@ -342,17 +337,7 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
 const validateCustomServer = (ctx, serverUrl) =>
   ModeService.validateIdentityServer(serverUrl);
 
-const setupDemoData = async ({ commit }, demoDataQuery) => {
-  if (!demoDataQuery) {
-    return;
-  }
-  let demoData;
-  try {
-    demoData = JSON.parse(decodeURIComponent(demoDataQuery));
-  } catch (e) {
-    console.error('setupDemoData parse error', e);
-  }
-
+const setupDemoData = async ({ commit }, demoData) => {
   if (!demoData || !demoData.v3KeyStore) {
     return;
   }
