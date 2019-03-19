@@ -8,6 +8,8 @@ const { NODE_ENV, SOURCE_MAP } = process.env;
 const ENV = getEnv(NODE_ENV);
 
 module.exports = {
+  baseUrl: '',
+
   productionSourceMap: false,
 
   configureWebpack: {
