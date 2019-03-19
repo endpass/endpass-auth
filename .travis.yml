@@ -1,34 +1,34 @@
 language: node_js
 node_js:
 - '10'
-cache:
-  directories:
-  - "~/.cache"
+cache: yarn
 install: yarn install --frozen-lockfile
 stages:
 - name: test
-- name: deploy_npm
-  if: branch = release
-- name: deploy_s3
-  if: branch = master
+- name: deploy
 jobs:
   include:
-    - stage: test
-      script: npm test
-    - stage: deploy_s3
-      script:
-        - npm run build:dev
-      deploy:
-        provider: s3
-        access_key_id: '$ACCESS_KEY_ID'
-        secret_access_key: '$SECRET_ACCESS_KEY'
-        bucket: auth-dev.endpass.com
-        region: us-east-1
-        skip_cleanup: true
-        local_dir: dist/app
-branches:
-  except:
-  - "/^v\\d+\\.\\d+\\.\\d+$/"
+  - stage: test
+    script: yarn test
+  - stage: deploy
+    script:
+    - yarn build:dev
+    deploy:
+    - provider: s3
+      bucket: auth-dev.endpass.com
+      region: us-east-1
+      skip_cleanup: true
+      local_dir: dist/app
+      on:
+        tags: false
+    - provider: s3
+      bucket: auth-dev.endpass.com
+      region: us-east-1
+      skip_cleanup: true
+      local_dir: dist/app
+      upload-dir: "$TRAVIS_TAG"
+      on:
+        tags: true
 notifications:
   slack:
-    secure: nkmuE9/XdAJ/aomaFiyVWrTt7R2cbzXMpEb7TqcuqS1IWGBjaUL9jg0xgq1RlNEjrmz5ONwnVfmebkBZIF5uUXwGVN4vhtjPDe01NytXWCtYQiztyQ3GVe0My0NehXm5KbyydgXT7OftYd1926iIOGHLsX3oZi4rHqFhE9dtFwsEORsdU7JIxaRCAo7MmnhphcQI7SVBYcsUFIGKR1QzIyXw21csOIcEhr/Vb4x9lgA+XdjP40Oysp6V5Ccnkq/OaHXxgqt2AlLRg/t/vqq3qV5vArFvnM+UPw+1or+KUdvWIkhhfD2I33FUV2OGMH1hajpmC7q50HSsSFwJGydRhbJZDTtUGEqaFBt3DZQJ8xhvU/+aABBrqovosWsww727kcrLceznedbVUnrGCbyP0UOlZdfBfP3BrlWO5lgszw8mD6iGJJ6TNsuwaztm1dKAAug1zDFSYHjtPIdZE3TcCcTkOBDwqRHiOybKP4VCYnLKfYS/vNdozCF2idOSlO1fRt/nY/Ve1fDiotYVv244L8QlP9vw5b8FV5wC4tJ4pthChMZgtzcFqWdgKZ3pzwljHPKoQWE5Sl6r9dYD5nLWq8Asv+aPllETSLImzKhwqnhdvn40KnrJGPd9MAsVsSeRag6jajOzckzp1RS0mXZLGdRxHcShxGGK4iLiPr+nJhI=
+    secure: kZC0wzCLSrJlPqhOZL2/8TKx/+ZcGHHh+dYzAyrK15fjZBQfKAeq3hCeMybxH/d7ANgf9D8RWQ5mYWmGI6VEJdq3iXzIVXcTY/e97c4hBQEUZ5Ojl+UheEiNZsech/CifnztGpkIHOCmxF+/7EtilXnTr13V4kd7Cp2gAgdjywRagVklSq1Q7X6vVSBBJ5W90Ubhgl1renCEIVBUJ5D6hkX4U9gS9B3qso/pGOJhQdeJvWY33vOwzGbQyWPcXdPfxi/vAoWqinLzPKnCXRwsPhIdUtIhb77a4LdESf9p5aww+YA4LTB7+6o1G9DhBgnJOWlACSnVC3q4U6tYXpuB9r1F4cAtNIjkPxAiUTj3CVzxnhOFH9VLnfzW+8LJRdkKmWzSk3O56mSs6dBDQQJYkQQzy+rc8yNWmUcmF2YPu2D5Bg6t6ZMvIMgRoQprb9bI7A+3LlJLYMi9D5XIXMERbhnGr/PTdSvYTKTTTB8Z77/+Hn3YICWrog904TMN3OJ2qMXzSvtsxMCFg3DxxG6qzLFfLDZ8DBrXu/D5MjDMMf3OVPoFgB2aXHk2liX6QEseEBYoWB93FKjQBoXI39RFoU07v6v7g8lA+VWNBXqAc4QH0IS2XQEQrxAkkA5U2uUCBZhX0K3O5n0RSdAJfQ0bvk1OjbYmd6mumK68lP63Opg=
