@@ -2,7 +2,7 @@ import { CrossWindowMessenger } from '@endpass/class';
 import { DIRECTION } from '@/constants';
 
 const bridgeMessenger = new CrossWindowMessenger({
-  showLogs: !ENV.isProduction,
+  // showLogs: !ENV.isProduction,
   name: 'auth-bridge',
   target: window.parent,
   from: DIRECTION.AUTH,
