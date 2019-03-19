@@ -2,7 +2,6 @@ import { isEmpty } from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
-import queryStringToMap from '@endpass/utils/queryStringToMap';
 
 import Bridge from '@/components/Bridge';
 import Auth from '@/components/screens/Auth';
@@ -39,26 +38,20 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const isPublicRoute = ['AuthScreen', 'AuthGitScreen', 'Bridge'].includes(
-    to.name,
-  );
+  const needAuth = ['User', 'SignScreen'].includes(to.name);
 
-  const searchString = (window.location.search || '').substring(1);
-  const query = queryStringToMap(searchString);
-  if (query.demoData) {
-    await store.dispatch('setupDemoData', query.demoData);
-  }
-
-  if (store.getters.demoData || isPublicRoute) {
+  if (!needAuth) {
     return next();
   }
 
-  await store.dispatch('defineOnlyV3Accounts');
+  // await store.dispatch('defineOnlyV3Accounts');
   try {
-    await store.dispatch('defineSettings');
+    // await store.dispatch('defineSettings');
   } finally {
-    return !isEmpty(store.state.accounts.accounts) ? next() : next('auth');
   }
+  return !isEmpty(store.state.accounts.accounts) ? next() : next('auth');
 });
+
+router.afterEach(() => {});
 
 export default router;

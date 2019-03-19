@@ -1,6 +1,6 @@
 import Wallet from '@/class/Wallet';
-import { awaitMessageFromOpener } from '@/util/message';
 import requestsActions from '@/store/modules/requests/actions';
+import syncChannel from '@/class/singleton/syncChannel';
 
 describe('requests actions', () => {
   const password = 'secret';
@@ -23,50 +23,6 @@ describe('requests actions', () => {
     };
     dispatch = jest.fn();
     commit = jest.fn();
-  });
-
-  describe('awaitRequestMessage', () => {
-    it('should await request message and set request if it present', async () => {
-      expect.assertions(1);
-
-      const request = {
-        foo: 'bar',
-      };
-
-      awaitMessageFromOpener.mockResolvedValueOnce(request);
-
-      await requestsActions.awaitRequestMessage({ dispatch, commit });
-
-      expect(commit).toBeCalledWith('setRequest', request);
-    });
-
-    it('should not set request if it not present', async () => {
-      expect.assertions(1);
-
-      awaitMessageFromOpener.mockResolvedValueOnce(null);
-
-      await requestsActions.awaitRequestMessage({ dispatch, commit });
-
-      expect(commit).not.toBeCalled();
-    });
-
-    it('should set web3 provider if message was received', async () => {
-      awaitMessageFromOpener.mockResolvedValueOnce({
-        net: 1,
-      });
-
-      await requestsActions.awaitRequestMessage({ dispatch, commit });
-
-      expect(dispatch).toBeCalledWith('setWeb3NetworkProvider', 1);
-    });
-
-    it('should not set web3 provider if message was received', async () => {
-      awaitMessageFromOpener.mockResolvedValueOnce(null);
-
-      await requestsActions.awaitRequestMessage({ dispatch, commit });
-
-      expect(dispatch).not.toBeCalled();
-    });
   });
 
   describe('processRequest', () => {
@@ -141,7 +97,6 @@ describe('requests actions', () => {
         id: state.request.request.id,
         result: [],
         jsonrpc: state.request.request.jsonrpc,
-        status: false,
         error,
       });
     });
@@ -153,13 +108,16 @@ describe('requests actions', () => {
     };
 
     it('should send response to opener and close dialog window', async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
-      await requestsActions.sendResponse({ dispatch }, payload);
+      syncChannel.put = jest.fn();
 
-      expect(dispatch).toBeCalledWith('resolveMessage', {
+      await requestsActions.sendResponse({ commit, dispatch }, payload);
+
+      expect(commit).toBeCalledWith('changeLoadingStatus', false);
+      expect(syncChannel.put).toBeCalledWith({
         status: true,
-        ...payload,
+        payload,
       });
     });
   });

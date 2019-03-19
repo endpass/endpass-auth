@@ -32,7 +32,17 @@ const setDemoData = (state, demoData) => {
   state.demoData = demoData;
 };
 
+const logout = state => {
+  state.otpEmail = null;
+  state.authParams = null;
+  state.isAuthorized = false;
+  state.accounts = [];
+  state.settings = null;
+  state.recoveryIdentifier = null;
+};
+
 export default {
+  logout,
   setDemoData,
   setAuthParams,
   setAuthStatus,

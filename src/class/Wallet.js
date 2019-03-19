@@ -1,7 +1,7 @@
 import { get } from 'lodash';
 import { utils } from 'web3';
 import Tx from 'ethereumjs-tx';
-import web3 from '@/class/singleton/web3';
+import { web3 } from '@/class/singleton';
 import keystore from '@/util/keystore';
 
 const { isAddress, bytesToHex, numberToHex } = utils;

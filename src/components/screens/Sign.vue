@@ -38,7 +38,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['awaitRequestMessage', 'processRequest', 'cancelRequest']),
+    ...mapActions(['processRequest', 'cancelRequest']),
 
     async handleSignSubmit(res) {
       try {
