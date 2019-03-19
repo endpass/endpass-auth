@@ -5,10 +5,12 @@ import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 
 import { v3KeyStore } from '@unitFixtures/accounts';
+import syncChannel from '@/class/singleton/syncChannel';
 
 describe('accounts actions', () => {
   let dispatch;
   let commit;
+  syncChannel.put = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -245,9 +247,9 @@ describe('accounts actions', () => {
 
       await accountsActions.cancelAuth({ dispatch });
 
-      expect(dispatch).toBeCalledWith('resolveMessage', {
+      expect(syncChannel.put).toBeCalledWith({
         status: false,
-        message: 'Auth was canceled by user!',
+        error: 'Auth was canceled by user!',
       });
     });
   });
@@ -258,7 +260,7 @@ describe('accounts actions', () => {
 
       await accountsActions.confirmAuth({ dispatch });
 
-      expect(dispatch).toBeCalledWith('resolveMessage', {
+      expect(syncChannel.put).toBeCalledWith({
         status: true,
       });
     });
@@ -324,19 +326,22 @@ describe('accounts actions', () => {
 
   describe('logout', () => {
     it('it should logout user with identity service', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       IdentityService.logout.mockResolvedValueOnce();
 
       await accountsActions.logout({ dispatch, commit });
 
-      expect(dispatch).toBeCalledWith('resolveMessage', {
+      expect(syncChannel.put).toBeCalledWith({
         status: true,
-        type: 'logout',
+        payload: {
+          type: 'logout',
+        },
       });
-      expect(commit).toBeCalledTimes(2);
+      expect(commit).toBeCalledTimes(3);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(2, 'logout');
+      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
     });
 
     it('it should throw error', async done => {
@@ -622,12 +627,11 @@ describe('accounts actions', () => {
       activeNet: 3,
       password: '12345678',
     };
-    const query = encodeURIComponent(JSON.stringify(demoData));
 
     it('should setup demo data', async () => {
       expect.assertions(4);
 
-      await accountsActions.setupDemoData({ commit }, query);
+      await accountsActions.setupDemoData({ commit }, demoData);
 
       expect(commit).toBeCalledTimes(3);
       expect(commit).toHaveBeenNthCalledWith(1, 'setDemoData', demoData);

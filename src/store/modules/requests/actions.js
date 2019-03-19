@@ -1,22 +1,11 @@
 import Wallet from '@/class/Wallet';
-import { awaitMessageFromOpener } from '@/util/message';
-import { NET_ID } from '@/constants';
+import { Network } from '@endpass/class';
+import syncChannel from '@/class/singleton/syncChannel';
+import { Answer } from '@/class';
 
-const awaitRequestMessage = async ({ commit, dispatch }) => {
-  const res = await awaitMessageFromOpener();
-
-  if (res) {
-    await dispatch('setWeb3NetworkProvider', res.net);
-
-    commit('setRequest', res);
-  }
-};
-
-const sendResponse = async ({ dispatch }, payload) => {
-  dispatch('resolveMessage', {
-    status: true,
-    ...payload,
-  });
+const sendResponse = async ({ commit }, payload) => {
+  syncChannel.put(Answer.createOk(payload));
+  commit('changeLoadingStatus', false);
 };
 
 const processRequest = async (
@@ -25,7 +14,7 @@ const processRequest = async (
 ) => {
   commit('changeLoadingStatus', true);
 
-  const { address, request, net = NET_ID.MAIN } = state.request;
+  const { address, request, net = Network.NET_ID.MAIN } = state.request;
 
   // eslint-disable-next-line
   const demoData = getters.demoData;
@@ -62,9 +51,10 @@ const processRequest = async (
         result: [],
         error: err,
         jsonrpc: request.jsonrpc,
-        status: false,
       });
     }
+  } finally {
+    commit('changeLoadingStatus', false);
   }
 };
 
@@ -142,7 +132,6 @@ const cancelRequest = ({ state, dispatch }) => {
 };
 
 export default {
-  awaitRequestMessage,
   processRequest,
   recoverMessage,
   sendResponse,

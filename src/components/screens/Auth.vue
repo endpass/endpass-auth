@@ -34,7 +34,7 @@
         :inited="inited"
         :loading="loading"
         :error="error"
-        :is-server-mode="isServerMode"
+        :is-server-mode="isIdentityMode"
         @submit="handleAuthSubmit"
         @error="handleAuthError"
       />
@@ -61,7 +61,6 @@ export default {
     error: null,
     needAccount: false,
     recoverAccess: false,
-    isServerMode: false,
     serverMode: null,
   }),
 
@@ -73,6 +72,7 @@ export default {
       otpEmail: state => state.accounts.otpEmail,
       accounts: state => state.accounts.accounts,
       isAuthorized: state => state.accounts.isAuthorized,
+      isIdentityMode: state => state.core.isIdentityMode,
     }),
     ...mapGetters(['isDialog']),
 
@@ -200,8 +200,6 @@ export default {
   },
 
   created() {
-    this.isServerMode = Boolean(this.$route.query.mode);
-
     if (this.isDialog) {
       window.addEventListener('beforeunload', this.handleWindowClose);
     }

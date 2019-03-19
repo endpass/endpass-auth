@@ -1,12 +1,17 @@
-import get from 'lodash/get';
-import omit from 'lodash/omit';
-import web3 from '@/class/singleton/web3';
-import { createSubscribtion, sendMessageToOpener } from '@/util/message';
-import { DEFAULT_NETWORKS, METHODS, LAZY_METHODS } from '@/constants';
+import { web3 } from '@/class/singleton';
+import { Network } from '@endpass/class';
+import { METHODS } from '@/constants';
 
-const init = async ({ dispatch, commit }) => {
+import bridgeMessenger from '@/class/singleton/messengers';
+import syncChannel from '@/class/singleton/syncChannel';
+import { Answer } from '@/class';
+
+const init = async ({ dispatch, commit }, router) => {
   try {
     await dispatch('defineOnlyV3Accounts');
+    await dispatch('subscribeOnDialog', router);
+    await dispatch('subscribeOnBridge');
+    await dispatch('startBridge');
     // eslint-disable-next-line
   } catch (err) {
   } finally {
@@ -15,163 +20,123 @@ const init = async ({ dispatch, commit }) => {
 };
 
 const setWeb3NetworkProvider = (ctx, netId) => {
-  const netUrl = get(DEFAULT_NETWORKS, `[${netId}].url[0]`);
+  const netUrl = Network.NETWORK_URL_HTTP[netId][0];
   const provider = new web3.providers.HttpProvider(netUrl);
 
   web3.setProvider(provider);
 };
 
-const sendDialogMessage = (ctx, { payload, target }) => {
-  if (target) sendMessageToOpener(target, 'dialog', payload);
-};
+const subscribeOnBridge = async ({ commit, dispatch, rootState }) => {
+  bridgeMessenger.subscribe(METHODS.RECOVER, async (payload, req) => {
+    try {
+      const res = await dispatch('recoverMessage', payload);
 
-const sendBridgeMessage = (ctx, { payload, target }) => {
-  if (target) sendMessageToOpener(target, 'bridge', payload);
-};
-
-const subscribeOnBridge = ({ dispatch, rootState }) => {
-  const handler = (target, message) => {
-    if (message.method === METHODS.READY_STATE_BRIDGE) {
-      dispatch('sendBridgeMessage', {
-        payload: {
-          method: METHODS.READY_STATE_BRIDGE,
-          status: true,
-        },
-        target,
-      });
-    } else if (message.method === METHODS.GET_SETTINGS) {
-      dispatch('defineSettings')
-        .then(() =>
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.GET_SETTINGS,
-              status: true,
-              ...rootState.accounts.settings,
-            },
-            target,
-          }),
-        )
-        .catch(() => {
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.GET_SETTINGS,
-              status: false,
-            },
-            target,
-          });
-        });
-    } else if (message.method === METHODS.RECOVER) {
-      dispatch('recoverMessage', message)
-        .then(res =>
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.RECOVER,
-              status: true,
-              ...res,
-            },
-            target,
-          }),
-        )
-        .catch(() => {
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.RECOVER,
-              status: false,
-            },
-            target,
-          });
-        });
-    } else if (message.method === METHODS.LOGOUT) {
-      dispatch('logout')
-        .then(() =>
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.LOGOUT,
-              status: true,
-            },
-            target,
-          }),
-        )
-        .catch(() => {
-          dispatch('sendBridgeMessage', {
-            payload: {
-              method: METHODS.LOGOUT,
-              status: false,
-            },
-            target,
-          });
-        });
+      req.answer(Answer.createOk(res));
+    } catch (e) {
+      req.answer(Answer.createFail());
     }
-  };
+  });
 
-  const subscribtion = createSubscribtion('bridge');
+  bridgeMessenger.subscribe(METHODS.GET_SETTINGS, async (payload, req) => {
+    try {
+      const settings = await dispatch('defineSettings');
 
-  subscribtion.on(handler);
-};
-
-const subscribeOnDialog = ({ dispatch }) => {
-  const handler = async (target, message) => {
-    if (LAZY_METHODS.includes(message.method)) {
-      dispatch('processLazyMessage', { target, message });
-    } else if (message.method === METHODS.READY_STATE_DIALOG) {
-      dispatch('sendDialogMessage', {
-        payload: {
-          method: METHODS.READY_STATE_DIALOG,
-          status: true,
-        },
-        target,
-      });
-    } else if (message.method === METHODS.RESIZE_DIALOG) {
-      dispatch('sendDialogMessage', {
-        payload: {
-          method: METHODS.RESIZE_DIALOG,
-          result: document.body.offsetHeight,
-          status: true,
-        },
-        target,
-      });
+      req.answer(Answer.createOk({ settings }));
+    } catch (e) {
+      req.answer(Answer.createFail());
     }
-  };
+  });
 
-  const subscribtion = createSubscribtion('dialog');
+  bridgeMessenger.subscribe(METHODS.LOGOUT, async (payload, req) => {
+    try {
+      await dispatch('logout');
+      req.answer(Answer.createOk());
+    } catch (e) {
+      req.answer(Answer.createFail());
+    }
+  });
 
-  subscribtion.on(handler);
-};
+  bridgeMessenger.subscribe(METHODS.AUTH, async (payload, req) => {
+    commit('setAuthParams', payload);
 
-const processLazyMessage = async (
-  { commit, dispatch },
-  { target, message },
-) => {
-  commit('setMessageAwaitingStatus', true);
+    const result = await syncChannel.take();
 
-  await dispatch('processSpecificLazyMessage', message);
+    req.answer(result);
+  });
 
-  const res = await dispatch('awaitMessageResolution');
+  bridgeMessenger.subscribe(METHODS.ACCOUNT, async (payload, req) => {
+    const result = await syncChannel.take();
 
-  dispatch('sendDialogMessage', {
-    payload: {
-      method: message.method,
-      ...res,
-    },
-    target,
+    req.answer(result);
+  });
+
+  bridgeMessenger.subscribe(METHODS.SIGN, async (payload, req) => {
+    commit('setRequest', payload);
+
+    const result = await syncChannel.take();
+
+    req.answer(result);
   });
 };
 
-const processSpecificLazyMessage = async ({ commit }, message) => {
-  if (message.method === METHODS.AUTH) {
-    commit('setAuthParams', omit(message, ['method']));
-  } else if (message.method === METHODS.SIGN) {
-    commit('setRequest', omit(message, ['method']));
+const startBridge = async ({ dispatch, commit, getters }) => {
+  if (!getters.isDialog) {
+    return;
   }
+
+  const {
+    isIdentityMode,
+    demoData,
+  } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
+
+  if (isIdentityMode !== undefined) {
+    commit('changeIdentityMode', isIdentityMode);
+  }
+
+  if (demoData) {
+    await dispatch('setupDemoData', demoData);
+  }
+
+  bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
+};
+
+const subscribeOnDialog = ({ dispatch }, router) => {
+  bridgeMessenger.subscribe(METHODS.DIALOG_OPEN, (payload, req) => {
+    const { route = '' } = payload;
+    const onComplete = () => req.answer(Answer.createOk());
+    router.push(`/${route}`, onComplete, onComplete);
+  });
+
+  bridgeMessenger.subscribe(METHODS.DIALOG_CLOSE, () => {
+    router.push(`/bridge`);
+  });
+
+  dispatch('setupOnResize');
+};
+
+const setupOnResize = () => {
+  let lastHeight = 0;
+  const onResize = () => {
+    const newHeight = document.body.offsetHeight;
+    if (newHeight !== lastHeight) {
+      lastHeight = newHeight;
+      bridgeMessenger.send(METHODS.DIALOG_RESIZE, {
+        offsetHeight: document.body.offsetHeight,
+      });
+    }
+  };
+
+  // dirty hack for detect resize
+  setInterval(onResize, 200);
+
+  window.addEventListener('resize', onResize);
 };
 
 export default {
-  sendDialogMessage,
-  sendBridgeMessage,
   init,
   setWeb3NetworkProvider,
+  setupOnResize,
   subscribeOnBridge,
+  startBridge,
   subscribeOnDialog,
-  processLazyMessage,
-  processSpecificLazyMessage,
 };

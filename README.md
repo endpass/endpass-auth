@@ -1,23 +1,10 @@
-# Endpass Connect
+# Endpass Auth
 
 > Compatible with web3.js@0.37.0beta and below
 
 ## Table of contents
 
-- [Library](#library)
 - [Development](#development)
-
-## Library
-
-Install library via `npm` of `yarn`.
-
-```bash
-npm i --save @endpass/connect
-yarn add @endpass/connect
-```
-
-You don't need any dependencies like `web3`, Endpass Connect includes it out of
-the box.
 
 ### Usage
 

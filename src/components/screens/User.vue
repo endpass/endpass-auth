@@ -23,7 +23,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
-import { DEFAULT_NETWORKS } from '@/constants';
+import { Network } from '@endpass/class';
 import Screen from '../Screen.vue';
 import VFrame from '../VFrame.vue';
 import AccountForm from '../forms/Account.vue';
@@ -50,7 +50,7 @@ export default {
     ...mapGetters(['availableAccounts', 'isDialog']),
 
     networksOptions() {
-      return Object.values(DEFAULT_NETWORKS).map(({ id, name }) => ({
+      return Object.values(Network.DEFAULT_NETWORKS).map(({ id, name }) => ({
         value: id,
         label: name,
       }));

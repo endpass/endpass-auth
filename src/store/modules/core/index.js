@@ -5,6 +5,7 @@ import getters from './getters';
 export const state = {
   loading: false,
   inited: false,
+  isIdentityMode: false,
 };
 
 export default {

@@ -1,1 +1,1 @@
-export { default as inpageProvider } from './inpageProvider';
+export { default as web3 } from './web3';
