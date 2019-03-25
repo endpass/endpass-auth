@@ -8,7 +8,7 @@
 import pkg from '@/../package.json';
 import VFrame from './VFrame.vue';
 
-if (ENV.isProduction) {
+if (!ENV.notShowVersion) {
   console.info(
     `%cEndpass Auth Bridge (${pkg.version}) loaded 🔌`,
     'font-size: 14px; font-weight: bold',
