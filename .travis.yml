@@ -1,6 +1,7 @@
 language: node_js
 node_js:
 - '10'
+env: RELEASE_TAG=v0.2
 cache: yarn
 install: yarn install --frozen-lockfile
 stages:
@@ -20,15 +21,17 @@ jobs:
       skip_cleanup: true
       local_dir: dist/app
       on:
-        tags: false
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
     - provider: s3
       bucket: auth-dev.endpass.com
       region: us-east-1
       skip_cleanup: true
       local_dir: dist/app
-      upload-dir: "$TRAVIS_TAG"
+      upload-dir: "$RELEASE_TAG"
       on:
-        tags: true
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
 notifications:
   slack:
-    secure: kZC0wzCLSrJlPqhOZL2/8TKx/+ZcGHHh+dYzAyrK15fjZBQfKAeq3hCeMybxH/d7ANgf9D8RWQ5mYWmGI6VEJdq3iXzIVXcTY/e97c4hBQEUZ5Ojl+UheEiNZsech/CifnztGpkIHOCmxF+/7EtilXnTr13V4kd7Cp2gAgdjywRagVklSq1Q7X6vVSBBJ5W90Ubhgl1renCEIVBUJ5D6hkX4U9gS9B3qso/pGOJhQdeJvWY33vOwzGbQyWPcXdPfxi/vAoWqinLzPKnCXRwsPhIdUtIhb77a4LdESf9p5aww+YA4LTB7+6o1G9DhBgnJOWlACSnVC3q4U6tYXpuB9r1F4cAtNIjkPxAiUTj3CVzxnhOFH9VLnfzW+8LJRdkKmWzSk3O56mSs6dBDQQJYkQQzy+rc8yNWmUcmF2YPu2D5Bg6t6ZMvIMgRoQprb9bI7A+3LlJLYMi9D5XIXMERbhnGr/PTdSvYTKTTTB8Z77/+Hn3YICWrog904TMN3OJ2qMXzSvtsxMCFg3DxxG6qzLFfLDZ8DBrXu/D5MjDMMf3OVPoFgB2aXHk2liX6QEseEBYoWB93FKjQBoXI39RFoU07v6v7g8lA+VWNBXqAc4QH0IS2XQEQrxAkkA5U2uUCBZhX0K3O5n0RSdAJfQ0bvk1OjbYmd6mumK68lP63Opg=
+    secure: QYgDUQcsAOFeSEQuK/FpiScPml9vLO8/SYjze2E2y64G/Rw8LEUGiMPuOZZy+AZbA2ryaELEYaTxk6HSPjqZJttNYJPfwt+9o38pwKwjyTQC5qKRCaJcyCfERUQJ2aLbmxnKKaWf9ZmA5C7li2pseI8+OnrYT9YgwYtdU9KRxlQ3DjhFLYwOkYEApbgHsSZ4Th8IWNCxpJTT6fVfkS27NkBldtAANTtb0hKqtDLPpKJz4slj2vSCaaLUaQjETsoAdiDoXdXZIPn33t0Aox4+nuY4Cnn2959q1N8e/dYzdWnSg/wDRRxiXbYpA9Ou4AddVVLpYiIGxsaYKIciukclIMTOioyUQKLSILXqFfM90rpU6zPMIkEHh4MVqb56oR9yNwKSKj+Uy9HOx5p9foB60mUqBjt7OwzUSXI/W7NMK8Fi6nCC4N8aFPJffnhXJwtVjUCjm87iKpmcWEWBxPNpMWvpL4ApQuJsrn+z0UP3GmCG4EFyHrrJ5+A/qV8WtAOp+Pt195778fqPE8NCOqtz28YFulalGZl/ES1koxJatUKOS1Lu/YduKorLdEp/zYVLdZYpGUzsfs23l0H0uTHBdBajTz+2NrUYfAHNOUkMSOVpqE3OjScwEZJ2vTdMM9tPvOlbc4f5+0fun49pAexPZHk2KuXrmB6eM/cqu90dvkY=
