@@ -2,39 +2,17 @@ import { isEmpty } from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
-
-import Bridge from '@/components/Bridge';
-import Auth from '@/components/screens/Auth';
-import AuthGit from '@/components/screens/AuthGit';
-import Sign from '@/components/screens/Sign';
-import User from '@/components/screens/User';
+import routes from './routes';
+import baseRoute from '@/router/baseRoute';
 
 Vue.use(Router);
 
+const base = window.location.pathname.indexOf(baseRoute) === 0 ? baseRoute : '';
+
 const router = new Router({
   mode: 'history',
-  routes: [
-    {
-      path: '/',
-      name: 'User',
-      component: User,
-    },
-    {
-      path: '/bridge',
-      name: 'Bridge',
-      component: Bridge,
-    },
-    {
-      path: '/auth',
-      name: 'AuthScreen',
-      component: Auth,
-    },
-    {
-      path: '/sign',
-      name: 'SignScreen',
-      component: Sign,
-    },
-  ],
+  base: `${base}`,
+  routes,
 });
 
 router.beforeEach(async (to, from, next) => {

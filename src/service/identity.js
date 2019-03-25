@@ -2,6 +2,11 @@ import axios from 'axios';
 
 const { url: identityBaseUrl } = ENV.identity;
 
+// solution for 0.2 version of auth
+axios.defaults.headers.common['x-connect-lib-host'] = ENV.isProduction
+  ? 'https://wallet.endpass.com'
+  : 'https://wallet-dev.endpass.com';
+
 const request = {
   get: url =>
     axios
