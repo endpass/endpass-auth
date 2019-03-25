@@ -4,18 +4,11 @@ const utils = require('@endpass/utils/build');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { getEnv } = require('./env');
 
-const pkg = require('./package');
-
-const baseUrl = pkg.version
-  .split('.')
-  .splice(0, 2)
-  .join('.');
-
 const { NODE_ENV, SOURCE_MAP } = process.env;
 const ENV = getEnv(NODE_ENV);
 
 module.exports = {
-  baseUrl: ENV.isProduction ? '' : `/v${baseUrl}`,
+  baseUrl: '',
 
   productionSourceMap: false,
 

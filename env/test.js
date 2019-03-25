@@ -30,4 +30,5 @@ module.exports = {
   googleClientId,
   gitClientId,
   isProduction,
+  notShowVersion: true,
 };

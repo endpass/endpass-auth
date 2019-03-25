@@ -3,15 +3,11 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
 import routes from './routes';
-import baseRoute from '@/router/baseRoute';
 
 Vue.use(Router);
 
-const base = window.location.pathname.indexOf(baseRoute) === 0 ? baseRoute : '';
-
 const router = new Router({
   mode: 'history',
-  base: `${base}`,
   routes,
 });
 
