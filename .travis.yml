@@ -13,6 +13,8 @@ jobs:
   - stage: deploy
     script:
     - yarn build:dev
+    before_deploy:
+    - export RELEASE_TAG=$(jq .version package.json | tr -d \" | cut -d . -f "1 2")
     deploy:
     - provider: s3
       bucket: auth-dev.endpass.com
@@ -20,15 +22,17 @@ jobs:
       skip_cleanup: true
       local_dir: dist/app
       on:
-        tags: false
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
     - provider: s3
       bucket: auth-dev.endpass.com
       region: us-east-1
       skip_cleanup: true
       local_dir: dist/app
-      upload-dir: "$TRAVIS_TAG"
+      upload-dir: v$RELEASE_TAG
       on:
-        tags: true
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
 notifications:
   slack:
-    secure: kZC0wzCLSrJlPqhOZL2/8TKx/+ZcGHHh+dYzAyrK15fjZBQfKAeq3hCeMybxH/d7ANgf9D8RWQ5mYWmGI6VEJdq3iXzIVXcTY/e97c4hBQEUZ5Ojl+UheEiNZsech/CifnztGpkIHOCmxF+/7EtilXnTr13V4kd7Cp2gAgdjywRagVklSq1Q7X6vVSBBJ5W90Ubhgl1renCEIVBUJ5D6hkX4U9gS9B3qso/pGOJhQdeJvWY33vOwzGbQyWPcXdPfxi/vAoWqinLzPKnCXRwsPhIdUtIhb77a4LdESf9p5aww+YA4LTB7+6o1G9DhBgnJOWlACSnVC3q4U6tYXpuB9r1F4cAtNIjkPxAiUTj3CVzxnhOFH9VLnfzW+8LJRdkKmWzSk3O56mSs6dBDQQJYkQQzy+rc8yNWmUcmF2YPu2D5Bg6t6ZMvIMgRoQprb9bI7A+3LlJLYMi9D5XIXMERbhnGr/PTdSvYTKTTTB8Z77/+Hn3YICWrog904TMN3OJ2qMXzSvtsxMCFg3DxxG6qzLFfLDZ8DBrXu/D5MjDMMf3OVPoFgB2aXHk2liX6QEseEBYoWB93FKjQBoXI39RFoU07v6v7g8lA+VWNBXqAc4QH0IS2XQEQrxAkkA5U2uUCBZhX0K3O5n0RSdAJfQ0bvk1OjbYmd6mumK68lP63Opg=
+    secure: bFhnj+Bs2xUVA7zznhvsJGGsWJhKA/hGfIoHFrvdD7uDhYmaW08+iFItXIfx7weO/BhiB4Zim7usFFsbsKPnqPC1OpBUW5TRE4kjg29AFdMXmtsPpqMi4tAJs5kPJKBg7Z5TSiFtM8qw9LrSAyuy09DTzQd2e1PBs7/S92eUceeF1gupqts9/ZXpBu5uDlwCirVyV8DMFrZDMkfmxxyHFSnuYU+cv8bKbEp2Bks5ByGvkUYe8tRAp5Fge6TUv/uBnwEpo5VLjdEVP/BKLyXPWoHvxVPQdZYUnEe7LNuDrgNEJuuLc02vJP0Xrd0d38hd9qtk1rD/f7SoZj6KYR11jdrI6lXfEMclda73rKEscFCBVrOD73AeotcZ79eXFcBqXgAqWtH4xCiW+y46VDsHClVdKh40kaKT4+Letw24kGtXiHY5/3Pqd5cHDa+3SLd6LyJzTTkDbXToHRqSd9WEPV7JBO2i01rTGFB/iufpcA7NkyYF2Gbx5S4YLSgtZMzRY7YnzAjSTpA9KEDnDrkmVj29TEhtrMHSis9DcVEG7DqEkMC61aUS+zt+we+RyFLUQsvP/EyN++xIuoTBrk4OH0kka3Gltr3D/hhfdfXGRqF4q3sdNzOit8FjmG/sQ/k85mi49Qm2p7hzkDZqBeZD5fGPt7xs20jeU9hanMHnlpE=
