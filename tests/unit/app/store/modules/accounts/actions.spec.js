@@ -1,16 +1,25 @@
 import Web3 from 'web3';
 
+import Wallet from '@/class/Wallet';
 import IdentityService from '@/service/identity';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 
 import { v3KeyStore } from '@unitFixtures/accounts';
-import syncChannel from '@/class/singleton/syncChannel';
+import {
+  permissionChannel,
+  accountChannel,
+  authChannel,
+} from '@/class/singleton/channels';
+import Answer from '@/class/Answer';
 
 describe('accounts actions', () => {
   let dispatch;
   let commit;
-  syncChannel.put = jest.fn();
+
+  accountChannel.put = jest.fn();
+  authChannel.put = jest.fn();
+  permissionChannel.put = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -247,7 +256,7 @@ describe('accounts actions', () => {
 
       await accountsActions.cancelAuth({ dispatch });
 
-      expect(syncChannel.put).toBeCalledWith({
+      expect(authChannel.put).toBeCalledWith({
         status: false,
         error: 'Auth was canceled by user!',
       });
@@ -260,7 +269,7 @@ describe('accounts actions', () => {
 
       await accountsActions.confirmAuth({ dispatch });
 
-      expect(syncChannel.put).toBeCalledWith({
+      expect(authChannel.put).toBeCalledWith({
         status: true,
       });
     });
@@ -316,7 +325,7 @@ describe('accounts actions', () => {
     it('should await auth confirm and then request accounts', async () => {
       expect.assertions(1);
 
-      IdentityService.awaitAuthConfirm.mockResolvedValueOnce(true);
+      IdentityService.getAuthStatus.mockResolvedValueOnce(200);
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
@@ -332,7 +341,7 @@ describe('accounts actions', () => {
 
       await accountsActions.logout({ dispatch, commit });
 
-      expect(syncChannel.put).toBeCalledWith({
+      expect(accountChannel.put).toBeCalledWith({
         status: true,
         payload: {
           type: 'logout',
@@ -567,7 +576,7 @@ describe('accounts actions', () => {
 
   describe('change settings', () => {
     it('should change settings without demoData', async () => {
-      expect.assertions(4);
+      expect.assertions(3);
 
       const getters = {};
       const state = {
@@ -582,21 +591,20 @@ describe('accounts actions', () => {
 
       dispatch.mockResolvedValueOnce(settings);
 
-      const res = await accountsActions.defineSettings({
+      await accountsActions.defineSettings({
         state,
         dispatch,
         commit,
         getters,
       });
 
-      expect(res).toEqual(settings);
       expect(dispatch).toBeCalledTimes(1);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'getSettings');
       expect(commit).toHaveBeenCalledWith('setSettings', settings);
     });
 
     it('should change settings with demoData', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       const settings = {
         lastActiveAccount: '123',
@@ -608,14 +616,13 @@ describe('accounts actions', () => {
 
       dispatch.mockResolvedValueOnce(settings);
 
-      const res = await accountsActions.defineSettings({
+      await accountsActions.defineSettings({
         state,
         dispatch,
         commit,
         getters: { demoData: {} },
       });
 
-      expect(res).toEqual(state.settings);
       expect(dispatch).toBeCalledTimes(0);
       expect(commit).toHaveBeenCalledWith('setSettings', state.settings);
     });
@@ -642,6 +649,57 @@ describe('accounts actions', () => {
         lastActiveAccount: v3KeyStore.address,
         net: demoData.activeNet,
       });
+    });
+  });
+
+  describe('signPermission', () => {
+    it('should sign permission', async () => {
+      expect.assertions(1);
+
+      const password = 'secret';
+      const ok = Answer.createOk();
+
+      jest.spyOn(Wallet.prototype, 'sign').mockReturnValueOnce({
+        signature: 'signature',
+      });
+
+      IdentityService.getAuthPermission.mockReturnValueOnce({
+        keystore: v3KeyStore,
+      });
+      await accountsActions.signPermission({}, { password });
+
+      expect(permissionChannel.put).toBeCalledWith(ok);
+    });
+
+    it('should cancel sign permission', async () => {
+      const fail = Answer.createFail();
+      accountsActions.cancelSignPermission();
+
+      expect(permissionChannel.put).toBeCalledWith(fail);
+    });
+  });
+
+  describe('getAuthStatus', () => {
+    it('should return 200 status', async () => {
+      expect.assertions(3);
+
+      IdentityService.getAuthStatus.mockReturnValueOnce(200);
+
+      const status = await accountsActions.getAuthStatus({ commit });
+      expect(commit).toBeCalledTimes(1);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', true);
+      expect(status).toBe(200);
+    });
+
+    it('should return 401 status', async () => {
+      expect.assertions(3);
+
+      IdentityService.getAuthStatus.mockReturnValueOnce(401);
+
+      const status = await accountsActions.getAuthStatus({ commit });
+      expect(commit).toBeCalledTimes(1);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', false);
+      expect(status).toBe(401);
     });
   });
 });

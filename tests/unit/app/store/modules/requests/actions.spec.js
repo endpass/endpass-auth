@@ -1,6 +1,6 @@
 import Wallet from '@/class/Wallet';
 import requestsActions from '@/store/modules/requests/actions';
-import syncChannel from '@/class/singleton/syncChannel';
+import { signChannel } from '@/class/singleton/channels';
 
 describe('requests actions', () => {
   const password = 'secret';
@@ -110,12 +110,12 @@ describe('requests actions', () => {
     it('should send response to opener and close dialog window', async () => {
       expect.assertions(2);
 
-      syncChannel.put = jest.fn();
+      signChannel.put = jest.fn();
 
       await requestsActions.sendResponse({ commit, dispatch }, payload);
 
       expect(commit).toBeCalledWith('changeLoadingStatus', false);
-      expect(syncChannel.put).toBeCalledWith({
+      expect(signChannel.put).toBeCalledWith({
         status: true,
         payload,
       });

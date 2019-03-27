@@ -975,10 +975,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.9.1":
-  version "0.9.1"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.9.1.tgz#2074f82f94f4e6b2bed74e7bdedd0cddca5cfad2"
-  integrity sha512-/TaFCGISblwFIGUm2uehIzyUuCHmQLtpxZsvVh9KfAXItqZp1zA/UGBw2EaOfEUcEReLDZ/BJ3ksdC2PCR+zgw==
+"@endpass/class@^0.10.0":
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.10.0.tgz#d6157869780054b4784494ff38b18ec1fbf8e289"
+  integrity sha512-Qri4K3gCNpCoyIe8gKg4RZtV8H2zacdLvzmqDJamfNS5ro7ctHXACcu6tTIkopa8JzjD00zqxJqg0Vozis7WVw==
   dependencies:
     "@endpass/utils" "^1.2.1"
     "@ledgerhq/hw-app-eth" "^4.24.0"

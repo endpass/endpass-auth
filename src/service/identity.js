@@ -1,11 +1,10 @@
 import axios from 'axios';
+import { ORIGIN_HOST } from '@/constants';
+import get from 'lodash/get';
 
 const { url: identityBaseUrl } = ENV.identity;
 
-// solution for 0.2 version of auth
-axios.defaults.headers.common['x-connect-lib-host'] = ENV.isProduction
-  ? 'https://wallet.endpass.com'
-  : 'https://wallet-dev.endpass.com';
+axios.defaults.headers.common['x-connect-lib-host'] = ORIGIN_HOST;
 
 const request = {
   get: url =>
@@ -68,6 +67,15 @@ export const auth = (email, redirectUrl) => {
     });
 };
 
+export const getAuthPermission = () =>
+  request.get(`${identityBaseUrl}/api/v1.1/auth/permission`);
+
+export const setAuthPermission = signature => {
+  return request.post(`${identityBaseUrl}/api/v1.1/auth/permission`, {
+    signature,
+  });
+};
+
 export const otpAuth = (email, code) =>
   request
     .post(`${identityBaseUrl}/api/v1.1/auth/token`, {
@@ -110,21 +118,6 @@ export const authWithGitHub = code =>
     .catch(err => {
       throw err.response.data;
     });
-
-export const awaitAuthConfirm = () =>
-  new Promise(resolve => {
-    /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
-      try {
-        await getAccounts();
-
-        clearInterval(interval);
-
-        return resolve();
-        /* eslint-disable-next-line */
-      } catch (err) {}
-    }, 1500);
-  });
 
 export const logout = () => request.post(`${identityBaseUrl}/api/v1.1/logout`);
 
@@ -186,19 +179,31 @@ export const recover = (email, signature, redirectUrl) =>
       return res;
     });
 
+export const getAuthStatus = async () => {
+  let res = 200;
+  try {
+    await getAccounts();
+  } catch (e) {
+    res = get(e, ['response', 'status']);
+  }
+  return res;
+};
+
 export default {
   getSettings,
   getOtpSettings,
   getAccount,
   getAccounts,
+  getAuthStatus,
   getAccountInfo,
   getAccountWithInfo,
+  getAuthPermission,
+  setAuthPermission,
   setSettings,
   auth,
   authWithGoogle,
   authWithGitHub,
   otpAuth,
-  awaitAuthConfirm,
   logout,
   awaitLogoutConfirm,
   awaitAccountCreate,

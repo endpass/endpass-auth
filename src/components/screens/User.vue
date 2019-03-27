@@ -1,5 +1,5 @@
 <template>
-  <screen>
+  <screen @close="handleWindowClose">
     <v-frame :loading="!inited" :closable="isDialog" @close="handleCancel">
       <account-form
         :loading="loading"
@@ -24,9 +24,9 @@
 <script>
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import { Network } from '@endpass/class';
-import Screen from '../Screen.vue';
-import VFrame from '../VFrame.vue';
-import AccountForm from '../forms/Account.vue';
+import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
+import AccountForm from '@/components/forms/Account';
 
 export default {
   name: 'User',
@@ -81,7 +81,7 @@ export default {
 
   methods: {
     ...mapMutations(['changeLoadingStatus']),
-    ...mapActions(['logout', 'closeAccount', 'updateSettings']),
+    ...mapActions(['logout', 'closeAccount', 'updateSettings', 'dialogClose']),
 
     async handleAccountFormSubmit() {
       const { activeAccount, activeNet } = this.formData;
@@ -106,6 +106,7 @@ export default {
 
     handleCancel() {
       this.closeAccount();
+      this.dialogClose();
     },
 
     handleDonateRequest() {
@@ -125,18 +126,14 @@ export default {
 
     handleWindowClose() {
       this.closeAccount();
+      this.dialogClose();
     },
   },
 
   async created() {
     const { settings } = this;
-
     this.formData.activeAccount = settings.lastActiveAccount;
     this.formData.activeNet = settings.net;
-
-    if (this.isDialog) {
-      window.addEventListener('beforeunload', this.handleWindowClose);
-    }
   },
 
   components: {
