@@ -1,10 +1,10 @@
 import Wallet from '@/class/Wallet';
 import { Network } from '@endpass/class';
-import syncChannel from '@/class/singleton/syncChannel';
+import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 
 const sendResponse = async ({ commit }, payload) => {
-  syncChannel.put(Answer.createOk(payload));
+  signChannel.put(Answer.createOk(payload));
   commit('changeLoadingStatus', false);
 };
 

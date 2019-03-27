@@ -1,5 +1,5 @@
 <template>
-  <screen>
+  <screen @close="handleWindowClose">
     <v-frame :loading="!inited" :closable="isDialog" @close="handleAuthCancel">
       <create-account-form
         v-if="isAuthorized && isAccountsEmpty"
@@ -45,13 +45,13 @@
 <script>
 import isEmpty from 'lodash/isEmpty';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import Screen from '../Screen.vue';
-import VFrame from '../VFrame.vue';
-import AuthForm from '../forms/Auth.vue';
-import OtpForm from '../forms/Otp.vue';
-import RecoverForm from '../forms/Recover.vue';
-import MessageForm from '../forms/Message.vue';
-import CreateAccountForm from '../forms/CreateAccount.vue';
+import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
+import AuthForm from '@/components/forms/Auth';
+import OtpForm from '@/components/forms/Otp';
+import RecoverForm from '@/components/forms/Recover';
+import MessageForm from '@/components/forms/Message';
+import CreateAccountForm from '@/components/forms/CreateAccount';
 import { IDENTITY_MODE } from '@/constants';
 
 export default {
@@ -75,10 +75,6 @@ export default {
       isIdentityMode: state => state.core.isIdentityMode,
     }),
     ...mapGetters(['isDialog']),
-
-    confirmed() {
-      return this.isAuthorized && this.sent;
-    },
 
     isAccountsEmpty() {
       return isEmpty(this.accounts);
@@ -112,6 +108,7 @@ export default {
       'openCreateAccountPage',
       'getRecoveryIdentifier',
       'recover',
+      'dialogClose',
     ]),
 
     async handleOtpSubmit(code) {
@@ -183,10 +180,12 @@ export default {
 
     handleAuthCancel() {
       this.cancelAuth();
+      this.dialogClose();
     },
 
     handleWindowClose() {
       this.cancelAuth();
+      this.dialogClose();
     },
 
     handleAuthError(error) {
@@ -197,12 +196,6 @@ export default {
       this.error =
         (error && error.message) || 'Recover failed. Please, try again';
     },
-  },
-
-  created() {
-    if (this.isDialog) {
-      window.addEventListener('beforeunload', this.handleWindowClose);
-    }
   },
 
   components: {

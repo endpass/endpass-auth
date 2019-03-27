@@ -1,4 +1,3 @@
-import { isEmpty } from 'lodash';
 import Vue from 'vue';
 import Router from 'vue-router';
 import store from '@/store';
@@ -12,18 +11,10 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const needAuth = ['User', 'SignScreen'].includes(to.name);
-
-  if (!needAuth) {
-    return next();
+  if (!store.getters.isDialog && to.name !== 'Bridge') {
+    return next('bridge');
   }
-
-  // await store.dispatch('defineOnlyV3Accounts');
-  try {
-    // await store.dispatch('defineSettings');
-  } finally {
-  }
-  return !isEmpty(store.state.accounts.accounts) ? next() : next('auth');
+  return next();
 });
 
 router.afterEach(() => {});

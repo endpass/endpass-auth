@@ -1,10 +1,11 @@
 export const METHODS = {
-  AUTH: 'AUTH',
   SIGN: 'SIGN',
-  LOGOUT: 'LOGOUT',
   ACCOUNT: 'ACCOUNT',
   RECOVER: 'RECOVER',
   GET_SETTINGS: 'GET_SETTINGS',
+
+  AUTH: 'AUTH',
+  LOGOUT: 'LOGOUT',
   DIALOG_RESIZE: 'DIALOG_RESIZE',
   DIALOG_OPEN: 'DIALOG_OPEN',
   DIALOG_CLOSE: 'DIALOG_CLOSE',
@@ -24,3 +25,9 @@ export const DIRECTION = Object.freeze({
   AUTH: 'auth',
   CONNECT: 'connect',
 });
+
+export const ORIGIN_HOST = (() => {
+  const parser = document.createElement('a');
+  parser.href = document.referrer;
+  return parser.origin;
+})();

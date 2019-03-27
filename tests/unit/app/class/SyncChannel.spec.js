@@ -1,6 +1,7 @@
-import syncChannel from '@/class/singleton/syncChannel';
+import Channel from '@/class/Channel';
 
-describe('SyncChannel class', () => {
+describe('Channel class', () => {
+  const channel = new Channel();
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -11,20 +12,24 @@ describe('SyncChannel class', () => {
         data: 'data',
       };
 
-      syncChannel.put({ wrongData: 'wrong' });
+      const lastPayload = {
+        last: 'last',
+      };
 
-      const dataPromise = syncChannel.take();
-      let error;
-      try {
-        syncChannel.take();
-      } catch (e) {
-        error = e;
-      }
+      channel.put({ wrongData: 'wrong' });
 
-      syncChannel.put(payload);
+      const dataPromise = channel.take();
+      const secondPromise = channel.take();
+
+      channel.put(payload);
+
+      const thirdPromise = channel.take();
+
+      channel.put(lastPayload);
 
       expect(dataPromise).resolves.toEqual(payload);
-      expect(error).toEqual(new Error('SyncChannel is busy, doh...'));
+      expect(secondPromise).resolves.toEqual(payload);
+      expect(thirdPromise).resolves.toEqual(lastPayload);
     });
   });
 });

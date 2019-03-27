@@ -58,15 +58,15 @@
 import Vue from 'vue';
 
 import VCheckbox from '@endpass/ui/dist/components/VCheckbox';
-import VFrame from '@/components/VFrame.vue';
-import VInput from '@/components/VInput.vue';
-import VButton from '@/components/VButton.vue';
-import GoogleAuthButton from '@/components/GoogleAuthButton.vue';
-import GitAuthButton from '@/components/GitAuthButton.vue';
-import Message from '@/components/Message.vue';
-import FormField from '@/components/FormField.vue';
-import FormControls from '@/components/FormControls.vue';
-import ServerModeSelect from '@/components/ServerModeSelect';
+import VFrame from '@/components/common/VFrame.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
+import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
+import GitAuthButton from '@/components/common/GitAuthButton.vue';
+import Message from '@/components/common/Message.vue';
+import FormField from '@/components/common/FormField.vue';
+import FormControls from '@/components/common/FormControls.vue';
+import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
 
 Vue.component(VCheckbox);

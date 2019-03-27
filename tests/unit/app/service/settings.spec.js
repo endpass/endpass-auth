@@ -1,4 +1,4 @@
-import settingService, { setLocalSettings } from '../../../../src/service/settings';
+import settingService from '../../../../src/service/settings'; // must be not alias path!
 
 jest.unmock('@/service/settings');
 

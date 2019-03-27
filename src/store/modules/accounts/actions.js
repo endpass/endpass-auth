@@ -9,8 +9,15 @@ import IdentityService from '@/service/identity';
 import SettingsService from '@/service/settings';
 import ModeService from '@/service/mode';
 import { Network } from '@endpass/class';
-import syncChannel from '@/class/singleton/syncChannel';
+import {
+  accountChannel,
+  authChannel,
+  permissionChannel,
+} from '@/class/singleton/channels';
 import { Answer } from '@/class';
+
+import Wallet from '@/class/Wallet';
+import { ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -78,6 +85,9 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
     } else if (link) {
       commit('setSentStatus', true);
     }
+
+    // todo: add check status 403
+    // replace('permission');
   } catch (err) {
     commit('changeLoadingStatus', false);
     throw err;
@@ -97,11 +107,11 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
 };
 
 const confirmAuth = ({}, serverMode) => {
-  syncChannel.put(Answer.createOk(serverMode));
+  authChannel.put(Answer.createOk(serverMode));
 };
 
 const cancelAuth = () => {
-  syncChannel.put(Answer.createFail('Auth was canceled by user!'));
+  authChannel.put(Answer.createFail('Auth was canceled by user!'));
 };
 
 const getSettings = async ({ dispatch }) => {
@@ -139,30 +149,29 @@ const defineSettings = async ({ state, dispatch, commit, getters }) => {
   };
 
   commit('setSettings', newSettings);
-
-  return newSettings;
 };
 
 const setSettings = async (ctx, payload) => {
   SettingsService.setLocalSettings(payload);
 };
 
-const updateSettings = async ({ commit, dispatch }, payload) => {
+const updateSettings = async ({ state, commit, dispatch }, payload) => {
   commit('changeLoadingStatus', true);
 
   try {
     await dispatch('setSettings', payload);
 
-    const res = await dispatch('defineSettings');
+    await dispatch('defineSettings');
+    const { settings } = state;
 
     const answer = Answer.createOk({
       type: 'update',
       settings: {
-        activeAccount: res.lastActiveAccount,
-        activeNet: res.net,
+        activeAccount: settings.lastActiveAccount,
+        activeNet: settings.net,
       },
     });
-    syncChannel.put(answer);
+    accountChannel.put(answer);
   } catch (err) {
     throw new Error('Something went wrong, try again later');
   } finally {
@@ -235,11 +244,6 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
     : accounts.find(account => account.type !== 'PublicAccount') || null;
 };
 
-const awaitAuthConfirm = async ({ dispatch }) => {
-  await IdentityService.awaitAuthConfirm();
-  await dispatch('defineOnlyV3Accounts');
-};
-
 const awaitAccountCreate = async ({ commit }) => {
   const res = await IdentityService.awaitAccountCreate();
 
@@ -263,7 +267,7 @@ const awaitLogoutConfirm = async ({ commit }) => {
 };
 
 const closeAccount = async () => {
-  syncChannel.put(Answer.createOk({ type: 'close' }));
+  accountChannel.put(Answer.createOk({ type: 'close' }));
 };
 
 const logout = async ({ commit }) => {
@@ -274,7 +278,7 @@ const logout = async ({ commit }) => {
     SettingsService.clearLocalSettings();
     commit('logout');
 
-    syncChannel.put(
+    accountChannel.put(
       Answer.createOk({
         type: 'logout',
       }),
@@ -353,6 +357,45 @@ const setupDemoData = async ({ commit }, demoData) => {
   });
 };
 
+const signPermission = async (store, { password }) => {
+  const res = await IdentityService.getAuthPermission();
+  const wallet = new Wallet(res.keystore);
+  const singRes = await wallet.sign(ORIGIN_HOST, password);
+  await IdentityService.setAuthPermission(singRes.signature);
+  permissionChannel.put(Answer.createOk());
+};
+
+const cancelSignPermission = () => {
+  permissionChannel.put(Answer.createFail());
+};
+
+const awaitAuthConfirm = async ({ dispatch }) => {
+  const waiter = new Promise(resolve => {
+    let timerId;
+
+    const checker = async () => {
+      const status = await IdentityService.getAuthStatus();
+      if (status === 200 || status === 403) {
+        resolve();
+      } else {
+        timerId = setTimeout(checker, 1500);
+      }
+    };
+
+    checker();
+  });
+  await waiter;
+  await dispatch('defineOnlyV3Accounts');
+  authChannel.put(Answer.createOk());
+};
+
+const getAuthStatus = async ({ commit }) => {
+  const status = await IdentityService.getAuthStatus();
+  const isAuthority = status === 200;
+  commit('setAuthStatus', isAuthority);
+  return status;
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -379,5 +422,8 @@ export default {
   recover,
   validateCustomServer,
 
+  getAuthStatus,
+  signPermission,
+  cancelSignPermission,
   setupDemoData,
 };
