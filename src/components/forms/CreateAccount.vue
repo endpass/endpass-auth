@@ -12,11 +12,11 @@
 </template>
 
 <script>
-import VFrame from '../VFrame.vue';
-import VInput from '../VInput.vue';
-import VButton from '../VButton.vue';
-import Message from '../Message.vue';
-import FormControls from '../FormControls.vue';
+import VFrame from '@/components/common/VFrame.vue';
+import VInput from '@/components/common/VInput.vue';
+import VButton from '@/components/common/VButton.vue';
+import Message from '@/components/common/Message.vue';
+import FormControls from '@/components/common/FormControls.vue';
 
 export default {
   name: 'CreateAccountForm',

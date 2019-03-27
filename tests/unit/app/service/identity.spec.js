@@ -5,7 +5,7 @@ import {
   errorResponse,
   getRecoveryIdentifierResponse,
 } from '@unitFixtures/services/identity';
-import identityService from '../../../../src/service/identity';
+import identityService from '../../../../src/service/identity'; // must be not alias path!
 
 jest.unmock('@/service/identity');
 

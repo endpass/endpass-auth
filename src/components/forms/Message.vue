@@ -15,10 +15,10 @@
 </template>
 
 <script>
-import VButton from '../VButton.vue';
-import Message from '../Message.vue';
-import FormField from '../FormField.vue';
-import FormControls from '../FormControls.vue';
+import VButton from '@/components/common/VButton.vue';
+import Message from '@/components/common/Message.vue';
+import FormField from '@/components/common/FormField.vue';
+import FormControls from '@/components/common/FormControls.vue';
 
 export default {
   name: 'MessageForm',

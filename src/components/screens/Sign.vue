@@ -1,8 +1,7 @@
 <template>
-  <screen>
+  <screen @close="handleWindowClose">
     <v-frame :loading="!request" :closable="isDialog" @close="handleSignCancel">
       <sign-form
-        :accounts="accounts"
         :loading="loading"
         :request="request"
         :error="error"
@@ -16,9 +15,9 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import Screen from '../Screen.vue';
-import VFrame from '../VFrame.vue';
-import SignForm from '../forms/Sign.vue';
+import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
+import SignForm from '@/components/forms/Sign';
 
 export default {
   name: 'Sign',
@@ -29,7 +28,6 @@ export default {
 
   computed: {
     ...mapState({
-      accounts: state => state.accounts.accounts, // from demo, or from state
       inited: state => state.core.inited,
       loading: state => state.core.loading,
       request: state => state.requests.request,
@@ -38,7 +36,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['processRequest', 'cancelRequest']),
+    ...mapActions(['processRequest', 'cancelRequest', 'dialogClose']),
 
     async handleSignSubmit(res) {
       try {
@@ -51,17 +49,13 @@ export default {
 
     handleSignCancel() {
       this.cancelRequest();
+      this.dialogClose();
     },
 
     handleWindowClose() {
       this.cancelRequest();
+      this.dialogClose();
     },
-  },
-
-  async created() {
-    if (this.isDialog) {
-      window.addEventListener('beforeunload', this.handleWindowClose);
-    }
   },
 
   components: {

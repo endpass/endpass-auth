@@ -45,13 +45,13 @@
 
 <script>
 import { get } from 'lodash';
-import VInput from '../VInput.vue';
-import VSelect from '../VSelect.vue';
-import VCode from '../VCode.vue';
-import VButton from '../VButton.vue';
-import Message from '../Message.vue';
-import FormField from '../FormField.vue';
-import FormControls from '../FormControls.vue';
+import VInput from '@/components/common/VInput.vue';
+import VSelect from '@/components/common/VSelect.vue';
+import VCode from '@/components/common/VCode.vue';
+import VButton from '@/components/common/VButton.vue';
+import Message from '@/components/common/Message.vue';
+import FormField from '@/components/common/FormField.vue';
+import FormControls from '@/components/common/FormControls.vue';
 
 export default {
   name: 'SignForm',
@@ -70,11 +70,6 @@ export default {
     request: {
       type: Object,
       default: null,
-    },
-
-    accounts: {
-      type: Array,
-      default: () => [],
     },
 
     closable: {
