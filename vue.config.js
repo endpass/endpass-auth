@@ -25,6 +25,10 @@ module.exports = {
       //   },
       // }),
     ],
+    output: {
+      filename: '[name].[hash:8].js',
+      chunkFilename: '[name].[hash:8].js',
+    },
   },
 
   pluginOptions: {
@@ -42,7 +46,7 @@ module.exports = {
        */
       loaderOptions: {
         extract: true,
-        spriteFilename: 'img/icons.[hash:8].svg', // or 'img/icons.svg' if filenameHashing == false
+        spriteFilename: 'icons.[hash:8].svg', // or 'img/icons.svg' if filenameHashing == false
       },
       /*
        * @see https://github.com/kisenka/svg-sprite-loader#configuration
@@ -53,8 +57,26 @@ module.exports = {
     },
   },
 
+  css: {
+    extract: {
+      filename: '[name].[hash:8].css',
+      chunkFilename: '[name].[hash:8].css',
+    },
+  },
+
   chainWebpack: config => {
     config.resolve.alias.set('@', path.resolve(__dirname, './src'));
+
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|ico)(\?.*)?$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .options({
+        limit: 1,
+        name: '[name].[hash:8].[ext]',
+      });
+
     config.module
       .rule('svg-sprite')
       .use('svgo-loader')
