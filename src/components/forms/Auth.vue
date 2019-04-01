@@ -57,7 +57,7 @@
 <script>
 import Vue from 'vue';
 
-import VCheckbox from '@endpass/ui/dist/components/VCheckbox';
+import VCheckbox from '@endpass/ui/components/VCheckbox';
 import VFrame from '@/components/common/VFrame.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';

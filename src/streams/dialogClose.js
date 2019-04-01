@@ -1,4 +1,4 @@
-import bridgeMessenger from '@/class/singleton/messengers';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
 
 export default function() {

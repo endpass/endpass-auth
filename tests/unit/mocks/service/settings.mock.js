@@ -1,4 +1,4 @@
-import identityService from '@/service/settings';
+import settingsService from '@/service/settings';
 
 jest.mock('@/service/settings', () => {
   return {
@@ -9,4 +9,4 @@ jest.mock('@/service/settings', () => {
  };
 });
 
-export default identityService;
+export default settingsService;

@@ -62,7 +62,7 @@
 
 <script>
 import { VFaucetButton } from '@endpass/faucet';
-import { Network } from '@endpass/class';
+import Network from '@endpass/class/Network';
 import VButton from '@/components/common/VButton.vue';
 import VSelect from '@/components/common/VSelect.vue';
 import Message from '@/components/common/Message.vue';

@@ -1,0 +1,19 @@
+async function getSigner() {
+  const mod = await import(/* webpackChunkName: "signer" */ './signer');
+  return mod.default;
+}
+
+export default {
+  async recover(params) {
+    const Signer = await getSigner();
+    return Signer.recover(params);
+  },
+  async recoverMessage(params) {
+    const Singer = await getSigner();
+    return Singer.recoverMessage(params);
+  },
+  async getSignedRequest(params) {
+    const Singer = await getSigner();
+    return Singer.getSignedRequest(params);
+  },
+};

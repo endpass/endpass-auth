@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 
-import Wallet from '@/class/Wallet';
-import IdentityService from '@/service/identity';
+import Wallet from '@/service/signer/Wallet';
+import identityService from '@/service/identity';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 
@@ -120,7 +120,7 @@ describe('accounts actions', () => {
     it('should call handleAuthRequest with correct params', async () => {
       expect.assertions(2);
 
-      IdentityService.auth.mockReturnValueOnce(request);
+      identityService.auth.mockReturnValueOnce(request);
 
       await accountsActions.auth({ dispatch }, { email, serverMode });
 
@@ -132,25 +132,25 @@ describe('accounts actions', () => {
       });
     });
 
-    it('should call IdentityService.auth with correct email', async () => {
+    it('should call identityService.auth with correct email', async () => {
       expect.assertions(2);
 
       const resultUrl = `${redirectUrl}?mode=${type}`;
 
-      IdentityService.auth.mockReturnValueOnce(request);
+      identityService.auth.mockReturnValueOnce(request);
 
       await accountsActions.auth({ state, dispatch }, { email, serverMode });
 
-      expect(IdentityService.auth).toBeCalledTimes(1);
-      expect(IdentityService.auth).toBeCalledWith(email, resultUrl);
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
     });
 
-    it('should call IdentityService.auth with correct server url', async () => {
+    it('should call identityService.auth with correct server url', async () => {
       expect.assertions(2);
 
       const resultUrl = `${redirectUrl}?mode=${type}&serverUrl=${serverUrl}`;
 
-      IdentityService.auth.mockReturnValueOnce(request);
+      identityService.auth.mockReturnValueOnce(request);
 
       await accountsActions.auth(
         { state, dispatch },
@@ -160,8 +160,8 @@ describe('accounts actions', () => {
         },
       );
 
-      expect(IdentityService.auth).toBeCalledTimes(1);
-      expect(IdentityService.auth).toBeCalledWith(email, resultUrl);
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
     });
   });
 
@@ -172,7 +172,7 @@ describe('accounts actions', () => {
     it('should call handleAuthRequest with correct params', async () => {
       expect.assertions(2);
 
-      IdentityService.authWithGoogle.mockReturnValueOnce(request);
+      identityService.authWithGoogle.mockReturnValueOnce(request);
       await accountsActions.authWithGoogle({ dispatch }, { email });
       expect(dispatch).toBeCalledTimes(1);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'handleAuthRequest', {
@@ -188,7 +188,7 @@ describe('accounts actions', () => {
     it('should auth user and change link status', async () => {
       expect.assertions(3);
 
-      IdentityService.authWithGitHub.mockResolvedValueOnce({
+      identityService.authWithGitHub.mockResolvedValueOnce({
         success: true,
       });
       await accountsActions.authWithGitHub({ commit }, {});
@@ -201,7 +201,7 @@ describe('accounts actions', () => {
     it('should set otp email if challenge type equals to otp', async () => {
       expect.assertions(4);
 
-      IdentityService.authWithGitHub.mockResolvedValueOnce({
+      identityService.authWithGitHub.mockResolvedValueOnce({
         success: true,
         challenge: {
           challengeType: 'otp',
@@ -220,7 +220,7 @@ describe('accounts actions', () => {
     it('should throw error if auth response is falsy', async done => {
       expect.assertions(3);
 
-      IdentityService.authWithGitHub.mockResolvedValueOnce({
+      identityService.authWithGitHub.mockResolvedValueOnce({
         success: false,
       });
       try {
@@ -238,7 +238,7 @@ describe('accounts actions', () => {
 
       const error = new Error();
 
-      IdentityService.authWithGitHub.mockRejectedValueOnce(error);
+      identityService.authWithGitHub.mockRejectedValueOnce(error);
       try {
         await accountsActions.authWithGitHub({ commit }, {});
       } catch (err) {
@@ -279,8 +279,8 @@ describe('accounts actions', () => {
     it('should request accounts, bypass xpub accounts and set it', async () => {
       expect.assertions(1);
 
-      IdentityService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
-      IdentityService.getAccountInfo.mockImplementation(acc => ({
+      identityService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
+      identityService.getAccountInfo.mockImplementation(acc => ({
         address: acc,
         type: 'StandardAccount',
       }));
@@ -296,7 +296,7 @@ describe('accounts actions', () => {
     it('should set empty accounts on error', async () => {
       expect.assertions(1);
 
-      IdentityService.getAccounts.mockRejectedValueOnce();
+      identityService.getAccounts.mockRejectedValueOnce();
 
       await accountsActions.getAccounts({ commit });
 
@@ -312,11 +312,11 @@ describe('accounts actions', () => {
         address: '0x0',
       };
 
-      IdentityService.getAccount.mockResolvedValueOnce(account);
+      identityService.getAccount.mockResolvedValueOnce(account);
 
       const res = await accountsActions.getAccount(null, '0x0');
 
-      expect(IdentityService.getAccount).toBeCalledWith('0x0');
+      expect(identityService.getAccount).toBeCalledWith('0x0');
       expect(res).toEqual(account);
     });
   });
@@ -325,7 +325,7 @@ describe('accounts actions', () => {
     it('should await auth confirm and then request accounts', async () => {
       expect.assertions(1);
 
-      IdentityService.getAuthStatus.mockResolvedValueOnce(200);
+      identityService.getAuthStatus.mockResolvedValueOnce(200);
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
@@ -337,7 +337,7 @@ describe('accounts actions', () => {
     it('it should logout user with identity service', async () => {
       expect.assertions(5);
 
-      IdentityService.logout.mockResolvedValueOnce();
+      identityService.logout.mockResolvedValueOnce();
 
       await accountsActions.logout({ dispatch, commit });
 
@@ -356,7 +356,7 @@ describe('accounts actions', () => {
     it('it should throw error', async done => {
       expect.assertions(2);
 
-      IdentityService.logout.mockRejectedValueOnce();
+      identityService.logout.mockRejectedValueOnce();
 
       try {
         await accountsActions.logout({ dispatch, commit });
@@ -373,7 +373,7 @@ describe('accounts actions', () => {
     it('should await logout confirm', async () => {
       expect.assertions(3);
 
-      IdentityService.awaitLogoutConfirm.mockResolvedValueOnce();
+      identityService.awaitLogoutConfirm.mockResolvedValueOnce();
 
       await accountsActions.awaitLogoutConfirm({ commit });
 
@@ -385,7 +385,7 @@ describe('accounts actions', () => {
     it('should throw error', async done => {
       expect.assertions(3);
 
-      IdentityService.awaitLogoutConfirm.mockRejectedValueOnce();
+      identityService.awaitLogoutConfirm.mockRejectedValueOnce();
 
       try {
         await accountsActions.awaitLogoutConfirm({ commit });
@@ -474,8 +474,8 @@ describe('accounts actions', () => {
     it('should get recovery identifier through the identity service', () => {
       accountsActions.getRecoveryIdentifier({ state, commit });
 
-      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
-      expect(IdentityService.getRecoveryIdentifier).toHaveBeenCalledWith(
+      expect(identityService.getRecoveryIdentifier).toHaveBeenCalledTimes(1);
+      expect(identityService.getRecoveryIdentifier).toHaveBeenCalledWith(
         state.otpEmail,
       );
     });
@@ -506,7 +506,7 @@ describe('accounts actions', () => {
 
       const error = new Error();
 
-      IdentityService.getRecoveryIdentifier.mockRejectedValue(error);
+      identityService.getRecoveryIdentifier.mockRejectedValue(error);
 
       await expect(
         accountsActions.getRecoveryIdentifier({ state, commit }),
@@ -534,8 +534,8 @@ describe('accounts actions', () => {
       Web3.eth.accounts.sign.mockResolvedValue({ signature });
       await accountsActions.recover({ state, commit }, { seedPhrase });
 
-      expect(IdentityService.recover).toHaveBeenCalledTimes(1);
-      expect(IdentityService.recover).toHaveBeenCalledWith(
+      expect(identityService.recover).toHaveBeenCalledTimes(1);
+      expect(identityService.recover).toHaveBeenCalledWith(
         state.otpEmail,
         signature,
         state.authParams.redirectUrl,
@@ -564,7 +564,7 @@ describe('accounts actions', () => {
 
       const error = new Error();
 
-      IdentityService.recover.mockRejectedValue(error);
+      identityService.recover.mockRejectedValue(error);
 
       await expect(
         accountsActions.recover({ state, commit }, { seedPhrase }),
@@ -663,7 +663,7 @@ describe('accounts actions', () => {
         signature: 'signature',
       });
 
-      IdentityService.getAuthPermission.mockReturnValueOnce({
+      identityService.getAuthPermission.mockReturnValueOnce({
         keystore: v3KeyStore,
       });
       await accountsActions.signPermission({}, { password });
@@ -683,7 +683,7 @@ describe('accounts actions', () => {
     it('should return 200 status', async () => {
       expect.assertions(3);
 
-      IdentityService.getAuthStatus.mockReturnValueOnce(200);
+      identityService.getAuthStatus.mockReturnValueOnce(200);
 
       const status = await accountsActions.getAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);
@@ -694,7 +694,7 @@ describe('accounts actions', () => {
     it('should return 401 status', async () => {
       expect.assertions(3);
 
-      IdentityService.getAuthStatus.mockReturnValueOnce(401);
+      identityService.getAuthStatus.mockReturnValueOnce(401);
 
       const status = await accountsActions.getAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);

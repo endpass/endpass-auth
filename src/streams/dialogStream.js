@@ -1,5 +1,5 @@
 import store from '@/store';
-import bridgeMessenger from '@/class/singleton/messengers';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import {
   accountChannel,
   authChannel,
