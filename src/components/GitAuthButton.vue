@@ -1,6 +1,6 @@
 <template>
   <v-button @click="loginWithGithub">
-    <v-svg-icon name="github" width="30px" height="30px" />
+    <v-svg-icon name="github" width="30" height="30" />
   </v-button>
 </template>
 

@@ -13,10 +13,12 @@
   },
   "homepage": "https://github.com/endpass/endpass-auth",
   "scripts": {
-    "dev": "SOURCE_MAP=true NODE_ENV=local vue-cli-service serve ./src/main.js",
-    "build": "rimraf NODE_ENV=production vue-cli-service build ./src/main.js",
-    "build:dev": "NODE_ENV=development vue-cli-service build ./src/main.js",
-    "build:test": "NODE_ENV=test vue-cli-service build ./src/main.js",
+    "dev": "yarn build:icons && SOURCE_MAP=true NODE_ENV=local vue-cli-service serve ./src/main.js",
+    "pre-build": "rimraf ./dist && yarn build:icons",
+    "build": "yarn pre-build && NODE_ENV=production vue-cli-service build ./src/main.js",
+    "build:dev": "yarn pre-build && NODE_ENV=development vue-cli-service build ./src/main.js",
+    "build:test": "yarn pre-build && NODE_ENV=test vue-cli-service build ./src/main.js",
+    "build:icons": "vsvg -s ./src/assets/icons -t ./src/components/VSvgIcon/icons",
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watch",
     "format": "prettier --write './src/**/*.{js,vue,json}' && eslint ./src/**/*.{js,vue} --fix",
@@ -51,8 +53,8 @@
     "lodash": "^4.17.11",
     "reset.css": "^2.0.2",
     "vue": "^2.5.17",
-    "vue-cli-plugin-svg": "^0.1.2",
     "vue-router": "^3.0.2",
+    "vue-svgicon": "^3.2.5",
     "vuex": "^3.0.1",
     "web3": "^1.0.0-beta.37"
   },
@@ -87,9 +89,6 @@
     "postcss-nested": "^4.1.0",
     "prettier": "^1.16.1",
     "rimraf": "^2.6.2",
-    "svgo": "^1.1.1",
-    "svgo-loader": "^2.2.0",
-    "vue-cli-plugin-svg-sprite": "^0.3.1",
     "vue-template-compiler": "^2.5.17",
     "webpack": "^4.27.1"
   }

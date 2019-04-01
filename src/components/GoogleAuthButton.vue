@@ -5,7 +5,7 @@
     data-test="submit-button"
     @click="loginWithGoogle"
   >
-    <v-svg-icon name="google" width="30px" height="30px" />
+    <v-svg-icon name="google" width="30" height="30" />
   </v-button>
 </template>
 
