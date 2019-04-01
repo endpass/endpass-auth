@@ -42,7 +42,7 @@ export default {
 
     switch (request.method) {
       case 'eth_sendTransaction':
-        return wallet.sendSignedTransaction(request.transaction, password);
+        return wallet.sendSignedTransaction(request.params[0], password);
 
       case 'eth_signTypedData':
         // const wallet = rootGetters['accounts/wallet'];

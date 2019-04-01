@@ -28,7 +28,7 @@ describe('Signer', () => {
 
       const request = {
         method: 'eth_sendTransaction',
-        transaction: 'transaction',
+        params: ['transaction'],
       };
 
       const res = await Signer.getSignedRequest({
@@ -36,7 +36,7 @@ describe('Signer', () => {
         request,
       });
 
-      expect(spyon).toBeCalledWith(request.transaction, password);
+      expect(spyon).toBeCalledWith(request.params[0], password);
 
       expect(res).toBe(result);
     });
