@@ -23,7 +23,7 @@
 
 <script>
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
-import { Network } from '@endpass/class';
+import Network from '@endpass/class/Network';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import AccountForm from '@/components/forms/Account';

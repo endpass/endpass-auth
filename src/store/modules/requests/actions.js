@@ -1,7 +1,6 @@
-import Wallet from '@/class/Wallet';
-import { Network } from '@endpass/class';
 import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
+import signerService from '@/service/signer';
 
 const sendResponse = async ({ commit }, payload) => {
   signChannel.put(Answer.createOk(payload));
@@ -14,7 +13,7 @@ const processRequest = async (
 ) => {
   commit('changeLoadingStatus', true);
 
-  const { address, request, net = Network.NET_ID.MAIN } = state.request;
+  const { address, request, net } = state.request;
 
   // eslint-disable-next-line
   const demoData = getters.demoData;
@@ -27,11 +26,13 @@ const processRequest = async (
     v3KeyStore = await dispatch('getAccount', address);
   }
 
-  const wallet = new Wallet(v3KeyStore);
-
   try {
-    await dispatch('setWeb3NetworkProvider', net);
-    const signResult = await dispatch('getSignedRequest', { wallet, password });
+    const signResult = await signerService.getSignedRequest({
+      v3KeyStore,
+      request,
+      password,
+      net,
+    });
 
     dispatch('sendResponse', {
       id: request.id,
@@ -59,12 +60,11 @@ const processRequest = async (
 };
 
 const recoverMessage = async ({ dispatch }, payload) => {
-  const { address, request } = payload;
+  const { address, request, net } = payload;
 
   try {
     const account = await dispatch('getAccount', address);
-    const wallet = new Wallet(account);
-    const res = await wallet.recover(request.params[0], request.params[1]);
+    const res = await signerService.recoverMessage({ account, request, net });
 
     return {
       id: request.id,
@@ -81,46 +81,6 @@ const recoverMessage = async ({ dispatch }, payload) => {
   }
 };
 
-const getSignedRequest = async ({ state, dispatch }, payload) => {
-  const { method } = state.request;
-
-  switch (method) {
-    case 'eth_sendTransaction':
-      return dispatch('getSignedTransaction', payload);
-    case 'eth_signTypedData':
-      return dispatch('getSignedTypedDataRequest', payload);
-    default:
-      return dispatch('getSignedPlainRequest', payload);
-  }
-};
-
-const getSignedTransaction = async ({ state }, { password, wallet }) => {
-  const { request } = state.request;
-  const res = await wallet.sendSignedTransaction(request.transaction, password);
-
-  return res;
-};
-
-const getSignedTypedDataRequest = async () => {
-  // const wallet = rootGetters['accounts/wallet'];
-  // const request = getters.currentRequest;
-  throw new Error('Sign typed data not supported yet!');
-};
-
-const getSignedPlainRequest = async ({ state }, { password, wallet }) => {
-  const { request } = state.request;
-  let res;
-  const passParams = request.params[0];
-  if (request.method === 'eth_sendTransaction') {
-    res = await wallet.sendSignedTransaction(passParams, password);
-  } else {
-    const singRes = await wallet.sign(passParams, password);
-    res = singRes.signature;
-  }
-
-  return res;
-};
-
 const cancelRequest = ({ state, dispatch }) => {
   const { request } = state.request;
 
@@ -135,9 +95,5 @@ export default {
   processRequest,
   recoverMessage,
   sendResponse,
-  getSignedRequest,
-  getSignedTypedDataRequest,
-  getSignedTransaction,
-  getSignedPlainRequest,
   cancelRequest,
 };

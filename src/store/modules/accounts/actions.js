@@ -1,22 +1,18 @@
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import Bip39 from 'bip39';
-import HDKey from 'ethereumjs-wallet/hdkey';
-import Web3 from 'web3';
-import { keystore } from '@endpass/utils';
+import isV3 from '@endpass/utils/isV3';
 
-import IdentityService from '@/service/identity';
-import SettingsService from '@/service/settings';
-import ModeService from '@/service/mode';
-import { Network } from '@endpass/class';
+import signerService from '@/service/signer';
+import identityService from '@/service/identity';
+import settingsService from '@/service/settings';
+import modeService from '@/service/mode';
+
 import {
   accountChannel,
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
-
-import Wallet from '@/class/Wallet';
 import { ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
@@ -27,7 +23,7 @@ const auth = async ({ state, dispatch }, { email, serverMode }) => {
     redirectUrl = `${redirectUrl}&serverUrl=${serverUrl}`;
   }
 
-  const request = IdentityService.auth(email, redirectUrl);
+  const request = identityService.auth(email, redirectUrl);
 
   await dispatch('handleAuthRequest', {
     request,
@@ -37,7 +33,7 @@ const auth = async ({ state, dispatch }, { email, serverMode }) => {
 };
 
 const authWithGoogle = async ({ dispatch }, { email, idToken }) => {
-  const request = IdentityService.authWithGoogle(idToken);
+  const request = identityService.authWithGoogle(idToken);
 
   await dispatch('handleAuthRequest', {
     request,
@@ -49,11 +45,11 @@ const authWithGitHub = async ({ commit }, code) => {
   commit('changeLoadingStatus', true);
 
   try {
-    const res = await IdentityService.authWithGitHub(code);
+    const res = await identityService.authWithGitHub(code);
 
     if (!res.success) throw new Error(res.message || 'Auth failed!');
 
-    SettingsService.clearLocalSettings();
+    settingsService.clearLocalSettings();
 
     const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
@@ -76,7 +72,7 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     if (!res.success) throw new Error('Auth failed!');
 
-    SettingsService.clearLocalSettings();
+    settingsService.clearLocalSettings();
 
     const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
@@ -98,7 +94,7 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    await IdentityService.otpAuth(email, code);
+    await identityService.otpAuth(email, code);
   } catch (err) {
     throw err;
   } finally {
@@ -115,7 +111,7 @@ const cancelAuth = () => {
 };
 
 const getSettings = async ({ dispatch }) => {
-  const settings = await IdentityService.getSettings();
+  const settings = await identityService.getSettings();
   const { lastActiveAccount } = settings;
   let account = null;
 
@@ -123,7 +119,7 @@ const getSettings = async ({ dispatch }) => {
     account = await dispatch('getAccount', lastActiveAccount);
   }
 
-  if (!lastActiveAccount || !keystore.isV3(account)) {
+  if (!lastActiveAccount || !isV3(account)) {
     const lastAccount = await dispatch('getFirstPrivateAccount');
 
     Object.assign(settings, {
@@ -139,9 +135,9 @@ const defineSettings = async ({ state, dispatch, commit, getters }) => {
 
   const settings = demoData ? state.settings : await dispatch('getSettings');
 
-  const mergedSettings = SettingsService.mergeSettings(settings);
+  const mergedSettings = settingsService.mergeSettings(settings);
 
-  SettingsService.setLocalSettings(mergedSettings);
+  settingsService.setLocalSettings(mergedSettings);
 
   const newSettings = {
     ...settings,
@@ -152,7 +148,7 @@ const defineSettings = async ({ state, dispatch, commit, getters }) => {
 };
 
 const setSettings = async (ctx, payload) => {
-  SettingsService.setLocalSettings(payload);
+  settingsService.setLocalSettings(payload);
 };
 
 const updateSettings = async ({ state, commit, dispatch }, payload) => {
@@ -182,9 +178,9 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 const getAccounts = async ({ commit }) => {
   // TODO: check `getAccounts` usages
   try {
-    const res = await IdentityService.getAccounts();
+    const res = await identityService.getAccounts();
     const accounts = await Promise.all(
-      res.map(address => IdentityService.getAccountInfo(address)),
+      res.map(address => identityService.getAccountInfo(address)),
     );
 
     commit(
@@ -205,19 +201,17 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
   }
 
   try {
-    const res = await IdentityService.getAccounts();
+    const res = await identityService.getAccounts();
 
     const accounts = await Promise.all(
       res
         .filter(address => !/^xpub/.test(address))
-        .map(address => IdentityService.getAccountWithInfo(address)),
+        .map(address => identityService.getAccountWithInfo(address)),
     );
 
     commit(
       'setAccounts',
-      accounts
-        .filter(account => keystore.isV3(account))
-        .map(({ info }) => info),
+      accounts.filter(account => isV3(account)).map(({ info }) => info),
     );
     commit('setAuthStatus', true);
   } catch (err) {
@@ -227,7 +221,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 };
 
 const getAccount = async (ctx, address) => {
-  const res = await IdentityService.getAccount(address);
+  const res = await identityService.getAccount(address);
 
   return res;
 };
@@ -245,7 +239,7 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
 };
 
 const awaitAccountCreate = async ({ commit }) => {
-  const res = await IdentityService.awaitAccountCreate();
+  const res = await identityService.awaitAccountCreate();
 
   commit('setAccounts', res);
 };
@@ -258,7 +252,7 @@ const awaitLogoutConfirm = async ({ commit }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    await IdentityService.awaitLogoutConfirm();
+    await identityService.awaitLogoutConfirm();
   } catch (err) {
     throw err;
   } finally {
@@ -274,8 +268,8 @@ const logout = async ({ commit }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    await IdentityService.logout();
-    SettingsService.clearLocalSettings();
+    await identityService.logout();
+    settingsService.clearLocalSettings();
     commit('logout');
 
     accountChannel.put(
@@ -296,7 +290,7 @@ const getRecoveryIdentifier = async ({ state, commit }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    const identifier = await IdentityService.getRecoveryIdentifier(
+    const identifier = await identityService.getRecoveryIdentifier(
       state.otpEmail,
     );
 
@@ -312,17 +306,12 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    const seed = Bip39.mnemonicToSeed(seedPhrase);
-    const hdKey = HDKey.fromMasterSeed(seed);
-    const hdWallet = hdKey.derivePath(ENV.hdKeyMnemonic.path);
-    const wallet = hdWallet.deriveChild(0).getWallet();
-    const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
-    const web3 = new Web3(Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0]);
-    const { signature } = await web3.eth.accounts.sign(
-      state.recoveryIdentifier,
-      privateKey,
-    );
-    const { success } = await IdentityService.recover(
+    const signature = await signerService.recover({
+      seedPhrase,
+      recoveryIdentifier: state.recoveryIdentifier,
+    });
+
+    const { success } = await identityService.recover(
       state.otpEmail,
       signature,
       state.authParams.redirectUrl,
@@ -339,7 +328,7 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
 };
 
 const validateCustomServer = (ctx, serverUrl) =>
-  ModeService.validateIdentityServer(serverUrl);
+  modeService.validateIdentityServer(serverUrl);
 
 const setupDemoData = async ({ commit }, demoData) => {
   if (!demoData || !demoData.v3KeyStore) {
@@ -358,10 +347,15 @@ const setupDemoData = async ({ commit }, demoData) => {
 };
 
 const signPermission = async (store, { password }) => {
-  const res = await IdentityService.getAuthPermission();
-  const wallet = new Wallet(res.keystore);
-  const singRes = await wallet.sign(ORIGIN_HOST, password);
-  await IdentityService.setAuthPermission(singRes.signature);
+  const res = await identityService.getAuthPermission();
+  const signature = await signerService.getSignedRequest({
+    v3KeyStore: res.keystore,
+    password,
+    request: {
+      params: [ORIGIN_HOST],
+    },
+  });
+  await identityService.setAuthPermission(signature);
   permissionChannel.put(Answer.createOk());
 };
 
@@ -371,14 +365,12 @@ const cancelSignPermission = () => {
 
 const awaitAuthConfirm = async ({ dispatch }) => {
   const waiter = new Promise(resolve => {
-    let timerId;
-
     const checker = async () => {
-      const status = await IdentityService.getAuthStatus();
+      const status = await identityService.getAuthStatus();
       if (status === 200 || status === 403) {
         resolve();
       } else {
-        timerId = setTimeout(checker, 1500);
+        setTimeout(checker, 1500);
       }
     };
 
@@ -390,7 +382,7 @@ const awaitAuthConfirm = async ({ dispatch }) => {
 };
 
 const getAuthStatus = async ({ commit }) => {
-  const status = await IdentityService.getAuthStatus();
+  const status = await identityService.getAuthStatus();
   const isAuthority = status === 200;
   commit('setAuthStatus', isAuthority);
   return status;

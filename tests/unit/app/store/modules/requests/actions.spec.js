@@ -1,6 +1,15 @@
-import Wallet from '@/class/Wallet';
 import requestsActions from '@/store/modules/requests/actions';
 import { signChannel } from '@/class/singleton/channels';
+import Signer from '@/service/signer';
+
+jest.mock('@/service/signer', () => {
+  return {
+    recover: jest.fn(),
+    signWallet: jest.fn(),
+    recoverMessage: jest.fn(),
+    getSignedRequest: jest.fn(),
+  };
+});
 
 describe('requests actions', () => {
   const password = 'secret';
@@ -33,19 +42,18 @@ describe('requests actions', () => {
     const getters = {};
 
     it('should process request with new wallet instance and send response', async () => {
-      expect.assertions(5);
+      expect.assertions(4);
 
-      dispatch
-        .mockResolvedValueOnce(account)
-        .mockResolvedValueOnce({})
-        .mockResolvedValueOnce(signResult);
+      Signer.getSignedRequest.mockResolvedValueOnce(signResult);
+
+      dispatch.mockResolvedValueOnce(account);
 
       await requestsActions.processRequest(
         { state, commit, dispatch, getters },
         password,
       );
 
-      expect(dispatch).toBeCalledTimes(4);
+      expect(dispatch).toBeCalledTimes(2);
 
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
@@ -53,13 +61,15 @@ describe('requests actions', () => {
         state.request.address,
       );
 
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'setWeb3NetworkProvider', 1);
-
-      expect(dispatch).toHaveBeenNthCalledWith(3, 'getSignedRequest', {
-        wallet: expect.any(Wallet),
+      expect(Signer.getSignedRequest).toHaveBeenCalledWith({
         password,
+        request: state.request.request,
+        v3KeyStore: {
+          address: state.request.address,
+        },
       });
-      expect(dispatch).toHaveBeenNthCalledWith(4, 'sendResponse', {
+
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'sendResponse', {
         id: state.request.request.id,
         result: signResult,
         jsonrpc: state.request.request.jsonrpc,
@@ -67,33 +77,36 @@ describe('requests actions', () => {
     });
 
     it('should send response with error if error was occured during processing request', async () => {
-      expect.assertions(5);
+      expect.assertions(4);
 
       const error = new Error('foo');
 
+      Signer.getSignedRequest.mockRejectedValueOnce(error);
+
       dispatch.mockResolvedValueOnce(account);
-      dispatch.mockResolvedValueOnce({}); // for setWeb3NetworkProvider
-      dispatch.mockRejectedValueOnce(error);
 
       await requestsActions.processRequest(
         { state, commit, dispatch, getters },
         password,
       );
 
-      expect(dispatch).toBeCalledTimes(4);
+      expect(dispatch).toBeCalledTimes(2);
+
+      expect(Signer.getSignedRequest).toHaveBeenCalledWith({
+        password,
+        request: state.request.request,
+        v3KeyStore: {
+          address: state.request.address,
+        },
+      });
 
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
         state.request.address,
       );
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'setWeb3NetworkProvider', 1);
 
-      expect(dispatch).toHaveBeenNthCalledWith(3, 'getSignedRequest', {
-        wallet: expect.any(Wallet),
-        password,
-      });
-      expect(dispatch).toHaveBeenNthCalledWith(4, 'sendResponse', {
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'sendResponse', {
         id: state.request.request.id,
         result: [],
         jsonrpc: state.request.request.jsonrpc,
@@ -119,105 +132,6 @@ describe('requests actions', () => {
         status: true,
         payload,
       });
-    });
-  });
-
-  describe('getSignedRequest', () => {
-    const payload = {
-      foo: 'bar',
-    };
-
-    it('should return signed transaction if request method is eth_sendTransaction', async () => {
-      expect.assertions(1);
-
-      state.request.method = 'eth_sendTransaction';
-
-      await requestsActions.getSignedRequest({ state, dispatch }, payload);
-
-      expect(dispatch).toBeCalledWith('getSignedTransaction', payload);
-    });
-
-    it('should return signed typed data is getSignedTypedDataRequest', async () => {
-      expect.assertions(1);
-
-      state.request.method = 'eth_signTypedData';
-
-      await requestsActions.getSignedRequest({ state, dispatch }, payload);
-
-      expect(dispatch).toBeCalledWith('getSignedTypedDataRequest', payload);
-    });
-
-    it('should return signed request if reqest method is getSignedPlainRequest', async () => {
-      expect.assertions(1);
-
-      await requestsActions.getSignedRequest({ state, dispatch }, payload);
-
-      expect(dispatch).toBeCalledWith('getSignedPlainRequest', payload);
-    });
-  });
-
-  describe('getSignedTypedDataRequest', () => {
-    it('should throw error', async done => {
-      try {
-        await requestsActions.getSignedTypedDataRequest();
-      } catch (err) {
-        done();
-      }
-    });
-  });
-
-  // TODO need to  rewrite logic or test
-  //   describe('getSignedTransaction', () => {
-  //     const tx = {
-  //       foo: 'bar',
-  //     };
-  //     let sendEventMock;
-  //
-  //     beforeEach(() => {
-  //       state.request.request.transaction = { ...tx };
-  //       sendEventMock = {
-  //         then: jest.fn(),
-  //         on: jest.fn(),
-  //         catch: jest.fn(),
-  //       };
-  //     });
-  //
-  //     it('should return signed by wallet transaction request', async () => {
-  //       const walletMock = {
-  //         getNextNonce: jest.fn().mockResolvedValueOnce(1),
-  //         signTransaction: jest.fn().mockResolvedValueOnce(sendEventMock),
-  //       };
-  //
-  //       await requestsActions.getSignedTransaction(
-  //         { state },
-  //         { password, wallet: walletMock },
-  //       );
-  //
-  //       expect(walletMock.signTransaction).toBeCalledWith({
-  //         ...tx,
-  //         nonce: 1,
-  //       });
-  //     });
-  //   });
-
-  describe('getSignedPlainRequest', () => {
-    it('should return signed by wallet plain request data', async () => {
-      const walletMock = {
-        sign: jest.fn().mockResolvedValueOnce({
-          signature: '0x0',
-        }),
-      };
-
-      const res = await requestsActions.getSignedPlainRequest(
-        { state },
-        { password, wallet: walletMock },
-      );
-
-      expect(walletMock.sign).toBeCalledWith(
-        state.request.request.params[0],
-        password,
-      );
-      expect(res).toBe('0x0');
     });
   });
 

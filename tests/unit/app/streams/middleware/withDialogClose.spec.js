@@ -1,8 +1,8 @@
 import withDialogClose from '@/streams/middleware/withDialogClose';
-import bridgeMessenger from '@/class/singleton/messengers';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
 
-jest.mock('@/class/singleton/messengers', () => {
+jest.mock('@/class/singleton/bridgeMessenger', () => {
   return {
     send: jest.fn(),
   };

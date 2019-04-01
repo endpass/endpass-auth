@@ -1,8 +1,6 @@
-import { web3 } from '@/class/singleton';
-import { Network } from '@endpass/class';
 import { METHODS } from '@/constants';
 
-import bridgeMessenger from '@/class/singleton/messengers';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import dialogClose from '@/streams/dialogClose';
 
 const init = async ({ dispatch, commit }) => {
@@ -14,13 +12,6 @@ const init = async ({ dispatch, commit }) => {
   } finally {
     commit('changeInitStatus', true);
   }
-};
-
-const setWeb3NetworkProvider = (ctx, netId) => {
-  const netUrl = Network.NETWORK_URL_HTTP[netId][0];
-  const provider = new web3.providers.HttpProvider(netUrl);
-
-  web3.setProvider(provider);
 };
 
 const startBridge = async ({ dispatch, commit, getters }) => {
@@ -50,7 +41,6 @@ const dialogCloseWrap = () => {
 
 export default {
   init,
-  setWeb3NetworkProvider,
   dialogClose: dialogCloseWrap,
   startBridge,
 };

@@ -1,4 +1,4 @@
-import { CrossWindowMessenger } from '@endpass/class';
+import CrossWindowMessenger from '@endpass/class/CrossWindowMessenger';
 import { DIRECTION } from '@/constants';
 
 const bridgeMessenger = new CrossWindowMessenger({

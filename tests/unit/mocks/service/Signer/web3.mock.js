@@ -1,4 +1,4 @@
-jest.mock('@/class/singleton/web3', () => ({
+jest.mock('@/service/signer/web3', () => ({
   eth: {
     sendSignedTransaction: jest.fn(),
   },
