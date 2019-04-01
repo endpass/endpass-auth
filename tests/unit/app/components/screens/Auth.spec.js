@@ -1,9 +1,11 @@
+import VueSvgIcons from 'vue-svgicon';
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/Auth.vue';
 
 const localVue = createLocalVue();
 
+localVue.use(VueSvgIcons);
 localVue.use(Vuex);
 
 describe('Auth', () => {

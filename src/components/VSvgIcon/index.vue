@@ -9,6 +9,7 @@
 </template>
 
 <script>
+import svgicon from 'vue-svgicon';
 import './icons';
 
 export default {
@@ -27,6 +28,10 @@ export default {
       type: String,
       default: '20',
     },
+  },
+
+  components: {
+    svgicon,
   },
 };
 </script>

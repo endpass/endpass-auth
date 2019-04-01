@@ -2,12 +2,12 @@
 
 exports[`GoogleAuthButton render should correctly render GoogleAuthButton component empty if auth2 isn't loaded 1`] = `
 <v-button-stub disabled="true" data-test="submit-button">
-  <v-svg-icon-stub name="google" width="30px" fill="" height="30px"></v-svg-icon-stub>
+  <v-svg-icon-stub name="google" width="30" height="30"></v-svg-icon-stub>
 </v-button-stub>
 `;
 
 exports[`GoogleAuthButton render should correctly render GoogleAuthButton component if auth2 is loaded 1`] = `
 <v-button-stub data-test="submit-button">
-  <v-svg-icon-stub name="google" width="30px" fill="" height="30px"></v-svg-icon-stub>
+  <v-svg-icon-stub name="google" width="30" height="30"></v-svg-icon-stub>
 </v-button-stub>
 `;

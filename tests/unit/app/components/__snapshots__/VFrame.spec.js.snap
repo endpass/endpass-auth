@@ -4,7 +4,7 @@ exports[`VFrame render should correctly render VFrame component without loading 
 <div class="frame">
   <header class="frame__header"><img src="../assets/logo.png" alt="Endpass" class="frame__logo">
     Connect
-    <span class="frame__close-btn"><v-button-stub data-test="close-button"><v-svg-icon-stub name="x" width="20px" fill="white" height="20px"></v-svg-icon-stub></v-button-stub></span></header>
+    <span class="frame__close-btn"><v-button-stub data-test="close-button"><v-svg-icon-stub name="x" width="20" height="20" fill="white"></v-svg-icon-stub></v-button-stub></span></header>
   <div class="frame__body"></div>
 </div>
 `;
