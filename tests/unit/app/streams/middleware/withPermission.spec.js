@@ -1,7 +1,8 @@
 import withPermission from '@/streams/middleware/withPermission';
-import { permissionChannel } from '@/class/singleton/channels';
+import { authChannel, permissionChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import store from '@/store';
+import Answer from '@/class/Answer';
 
 jest.mock('@/store', () => {
   return {
@@ -66,7 +67,7 @@ describe('withPermission', () => {
   });
 
   it('should not redirect to permission', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(401);
     permissionChannel.take = jest.fn().mockResolvedValue();
@@ -74,6 +75,7 @@ describe('withPermission', () => {
     await withPermission(options);
 
     expect(permissionChannel.take).not.toBeCalled();
+    expect(permissionChannel.put).toBeCalledWith(Answer.createOk());
     expect(router.replace).not.toBeCalled();
   });
 });
