@@ -2,6 +2,7 @@ import withAuth from '@/streams/middleware/withAuth';
 import { authChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import store from '@/store';
+import Answer from '@/class/Answer';
 
 jest.mock('@/store', () => {
   return {
@@ -66,7 +67,7 @@ describe('withAuth', () => {
   });
 
   it('should not redirect to auth', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(403);
     authChannel.take = jest.fn().mockResolvedValue();
@@ -74,6 +75,7 @@ describe('withAuth', () => {
     await withAuth(options);
 
     expect(authChannel.take).not.toBeCalled();
+    expect(authChannel.put).toBeCalledWith(Answer.createOk());
     expect(router.replace).not.toBeCalled();
   });
 });
