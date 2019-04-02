@@ -15,23 +15,22 @@ jobs:
     - yarn build:dev
     before_deploy:
     - export RELEASE_TAG=$(jq .version package.json | tr -d \" | cut -d . -f "1")
+    - pip install --user awscli
     deploy:
-    - provider: s3
-      bucket: auth-dev.endpass.com
-      region: us-east-1
+    - provider: script
+      script: "~/.local/bin/aws s3 sync dist/app s3://auth-dev.endpass.com --region=us-east-1
+        --delete"
       skip_cleanup: true
-      local_dir: dist/app
       on:
         all_branches: true
         condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
-    - provider: s3
-      bucket: auth${RELEASE_TAG}-dev.endpass.com
-      region: us-east-1
+    - provider: script
+      script: "~/.local/bin/aws s3 sync dist/app s3://auth${RELEASE_TAG}-dev.endpass.com
+        --region=us-east-1 --delete"
       skip_cleanup: true
-      local_dir: dist/app
       on:
         all_branches: true
         condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
 notifications:
   slack:
-    secure: rqkeIduFhSRzCDWVbnEgVVgq9+94ZknecoygmyoY5el2LKHtHPJuUU0gMB9zjPhsvvi3fOlaKKGX60PjGSMI19/LEAGMe2rYsgWbArU3/IysUqCtziF2dyTfgJFkTu5CZDkQzwdG3VPForKxmYg3RfZd46Sscf5RET8E1GUKHQqfk5eWmSTCYqpK3gkJdFyz8q5auFHiXQpEt1nt55iUggkPCl9fAlB8bSAdXBQUeQUBBrH4kA5pY+0kaD7lvdm0C1ludAyPhXrsxhnfwxbEN2+oIs4aJQGs6oydmUl9CGdrzSXnQwmlbdiQ35jLYrPQrODiwDep7cC1Q7crGlM1iTyfCNan0p86AHQMD88zWMCSqIMoZLa0K4tDSaknoDtNThjRZfRbUt1DpniHuC7LxtbsbFJdqKppBSoNrEMauKBYnwTcomZm8VecMlN8+qvNaMpDLvZMvhUFSpS49qUHYP4Cww14CZJb362QEPe6HdfCnlGmfFmlDom6mdUNZzrC0wkbrHYHNsV0sK1K+MGujyvAVIRuKA2IV9i5uNxX6TjY+3yjGSt9e3X4Ja4Am2ne1kK8IZ59zOUdaO/tE5/y/ET1/v8tS5HJzq2CNlbGHHneDhwszPtDGah0GGNq3jd+e/fh/0W4CG9JcKYOsLo8FYrfmJ4pHpBXzjO8zty/xZk=
+    secure: AI2UOJEgAHPsknACUA9BQUmrtW3c5GSVAXDikN37IUSPahzKUqc2HRCHRJGWKdSjQdMct3x1NRRYniwmtHuL5eBANRzpCRHadDSrvEC1r4k4uBI7ngZirpbpWiv5URif7EV9i8w6ckWTUELjVvwX2qCISHWEWAe40FXXXpHtdTIsIG0lMb1d2z0i+Xmq1rPUPftaGjYBARSv11TCCMSMoyqTrJYH4Y3CXZUGGH5Ij80pgZh+lcROO6wgIjI2RHLPFWc8+YLMJFIii1tBT8REEnxiw+CYmocP5SzTdYOO7WTwhJpU9WmkR7XirHzCK/zlheZMMCXu0DwehaXC6gvd9+o9yV6X9qS69AIyJbVbZmldKT/Km1oF4GDsA6MfWv7DJQe/u8z8IsDqMandNfnbixix2ygVpPl7isUZS258uhbKEUUMSyk74TjbPb/dcXJYGzyKHR7KujgFrmIDXy4WmPRqROPW90eV5UAM6bJ/QjRiIPUqbNTfVQgS9aEwOAAQlWHIVl8+447MZ28I5xkPRfCibriprr8IlRGzbCbjIQ/ob7//dMvEppCf9UV/heGNS0vua4TbBnEPN5S1uOQcpp2+x5/cB0oVQPXsDzOyoPYsOZiJac81nmGtauoixUE+SwKh5IYfF5WDKWNR/E5HE9op4pXhxYaxXv4Reo9LgsA=
