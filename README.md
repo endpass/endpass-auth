@@ -4,124 +4,35 @@
 
 ## Table of contents
 
+- [Concept](#concept)
 - [Development](#development)
 
-### Usage
+### Concept
 
-Create instance of class and use it in your application. You can know about
-options and methods in the [API section](#api).
+Auth is a part of `@endpass/connect` (`connect` below) library.
 
-```js
-import Web3 from 'web3';
-import EndpassConnect from '@endpass/connect';
+All communication with `connect` is working through `bridgeMessenger` method. And starts with `METHODS.INITIATE` method which getting initial params from initialized `connect` instance.
 
-const web3 = new Web3('https://network.url');
-const connect = new EndpassConnect({
-  appUrl: 'http://connect.url',
-});
-const provider = connect.extendProvider(web3);
+`Screen` component must has own `Channel` instance (for example `Auth` – `authChannel`, `Permission` – `permissionChannel`) for answering with result of their processed actions (`ok`, `cancel`, `apply`, etc.).
 
-web3.setProvider(provider);
-```
+`dialogStream` - is entry point for methods from `connect`, where method’s payload will be processed through middlewares set. Each `method` has `options` property for controlling different middlewares behavior (pass it or use).
 
-Next, you can try to authentificate user.
+Each middleware has responsibility only for one action (`store`, `save`, `open`, etc.).
 
-```js
-try {
-  const res = await connect.auth();
+### Add new `screen` component
 
-  // Now, you have active account address and network id
-} catch (err) {
-  // Something goes wrong! User is not authorized
-}
-```
+It depends of new component flow using. If new screen similar to `Auth` screen, you should create new middleware like `withAuth`.
 
-#### Provider creating
-
-If you want to use this library and process `web3` requests through `endpass` services you should complete these conditions.
-
-Install `web3` library if you want to use it manually in you application. Create instance of `web3` and create provider based on it:
-
-```js
-import { HttpProvider } from 'web3-providers';
-import Connect from '@endpass/connect';
-
-const web3 = new Web3('https://network.url');
-const connect = new Connect();
-const provider = connect.extendProvider(HttpProvider);
-
-// If you are using old versions of web3 (0.30.0-beta and below) you should call
-// setProvider
-web3.setProvider(provider);
-
-// If you are using new versions of web3 (1.0.0 and more) you can reassign
-// global property ethereum in application window object
-window.ethereum = provider;
-
-// We highly recommend to use both methods for more stability and compatibility
-window.ethereum = provider;
-web3.setProvider(provider);
-```
-
-If `web3` can be found in application window object you can not install `web3`
-manually, `extendProvider` also should try to find it.
-
-### API
-
-#### Instance options
-
-| Property  | Type     | Default                    | Description                         |
-| --------- | -------- | -------------------------- | ----------------------------------- |
-| `authUrl` | `string` | `https://auth.endpass.com` | Url of Endpass Connect application. |
-
-#### Instance methods
-
-| Method                | Params                                           | Returns                                                                             | Description                                                                                                                                                               |
-| --------------------- | ------------------------------------------------ | ----------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `auth`                |                                                  | `Promise<{ status: boolean, message?: string }>`                                    | Open Endpass Connect application for user authorization, return promise, which returns object with auth status. See [Errors handling](#errors-handling) for more details. |
-| `logout`              |                                                  | `Promise<Boolean>`                                                                  | Makes logout request and returns status or throw error                                                                                                                    |
-| `getAccountData`      |                                                  | `Promise<{ activeAccount: string, activeNet: number }>`                             | Returns authorized user active account.                                                                                                                                   |
-| `extendProvider`      | `provider: Web3.Provider`                        | `Web3Provider`                                                                      | Creates Web3 provider for injection in Web3 instance.                                                                                                                     |
-| `setProviderSettings` | `{ activeAccount: string`, `activeNet: number }` |                                                                                     | Set user settings to the injected `web3` provider.                                                                                                                        |
-| `openAccount`         |                                                  | `Promise<{ type: string, payload?: { activeAccount: string, activeNet: number } }>` | Open Endpass Connect application for change user active address, network or logout                                                                                        |
-
-### Interactions with current account
-
-If you use `openAccount` method connect application will open screen with user base settings: current account and network.
-You also can makes logout here. This method will return object with type field. This field determines response type. There is
-two types of response:
-
-- `logout` – means user makes logout from his account.
-- `update` – means user update account settings. Response also contains `payload` field with updated settings object.
-
-At the same time `update` will set new account settings to injected provider. After this, you can refresh browser page
-or something else.
-
-Examples:
-
-```js
-import Connect from '@endpass/connect';
-
-const connect = new Connect();
-
-connect.openAccount().then(res => {
-  if (res.type === 'logout') {
-    // User have logout here
-  } else if (res.type === 'update') {
-    // Account settings was updated by user
-    console.log(res); // { activeAccount: "0x0", activeNet: 1 }
-  }
-});
-```
+Or if this screen similar to `Account` (has not specific answer result and sending response with one of types), you should create new method in `METHODS` constant and define options for this method.
 
 ## Development
 
 | Command     | Description                                            |
 | ----------- | ------------------------------------------------------ |
-| `build`     | Builds application and library.                        |
-| `dev:app`   | Starts application dev server.                         |
-| `build:app` | Builds application.                                    |
+| `build`     | Build application.                                     |
+| `dev`       | Start application dev server.                          |
+| `report`    | Create report                                          |
 | `dev:lib`   | Starts library development environment.                |
 | `build:lib` | Builds library.                                        |
-| `test:unit` | Runs unit tests.                                       |
+| `test`      | Runs unit tests.                                       |
 | `format`    | Formats code of packages with `eslint` and `prettier`. |
