@@ -64,6 +64,35 @@ const authWithGitHub = async ({ commit }, code) => {
   }
 };
 
+const authWithHydra = async (
+  { commit, dispatch, rootState },
+  { challengeId, password },
+) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    await dispatch('defineSettings');
+
+    const { lastActiveAccount, email } = get(rootState, 'accounts.settings');
+    const v3Keystore = await dispatch('getAccount', lastActiveAccount);
+    const { signature } = await signerService.signDataWithAccount({
+      account: v3Keystore,
+      data: email,
+      password,
+    });
+
+    await identityService.hydraLogin({
+      challengeId,
+      signature,
+    });
+  } catch (err) {
+    console.log(err);
+    throw new Error('Password is incorrect');
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
   commit('changeLoadingStatus', true);
 
@@ -364,19 +393,7 @@ const cancelSignPermission = () => {
 };
 
 const awaitAuthConfirm = async ({ dispatch }) => {
-  const waiter = new Promise(resolve => {
-    const checker = async () => {
-      const status = await identityService.getAuthStatus();
-      if (status === 200 || status === 403) {
-        resolve();
-      } else {
-        setTimeout(checker, 1500);
-      }
-    };
-
-    checker();
-  });
-  await waiter;
+  await identityService.awaitAuthConfirm();
   await dispatch('defineOnlyV3Accounts');
   authChannel.put(Answer.createOk());
 };
@@ -392,6 +409,7 @@ export default {
   auth,
   authWithGoogle,
   authWithGitHub,
+  authWithHydra,
   cancelAuth,
   confirmAuth,
   confirmAuthViaOtp,
@@ -413,7 +431,6 @@ export default {
   getRecoveryIdentifier,
   recover,
   validateCustomServer,
-
   getAuthStatus,
   signPermission,
   cancelSignPermission,

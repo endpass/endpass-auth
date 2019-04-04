@@ -153,6 +153,24 @@ export const awaitAccountCreate = () =>
     }, 1500);
   });
 
+export const awaitAuthConfirm = () =>
+  new Promise((resolve, reject) => {
+    /* eslint-disable-next-line */
+    const interval = setInterval(async () => {
+      try {
+        const status = await getAuthStatus();
+
+        if (status === 200 || status === 403) {
+          clearInterval(interval);
+
+          return resolve(status);
+        }
+      } catch (err) {
+        return reject(err);
+      }
+    }, 1500);
+  });
+
 export const getRecoveryIdentifier = email =>
   request
     .get(
@@ -189,6 +207,11 @@ export const getAuthStatus = async () => {
   return res;
 };
 
+// TODO: impletent that
+export const hydraLogin = async ({ signature, challengeId }) => {
+  console.log(signature, challengeId);
+};
+
 export default {
   getSettings,
   getOtpSettings,
@@ -207,6 +230,8 @@ export default {
   logout,
   awaitLogoutConfirm,
   awaitAccountCreate,
+  awaitAuthConfirm,
   getRecoveryIdentifier,
   recover,
+  hydraLogin,
 };

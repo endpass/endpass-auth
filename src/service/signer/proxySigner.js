@@ -4,6 +4,10 @@ async function getSigner() {
 }
 
 export default {
+  async signDataWithAccount(params) {
+    const Signer = await getSigner();
+    return Signer.signDataWithAccount(params);
+  },
   async recover(params) {
     const Signer = await getSigner();
     return Signer.recover(params);

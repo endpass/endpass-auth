@@ -13,6 +13,13 @@ function setWeb3Network(net = Network.NET_ID.MAIN) {
 }
 
 export default {
+  async signDataWithAccount({ account, data, password }) {
+    const wallet = new Wallet(account);
+    const res = await wallet.sign(data, password);
+
+    return res;
+  },
+
   async recover({ seedPhrase, recoveryIdentifier }) {
     const seed = Bip39.mnemonicToSeed(seedPhrase);
     const hdKey = HDKey.fromMasterSeed(seed);
