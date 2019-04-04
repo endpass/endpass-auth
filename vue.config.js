@@ -1,15 +1,13 @@
 const path = require('path');
 const webpack = require('webpack');
 const utils = require('@endpass/utils/build');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { getEnv } = require('./env');
 
 const { NODE_ENV, SOURCE_MAP } = process.env;
 const ENV = getEnv(NODE_ENV);
+const PRODUCTION_ENV = NODE_ENV === 'production';
 
 module.exports = {
-  baseUrl: '',
-
   productionSourceMap: false,
 
   configureWebpack: {
@@ -19,15 +17,10 @@ module.exports = {
       new webpack.DefinePlugin({
         ENV: JSON.stringify(ENV),
       }),
-      // new HtmlWebpackPlugin({
-      //   meta: {
-      //     build: getCommitHash(),
-      //   },
-      // }),
     ],
     output: {
-      filename: '[name].[hash:8].js',
-      chunkFilename: '[name].[hash:8].js',
+      filename: PRODUCTION_ENV ? '[name].[hash:8].js' : '[name].js',
+      chunkFilename: PRODUCTION_ENV ? '[name].[hash:8].js' : '[name].js',
     },
   },
 
@@ -59,8 +52,8 @@ module.exports = {
 
   css: {
     extract: {
-      filename: '[name].[hash:8].css',
-      chunkFilename: '[name].[hash:8].css',
+      filename: PRODUCTION_ENV ? '[name].[hash:8].css' : '[name].css',
+      chunkFilename: PRODUCTION_ENV ? '[name].[hash:8].css' : '[name].css',
     },
   },
 
@@ -103,7 +96,6 @@ module.exports = {
         cookieDomainRewrite: 'localhost',
       },
     },
-    // https: true,
   },
 
   outputDir: path.resolve(__dirname, './dist/app'),

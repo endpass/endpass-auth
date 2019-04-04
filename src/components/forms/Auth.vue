@@ -1,6 +1,6 @@
 <template>
   <form data-test="auth-form" @submit.prevent="handleSubmit">
-    <form-field v-if="isServerMode">
+    <form-field v-if="isServerMode && !public">
       <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
     </form-field>
     <template v-if="isDefaultMode">
@@ -32,12 +32,14 @@
           >
         </div>
       </form-field>
-      <form-controls>
-        <google-auth-button @error="handleOauthError" />
-      </form-controls>
-      <form-controls>
-        <git-auth-button @error="handleOauthError" />
-      </form-controls>
+      <template v-if="!public">
+        <form-controls>
+          <google-auth-button @error="handleOauthError" />
+        </form-controls>
+        <form-controls>
+          <git-auth-button @error="handleOauthError" />
+        </form-controls>
+      </template>
       <form-controls>
         <v-checkbox v-model="isTermsAccepted">
           I accept the
@@ -88,6 +90,11 @@ export default {
     error: {
       type: String,
       default: null,
+    },
+
+    public: {
+      type: Boolean,
+      default: false,
     },
 
     isServerMode: {
