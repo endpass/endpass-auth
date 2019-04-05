@@ -6,7 +6,7 @@
       </message>
     </form-field>
     <form-field v-if="error">
-      <message :error="true">{{ error }}</message>
+      <message :error="true" data-test="error-message">{{ error }}</message>
     </form-field>
     <form-field>
       <v-input
@@ -15,6 +15,7 @@
         name="password"
         type="password"
         placeholder="Enter your wallet password..."
+        data-test="password-input"
       />
     </form-field>
     <form-controls>

@@ -12,7 +12,7 @@
 import { mapActions, mapState } from 'vuex';
 import { queryParamsToObject } from '@/util/url';
 import VFrame from '@/components/common/VFrame';
-import PasswordForm from '@/components/forms/PasswordForm';
+import PasswordForm from '@/components/forms/Password';
 
 export default {
   name: 'LoginProvider',
