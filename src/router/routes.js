@@ -18,7 +18,7 @@ const routes = [
     component: PublicAuth,
   },
   {
-    path: '/login',
+    path: '/public/login',
     name: 'LoginProvider',
     component: LoginProvider,
   },

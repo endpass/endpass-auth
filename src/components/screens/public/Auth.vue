@@ -2,7 +2,7 @@
   <screen>
     <composite-auth-form
       :closable="false"
-      :public="true"
+      :is-public="true"
       @authorize="handleAuthorize"
     />
   </screen>

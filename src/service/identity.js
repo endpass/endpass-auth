@@ -6,6 +6,8 @@ const { url: identityBaseUrl } = ENV.identity;
 
 axios.defaults.headers.common['x-connect-lib-host'] = ORIGIN_HOST;
 
+const createTimeout = handler => setTimeout(handler, 1500);
+
 const request = {
   get: url =>
     axios
@@ -121,54 +123,70 @@ export const authWithGitHub = code =>
 
 export const logout = () => request.post(`${identityBaseUrl}/api/v1.1/logout`);
 
+export const getAuthStatus = async () => {
+  let res = 200;
+  try {
+    await getAccounts();
+  } catch (e) {
+    res = get(e, ['response', 'status']);
+  }
+  return res;
+};
+
 export const awaitLogoutConfirm = () =>
   new Promise(resolve => {
     /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
+    const handler = async function() {
       try {
         await getAccounts();
-      } catch (err) {
-        clearInterval(interval);
 
+        createTimeout(handler);
+      } catch (err) {
         return resolve();
       }
-    }, 1500);
+    };
+
+    createTimeout(handler);
   });
 
 export const awaitAccountCreate = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
+    const handler = async function() {
       try {
         const res = await getAccounts();
 
         if (res.filter(address => !/^xpub/.test(address)).length > 0) {
-          clearInterval(interval);
-
           return resolve(res);
         }
+
+        createTimeout(handler);
       } catch (err) {
         return reject(err);
       }
-    }, 1500);
+    };
+
+    createTimeout(handler);
   });
 
 export const awaitAuthConfirm = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
+    const handler = async function() {
       try {
         const status = await getAuthStatus();
 
         if (status === 200 || status === 403) {
-          clearInterval(interval);
-
           return resolve(status);
         }
+
+        createTimeout(handler);
       } catch (err) {
         return reject(err);
       }
-    }, 1500);
+    };
+
+    createTimeout(handler);
   });
 
 export const getRecoveryIdentifier = email =>
@@ -196,16 +214,6 @@ export const recover = (email, signature, redirectUrl) =>
 
       return res;
     });
-
-export const getAuthStatus = async () => {
-  let res = 200;
-  try {
-    await getAccounts();
-  } catch (e) {
-    res = get(e, ['response', 'status']);
-  }
-  return res;
-};
 
 // TODO: impletent that
 export const hydraLogin = async ({ signature, challengeId }) => {

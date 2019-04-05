@@ -14,7 +14,7 @@
         :required="true"
         name="password"
         type="password"
-        placeholder="Enter your wallet password..."
+        placeholder="Enter your password..."
         data-test="password-input"
       />
     </form-field>

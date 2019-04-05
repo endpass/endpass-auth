@@ -34,7 +34,7 @@
       :loading="loading"
       :error="error"
       :is-server-mode="isIdentityMode"
-      :public="public"
+      :is-public="isPublic"
       @submit="handleAuthSubmit"
       @error="handleAuthError"
     />
@@ -43,7 +43,7 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import AuthForm from '@/components/forms/Auth';
@@ -62,7 +62,7 @@ export default {
       default: true,
     },
 
-    public: {
+    isPublic: {
       type: Boolean,
       default: false,
     },
