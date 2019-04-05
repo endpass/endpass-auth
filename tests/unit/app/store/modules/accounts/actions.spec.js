@@ -325,7 +325,7 @@ describe('accounts actions', () => {
     it('should await auth confirm and then request accounts', async () => {
       expect.assertions(1);
 
-      identityService.getAuthStatus.mockResolvedValueOnce(200);
+      identityService.awaitAuthConfirm.mockResolvedValueOnce(200);
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
