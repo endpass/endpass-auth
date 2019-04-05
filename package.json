@@ -15,8 +15,10 @@
   "scripts": {
     "dev": "SOURCE_MAP=true NODE_ENV=local vue-cli-service serve ./src/main.js",
     "build": "rimraf ./dist && NODE_ENV=production vue-cli-service build ./src/main.js",
+    "build:version": "rimraf ./dist && NODE_ENV=production WITH_VERSION=true vue-cli-service build ./src/main.js",
     "report": "vue-cli-service build ./src/main.js --report ",
     "build:dev": "rimraf ./dist && NODE_ENV=development vue-cli-service build ./src/main.js",
+    "build:dev:version": "rimraf ./dist && NODE_ENV=development WITH_VERSION=true vue-cli-service build ./src/main.js",
     "build:test": "rimraf ./dist && NODE_ENV=test vue-cli-service build ./src/main.js",
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watchAll",
