@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PublicAuth render should correclty render Auth public screen component 1`] = `
+exports[`PublicAuth render should correctly render Auth public screen component 1`] = `
 <screen-stub>
-  <composite-auth-form-stub public="true"></composite-auth-form-stub>
+  <composite-auth-form-stub ispublic="true"></composite-auth-form-stub>
 </screen-stub>
 `;

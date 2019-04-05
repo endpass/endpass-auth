@@ -5,10 +5,11 @@ const { getEnv } = require('./env');
 
 const { NODE_ENV, SOURCE_MAP } = process.env;
 const ENV = getEnv(NODE_ENV);
-const PRODUCTION_ENV = NODE_ENV === 'production';
 
 module.exports = {
   productionSourceMap: false,
+
+  baseUrl: '/',
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
@@ -19,8 +20,8 @@ module.exports = {
       }),
     ],
     output: {
-      filename: PRODUCTION_ENV ? '[name].[hash:8].js' : '[name].js',
-      chunkFilename: PRODUCTION_ENV ? '[name].[hash:8].js' : '[name].js',
+      filename: '[name].[hash:8].js',
+      chunkFilename: '[name].[hash:8].js',
     },
   },
 
@@ -52,8 +53,8 @@ module.exports = {
 
   css: {
     extract: {
-      filename: PRODUCTION_ENV ? '[name].[hash:8].css' : '[name].css',
-      chunkFilename: PRODUCTION_ENV ? '[name].[hash:8].css' : '[name].css',
+      filename: '[name].[hash:8].css',
+      chunkFilename: '[name].[hash:8].css',
     },
   },
 
@@ -96,6 +97,7 @@ module.exports = {
         cookieDomainRewrite: 'localhost',
       },
     },
+    // https: true,
   },
 
   outputDir: path.resolve(__dirname, './dist/app'),

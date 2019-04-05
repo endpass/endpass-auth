@@ -1,6 +1,6 @@
 <template>
   <form data-test="auth-form" @submit.prevent="handleSubmit">
-    <form-field v-if="isServerMode && !public">
+    <form-field v-if="isServerMode && !isPublic">
       <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
     </form-field>
     <template v-if="isDefaultMode">
@@ -32,7 +32,7 @@
           >
         </div>
       </form-field>
-      <template v-if="!public">
+      <template>
         <form-controls>
           <google-auth-button @error="handleOauthError" />
         </form-controls>
@@ -92,7 +92,7 @@ export default {
       default: null,
     },
 
-    public: {
+    isPublic: {
       type: Boolean,
       default: false,
     },

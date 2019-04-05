@@ -19,6 +19,9 @@ describe('User', () => {
         inited: true,
         loading: false,
       },
+      actions: {
+        dialogClose: jest.fn(),
+      },
       getters: {
         isDialog: jest.fn(() => true),
       },

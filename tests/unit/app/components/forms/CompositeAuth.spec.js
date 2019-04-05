@@ -27,6 +27,7 @@ describe('CompositeAuth', () => {
       },
       actions: {
         openCreateAccountPage: jest.fn(),
+        dialogClose: jest.fn(),
       },
       getters: {
         isDialog: jest.fn(() => true),
@@ -114,26 +115,6 @@ describe('CompositeAuth', () => {
   });
 
   describe('behavior', () => {
-    describe('initial actions', () => {
-      // TODO: another magic moment
-      //       it('should not do anything if it opened not in dialog', async () => {
-      //         expect.assertions(3);
-      //
-      //         coreModule.getters.isDialog.mockReturnValueOnce(false);
-      //         store = new Vuex.Store(storeData);
-      //         wrapper = shallowMount(Auth, {
-      //           localVue,
-      //           store,
-      //         });
-      //
-      //         await global.flushPromises();
-      //
-      //         expect(coreModule.actions.init).toBeCalled();
-      //         expect(accountsModule.actions.awaitAuthMessage).not.toBeCalled();
-      //         expect(coreModule.actions.sendReadyMessage).not.toBeCalled();
-      //       });
-    });
-
     it('should not confirm auth by default on mount', () => {
       expect(accountsModule.actions.confirmAuth).not.toBeCalled();
     });
@@ -159,9 +140,19 @@ describe('CompositeAuth', () => {
       expect(wrapper.emitted().authorize[0]).toEqual([{ serverMode: null }]);
     });
 
-    it('should cancel auth on form cancel', () => {
-      // TODO Have troubles with triggering event from stub, solve it when possivble
-      wrapper.vm.handleAuthCancel();
+    it('should cancel auth on form cancel', async () => {
+      expect.assertions(1);
+
+      accountsModule.state.linkSent = true;
+      wrapper = shallowMount(CompositeAuth, {
+        localVue,
+        store,
+        router,
+      });
+
+      wrapper.find('message-form-stub').vm.$emit('cancel');
+
+      await wrapper.vm.$nextTick();
 
       expect(accountsModule.actions.cancelAuth).toBeCalled();
     });
@@ -175,8 +166,9 @@ describe('CompositeAuth', () => {
     });
 
     describe('auth form logic', () => {
-      it('should request auth on form submit', () => {
-        // TODO Have troubles with triggering event from stub, solve it when possivble
+      it('should request auth on form submit', async () => {
+        expect.assertions(2);
+
         const params = {
           email: 'foo@bar.baz',
           serverMode: {
@@ -184,7 +176,9 @@ describe('CompositeAuth', () => {
           },
         };
 
-        wrapper.vm.handleAuthSubmit(params);
+        wrapper.find('auth-form-stub').vm.$emit('submit', params);
+
+        await wrapper.vm.$nextTick();
 
         expect(accountsModule.actions.auth).toBeCalledTimes(1);
         expect(accountsModule.actions.auth).toBeCalledWith(

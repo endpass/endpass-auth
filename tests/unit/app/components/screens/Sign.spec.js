@@ -23,6 +23,7 @@ describe('Sign', () => {
         },
         actions: {
           sendReadyMessage: jest.fn(),
+          dialogClose: jest.fn(),
         },
         getters: {
           isDialog: jest.fn(() => true),

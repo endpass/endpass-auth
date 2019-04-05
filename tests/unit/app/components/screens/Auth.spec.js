@@ -44,7 +44,7 @@ describe('Auth', () => {
   });
 
   describe('render', () => {
-    it('should correclty render Auth screen component', () => {
+    it('should correctly render Auth screen component', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
   });

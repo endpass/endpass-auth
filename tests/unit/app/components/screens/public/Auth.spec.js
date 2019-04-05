@@ -21,7 +21,7 @@ describe('PublicAuth', () => {
   });
 
   describe('render', () => {
-    it('should correclty render Auth public screen component', () => {
+    it('should correctly render Auth public screen component', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
