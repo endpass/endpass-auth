@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 
@@ -17,6 +17,13 @@ export default {
   },
 
   methods: {
+    ...mapActions(['confirmAuth', 'cancelAuth', 'dialogClose']),
+
+    handleWindowClose() {
+      this.cancelAuth();
+      this.dialogClose();
+    },
+
     handleAuthorize({ serverMode }) {
       this.confirmAuth(serverMode);
     },
