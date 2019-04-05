@@ -20,14 +20,21 @@ const googleClientId =
 
 const gitClientId = '346108128ad51a5eccd1';
 
+const googleClientIdWithVersion =
+  '885568627115-sutcos98pmkmknhonq3qei1rnrd49i2h.apps.googleusercontent.com';
+
+const gitClientIdWithVersion = '09d967653008b4d10c58';
+
 const isProduction = false;
+
+const withVersion = !!process.env.WITH_VERSION;
 
 module.exports = {
   wallet,
   infura,
   identity,
   hdKeyMnemonic,
-  googleClientId,
-  gitClientId,
+  googleClientId: withVersion ? googleClientIdWithVersion : googleClientId,
+  gitClientId: withVersion ? gitClientIdWithVersion : gitClientId,
   isProduction,
 };
