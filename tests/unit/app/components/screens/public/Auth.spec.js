@@ -1,5 +1,6 @@
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { queryParamsToObject } from '@/util/url';
 import Auth from '@/components/screens/public/Auth.vue';
 
 const localVue = createLocalVue();
@@ -38,5 +39,17 @@ describe('PublicAuth', () => {
 
       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
     });
+
+    it('should redirect to root if place query param is not present', () => {
+        queryParamsToObject.mockReturnValueOnce({});
+        wrapper = shallowMount(Auth, {
+          localVue,
+          router,
+        });
+        wrapper.vm.$router.replace = jest.fn();
+        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+
+        expect(wrapper.vm.$router.replace).toBeCalledWith('/');
+      });
   });
 });
