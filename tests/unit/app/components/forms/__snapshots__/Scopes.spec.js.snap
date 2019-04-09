@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Scopes render should correctly render component 1`] = `
+<form>
+  <form-field-stub>
+    <message-stub>
+      Application requests following scopes. Press "Allow" button to grant
+      these permissions.
+    </message-stub>
+  </form-field-stub>
+  <!---->
+  <form-controls-stub>
+    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">Submit</v-button-stub>
+  </form-controls-stub>
+</form>
+`;
+
+exports[`Scopes render should render checkboxes with given scopes 1`] = `
+<form>
+  <form-field-stub>
+    <message-stub>
+      Application requests following scopes. Press "Allow" button to grant
+      these permissions.
+    </message-stub>
+  </form-field-stub>
+  <!---->
+  <form-field-stub>
+    <v-checkbox-stub name="checkbox">
+      foo
+    </v-checkbox-stub>
+  </form-field-stub>
+  <form-field-stub>
+    <v-checkbox-stub name="checkbox">
+      bar
+    </v-checkbox-stub>
+  </form-field-stub>
+  <form-controls-stub>
+    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button" disabled="true">Submit</v-button-stub>
+  </form-controls-stub>
+</form>
+`;

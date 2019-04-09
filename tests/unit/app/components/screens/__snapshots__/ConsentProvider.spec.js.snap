@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConsentProvider render should correctly render ConsentProvider screen 1`] = `
+<v-frame-stub closable="true">
+  <scopes-form-stub scopes="" error="You should provide consent_challenge param in url, add it and try again!"></scopes-form-stub>
+</v-frame-stub>
+`;
