@@ -70,8 +70,6 @@ export default {
     },
 
     isFormValid() {
-      console.log(this.scopes, this.checkedScopes);
-      console.log(xor(this.scopes, this.checkedScopes));
       return xor(this.scopes, this.checkedScopes).length === 0;
     },
   },
