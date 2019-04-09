@@ -240,6 +240,11 @@ export const hydraLogin = async ({ signature, challengeId }) => {
   console.log(signature, challengeId);
 };
 
+// TODO: impletent that
+export const hydraGrantPermissions = async ({ consentChallenge, scopes }) => {
+  console.log(consentChallenge, scopes);
+};
+
 export default {
   getSettings,
   getOtpSettings,
@@ -262,4 +267,5 @@ export default {
   getRecoveryIdentifier,
   recover,
   hydraLogin,
+  hydraGrantPermissions,
 };

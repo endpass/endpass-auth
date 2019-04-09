@@ -101,6 +101,10 @@ const authWithHydra = async (
   }
 };
 
+const grantPermissionsWithHydra = async (ctx, { consentChallenge, scopes }) => {
+  await identityService.hydraGrantPermissions({ consentChallenge, scopes });
+};
+
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
   commit('changeLoadingStatus', true);
 
@@ -418,6 +422,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithHydra,
+  grantPermissionsWithHydra,
   cancelAuth,
   confirmAuth,
   confirmAuthViaOtp,
