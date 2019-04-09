@@ -1075,10 +1075,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.10.2":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.10.2.tgz#5e0083192738e847add827bff3b61cc0f5533023"
-  integrity sha512-Np0Jmh9LPho8klLQ1nUJSbNM1r7VCTpbCYUZ3jeQKouVZFf3Fo3gi9ZIS/ncM2qKy8X547rU/hZNQjkH5UF/0g==
+"@endpass/class@^0.10.3":
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.10.3.tgz#d92c4d3d37dc1249ecfe815a1d657a7b1162e095"
+  integrity sha512-auJYa340yqY9g8nUPKEIvZ+fySda6R7rO7R4RNkqeSNDHrXEhCoLpjQHnvLhtEnvgQqwOllqIMSWWam95oSISQ==
   dependencies:
     "@endpass/utils" "^1.2.3"
     "@ledgerhq/hw-app-eth" "^4.24.0"
@@ -1105,10 +1105,10 @@
     axios "^0.18.0"
     vue "^2.5.22"
 
-"@endpass/ui@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.4.0.tgz#199d9c1bc606501b6ec236887cbbaa24b26abee0"
-  integrity sha512-3HeanaTeCwBQ1RCuMrXgJC3V+B5dAN+PlJp3FeZ2DIjrWOJaXHcFHvlrJGHZjg5RkNU79Y2zQeZZk1MsuTYX1g==
+"@endpass/ui@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.4.1.tgz#b161bf7f6f75d2fd440bc27d85c973b80026ea3b"
+  integrity sha512-yWovhgS9DBllYO5vIrjLh+PSDGxvJ49nLbj2tQhewGr1JxeEz74LRlu0kpl2+ojjk+9IGk2FM8+MV9g6Gs06Yw==
   dependencies:
     "@endpass/utils" "^1.2.1"
     vue "^2.5.21"
@@ -1130,6 +1130,19 @@
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.2.3.tgz#6fa0104b84feab666208f1e016c0f0e23598b672"
   integrity sha512-h/bVkeAilCF8DIbgKAiEfW4WuoUkaPzTGVUAnutsecwGJ2XQJufOJjJlJVqTmT8DZGcvWuY1nd1jx7stA1a8/g==
+  dependencies:
+    bs58check "^2.1.2"
+    dayjs "^1.7.8"
+    ethereumjs-wallet "^0.6.2"
+    export-files "^2.1.1"
+    keythereum "^1.0.4"
+    lodash "^4.17.11"
+    node-notifier "^5.4.0"
+
+"@endpass/utils@^1.3.4":
+  version "1.3.4"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.3.4.tgz#f83cb2cd434f1c878e3c91f68ae4b90a47710416"
+  integrity sha512-EdHncOJKu0Ulufz9Fy9BtzT+ShOODOTb0l/dnIusuzM1IRLwugewNQlUtzIKEk/i+xnZ3elfHkGrt4Gwckvt3w==
   dependencies:
     bs58check "^2.1.2"
     dayjs "^1.7.8"
