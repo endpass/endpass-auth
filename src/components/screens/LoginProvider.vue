@@ -57,7 +57,7 @@ export default {
     }
 
     if (!this.isAuthorized) {
-      this.$router.replace(`/public/auth?redirect_url=${encodeURI(href)}`);
+      this.$router.replace(`/public/auth?redirect_url=${encodeURI(href)}&place=login`);
     }
   },
 

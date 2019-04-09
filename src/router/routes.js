@@ -7,6 +7,7 @@ import Loader from '@/components/screens/Loader';
 import SignPermission from '@/components/screens/SignPermission';
 import NotFound from '@/components/screens/NotFound';
 import LoginProvider from '@/components/screens/LoginProvider';
+import ConsentProvider from '@/components/screens/ConsentProvider';
 
 // Public routes
 import PublicAuth from '@/components/screens/public/Auth';
@@ -21,6 +22,11 @@ const routes = [
     path: '/public/login',
     name: 'LoginProvider',
     component: LoginProvider,
+  },
+  {
+    path: '/public/consent',
+    name: 'ConsentProvider',
+    component: ConsentProvider,
   },
   {
     path: '/bridge',
