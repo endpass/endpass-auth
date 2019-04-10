@@ -31,6 +31,9 @@ describe('withAuth', () => {
     jest.clearAllMocks();
     action = {
       end: jest.fn(),
+      req: {
+        answer: jest.fn(),
+      },
     };
   });
 
@@ -51,14 +54,15 @@ describe('withAuth', () => {
   });
 
   it('should redirect to auth and end stream', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(401);
-    authChannel.take = jest.fn().mockResolvedValue({ status: false });
+    authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withAuth(options, action);
 
     expect(action.end).toBeCalled();
+    expect(action.req.answer).toBeCalledWith(Answer.createFail());
     expect(router.replace).toBeCalledWith(
       '/auth',
       expect.any(Function),
