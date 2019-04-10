@@ -1,6 +1,8 @@
-const { queryParamsToObject, objectToQueryParams } = require.requireActual(
-  '@/util/url',
-);
+const {
+  queryParamsToObject,
+  objectToQueryParams,
+  appendQueryParametersToUrl,
+} = require.requireActual('@/util/url');
 
 describe('queryParamsToObject', () => {
   it('should transform query params to object', () => {
@@ -29,5 +31,21 @@ describe('objectToQueryParams', () => {
         bar: 'baz',
       }),
     ).toBe('foo=bar&bar=baz');
+  });
+});
+
+describe('appendQueryParametersToUrl', () => {
+  it('should append query parameters to url', () => {
+    expect(
+      appendQueryParametersToUrl('https://foo.bar', {
+        foo: 'bar',
+        bar: 'baz',
+      }),
+    ).toBe('https://foo.bar?foo=bar&bar=baz');
+    expect(
+      appendQueryParametersToUrl('https://foo.bar?foo=bar', {
+        bar: 'baz',
+      }),
+    ).toBe('https://foo.bar?foo=bar&bar=baz');
   });
 });

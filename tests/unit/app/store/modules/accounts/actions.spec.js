@@ -122,7 +122,7 @@ describe('accounts actions', () => {
 
       identityService.auth.mockReturnValueOnce(request);
 
-      await accountsActions.auth({ dispatch }, { email, serverMode });
+      await accountsActions.auth({ state, dispatch }, { email, serverMode });
 
       expect(dispatch).toBeCalledTimes(1);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'handleAuthRequest', {
