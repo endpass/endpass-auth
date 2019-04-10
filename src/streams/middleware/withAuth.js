@@ -23,5 +23,6 @@ export default async function withAuth(options, action) {
   const res = await authChannel.take();
   if (res.status === false) {
     action.end();
+    action.req.answer(res);
   }
 }

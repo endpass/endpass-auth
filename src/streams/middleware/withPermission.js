@@ -23,5 +23,6 @@ export default async function withPermission(options, action) {
   const res = await permissionChannel.take();
   if (res.status === false) {
     action.end();
+    action.req.answer(res);
   }
 }

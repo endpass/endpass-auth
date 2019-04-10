@@ -31,6 +31,9 @@ describe('withPermission', () => {
     jest.clearAllMocks();
     action = {
       end: jest.fn(),
+      req: {
+        answer: jest.fn(),
+      },
     };
   });
 
@@ -51,14 +54,15 @@ describe('withPermission', () => {
   });
 
   it('should redirect to permission and end stream', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(403);
-    permissionChannel.take = jest.fn().mockResolvedValue({ status: false });
+    permissionChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withPermission(options, action);
 
     expect(action.end).toBeCalled();
+    expect(action.req.answer).toBeCalledWith(Answer.createFail());
     expect(router.replace).toBeCalledWith(
       '/permission',
       expect.any(Function),
