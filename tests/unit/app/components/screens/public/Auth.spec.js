@@ -28,10 +28,15 @@ describe('PublicAuth', () => {
 
   describe('behavior', () => {
     it('should redirect to LoginProvider on auth form authorize event handling', () => {
+      wrapper.setData({
+        params: {
+          redirectUrl: 'http://foo.bar/public/foo/bar',
+        },
+      });
       wrapper.vm.$router.replace = jest.fn();
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
-      expect(wrapper.vm.$router.replace).toBeCalledWith('/login');
+      expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
     });
   });
 });

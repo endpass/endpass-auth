@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
-
+import { appendQueryParametersToUrl } from '@/util/url';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import settingsService from '@/service/settings';
@@ -17,13 +17,21 @@ import { ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
-  let redirectUrl = `${get(state, 'authParams.redirectUrl')}?mode=${type}`;
+  const redirectUrl = get(state, 'authParams.redirectUrl');
+  const queryParamsToAppend = {
+    mode: type,
+  };
 
   if (serverUrl) {
-    redirectUrl = `${redirectUrl}&serverUrl=${serverUrl}`;
+    Object.assign(queryParamsToAppend, {
+      serverUrl,
+    });
   }
 
-  const request = identityService.auth(email, redirectUrl);
+  const request = identityService.auth(
+    email,
+    appendQueryParametersToUrl(redirectUrl, queryParamsToAppend),
+  );
 
   await dispatch('handleAuthRequest', {
     request,

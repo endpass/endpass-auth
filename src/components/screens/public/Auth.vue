@@ -9,18 +9,45 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex';
+import { queryParamsToObject } from '@/util/url';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 
 export default {
   name: 'PublicAuth',
 
-  methods: {
-    handleAuthorize() {
-      const { search } = window.location;
+  data: () => ({
+    params: {},
+  }),
 
-      this.$router.replace(`/login${search}`);
+  methods: {
+    ...mapMutations(['setAuthParams']),
+
+    handleAuthorize() {
+      const { redirectUrl } = this.params;
+
+      if (redirectUrl) {
+        const redirectRoute = decodeURIComponent(redirectUrl).replace(
+          /^(https?:\/\/[a-z.]+(:\d+)?)/gm,
+          '',
+        );
+
+        this.$router.replace(redirectRoute);
+      }
     },
+  },
+
+  mounted() {
+    const { search } = window.location;
+
+    this.params = queryParamsToObject(search);
+
+    if (this.params.redirectUrl) {
+      this.setAuthParams({
+        redirectUrl: decodeURIComponent(this.params.redirectUrl),
+      });
+    }
   },
 
   components: {

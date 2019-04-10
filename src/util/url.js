@@ -24,7 +24,20 @@ export const objectToQueryParams = object =>
     '',
   );
 
+export const appendQueryParametersToUrl = (url, params) => {
+  const stringifiedParams = Object.keys(params)
+    .map(key => `${key}=${params[key]}`)
+    .join('&');
+
+  if (url.includes('?')) {
+    return `${url}&${stringifiedParams}`;
+  }
+
+  return `${url}?${stringifiedParams}`;
+};
+
 export default {
   queryParamsToObject,
   objectToQueryParams,
+  appendQueryParametersToUrl,
 };

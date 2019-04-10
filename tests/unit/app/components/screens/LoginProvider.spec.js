@@ -1,8 +1,16 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { queryParamsToObject } from '@/util/url';
 import LoginProvider from '@/components/screens/LoginProvider';
+
+jest.mock('@/util/url', () => ({
+  queryParamsToObject: jest.fn().mockImplementation(() => ({
+    challengeId: 'foo',
+  })),
+}));
+
+/* eslint-disable-next-line */
+import { queryParamsToObject } from '@/util/url';
 
 const localVue = createLocalVue();
 
@@ -50,9 +58,6 @@ describe('LoginProvider', () => {
 
   describe('render', () => {
     it('should correctly render LoginProvider screen', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        challengeId: 'foo',
-      });
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
@@ -69,14 +74,18 @@ describe('LoginProvider', () => {
     });
 
     it('should takes query params from current location and assign error if challengeId is not in params', () => {
+      queryParamsToObject.mockImplementationOnce(() => ({}));
+      wrapper = shallowMount(LoginProvider, {
+        localVue,
+        store,
+        router,
+      });
+
       expect(wrapper.vm.error).not.toBeNull();
       expect(wrapper.vm.$router.replace).not.toBeCalled();
     });
 
     it('should takes query params from current location and makes redirect if challengeId is not empty but authorization status is falsy', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        challengeId: 'foo',
-      });
       accountsModule.state.isAuthorized = false;
       wrapper = shallowMount(LoginProvider, {
         localVue,
@@ -88,9 +97,6 @@ describe('LoginProvider', () => {
     });
 
     it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        challengeId: 'foo',
-      });
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
@@ -140,17 +146,6 @@ describe('LoginProvider', () => {
         await wrapper.vm.$nextTick();
 
         expect(wrapper.vm.error).toBe(errorMessage);
-      });
-
-      it('should not do anything if challengeId is not in params', () => {
-        wrapper.setData({
-          params: {
-            challengeId: null,
-          },
-        });
-        wrapper.find('password-form-stub').vm.$emit('submit', password);
-
-        expect(accountsModule.actions.authWithHydra).not.toBeCalled();
       });
     });
   });

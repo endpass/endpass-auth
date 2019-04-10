@@ -46,7 +46,7 @@ export default {
   },
 
   mounted() {
-    const { search } = window.location;
+    const { search, href } = window.location;
 
     this.params = queryParamsToObject(search);
 
@@ -57,7 +57,7 @@ export default {
     }
 
     if (!this.isAuthorized) {
-      this.$router.replace(`/public/auth${search}`);
+      this.$router.replace(`/public/auth?redirect_url=${encodeURI(href)}`);
     }
   },
 
