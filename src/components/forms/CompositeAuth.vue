@@ -200,7 +200,7 @@ export default {
       this.dialogClose();
     },
 
-    handleAuthError(error) {
+    handleAuthError() {
       this.error = 'Auth failed. Please, try again';
     },
 

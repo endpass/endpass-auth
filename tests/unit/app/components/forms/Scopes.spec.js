@@ -44,7 +44,7 @@ describe('Scopes', () => {
         loading: false,
       });
 
-      expect(submitButton.text()).toBe('Submit');
+      expect(submitButton.text()).toBe('Allow');
       expect(submitButton.attributes().disabled).toBeFalsy();
 
       wrapper.setProps({

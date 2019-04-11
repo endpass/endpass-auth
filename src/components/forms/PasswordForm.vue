@@ -19,7 +19,7 @@
     </form-field>
     <form-controls>
       <v-button
-        :disabled="!isFormValid || loading"
+        :disabled="!isFormValid || isLoading"
         :submit="true"
         :fluid="true"
         type="primary"
@@ -41,7 +41,7 @@ export default {
   name: 'PasswordForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -58,7 +58,7 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Submit' : 'Loading...';
+      return !this.isLoading ? 'Submit' : 'Loading...';
     },
 
     isFormValid() {

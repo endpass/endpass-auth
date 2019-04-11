@@ -1,25 +1,14 @@
 import Vuex from 'vuex';
-import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConsentProvider from '@/components/screens/ConsentProvider';
 
-jest.mock('@/util/url', () => ({
-  queryParamsToObject: jest.fn().mockImplementation(() => ({
-    consentChallenge: 'foo',
-  })),
-}));
-
-/* eslint-disable-next-line */
-import { queryParamsToObject } from '@/util/url';
-
 const localVue = createLocalVue();
 
-localVue.use(VueRouter);
 localVue.use(Vuex);
 
 describe('ConsentProvider', () => {
+  let $router;
   let wrapper;
-  let router;
   let store;
   let storeData;
   let coreModule;
@@ -48,90 +37,97 @@ describe('ConsentProvider', () => {
       },
     };
     store = new Vuex.Store(storeData);
-    router = new VueRouter();
+    $router = {
+      history: {
+        current: {
+          query: {
+            consent_challenge: 'foo',
+            scopes: 'foo bar baz',
+          },
+        },
+      },
+      replace: jest.fn(),
+    };
     wrapper = shallowMount(ConsentProvider, {
       localVue,
       store,
-      router,
+      mocks: {
+        $router,
+      },
     });
   });
 
   describe('render', () => {
     it('should correctly render ConsentProvider screen', () => {
-      queryParamsToObject.mockImplementationOnce(() => ({
-        consentChallenge: 'foo',
-        scopes: 'foo+bar+baz',
-      }));
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        router,
-      });
-
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
-    beforeEach(() => {
-      router.replace = jest.fn();
-    });
-
     it('should takes query params from current location and assign error if consentChallenge is not in params', () => {
-      expect(wrapper.vm.error).not.toBeNull();
-      expect(wrapper.vm.$router.replace).not.toBeCalled();
-    });
+      $router.history.current.query = {};
 
-    it('should takes query params from current location and assign error if scopes is not in params', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       expect(wrapper.vm.error).not.toBeNull();
-      expect(wrapper.vm.$router.replace).not.toBeCalled();
+      expect($router.replace).not.toBeCalled();
+    });
+
+    it('should takes query params from current location and assign error if scopes is not in params', () => {
+      $router.history.current.query = {
+        consent_challenge: 'foo',
+      };
+      wrapper = shallowMount(ConsentProvider, {
+        localVue,
+        store,
+        mocks: {
+          $router,
+        },
+      });
+
+      expect(wrapper.vm.error).not.toBeNull();
+      expect($router.replace).not.toBeCalled();
     });
 
     it('should takes query params from current location and makes redirect if consentChallenge is not empty but authorization status is falsy', () => {
-      queryParamsToObject.mockImplementationOnce(() => ({
-        consentChallenge: 'foo',
-        scopes: 'foo bar baz',
-      }));
       accountsModule.state.isAuthorized = false;
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
-      expect(wrapper.vm.$router.replace).toBeCalled();
+      expect($router.replace).toBeCalled();
     });
 
     it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        consentChallenge: 'foo',
-        scopes: 'foo bar baz',
-      });
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       expect(wrapper.vm.error).toBeNull();
-      expect(wrapper.vm.$router.replace).not.toBeCalled();
+      expect($router.replace).not.toBeCalled();
     });
 
     it('should grant permissions on scopes form submit', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        consentChallenge: 'foo',
-        scopes: 'foo bar baz',
-      });
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       wrapper
@@ -151,7 +147,7 @@ describe('ConsentProvider', () => {
     it('should not grant permissions on scopes form submit if consentChallenge is not in params', () => {
       wrapper.setData({
         params: {
-          consentChallenge: null,
+          consent_challenge: null,
         },
       });
 

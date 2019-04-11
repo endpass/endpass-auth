@@ -4,6 +4,7 @@ import isV3 from '@endpass/utils/isV3';
 import { appendQueryParametersToUrl } from '@/util/url';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
+import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
 
@@ -89,7 +90,7 @@ const authWithHydra = async (
       password,
     });
 
-    await identityService.hydraLogin({
+    await permissionsService.login({
       challengeId,
       signature,
     });
@@ -102,7 +103,7 @@ const authWithHydra = async (
 };
 
 const grantPermissionsWithHydra = async (ctx, { consentChallenge, scopes }) => {
-  await identityService.hydraGrantPermissions({ consentChallenge, scopes });
+  await permissionsService.grantPermissions({ consentChallenge, scopes });
 };
 
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
