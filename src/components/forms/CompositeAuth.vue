@@ -201,7 +201,6 @@ export default {
     },
 
     handleAuthError(error) {
-      console.log(error);
       this.error = 'Auth failed. Please, try again';
     },
 
