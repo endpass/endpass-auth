@@ -11,9 +11,19 @@ import NotFound from '@/components/screens/NotFound';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import PublicAuth from '@/components/screens/public/Auth';
+import LoginProvider from '@/components/screens/LoginProvider';
+import Widget from '@/components/widget/Widget';
 import Error from '@/components/screens/public/Error';
 
 const routes = [
+  /**
+   * Public routes
+   */
+  {
+    path: '/public/widget',
+    name: 'Widget',
+    component: Widget,
+  },
   {
     path: '/public/auth',
     name: 'PublicAuthScreen',
@@ -24,6 +34,9 @@ const routes = [
     name: 'LoginProvider',
     component: LoginProvider,
   },
+  /**
+   * Non-public
+   */
   {
     path: '/public/consent',
     name: 'ConsentProvider',

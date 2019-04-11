@@ -56,6 +56,7 @@
     "github-oauth-popup": "^1.2.0",
     "lodash": "^4.17.11",
     "reset.css": "^2.0.2",
+    "v-show-slide": "^1.6.0",
     "vue": "^2.5.17",
     "vue-cli-plugin-svg": "^0.1.2",
     "vue-router": "^3.0.2",
