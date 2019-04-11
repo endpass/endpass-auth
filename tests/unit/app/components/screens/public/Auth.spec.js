@@ -1,23 +1,48 @@
+import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { queryParamsToObject } from '@/util/url';
 import Auth from '@/components/screens/public/Auth.vue';
+
+jest.mock('@/util/url', () => ({
+  queryParamsToObject: jest.fn().mockImplementation(() => ({
+    redirectUrl: 'http://foo.bar',
+  })),
+}));
+
+/* eslint-disable-next-line */
+import { queryParamsToObject } from '@/util/url';
 
 const localVue = createLocalVue();
 
+localVue.use(Vuex);
 localVue.use(VueRouter);
 
 describe('PublicAuth', () => {
   let wrapper;
   let router;
+  let store;
+  let storeData;
+  let accountsModule;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     router = new VueRouter();
+    accountsModule = {
+      mutations: {
+        setAuthParams: jest.fn(),
+      },
+    };
+    storeData = {
+      modules: {
+        accounts: accountsModule,
+      },
+    };
+    store = new Vuex.Store(storeData);
     wrapper = shallowMount(Auth, {
       localVue,
       router,
+      store,
     });
   });
 
@@ -40,16 +65,25 @@ describe('PublicAuth', () => {
       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
     });
 
-    it('should redirect to root if place query param is not present', () => {
-        queryParamsToObject.mockReturnValueOnce({});
-        wrapper = shallowMount(Auth, {
-          localVue,
-          router,
-        });
-        wrapper.vm.$router.replace = jest.fn();
-        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+    it('should set auth params if redirectUrl exists', () => {
+      expect(accountsModule.mutations.setAuthParams).toBeCalledWith(
+        expect.any(Object),
+        {
+          redirectUrl: 'http://foo.bar',
+        },
+      );
+    });
 
-        expect(wrapper.vm.$router.replace).toBeCalledWith('/');
+    it('should not set auth params if redirectUrl not exists', () => {
+      queryParamsToObject.mockImplementation(() => ({}));
+      accountsModule.mutations.setAuthParams.mockRestore();
+      wrapper = shallowMount(Auth, {
+        localVue,
+        router,
+        store,
       });
+
+      expect(accountsModule.mutations.setAuthParams).not.toBeCalled();
+    });
   });
 });

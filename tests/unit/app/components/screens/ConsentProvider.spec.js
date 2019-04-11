@@ -1,8 +1,16 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { queryParamsToObject } from '@/util/url';
 import ConsentProvider from '@/components/screens/ConsentProvider';
+
+jest.mock('@/util/url', () => ({
+  queryParamsToObject: jest.fn().mockImplementation(() => ({
+    consentChallenge: 'foo',
+  })),
+}));
+
+/* eslint-disable-next-line */
+import { queryParamsToObject } from '@/util/url';
 
 const localVue = createLocalVue();
 
@@ -50,9 +58,10 @@ describe('ConsentProvider', () => {
 
   describe('render', () => {
     it('should correctly render ConsentProvider screen', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        challengeId: 'foo',
-      });
+      queryParamsToObject.mockImplementationOnce(() => ({
+        consentChallenge: 'foo',
+        scopes: 'foo+bar+baz',
+      }));
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
@@ -74,9 +83,6 @@ describe('ConsentProvider', () => {
     });
 
     it('should takes query params from current location and assign error if scopes is not in params', () => {
-      queryParamsToObject.mockReturnValueOnce({
-        consentChallenge: 'foo',
-      });
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
@@ -88,10 +94,10 @@ describe('ConsentProvider', () => {
     });
 
     it('should takes query params from current location and makes redirect if consentChallenge is not empty but authorization status is falsy', () => {
-      queryParamsToObject.mockReturnValueOnce({
+      queryParamsToObject.mockImplementationOnce(() => ({
         consentChallenge: 'foo',
         scopes: 'foo bar baz',
-      });
+      }));
       accountsModule.state.isAuthorized = false;
       wrapper = shallowMount(ConsentProvider, {
         localVue,
@@ -144,7 +150,9 @@ describe('ConsentProvider', () => {
 
     it('should not grant permissions on scopes form submit if consentChallenge is not in params', () => {
       wrapper.setData({
-        params: {},
+        params: {
+          consentChallenge: null,
+        },
       });
 
       wrapper.find('scopes-form-stub').vm.$emit('submit');

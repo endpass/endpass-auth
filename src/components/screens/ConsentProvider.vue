@@ -31,10 +31,10 @@ export default {
     }),
 
     scopes() {
-      const params = get(this.params, 'scopes', '');
+      const scopes = get(this.params, 'scopes', '');
 
-      if (params) {
-        return decodeURIComponent(this.params.scopes).split(' ');
+      if (scopes) {
+        return decodeURIComponent(scopes).split(' ');
       }
 
       return [];

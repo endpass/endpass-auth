@@ -189,26 +189,6 @@ export const awaitAuthConfirm = () =>
     createTimeout(handler);
   });
 
-export const awaitAuthConfirm = () =>
-  new Promise((resolve, reject) => {
-    /* eslint-disable-next-line */
-    const handler = async function() {
-      try {
-        const status = await getAuthStatus();
-
-        if (status === 200 || status === 403) {
-          return resolve(status);
-        }
-
-        createTimeout(handler);
-      } catch (err) {
-        return reject(err);
-      }
-    };
-
-    createTimeout(handler);
-  });
-
 export const getRecoveryIdentifier = email =>
   request
     .get(
