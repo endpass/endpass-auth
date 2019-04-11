@@ -1,28 +1,8 @@
-import axios from 'axios';
-import { ORIGIN_HOST } from '@/constants';
+import request from '@/util/request';
 import get from 'lodash/get';
 
 const { url: identityBaseUrl } = ENV.identity;
-
-axios.defaults.headers.common['x-connect-lib-host'] = ORIGIN_HOST;
-
 const createTimeout = handler => setTimeout(handler, 1500);
-
-const request = {
-  get: url =>
-    axios
-      .get(url, {
-        withCredentials: true,
-      })
-      .then(({ data }) => data),
-
-  post: (url, body) =>
-    axios
-      .post(url, body, {
-        withCredentials: true,
-      })
-      .then(({ data }) => data),
-};
 
 export const getSettings = () =>
   request.get(`${identityBaseUrl}/api/v1.1/settings`);
@@ -215,16 +195,6 @@ export const recover = (email, signature, redirectUrl) =>
       return res;
     });
 
-// TODO: impletent that
-export const hydraLogin = async ({ signature, challengeId }) => {
-  console.log(signature, challengeId);
-};
-
-// TODO: impletent that
-export const hydraGrantPermissions = async ({ consentChallenge, scopes }) => {
-  console.log(consentChallenge, scopes);
-};
-
 export default {
   getSettings,
   getOtpSettings,
@@ -246,6 +216,4 @@ export default {
   awaitAuthConfirm,
   getRecoveryIdentifier,
   recover,
-  hydraLogin,
-  hydraGrantPermissions,
 };

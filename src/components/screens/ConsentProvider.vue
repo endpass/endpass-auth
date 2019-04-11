@@ -45,12 +45,15 @@ export default {
     ...mapActions(['grantPermissionsWithHydra']),
 
     async handleScopesSubmit(scopes) {
-      const { consentChallenge } = this.params;
+      const { consent_challenge } = this.params;
 
-      if (!consentChallenge) return;
+      if (!consent_challenge) return;
 
       try {
-        await this.grantPermissionsWithHydra({ consentChallenge, scopes });
+        await this.grantPermissionsWithHydra({
+          consentChallenge: consent_challenge,
+          scopes,
+        });
       } catch (err) {
         this.error = err.message;
       }
@@ -58,11 +61,12 @@ export default {
   },
 
   mounted() {
-    const { search } = window.location;
+    const { query } = get(this.$router, 'history.current', {});
+    const { href } = window.location;
 
-    this.params = queryParamsToObject(search);
+    this.params = query;
 
-    if (!this.params.consentChallenge) {
+    if (!this.params.consent_challenge) {
       this.error =
         'You should provide consent_challenge param in url, add it and try again!';
       return;
@@ -75,7 +79,9 @@ export default {
     }
 
     if (!this.isAuthorized) {
-      this.$router.replace(`/public/auth${search}&place=consent`);
+      this.$router.replace(
+        `/public/auth?redirect_url=${encodeURI(href)}&place=consent`,
+      );
     }
   },
 

@@ -66,7 +66,7 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Submit' : 'Loading...';
+      return !this.loading ? 'Allow' : 'Loading...';
     },
 
     isFormValid() {

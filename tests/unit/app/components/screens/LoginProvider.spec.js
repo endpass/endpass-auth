@@ -1,25 +1,14 @@
 import Vuex from 'vuex';
-import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import LoginProvider from '@/components/screens/LoginProvider';
 
-jest.mock('@/util/url', () => ({
-  queryParamsToObject: jest.fn().mockImplementation(() => ({
-    challengeId: 'foo',
-  })),
-}));
-
-/* eslint-disable-next-line */
-import { queryParamsToObject } from '@/util/url';
-
 const localVue = createLocalVue();
 
-localVue.use(VueRouter);
 localVue.use(Vuex);
 
 describe('LoginProvider', () => {
+  let $router;
   let wrapper;
-  let router;
   let store;
   let storeData;
   let coreModule;
@@ -48,11 +37,22 @@ describe('LoginProvider', () => {
       },
     };
     store = new Vuex.Store(storeData);
-    router = new VueRouter();
+    $router = {
+      history: {
+        current: {
+          query: {
+            challenge_id: 'foo',
+          },
+        },
+      },
+      replace: jest.fn(),
+    };
     wrapper = shallowMount(LoginProvider, {
       localVue,
       store,
-      router,
+      mocks: {
+        $router,
+      },
     });
   });
 
@@ -61,7 +61,9 @@ describe('LoginProvider', () => {
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       expect(wrapper.html()).toMatchSnapshot();
@@ -69,20 +71,18 @@ describe('LoginProvider', () => {
   });
 
   describe('behavior', () => {
-    beforeEach(() => {
-      router.replace = jest.fn();
-    });
-
     it('should takes query params from current location and assign error if challengeId is not in params', () => {
-      queryParamsToObject.mockImplementationOnce(() => ({}));
+      $router.history.current.query = {};
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       expect(wrapper.vm.error).not.toBeNull();
-      expect(wrapper.vm.$router.replace).not.toBeCalled();
+      expect($router.replace).not.toBeCalled();
     });
 
     it('should takes query params from current location and makes redirect if challengeId is not empty but authorization status is falsy', () => {
@@ -90,21 +90,25 @@ describe('LoginProvider', () => {
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
-      expect(wrapper.vm.$router.replace).toBeCalled();
+      expect($router.replace).toBeCalled();
     });
 
     it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
-        router,
+        mocks: {
+          $router,
+        },
       });
 
       expect(wrapper.vm.error).toBeNull();
-      expect(wrapper.vm.$router.replace).not.toBeCalled();
+      expect($router.replace).not.toBeCalled();
     });
 
     describe('password submit', () => {

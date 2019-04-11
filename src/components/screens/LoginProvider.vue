@@ -2,15 +2,15 @@
   <v-frame>
     <password-form
       :error="error"
-      :loading="loading"
+      :is-loading="loading"
       @submit="handlePasswordSubmit"
     />
   </v-frame>
 </template>
 
 <script>
+import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import { queryParamsToObject } from '@/util/url';
 import VFrame from '@/components/common/VFrame';
 import PasswordForm from '@/components/forms/Password';
 
@@ -46,18 +46,21 @@ export default {
   },
 
   mounted() {
-    const { search, href } = window.location;
+    const { query } = get(this.$router, 'history.current', {});
+    const { href } = window.location;
 
-    this.params = queryParamsToObject(search);
+    this.params = query;
 
-    if (!this.params.challengeId) {
+    if (!this.params.challenge_id) {
       this.error =
         'You should provide challenge_id param in url, add it and try again!';
       return;
     }
 
     if (!this.isAuthorized) {
-      this.$router.replace(`/public/auth?redirect_url=${encodeURI(href)}&place=login`);
+      this.$router.replace(
+        `/public/auth?redirect_url=${encodeURI(href)}&place=login`,
+      );
     }
   },
 
