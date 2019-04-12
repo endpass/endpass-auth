@@ -1,10 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
-const utils = require('@endpass/utils/build');
-const { getEnv } = require('./env');
+const buildUtils = require('@endpass/utils/build');
+const objectUtils = require('@endpass/utils/objects');
 
-const { NODE_ENV, SOURCE_MAP } = process.env;
-const ENV = getEnv(NODE_ENV);
+const { SOURCE_MAP, NODE_ENV } = process.env;
+
+const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
+
+console.log('NODE_ENV', NODE_ENV);
+console.log('ENV', ENV);
 
 module.exports = {
   productionSourceMap: false,
@@ -78,7 +82,7 @@ module.exports = {
     config.plugin('html').tap(args => {
       const options = Object.assign(args[0], {
         meta: {
-          build: utils.getCommitHash(),
+          build: buildUtils.getCommitHash(),
         },
       });
       return [options];
@@ -89,7 +93,7 @@ module.exports = {
   devServer: {
     proxy: {
       '^/identity/api/v1.1': {
-        target: ENV.identity.url,
+        target: 'https://identity-dev.endpass.com',
         changeOrigin: true,
         pathRewrite: {
           '^/identity': '',

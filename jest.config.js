@@ -1,7 +1,4 @@
-const { getEnv } = require('./env');
-
-const { NODE_ENV = 'development' } = process.env;
-const ENV = getEnv(NODE_ENV);
+const objectUtils = require('@endpass/utils/objects');
 
 module.exports = {
   moduleFileExtensions: ['js', 'jsx', 'json', 'vue', 'node'],
@@ -21,6 +18,6 @@ module.exports = {
   testURL: 'http://localhost/',
   setupFiles: ['<rootDir>/tests/unit/setup'],
   globals: {
-    ENV,
+    ENV: objectUtils.parseObjectProperties(process.env, 'VUE_APP'),
   },
 };

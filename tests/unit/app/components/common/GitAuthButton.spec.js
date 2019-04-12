@@ -56,7 +56,7 @@ describe('GitAuthButton', () => {
       });
       await wrapper.vm.loginWithGithub();
       expect(loginWithGithub).toHaveBeenCalledWith({
-        client_id: ENV.gitClientId,
+        client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',
       });
       expect(actions.authWithGitHub).toHaveBeenCalledWith(

@@ -23,7 +23,7 @@ export default {
   async recover({ seedPhrase, recoveryIdentifier }) {
     const seed = Bip39.mnemonicToSeed(seedPhrase);
     const hdKey = HDKey.fromMasterSeed(seed);
-    const hdWallet = hdKey.derivePath(ENV.hdKeyMnemonic.path);
+    const hdWallet = hdKey.derivePath(ENV.VUE_APP_HD_KEY_MNEMONIC_PATH);
     const wallet = hdWallet.deriveChild(0).getWallet();
     const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
     const web3Recover = new Web3(

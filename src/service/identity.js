@@ -1,26 +1,25 @@
 import request from '@/util/request';
 import get from 'lodash/get';
 
-const { url: identityBaseUrl } = ENV.identity;
+const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
+
 const createTimeout = handler => setTimeout(handler, 1500);
 
-export const getSettings = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/settings`);
+export const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
 export const setSettings = settings =>
-  request.post(`${identityBaseUrl}/api/v1.1/settings`, settings);
+  request.post(`${identityBaseUrl}/settings`, settings);
 
 export const getOtpSettings = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/settings/otp`);
+  request.get(`${identityBaseUrl}/settings/otp`);
 
-export const getAccounts = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/accounts`);
+export const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
 
 export const getAccount = address =>
-  request.get(`${identityBaseUrl}/api/v1.1/account/${address}`);
+  request.get(`${identityBaseUrl}/account/${address}`);
 
 export const getAccountInfo = address =>
-  request.get(`${identityBaseUrl}/api/v1.1/account/${address}/info`);
+  request.get(`${identityBaseUrl}/account/${address}/info`);
 
 export const getAccountWithInfo = async address => {
   const [v3keystore, info] = await Promise.all([
@@ -33,10 +32,8 @@ export const getAccountWithInfo = async address => {
 
 export const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
-    ? `${identityBaseUrl}/api/v1.1/auth?redirect_uri=${encodeURIComponent(
-        redirectUrl,
-      )}`
-    : `${identityBaseUrl}/api/v1.1/auth`;
+    ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
+    : `${identityBaseUrl}/auth`;
 
   return request
     .post(requestUrl, {
@@ -50,17 +47,17 @@ export const auth = (email, redirectUrl) => {
 };
 
 export const getAuthPermission = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/auth/permission`);
+  request.get(`${identityBaseUrl}/auth/permission`);
 
 export const setAuthPermission = signature => {
-  return request.post(`${identityBaseUrl}/api/v1.1/auth/permission`, {
+  return request.post(`${identityBaseUrl}/auth/permission`, {
     signature,
   });
 };
 
 export const otpAuth = (email, code) =>
   request
-    .post(`${identityBaseUrl}/api/v1.1/auth/token`, {
+    .post(`${identityBaseUrl}/auth/token`, {
       challengeType: 'otp',
       email,
       code,
@@ -73,11 +70,7 @@ export const otpAuth = (email, code) =>
 
 export const authWithGoogle = idToken =>
   request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/google?token=${encodeURIComponent(
-        idToken,
-      )}`,
-    )
+    .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
@@ -88,11 +81,7 @@ export const authWithGoogle = idToken =>
 
 export const authWithGitHub = code =>
   request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/github?code=${encodeURIComponent(
-        code,
-      )}`,
-    )
+    .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
@@ -101,7 +90,7 @@ export const authWithGitHub = code =>
       throw err.response.data;
     });
 
-export const logout = () => request.post(`${identityBaseUrl}/api/v1.1/logout`);
+export const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 export const getAuthStatus = async () => {
   let res = 200;
@@ -171,11 +160,7 @@ export const awaitAuthConfirm = () =>
 
 export const getRecoveryIdentifier = email =>
   request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/recover?email=${encodeURIComponent(
-        email,
-      )}`,
-    )
+    .get(`${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`)
     .then(res => {
       if (!res.success) throw new Error(res.message);
 
@@ -184,7 +169,7 @@ export const getRecoveryIdentifier = email =>
 
 export const recover = (email, signature, redirectUrl) =>
   request
-    .post(`${identityBaseUrl}/api/v1.1/auth/recover`, {
+    .post(`${identityBaseUrl}/auth/recover`, {
       email,
       signature,
       redirectUrl,

@@ -287,7 +287,7 @@ const awaitAccountCreate = async ({ commit }) => {
 };
 
 const openCreateAccountPage = async () => {
-  window.open(ENV.wallet.openUrl);
+  window.open(ENV.VUE_APP_WALLET_URL);
 };
 
 const awaitLogoutConfirm = async ({ commit }) => {

@@ -22,7 +22,7 @@ export default {
     async loginWithGithub() {
       try {
         const response = await loginWithGithub({
-          client_id: ENV.gitClientId,
+          client_id: ENV.VUE_APP_GIT_CLIENT_ID,
           scope: 'user:email',
         });
         await this.authWithGitHub(response.code);
