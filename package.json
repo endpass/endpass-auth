@@ -1,6 +1,6 @@
 {
   "name": "@endpass/auth",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "repository": {
     "type": "git",
@@ -13,16 +13,16 @@
   },
   "homepage": "https://github.com/endpass/endpass-auth",
   "scripts": {
-    "dev": "SOURCE_MAP=true NODE_ENV=local WITH_VERSION=true vue-cli-service serve ./src/main.js",
+    "dev": "SOURCE_MAP=true vue-cli-service serve ./src/main.js",
     "build": "rimraf ./dist && NODE_ENV=production vue-cli-service build ./src/main.js",
-    "build:version": "rimraf ./dist && NODE_ENV=production WITH_VERSION=true vue-cli-service build ./src/main.js",
+    "build:version": "rimraf ./dist && vue-cli-service build ./src/main.js --mode version",
     "report": "vue-cli-service build ./src/main.js --report ",
-    "build:dev": "rimraf ./dist && NODE_ENV=development vue-cli-service build ./src/main.js",
-    "build:dev:version": "rimraf ./dist && NODE_ENV=development WITH_VERSION=true vue-cli-service build ./src/main.js",
-    "build:test": "rimraf ./dist && NODE_ENV=test vue-cli-service build ./src/main.js",
+    "build:dev": "rimraf ./dist && vue-cli-service build ./src/main.js --mode development ",
+    "build:dev:version": "rimraf ./dist && vue-cli-service build ./src/main.js --mode version-dev",
+    "build:test": "rimraf ./dist && vue-cli-service build ./src/main.js --mode test",
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watchAll",
-    "inspect": "vue-cli-service inspect > serv.js",
+    "inspect": "vue-cli-service inspect > inspect.js",
     "format": "prettier --write './src/**/*.{js,vue,json}' && eslint ./src/**/*.{js,vue} --fix",
     "commit": "git-cz"
   },

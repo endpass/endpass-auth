@@ -1,10 +1,10 @@
 import request from '@/util/request';
 
-const { url: identityBaseUrl } = ENV.identity;
+const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 export const login = async ({ signature, challengeId }) =>
   request
-    .post(`${identityBaseUrl}/api/v1.1/oauth/login`, {
+    .post(`${identityBaseUrl}/oauth/login`, {
       challenge: challengeId,
       signature,
     })
@@ -14,7 +14,7 @@ export const login = async ({ signature, challengeId }) =>
 
 export const grantPermissions = async ({ consentChallenge, scopes }) =>
   request
-    .post(`${identityBaseUrl}/api/v1.1/oauth/consent`, {
+    .post(`${identityBaseUrl}/oauth/consent`, {
       challenge: consentChallenge,
       grantScopes: scopes,
     })

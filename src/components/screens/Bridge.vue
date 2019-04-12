@@ -9,7 +9,7 @@ import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
 import { mapActions } from 'vuex';
 
-if (!ENV.notShowVersion) {
+if (ENV.VUE_APP_SHOW_VERSION_INFO) {
   console.info(
     `%cEndpass Auth Bridge (${pkg.version}) loaded 🔌`,
     'font-size: 14px; font-weight: bold',
