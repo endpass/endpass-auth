@@ -28,12 +28,21 @@ export default {
       const { redirectUrl } = this.params;
 
       if (redirectUrl) {
-        const redirectRoute = decodeURIComponent(redirectUrl).replace(
-          /^(https?:\/\/[a-z.]+(:\d+)?)/gm,
-          '',
-        );
+        const fullPath = decodeURIComponent(redirectUrl);
 
-        this.$router.replace(redirectRoute);
+        const parser = document.createElement('a');
+        parser.href = window.location;
+        const { origin } = parser;
+
+        const newPath = fullPath.replace(origin, '');
+
+        // const redirectRoute = decodeURIComponent(redirectUrl).replace(
+        //   /^(https?:\/\/[a-z.]+(:\d+)?)/gm,
+        //   '',
+        // );
+
+        this.$router.replace(newPath);
+        // this.$router.replace(redirectRoute);
       }
     },
   },
