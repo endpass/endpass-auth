@@ -51,9 +51,9 @@ export default {
 
     this.params = query;
 
-    if (!this.params.challenge_id) {
+    if (!this.params.login_challenge) {
       this.error =
-        'You should provide challenge_id param in url, add it and try again!';
+        'You should provide login_challenge param in url, add it and try again!';
       return;
     }
 

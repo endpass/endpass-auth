@@ -390,6 +390,9 @@ const setupDemoData = async ({ commit }, demoData) => {
 
 const signPermission = async (store, { password }) => {
   const res = await identityService.getAuthPermission();
+  if (res.success === false) {
+    throw new Error('No permission');
+  }
   const signature = await signerService.getSignedRequest({
     v3KeyStore: res.keystore,
     password,
