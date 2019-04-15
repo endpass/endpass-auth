@@ -5,10 +5,19 @@
     @click="emitClick"
   >
     <slot />
+    <div
+      v-if="icon"
+      :style="{ transform: iconTransform }"
+      class="option-button-icon"
+    >
+      <v-svg-icon :name="icon" :fill="iconFill" width="12px" height="12px" />
+    </div>
   </button>
 </template>
 
 <script>
+import VSvgIcon from '@/components/common/VSvgIcon';
+
 export default {
   name: 'OptionButton',
 
@@ -17,12 +26,31 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    icon: {
+      type: String,
+      default: null,
+    },
+
+    iconFill: {
+      type: String,
+      default: null,
+    },
+
+    iconTransform: {
+      type: String,
+      default: null,
+    },
   },
 
   methods: {
     emitClick() {
       this.$emit('click');
     },
+  },
+
+  components: {
+    VSvgIcon,
   },
 };
 </script>
@@ -59,5 +87,12 @@ export default {
   &.active {
     background-color: #f2f4f7;
   }
+}
+
+.option-button-icon {
+  flex: 0 0 auto;
+  margin-left: auto;
+  transition: transform 0.35s linear;
+  transform-origin: center;
 }
 </style>

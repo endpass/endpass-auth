@@ -1,10 +1,15 @@
 <template>
   <div class="widget" ref="widget">
-    <widget-header :collapsed="collapsed" @toggle="handleWidgetToggle" />
+    <widget-header
+      :balance="balance"
+      :collapsed="collapsed"
+      @toggle="handleWidgetToggle"
+    />
     <widget-content
       :collapsed="collapsed"
       :is-accounts-collapsed="isAccountsCollapsed"
       :accounts="accounts"
+      :current-account="currentAccount"
       @account-create="handleAccountCreate"
       @account-change="handleAccountChange"
       @accounts-toggle="handleAccountsToggle"
@@ -14,12 +19,18 @@
 </template>
 
 <script>
+import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
+import cryptoDataService from '@/service/cryptoData';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
 export default {
   name: 'Widget',
+
+  data: () => ({
+    balance: '0',
+  }),
 
   computed: {
     ...mapState({
@@ -28,6 +39,32 @@ export default {
       collapsed: state => state.widget.collapsed,
       isAccountsCollapsed: state => state.widget.isAccountsCollapsed,
     }),
+
+    currentNet() {
+      return get(this.settings, 'net', 1);
+    },
+
+    currentAccount() {
+      return get(this.settings, 'lastActiveAccount', null);
+    },
+  },
+
+  watch: {
+    async currentAccount() {
+      if (this.currentAccount) {
+        try {
+          // FIXME: throws an error with CORS
+          const { balance } = await cryptoDataService.getAccountBalance({
+            network: this.currentNet,
+            address: this.currentAccount,
+          });
+
+          this.balance = balance;
+        } catch (err) {
+          this.balance = '0';
+        }
+      }
+    },
   },
 
   methods: {
@@ -48,7 +85,7 @@ export default {
     },
 
     handleAccountCreate() {
-      console.log('accoubt create');
+      console.log('account create');
     },
 
     handleAccountChange(account) {
@@ -63,7 +100,6 @@ export default {
   async mounted() {
     await this.updateSettings();
     await this.getAccounts();
-    console.log('all data is requested');
   },
 
   components: {

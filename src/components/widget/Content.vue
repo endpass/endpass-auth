@@ -5,7 +5,9 @@
         <option-button
           slot="control"
           :big="true"
-          icon="arrow - left"
+          :icon-fill="isAccountsCollapsed ? '#C3C6CA' : '#4B0470'"
+          :icon-transform="isAccountsCollapsed ? 'none' : 'rotate(90deg)'"
+          icon="arrow"
           @click="handleAccountsButtonClick"
         >
           Change account
@@ -13,18 +15,17 @@
         <template v-if="!isEmptyAccounts">
           <option-button
             v-for="account in accounts"
+            v-if="account.address"
             :key="account.address"
+            :icon="currentAccount === account.address ? 'check' : null"
+            :icon-fill="currentAccount === account.address ? '#4B0470' : null"
             @click="handleAccountButtonClick(account.address)"
           >
-            {{ account.address }}
+            {{ formatAddress(account.address) }}
           </option-button>
         </template>
       </accordion>
-      <option-button
-        :big="true"
-        icon="arrow - left"
-        @click="handleLogoutButtonClick"
-      >
+      <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
         Logout
       </option-button>
     </section>
@@ -32,6 +33,7 @@
 </template>
 
 <script>
+import { getShortStringWithEllipsis } from '@endpass/utils/strings';
 import OptionButton from './OptionButton.vue';
 import Accordion from './Accordion.vue';
 
@@ -39,6 +41,11 @@ export default {
   name: 'WidgetContent',
 
   props: {
+    currentAccount: {
+      type: String,
+      default: null,
+    },
+
     accounts: {
       type: Array,
       default: () => [],
@@ -80,6 +87,10 @@ export default {
 
     handleLogoutButtonClick() {
       this.$emit('logout');
+    },
+
+    formatAddress(address) {
+      return getShortStringWithEllipsis(address, 11);
     },
   },
 
