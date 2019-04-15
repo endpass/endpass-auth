@@ -180,9 +180,7 @@ const getSettings = async ({ dispatch }) => {
 
 const defineSettings = async ({ state, dispatch, commit, getters }) => {
   const { demoData } = getters;
-
   const settings = demoData ? state.settings : await dispatch('getSettings');
-
   const mergedSettings = settingsService.mergeSettings(settings);
 
   settingsService.setLocalSettings(mergedSettings);
@@ -204,10 +202,9 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
   try {
     await dispatch('setSettings', payload);
-
     await dispatch('defineSettings');
-    const { settings } = state;
 
+    const { settings } = state;
     const answer = Answer.createOk({
       type: 'update',
       settings: {
@@ -215,6 +212,7 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
         activeNet: settings.net,
       },
     });
+
     accountChannel.put(answer);
   } catch (err) {
     throw new Error('Something went wrong, try again later');

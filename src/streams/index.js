@@ -1,1 +1,1 @@
-import './dialogStream';
+export { applyDialogStream } from './dialogStream';
