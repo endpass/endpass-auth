@@ -118,7 +118,7 @@ describe('LoginProvider', () => {
       it('should handle password submit and makes hydra login', () => {
         wrapper.setData({
           params: {
-            challengeId,
+            login_challenge: challengeId,
           },
         });
         wrapper.find('password-form-stub').vm.$emit('submit', password);
