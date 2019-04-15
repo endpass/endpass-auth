@@ -9,7 +9,7 @@
       </button>
     </section>
     <p class="widget-header-balace">
-      31.8123157
+      {{ balance }}
     </p>
   </header>
 </template>
@@ -19,6 +19,11 @@ export default {
   name: 'WidgetHeader',
 
   props: {
+    balance: {
+      type: String,
+      default: null,
+    },
+
     collapsed: {
       type: Boolean,
       default: true,
