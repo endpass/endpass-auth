@@ -41,7 +41,7 @@ describe('LoginProvider', () => {
       history: {
         current: {
           query: {
-            challenge_id: 'foo',
+            login_challenge: 'foo',
           },
         },
       },
