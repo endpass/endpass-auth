@@ -33,12 +33,15 @@ export default {
     ...mapActions(['authWithHydra']),
 
     async handlePasswordSubmit(password) {
-      const { challengeId } = this.params;
+      const { login_challenge } = this.params;
 
-      if (!challengeId) return;
+      if (!login_challenge) {
+        throw new Error('Login chalenge id is not defined');
+        return;
+      }
 
       try {
-        await this.authWithHydra({ challengeId, password });
+        await this.authWithHydra({ challengeId: login_challenge, password });
       } catch (err) {
         this.error = err.message;
       }
