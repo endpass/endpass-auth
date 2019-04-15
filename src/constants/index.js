@@ -3,12 +3,13 @@ export const METHODS = {
   ACCOUNT: 'ACCOUNT',
   RECOVER: 'RECOVER',
   GET_SETTINGS: 'GET_SETTINGS',
-
   AUTH: 'AUTH',
   LOGOUT: 'LOGOUT',
   DIALOG_RESIZE: 'DIALOG_RESIZE',
   DIALOG_OPEN: 'DIALOG_OPEN',
   DIALOG_CLOSE: 'DIALOG_CLOSE',
+  WIDGET_OPEN: 'WIDGET_OPEN',
+  WIDGET_FIT: 'WIDGET_FIT',
   INITIATE: 'INITIATE',
   READY_STATE_BRIDGE: 'READY_STATE_BRIDGE',
 };
@@ -31,3 +32,5 @@ export const ORIGIN_HOST = (() => {
   parser.href = document.referrer;
   return parser.origin;
 })();
+
+export const WIDGET_RESIZE_DURATION = 300;

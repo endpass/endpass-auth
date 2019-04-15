@@ -1,6 +1,8 @@
 import { METHODS } from '@/constants';
 
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import { applyDialogStream } from '@/streams';
+// TODO: move it to the mehtods
 import dialogClose from '@/streams/dialogClose';
 
 const init = async ({ dispatch, commit }) => {
@@ -22,7 +24,12 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   const {
     isIdentityMode,
     demoData,
+    source,
   } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
+
+  if (source === 'dialog') {
+    applyDialogStream();
+  }
 
   if (isIdentityMode !== undefined) {
     commit('changeIdentityMode', isIdentityMode);

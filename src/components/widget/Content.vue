@@ -1,7 +1,7 @@
 <template>
   <accordion :collapsed="collapsed">
     <section class="widget-content">
-      <accordion :collapsed="accountsCollapsed" max-height="225px">
+      <accordion :collapsed="isAccountsCollapsed" max-height="225px">
         <option-button
           slot="control"
           :big="true"
@@ -13,10 +13,10 @@
         <template v-if="!isEmptyAccounts">
           <option-button
             v-for="account in accounts"
-            :key="account"
-            @click="handleAccountButtonClick(account)"
+            :key="account.address"
+            @click="handleAccountButtonClick(account.address)"
           >
-            {{ account }}
+            {{ account.address }}
           </option-button>
         </template>
       </accordion>
@@ -48,11 +48,12 @@ export default {
       type: Boolean,
       default: true,
     },
-  },
 
-  data: () => ({
-    accountsCollapsed: true,
-  }),
+    isAccountsCollapsed: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   computed: {
     isEmptyAccounts() {
@@ -69,7 +70,7 @@ export default {
       if (this.isEmptyAccounts) {
         this.$emit('account-create');
       } else {
-        this.accountsCollapsed = !this.accountsCollapsed;
+        this.$emit('accounts-toggle');
       }
     },
 
