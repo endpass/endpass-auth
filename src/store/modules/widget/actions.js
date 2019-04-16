@@ -1,8 +1,14 @@
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
-const openWidget = async () => {
-  await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN);
+const openWidget = async (ctx, isEmmitedByRoot) => {
+  await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN, {
+    root: isEmmitedByRoot || false,
+  });
+};
+
+const closeWidget = async () => {
+  await bridgeMessenger.send(METHODS.WIDGET_CLOSE);
 };
 
 const fitWidget = (ctx, widgetNode) => {
@@ -15,7 +21,9 @@ const fitWidget = (ctx, widgetNode) => {
 
 const toggleWidget = async ({ state, commit, dispatch }, widgetNode) => {
   if (state.collapsed) {
-    await dispatch('openWidget');
+    await dispatch('openWidget', true);
+  } else {
+    await dispatch('closeWidget');
   }
 
   commit('toggleWidget');
@@ -36,4 +44,5 @@ export default {
   toggleAccounts,
   fitWidget,
   openWidget,
+  closeWidget,
 };
