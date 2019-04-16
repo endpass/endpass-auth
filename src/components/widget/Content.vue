@@ -21,7 +21,12 @@
             :icon-fill="currentAccount === account.address ? '#4B0470' : null"
             @click="handleAccountButtonClick(account.address)"
           >
-            {{ formatAddress(account.address) }}
+            <span class="widget-content-address">
+              <i class="widget-content-identicon">
+                <identicon :address="account.address" />
+              </i>
+              <span>{{ formatAddress(account.address) }}</span>
+            </span>
           </option-button>
         </template>
       </accordion>
@@ -34,6 +39,7 @@
 
 <script>
 import { getShortStringWithEllipsis } from '@endpass/utils/strings';
+import Identicon from '@/components/common/Identicon';
 import OptionButton from './OptionButton.vue';
 import Accordion from './Accordion.vue';
 
@@ -90,11 +96,12 @@ export default {
     },
 
     formatAddress(address) {
-      return getShortStringWithEllipsis(address, 11);
+      return getShortStringWithEllipsis(address, 9);
     },
   },
 
   components: {
+    Identicon,
     Accordion,
     OptionButton,
   },
@@ -104,5 +111,15 @@ export default {
 <style lang="postcss">
 .widget-content {
   background-color: #fff;
+}
+
+.widget-content-address {
+  display: inline-flex;
+  align-items: center;
+}
+
+.widget-content-identicon {
+  flex: 0 0 auto;
+  margin-right: 13px;
 }
 </style>
