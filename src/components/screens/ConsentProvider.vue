@@ -3,16 +3,17 @@
     <scopes-form
       :error="error"
       :loading="loading"
-      :scopes="scopes"
+      :scopes="scopesList"
       @submit="handleScopesSubmit"
     />
   </v-frame>
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import { queryParamsToObject } from '@/util/url';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 
@@ -20,7 +21,7 @@ export default {
   name: 'ConsentProvider',
 
   data: () => ({
-    params: {},
+    queryParamsMap: {},
     error: null,
   }),
 
@@ -30,14 +31,14 @@ export default {
       isAuthorized: state => state.accounts.isAuthorized,
     }),
 
-    scopes() {
-      const scopes = get(this.params, 'scopes', '');
+    scopesList() {
+      const scopesList = get(this.queryParamsMap, 'scopes', '');
 
-      if (scopes) {
-        return decodeURIComponent(scopes).split(' ');
+      if (!scopesList) {
+        return [];
       }
 
-      return [];
+      return decodeURIComponent(scopesList).split(' ');
     },
   },
 
@@ -45,7 +46,7 @@ export default {
     ...mapActions(['grantPermissionsWithHydra']),
 
     async handleScopesSubmit(scopes) {
-      const { consent_challenge } = this.params;
+      const { consent_challenge } = this.queryParamsMap;
 
       if (!consent_challenge) return;
 
@@ -64,15 +65,15 @@ export default {
     const { query } = get(this.$router, 'history.current', {});
     const { href } = window.location;
 
-    this.params = query;
+    this.queryParamsMap = query;
 
-    if (!this.params.consent_challenge) {
+    if (!this.queryParamsMap.consent_challenge) {
       this.error =
         'You should provide consent_challenge param in url, add it and try again!';
       return;
     }
 
-    if (!this.params.scopes) {
+    if (!this.queryParamsMap.scopes) {
       this.error =
         'You should provide scopes param in url, add it and try again!';
       return;

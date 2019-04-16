@@ -115,9 +115,15 @@ describe('LoginProvider', () => {
       const password = 'foo';
       const challengeId = 'bar';
 
-      it('should handle password submit and makes hydra login', () => {
+      it('should handle password submit and makes hydra login', async () => {
+        expect.assertions(2);
+
+        accountsModule.actions.authWithHydra.mockResolvedValueOnce({
+          redirect: 'new/path',
+        });
+
         wrapper.setData({
-          params: {
+          queryParamsMap: {
             login_challenge: challengeId,
           },
         });
@@ -131,6 +137,10 @@ describe('LoginProvider', () => {
           },
           undefined,
         );
+
+        await wrapper.vm.$nextTick();
+
+        expect($router.replace).toBeCalledWith('new/path');
       });
 
       it('should render error if submit failed', async () => {
@@ -141,7 +151,7 @@ describe('LoginProvider', () => {
 
         accountsModule.actions.authWithHydra.mockRejectedValueOnce(error);
         wrapper.setData({
-          params: {
+          queryParamsMap: {
             challengeId,
           },
         });

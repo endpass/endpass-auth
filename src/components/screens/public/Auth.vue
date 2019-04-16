@@ -9,8 +9,10 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import { mapMutations } from 'vuex';
-import { queryParamsToObject } from '@/util/url';
+import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 
@@ -18,17 +20,17 @@ export default {
   name: 'PublicAuth',
 
   data: () => ({
-    params: {},
+    queryParamsMap: {},
   }),
 
   methods: {
     ...mapMutations(['setAuthParams']),
 
     handleAuthorize() {
-      const { redirectUrl } = this.params;
+      const { redirect_url } = this.queryParamsMap;
 
-      if (redirectUrl) {
-        const fullPath = decodeURIComponent(redirectUrl);
+      if (redirect_url) {
+        const fullPath = decodeURIComponent(redirect_url);
 
         const parser = document.createElement('a');
         parser.href = window.location;
@@ -50,11 +52,11 @@ export default {
   mounted() {
     const { search } = window.location;
 
-    this.params = queryParamsToObject(search);
+    this.queryParamsMap = queryStringToMap(search);
 
-    if (this.params.redirectUrl) {
+    if (this.queryParamsMap.redirect_url) {
       this.setAuthParams({
-        redirectUrl: decodeURIComponent(this.params.redirectUrl),
+        redirectUrl: decodeURIComponent(this.queryParamsMap.redirect_url),
       });
     }
   },

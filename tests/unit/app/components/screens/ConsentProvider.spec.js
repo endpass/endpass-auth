@@ -146,7 +146,7 @@ describe('ConsentProvider', () => {
 
     it('should not grant permissions on scopes form submit if consentChallenge is not in params', () => {
       wrapper.setData({
-        params: {
+        queryParamsMap: {
           consent_challenge: null,
         },
       });
