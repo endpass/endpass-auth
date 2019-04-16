@@ -1,3 +1,3 @@
-jest.mock('@/util/url', () => ({
-  queryParamsToObject: jest.fn().mockReturnValue({}),
-}));
+jest.mock('@endpass/utils/queryStringToMap', () =>
+  jest.fn().mockReturnValue({}),
+);

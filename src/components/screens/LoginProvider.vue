@@ -9,6 +9,8 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
+
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import VFrame from '@/components/common/VFrame';
@@ -18,7 +20,7 @@ export default {
   name: 'LoginProvider',
 
   data: () => ({
-    params: {},
+    queryParamsMap: {},
     error: null,
   }),
 
@@ -33,15 +35,18 @@ export default {
     ...mapActions(['authWithHydra']),
 
     async handlePasswordSubmit(password) {
-      const { login_challenge } = this.params;
+      const { login_challenge } = this.queryParamsMap;
 
       if (!login_challenge) {
-        throw new Error('Login chalenge id is not defined');
-        return;
+        throw new Error('Login challenge id is not defined');
       }
 
       try {
-        await this.authWithHydra({ challengeId: login_challenge, password });
+        const { redirect } = await this.authWithHydra({
+          challengeId: login_challenge,
+          password,
+        });
+        this.$router.replace(redirect);
       } catch (err) {
         this.error = err.message;
       }
@@ -52,9 +57,9 @@ export default {
     const { query } = get(this.$router, 'history.current', {});
     const { href } = window.location;
 
-    this.params = query;
+    this.queryParamsMap = query;
 
-    if (!this.params.login_challenge) {
+    if (!this.queryParamsMap.login_challenge) {
       this.error =
         'You should provide login_challenge param in url, add it and try again!';
       return;

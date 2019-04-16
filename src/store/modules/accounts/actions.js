@@ -1,7 +1,7 @@
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
-import { appendQueryParametersToUrl } from '@/util/url';
+import mapToQueryString from '@endpass/utils/mapToQueryString';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
@@ -31,7 +31,7 @@ const auth = async ({ state, dispatch }, { email, serverMode }) => {
 
   const request = identityService.auth(
     email,
-    appendQueryParametersToUrl(redirectUrl, queryParamsToAppend),
+    mapToQueryString(redirectUrl, queryParamsToAppend),
   );
 
   await dispatch('handleAuthRequest', {
@@ -78,6 +78,7 @@ const authWithHydra = async (
   { challengeId, password },
 ) => {
   commit('changeLoadingStatus', true);
+  let res;
 
   try {
     await dispatch('defineSettings');
@@ -90,7 +91,7 @@ const authWithHydra = async (
       password,
     });
 
-    await permissionsService.login({
+    res = await permissionsService.login({
       challengeId,
       signature,
     });
@@ -100,6 +101,7 @@ const authWithHydra = async (
   } finally {
     commit('changeLoadingStatus', false);
   }
+  return res;
 };
 
 const grantPermissionsWithHydra = async (ctx, { consentChallenge, scopes }) => {
