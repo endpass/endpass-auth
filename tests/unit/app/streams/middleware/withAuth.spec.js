@@ -2,6 +2,7 @@ import withAuth from '@/streams/middleware/withAuth';
 import { authChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import store from '@/store';
+import Answer from '@/class/Answer';
 
 jest.mock('@/store', () => {
   return {
@@ -30,6 +31,9 @@ describe('withAuth', () => {
     jest.clearAllMocks();
     action = {
       end: jest.fn(),
+      req: {
+        answer: jest.fn(),
+      },
     };
   });
 
@@ -50,14 +54,15 @@ describe('withAuth', () => {
   });
 
   it('should redirect to auth and end stream', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(401);
-    authChannel.take = jest.fn().mockResolvedValue({ status: false });
+    authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withAuth(options, action);
 
     expect(action.end).toBeCalled();
+    expect(action.req.answer).toBeCalledWith(Answer.createFail());
     expect(router.replace).toBeCalledWith(
       '/auth',
       expect.any(Function),
@@ -66,7 +71,7 @@ describe('withAuth', () => {
   });
 
   it('should not redirect to auth', async () => {
-    expect.assertions(2);
+    expect.assertions(3);
 
     store.dispatch = jest.fn().mockResolvedValue(403);
     authChannel.take = jest.fn().mockResolvedValue();
@@ -74,6 +79,7 @@ describe('withAuth', () => {
     await withAuth(options);
 
     expect(authChannel.take).not.toBeCalled();
+    expect(authChannel.put).toBeCalledWith(Answer.createOk());
     expect(router.replace).not.toBeCalled();
   });
 });

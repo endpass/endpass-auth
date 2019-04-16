@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { get } from 'lodash';
+import get from 'lodash/get';
 import VInput from '@/components/common/VInput.vue';
 import VSelect from '@/components/common/VSelect.vue';
 import VCode from '@/components/common/VCode.vue';

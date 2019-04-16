@@ -1,6 +1,7 @@
 import store from '@/store';
 import dialogOpen from '../dialogOpen';
 import { authChannel } from '@/class/singleton/channels';
+import { Answer } from '@/class';
 
 export default async function withAuth(options, action) {
   if (!options.needAuth) {
@@ -14,6 +15,7 @@ export default async function withAuth(options, action) {
   const status = await store.dispatch('getAuthStatus');
 
   if (status !== 401) {
+    authChannel.put(Answer.createOk());
     return;
   }
 
@@ -21,5 +23,6 @@ export default async function withAuth(options, action) {
   const res = await authChannel.take();
   if (res.status === false) {
     action.end();
+    action.req.answer(res);
   }
 }

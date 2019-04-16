@@ -10,8 +10,8 @@
         :options="availableIdentityServerTypes"
         :items="availableIdentityServerTypes"
         v-model="currentIdentityServerType"
-        label="Identity Server"
         :value="currentIdentityServerType"
+        label="Identity Server"
         name="currentIdentityServerType"
         data-test="mode-select"
       />
@@ -82,7 +82,9 @@ const availableIdentityServerTypes = [
     value: IDENTITY_MODE.CUSTOM,
     label: 'Custom server',
   },
-].filter(mode => !(ENV.isProduction && mode.val === IDENTITY_MODE.LOCAL));
+].filter(
+  mode => !(ENV.VUE_APP_IS_PRODUCTION && mode.val === IDENTITY_MODE.LOCAL),
+);
 
 export default {
   name: 'ServerModeSelect',

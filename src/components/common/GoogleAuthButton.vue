@@ -32,7 +32,7 @@ export default {
     ...mapActions(['authWithGoogle', 'awaitAuthConfirm']),
     async loginWithGoogle() {
       const auth = gapi.auth2.init({
-        client_id: ENV.googleClientId,
+        client_id: ENV.VUE_APP_GOOGLE_CLIENT_ID,
         scope: 'profile',
       });
       await auth.signIn();

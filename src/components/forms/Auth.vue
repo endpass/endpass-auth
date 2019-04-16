@@ -1,6 +1,6 @@
 <template>
   <form data-test="auth-form" @submit.prevent="handleSubmit">
-    <form-field v-if="isServerMode">
+    <form-field v-if="isServerMode && !isPublic">
       <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
     </form-field>
     <template v-if="isDefaultMode">
@@ -32,12 +32,14 @@
           >
         </div>
       </form-field>
-      <form-controls>
-        <google-auth-button @error="handleOauthError" />
-      </form-controls>
-      <form-controls>
-        <git-auth-button @error="handleOauthError" />
-      </form-controls>
+      <template>
+        <form-controls>
+          <google-auth-button @error="handleOauthError" />
+        </form-controls>
+        <form-controls>
+          <git-auth-button @error="handleOauthError" />
+        </form-controls>
+      </template>
       <form-controls>
         <v-checkbox v-model="isTermsAccepted">
           I accept the
@@ -57,7 +59,7 @@
 <script>
 import Vue from 'vue';
 
-import VCheckbox from '@endpass/ui/dist/components/VCheckbox';
+import VCheckbox from '@endpass/ui/components/VCheckbox';
 import VFrame from '@/components/common/VFrame.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
@@ -88,6 +90,11 @@ export default {
     error: {
       type: String,
       default: null,
+    },
+
+    isPublic: {
+      type: Boolean,
+      default: false,
     },
 
     isServerMode: {

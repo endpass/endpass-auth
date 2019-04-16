@@ -1,16 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
-const utils = require('@endpass/utils/build');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const { getEnv } = require('./env');
+const buildUtils = require('@endpass/utils/build');
+const objectUtils = require('@endpass/utils/objects');
 
-const { NODE_ENV, SOURCE_MAP } = process.env;
-const ENV = getEnv(NODE_ENV);
+const { SOURCE_MAP, NODE_ENV } = process.env;
+
+const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
+
+console.log('NODE_ENV', NODE_ENV);
+console.log('ENV', ENV);
 
 module.exports = {
-  baseUrl: '',
-
   productionSourceMap: false,
+
+  baseUrl: '/',
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
@@ -19,12 +22,11 @@ module.exports = {
       new webpack.DefinePlugin({
         ENV: JSON.stringify(ENV),
       }),
-      // new HtmlWebpackPlugin({
-      //   meta: {
-      //     build: getCommitHash(),
-      //   },
-      // }),
     ],
+    output: {
+      filename: '[name].[hash:8].js',
+      chunkFilename: '[name].[hash:8].js',
+    },
   },
 
   pluginOptions: {
@@ -42,7 +44,7 @@ module.exports = {
        */
       loaderOptions: {
         extract: true,
-        spriteFilename: 'img/icons.[hash:8].svg', // or 'img/icons.svg' if filenameHashing == false
+        spriteFilename: 'icons.[hash:8].svg', // or 'img/icons.svg' if filenameHashing == false
       },
       /*
        * @see https://github.com/kisenka/svg-sprite-loader#configuration
@@ -53,8 +55,26 @@ module.exports = {
     },
   },
 
+  css: {
+    extract: {
+      filename: '[name].[hash:8].css',
+      chunkFilename: '[name].[hash:8].css',
+    },
+  },
+
   chainWebpack: config => {
     config.resolve.alias.set('@', path.resolve(__dirname, './src'));
+
+    config.module
+      .rule('images')
+      .test(/\.(png|jpe?g|gif|ico)(\?.*)?$/)
+      .use('url-loader')
+      .loader('url-loader')
+      .options({
+        limit: 1,
+        name: '[name].[hash:8].[ext]',
+      });
+
     config.module
       .rule('svg-sprite')
       .use('svgo-loader')
@@ -62,16 +82,18 @@ module.exports = {
     config.plugin('html').tap(args => {
       const options = Object.assign(args[0], {
         meta: {
-          build: utils.getCommitHash(),
+          build: buildUtils.getCommitHash(),
         },
       });
       return [options];
     });
+
+    config.plugins.delete('prefetch');
   },
   devServer: {
     proxy: {
       '^/identity/api/v1.1': {
-        target: ENV.identity.url,
+        target: 'https://identity-dev.endpass.com',
         changeOrigin: true,
         pathRewrite: {
           '^/identity': '',

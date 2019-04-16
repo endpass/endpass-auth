@@ -5,34 +5,39 @@ cache: yarn
 install: yarn install --frozen-lockfile
 stages:
 - name: test
-- name: deploy
+- name: deploy_main
+- name: deploy_version
 jobs:
   include:
   - stage: test
     script: yarn test
-  - stage: deploy
-    script:
-    - yarn build:dev
+  - stage: deploy_main
+    script: yarn build:dev
     before_deploy:
-    - export RELEASE_TAG=$(jq .version package.json | tr -d \" | cut -d . -f "1 2")
+    - pip install --user awscli
+    - export PATH=$PATH:$HOME/.local/bin
     deploy:
-    - provider: s3
-      bucket: auth-dev.endpass.com
-      region: us-east-1
+    - provider: script
+      script: aws s3 sync dist/app s3://auth-dev.endpass.com --region=us-east-1 --delete
       skip_cleanup: true
-      local_dir: dist/app
       on:
         all_branches: true
         condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
-    - provider: s3
-      bucket: auth-dev.endpass.com
-      region: us-east-1
+  - stage: deploy_version
+    script:
+    - yarn build:dev:version
+    before_deploy:
+    - export RELEASE_TAG=$(jq .version package.json | tr -d \" | cut -d . -f "1")
+    - pip install --user awscli
+    - export PATH=$PATH:$HOME/.local/bin
+    deploy:
+    - provider: script
+      script: aws s3 sync dist/app s3://auth${RELEASE_TAG}-dev.endpass.com --region=us-east-1
+        --delete
       skip_cleanup: true
-      local_dir: dist/app
-      upload-dir: v$RELEASE_TAG
       on:
         all_branches: true
         condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
 notifications:
   slack:
-    secure: bFhnj+Bs2xUVA7zznhvsJGGsWJhKA/hGfIoHFrvdD7uDhYmaW08+iFItXIfx7weO/BhiB4Zim7usFFsbsKPnqPC1OpBUW5TRE4kjg29AFdMXmtsPpqMi4tAJs5kPJKBg7Z5TSiFtM8qw9LrSAyuy09DTzQd2e1PBs7/S92eUceeF1gupqts9/ZXpBu5uDlwCirVyV8DMFrZDMkfmxxyHFSnuYU+cv8bKbEp2Bks5ByGvkUYe8tRAp5Fge6TUv/uBnwEpo5VLjdEVP/BKLyXPWoHvxVPQdZYUnEe7LNuDrgNEJuuLc02vJP0Xrd0d38hd9qtk1rD/f7SoZj6KYR11jdrI6lXfEMclda73rKEscFCBVrOD73AeotcZ79eXFcBqXgAqWtH4xCiW+y46VDsHClVdKh40kaKT4+Letw24kGtXiHY5/3Pqd5cHDa+3SLd6LyJzTTkDbXToHRqSd9WEPV7JBO2i01rTGFB/iufpcA7NkyYF2Gbx5S4YLSgtZMzRY7YnzAjSTpA9KEDnDrkmVj29TEhtrMHSis9DcVEG7DqEkMC61aUS+zt+we+RyFLUQsvP/EyN++xIuoTBrk4OH0kka3Gltr3D/hhfdfXGRqF4q3sdNzOit8FjmG/sQ/k85mi49Qm2p7hzkDZqBeZD5fGPt7xs20jeU9hanMHnlpE=
+    secure: Yy5GObCbArqL/A0qbyvyKLoKPICzgbE+fZKJ04Ovr8u0fEGhcTPE/15is/3UQhSc/6ESTVI5X5vFoxjOyQ0UA+LtCnQegG50qEBx0+ejRNa1dg/+Fs4sfjoZuvBKoAU8DJUgcC6eYGOfwa60D6+QT3/nkEsIH+lrxFbwXw+Y809QkFMwvoQKQ/j7mC4f9zbS6rAPC4jNZjJskiOuwK09+mjCvL6GHVEpQyt9F4GFsfO2q3UBysCATPnmtdPvE3Is3DO5W12KDc4DdR1TDKcTrQW9ZQEasiWeSpJ5/MeBFyPm4VNLld+2DPVbWaPKRLSp/lN7DrYcdguDK/rMWWNM6XRJaTWMB1U8l7VaGsa44dnfgZx77I/jbHcxivQqRMv1rQcDQstnM+GauQVv6MwxzGU4Cui0x7rTnoOon8nmKbbf7SE+FRD3uJfZTXw8qyHkXQsxRCE/0mJCyfBy8PKdgDPtCD+P0zbLrHvPo+p6cPFoW3200tFrZnDFc8Obapt9ZaJ3YB2YW76NLv/h7DO8cKy0nVP4UQ1YSnsv6OG5+Yt/eb3XUJKEDkdXAUzH7QO9qUmaImMTv9qOHfoNAgusHKy+nobMTYR6o4IvJZbEUeSRtHtCwABv/WTVdzPw1cXLtqkK9iScj1oWPpTtREYSzKGVH1Ulo8yYXigvNLqgLS4=

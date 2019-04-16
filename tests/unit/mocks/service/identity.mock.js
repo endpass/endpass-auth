@@ -20,10 +20,13 @@ jest.mock('@/service/identity', () => {
     logout: jest.fn(),
     awaitLogoutConfirm: jest.fn(),
     awaitAccountCreate: jest.fn(),
-    getRecoveryIdentifier: jest.fn().mockResolvedValue(getRecoveryIdentifierResponse.message),
+    getRecoveryIdentifier: jest
+      .fn()
+      .mockResolvedValue(getRecoveryIdentifierResponse.message),
     recover: jest.fn().mockResolvedValue(successResponse),
     getAuthPermission: jest.fn(),
     setAuthPermission: jest.fn(),
+    awaitAuthConfirm: jest.fn(),
   };
 });
 

@@ -11,9 +11,16 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  if (!store.getters.isDialog && to.name !== 'Bridge') {
+  const needsDialogPresistance = to.meta.isDialog && !store.getters.isDialog;
+
+  if (to.query.code) {
+    return next();
+  }
+
+  if (needsDialogPresistance && to.name !== 'Bridge') {
     return next('bridge');
   }
+
   return next();
 });
 

@@ -1,44 +1,25 @@
-import axios from 'axios';
-import { ORIGIN_HOST } from '@/constants';
+import request from '@/util/request';
 import get from 'lodash/get';
 
-const { url: identityBaseUrl } = ENV.identity;
+const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
-axios.defaults.headers.common['x-connect-lib-host'] = ORIGIN_HOST;
+const createTimeout = handler => setTimeout(handler, 1500);
 
-const request = {
-  get: url =>
-    axios
-      .get(url, {
-        withCredentials: true,
-      })
-      .then(({ data }) => data),
-
-  post: (url, body) =>
-    axios
-      .post(url, body, {
-        withCredentials: true,
-      })
-      .then(({ data }) => data),
-};
-
-export const getSettings = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/settings`);
+export const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
 export const setSettings = settings =>
-  request.post(`${identityBaseUrl}/api/v1.1/settings`, settings);
+  request.post(`${identityBaseUrl}/settings`, settings);
 
 export const getOtpSettings = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/settings/otp`);
+  request.get(`${identityBaseUrl}/settings/otp`);
 
-export const getAccounts = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/accounts`);
+export const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
 
 export const getAccount = address =>
-  request.get(`${identityBaseUrl}/api/v1.1/account/${address}`);
+  request.get(`${identityBaseUrl}/account/${address}`);
 
 export const getAccountInfo = address =>
-  request.get(`${identityBaseUrl}/api/v1.1/account/${address}/info`);
+  request.get(`${identityBaseUrl}/account/${address}/info`);
 
 export const getAccountWithInfo = async address => {
   const [v3keystore, info] = await Promise.all([
@@ -51,10 +32,8 @@ export const getAccountWithInfo = async address => {
 
 export const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
-    ? `${identityBaseUrl}/api/v1.1/auth?redirect_uri=${encodeURIComponent(
-        redirectUrl,
-      )}`
-    : `${identityBaseUrl}/api/v1.1/auth`;
+    ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
+    : `${identityBaseUrl}/auth`;
 
   return request
     .post(requestUrl, {
@@ -68,17 +47,17 @@ export const auth = (email, redirectUrl) => {
 };
 
 export const getAuthPermission = () =>
-  request.get(`${identityBaseUrl}/api/v1.1/auth/permission`);
+  request.get(`${identityBaseUrl}/auth/permission`);
 
 export const setAuthPermission = signature => {
-  return request.post(`${identityBaseUrl}/api/v1.1/auth/permission`, {
+  return request.post(`${identityBaseUrl}/auth/permission`, {
     signature,
   });
 };
 
 export const otpAuth = (email, code) =>
   request
-    .post(`${identityBaseUrl}/api/v1.1/auth/token`, {
+    .post(`${identityBaseUrl}/auth/token`, {
       challengeType: 'otp',
       email,
       code,
@@ -91,11 +70,7 @@ export const otpAuth = (email, code) =>
 
 export const authWithGoogle = idToken =>
   request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/google?token=${encodeURIComponent(
-        idToken,
-      )}`,
-    )
+    .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
@@ -106,11 +81,7 @@ export const authWithGoogle = idToken =>
 
 export const authWithGitHub = code =>
   request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/github?code=${encodeURIComponent(
-        code,
-      )}`,
-    )
+    .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
@@ -119,65 +90,7 @@ export const authWithGitHub = code =>
       throw err.response.data;
     });
 
-export const logout = () => request.post(`${identityBaseUrl}/api/v1.1/logout`);
-
-export const awaitLogoutConfirm = () =>
-  new Promise(resolve => {
-    /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
-      try {
-        await getAccounts();
-      } catch (err) {
-        clearInterval(interval);
-
-        return resolve();
-      }
-    }, 1500);
-  });
-
-export const awaitAccountCreate = () =>
-  new Promise((resolve, reject) => {
-    /* eslint-disable-next-line */
-    const interval = setInterval(async () => {
-      try {
-        const res = await getAccounts();
-
-        if (res.filter(address => !/^xpub/.test(address)).length > 0) {
-          clearInterval(interval);
-
-          return resolve(res);
-        }
-      } catch (err) {
-        return reject(err);
-      }
-    }, 1500);
-  });
-
-export const getRecoveryIdentifier = email =>
-  request
-    .get(
-      `${identityBaseUrl}/api/v1.1/auth/recover?email=${encodeURIComponent(
-        email,
-      )}`,
-    )
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
-
-      return res.message;
-    });
-
-export const recover = (email, signature, redirectUrl) =>
-  request
-    .post(`${identityBaseUrl}/api/v1.1/auth/recover`, {
-      email,
-      signature,
-      redirectUrl,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
-
-      return res;
-    });
+export const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 export const getAuthStatus = async () => {
   let res = 200;
@@ -188,6 +101,84 @@ export const getAuthStatus = async () => {
   }
   return res;
 };
+
+export const awaitLogoutConfirm = () =>
+  new Promise(resolve => {
+    /* eslint-disable-next-line */
+    const handler = async function() {
+      try {
+        await getAccounts();
+
+        createTimeout(handler);
+      } catch (err) {
+        return resolve();
+      }
+    };
+
+    createTimeout(handler);
+  });
+
+export const awaitAccountCreate = () =>
+  new Promise((resolve, reject) => {
+    /* eslint-disable-next-line */
+    const handler = async function() {
+      try {
+        const res = await getAccounts();
+
+        if (res.filter(address => !/^xpub/.test(address)).length > 0) {
+          return resolve(res);
+        }
+
+        createTimeout(handler);
+      } catch (err) {
+        return reject(err);
+      }
+    };
+
+    createTimeout(handler);
+  });
+
+export const awaitAuthConfirm = () =>
+  new Promise((resolve, reject) => {
+    /* eslint-disable-next-line */
+    const handler = async function() {
+      try {
+        const status = await getAuthStatus();
+
+        if (status === 200 || status === 403) {
+          return resolve(status);
+        }
+
+        createTimeout(handler);
+      } catch (err) {
+        return reject(err);
+      }
+    };
+
+    createTimeout(handler);
+  });
+
+export const getRecoveryIdentifier = email =>
+  request
+    .get(`${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`)
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res.message;
+    });
+
+export const recover = (email, signature, redirectUrl) =>
+  request
+    .post(`${identityBaseUrl}/auth/recover`, {
+      email,
+      signature,
+      redirectUrl,
+    })
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res;
+    });
 
 export default {
   getSettings,
@@ -207,6 +198,7 @@ export default {
   logout,
   awaitLogoutConfirm,
   awaitAccountCreate,
+  awaitAuthConfirm,
   getRecoveryIdentifier,
   recover,
 };
