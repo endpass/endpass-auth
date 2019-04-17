@@ -1,7 +1,12 @@
 <template>
   <v-frame>
+    <v-error
+      v-if="error.show"
+      :hint="error.hint"
+      :description="error.description"
+    />
     <scopes-form
-      :error="error"
+      v-else
       :loading="loading"
       :scopes="scopesList"
       @submit="handleScopesSubmit"
@@ -16,13 +21,18 @@ import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
+import VError from '@/components/common/VError';
 
 export default {
   name: 'ConsentProvider',
 
   data: () => ({
     queryParamsMap: {},
-    error: null,
+    error: {
+      show: false,
+      hint: '',
+      description: '',
+    },
   }),
 
   computed: {
@@ -56,8 +66,15 @@ export default {
           scopes,
         });
       } catch (err) {
-        this.error = err.message;
+        this.error = { hint: err.message };
       }
+    },
+    setError(hint, description = '') {
+      this.error = {
+        show: true,
+        hint,
+        description,
+      };
     },
   },
 
@@ -67,15 +84,22 @@ export default {
 
     this.queryParamsMap = query;
 
-    if (!this.queryParamsMap.consent_challenge) {
-      this.error =
-        'You should provide consent_challenge param in url, add it and try again!';
+    if (query.error) {
+      this.setError(query.error_hint, query.error_description);
       return;
     }
 
-    if (!this.queryParamsMap.scopes) {
-      this.error =
-        'You should provide scopes param in url, add it and try again!';
+    if (!query.consent_challenge) {
+      this.setError(
+        'You should provide consent_challenge param in url, add it and try again!',
+      );
+      return;
+    }
+
+    if (!query.scopes) {
+      this.setError(
+        'You should provide scopes param in url, add it and try again!',
+      );
       return;
     }
 
@@ -87,6 +111,7 @@ export default {
   },
 
   components: {
+    VError,
     VFrame,
     ScopesForm,
   },

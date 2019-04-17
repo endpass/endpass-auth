@@ -6,9 +6,6 @@
         these permissions.
       </message>
     </form-field>
-    <form-field v-if="error">
-      <message :error="true" data-test="error-message">{{ error }}</message>
-    </form-field>
     <form-field v-for="scope in scopes" :key="scope">
       <v-checkbox
         :checked="isScopeChecked(scope)"
@@ -47,11 +44,6 @@ export default {
     loading: {
       type: Boolean,
       default: false,
-    },
-
-    error: {
-      type: String,
-      default: null,
     },
 
     scopes: {

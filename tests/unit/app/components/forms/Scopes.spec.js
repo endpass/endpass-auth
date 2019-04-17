@@ -22,14 +22,6 @@ describe('Scopes', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render error', () => {
-      const error = 'error';
-
-      wrapper.setProps({ error });
-
-      expect(wrapper.find('[data-test=error-message]').text()).toBe(error);
-    });
-
     it('should correctly disable submit button', () => {
       const submitButton = wrapper.find('[data-test=submit-button]');
 
