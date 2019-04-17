@@ -2,7 +2,8 @@ import { METHODS } from '@/constants';
 
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { applyDialogStream } from '@/streams';
-// TODO: move it to the mehtods
+
+// TODO: move it to the streams mehtods
 import dialogClose from '@/streams/dialogClose';
 
 const init = async ({ dispatch, commit }) => {
@@ -40,6 +41,15 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   }
 
   bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
+  bridgeMessenger.subscribe(METHODS.BROADCAST, ({ payload }) => {
+    switch (payload.type) {
+      case 'settings':
+        commit('setWidgetSettings', payload.data);
+        break;
+      default:
+        break;
+    }
+  });
 };
 
 const dialogCloseWrap = () => {
