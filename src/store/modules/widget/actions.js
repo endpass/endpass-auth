@@ -1,5 +1,6 @@
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import { logout } from '@/service/identity';
 
 const openWidget = async (ctx, isEmmitedByRoot) => {
   await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN, {
@@ -61,8 +62,17 @@ const changeWidgetAccount = async (ctx, address) => {
   });
 };
 
-const widgetLogout = async ctx => {
-  console.log('logout');
+const widgetLogout = async () => {
+  try {
+    await logout();
+    await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_LOGOUT);
+    await bridgeMessenger.send(METHODS.BROADCAST, {
+      type: 'logout',
+    });
+  } catch (err) {
+    /* eslint-disable-next-line */
+    console.log(err);
+  }
 };
 
 export default {
