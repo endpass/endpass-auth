@@ -28,9 +28,9 @@
           </span>
         </option-button>
       </accordion>
-      <!-- <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
+      <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
         Logout
-      </option-button> -->
+      </option-button>
     </section>
   </accordion>
 </template>

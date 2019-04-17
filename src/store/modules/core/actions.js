@@ -46,6 +46,9 @@ const startBridge = async ({ dispatch, commit, getters }) => {
       case 'settings':
         commit('setWidgetSettings', payload.data);
         break;
+      case 'logout':
+        commit('logout');
+        break;
       default:
         break;
     }

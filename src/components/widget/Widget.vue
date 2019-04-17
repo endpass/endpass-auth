@@ -114,6 +114,7 @@ export default {
 body {
   background: none !important;
 }
+
 .widget {
   overflow: hidden;
   position: absolute;
