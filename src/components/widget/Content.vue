@@ -12,27 +12,25 @@
         >
           Change account
         </option-button>
-        <template v-if="!isEmptyAccounts">
-          <option-button
-            v-for="account in accounts"
-            v-if="account.address"
-            :key="account.address"
-            :icon="currentAccount === account.address ? 'check' : null"
-            :icon-fill="currentAccount === account.address ? '#4B0470' : null"
-            @click="handleAccountButtonClick(account.address)"
-          >
-            <span class="widget-content-address">
-              <i class="widget-content-identicon">
-                <identicon :address="account.address" />
-              </i>
-              <span>{{ formatAddress(account.address) }}</span>
-            </span>
-          </option-button>
-        </template>
+        <option-button
+          v-for="account in accounts"
+          v-if="account.address"
+          :key="account.address"
+          :icon="currentAccount === account.address ? 'check' : null"
+          :icon-fill="currentAccount === account.address ? '#4B0470' : null"
+          @click="handleAccountButtonClick(account.address)"
+        >
+          <span class="widget-content-address">
+            <i class="widget-content-identicon">
+              <identicon :address="account.address" />
+            </i>
+            <span>{{ formatAddress(account.address) }}</span>
+          </span>
+        </option-button>
       </accordion>
-      <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
+      <!-- <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
         Logout
-      </option-button>
+      </option-button> -->
     </section>
   </accordion>
 </template>
@@ -68,23 +66,9 @@ export default {
     },
   },
 
-  computed: {
-    isEmptyAccounts() {
-      return this.accounts.length === 0;
-    },
-
-    accountsButtonLabel() {
-      return this.isEmptyAccounts ? 'Create account' : 'Change account';
-    },
-  },
-
   methods: {
     handleAccountsButtonClick() {
-      if (this.isEmptyAccounts) {
-        this.$emit('account-create');
-      } else {
-        this.$emit('accounts-toggle');
-      }
+      this.$emit('accounts-toggle');
     },
 
     handleAccountButtonClick(account) {

@@ -1,7 +1,7 @@
 <template>
   <div class="widget" ref="widget">
     <widget-header
-      :balance="balance"
+      :balance="formattedBalance"
       :collapsed="collapsed"
       @toggle="handleWidgetToggle"
     />
@@ -10,7 +10,6 @@
       :is-accounts-collapsed="isAccountsCollapsed"
       :accounts="accounts"
       :current-account="currentAccount"
-      @account-create="handleAccountCreate"
       @account-change="handleAccountChange"
       @accounts-toggle="handleAccountsToggle"
       @logout="handleLogout"
@@ -22,6 +21,7 @@
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import cryptoDataService from '@/service/cryptoData';
+import { fromWei } from '@/util/number';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
@@ -35,17 +35,21 @@ export default {
   computed: {
     ...mapState({
       accounts: state => state.accounts.accounts,
-      settings: state => state.accounts.settings,
       collapsed: state => state.widget.collapsed,
+      settings: state => state.widget.currentSettings,
       isAccountsCollapsed: state => state.widget.isAccountsCollapsed,
     }),
 
     currentNet() {
-      return get(this.settings, 'net', 1);
+      return get(this.settings, 'activeNet', 1);
     },
 
     currentAccount() {
-      return get(this.settings, 'lastActiveAccount', null);
+      return get(this.settings, 'activeAccount', null);
+    },
+
+    formattedBalance() {
+      return fromWei(this.balance);
     },
   },
 
@@ -53,7 +57,6 @@ export default {
     async currentAccount() {
       if (this.currentAccount) {
         try {
-          // FIXME: throws an error with CORS
           const { balance } = await cryptoDataService.getAccountBalance({
             network: this.currentNet,
             address: this.currentAccount,
@@ -72,8 +75,10 @@ export default {
       'startRemoteWidgetResizing',
       'toggleWidget',
       'toggleAccounts',
-      'updateSettings',
+      'getWidgetSettings',
       'getAccounts',
+      'changeWidgetAccount',
+      'widgetLogout',
     ]),
 
     handleWidgetToggle() {
@@ -84,21 +89,17 @@ export default {
       this.toggleAccounts(this.$refs.widget);
     },
 
-    handleAccountCreate() {
-      console.log('account create');
+    async handleAccountChange(address) {
+      await this.changeWidgetAccount(address);
     },
 
-    handleAccountChange(account) {
-      console.log('account change: ', account);
-    },
-
-    handleLogout() {
-      console.log('logout');
+    async handleLogout() {
+      await this.widgetLogout();
     },
   },
 
   async mounted() {
-    await this.updateSettings();
+    await this.getWidgetSettings();
     await this.getAccounts();
   },
 

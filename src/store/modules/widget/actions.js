@@ -30,6 +30,14 @@ const toggleWidget = async ({ state, commit, dispatch }, widgetNode) => {
   dispatch('fitWidget', widgetNode);
 };
 
+const getWidgetSettings = async ({ commit }) => {
+  const settings = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.WIDGET_GET_SETTING,
+  );
+
+  commit('setWidgetSettings', settings);
+};
+
 const toggleAccounts = async ({ state, commit, dispatch }, widgetNode) => {
   if (state.isAccountsCollapsed) {
     await dispatch('openWidget');
@@ -39,10 +47,31 @@ const toggleAccounts = async ({ state, commit, dispatch }, widgetNode) => {
   dispatch('fitWidget', widgetNode);
 };
 
+const changeWidgetAccount = async (ctx, address) => {
+  const newSettings = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.WIDGET_CHANGE_ACCOUNT,
+    {
+      address,
+    },
+  );
+
+  bridgeMessenger.send(METHODS.BROADCAST, {
+    type: 'settings',
+    data: newSettings,
+  });
+};
+
+const widgetLogout = async ctx => {
+  console.log('logout');
+};
+
 export default {
   toggleWidget,
   toggleAccounts,
   fitWidget,
   openWidget,
   closeWidget,
+  getWidgetSettings,
+  changeWidgetAccount,
+  widgetLogout,
 };
