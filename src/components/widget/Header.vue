@@ -86,7 +86,7 @@ export default {
     display: inline-block;
     vertical-align: bottom;
     margin-left: 4px;
-    content: 'etc';
+    content: 'eth';
     font-size: 12px;
     color: #c0a6ce;
   }
