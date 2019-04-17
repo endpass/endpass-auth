@@ -8,7 +8,6 @@ exports[`Scopes render should correctly render component 1`] = `
       these permissions.
     </message-stub>
   </form-field-stub>
-  <!---->
   <form-controls-stub>
     <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">Allow</v-button-stub>
   </form-controls-stub>
@@ -23,7 +22,6 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
       these permissions.
     </message-stub>
   </form-field-stub>
-  <!---->
   <form-field-stub>
     <v-checkbox-stub name="checkbox">
       foo

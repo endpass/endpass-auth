@@ -10,6 +10,7 @@ export const login = async ({ signature, challengeId }) =>
     })
     .then(res => {
       console.log('login res: ', res);
+      return res;
     });
 
 export const grantPermissions = async ({ consentChallenge, scopes }) =>
@@ -20,6 +21,7 @@ export const grantPermissions = async ({ consentChallenge, scopes }) =>
     })
     .then(res => {
       console.log('consent res: ', res);
+      return res;
     });
 
 export default {

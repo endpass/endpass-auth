@@ -75,7 +75,7 @@ describe('ConsentProvider', () => {
         },
       });
 
-      expect(wrapper.vm.error).not.toBeNull();
+      expect(wrapper.vm.error.show).toBe(true);
       expect($router.replace).not.toBeCalled();
     });
 
@@ -91,7 +91,7 @@ describe('ConsentProvider', () => {
         },
       });
 
-      expect(wrapper.vm.error).not.toBeNull();
+      expect(wrapper.vm.error.show).toBe(true);
       expect($router.replace).not.toBeCalled();
     });
 
@@ -117,7 +117,11 @@ describe('ConsentProvider', () => {
         },
       });
 
-      expect(wrapper.vm.error).toBeNull();
+      expect(wrapper.vm.error).toEqual({
+        show: false,
+        hint: '',
+        description: '',
+      });
       expect($router.replace).not.toBeCalled();
     });
 
