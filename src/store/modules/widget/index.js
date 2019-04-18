@@ -4,8 +4,6 @@ import getters from './getters';
 
 export const state = {
   currentSettings: {},
-  collapsed: true,
-  isAccountsCollapsed: true,
 };
 
 export default {
