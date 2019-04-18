@@ -2,14 +2,27 @@ import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { logout } from '@/service/identity';
 
-const openWidget = async (ctx, isEmmitedByRoot) => {
+const openWidget = async ({ dispatch }, { widgetNode, root = false }) => {
   await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN, {
-    root: isEmmitedByRoot || false,
+    root,
   });
+  dispatch('fitWidget', widgetNode);
 };
 
-const closeWidget = async () => {
+const closeWidget = async ({ dispatch }, widgetNode) => {
   await bridgeMessenger.send(METHODS.WIDGET_CLOSE);
+  dispatch('fitWidget', widgetNode);
+};
+
+const openAccounts = async ({ dispatch }, widgetNode) => {
+  await dispatch('openWidget', {
+    widgetNode,
+  });
+  dispatch('fitWidget', widgetNode);
+};
+
+const closeAccounts = async ({ dispatch }, widgetNode) => {
+  dispatch('fitWidget', widgetNode);
 };
 
 const fitWidget = (ctx, widgetNode) => {
@@ -20,32 +33,12 @@ const fitWidget = (ctx, widgetNode) => {
   }, WIDGET_RESIZE_DURATION + 100);
 };
 
-const toggleWidget = async ({ state, commit, dispatch }, widgetNode) => {
-  if (state.collapsed) {
-    await dispatch('openWidget', true);
-  } else {
-    await dispatch('closeWidget');
-  }
-
-  commit('toggleWidget');
-  dispatch('fitWidget', widgetNode);
-};
-
 const getWidgetSettings = async ({ commit }) => {
   const settings = await bridgeMessenger.sendAndWaitResponse(
     METHODS.WIDGET_GET_SETTING,
   );
 
   commit('setWidgetSettings', settings);
-};
-
-const toggleAccounts = async ({ state, commit, dispatch }, widgetNode) => {
-  if (state.isAccountsCollapsed) {
-    await dispatch('openWidget');
-  }
-
-  commit('toggleAccounts');
-  dispatch('fitWidget', widgetNode);
 };
 
 const changeWidgetAccount = async (ctx, address) => {
@@ -76,11 +69,11 @@ const widgetLogout = async () => {
 };
 
 export default {
-  toggleWidget,
-  toggleAccounts,
-  fitWidget,
   openWidget,
   closeWidget,
+  openAccounts,
+  closeAccounts,
+  fitWidget,
   getWidgetSettings,
   changeWidgetAccount,
   widgetLogout,
