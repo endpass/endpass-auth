@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
-
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';

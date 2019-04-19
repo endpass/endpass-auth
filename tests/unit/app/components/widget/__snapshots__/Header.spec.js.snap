@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Widget Header render should change toggler label is collapsed is falsy 1`] = `
+<header class="widget-header">
+  <section class="widget-header-control">
+    <h3 class="widget-header-title">
+      balance
+    </h3> <button data-test="widget-header-toggler" class="widget-header-toggler">
+      Show less
+    </button>
+  </section>
+  <p class="widget-header-balace">
+    0
+  </p>
+</header>
+`;
+
+exports[`Widget Header render should correctly render 1`] = `
+<header class="widget-header">
+  <section class="widget-header-control">
+    <h3 class="widget-header-title">
+      balance
+    </h3> <button data-test="widget-header-toggler" class="widget-header-toggler">
+      Show more
+    </button>
+  </section>
+  <p class="widget-header-balace">
+    0
+  </p>
+</header>
+`;

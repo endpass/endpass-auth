@@ -3,8 +3,8 @@
     <slot name="control" />
     <section
       v-show-slide="!collapsed"
-      class="accordion-content"
       :style="{ maxHeight: maxHeight }"
+      class="accordion-content"
     >
       <slot />
     </section>

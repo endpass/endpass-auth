@@ -4,7 +4,11 @@
       <h3 class="widget-header-title">
         balance
       </h3>
-      <button class="widget-header-toggler" @click="handleTogglerClick">
+      <button
+        class="widget-header-toggler"
+        data-test="widget-header-toggler"
+        @click="handleTogglerClick"
+      >
         {{ togglerLabel }}
       </button>
     </section>
@@ -21,7 +25,7 @@ export default {
   props: {
     balance: {
       type: String,
-      default: null,
+      default: '0',
     },
 
     collapsed: {

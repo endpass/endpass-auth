@@ -13,13 +13,13 @@ export default {
   props: {
     address: {
       type: String,
-      default: '',
+      required: true,
     },
   },
 
   computed: {
     image() {
-      return this.address && blockie(this.address);
+      return blockie(this.address);
     },
   },
 };

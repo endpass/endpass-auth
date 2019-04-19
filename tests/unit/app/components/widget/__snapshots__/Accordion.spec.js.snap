@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Accordion should correctly render 1`] = `
+<section class="accordion">
+  <section class="accordion-content" style="max-height: none; height: 0px; overflow: hidden;"></section>
+</section>
+`;
