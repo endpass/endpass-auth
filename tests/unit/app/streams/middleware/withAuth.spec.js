@@ -8,6 +8,11 @@ jest.mock('@/store', () => {
   return {
     dispatch: jest.fn(),
     getters: { demoData: false },
+    state: {
+      accounts: {
+        isLogin: false,
+      },
+    },
   };
 });
 
@@ -40,7 +45,7 @@ describe('withAuth', () => {
   it('should redirect to auth', async () => {
     expect.assertions(2);
 
-    store.dispatch = jest.fn().mockResolvedValue(401);
+    store.state.accounts.isLogin = false;
     authChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withAuth(options, action);
@@ -56,7 +61,8 @@ describe('withAuth', () => {
   it('should redirect to auth and end stream', async () => {
     expect.assertions(3);
 
-    store.dispatch = jest.fn().mockResolvedValue(401);
+    store.state.accounts.isLogin = false;
+
     authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withAuth(options, action);
@@ -73,7 +79,7 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    store.dispatch = jest.fn().mockResolvedValue(403);
+    store.state.accounts.isLogin = true;
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

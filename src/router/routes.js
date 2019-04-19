@@ -8,8 +8,8 @@ import SignPermission from '@/components/screens/SignPermission';
 import NotFound from '@/components/screens/NotFound';
 
 // Public routes
-import LoginProvider from '@/components/screens/LoginProvider';
-import ConsentProvider from '@/components/screens/ConsentProvider';
+import LoginProvider from '@/components/screens/public/LoginProvider';
+import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import PublicAuth from '@/components/screens/public/Auth';
 import Error from '@/components/screens/public/Error';
 

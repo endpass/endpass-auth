@@ -20,7 +20,7 @@ describe('core actions', () => {
         dispatch,
       });
 
-      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
+      expect(dispatch).toBeCalledWith('defineAuthStatus');
       expect(dispatch).toBeCalledWith('startBridge');
       expect(commit).toBeCalledWith('changeInitStatus', true);
     });

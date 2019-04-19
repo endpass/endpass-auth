@@ -9,7 +9,8 @@ const state = {
   accounts: [],
   settings: null,
   recoveryIdentifier: null,
-  isAuthorized: false,
+  isPermission: false,
+  isLogin: false,
   demoData: null,
 };
 

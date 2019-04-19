@@ -95,7 +95,7 @@ export const logout = () => request.post(`${identityBaseUrl}/logout`);
 export const getAuthStatus = async () => {
   let res = 200;
   try {
-    await getAccounts();
+    await request.get(`${identityBaseUrl}/auth/check`);
   } catch (e) {
     res = get(e, ['response', 'status']);
   }
