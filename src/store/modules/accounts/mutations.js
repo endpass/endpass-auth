@@ -42,7 +42,8 @@ const setDemoData = (state, demoData) => {
 const logout = state => {
   state.otpEmail = null;
   state.authParams = null;
-  state.isAuthorized = false;
+  state.isPermission = false;
+  state.isLogin = false;
   state.accounts = [];
   state.settings = null;
   state.recoveryIdentifier = null;
