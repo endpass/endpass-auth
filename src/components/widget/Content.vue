@@ -8,6 +8,7 @@
           :icon-fill="isAccountsCollapsed ? '#C3C6CA' : '#4B0470'"
           :icon-transform="isAccountsCollapsed ? 'none' : 'rotate(90deg)'"
           icon="arrow"
+          data-test="accounts-toggle-button"
           @click="handleAccountsButtonClick"
         >
           Change account
@@ -18,6 +19,7 @@
           :key="account.address"
           :icon="currentAccount === account.address ? 'check' : null"
           :icon-fill="currentAccount === account.address ? '#4B0470' : null"
+          data-test="account-button"
           @click="handleAccountButtonClick(account.address)"
         >
           <span class="widget-content-address">
@@ -28,7 +30,12 @@
           </span>
         </option-button>
       </accordion>
-      <option-button :big="true" icon="arrow" @click="handleLogoutButtonClick">
+      <option-button
+        :big="true"
+        icon="arrow"
+        data-test="logout-button"
+        @click="handleLogoutButtonClick"
+      >
         Logout
       </option-button>
     </section>

@@ -77,9 +77,9 @@ export default {
       'openAccounts',
       'closeAccounts',
       'getWidgetSettings',
-      'getAccounts',
-      'changeWidgetAccount',
       'widgetLogout',
+      'changeWidgetAccount',
+      'getAccounts',
     ]),
 
     handleWidgetToggle() {
