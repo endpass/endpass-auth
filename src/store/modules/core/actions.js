@@ -18,9 +18,7 @@ const init = async ({ dispatch, commit }) => {
 };
 
 const startBridge = async ({ dispatch, commit, getters }) => {
-  if (!getters.isDialog) {
-    return;
-  }
+  if (!getters.isDialog) return;
 
   const {
     isIdentityMode,
@@ -61,6 +59,6 @@ const dialogCloseWrap = () => {
 
 export default {
   init,
-  dialogClose: dialogCloseWrap,
   startBridge,
+  dialogClose: dialogCloseWrap,
 };
