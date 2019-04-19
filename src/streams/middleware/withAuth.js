@@ -12,9 +12,9 @@ export default async function withAuth(options, action) {
     return;
   }
 
-  const status = await store.dispatch('getAuthStatus');
+  await store.dispatch('defineAuthStatus');
 
-  if (status !== 401) {
+  if (store.state.accounts.isLogin) {
     authChannel.put(Answer.createOk());
     return;
   }

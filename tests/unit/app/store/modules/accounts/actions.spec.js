@@ -679,15 +679,15 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('getAuthStatus', () => {
+  describe('defineAuthStatus', () => {
     it('should return 200 status', async () => {
       expect.assertions(3);
 
       identityService.getAuthStatus.mockReturnValueOnce(200);
 
-      const status = await accountsActions.getAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 200);
       expect(status).toBe(200);
     });
 
@@ -696,9 +696,9 @@ describe('accounts actions', () => {
 
       identityService.getAuthStatus.mockReturnValueOnce(401);
 
-      const status = await accountsActions.getAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 401);
       expect(status).toBe(401);
     });
   });

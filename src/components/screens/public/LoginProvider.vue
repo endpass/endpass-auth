@@ -46,7 +46,7 @@ export default {
           challengeId: login_challenge,
           password,
         });
-        this.$router.replace(redirect);
+        window.location.href = redirect;
       } catch (err) {
         this.error = err.message;
       }

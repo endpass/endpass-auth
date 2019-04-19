@@ -12,6 +12,7 @@ jest.mock('@/service/identity', () => {
     getAccount: jest.fn(),
     getAccounts: jest.fn(),
     getAccountInfo: jest.fn(),
+    defineAuthStatus: jest.fn(),
     getAuthStatus: jest.fn(),
     auth: jest.fn(),
     authWithGoogle: jest.fn(),

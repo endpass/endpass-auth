@@ -12,7 +12,8 @@ describe('accounts mutations', () => {
     it('should set auth status', () => {
       accountsMutations.setAuthStatus(state, true);
 
-      expect(state.isAuthorized).toBe(true);
+      expect(state.isLogin).toBe(true);
+      expect(state.isPermission).toBe(true);
     });
   });
 

@@ -5,7 +5,7 @@ import dialogClose from '@/streams/dialogClose';
 
 const init = async ({ dispatch, commit }) => {
   try {
-    await dispatch('defineOnlyV3Accounts');
+    await dispatch('defineAuthStatus');
     await dispatch('startBridge');
     // eslint-disable-next-line
   } catch (err) {

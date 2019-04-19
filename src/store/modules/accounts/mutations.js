@@ -4,8 +4,15 @@ const setAuthParams = (state, params) => {
   state.authParams = params;
 };
 
-const setAuthStatus = (state, status) => {
-  state.isAuthorized = status;
+const setAuthStatus = (state, flag) => {
+  // TODO: merge with setAuthByCode functionality
+  state.isLogin = flag;
+  state.isPermission = flag;
+};
+
+const setAuthByCode = (state, code) => {
+  state.isLogin = code !== 401;
+  state.isPermission = !(code === 403 || code === 401);
 };
 
 const setOtpEmail = (state, email) => {
@@ -51,4 +58,5 @@ export default {
   setSentStatus,
   setSettings,
   setRecoveryIdentifier,
+  setAuthByCode,
 };

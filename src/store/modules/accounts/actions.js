@@ -104,8 +104,12 @@ const authWithHydra = async (
   return res;
 };
 
-const grantPermissionsWithHydra = async (ctx, { consentChallenge, scopes }) => {
-  await permissionsService.grantPermissions({ consentChallenge, scopes });
+const getConsentDetails = (ctx, consentChallenge) => {
+  return permissionsService.getConsentDetails(consentChallenge);
+};
+
+const grantPermissionsWithHydra = (ctx, { consentChallenge, scopesList }) => {
+  return permissionsService.grantPermissions({ consentChallenge, scopesList });
 };
 
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
@@ -416,10 +420,9 @@ const awaitAuthConfirm = async ({ dispatch }) => {
   authChannel.put(Answer.createOk());
 };
 
-const getAuthStatus = async ({ commit }) => {
+const defineAuthStatus = async ({ commit }) => {
   const status = await identityService.getAuthStatus();
-  const isAuthority = status === 200;
-  commit('setAuthStatus', isAuthority);
+  commit('setAuthByCode', status);
   return status;
 };
 
@@ -450,8 +453,9 @@ export default {
   getRecoveryIdentifier,
   recover,
   validateCustomServer,
-  getAuthStatus,
+  defineAuthStatus,
   signPermission,
   cancelSignPermission,
   setupDemoData,
+  getConsentDetails,
 };

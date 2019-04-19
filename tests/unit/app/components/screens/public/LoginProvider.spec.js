@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import LoginProvider from '@/components/screens/LoginProvider';
+import '@mocks/window';
+import LoginProvider from '@/components/screens/public/LoginProvider';
 
 const localVue = createLocalVue();
 
@@ -16,6 +17,7 @@ describe('LoginProvider', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    window.location.href = jest.fn();
 
     coreModule = {
       state: {
@@ -140,7 +142,7 @@ describe('LoginProvider', () => {
 
         await wrapper.vm.$nextTick();
 
-        expect($router.replace).toBeCalledWith('new/path');
+        expect(window.location.href).toBe('new/path');
       });
 
       it('should render error if submit failed', async () => {

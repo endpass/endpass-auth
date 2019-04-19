@@ -13,11 +13,15 @@ export const login = async ({ signature, challengeId }) =>
       return res;
     });
 
-export const grantPermissions = async ({ consentChallenge, scopes }) =>
+export const getConsentDetails = async consentChallenge => {
+  return request.get(`${identityBaseUrl}/oauth/consent/${consentChallenge}`);
+};
+
+export const grantPermissions = async ({ consentChallenge, scopesList }) =>
   request
     .post(`${identityBaseUrl}/oauth/consent`, {
       challenge: consentChallenge,
-      grantScopes: scopes,
+      grantScopes: scopesList,
     })
     .then(res => {
       console.log('consent res: ', res);
@@ -27,4 +31,5 @@ export const grantPermissions = async ({ consentChallenge, scopes }) =>
 export default {
   login,
   grantPermissions,
+  getConsentDetails,
 };

@@ -12,9 +12,11 @@ export default async function withPermission(options, action) {
     return;
   }
 
-  const status = await store.dispatch('getAuthStatus');
+  await store.dispatch('defineAuthStatus');
 
-  if (status !== 403) {
+  const { isPermission, isLogin } = store.state.accounts;
+
+  if (isPermission || !isLogin) {
     permissionChannel.put(Answer.createOk());
     return;
   }
