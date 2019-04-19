@@ -45,6 +45,7 @@ const startBridge = async ({ dispatch, commit, getters }) => {
         commit('setWidgetSettings', payload.data);
         break;
       case 'logout':
+        bridgeMessenger.send(METHODS.WIDGET_LOGOUT);
         commit('logout');
         break;
       default:

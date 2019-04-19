@@ -9,8 +9,8 @@ import NotFound from '@/components/screens/NotFound';
 
 // Public routes
 import PublicAuth from '@/components/screens/public/Auth';
-import LoginProvider from '@/components/screens/LoginProvider';
-import ConsentProvider from '@/components/screens/ConsentProvider';
+import LoginProvider from '@/components/screens/public/LoginProvider';
+import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import Widget from '@/components/widget/Widget';
 import Error from '@/components/screens/public/Error';
 
