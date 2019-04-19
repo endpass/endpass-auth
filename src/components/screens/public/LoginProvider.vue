@@ -12,7 +12,7 @@
 /* eslint-disable camelcase */
 
 import get from 'lodash/get';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import PasswordForm from '@/components/forms/Password';
 
@@ -27,8 +27,8 @@ export default {
   computed: {
     ...mapState({
       loading: state => state.core.loading,
-      isAuthorized: state => state.accounts.isAuthorized,
     }),
+    ...mapGetters(['isAuthorized']),
   },
 
   methods: {

@@ -26,10 +26,17 @@ describe('LoginProvider', () => {
     };
     accountsModule = {
       state: {
-        isAuthorized: true,
+        isLogin: true,
+        isPermission: true,
       },
       actions: {
         authWithHydra: jest.fn(),
+      },
+      getters: {
+        isAuthorized: jest.fn(
+          () =>
+            accountsModule.state.isLogin && accountsModule.state.isPermission,
+        ),
       },
     };
     storeData = {
@@ -88,7 +95,9 @@ describe('LoginProvider', () => {
     });
 
     it('should takes query params from current location and makes redirect if challengeId is not empty but authorization status is falsy', () => {
-      accountsModule.state.isAuthorized = false;
+      accountsModule.state.isLogin = false;
+      accountsModule.state.isPermission = false;
+
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,

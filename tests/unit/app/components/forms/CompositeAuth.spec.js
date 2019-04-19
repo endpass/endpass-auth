@@ -37,7 +37,8 @@ describe('CompositeAuth', () => {
       state: {
         linkSent: false,
         accounts: null,
-        isAuthorized: false,
+        isLogin: false,
+        isPermission: false,
         otpEmail: null,
       },
       actions: {
@@ -49,6 +50,12 @@ describe('CompositeAuth', () => {
         awaitAuthMessage: jest.fn(),
         getRecoveryIdentifier: jest.fn(),
         recover: jest.fn(),
+      },
+      getters: {
+        isAuthorized: jest.fn(
+          () =>
+            accountsModule.state.isLogin && accountsModule.state.isPermission,
+        ),
       },
     };
     storeData = {
@@ -72,7 +79,8 @@ describe('CompositeAuth', () => {
     });
 
     it('should render create account form if user authorized but does not have any account', () => {
-      store.state.accounts.isAuthorized = true;
+      store.state.accounts.isLogin = true;
+      store.state.accounts.isPermission = true;
       store.state.accounts.accounts = [];
 
       expect(wrapper.find('create-account-form-stub').exists()).toBe(true);
@@ -135,7 +143,8 @@ describe('CompositeAuth', () => {
     it('should emit authorize event if link was sent and authorization status was changed', () => {
       store.state.accounts.linkSent = true;
       store.state.accounts.accounts = ['0x0'];
-      store.state.accounts.isAuthorized = true;
+      store.state.accounts.isLogin = true;
+      store.state.accounts.isPermission = true;
 
       expect(wrapper.emitted().authorize[0]).toEqual([{ serverMode: null }]);
     });

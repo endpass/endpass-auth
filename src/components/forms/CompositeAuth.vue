@@ -43,7 +43,7 @@
 
 <script>
 import isEmpty from 'lodash/isEmpty';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import AuthForm from '@/components/forms/Auth';
@@ -82,9 +82,9 @@ export default {
       sent: state => state.accounts.linkSent,
       otpEmail: state => state.accounts.otpEmail,
       accounts: state => state.accounts.accounts,
-      isAuthorized: state => state.accounts.isAuthorized,
       isIdentityMode: state => state.core.isIdentityMode,
     }),
+    ...mapGetters(['isAuthorized']),
 
     isAccountsEmpty() {
       return isEmpty(this.accounts);

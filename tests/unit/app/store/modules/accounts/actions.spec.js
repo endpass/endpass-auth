@@ -329,7 +329,7 @@ describe('accounts actions', () => {
 
       await accountsActions.awaitAuthConfirm({ dispatch });
 
-      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
+      expect(dispatch).toBeCalledWith('defineAuthStatus');
     });
   });
 

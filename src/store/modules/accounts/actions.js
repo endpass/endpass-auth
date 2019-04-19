@@ -416,7 +416,7 @@ const cancelSignPermission = () => {
 
 const awaitAuthConfirm = async ({ dispatch }) => {
   await identityService.awaitAuthConfirm();
-  await dispatch('defineOnlyV3Accounts');
+  await dispatch('defineAuthStatus');
   authChannel.put(Answer.createOk());
 };
 
