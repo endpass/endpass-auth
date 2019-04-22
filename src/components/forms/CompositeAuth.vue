@@ -5,7 +5,7 @@
       @request="handleAccountRequest"
     />
     <otp-form
-      v-else-if="otpEmail && !recoverAccess"
+      v-else-if="otpEmail && !recoverAccess && !isPublic"
       :loading="loading"
       :error="error"
       @submit="handleOtpSubmit"
