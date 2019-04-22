@@ -1,11 +1,11 @@
 <template>
   <v-frame :loading="!inited" :closable="closable" @close="handleAuthCancel">
     <create-account-form
-      v-if="isAuthorized && isAccountsEmpty"
+      v-if="isAuthorized && isAccountsEmpty && !isPublic"
       @request="handleAccountRequest"
     />
     <otp-form
-      v-else-if="otpEmail && !recoverAccess && !isPublic"
+      v-else-if="otpEmail && !recoverAccess"
       :loading="loading"
       :error="error"
       @submit="handleOtpSubmit"
