@@ -1,6 +1,5 @@
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { logout } from '@/service/identity';
 
 const openWidget = async ({ dispatch }, { widgetNode, root = false }) => {
   await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN, {
@@ -18,7 +17,6 @@ const openAccounts = async ({ dispatch }, widgetNode) => {
   await dispatch('openWidget', {
     widgetNode,
   });
-  dispatch('fitWidget', widgetNode);
 };
 
 const closeAccounts = async ({ dispatch }, widgetNode) => {
@@ -31,6 +29,10 @@ const fitWidget = (ctx, widgetNode) => {
       height: widgetNode.clientHeight,
     });
   }, WIDGET_RESIZE_DURATION + 100);
+};
+
+const unmountWidget = () => {
+  bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
 };
 
 const getWidgetSettings = async ({ commit }) => {
@@ -55,19 +57,6 @@ const changeWidgetAccount = async (ctx, address) => {
   });
 };
 
-const widgetLogout = async () => {
-  try {
-    await logout();
-    await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_LOGOUT);
-    await bridgeMessenger.send(METHODS.BROADCAST, {
-      type: 'logout',
-    });
-  } catch (err) {
-    /* eslint-disable-next-line */
-    console.log(err);
-  }
-};
-
 export default {
   openWidget,
   closeWidget,
@@ -76,5 +65,5 @@ export default {
   fitWidget,
   getWidgetSettings,
   changeWidgetAccount,
-  widgetLogout,
+  unmountWidget,
 };

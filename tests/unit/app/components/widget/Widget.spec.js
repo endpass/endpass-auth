@@ -12,21 +12,23 @@ describe('Widget', () => {
   let wrapper;
   let storeData;
   let store;
+  let coreModule;
   let widgetModule;
   let accountsModule;
 
   beforeEach(() => {
     accountsModule = {
-      getters: {
-        availableAccounts: jest.fn().mockReturnValue(accounts),
+      state: {
+        accounts,
       },
       actions: {
-        getAccounts: jest.fn(),
+        defineOnlyV3Accounts: jest.fn(),
+        getAccountBalance: jest.fn(),
       },
     };
     widgetModule = {
       state: {
-        currentSettings: {
+        settings: {
           activeNet: 1,
           activeAccount: accountAddress,
         },
@@ -38,11 +40,20 @@ describe('Widget', () => {
         closeAccounts: jest.fn(),
         getWidgetSettings: jest.fn(),
         widgetLogout: jest.fn(),
-        changeWidgetAccount: jest.fn(),
+        changeAccount: jest.fn(),
+      },
+    };
+    coreModule = {
+      state: {
+        loading: false,
+      },
+      actions: {
+        logout: jest.fn(),
       },
     };
     storeData = {
       modules: {
+        core: coreModule,
         accounts: accountsModule,
         widget: widgetModule,
       },
@@ -63,7 +74,7 @@ describe('Widget', () => {
   describe('behavior', () => {
     it('should request accounts and widget settings on mount', () => {
       expect(widgetModule.actions.getWidgetSettings).toBeCalled();
-      expect(accountsModule.actions.getAccounts).toBeCalled();
+      expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
     });
 
     it('should correctly open widget', () => {
@@ -105,7 +116,7 @@ describe('Widget', () => {
         .find('widget-content-stub')
         .vm.$emit('account-change', accounts[0].address);
 
-      expect(widgetModule.actions.changeWidgetAccount).toBeCalledWith(
+      expect(widgetModule.actions.changeAccount).toBeCalledWith(
         expect.any(Object),
         accounts[0].address,
         undefined,
@@ -115,26 +126,23 @@ describe('Widget', () => {
     it('should correctly handle logout event', () => {
       wrapper.find('widget-content-stub').vm.$emit('logout');
 
-      expect(widgetModule.actions.widgetLogout).toBeCalled();
+      expect(coreModule.actions.logout).toBeCalled();
     });
 
     it('should request balance on current account change', async () => {
       expect.assertions(3);
 
-      widgetModule.state.currentSettings.activeAccount = null;
+      widgetModule.state.settings.activeAccount = null;
       wrapper = shallowMount(Widget, {
         localVue,
         store,
       });
 
-      expect(cryptoDataService.getAccountBalance).not.toBeCalled();
+      expect(accountsModule.actions.getAccountBalance).not.toBeCalled();
 
-      store.state.widget.currentSettings.activeAccount = accounts[0].address;
+      store.state.widget.settings.activeAccount = accounts[0].address;
 
-      expect(cryptoDataService.getAccountBalance).toBeCalledWith({
-        address: accounts[0].address,
-        network: 1,
-      });
+      expect(accountsModule.actions.getAccountBalance).toBeCalled();
 
       await wrapper.vm.$nextTick();
 
@@ -142,13 +150,13 @@ describe('Widget', () => {
     });
 
     it('should set zero balance if balance request was failed', async () => {
-      widgetModule.state.currentSettings.activeAccount = null;
+      widgetModule.state.settings.activeAccount = null;
       wrapper = shallowMount(Widget, {
         localVue,
         store,
       });
-      cryptoDataService.getAccountBalance.mockRejectedValueOnce();
-      store.state.widget.currentSettings.activeAccount = accounts[0].address;
+      accountsModule.actions.getAccountBalance.mockRejectedValueOnce();
+      store.state.widget.settings.activeAccount = accounts[0].address;
 
       expect(wrapper.vm.balance).toBe('0');
     });

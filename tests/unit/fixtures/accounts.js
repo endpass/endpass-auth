@@ -23,7 +23,7 @@ export const accountAddress = '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb';
 
 export const accounts = [
   {
-    address: '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb',
+    ...v3KeyStore,
   },
   {
     address: '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca',

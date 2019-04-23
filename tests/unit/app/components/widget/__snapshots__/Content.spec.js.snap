@@ -1,16 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Widget Content render should correctly render 1`] = `
-<accordion-stub maxheight="none" collapsed="true">
+<accordion-stub maxheight="none" iscollapsed="true">
   <section class="widget-content">
-    <accordion-stub maxheight="225px" collapsed="true">
-      <option-button-stub big="true" icon="arrow" iconfill="#C3C6CA" icontransform="none" data-test="accounts-toggle-button">
+    <accordion-stub maxheight="225px" iscollapsed="true">
+      <option-button-stub isbig="true" icon="arrow" iconfill="#C3C6CA" icontransform="none" data-test="accounts-toggle-button">
         Change account
       </option-button-stub>
       <option-button-stub data-test="account-button"><span class="widget-content-address"><i class="widget-content-identicon"><identicon-stub address="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb"></identicon-stub></i> <span>0x68Aa50b...D250967Cb</span></span></option-button-stub>
       <option-button-stub data-test="account-button"><span class="widget-content-address"><i class="widget-content-identicon"><identicon-stub address="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca"></identicon-stub></i> <span>0x68Aa50b...D250967Ca</span></span></option-button-stub>
     </accordion-stub>
-    <option-button-stub big="true" icon="arrow" data-test="logout-button">
+    <option-button-stub isbig="true" icon="arrow" data-test="logout-button">
       Logout
     </option-button-stub>
   </section>

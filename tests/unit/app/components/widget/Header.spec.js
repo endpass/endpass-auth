@@ -16,10 +16,25 @@ describe('Widget Header', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
+    it('should render spinner if balance is not passed', () => {
+      expect(wrapper.find('spinner-stub').exists()).toBe(true);
+    });
+
+    it('should not render spinner if balance is passed and should render balance', () => {
+      wrapper = shallowMount(Header, {
+        propsData: {
+          balance: '1000',
+        },
+      });
+
+      expect(wrapper.html()).toMatchSnapshot();
+      expect(wrapper.find('spinner-stub').exists()).toBe(false);
+    });
+
     it('should change toggler label is collapsed is falsy', () => {
       wrapper = shallowMount(Header, {
         propsData: {
-          collapsed: false,
+          isCollapsed: false,
         },
       });
 

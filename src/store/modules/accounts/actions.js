@@ -7,6 +7,7 @@ import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
+import cryptoDataService from '@/service/cryptoData';
 
 import {
   accountChannel,
@@ -310,28 +311,6 @@ const closeAccount = async () => {
   accountChannel.put(Answer.createOk({ type: 'close' }));
 };
 
-const logout = async ({ commit }) => {
-  commit('changeLoadingStatus', true);
-
-  try {
-    await identityService.logout();
-    settingsService.clearLocalSettings();
-    commit('logout');
-
-    accountChannel.put(
-      Answer.createOk({
-        type: 'logout',
-      }),
-    );
-  } catch (err) {
-    console.error(err);
-
-    throw new Error('Something went wrong, try again later');
-  } finally {
-    commit('changeLoadingStatus', false);
-  }
-};
-
 const getRecoveryIdentifier = async ({ state, commit }) => {
   commit('changeLoadingStatus', true);
 
@@ -424,6 +403,15 @@ const defineAuthStatus = async ({ commit }) => {
   return status;
 };
 
+const getAccountBalance = async ({ state }) => {
+  const { balance } = await cryptoDataService.getAccountBalance({
+    network: state.settings.currentNet,
+    address: state.settings.currentAccount,
+  });
+
+  return balance;
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -446,7 +434,6 @@ export default {
   awaitLogoutConfirm,
   setSettings,
   updateSettings,
-  logout,
   closeAccount,
   getRecoveryIdentifier,
   recover,
@@ -456,4 +443,5 @@ export default {
   cancelSignPermission,
   setupDemoData,
   getConsentDetails,
+  getAccountBalance,
 };

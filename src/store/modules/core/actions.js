@@ -1,8 +1,10 @@
-import { METHODS } from '@/constants';
+import { METHODS, DIRECTION } from '@/constants';
 
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { applyDialogStream } from '@/streams';
-
+import { accountChannel } from '@/class/singleton/channels';
+import settingsService from '@/service/settings';
+import { Answer } from '@/class';
+import { initDialogStream } from '@/streams';
 // TODO: move it to the streams mehtods
 import dialogClose from '@/streams/dialogClose';
 
@@ -26,8 +28,8 @@ const startBridge = async ({ dispatch, commit, getters }) => {
     source,
   } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
 
-  if (source === 'dialog') {
-    applyDialogStream();
+  if (source === DIRECTION.AUTH) {
+    initDialogStream();
   }
 
   if (isIdentityMode !== undefined) {
@@ -39,19 +41,54 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   }
 
   bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
-  bridgeMessenger.subscribe(METHODS.BROADCAST, ({ payload }) => {
-    switch (payload.type) {
-      case 'settings':
-        commit('setWidgetSettings', payload.data);
-        break;
-      case 'logout':
-        bridgeMessenger.send(METHODS.WIDGET_LOGOUT);
-        commit('logout');
-        break;
-      default:
-        break;
-    }
+
+  dispatch('subscribeOnBroadcasting');
+};
+
+const subscribeOnBroadcasting = ({ commit, dispatch }) => {
+  bridgeMessenger.subscribe(METHODS.LOGOUT_RESPONSE, () => {
+    commit('logout');
+    dispatch('unmountWidget');
+
+    settingsService.clearLocalSettings();
+    accountChannel.put(
+      Answer.createOk({
+        type: 'logout',
+      }),
+    );
   });
+  bridgeMessenger.subscribe(METHODS.CHANGE_SETTINGS_RESPONSE, payload => {
+    commit('setWidgetSettings', payload);
+  });
+};
+
+const logout = async ({ commit }) => {
+  commit('changeLoadingStatus', true);
+
+  const res = await bridgeMessenger.sendAndWaitResponse(METHODS.LOGOUT_REQUEST);
+
+  commit('changeLoadingStatus', false);
+
+  if (res.err) {
+    throw new Error(res.err);
+  }
+};
+
+const changeAccount = async ({ commit }, address) => {
+  commit('changeLoadingStatus', true);
+
+  const res = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.CHANGE_SETTINGS_REQUEST,
+    {
+      address,
+    },
+  );
+
+  if (res.err) {
+    throw new Error(res.err);
+  }
+
+  commit('changeLoadingStatus', false);
 };
 
 const dialogCloseWrap = () => {
@@ -61,5 +98,8 @@ const dialogCloseWrap = () => {
 export default {
   init,
   startBridge,
+  logout,
+  changeAccount,
+  subscribeOnBroadcasting,
   dialogClose: dialogCloseWrap,
 };

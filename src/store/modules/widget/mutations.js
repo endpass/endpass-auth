@@ -1,5 +1,5 @@
 const setWidgetSettings = (state, settings) => {
-  state.currentSettings = settings;
+  state.settings = settings;
 };
 
 export default {

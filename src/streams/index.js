@@ -1,1 +1,1 @@
-export { applyDialogStream } from './dialogStream';
+export { default as initDialogStream } from './dialogStream';
