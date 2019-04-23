@@ -1,6 +1,7 @@
 <template>
   <button
-    :class="{ 'option-button': true, big: big }"
+    :class="{ 'option-button': true, big: isBig, disabled: disabled }"
+    :disabled="disabled"
     type="button"
     @click="emitClick"
   >
@@ -22,7 +23,7 @@ export default {
   name: 'OptionButton',
 
   props: {
-    big: {
+    isBig: {
       type: Boolean,
       default: false,
     },
@@ -40,6 +41,11 @@ export default {
     iconTransform: {
       type: String,
       default: null,
+    },
+
+    disabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -77,6 +83,11 @@ export default {
   &.big {
     padding: 26px 20px;
     font-size: 16px;
+  }
+
+  &.disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 
   &:hover {

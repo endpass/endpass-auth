@@ -3,7 +3,7 @@ import actions from './actions';
 import getters from './getters';
 
 export const state = {
-  currentSettings: {},
+  settings: {},
 };
 
 export default {

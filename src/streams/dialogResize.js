@@ -5,6 +5,7 @@ let lastHeight = 0;
 
 const dialogResize = () => {
   const newHeight = document.body.offsetHeight;
+
   if (newHeight !== lastHeight) {
     lastHeight = newHeight;
     bridgeMessenger.send(METHODS.DIALOG_RESIZE, {
@@ -13,7 +14,7 @@ const dialogResize = () => {
   }
 };
 
-export const applyDialogResizeStream = () => {
+export const initDialogResizeStream = () => {
   // dirty hack for detect resize, when 'resize' event not fired
   setInterval(dialogResize, 200);
 
@@ -21,5 +22,5 @@ export const applyDialogResizeStream = () => {
 };
 
 export default {
-  applyDialogResizeStream,
+  initDialogResizeStream,
 };

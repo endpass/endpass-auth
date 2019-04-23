@@ -333,42 +333,6 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('logout', () => {
-    it('it should logout user with identity service', async () => {
-      expect.assertions(5);
-
-      identityService.logout.mockResolvedValueOnce();
-
-      await accountsActions.logout({ dispatch, commit });
-
-      expect(accountChannel.put).toBeCalledWith({
-        status: true,
-        payload: {
-          type: 'logout',
-        },
-      });
-      expect(commit).toBeCalledTimes(3);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'logout');
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
-    });
-
-    it('it should throw error', async done => {
-      expect.assertions(2);
-
-      identityService.logout.mockRejectedValueOnce();
-
-      try {
-        await accountsActions.logout({ dispatch, commit });
-      } catch (err) {
-        done();
-      }
-
-      expect(commit).toBeCalledTimes(2);
-      expect(dispatch).not.toBeCalled();
-    });
-  });
-
   describe('awaitLogoutConfirm', () => {
     it('should await logout confirm', async () => {
       expect.assertions(3);

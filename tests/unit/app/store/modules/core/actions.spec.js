@@ -1,4 +1,4 @@
-import { METHODS } from '@/constants';
+import { METHODS, DIRECTION } from '@/constants';
 import coreActions from '@/store/modules/core/actions';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
@@ -7,12 +7,13 @@ jest.mock('@/class/singleton/bridgeMessenger', () => ({
   subscribe: jest.fn(),
 }));
 jest.mock('@/streams', () => ({
-  applyDialogStream: jest.fn(),
+  initDialogStream: jest.fn(),
 }));
 
 /* eslint-disable */
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { applyDialogStream } from '@/streams';
+import { initDialogStream } from '@/streams';
+import { address } from '@unitFixtures/accounts';
 /* eslint-enable */
 
 describe('core actions', () => {
@@ -49,7 +50,7 @@ describe('core actions', () => {
     beforeEach(() => {
       bridgeMessenger.sendAndWaitResponse.mockResolvedValue({
         isIdentityMode: true,
-        source: 'dialog',
+        source: DIRECTION.AUTH,
       });
     });
 
@@ -59,10 +60,7 @@ describe('core actions', () => {
       await coreActions.startBridge({ dispatch, commit, getters });
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.READY_STATE_BRIDGE);
-      expect(bridgeMessenger.subscribe).toBeCalledWith(
-        METHODS.BROADCAST,
-        expect.any(Function),
-      );
+      expect(dispatch).toBeCalledWith('subscribeOnBroadcasting');
     });
 
     it('should change indentity mode if it is defined', async () => {
@@ -78,11 +76,11 @@ describe('core actions', () => {
 
       await coreActions.startBridge({ dispatch, commit, getters });
 
-      expect(applyDialogStream).toBeCalled();
+      expect(initDialogStream).toBeCalled();
     });
 
     it('should not do anything if called is not in dialog', async () => {
-      expect.assertions(6);
+      expect.assertions(5);
 
       getters.isDialog = false;
 
@@ -90,10 +88,83 @@ describe('core actions', () => {
 
       expect(bridgeMessenger.sendAndWaitResponse).not.toBeCalled();
       expect(bridgeMessenger.send).not.toBeCalled();
-      expect(bridgeMessenger.subscribe).not.toBeCalled();
       expect(dispatch).not.toBeCalled();
       expect(commit).not.toBeCalled();
-      expect(applyDialogStream).not.toBeCalled();
+      expect(initDialogStream).not.toBeCalled();
+    });
+  });
+
+  describe('logout', () => {
+    it('should send logout request', async () => {
+      expect.assertions(3);
+
+      await coreActions.logout({ commit });
+
+      expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
+        METHODS.LOGOUT_REQUEST,
+      );
+      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+    });
+
+    it('should throw an error if logout request failed', async done => {
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+        err: 'foo',
+      });
+
+      try {
+        await coreActions.logout({ commit });
+      } catch (err) {
+        done();
+      }
+    });
+  });
+
+  describe('changeAccount', () => {
+    it('should send change settings request', async () => {
+      expect.assertions(3);
+
+      await coreActions.changeAccount({ commit }, address);
+
+      expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
+        METHODS.CHANGE_SETTINGS_REQUEST,
+        {
+          address,
+        },
+      );
+      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+    });
+
+    it('should throw an error if change settings request failed', async done => {
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+        err: 'foo',
+      });
+
+      try {
+        await coreActions.changeAccount({ commit });
+      } catch (err) {
+        done();
+      }
+    });
+  });
+
+  describe('subscribeOnBroadcasting', () => {
+    it('should subscribe on broadcast messages', async () => {
+      expect.assertions(2);
+
+      await coreActions.subscribeOnBroadcasting({ commit, dispatch });
+
+      expect(bridgeMessenger.subscribe).toHaveBeenNthCalledWith(
+        1,
+        METHODS.LOGOUT_RESPONSE,
+        expect.any(Function),
+      );
+      expect(bridgeMessenger.subscribe).toHaveBeenNthCalledWith(
+        2,
+        METHODS.CHANGE_SETTINGS_RESPONSE,
+        expect.any(Function),
+      );
     });
   });
 });

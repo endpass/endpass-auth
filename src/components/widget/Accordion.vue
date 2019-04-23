@@ -2,7 +2,7 @@
   <section class="accordion">
     <slot name="control" />
     <section
-      v-show-slide="!collapsed"
+      v-show-slide="!isCollapsed"
       :style="{ maxHeight: maxHeight }"
       class="accordion-content"
     >
@@ -21,7 +21,7 @@ export default {
       default: 'none',
     },
 
-    collapsed: {
+    isCollapsed: {
       type: Boolean,
       default: true,
     },

@@ -14,11 +14,10 @@ const processRequest = async (
   commit('changeLoadingStatus', true);
 
   const { address, request, net } = state.request;
-
-  // eslint-disable-next-line
-  const demoData = getters.demoData;
+  const { demoData } = getters;
 
   let v3KeyStore;
+
   if (demoData) {
     // eslint-disable-next-line
     v3KeyStore = demoData.v3KeyStore;

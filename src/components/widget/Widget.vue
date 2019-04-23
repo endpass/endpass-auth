@@ -1,15 +1,16 @@
 <template>
   <div class="widget" ref="widget">
     <widget-header
-      :balance="formattedBalance"
-      :collapsed="isCollapsed"
+      :balance="balance"
+      :is-collapsed="isCollapsed"
       @toggle="handleWidgetToggle"
     />
     <widget-content
-      :collapsed="isCollapsed"
+      :is-collapsed="isCollapsed"
       :is-accounts-collapsed="isAccountsCollapsed"
-      :accounts="availableAccounts"
+      :accounts="accounts"
       :current-account="currentAccount"
+      :is-loading="loading"
       @account-change="handleAccountChange"
       @accounts-toggle="handleAccountsToggle"
       @logout="handleLogout"
@@ -19,9 +20,7 @@
 
 <script>
 import get from 'lodash/get';
-import { mapActions, mapGetters, mapState } from 'vuex';
-import cryptoDataService from '@/service/cryptoData';
-import { fromWei } from '@/util/number';
+import { mapActions, mapState } from 'vuex';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
@@ -36,9 +35,10 @@ export default {
 
   computed: {
     ...mapState({
-      settings: state => state.widget.currentSettings,
+      accounts: state => state.accounts.accounts,
+      loading: state => state.core.loading,
+      settings: state => state.widget.settings,
     }),
-    ...mapGetters(['availableAccounts']),
 
     currentNet() {
       return get(this.settings, 'activeNet', 1);
@@ -47,22 +47,13 @@ export default {
     currentAccount() {
       return get(this.settings, 'activeAccount', null);
     },
-
-    formattedBalance() {
-      return fromWei(this.balance);
-    },
   },
 
   watch: {
     async currentAccount() {
       if (this.currentAccount) {
         try {
-          const { balance } = await cryptoDataService.getAccountBalance({
-            network: this.currentNet,
-            address: this.currentAccount,
-          });
-
-          this.balance = balance;
+          this.balance = await this.getAccountBalance();
         } catch (err) {
           this.balance = '0';
         }
@@ -77,9 +68,10 @@ export default {
       'openAccounts',
       'closeAccounts',
       'getWidgetSettings',
-      'widgetLogout',
-      'changeWidgetAccount',
-      'getAccounts',
+      'logout',
+      'changeAccount',
+      'defineOnlyV3Accounts',
+      'getAccountBalance',
     ]),
 
     handleWidgetToggle() {
@@ -106,17 +98,21 @@ export default {
     },
 
     async handleAccountChange(address) {
-      await this.changeWidgetAccount(address);
+      await this.changeAccount(address);
     },
 
     async handleLogout() {
-      await this.widgetLogout();
+      try {
+        this.logout();
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
 
   async mounted() {
     await this.getWidgetSettings();
-    await this.getAccounts();
+    await this.defineOnlyV3Accounts();
   },
 
   components: {

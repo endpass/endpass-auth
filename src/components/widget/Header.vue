@@ -12,23 +12,27 @@
         {{ togglerLabel }}
       </button>
     </section>
-    <p class="widget-header-balace">
-      {{ balance }}
+    <p v-if="balance" class="widget-header-balace">
+      {{ formattedBalance }}
     </p>
+    <spinner v-else :size="24" />
   </header>
 </template>
 
 <script>
+import { fromWei } from '@/util/number';
+import Spinner from '@/components/common/Spinner';
+
 export default {
   name: 'WidgetHeader',
 
   props: {
     balance: {
       type: String,
-      default: '0',
+      default: null,
     },
 
-    collapsed: {
+    isCollapsed: {
       type: Boolean,
       default: true,
     },
@@ -36,7 +40,11 @@ export default {
 
   computed: {
     togglerLabel() {
-      return this.collapsed ? 'Show more' : 'Show less';
+      return this.isCollapsed ? 'Show more' : 'Show less';
+    },
+
+    formattedBalance() {
+      return fromWei(this.balance);
     },
   },
 
@@ -44,6 +52,10 @@ export default {
     handleTogglerClick() {
       this.$emit('toggle');
     },
+  },
+
+  components: {
+    Spinner,
   },
 };
 </script>

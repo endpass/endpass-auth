@@ -1,9 +1,9 @@
 import router from '@/router';
-import dialogResize from '../dialogResize';
+import { initDialogResizeStream } from '../dialogResize';
 
 export default async function withDialogOpen(options) {
   if (options.routeName !== undefined) {
     router.replace(`/${options.routeName}`);
-    dialogResize();
+    initDialogResizeStream();
   }
 }

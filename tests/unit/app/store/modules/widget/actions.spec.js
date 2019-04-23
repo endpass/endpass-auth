@@ -51,14 +51,13 @@ describe('widget actions', () => {
 
   describe('openAccounts', () => {
     it('should open widget and then fit it', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       await widgetActions.openAccounts({ dispatch }, 'foo');
 
       expect(dispatch).toHaveBeenNthCalledWith(1, 'openWidget', {
         widgetNode: 'foo',
       });
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'fitWidget', 'foo');
     });
   });
 
@@ -140,19 +139,11 @@ describe('widget actions', () => {
     });
   });
 
-  describe('widgetLogout', () => {
-    it('should call identity logout method, send message to the bridge and broadcast logout on success', async () => {
-      expect.assertions(3);
+  describe('unmountWidget', () => {
+    it('should request widget unmounting', async () => {
+      await widgetActions.unmountWidget();
 
-      await widgetActions.widgetLogout();
-
-      expect(identityService.logout).toBeCalled();
-      expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
-        METHODS.WIDGET_LOGOUT,
-      );
-      expect(bridgeMessenger.send).toBeCalledWith(METHODS.BROADCAST, {
-        type: 'logout',
-      });
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_UNMOUNT);
     });
   });
 });

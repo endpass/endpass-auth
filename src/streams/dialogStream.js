@@ -6,12 +6,13 @@ import {
   signChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
+import identityService from '@/service/identity';
 import Queue from './Queue';
 import middleware from './middleware';
-import { applyDialogResizeStream } from './dialogResize';
+import { initDialogResizeStream } from './dialogResize';
 
-export function applyDialogStream() {
-  applyDialogResizeStream();
+function initDialogStream() {
+  initDialogResizeStream();
 
   const queueInst = new Queue({ middleware });
 
@@ -61,7 +62,7 @@ export function applyDialogStream() {
     },
     [METHODS.LOGOUT]: {
       payloadHandler() {
-        return store.dispatch('logout');
+        return identityService.logout();
       },
     },
   };
@@ -75,3 +76,5 @@ export function applyDialogStream() {
     queueInst.handleRequest(options, payload, req);
   });
 }
+
+export default initDialogStream;

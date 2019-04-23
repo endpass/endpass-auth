@@ -4,7 +4,7 @@ describe('widget mutations', () => {
   describe('setWidgetSettings', () => {
     it('should set widget current settings', () => {
       const state = {
-        currentSettings: null,
+        settings: null,
       };
       const settings = {
         activeAccount: '0x0123',
@@ -14,7 +14,7 @@ describe('widget mutations', () => {
       widgetMutations.setWidgetSettings(state, settings);
 
       expect(state).toEqual({
-        currentSettings: settings,
+        settings: settings,
       });
     });
   });
