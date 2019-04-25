@@ -2,7 +2,7 @@
 
 exports[`Widget render should correctly render 1`] = `
 <div class="widget">
-  <widget-header-stub balance="0" iscollapsed="true"></widget-header-stub>
+  <widget-header-stub iscollapsed="true"></widget-header-stub>
   <widget-content-stub currentaccount="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb" accounts="[object Object],[object Object]" iscollapsed="true" isaccountscollapsed="true"></widget-content-stub>
 </div>
 `;

@@ -27,7 +27,18 @@ describe('Widget Header', () => {
         },
       });
 
-      expect(wrapper.html()).toMatchSnapshot();
+      expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
+      expect(wrapper.find('spinner-stub').exists()).toBe(false);
+    });
+
+    it('should not render spinner if balance equals to stringified 0', () => {
+      wrapper = shallowMount(Header, {
+        propsData: {
+          balance: '0',
+        },
+      });
+
+      expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
       expect(wrapper.find('spinner-stub').exists()).toBe(false);
     });
 

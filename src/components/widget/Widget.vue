@@ -20,7 +20,10 @@
 
 <script>
 import get from 'lodash/get';
+import pick from 'lodash/pick';
 import { mapActions, mapState } from 'vuex';
+import { METHODS } from '@/constants';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
@@ -28,7 +31,7 @@ export default {
   name: 'Widget',
 
   data: () => ({
-    balance: '0',
+    widgetSettings: null,
     isCollapsed: true,
     isAccountsCollapsed: true,
   }),
@@ -36,27 +39,24 @@ export default {
   computed: {
     ...mapState({
       accounts: state => state.accounts.accounts,
+      settings: state => state.accounts.settings,
+      balance: state => state.accounts.balance,
       loading: state => state.core.loading,
-      settings: state => state.widget.settings,
     }),
 
     currentNet() {
-      return get(this.settings, 'activeNet', 1);
+      return get(this.widgetSettings, 'net', 1);
     },
 
     currentAccount() {
-      return get(this.settings, 'activeAccount', null);
+      return get(this.widgetSettings, 'lastActiveAccount', null);
     },
   },
 
   watch: {
-    async currentAccount() {
-      if (this.currentAccount) {
-        try {
-          this.balance = await this.getAccountBalance();
-        } catch (err) {
-          this.balance = '0';
-        }
+    settings(value) {
+      if (value && !this.widgetSettings) {
+        this.widgetSettings = pick(value, ['lastActiveAccount', 'net']);
       }
     },
   },
@@ -67,12 +67,26 @@ export default {
       'closeWidget',
       'openAccounts',
       'closeAccounts',
-      'getWidgetSettings',
       'logout',
       'changeAccount',
       'defineOnlyV3Accounts',
+      'defineSettings',
       'getAccountBalance',
+      'subscribeOnBalanceUpdates',
+      'updateSettings',
     ]),
+
+    createSettingsSubscribtion() {
+      bridgeMessenger.subscribe(
+        METHODS.CHANGE_SETTINGS_RESPONSE,
+        ({ activeAccount, activeNet }) => {
+          this.widgetSettings = {
+            lastActiveAccount: activeAccount,
+            net: activeNet,
+          };
+        },
+      );
+    },
 
     handleWidgetToggle() {
       if (this.isCollapsed) {
@@ -98,7 +112,9 @@ export default {
     },
 
     async handleAccountChange(address) {
-      await this.changeAccount(address);
+      await this.updateSettings({
+        lastActiveAccount: address,
+      });
     },
 
     async handleLogout() {
@@ -111,8 +127,10 @@ export default {
   },
 
   async mounted() {
-    await this.getWidgetSettings();
+    this.createSettingsSubscribtion();
+    await this.defineSettings();
     await this.defineOnlyV3Accounts();
+    this.subscribeOnBalanceUpdates();
   },
 
   components: {
