@@ -1,5 +1,4 @@
 import get from 'lodash/get';
-import pick from 'lodash/pick';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
@@ -418,22 +417,26 @@ const getAccountBalance = async (ctx, { address, net }) => {
   return balance;
 };
 
-const subscribeOnBalanceUpdates = ({ commit, dispatch }) => {
-  setInterval(async () => {
-    const settings = settingsService.getLocalSettings();
-    const address = get(settings, 'lastActiveAccount');
-    const net = get(settings, 'net', 1);
+const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
+  const handler = () =>
+    setTimeout(async () => {
+      const address = get(state.settings, 'lastActiveAccount');
+      const net = get(state.settings, 'net', 1);
 
-    if (!address) return;
+      if (address) {
+        try {
+          const balance = await dispatch('getAccountBalance', { address, net });
 
-    try {
-      const balance = await dispatch('getAccountBalance', { address, net });
+          commit('setBalance', balance);
+        } catch (err) {
+          commit('setBalance', null);
+        }
+      }
 
-      commit('setBalance', balance);
-    } catch (err) {
-      commit('setBalance', null);
-    }
-  }, 1500);
+      handler();
+    }, 1500);
+
+  handler();
 };
 
 export default {

@@ -54,4 +54,12 @@ describe('accounts mutations', () => {
       expect(state.demoData).toBe(demoData);
     });
   });
+
+  describe('setBalance', () => {
+    it('should set given balance', () => {
+      accountsMutations.setBalance(state, '1000');
+
+      expect(state.balance).toBe('1000');
+    });
+  });
 });

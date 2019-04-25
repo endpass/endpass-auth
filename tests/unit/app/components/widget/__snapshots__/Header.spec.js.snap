@@ -25,18 +25,3 @@ exports[`Widget Header render should correctly render 1`] = `
   <spinner-stub size="24"></spinner-stub>
 </header>
 `;
-
-exports[`Widget Header render should not render spinner if balance is passed and should render balance 1`] = `
-<header class="widget-header">
-  <section class="widget-header-control">
-    <h3 class="widget-header-title">
-      balance
-    </h3> <button data-test="widget-header-toggler" class="widget-header-toggler">
-      Show more
-    </button>
-  </section>
-  <p class="widget-header-balace">
-    0
-  </p>
-</header>
-`;

@@ -1,0 +1,1471 @@
+Searching 111 files for "foo" (case sensitive)
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/common/FormField.spec.js:
+   19        wrapper = shallowMount(FormField, {
+   20          propsData: {
+   21:           label: 'foo',
+   22          },
+   23        });
+   24  
+   25:       expect(wrapper.find('.form-field__label').text()).toBe('foo');
+   26      });
+   27    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Auth.spec.js:
+   24        wrapper = shallowMount(Auth, {
+   25          propsData: {
+   26:           message: 'foo',
+   27            error: 'bar',
+   28          },
+   ..
+   35        wrapper = shallowMount(Auth, {
+   36          propsData: {
+   37:           message: 'foo',
+   38            loading: true,
+   39          },
+   ..
+   63  
+   64    describe('behavior', () => {
+   65:     const email = 'foo+@bar.baz';
+   66      const defaultServerMode = {
+   67        type: IDENTITY_MODE.DEFAULT,
+   ..
+   74          wrapper = mount(Auth, {
+   75            propsData: {
+   76:             message: 'foo',
+   77              inited: true,
+   78            },
+   ..
+   91          describe('invalid', () => {
+   92            it('should disable submit button', () => {
+   93:             ['foo@bar', 'foo foo@bar.com', 'foo@bar.com foo'].forEach(
+   94                badEmail => {
+   95                  wrapper.setData({
+   ..
+  107            it('should not allow submit form', () => {
+  108              wrapper.setData({
+  109:               email: 'foo@bar',
+  110              });
+  111  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/CompositeAuth.spec.js:
+   81  
+   82      it('should render opt form', () => {
+   83:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   84  
+   85        wrapper.setData({
+   ..
+   91  
+   92      it('should render recovery form', () => {
+   93:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   94        store.state.accounts.linkSent = false;
+   95  
+   ..
+  171  
+  172          const params = {
+  173:           email: 'foo@bar.baz',
+  174            serverMode: {
+  175              type: IDENTITY_MODE.DEFAULT,
+  ...
+  193        describe('recover event', () => {
+  194          beforeEach(() => {
+  195:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  196  
+  197            wrapper.setData({
+  ...
+  241      describe('recover form', () => {
+  242        describe('submit event', () => {
+  243:         const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  244  
+  245          beforeEach(() => {
+  246:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  247  
+  248            wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Message.spec.js:
+    9        wrapper = shallowMount(Message, {
+   10          propsData: {
+   11:           message: 'foo',
+   12          },
+   13        });
+   ..
+   26        wrapper = mount(Message, {
+   27          propsData: {
+   28:           message: 'foo',
+   29          },
+   30        });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Password.spec.js:
+   43          loading: false,
+   44        });
+   45:       wrapper.setData({ password: 'foo' });
+   46  
+   47        expect(submitButton.text()).toBe('Submit');
+   ..
+   61  
+   62      it('should submit form', () => {
+   63:       const password = 'foo';
+   64  
+   65        wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Recover.spec.js:
+    3  
+    4  describe('Otp', () => {
+    5:   const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+    6    let wrapper;
+    7  
+    .
+   63  
+   64        wrapper.setData({
+   65:         seedPhrase: 'foo bar',
+   66        });
+   67  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Scopes.spec.js:
+   17      it('should render checkboxes with given scopes', () => {
+   18        wrapper.setProps({
+   19:         scopesList: ['foo', 'bar'],
+   20        });
+   21  
+   ..
+   42        wrapper.setProps({
+   43          loading: false,
+   44:         scopesList: ['foo', 'bar'],
+   45        });
+   46  
+   47        expect(submitButton.attributes().disabled).toBeFalsy();
+   48  
+   49:       wrapper.vm.onChange({ foo: false, bar: false });
+   50  
+   51        expect(submitButton.attributes().disabled).toBeTruthy();
+   ..
+   57        wrapper.setProps({
+   58          loading: false,
+   59:         scopesList: ['foo', 'bar'],
+   60        });
+   61  
+   62:       wrapper.vm.onChange({ foo: true, bar: false });
+   63  
+   64        wrapper.find('form').trigger('submit');
+   65  
+   66:       expect(wrapper.emitted().submit).toEqual([[['foo']]]);
+   67      });
+   68  
+   ..
+   70        wrapper.setProps({
+   71          loading: false,
+   72:         scopesList: ['foo', 'bar'],
+   73        });
+   74:       wrapper.vm.onChange({ foo: false, bar: false });
+   75  
+   76        wrapper.find('form').trigger('submit');
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Sign.spec.js:
+    6    url: 'http://localhost',
+    7    request: {
+    8:     foo: 'bar',
+    9    },
+   10  };
+   ..
+   93      it('should allow submit of email is valid', () => {
+   94        wrapper.setData({
+   95:         password: 'foo',
+   96        });
+   97  
+   ..
+  101          [
+  102            {
+  103:             password: 'foo',
+  104              account: request.address,
+  105            },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Auth.spec.js:
+   54        const payload = {
+   55          serverMode: {
+   56:           foo: 'bar',
+   57          },
+   58        };
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Sign.spec.js:
+   70          // TODO Have troubles with triggering event from stub, solve it when possivble
+   71          wrapper.vm.handleSignSubmit({
+   72:           password: 'foo',
+   73          });
+   74  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Auth.spec.js:
+    7  jest.mock('@endpass/utils/queryStringToMap', () =>
+    8    jest.fn().mockImplementation(() => ({
+    9:     redirect_url: 'http://foo.bar',
+   10    })),
+   11  );
+   ..
+   55        wrapper.setData({
+   56          queryParamsMap: {
+   57:           redirect_url: 'http://localhost/public/foo/bar',
+   58          },
+   59        });
+   ..
+   61        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+   62  
+   63:       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
+   64      });
+   65  
+   ..
+   68          expect.any(Object),
+   69          {
+   70:           redirectUrl: 'http://foo.bar',
+   71          },
+   72        );
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/ConsentProvider.spec.js:
+   21          current: {
+   22            query: {
+   23:             consent_challenge: 'foo',
+   24            },
+   25          },
+   ..
+   59          current: {
+   60            query: {
+   61:             consent_challenge: 'foo',
+   62:             scopes: 'foo bar baz',
+   63            },
+   64          },
+   ..
+  140        wrapper
+  141          .find('scopes-form-stub')
+  142:         .vm.$emit('submit', ['foo', 'bar', 'baz']);
+  143  
+  144        expect(accountsModule.actions.grantPermissionsWithHydra).toBeCalledWith(
+  145          expect.any(Object),
+  146          {
+  147:           consentChallenge: 'foo',
+  148:           scopesList: ['foo', 'bar', 'baz'],
+  149          },
+  150          undefined,
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Error.spec.js:
+   19      $route = {
+   20        query: {
+   21:         error_hint: 'foo',
+   22          error_description: 'bar',
+   23        },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/LoginProvider.spec.js:
+   44          current: {
+   45            query: {
+   46:             login_challenge: 'foo',
+   47            },
+   48          },
+   ..
+  115  
+  116      describe('password submit', () => {
+  117:       const password = 'foo';
+  118        const challengeId = 'bar';
+  119  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/accounts/actions.spec.js:
+   30  
+   31    describe('handleAuthRequest', () => {
+   32:     const email = 'foo@bar.baz';
+   33      const requestFunction = jest.fn();
+   34  
+   ..
+  106  
+  107    describe('auth', () => {
+  108:     const email = 'foo@bar.baz';
+  109      const request = 'kek';
+  110      const type = 'local';
+  ...
+  167  
+  168    describe('authWithGoogle', () => {
+  169:     const email = 'foo@bar.baz';
+  170      const request = 'kek';
+  171  
+  ...
+  184  
+  185    describe('authWithGitHub', () => {
+  186:     const email = 'foo@bar.baz';
+  187  
+  188      it('should auth user and change link status', async () => {
+  ...
+  482  
+  483    describe('recover', () => {
+  484:     const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  485      const state = {
+  486        authParams: {
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/core/actions.spec.js:
+  110      it('should throw an error if logout request failed', () => {
+  111        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  112:         error: 'foo',
+  113        });
+  114  
+  115:       expect(coreActions.logout({ commit })).rejects.toBe('foo');
+  116      });
+  117    });
+  ...
+  135      it('should throw an error if change settings request failed', () => {
+  136        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  137:         error: 'foo',
+  138        });
+  139  
+  140:       expect(coreActions.changeAccount({ commit })).rejects.toBe('foo');
+  141      });
+  142    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/actions.spec.js:
+   26          request: {
+   27            id: 1,
+   28:           params: ['foo', 'bar'],
+   29            jsonrpc: '2.0',
+   30          },
+   ..
+   80        expect.assertions(4);
+   81  
+   82:       const error = new Error('foo');
+   83  
+   84        Signer.getSignedRequest.mockRejectedValueOnce(error);
+   ..
+  118    describe('sendResponse', () => {
+  119      const payload = {
+  120:       foo: 'bar',
+  121      };
+  122  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/mutations.spec.js:
+   12      it('should set current request', () => {
+   13        const request = {
+   14:         foo: 'bar',
+   15        };
+   16  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/widget/actions.spec.js:
+   27        expect.assertions(2);
+   28  
+   29:       await widgetActions.openWidget({ dispatch }, { widgetNode: 'foo' });
+   30  
+   31        expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
+   ..
+   35          },
+   36        );
+   37:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   38      });
+   39    });
+   ..
+   43        expect.assertions(2);
+   44  
+   45:       await widgetActions.closeWidget({ dispatch }, 'foo');
+   46  
+   47        expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_CLOSE);
+   48:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   49      });
+   50    });
+   ..
+   54        expect.assertions(1);
+   55  
+   56:       await widgetActions.openAccounts({ dispatch }, 'foo');
+   57  
+   58        expect(dispatch).toHaveBeenNthCalledWith(1, 'openWidget', {
+   59:         widgetNode: 'foo',
+   60        });
+   61      });
+   ..
+   66        expect.assertions(1);
+   67  
+   68:       await widgetActions.closeAccounts({ dispatch }, 'foo');
+   69  
+   70:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   71      });
+   72    });
+
+/Users/lamartire/Work/endpass/endpass-connect/tests/unit/spec/Connect.spec.js:
+   70      it('should emit settings by inner connect emitter', () => {
+   71        const payload = {
+   72:         foo: 'bar',
+   73        };
+   74  
+   ..
+  103              lastActiveAccount: '0x0',
+  104              net: 1,
+  105:             foo: 'bar',
+  106              bar: 'baz',
+  107            },
+  ...
+  182          status: true,
+  183          payload: {
+  184:           type: 'foo',
+  185          },
+  186        });
+  ...
+  190        expect(context.bridge.ask).toBeCalledWith(METHODS.ACCOUNT, undefined);
+  191        expect(res).toEqual({
+  192:         type: 'foo',
+  193          settings: undefined,
+  194        });
+
+/Users/lamartire/Work/endpass/endpass-connect/tests/unit/spec/Context.spec.js:
+   23    describe('getConnectUrl', () => {
+   24      it('should return url to auth on connect application', () => {
+   25:       expect(context.getConnectUrl('foo')).toBe(`${authUrl}/foo`);
+   26      });
+   27    });
+
+/Users/lamartire/Work/endpass/endpass-connect/tests/unit/spec/RequestProcess.spec.js:
+   78          method: 'eth_some',
+   79        };
+   80:       const error = new Error('foo');
+   81  
+   82        reqProcess.currentRequest = { ...request };
+   ..
+  128      it('should send response via emitter', () => {
+  129        const payload = {
+  130:         foo: 'bar',
+  131        };
+  132  
+  ...
+  148    //         const request = {
+  149    //           jsonrpc: '2.0',
+  150:   //           method: 'foo',
+  151    //           params: [],
+  152    //         };
+  ...
+  176      const request = {
+  177        jsonrpc: '2.0',
+  178:       method: 'foo',
+  179        params: [],
+  180      };
+  ...
+  222      const request = {
+  223        jsonrpc: '2.0',
+  224:       method: 'foo',
+  225        params: [],
+  226      };
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/CrossWindowBroadcaster.spec.js:
+   28      beforeEach(() => {
+   29        broadcaster = new CrossWindowBroadcaster({
+   30:         method: 'foo',
+   31          bus
+   32        })
+   ..
+   44            data: {
+   45              messageType: 'endpass-cw-msgr',
+   46:             method: 'foo',
+   47              payload: 'bar'
+   48            }
+   ..
+   59            data: {
+   60              messageType: 'blabla',
+   61:             method: 'foo'
+   62            }
+   63          }
+   ..
+   92      beforeEach(() => {
+   93        broadcaster = new CrossWindowBroadcaster({
+   94:         method: 'foo',
+   95          bus
+   96        })
+   ..
+  106        it('should push given messenger to the broadcaster context', () => {
+  107          broadcaster = new CrossWindowBroadcaster({
+  108:           method: 'foo'
+  109          })
+  110  
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/Transaction.spec.js:
+  165          expect(Transaction.getPriceWei({ gasPrice: null })).toBe('0');
+  166          expect(Transaction.getPriceWei({ gasPrice: undefined })).toBe('0');
+  167:         expect(Transaction.getPriceWei({ gasPrice: 'foo' })).toBe('0');
+  168        });
+  169      });
+  ...
+  177  
+  178        it('should returns 0 if transaction value is not numberic', () => {
+  179:         expect(Transaction.getValueInWei({ value: 'foo' })).toBe('0');
+  180        });
+  181  
+  ...
+  201      describe('getValidData', () => {
+  202        it('should return transaction data if token is not present', () => {
+  203:         expect(Transaction.getValidData({ data: 'foo' })).toBe('foo');
+  204        });
+  205      });
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/provider/InpageProvider.spec.js:
+   28        provider = new InpageProvider(eventEmitter);
+   29  
+   30:       eventEmitter.emit(INPAGE_EVENT.SETTINGS, 'foo');
+   31        eventEmitter.emit(INPAGE_EVENT.RESPONSE, { id: 'bar' });
+   32  
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/provider/mixins/MockMixin.spec.js:
+   17    describe('methods', () => {
+   18      const method = 'rpc method';
+   19:     const params = ['parameter', { foo: undefined}];
+   20      const value = 'value';
+   21      const key = `{"method":"${method}","params":["${params[0]}","[]"]}`;
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/storage/LocalStorage.spec.js:
+    6        const dataToSave = { bar: 'baz' };
+    7  
+    8:       LocalStorage.save('foo', dataToSave);
+    9  
+   10        expect(localStorage.setItem).toHaveBeenCalledWith(
+   11:         'foo',
+   12          JSON.stringify(dataToSave),
+   13        );
+   ..
+   17    describe('remove', () => {
+   18      it('should call localStorage.removeItem method', () => {
+   19:       LocalStorage.remove('foo');
+   20  
+   21:       expect(localStorage.removeItem).toHaveBeenCalledWith('foo');
+   22      });
+   23    });
+   ..
+   25    describe('load', () => {
+   26      it('should call localStorage.getItem method and returns parsed value', () => {
+   27:       const dataToLoad = { foo: 'bar' };
+   28  
+   29        localStorage.getItem.mockReturnValueOnce(JSON.stringify(dataToLoad));
+   30  
+   31:       expect(LocalStorage.load('foo')).toEqual(dataToLoad);
+   32:       expect(localStorage.getItem).toHaveBeenCalledWith('foo');
+   33      });
+   34  
+   ..
+   36        localStorage.getItem.mockReturnValueOnce(undefined);
+   37  
+   38:       expect(LocalStorage.load('foo')).toEqual(null);
+   39:       expect(localStorage.getItem).toHaveBeenCalledWith('foo');
+   40      });
+   41    });
+
+/Users/lamartire/Work/endpass/endpass-core/packages/class/test/unit/specs/class/storage/SettingsStorage.spec.js:
+    4  
+    5  describe('SettingsStorage', () => {
+    6:   const key = 'foo';
+    7    const storageKey = `${key}:${checkKey}`;
+    8  
+
+/Users/lamartire/Work/endpass/endpass-core/packages/utils/tests/arrays.spec.js:
+   19              {
+   20                id: '0x0',
+   21:               foo: 'bar',
+   22              },
+   23              {
+   24                id: '0x1',
+   25:               foo: 'baz',
+   26              },
+   27            ],
+   ..
+   31          '0x0': {
+   32            id: '0x0',
+   33:           foo: 'bar',
+   34          },
+   35          '0x1': {
+   36            id: '0x1',
+   37:           foo: 'baz',
+   38          },
+   39        });
+   ..
+   46              {
+   47                id: '0x0',
+   48:               foo: 'bar',
+   49              },
+   50              {
+   51:               foo: 'baz',
+   52              },
+   53            ],
+   ..
+   57          '0x0': {
+   58            id: '0x0',
+   59:           foo: 'bar',
+   60          },
+   61        });
+
+/Users/lamartire/Work/endpass/endpass-core/packages/utils/tests/asyncCheckProperty.spec.js:
+   10        expect.assertions(1);
+   11  
+   12:       const foo = {
+   13          bar: 'beep',
+   14        };
+   15:       const res = await asyncCheckProperty(foo, 'bar', v => v === 'beep', 100);
+   16  
+   17        expect(res).toBe('beep');
+
+/Users/lamartire/Work/endpass/endpass-core/packages/utils/tests/mapToQueryString.spec.js:
+    4    it('should append query parameters to url', () => {
+    5      expect(
+    6:       mapToQueryString('https://foo.bar', {
+    7:         foo: 'bar',
+    8          bar: 'baz',
+    9        }),
+   10:     ).toBe('https://foo.bar?foo=bar&bar=baz');
+   11      expect(
+   12:       mapToQueryString('https://foo.bar?foo=bar', {
+   13          bar: 'baz',
+   14        }),
+   15:     ).toBe('https://foo.bar?foo=bar&bar=baz');
+   16    });
+   17  });
+
+/Users/lamartire/Work/endpass/endpass-core/packages/utils/tests/objects.spec.js:
+    7          merge(
+    8            {
+    9:             foo: 'bar',
+   10            },
+   11            {
+   ..
+   19            },
+   20            {
+   21:             foo: 'fee',
+   22            },
+   23          ),
+   24        ).toEqual({
+   25:         foo: 'fee',
+   26          bar: 'baz',
+   27          beep: 'bop',
+   ..
+   33    describe('getFrom', () => {
+   34      const obj = {
+   35:       foo: {
+   36          bar: {
+   37            baz: true,
+   ..
+   41  
+   42      it('should returns first not-null result from object by given paths', () => {
+   43:       expect(getFrom(obj, 'foo.bar.baz.boop', 'foo.bar.baz')).toBe(true);
+   44:       expect(getFrom(obj, 'foo.bar', 'foo.bar.baz')).toEqual({
+   45          baz: true,
+   46        });
+
+143 matches across 32 files
+
+
+Searching 92 files for "foo" (case sensitive)
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/common/FormField.spec.js:
+   19        wrapper = shallowMount(FormField, {
+   20          propsData: {
+   21:           label: 'foo',
+   22          },
+   23        });
+   24  
+   25:       expect(wrapper.find('.form-field__label').text()).toBe('foo');
+   26      });
+   27    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Auth.spec.js:
+   24        wrapper = shallowMount(Auth, {
+   25          propsData: {
+   26:           message: 'foo',
+   27            error: 'bar',
+   28          },
+   ..
+   35        wrapper = shallowMount(Auth, {
+   36          propsData: {
+   37:           message: 'foo',
+   38            loading: true,
+   39          },
+   ..
+   63  
+   64    describe('behavior', () => {
+   65:     const email = 'foo+@bar.baz';
+   66      const defaultServerMode = {
+   67        type: IDENTITY_MODE.DEFAULT,
+   ..
+   74          wrapper = mount(Auth, {
+   75            propsData: {
+   76:             message: 'foo',
+   77              inited: true,
+   78            },
+   ..
+   91          describe('invalid', () => {
+   92            it('should disable submit button', () => {
+   93:             ['foo@bar', 'foo foo@bar.com', 'foo@bar.com foo'].forEach(
+   94                badEmail => {
+   95                  wrapper.setData({
+   ..
+  107            it('should not allow submit form', () => {
+  108              wrapper.setData({
+  109:               email: 'foo@bar',
+  110              });
+  111  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/CompositeAuth.spec.js:
+   81  
+   82      it('should render opt form', () => {
+   83:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   84  
+   85        wrapper.setData({
+   ..
+   91  
+   92      it('should render recovery form', () => {
+   93:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   94        store.state.accounts.linkSent = false;
+   95  
+   ..
+  171  
+  172          const params = {
+  173:           email: 'foo@bar.baz',
+  174            serverMode: {
+  175              type: IDENTITY_MODE.DEFAULT,
+  ...
+  193        describe('recover event', () => {
+  194          beforeEach(() => {
+  195:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  196  
+  197            wrapper.setData({
+  ...
+  241      describe('recover form', () => {
+  242        describe('submit event', () => {
+  243:         const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  244  
+  245          beforeEach(() => {
+  246:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  247  
+  248            wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Message.spec.js:
+    9        wrapper = shallowMount(Message, {
+   10          propsData: {
+   11:           message: 'foo',
+   12          },
+   13        });
+   ..
+   26        wrapper = mount(Message, {
+   27          propsData: {
+   28:           message: 'foo',
+   29          },
+   30        });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Password.spec.js:
+   43          loading: false,
+   44        });
+   45:       wrapper.setData({ password: 'foo' });
+   46  
+   47        expect(submitButton.text()).toBe('Submit');
+   ..
+   61  
+   62      it('should submit form', () => {
+   63:       const password = 'foo';
+   64  
+   65        wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Recover.spec.js:
+    3  
+    4  describe('Otp', () => {
+    5:   const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+    6    let wrapper;
+    7  
+    .
+   63  
+   64        wrapper.setData({
+   65:         seedPhrase: 'foo bar',
+   66        });
+   67  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Scopes.spec.js:
+   17      it('should render checkboxes with given scopes', () => {
+   18        wrapper.setProps({
+   19:         scopesList: ['foo', 'bar'],
+   20        });
+   21  
+   ..
+   42        wrapper.setProps({
+   43          loading: false,
+   44:         scopesList: ['foo', 'bar'],
+   45        });
+   46  
+   47        expect(submitButton.attributes().disabled).toBeFalsy();
+   48  
+   49:       wrapper.vm.onChange({ foo: false, bar: false });
+   50  
+   51        expect(submitButton.attributes().disabled).toBeTruthy();
+   ..
+   57        wrapper.setProps({
+   58          loading: false,
+   59:         scopesList: ['foo', 'bar'],
+   60        });
+   61  
+   62:       wrapper.vm.onChange({ foo: true, bar: false });
+   63  
+   64        wrapper.find('form').trigger('submit');
+   65  
+   66:       expect(wrapper.emitted().submit).toEqual([[['foo']]]);
+   67      });
+   68  
+   ..
+   70        wrapper.setProps({
+   71          loading: false,
+   72:         scopesList: ['foo', 'bar'],
+   73        });
+   74:       wrapper.vm.onChange({ foo: false, bar: false });
+   75  
+   76        wrapper.find('form').trigger('submit');
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Sign.spec.js:
+    6    url: 'http://localhost',
+    7    request: {
+    8:     foo: 'bar',
+    9    },
+   10  };
+   ..
+   93      it('should allow submit of email is valid', () => {
+   94        wrapper.setData({
+   95:         password: 'foo',
+   96        });
+   97  
+   ..
+  101          [
+  102            {
+  103:             password: 'foo',
+  104              account: request.address,
+  105            },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Auth.spec.js.snap:
+    2  
+    3  exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
+    4: <form data-test="auth-form" message="foo">
+    5    <!---->
+    6    <form-field-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Message.spec.js.snap:
+    4  <div>
+    5    <form-field-stub>
+    6:     <message-stub data-test="form-message">foo</message-stub>
+    7    </form-field-stub>
+    8    <form-controls-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Sign.spec.js.snap:
+   18      <v-code-stub data-test="request-body">
+   19        {
+   20:       "foo": "bar"
+   21        }
+   22      </v-code-stub>
+   ..
+   46      <v-code-stub data-test="request-body">
+   47        {
+   48:       "foo": "bar"
+   49        }
+   50      </v-code-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Auth.spec.js:
+   54        const payload = {
+   55          serverMode: {
+   56:           foo: 'bar',
+   57          },
+   58        };
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Sign.spec.js:
+   70          // TODO Have troubles with triggering event from stub, solve it when possivble
+   71          wrapper.vm.handleSignSubmit({
+   72:           password: 'foo',
+   73          });
+   74  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Auth.spec.js:
+    7  jest.mock('@endpass/utils/queryStringToMap', () =>
+    8    jest.fn().mockImplementation(() => ({
+    9:     redirect_url: 'http://foo.bar',
+   10    })),
+   11  );
+   ..
+   55        wrapper.setData({
+   56          queryParamsMap: {
+   57:           redirect_url: 'http://localhost/public/foo/bar',
+   58          },
+   59        });
+   ..
+   61        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+   62  
+   63:       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
+   64      });
+   65  
+   ..
+   68          expect.any(Object),
+   69          {
+   70:           redirectUrl: 'http://foo.bar',
+   71          },
+   72        );
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/ConsentProvider.spec.js:
+   21          current: {
+   22            query: {
+   23:             consent_challenge: 'foo',
+   24            },
+   25          },
+   ..
+   59          current: {
+   60            query: {
+   61:             consent_challenge: 'foo',
+   62:             scopes: 'foo bar baz',
+   63            },
+   64          },
+   ..
+  140        wrapper
+  141          .find('scopes-form-stub')
+  142:         .vm.$emit('submit', ['foo', 'bar', 'baz']);
+  143  
+  144        expect(accountsModule.actions.grantPermissionsWithHydra).toBeCalledWith(
+  145          expect.any(Object),
+  146          {
+  147:           consentChallenge: 'foo',
+  148:           scopesList: ['foo', 'bar', 'baz'],
+  149          },
+  150          undefined,
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Error.spec.js:
+   19      $route = {
+   20        query: {
+   21:         error_hint: 'foo',
+   22          error_description: 'bar',
+   23        },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/LoginProvider.spec.js:
+   44          current: {
+   45            query: {
+   46:             login_challenge: 'foo',
+   47            },
+   48          },
+   ..
+  115  
+  116      describe('password submit', () => {
+  117:       const password = 'foo';
+  118        const challengeId = 'bar';
+  119  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/accounts/actions.spec.js:
+   30  
+   31    describe('handleAuthRequest', () => {
+   32:     const email = 'foo@bar.baz';
+   33      const requestFunction = jest.fn();
+   34  
+   ..
+  106  
+  107    describe('auth', () => {
+  108:     const email = 'foo@bar.baz';
+  109      const request = 'kek';
+  110      const type = 'local';
+  ...
+  167  
+  168    describe('authWithGoogle', () => {
+  169:     const email = 'foo@bar.baz';
+  170      const request = 'kek';
+  171  
+  ...
+  184  
+  185    describe('authWithGitHub', () => {
+  186:     const email = 'foo@bar.baz';
+  187  
+  188      it('should auth user and change link status', async () => {
+  ...
+  482  
+  483    describe('recover', () => {
+  484:     const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  485      const state = {
+  486        authParams: {
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/core/actions.spec.js:
+  110      it('should throw an error if logout request failed', () => {
+  111        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  112:         error: 'foo',
+  113        });
+  114  
+  115:       expect(coreActions.logout({ commit })).rejects.toBe('foo');
+  116      });
+  117    });
+  ...
+  135      it('should throw an error if change settings request failed', () => {
+  136        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  137:         error: 'foo',
+  138        });
+  139  
+  140:       expect(coreActions.changeAccount({ commit })).rejects.toBe('foo');
+  141      });
+  142    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/actions.spec.js:
+   26          request: {
+   27            id: 1,
+   28:           params: ['foo', 'bar'],
+   29            jsonrpc: '2.0',
+   30          },
+   ..
+   80        expect.assertions(4);
+   81  
+   82:       const error = new Error('foo');
+   83  
+   84        Signer.getSignedRequest.mockRejectedValueOnce(error);
+   ..
+  118    describe('sendResponse', () => {
+  119      const payload = {
+  120:       foo: 'bar',
+  121      };
+  122  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/mutations.spec.js:
+   12      it('should set current request', () => {
+   13        const request = {
+   14:         foo: 'bar',
+   15        };
+   16  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/widget/actions.spec.js:
+   27        expect.assertions(2);
+   28  
+   29:       await widgetActions.openWidget({ dispatch }, { widgetNode: 'foo' });
+   30  
+   31        expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
+   ..
+   35          },
+   36        );
+   37:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   38      });
+   39    });
+   ..
+   43        expect.assertions(2);
+   44  
+   45:       await widgetActions.closeWidget({ dispatch }, 'foo');
+   46  
+   47        expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_CLOSE);
+   48:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   49      });
+   50    });
+   ..
+   54        expect.assertions(1);
+   55  
+   56:       await widgetActions.openAccounts({ dispatch }, 'foo');
+   57  
+   58        expect(dispatch).toHaveBeenNthCalledWith(1, 'openWidget', {
+   59:         widgetNode: 'foo',
+   60        });
+   61      });
+   ..
+   66        expect.assertions(1);
+   67  
+   68:       await widgetActions.closeAccounts({ dispatch }, 'foo');
+   69  
+   70:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   71      });
+   72    });
+
+90 matches across 22 files
+
+
+Searching 92 files for "foo" (case sensitive)
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/common/FormField.spec.js:
+   19        wrapper = shallowMount(FormField, {
+   20          propsData: {
+   21:           label: 'foo',
+   22          },
+   23        });
+   24  
+   25:       expect(wrapper.find('.form-field__label').text()).toBe('foo');
+   26      });
+   27    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Auth.spec.js:
+   24        wrapper = shallowMount(Auth, {
+   25          propsData: {
+   26:           message: 'foo',
+   27            error: 'bar',
+   28          },
+   ..
+   35        wrapper = shallowMount(Auth, {
+   36          propsData: {
+   37:           message: 'foo',
+   38            loading: true,
+   39          },
+   ..
+   63  
+   64    describe('behavior', () => {
+   65:     const email = 'foo+@bar.baz';
+   66      const defaultServerMode = {
+   67        type: IDENTITY_MODE.DEFAULT,
+   ..
+   74          wrapper = mount(Auth, {
+   75            propsData: {
+   76:             message: 'foo',
+   77              inited: true,
+   78            },
+   ..
+   91          describe('invalid', () => {
+   92            it('should disable submit button', () => {
+   93:             ['foo@bar', 'foo foo@bar.com', 'foo@bar.com foo'].forEach(
+   94                badEmail => {
+   95                  wrapper.setData({
+   ..
+  107            it('should not allow submit form', () => {
+  108              wrapper.setData({
+  109:               email: 'foo@bar',
+  110              });
+  111  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/CompositeAuth.spec.js:
+   81  
+   82      it('should render opt form', () => {
+   83:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   84  
+   85        wrapper.setData({
+   ..
+   91  
+   92      it('should render recovery form', () => {
+   93:       store.state.accounts.otpEmail = 'foo@bar.baz';
+   94        store.state.accounts.linkSent = false;
+   95  
+   ..
+  171  
+  172          const params = {
+  173:           email: 'foo@bar.baz',
+  174            serverMode: {
+  175              type: IDENTITY_MODE.DEFAULT,
+  ...
+  193        describe('recover event', () => {
+  194          beforeEach(() => {
+  195:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  196  
+  197            wrapper.setData({
+  ...
+  241      describe('recover form', () => {
+  242        describe('submit event', () => {
+  243:         const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  244  
+  245          beforeEach(() => {
+  246:           store.state.accounts.otpEmail = 'foo@bar.baz';
+  247  
+  248            wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Message.spec.js:
+    9        wrapper = shallowMount(Message, {
+   10          propsData: {
+   11:           message: 'foo',
+   12          },
+   13        });
+   ..
+   26        wrapper = mount(Message, {
+   27          propsData: {
+   28:           message: 'foo',
+   29          },
+   30        });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Password.spec.js:
+   43          loading: false,
+   44        });
+   45:       wrapper.setData({ password: 'foo' });
+   46  
+   47        expect(submitButton.text()).toBe('Submit');
+   ..
+   61  
+   62      it('should submit form', () => {
+   63:       const password = 'foo';
+   64  
+   65        wrapper.setData({
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Recover.spec.js:
+    3  
+    4  describe('Otp', () => {
+    5:   const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+    6    let wrapper;
+    7  
+    .
+   63  
+   64        wrapper.setData({
+   65:         seedPhrase: 'foo bar',
+   66        });
+   67  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Scopes.spec.js:
+   17      it('should render checkboxes with given scopes', () => {
+   18        wrapper.setProps({
+   19:         scopesList: ['foo', 'bar'],
+   20        });
+   21  
+   ..
+   42        wrapper.setProps({
+   43          loading: false,
+   44:         scopesList: ['foo', 'bar'],
+   45        });
+   46  
+   47        expect(submitButton.attributes().disabled).toBeFalsy();
+   48  
+   49:       wrapper.vm.onChange({ foo: false, bar: false });
+   50  
+   51        expect(submitButton.attributes().disabled).toBeTruthy();
+   ..
+   57        wrapper.setProps({
+   58          loading: false,
+   59:         scopesList: ['foo', 'bar'],
+   60        });
+   61  
+   62:       wrapper.vm.onChange({ foo: true, bar: false });
+   63  
+   64        wrapper.find('form').trigger('submit');
+   65  
+   66:       expect(wrapper.emitted().submit).toEqual([[['foo']]]);
+   67      });
+   68  
+   ..
+   70        wrapper.setProps({
+   71          loading: false,
+   72:         scopesList: ['foo', 'bar'],
+   73        });
+   74:       wrapper.vm.onChange({ foo: false, bar: false });
+   75  
+   76        wrapper.find('form').trigger('submit');
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/Sign.spec.js:
+    6    url: 'http://localhost',
+    7    request: {
+    8:     foo: 'bar',
+    9    },
+   10  };
+   ..
+   93      it('should allow submit of email is valid', () => {
+   94        wrapper.setData({
+   95:         password: 'foo',
+   96        });
+   97  
+   ..
+  101          [
+  102            {
+  103:             password: 'foo',
+  104              account: request.address,
+  105            },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Auth.spec.js.snap:
+    2  
+    3  exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
+    4: <form data-test="auth-form" message="foo">
+    5    <!---->
+    6    <form-field-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Message.spec.js.snap:
+    4  <div>
+    5    <form-field-stub>
+    6:     <message-stub data-test="form-message">foo</message-stub>
+    7    </form-field-stub>
+    8    <form-controls-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/forms/__snapshots__/Sign.spec.js.snap:
+   18      <v-code-stub data-test="request-body">
+   19        {
+   20:       "foo": "bar"
+   21        }
+   22      </v-code-stub>
+   ..
+   46      <v-code-stub data-test="request-body">
+   47        {
+   48:       "foo": "bar"
+   49        }
+   50      </v-code-stub>
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Auth.spec.js:
+   54        const payload = {
+   55          serverMode: {
+   56:           foo: 'bar',
+   57          },
+   58        };
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/Sign.spec.js:
+   70          // TODO Have troubles with triggering event from stub, solve it when possivble
+   71          wrapper.vm.handleSignSubmit({
+   72:           password: 'foo',
+   73          });
+   74  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Auth.spec.js:
+    7  jest.mock('@endpass/utils/queryStringToMap', () =>
+    8    jest.fn().mockImplementation(() => ({
+    9:     redirect_url: 'http://foo.bar',
+   10    })),
+   11  );
+   ..
+   55        wrapper.setData({
+   56          queryParamsMap: {
+   57:           redirect_url: 'http://localhost/public/foo/bar',
+   58          },
+   59        });
+   ..
+   61        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+   62  
+   63:       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
+   64      });
+   65  
+   ..
+   68          expect.any(Object),
+   69          {
+   70:           redirectUrl: 'http://foo.bar',
+   71          },
+   72        );
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/ConsentProvider.spec.js:
+   21          current: {
+   22            query: {
+   23:             consent_challenge: 'foo',
+   24            },
+   25          },
+   ..
+   59          current: {
+   60            query: {
+   61:             consent_challenge: 'foo',
+   62:             scopes: 'foo bar baz',
+   63            },
+   64          },
+   ..
+  140        wrapper
+  141          .find('scopes-form-stub')
+  142:         .vm.$emit('submit', ['foo', 'bar', 'baz']);
+  143  
+  144        expect(accountsModule.actions.grantPermissionsWithHydra).toBeCalledWith(
+  145          expect.any(Object),
+  146          {
+  147:           consentChallenge: 'foo',
+  148:           scopesList: ['foo', 'bar', 'baz'],
+  149          },
+  150          undefined,
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/Error.spec.js:
+   19      $route = {
+   20        query: {
+   21:         error_hint: 'foo',
+   22          error_description: 'bar',
+   23        },
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/components/screens/public/LoginProvider.spec.js:
+   44          current: {
+   45            query: {
+   46:             login_challenge: 'foo',
+   47            },
+   48          },
+   ..
+  115  
+  116      describe('password submit', () => {
+  117:       const password = 'foo';
+  118        const challengeId = 'bar';
+  119  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/accounts/actions.spec.js:
+   30  
+   31    describe('handleAuthRequest', () => {
+   32:     const email = 'foo@bar.baz';
+   33      const requestFunction = jest.fn();
+   34  
+   ..
+  106  
+  107    describe('auth', () => {
+  108:     const email = 'foo@bar.baz';
+  109      const request = 'kek';
+  110      const type = 'local';
+  ...
+  167  
+  168    describe('authWithGoogle', () => {
+  169:     const email = 'foo@bar.baz';
+  170      const request = 'kek';
+  171  
+  ...
+  184  
+  185    describe('authWithGitHub', () => {
+  186:     const email = 'foo@bar.baz';
+  187  
+  188      it('should auth user and change link status', async () => {
+  ...
+  482  
+  483    describe('recover', () => {
+  484:     const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
+  485      const state = {
+  486        authParams: {
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/core/actions.spec.js:
+  110      it('should throw an error if logout request failed', () => {
+  111        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  112:         error: 'foo',
+  113        });
+  114  
+  115:       expect(coreActions.logout({ commit })).rejects.toBe('foo');
+  116      });
+  117    });
+  ...
+  135      it('should throw an error if change settings request failed', () => {
+  136        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+  137:         error: 'foo',
+  138        });
+  139  
+  140:       expect(coreActions.changeAccount({ commit })).rejects.toBe('foo');
+  141      });
+  142    });
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/actions.spec.js:
+   26          request: {
+   27            id: 1,
+   28:           params: ['foo', 'bar'],
+   29            jsonrpc: '2.0',
+   30          },
+   ..
+   80        expect.assertions(4);
+   81  
+   82:       const error = new Error('foo');
+   83  
+   84        Signer.getSignedRequest.mockRejectedValueOnce(error);
+   ..
+  118    describe('sendResponse', () => {
+  119      const payload = {
+  120:       foo: 'bar',
+  121      };
+  122  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/requests/mutations.spec.js:
+   12      it('should set current request', () => {
+   13        const request = {
+   14:         foo: 'bar',
+   15        };
+   16  
+
+/Users/lamartire/Work/endpass/endpass-auth/tests/unit/app/store/modules/widget/actions.spec.js:
+   27        expect.assertions(2);
+   28  
+   29:       await widgetActions.openWidget({ dispatch }, { widgetNode: 'foo' });
+   30  
+   31        expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
+   ..
+   35          },
+   36        );
+   37:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   38      });
+   39    });
+   ..
+   43        expect.assertions(2);
+   44  
+   45:       await widgetActions.closeWidget({ dispatch }, 'foo');
+   46  
+   47        expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_CLOSE);
+   48:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   49      });
+   50    });
+   ..
+   54        expect.assertions(1);
+   55  
+   56:       await widgetActions.openAccounts({ dispatch }, 'foo');
+   57  
+   58        expect(dispatch).toHaveBeenNthCalledWith(1, 'openWidget', {
+   59:         widgetNode: 'foo',
+   60        });
+   61      });
+   ..
+   66        expect.assertions(1);
+   67  
+   68:       await widgetActions.closeAccounts({ dispatch }, 'foo');
+   69  
+   70:       expect(dispatch).toBeCalledWith('fitWidget', 'foo');
+   71      });
+   72    });
+
+90 matches across 22 files
+
+
+Searching 0 files for "foo" (case sensitive)
+
+0 matches

@@ -1,7 +1,15 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Widget from '@/components/widget/Widget.vue';
 import { accountAddress, accounts } from '@unitFixtures/accounts';
+
+jest.mock('@/class/singleton/bridgeMessenger', () => ({
+  subscribe: jest.fn(),
+}));
+
+/* eslint-disable */
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import Widget from '@/components/widget/Widget.vue';
+/* eslint-enable */
 
 const localVue = createLocalVue();
 
@@ -18,28 +26,26 @@ describe('Widget', () => {
   beforeEach(() => {
     accountsModule = {
       state: {
+        settings: {
+          lastActiveAccount: accountAddress,
+          net: 1,
+        },
         accounts,
       },
       actions: {
+        defineSettings: jest.fn(),
         defineOnlyV3Accounts: jest.fn(),
-        getAccountBalance: jest.fn(),
+        updateSettings: jest.fn(),
+        subscribeOnBalanceUpdates: jest.fn(),
       },
     };
     widgetModule = {
-      state: {
-        settings: {
-          activeNet: 1,
-          activeAccount: accountAddress,
-        },
-      },
       actions: {
         openWidget: jest.fn(),
         closeWidget: jest.fn(),
         openAccounts: jest.fn(),
         closeAccounts: jest.fn(),
-        getWidgetSettings: jest.fn(),
         widgetLogout: jest.fn(),
-        changeAccount: jest.fn(),
       },
     };
     coreModule = {
@@ -65,15 +71,30 @@ describe('Widget', () => {
   });
 
   describe('render', () => {
-    it('should correctly render', () => {
+    it('should correctly render', async () => {
+      expect.assertions(1);
+
+      wrapper.setData({
+        widgetSettings: {
+          lastActiveAccount: accountAddress,
+          net: 1,
+        },
+      });
+
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
-    it('should request accounts and widget settings on mount', () => {
-      expect(widgetModule.actions.getWidgetSettings).toBeCalled();
+    beforeEach(() => {
+      jest.spyOn(wrapper.vm, 'createSettingsSubscribtion');
+    });
+
+    it('should request settings, accounts and sub on mount', () => {
+      expect(wrapper.vm.createSettingsSubscribtion).toBeCalled();
+      expect(accountsModule.actions.defineSettings).toBeCalled();
       expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
+      expect(accountsModule.actions.subscribeOnBalanceUpdates).toBeCalled();
     });
 
     it('should correctly open widget', () => {
@@ -110,54 +131,21 @@ describe('Widget', () => {
       expect(wrapper.vm.isAccountsCollapsed).toBe(true);
     });
 
-    it('should correctly handle account change event', () => {
-      wrapper
-        .find('widget-content-stub')
-        .vm.$emit('account-change', accounts[0].address);
-
-      expect(widgetModule.actions.changeAccount).toBeCalledWith(
-        expect.any(Object),
-        accounts[0].address,
-        undefined,
-      );
-    });
-
     it('should correctly handle logout event', () => {
       wrapper.find('widget-content-stub').vm.$emit('logout');
 
       expect(coreModule.actions.logout).toBeCalled();
     });
 
-    it('should request balance on current account change', async () => {
-      expect.assertions(3);
+    it('should update widget settings on global settings changes', () => {
+      const settings = {
+        lastActiveAccount: accountAddress,
+        net: 1,
+      };
 
-      widgetModule.state.settings.activeAccount = null;
-      wrapper = shallowMount(Widget, {
-        localVue,
-        store,
-      });
+      accountsModule.state.settings = settings;
 
-      expect(accountsModule.actions.getAccountBalance).not.toBeCalled();
-
-      store.state.widget.settings.activeAccount = accounts[0].address;
-
-      expect(accountsModule.actions.getAccountBalance).toBeCalled();
-
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.vm.balance).not.toBe('0');
-    });
-
-    it('should set zero balance if balance request was failed', async () => {
-      widgetModule.state.settings.activeAccount = null;
-      wrapper = shallowMount(Widget, {
-        localVue,
-        store,
-      });
-      accountsModule.actions.getAccountBalance.mockRejectedValueOnce();
-      store.state.widget.settings.activeAccount = accounts[0].address;
-
-      expect(wrapper.vm.balance).toBe(null);
+      expect(wrapper.vm.widgetSettings).toEqual(settings);
     });
   });
 });

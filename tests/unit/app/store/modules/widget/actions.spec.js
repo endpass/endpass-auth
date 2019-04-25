@@ -93,26 +93,6 @@ describe('widget actions', () => {
     });
   });
 
-  describe('getWidgetSettings', () => {
-    it('should request settings from the bridge and set responsed settings', async () => {
-      expect.assertions(2);
-
-      const settings = {
-        activeAccount: '0x0123',
-        activeNet: 1,
-      };
-
-      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce(settings);
-
-      await widgetActions.getWidgetSettings({ commit });
-
-      expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
-        METHODS.WIDGET_GET_SETTING,
-      );
-      expect(commit).toBeCalledWith('setWidgetSettings', settings);
-    });
-  });
-
   describe('changeWidgetAccount', () => {
     it('should send request for account change to the bridge and broadcase result', async () => {
       expect.assertions(2);

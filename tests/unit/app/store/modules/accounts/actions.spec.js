@@ -2,10 +2,10 @@ import Web3 from 'web3';
 
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
+import cryptoDataService from '@/service/cryptoData';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
-
-import { v3KeyStore } from '@unitFixtures/accounts';
+import { v3KeyStore, accountAddress } from '@unitFixtures/accounts';
 import {
   permissionChannel,
   accountChannel,
@@ -664,6 +664,95 @@ describe('accounts actions', () => {
       expect(commit).toBeCalledTimes(1);
       expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 401);
       expect(status).toBe(401);
+    });
+  });
+
+  describe('getAccountBalance', () => {
+    it('should request account balance', async () => {
+      expect.assertions(2);
+
+      cryptoDataService.getAccountBalance.mockResolvedValueOnce({
+        balance: '1000',
+      });
+
+      const payload = {
+        address: accountAddress,
+        net: 1,
+      };
+      const res = await accountsActions.getAccountBalance(null, payload);
+
+      expect(cryptoDataService.getAccountBalance).toBeCalledWith({
+        address: payload.address,
+        network: payload.net,
+      });
+      expect(res).toBe('1000');
+    });
+  });
+
+  describe('subscribeOnBalanceUpdates', () => {
+    const settings = {
+      lastActiveAccount: accountAddress,
+      net: 1,
+    };
+
+    beforeAll(() => {
+      jest.useFakeTimers();
+    });
+
+    it('should sets up interval with requesting current account balance', async () => {
+      expect.assertions(2);
+
+      const balance = '1000';
+
+      dispatch.mockResolvedValueOnce(balance);
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings },
+        commit,
+        dispatch,
+      });
+
+      expect(commit).not.toBeCalled();
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).toBeCalledWith('setBalance', balance);
+    });
+
+    it('should set null balance if error annears during requesting', async () => {
+      expect.assertions(2);
+
+      dispatch.mockRejectedValueOnce();
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings },
+        commit,
+        dispatch,
+      });
+
+      expect(commit).not.toBeCalled();
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).toBeCalledWith('setBalance', null);
+    });
+
+    it('should not do anything if current account is empty', async () => {
+      expect.assertions(1);
+
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings: {} },
+        commit,
+        dispatch,
+      });
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).not.toBeCalled();
     });
   });
 });
