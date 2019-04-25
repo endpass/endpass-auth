@@ -112,7 +112,7 @@ describe('core actions', () => {
         error: 'foo',
       });
 
-      expect(coreActions.logout({ commit })).rejects.toBe('foo');
+      expect(coreActions.logout({ commit })).rejects.toThrow('foo');
     });
   });
 
@@ -137,24 +137,18 @@ describe('core actions', () => {
         error: 'foo',
       });
 
-      expect(coreActions.changeAccount({ commit })).rejects.toBe('foo');
+      expect(coreActions.changeAccount({ commit })).rejects.toThrow('foo');
     });
   });
 
   describe('subscribeOnBroadcasting', () => {
     it('should subscribe on broadcast messages', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       await coreActions.subscribeOnBroadcasting({ commit, dispatch });
 
-      expect(bridgeMessenger.subscribe).toHaveBeenNthCalledWith(
-        1,
+      expect(bridgeMessenger.subscribe).toHaveBeenCalledWith(
         METHODS.LOGOUT_RESPONSE,
-        expect.any(Function),
-      );
-      expect(bridgeMessenger.subscribe).toHaveBeenNthCalledWith(
-        2,
-        METHODS.CHANGE_SETTINGS_RESPONSE,
         expect.any(Function),
       );
     });

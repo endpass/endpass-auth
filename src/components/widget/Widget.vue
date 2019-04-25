@@ -54,10 +54,12 @@ export default {
   },
 
   watch: {
-    settings(value) {
-      if (value && !this.widgetSettings) {
-        this.widgetSettings = pick(value, ['lastActiveAccount', 'net']);
-      }
+    settings: {
+      handler(value) {
+        if (value && !this.widgetSettings) {
+          this.widgetSettings = pick(value, ['lastActiveAccount', 'net']);
+        }
+      },
     },
   },
 
@@ -68,10 +70,8 @@ export default {
       'openAccounts',
       'closeAccounts',
       'logout',
-      'changeAccount',
       'defineOnlyV3Accounts',
       'defineSettings',
-      'getAccountBalance',
       'subscribeOnBalanceUpdates',
       'updateSettings',
     ]),
@@ -127,9 +127,9 @@ export default {
   },
 
   async mounted() {
-    this.createSettingsSubscribtion();
     await this.defineSettings();
     await this.defineOnlyV3Accounts();
+    this.createSettingsSubscribtion();
     this.subscribeOnBalanceUpdates();
   },
 

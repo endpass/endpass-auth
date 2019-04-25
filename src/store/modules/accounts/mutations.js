@@ -31,10 +31,6 @@ const setSettings = (state, settings) => {
   state.settings = settings;
 };
 
-const setLocalSettings = (state, settings) => {
-  state.localSettings = settings;
-};
-
 const setRecoveryIdentifier = (state, recoveryIdentifier) => {
   state.recoveryIdentifier = recoveryIdentifier;
 };
@@ -68,6 +64,5 @@ export default {
   setSettings,
   setRecoveryIdentifier,
   setAuthByCode,
-  setLocalSettings,
   setBalance,
 };
