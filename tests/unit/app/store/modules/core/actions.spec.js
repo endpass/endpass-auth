@@ -107,16 +107,12 @@ describe('core actions', () => {
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
 
-    it('should throw an error if logout request failed', async done => {
+    it('should throw an error if logout request failed', () => {
       bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
-        err: 'foo',
+        error: 'foo',
       });
 
-      try {
-        await coreActions.logout({ commit });
-      } catch (err) {
-        done();
-      }
+      expect(coreActions.logout({ commit })).rejects.toBe('foo');
     });
   });
 
@@ -136,16 +132,12 @@ describe('core actions', () => {
       expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
 
-    it('should throw an error if change settings request failed', async done => {
+    it('should throw an error if change settings request failed', () => {
       bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
-        err: 'foo',
+        error: 'foo',
       });
 
-      try {
-        await coreActions.changeAccount({ commit });
-      } catch (err) {
-        done();
-      }
+      expect(coreActions.changeAccount({ commit })).rejects.toBe('foo');
     });
   });
 

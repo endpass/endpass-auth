@@ -1,6 +1,5 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import cryptoDataService from '@/service/cryptoData';
 import Widget from '@/components/widget/Widget.vue';
 import { accountAddress, accounts } from '@unitFixtures/accounts';
 
@@ -158,7 +157,7 @@ describe('Widget', () => {
       accountsModule.actions.getAccountBalance.mockRejectedValueOnce();
       store.state.widget.settings.activeAccount = accounts[0].address;
 
-      expect(wrapper.vm.balance).toBe('0');
+      expect(wrapper.vm.balance).toBe(null);
     });
   });
 });

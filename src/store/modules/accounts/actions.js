@@ -1,4 +1,5 @@
 import get from 'lodash/get';
+import pick from 'lodash/pick';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
@@ -8,6 +9,7 @@ import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 import {
   accountChannel,
@@ -15,7 +17,7 @@ import {
   permissionChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
-import { ORIGIN_HOST } from '@/constants';
+import { METHODS, ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -206,14 +208,18 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
     await dispatch('defineSettings');
 
     const { settings } = state;
+    const settingsToSend = {
+      activeAccount: settings.lastActiveAccount,
+      activeNet: settings.net,
+    };
     const answer = Answer.createOk({
       type: 'update',
-      settings: {
-        activeAccount: settings.lastActiveAccount,
-        activeNet: settings.net,
-      },
+      settings: settingsToSend,
     });
 
+    commit('setBalance', null);
+
+    bridgeMessenger.send(METHODS.CHANGE_SETTINGS_REQUEST, settingsToSend);
     accountChannel.put(answer);
   } catch (err) {
     throw new Error('Something went wrong, try again later');
@@ -403,13 +409,31 @@ const defineAuthStatus = async ({ commit }) => {
   return status;
 };
 
-const getAccountBalance = async ({ state }) => {
+const getAccountBalance = async (ctx, { address, net }) => {
   const { balance } = await cryptoDataService.getAccountBalance({
-    network: state.settings.currentNet,
-    address: state.settings.currentAccount,
+    network: net,
+    address,
   });
 
   return balance;
+};
+
+const subscribeOnBalanceUpdates = ({ commit, dispatch }) => {
+  setInterval(async () => {
+    const settings = settingsService.getLocalSettings();
+    const address = get(settings, 'lastActiveAccount');
+    const net = get(settings, 'net', 1);
+
+    if (!address) return;
+
+    try {
+      const balance = await dispatch('getAccountBalance', { address, net });
+
+      commit('setBalance', balance);
+    } catch (err) {
+      commit('setBalance', null);
+    }
+  }, 1500);
 };
 
 export default {
@@ -444,4 +468,5 @@ export default {
   setupDemoData,
   getConsentDetails,
   getAccountBalance,
+  subscribeOnBalanceUpdates,
 };

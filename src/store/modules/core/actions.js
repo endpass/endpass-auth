@@ -57,9 +57,6 @@ const subscribeOnBroadcasting = ({ commit, dispatch }) => {
       }),
     );
   });
-  bridgeMessenger.subscribe(METHODS.CHANGE_SETTINGS_RESPONSE, payload => {
-    commit('setWidgetSettings', payload);
-  });
 };
 
 const logout = async ({ commit }) => {
@@ -69,8 +66,8 @@ const logout = async ({ commit }) => {
 
   commit('changeLoadingStatus', false);
 
-  if (res.err) {
-    throw new Error(res.err);
+  if (res.error) {
+    throw new Error(res.error);
   }
 };
 
@@ -84,8 +81,8 @@ const changeAccount = async ({ commit }, address) => {
     },
   );
 
-  if (res.err) {
-    throw new Error(res.err);
+  if (res.error) {
+    throw new Error(res.error);
   }
 
   commit('changeLoadingStatus', false);

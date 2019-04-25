@@ -35,14 +35,6 @@ const unmountWidget = () => {
   bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
 };
 
-const getWidgetSettings = async ({ commit }) => {
-  const settings = await bridgeMessenger.sendAndWaitResponse(
-    METHODS.WIDGET_GET_SETTING,
-  );
-
-  commit('setWidgetSettings', settings);
-};
-
 const changeWidgetAccount = async (ctx, address) => {
   const newSettings = await bridgeMessenger.sendAndWaitResponse(
     METHODS.WIDGET_CHANGE_ACCOUNT,
@@ -63,7 +55,6 @@ export default {
   openAccounts,
   closeAccounts,
   fitWidget,
-  getWidgetSettings,
   changeWidgetAccount,
   unmountWidget,
 };
