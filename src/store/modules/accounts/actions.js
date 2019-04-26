@@ -439,6 +439,18 @@ const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
   handler();
 };
 
+const subscribeOnSettingsUpdates = ({ dispatch }) => {
+  bridgeMessenger.subscribe(
+    METHODS.CHANGE_SETTINGS_RESPONSE,
+    ({ activeAccount, activeNet }) => {
+      dispatch('updateSettings', {
+        lastActiveAccount: activeAccount,
+        net: activeNet,
+      });
+    },
+  );
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -472,4 +484,5 @@ export default {
   getConsentDetails,
   getAccountBalance,
   subscribeOnBalanceUpdates,
+  subscribeOnSettingsUpdates,
 };

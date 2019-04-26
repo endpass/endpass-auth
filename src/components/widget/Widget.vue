@@ -20,10 +20,7 @@
 
 <script>
 import get from 'lodash/get';
-import pick from 'lodash/pick';
 import { mapActions, mapState } from 'vuex';
-import { METHODS } from '@/constants';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
@@ -45,21 +42,11 @@ export default {
     }),
 
     currentNet() {
-      return get(this.widgetSettings, 'net', 1);
+      return get(this.settings, 'net', 1);
     },
 
     currentAccount() {
-      return get(this.widgetSettings, 'lastActiveAccount', null);
-    },
-  },
-
-  watch: {
-    settings: {
-      handler(value) {
-        if (value && !this.widgetSettings) {
-          this.widgetSettings = pick(value, ['lastActiveAccount', 'net']);
-        }
-      },
+      return get(this.settings, 'lastActiveAccount', null);
     },
   },
 
@@ -73,20 +60,9 @@ export default {
       'defineOnlyV3Accounts',
       'defineSettings',
       'subscribeOnBalanceUpdates',
+      'subscribeOnSettingsUpdates',
       'updateSettings',
     ]),
-
-    createSettingsSubscribtion() {
-      bridgeMessenger.subscribe(
-        METHODS.CHANGE_SETTINGS_RESPONSE,
-        ({ activeAccount, activeNet }) => {
-          this.widgetSettings = {
-            lastActiveAccount: activeAccount,
-            net: activeNet,
-          };
-        },
-      );
-    },
 
     handleWidgetToggle() {
       if (this.isCollapsed) {
@@ -129,7 +105,7 @@ export default {
   async mounted() {
     await this.defineSettings();
     await this.defineOnlyV3Accounts();
-    this.createSettingsSubscribtion();
+    this.subscribeOnSettingsUpdates();
     this.subscribeOnBalanceUpdates();
   },
 
