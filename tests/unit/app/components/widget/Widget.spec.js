@@ -37,6 +37,7 @@ describe('Widget', () => {
         defineOnlyV3Accounts: jest.fn(),
         updateSettings: jest.fn(),
         subscribeOnBalanceUpdates: jest.fn(),
+        subscribeOnSettingsUpdates: jest.fn(),
       },
     };
     widgetModule = {
@@ -74,26 +75,19 @@ describe('Widget', () => {
     it('should correctly render', async () => {
       expect.assertions(1);
 
-      wrapper.setData({
-        widgetSettings: {
-          lastActiveAccount: accountAddress,
-          net: 1,
-        },
-      });
-
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
-    beforeEach(() => {
-      jest.spyOn(wrapper.vm, 'createSettingsSubscribtion');
-    });
+    it('should request settings, accounts and subscribe on mount', async () => {
+      expect.assertions(4);
 
-    it('should request settings, accounts and sub on mount', () => {
-      expect(wrapper.vm.createSettingsSubscribtion).toBeCalled();
+      await global.flushPromises();
+
       expect(accountsModule.actions.defineSettings).toBeCalled();
       expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
+      expect(accountsModule.actions.subscribeOnSettingsUpdates).toBeCalled();
       expect(accountsModule.actions.subscribeOnBalanceUpdates).toBeCalled();
     });
 
@@ -135,17 +129,6 @@ describe('Widget', () => {
       wrapper.find('widget-content-stub').vm.$emit('logout');
 
       expect(coreModule.actions.logout).toBeCalled();
-    });
-
-    it('should update widget settings on global settings changes', () => {
-      const settings = {
-        lastActiveAccount: accountAddress,
-        net: 1,
-      };
-
-      accountsModule.state.settings = settings;
-
-      expect(wrapper.vm.widgetSettings).toEqual(settings);
     });
   });
 });
