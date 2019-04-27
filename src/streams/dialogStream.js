@@ -6,7 +6,9 @@ import {
   signChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
+import settingsService from '@/service/settings';
 import identityService from '@/service/identity';
+import { Answer } from '@/class';
 import Queue from './Queue';
 import middleware from './middleware';
 import { initDialogResizeStream } from './dialogResize';
@@ -63,6 +65,17 @@ function initDialogStream() {
     [METHODS.LOGOUT]: {
       payloadHandler() {
         return identityService.logout();
+      },
+    },
+    [METHODS.LOGOUT_RESPONSE]: {
+      payloadHandler() {
+        store.commit('logout');
+        accountChannel.put(
+          Answer.createOk({
+            type: 'logout',
+          }),
+        );
+        settingsService.clearLocalSettings();
       },
     },
   };

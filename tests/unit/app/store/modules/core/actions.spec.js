@@ -8,11 +8,12 @@ jest.mock('@/class/singleton/bridgeMessenger', () => ({
 }));
 jest.mock('@/streams', () => ({
   initDialogStream: jest.fn(),
+  initWidgetStream: jest.fn(),
 }));
 
 /* eslint-disable */
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { initDialogStream } from '@/streams';
+import { initDialogStream, initWidgetStream } from '@/streams';
 import { address } from '@unitFixtures/accounts';
 /* eslint-enable */
 
@@ -33,7 +34,7 @@ describe('core actions', () => {
 
   describe('init', () => {
     it('should requests accounts and change init status', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       await coreActions.init({
         commit,
@@ -42,7 +43,62 @@ describe('core actions', () => {
 
       expect(dispatch).toBeCalledWith('defineAuthStatus');
       expect(dispatch).toBeCalledWith('startBridge');
+    });
+  });
+
+  describe('initDialog', () => {
+    it('should init dialog stream', async () => {
+      expect.assertions(2);
+
+      const state = {
+        inited: false,
+      };
+
+      await coreActions.initDialog({ state, commit });
+
+      expect(initDialogStream).toBeCalled();
       expect(commit).toBeCalledWith('changeInitStatus', true);
+    });
+
+    it('should not do anything if inited is truthy', async () => {
+      expect.assertions(2);
+
+      const state = {
+        inited: true,
+      };
+
+      await coreActions.initDialog({ state, commit });
+
+      expect(initDialogStream).not.toBeCalled();
+      expect(commit).not.toBeCalled();
+    });
+  });
+
+  describe('initWidget', () => {
+    it('should init widget stream', async () => {
+      expect.assertions(2);
+
+      const state = {
+        inited: false,
+      };
+
+      await coreActions.initWidget({ state, commit });
+
+      expect(initWidgetStream).toBeCalled();
+      expect(commit).toBeCalledWith('changeInitStatus', true);
+    });
+
+    it('should not do anything if inited is truthy', async () => {
+      expect.assertions(2);
+
+      const state = {
+        inited: true,
+      };
+
+      await coreActions.initWidget({ state, commit });
+
+      expect(initWidgetStream).not.toBeCalled();
+      expect(commit).not.toBeCalled();
     });
   });
 
@@ -55,12 +111,11 @@ describe('core actions', () => {
     });
 
     it('should create broadcast subscribtion and sent ready message to the bridge', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       await coreActions.startBridge({ dispatch, commit, getters });
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.READY_STATE_BRIDGE);
-      expect(dispatch).toBeCalledWith('subscribeOnBroadcasting');
     });
 
     it('should change indentity mode if it is defined', async () => {
@@ -69,14 +124,6 @@ describe('core actions', () => {
       await coreActions.startBridge({ dispatch, commit, getters });
 
       expect(commit).toBeCalledWith('changeIdentityMode', true);
-    });
-
-    it('should apply dialog stream if init message have return source proprty equals to dialog', async () => {
-      expect.assertions(1);
-
-      await coreActions.startBridge({ dispatch, commit, getters });
-
-      expect(initDialogStream).toBeCalled();
     });
 
     it('should not do anything if called is not in dialog', async () => {
@@ -138,19 +185,6 @@ describe('core actions', () => {
       });
 
       expect(coreActions.changeAccount({ commit })).rejects.toThrow('foo');
-    });
-  });
-
-  describe('subscribeOnBroadcasting', () => {
-    it('should subscribe on broadcast messages', async () => {
-      expect.assertions(1);
-
-      await coreActions.subscribeOnBroadcasting({ commit, dispatch });
-
-      expect(bridgeMessenger.subscribe).toHaveBeenCalledWith(
-        METHODS.LOGOUT_RESPONSE,
-        expect.any(Function),
-      );
     });
   });
 });

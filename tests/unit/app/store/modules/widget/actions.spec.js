@@ -1,7 +1,5 @@
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import widgetActions from '@/store/modules/widget/actions';
-import identityService from '@/service/identity';
-import { address } from '@unitFixtures/accounts';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   sendAndWaitResponse: jest.fn(),
@@ -13,13 +11,11 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 describe('widget actions', () => {
   let dispatch;
-  let commit;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     dispatch = jest.fn();
-    commit = jest.fn();
   });
 
   describe('openWidget', () => {
@@ -89,32 +85,6 @@ describe('widget actions', () => {
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_FIT, {
         height: 500,
-      });
-    });
-  });
-
-  describe('changeWidgetAccount', () => {
-    it('should send request for account change to the bridge and broadcase result', async () => {
-      expect.assertions(2);
-
-      const settings = {
-        activeAccount: address,
-        activeNet: 1,
-      };
-
-      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce(settings);
-
-      await widgetActions.changeWidgetAccount(null, address);
-
-      expect(bridgeMessenger.sendAndWaitResponse).toBeCalledWith(
-        METHODS.WIDGET_CHANGE_ACCOUNT,
-        {
-          address,
-        },
-      );
-      expect(bridgeMessenger.send).toBeCalledWith(METHODS.BROADCAST, {
-        type: 'settings',
-        data: settings,
       });
     });
   });

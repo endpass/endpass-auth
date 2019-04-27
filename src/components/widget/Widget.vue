@@ -105,7 +105,6 @@ export default {
   async mounted() {
     await this.defineSettings();
     await this.defineOnlyV3Accounts();
-    this.subscribeOnSettingsUpdates();
     this.subscribeOnBalanceUpdates();
   },
 
