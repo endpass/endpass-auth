@@ -1,22 +1,30 @@
-import { METHODS, DIRECTION } from '@/constants';
+import { METHODS } from '@/constants';
 
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { accountChannel } from '@/class/singleton/channels';
-import settingsService from '@/service/settings';
-import { Answer } from '@/class';
-import { initDialogStream } from '@/streams';
+import { initDialogStream, initWidgetStream } from '@/streams';
 // TODO: move it to the streams mehtods
 import dialogClose from '@/streams/dialogClose';
 
-const init = async ({ dispatch, commit }) => {
+const init = async ({ dispatch }) => {
   try {
     await dispatch('defineAuthStatus');
     await dispatch('startBridge');
     // eslint-disable-next-line
-  } catch (err) {
-  } finally {
-    commit('changeInitStatus', true);
-  }
+  } catch (err) {}
+};
+
+const initDialog = async ({ state, commit }) => {
+  if (state.inited) return;
+
+  initDialogStream();
+  commit('changeInitStatus', true);
+};
+
+const initWidget = async ({ state, commit }) => {
+  if (state.inited) return;
+
+  initWidgetStream();
+  commit('changeInitStatus', true);
 };
 
 const startBridge = async ({ dispatch, commit, getters }) => {
@@ -25,12 +33,7 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   const {
     isIdentityMode,
     demoData,
-    source,
   } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
-
-  if (source === DIRECTION.AUTH) {
-    initDialogStream();
-  }
 
   if (isIdentityMode !== undefined) {
     commit('changeIdentityMode', isIdentityMode);
@@ -41,22 +44,6 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   }
 
   bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
-
-  dispatch('subscribeOnBroadcasting');
-};
-
-const subscribeOnBroadcasting = ({ commit, dispatch }) => {
-  bridgeMessenger.subscribe(METHODS.LOGOUT_RESPONSE, () => {
-    commit('logout');
-    dispatch('unmountWidget');
-
-    settingsService.clearLocalSettings();
-    accountChannel.put(
-      Answer.createOk({
-        type: 'logout',
-      }),
-    );
-  });
 };
 
 const logout = async ({ commit }) => {
@@ -94,9 +81,10 @@ const dialogCloseWrap = () => {
 
 export default {
   init,
+  initDialog,
+  initWidget,
   startBridge,
   logout,
   changeAccount,
-  subscribeOnBroadcasting,
   dialogClose: dialogCloseWrap,
 };

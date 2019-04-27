@@ -15,13 +15,13 @@ import Widget from '@/components/widget/Widget';
 import Error from '@/components/screens/public/Error';
 
 const routes = [
-  /**
-   * Public routes
-   */
   {
     path: '/public/widget',
     name: 'Widget',
     component: Widget,
+    meta: {
+      isWidget: true,
+    },
   },
   {
     path: '/public/auth',
@@ -33,9 +33,6 @@ const routes = [
     name: 'LoginProvider',
     component: LoginProvider,
   },
-  /**
-   * Non-public
-   */
   {
     path: '/public/consent',
     name: 'ConsentProvider',
@@ -50,6 +47,9 @@ const routes = [
     path: '/bridge',
     name: 'Bridge',
     component: Bridge,
+    meta: {
+      isDialog: true,
+    },
   },
   {
     path: '/loader',
