@@ -2,6 +2,7 @@
 
 exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `
 <v-frame-stub closable="true">
-  <password-form-stub></password-form-stub>
+  <!---->
+  <sign-password-stub requesterurl="" message=""></sign-password-stub>
 </v-frame-stub>
 `;

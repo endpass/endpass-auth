@@ -1,8 +1,12 @@
 <template>
   <v-frame>
-    <password-form
+    <message v-if="!isReady" :error="true" data-test="error-message">
+      You should provide login_challenge param in url, add it and try again!
+    </message>
+    <sign-password
+      v-if="isReady"
+      :is-loading="isLoading"
       :error="error"
-      :is-loading="loading"
       @submit="handlePasswordSubmit"
     />
   </v-frame>
@@ -14,7 +18,8 @@
 import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import VFrame from '@/components/common/VFrame';
-import PasswordForm from '@/components/forms/Password';
+import Message from '@/components/common/Message';
+import SignPassword from '@/components/forms/SignPassword';
 
 export default {
   name: 'LoginProvider',
@@ -22,11 +27,12 @@ export default {
   data: () => ({
     queryParamsMap: {},
     error: null,
+    isReady: true,
   }),
 
   computed: {
     ...mapState({
-      loading: state => state.core.loading,
+      isLoading: state => state.core.loading,
     }),
     ...mapGetters(['isAuthorized']),
   },
@@ -60,8 +66,7 @@ export default {
     this.queryParamsMap = query;
 
     if (!this.queryParamsMap.login_challenge) {
-      this.error =
-        'You should provide login_challenge param in url, add it and try again!';
+      this.isReady = false;
       return;
     }
 
@@ -73,8 +78,9 @@ export default {
   },
 
   components: {
+    SignPassword,
+    Message,
     VFrame,
-    PasswordForm,
   },
 };
 </script>
