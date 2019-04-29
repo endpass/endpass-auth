@@ -1,3 +1,5 @@
+import { parseUrl } from '@/util/dom';
+
 export const METHODS = {
   SIGN: 'SIGN',
   ACCOUNT: 'ACCOUNT',
@@ -41,10 +43,6 @@ export const DIRECTION = Object.freeze({
   CONNECT: 'connect',
 });
 
-export const ORIGIN_HOST = (() => {
-  const parser = document.createElement('a');
-  parser.href = document.referrer;
-  return parser.origin;
-})();
+export const ORIGIN_HOST = parseUrl(document.referrer).origin;
 
 export const WIDGET_RESIZE_DURATION = 300;
