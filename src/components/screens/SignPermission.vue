@@ -1,12 +1,13 @@
 <template>
-  <screen @close="handleWindowClose">
-    <v-frame :loading="false" :closable="isDialog" @close="handleSignCancel">
-      <sign-form
-        :loading="isLoading"
+  <screen @close="handleCancel">
+    <v-frame :loading="false" :closable="isDialog" @close="handleCancel">
+      <sign-password
+        :with-logout-btn="true"
+        :requester-url="ORIGIN_HOST"
+        :is-loading="isLoading"
         :error="error"
-        :closable="isDialog"
-        @cancel="handleSignCancel"
         @submit="handleSignSubmit"
+        @cancel="handleCancel"
       />
     </v-frame>
   </screen>
@@ -16,7 +17,14 @@
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
-import SignForm from '@/components/forms/SignHost';
+import SignPassword from '@/components/forms/SignPassword';
+
+import { ORIGIN_HOST } from '@/constants';
+
+const FORMS = {
+  SIGN: 'SIGN',
+  CREATE_ACCOUNT: 'CREATE_ACCOUNT',
+};
 
 export default {
   name: 'SignPermission',
@@ -24,6 +32,9 @@ export default {
   data: () => ({
     error: null,
     isLoading: false,
+    FORMS,
+    ORIGIN_HOST,
+    activeForm: FORMS.SIGN,
   }),
 
   computed: {
@@ -34,42 +45,32 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'signPermission',
-      'cancelSignPermission',
-      'cancelRequest',
-      'dialogClose',
-    ]),
+    ...mapActions(['signPermission', 'cancelSignPermission', 'dialogClose']),
 
-    async handleSignSubmit(res) {
+    async handleSignSubmit(password) {
       this.isLoading = true;
       try {
         await this.signPermission({
-          password: res.password,
+          password,
         });
 
         this.error = null;
       } catch (err) {
-        this.error = err.message;
+        this.error = 'No permission';
       } finally {
         this.isLoading = false;
       }
     },
 
-    handleSignCancel() {
-      this.cancelSignPermission();
-      this.dialogClose();
-    },
-
-    handleWindowClose() {
+    handleCancel() {
       this.cancelSignPermission();
       this.dialogClose();
     },
   },
 
   components: {
+    SignPassword,
     Screen,
-    SignForm,
     VFrame,
   },
 };

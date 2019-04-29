@@ -3,6 +3,10 @@ import { ORIGIN_HOST } from '@/constants';
 
 const config = {
   withCredentials: true,
+};
+
+const configWithHeaders = {
+  ...config,
   headers: {
     'x-connect-lib-host': ORIGIN_HOST,
   },
@@ -13,9 +17,11 @@ function createAnswer(request) {
 }
 
 const request = {
-  get: url => createAnswer(axios.get(url, config)),
+  get: url => createAnswer(axios.get(url, configWithHeaders)),
 
-  post: (url, body) => createAnswer(axios.post(url, body, config)),
+  getSkipPermission: url => createAnswer(axios.get(url, config)),
+
+  post: (url, body) => createAnswer(axios.post(url, body, configWithHeaders)),
 };
 
 export default request;

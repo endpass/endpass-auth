@@ -98,7 +98,7 @@ const authWithHydra = async (
       signature,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw new Error('Password is incorrect');
   } finally {
     commit('changeLoadingStatus', false);
@@ -227,6 +227,8 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
   }
 };
 
+const checkAccountExists = () => identityService.checkAccountExist();
+
 const getAccounts = async ({ commit }) => {
   // TODO: check `getAccounts` usages
   try {
@@ -297,7 +299,7 @@ const awaitAccountCreate = async ({ commit }) => {
 };
 
 const openCreateAccountPage = async () => {
-  window.open(ENV.VUE_APP_WALLET_URL);
+  window.open(`${ENV.VUE_APP_WALLET_URL}?closeAfterCreateWallet=true`);
 };
 
 const awaitLogoutConfirm = async ({ commit }) => {
@@ -378,8 +380,9 @@ const setupDemoData = async ({ commit }, demoData) => {
 
 const signPermission = async (store, { password }) => {
   const res = await identityService.getAuthPermission();
+
   if (res.success === false) {
-    throw new Error('No permission');
+    throw new Error(res.message);
   }
   const signature = await signerService.getSignedRequest({
     v3KeyStore: res.keystore,
@@ -444,6 +447,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithHydra,
+  checkAccountExists,
   grantPermissionsWithHydra,
   cancelAuth,
   confirmAuth,

@@ -90,7 +90,8 @@ describe('LoginProvider', () => {
         },
       });
 
-      expect(wrapper.vm.error).not.toBeNull();
+      expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
+      expect(wrapper.find('sign-password-stub').exists()).toBe(false);
       expect($router.replace).not.toBeCalled();
     });
 
@@ -138,7 +139,7 @@ describe('LoginProvider', () => {
             login_challenge: challengeId,
           },
         });
-        wrapper.find('password-form-stub').vm.$emit('submit', password);
+        wrapper.find('sign-password-stub').vm.$emit('submit', password);
 
         expect(accountsModule.actions.authWithHydra).toBeCalledWith(
           expect.any(Object),
@@ -166,7 +167,7 @@ describe('LoginProvider', () => {
             challengeId,
           },
         });
-        wrapper.find('password-form-stub').vm.$emit('submit', password);
+        wrapper.find('sign-password-stub').vm.$emit('submit', password);
 
         await wrapper.vm.$nextTick();
 

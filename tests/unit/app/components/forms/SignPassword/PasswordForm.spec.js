@@ -1,7 +1,7 @@
 import { shallowMount } from '@vue/test-utils';
-import PasswordForm from '@/components/forms/Password';
+import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
 
-describe('Password', () => {
+describe('PasswordForm', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -26,25 +26,25 @@ describe('Password', () => {
       const submitButton = wrapper.find('[data-test=submit-button]');
 
       wrapper.setProps({
-        loading: true,
+        isLoading: true,
       });
 
       expect(submitButton.text()).toBe('Loading...');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
       });
 
-      expect(submitButton.text()).toBe('Submit');
+      expect(submitButton.text()).toBe('Apply');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
       });
       wrapper.setData({ password: 'foo' });
 
-      expect(submitButton.text()).toBe('Submit');
+      expect(submitButton.text()).toBe('Apply');
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
   });

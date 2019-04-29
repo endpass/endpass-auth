@@ -13,6 +13,9 @@ export const setSettings = settings =>
 export const getOtpSettings = () =>
   request.get(`${identityBaseUrl}/settings/otp`);
 
+export const getAccountsSkipPermission = () =>
+  request.getSkipPermission(`${identityBaseUrl}/accounts`);
+
 export const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
 
 export const getAccount = address =>
@@ -28,6 +31,15 @@ export const getAccountWithInfo = async address => {
   ]);
 
   return { ...v3keystore, info };
+};
+
+export const checkAccountExist = async () => {
+  let res = false;
+  try {
+    const list = await getAccountsSkipPermission();
+    res = list.length !== 0;
+  } catch (e) {}
+  return res;
 };
 
 export const auth = (email, redirectUrl) => {
@@ -123,7 +135,7 @@ export const awaitAccountCreate = () =>
     /* eslint-disable-next-line */
     const handler = async function() {
       try {
-        const res = await getAccounts();
+        const res = await getAccountsSkipPermission();
 
         if (res.filter(address => !/^xpub/.test(address)).length > 0) {
           return resolve(res);
@@ -191,6 +203,7 @@ export default {
   getAuthPermission,
   setAuthPermission,
   setSettings,
+  checkAccountExist,
   auth,
   authWithGoogle,
   authWithGitHub,

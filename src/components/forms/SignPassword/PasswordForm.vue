@@ -4,27 +4,42 @@
       Please apply connect to
       <a :href="requesterUrl" data-test="requester-url">{{ requesterUrl }}</a>
     </form-field>
+    <form-field v-if="message">
+      <message>
+        {{ message }}
+      </message>
+    </form-field>
     <form-field v-if="error">
       <message :error="true" data-test="error-message">{{ error }}</message>
     </form-field>
-    <form-field label="Your account password:">
+    <form-field label="Your wallet account password:">
       <v-input
         v-model="password"
         :autofocus="true"
+        :required="true"
         type="password"
+        name="password"
         placeholder="Enter your password..."
       />
     </form-field>
     <form-controls>
       <v-button
-        :disabled="loading || !password"
+        :disabled="isLoading || !isFormValid"
         :submit="true"
         type="primary"
         data-test="submit-button"
         >{{ primaryButtonLabel }}</v-button
       >
       <v-button
-        :disabled="!closable || loading"
+        v-if="withLogoutBtn"
+        :disabled="isLoading"
+        type="danger"
+        data-test="logout-button"
+        @click="emitLogout"
+        >Logout</v-button
+      >
+      <v-button
+        :disabled="!closable || isLoading"
         data-test="cancel-button"
         @click="emitCancel"
         >Close</v-button
@@ -42,15 +57,18 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
-import { ORIGIN_HOST } from '@/constants';
-
 export default {
-  name: 'SignHost',
+  name: 'PasswordForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
+    },
+
+    message: {
+      type: String,
+      default: '',
     },
 
     error: {
@@ -62,6 +80,16 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    withLogoutBtn: {
+      type: Boolean,
+      default: false,
+    },
+
+    requesterUrl: {
+      type: String,
+      default: '',
+    },
   },
 
   data: () => ({
@@ -69,26 +97,28 @@ export default {
   }),
 
   computed: {
-    requesterUrl() {
-      return ORIGIN_HOST;
+    primaryButtonLabel() {
+      return !this.isLoading ? 'Apply' : 'Loading...';
     },
 
-    primaryButtonLabel() {
-      return !this.loading ? 'Sign' : 'Loading...';
+    isFormValid() {
+      return !!this.password;
     },
   },
 
   methods: {
     emitSubmit() {
-      if (this.password) {
-        this.$emit('submit', {
-          password: this.password,
-        });
-      }
+      if (!this.isFormValid) return;
+
+      this.$emit('submit', this.password);
     },
 
     emitCancel() {
       this.$emit('cancel');
+    },
+
+    emitLogout() {
+      this.$emit('logout');
     },
   },
 
