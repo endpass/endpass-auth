@@ -76,7 +76,6 @@ select {
   background: #fff;
   position: relative;
   padding: 30px 15px 15px;
-  min-height: 100px;
   font-size: 1em;
   max-width: 100px;
   margin: 0 auto;

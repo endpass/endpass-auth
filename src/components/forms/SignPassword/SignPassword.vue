@@ -102,6 +102,7 @@ export default {
     this.isCheckingAccount = true;
 
     const isExist = await this.checkAccountExists();
+
     if (!isExist) {
       this.activeForm = FORMS.CREATE_ACCOUNT;
       await this.awaitAccountCreate();

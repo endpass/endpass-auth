@@ -15,6 +15,7 @@ import { mapMutations } from 'vuex';
 import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
+import { parseUrl } from '@/util/dom';
 
 export default {
   name: 'PublicAuth',
@@ -32,9 +33,7 @@ export default {
       if (redirect_url) {
         const fullPath = decodeURIComponent(redirect_url);
 
-        const parser = document.createElement('a');
-        parser.href = window.location;
-        const { origin } = parser;
+        const { origin } = parseUrl(window.location);
 
         const newPath = fullPath.replace(origin, '');
 
