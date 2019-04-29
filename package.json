@@ -23,12 +23,21 @@
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watchAll",
     "inspect": "vue-cli-service inspect > inspect.js",
-    "format": "prettier --write './src/**/*.{js,vue,json}' && eslint ./src/**/*.{js,vue} --fix",
+    "format:prettier:vue": "prettier --write '**/*.vue'",
+    "format:eslint": "eslint --ext .json,.js,.vue src/ --fix",
+    "format:prettier": "prettier --write '**/*.{js,json}'",
+    "format": "yarn format:prettier:vue && yarn format:eslint && yarn format:prettier",
     "commit": "git-cz"
   },
   "lint-staged": {
-    "./src/**/*.{js,vue,json}": [
+    "*.{js,json}": [
+      "eslint --fix",
       "prettier --write",
+      "git add"
+    ],
+    "*.vue": [
+      "prettier --write",
+      "eslint --fix",
       "git add"
     ]
   },
@@ -88,6 +97,7 @@
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-json": "^1.4.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-vue": "^4.7.1",
     "gh-pages": "^2.0.1",
