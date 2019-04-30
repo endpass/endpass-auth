@@ -1,7 +1,6 @@
-import { METHODS } from '@/constants';
-
+import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { initDialogStream, initWidgetStream } from '@/streams';
+import { initDialogStream, initWidgetStream, initCoreStream } from '@/streams';
 // TODO: move it to the streams mehtods
 import dialogClose from '@/streams/dialogClose';
 
@@ -43,10 +42,11 @@ const startBridge = async ({ dispatch, commit, getters }) => {
     await dispatch('setupDemoData', demoData);
   }
 
+  initCoreStream();
   bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
 };
 
-const logout = async ({ commit }) => {
+const logout = async ({ commit }, source = null) => {
   commit('changeLoadingStatus', true);
 
   const res = await bridgeMessenger.sendAndWaitResponse(METHODS.LOGOUT_REQUEST);
@@ -55,6 +55,13 @@ const logout = async ({ commit }) => {
 
   if (res.error) {
     throw new Error(res.error);
+  }
+
+  // TODO: fix that shame
+  if (source === DIRECTION.AUTH) {
+    bridgeMessenger.send(METHODS.DIALOG_CLOSE);
+  } else if (source === DIRECTION.WIDGET) {
+    bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
   }
 };
 

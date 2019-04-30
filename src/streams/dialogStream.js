@@ -7,7 +7,6 @@ import {
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
-import identityService from '@/service/identity';
 import { Answer } from '@/class';
 import Queue from './Queue';
 import middleware from './middleware';
@@ -62,11 +61,6 @@ function initDialogStream() {
         return store.dispatch('recoverMessage', payload);
       },
     },
-    [METHODS.LOGOUT]: {
-      payloadHandler() {
-        return identityService.logout();
-      },
-    },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
         store.commit('logout');
@@ -83,7 +77,6 @@ function initDialogStream() {
   bridgeMessenger.subscribe(async (payload, req) => {
     // routing by methods
     const { method } = req;
-
     const options = methodToOptions[method] || {};
 
     queueInst.handleRequest(options, payload, req);

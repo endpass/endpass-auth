@@ -1,29 +1,21 @@
-import store from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
+import identityService from '@/service/identity';
 import withPayloadHandler from './middleware/withPayloadHandler';
 import answerToRequest from './middleware/answerToRequest';
 import Queue from './Queue';
 
-function initWidgetStream() {
+function initCoreStream() {
   const queueInst = new Queue({
     middleware: [withPayloadHandler, answerToRequest],
   });
 
   const methodToOptions = {
-    [METHODS.LOGOUT_RESPONSE]: {
-      payloadHandler() {
-        store.commit('logout');
-        store.dispatch('unmountWidget');
-      },
-    },
-    [METHODS.CHANGE_SETTINGS_RESPONSE]: {
-      payloadHandler({ activeAccount, activeNet }) {
-        store.dispatch('setSettings', {
-          lastActiveAccount: activeAccount,
-          net: activeNet,
-        });
-        store.dispatch('defineSettings');
+    [METHODS.LOGOUT]: {
+      async payloadHandler() {
+        const res = await identityService.logout();
+
+        return res;
       },
     },
   };
@@ -38,4 +30,4 @@ function initWidgetStream() {
   });
 }
 
-export default initWidgetStream;
+export default initCoreStream;
