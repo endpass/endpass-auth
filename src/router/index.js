@@ -36,6 +36,10 @@ router.afterEach(async to => {
   if (isWidget) {
     await store.dispatch('initWidget');
   }
+
+  if (!isDialog && !isWidget) {
+    store.commit('changeInitStatus', true);
+  }
 });
 
 export default router;
