@@ -33,7 +33,7 @@ export default {
       if (redirect_url) {
         const fullPath = decodeURIComponent(redirect_url);
 
-        const { origin } = parseUrl(window.location);
+        const { origin } = parseUrl(fullPath);
 
         const newPath = fullPath.replace(origin, '');
 
