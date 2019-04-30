@@ -9,11 +9,12 @@ jest.mock('@/class/singleton/bridgeMessenger', () => ({
 jest.mock('@/streams', () => ({
   initDialogStream: jest.fn(),
   initWidgetStream: jest.fn(),
+  initCoreStream: jest.fn(),
 }));
 
 /* eslint-disable */
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { initDialogStream, initWidgetStream } from '@/streams';
+import { initDialogStream, initWidgetStream, initCoreStream } from '@/streams';
 import { address } from '@unitFixtures/accounts';
 /* eslint-enable */
 
@@ -139,9 +140,21 @@ describe('core actions', () => {
       expect(commit).not.toBeCalled();
       expect(initDialogStream).not.toBeCalled();
     });
+
+    it('should init core stream', async () => {
+      expect.assertions(1);
+
+      await coreActions.startBridge({ dispatch, commit, getters });
+
+      expect(initCoreStream).toBeCalled();
+    });
   });
 
   describe('logout', () => {
+    beforeEach(() => {
+      bridgeMessenger.sendAndWaitResponse = jest.fn().mockResolvedValue({});
+    });
+
     it('should send logout request', async () => {
       expect.assertions(3);
 
@@ -160,6 +173,30 @@ describe('core actions', () => {
       });
 
       expect(coreActions.logout({ commit })).rejects.toThrow('foo');
+    });
+
+    it('should close dialog if source equals to dialog', async () => {
+      expect.assertions(1);
+
+      await coreActions.logout({ commit }, DIRECTION.AUTH);
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+    });
+
+    it('should close widget if source equals to widget', async () => {
+      expect.assertions(1);
+
+      await coreActions.logout({ commit }, DIRECTION.WIDGET);
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_UNMOUNT);
+    });
+
+    it('should not close anything if source is empty', async () => {
+      expect.assertions(1);
+
+      await coreActions.logout({ commit });
+
+      expect(bridgeMessenger.send).not.toBeCalled();
     });
   });
 
