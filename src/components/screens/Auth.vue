@@ -1,6 +1,9 @@
 <template>
   <screen @close="handleWindowClose">
-    <composite-auth-form :closable="isDialog" @authorize="handleAuthorize" />
+    <composite-auth-form
+      :closable="isDialog"
+      @authorize="handleAuthorize"
+    />
   </screen>
 </template>
 

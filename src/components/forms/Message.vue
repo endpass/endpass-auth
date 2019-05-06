@@ -8,8 +8,7 @@
         :disabled="!closable"
         data-test="cancel-button"
         @click="emitCancel"
-        >Close</v-button
-      >
+      >Close</v-button>
     </form-controls>
   </div>
 </template>

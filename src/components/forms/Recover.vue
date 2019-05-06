@@ -6,7 +6,10 @@
       </message>
     </form-field>
     <form-field v-if="error">
-      <message :error="true" data-test="error-message">{{ error }}</message>
+      <message
+        :error="true"
+        data-test="error-message"
+      >{{ error }}</message>
     </form-field>
     <form-field>
       <v-input

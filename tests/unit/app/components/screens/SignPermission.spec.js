@@ -66,7 +66,6 @@ describe('SignPermission', () => {
     });
 
     describe('behavior', () => {
-
       it('should send sign request', async () => {
         expect.assertions(1);
 

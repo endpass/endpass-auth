@@ -1,6 +1,10 @@
 <template>
   <v-frame>
-    <message v-if="!isReady" :error="true" data-test="error-message">
+    <message
+      v-if="!isReady"
+      :error="true"
+      data-test="error-message"
+    >
       You should provide login_challenge param in url, add it and try again!
     </message>
     <sign-password

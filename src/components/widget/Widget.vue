@@ -1,5 +1,8 @@
 <template>
-  <div class="widget" ref="widget">
+  <div
+    ref="widget"
+    class="widget"
+  >
     <widget-header
       :balance="balance"
       :is-collapsed="isCollapsed"

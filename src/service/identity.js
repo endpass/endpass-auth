@@ -61,11 +61,10 @@ export const auth = (email, redirectUrl) => {
 export const getAuthPermission = () =>
   request.get(`${identityBaseUrl}/auth/permission`);
 
-export const setAuthPermission = signature => {
-  return request.post(`${identityBaseUrl}/auth/permission`, {
+export const setAuthPermission = signature =>
+  request.post(`${identityBaseUrl}/auth/permission`, {
     signature,
   });
-};
 
 export const otpAuth = (email, code) =>
   request
