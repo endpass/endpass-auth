@@ -1,8 +1,14 @@
 <template>
-  <form data-test="sign-form" @submit.prevent="emitSubmit">
+  <form
+    data-test="sign-form"
+    @submit.prevent="emitSubmit"
+  >
     <form-field v-if="requesterUrl">
       Please apply connect to
-      <a :href="requesterUrl" data-test="requester-url">{{ requesterUrl }}</a>
+      <a
+        :href="requesterUrl"
+        data-test="requester-url"
+      >{{ requesterUrl }}</a>
     </form-field>
     <form-field v-if="message">
       <message>
@@ -10,7 +16,10 @@
       </message>
     </form-field>
     <form-field v-if="error">
-      <message :error="true" data-test="error-message">{{ error }}</message>
+      <message
+        :error="true"
+        data-test="error-message"
+      >{{ error }}</message>
     </form-field>
     <form-field label="Your wallet account password:">
       <v-input
@@ -28,22 +37,19 @@
         :submit="true"
         type="primary"
         data-test="submit-button"
-        >{{ primaryButtonLabel }}</v-button
-      >
+      >{{ primaryButtonLabel }}</v-button>
       <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
         type="danger"
         data-test="logout-button"
         @click="emitLogout"
-        >Logout</v-button
-      >
+      >Logout</v-button>
       <v-button
         :disabled="!closable || isLoading"
         data-test="cancel-button"
         @click="emitCancel"
-        >Close</v-button
-      >
+      >Close</v-button>
     </form-controls>
   </form>
 </template>

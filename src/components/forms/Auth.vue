@@ -1,7 +1,13 @@
 <template>
-  <form data-test="auth-form" @submit.prevent="handleSubmit">
+  <form
+    data-test="auth-form"
+    @submit.prevent="handleSubmit"
+  >
     <form-field v-if="isServerMode && !isPublic">
-      <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
+      <server-mode-select
+        v-model="serverMode"
+        @confirm="handleSubmit"
+      />
     </form-field>
     <template v-if="isDefaultMode">
       <form-field>
@@ -10,7 +16,10 @@
         </message>
       </form-field>
       <form-field v-if="error">
-        <message :error="true" data-test="error-message">{{ error }}</message>
+        <message
+          :error="true"
+          data-test="error-message"
+        >{{ error }}</message>
       </form-field>
       <form-field>
         <div class="auth__fields-as-line">
@@ -28,8 +37,7 @@
             :submit="true"
             type="primary"
             data-test="submit-button"
-            >{{ primaryButtonLabel }}</v-button
-          >
+          >{{ primaryButtonLabel }}</v-button>
         </div>
       </form-field>
       <template>
@@ -43,13 +51,15 @@
       <form-controls>
         <v-checkbox v-model="isTermsAccepted">
           I accept the
-          <a href="https://endpass.com/terms/" target="_blank"
-            >Terms of Service</a
-          >
+          <a
+            href="https://endpass.com/terms/"
+            target="_blank"
+          >Terms of Service</a>
           and
-          <a href="https://endpass.com/privacy/" target="_blank"
-            >Privacy Policy</a
-          >.
+          <a
+            href="https://endpass.com/privacy/"
+            target="_blank"
+          >Privacy Policy</a>.
         </v-checkbox>
       </form-controls>
     </template>
@@ -118,7 +128,8 @@ export default {
     },
 
     isEmailValid() {
-      return /^[a-zA-Z._\-\+0-9]+@[a-z0-9]+\.[a-z]{2,}$/g.test(this.email);
+      // eslint-disable-next-line
+      return /^[a-zA-Z._\-\\+0-9]+@[a-z0-9]+\.[a-z]{2,}$/g.test(this.email);
     },
 
     isDefaultMode() {

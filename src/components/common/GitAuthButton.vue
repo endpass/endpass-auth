@@ -1,5 +1,9 @@
 <template>
-  <button :submit="false" class="github-button" @click="loginWithGithub">
+  <button
+    :submit="false"
+    class="github-button"
+    @click="loginWithGithub"
+  >
     <v-svg-icon
       class="github-button__icon"
       name="github"

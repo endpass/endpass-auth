@@ -12,10 +12,17 @@
         {{ togglerLabel }}
       </button>
     </section>
-    <p v-if="balance" class="widget-header-balace" data-test="balance-label">
+    <p
+      v-if="balance"
+      class="widget-header-balace"
+      data-test="balance-label"
+    >
       {{ formattedBalance }}
     </p>
-    <spinner v-else :size="24" />
+    <spinner
+      v-else
+      :size="24"
+    />
   </header>
 </template>
 

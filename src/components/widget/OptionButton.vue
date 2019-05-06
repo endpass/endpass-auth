@@ -11,7 +11,12 @@
       :style="{ transform: iconTransform }"
       class="option-button-icon"
     >
-      <v-svg-icon :name="icon" :fill="iconFill" width="12px" height="12px" />
+      <v-svg-icon
+        :name="icon"
+        :fill="iconFill"
+        width="12px"
+        height="12px"
+      />
     </div>
   </button>
 </template>

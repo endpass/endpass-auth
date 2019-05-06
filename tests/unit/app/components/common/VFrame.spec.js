@@ -38,7 +38,6 @@ describe('VFrame', () => {
 
     describe('close feature', () => {
       it('should emit close on click close button by default', () => {
-
         wrapper.find('[data-test=close-button]').vm.$emit('click');
 
         expect(wrapper.emitted().close).toBeTruthy();

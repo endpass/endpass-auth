@@ -13,9 +13,8 @@ export const login = async ({ signature, challengeId }) =>
       return res;
     });
 
-export const getConsentDetails = async consentChallenge => {
-  return request.get(`${identityBaseUrl}/oauth/consent/${consentChallenge}`);
-};
+export const getConsentDetails = async consentChallenge =>
+  request.get(`${identityBaseUrl}/oauth/consent/${consentChallenge}`);
 
 export const grantPermissions = async ({ consentChallenge, scopesList }) =>
   request

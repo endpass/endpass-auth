@@ -1,6 +1,10 @@
 <template>
   <div class="identicon">
-    <img :src="image" :alt="address" :title="address" />
+    <img
+      :src="image"
+      :alt="address"
+      :title="address"
+    >
   </div>
 </template>
 

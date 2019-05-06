@@ -106,13 +106,11 @@ const authWithHydra = async (
   return res;
 };
 
-const getConsentDetails = (ctx, consentChallenge) => {
-  return permissionsService.getConsentDetails(consentChallenge);
-};
+const getConsentDetails = (ctx, consentChallenge) =>
+  permissionsService.getConsentDetails(consentChallenge);
 
-const grantPermissionsWithHydra = (ctx, { consentChallenge, scopesList }) => {
-  return permissionsService.grantPermissions({ consentChallenge, scopesList });
-};
+const grantPermissionsWithHydra = (ctx, { consentChallenge, scopesList }) =>
+  permissionsService.grantPermissions({ consentChallenge, scopesList });
 
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
   commit('changeLoadingStatus', true);
@@ -152,7 +150,7 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
   }
 };
 
-const confirmAuth = ({}, serverMode) => {
+const confirmAuth = (ctx, serverMode) => {
   authChannel.put(Answer.createOk(serverMode));
 };
 

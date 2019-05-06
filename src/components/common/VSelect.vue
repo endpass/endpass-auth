@@ -1,6 +1,15 @@
 <template>
-  <select :value="value" :name="name" class="select" @change="emitInput">
-    <option v-for="item in items" :key="item.value" :value="item.value">
+  <select
+    :value="value"
+    :name="name"
+    class="select"
+    @change="emitInput"
+  >
+    <option
+      v-for="item in items"
+      :key="item.value"
+      :value="item.value"
+    >
       {{ item.label }}
     </option>
   </select>

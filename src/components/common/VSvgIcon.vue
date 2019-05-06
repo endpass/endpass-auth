@@ -8,7 +8,10 @@
     xmlns="http://www.w3.org/2000/svg"
   >
     <title v-if="title">{{ title }}</title>
-    <use :xlink:href="iconPath" xmlns:xlink="http://www.w3.org/1999/xlink" />
+    <use
+      :xlink:href="iconPath"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+    />
   </svg>
 </template>
 
@@ -41,6 +44,7 @@ export default {
   },
   computed: {
     iconPath() {
+      // eslint-disable-next-line
       const block = require(`@/assets/icons/${this.name}.svg`);
       const url = get(block, 'default.url', null);
 

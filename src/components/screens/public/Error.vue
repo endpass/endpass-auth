@@ -1,6 +1,9 @@
 <template>
   <v-frame>
-    <v-error :hint="errorHint" :description="errorDescription" />
+    <v-error
+      :hint="errorHint"
+      :description="errorDescription"
+    />
   </v-frame>
 </template>
 

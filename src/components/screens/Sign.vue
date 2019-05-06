@@ -1,6 +1,10 @@
 <template>
   <screen @close="handleWindowClose">
-    <v-frame :loading="!request" :closable="isDialog" @close="handleSignCancel">
+    <v-frame
+      :loading="!request"
+      :closable="isDialog"
+      @close="handleSignCancel"
+    >
       <sign-form
         :loading="loading"
         :request="request"

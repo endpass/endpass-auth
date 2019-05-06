@@ -1,5 +1,9 @@
 <template>
-  <v-frame :loading="!inited" :closable="closable" @close="handleAuthCancel">
+  <v-frame
+    :loading="!inited"
+    :closable="closable"
+    @close="handleAuthCancel"
+  >
     <create-account-form
       v-if="isAuthorized && isAccountsEmpty && !isPublic && !otpEmail"
       @request="handleAccountRequest"
@@ -166,6 +170,7 @@ export default {
         console.error(err);
         this.handleAuthError(err);
       }
+      return null;
     },
 
     handleAuthorizationDataChange() {
@@ -173,7 +178,6 @@ export default {
         isAuthorized,
         awaitAccountCreate,
         isAccountsEmpty,
-        confirmAuth,
         serverMode,
       } = this;
 
@@ -205,8 +209,7 @@ export default {
     },
 
     handleRecoverError(error) {
-      this.error =
-        (error && error.message) || 'Recover failed. Please, try again';
+      this.error = (error && error.message) || 'Recover failed. Please, try again';
     },
   },
 

@@ -4,7 +4,11 @@
       You have not any account. Create one and you will be logged in.
     </message>
     <form-controls>
-      <v-button type="primary" data-test="submit-button" @click="emitRequest">
+      <v-button
+        type="primary"
+        data-test="submit-button"
+        @click="emitRequest"
+      >
         Create account
       </v-button>
     </form-controls>

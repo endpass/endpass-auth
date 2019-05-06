@@ -23,8 +23,7 @@
         :fluid="true"
         type="primary"
         data-test="submit-button"
-        >{{ primaryButtonLabel }}</v-button
-      >
+      >{{ primaryButtonLabel }}</v-button>
     </form-controls>
   </form>
 </template>
@@ -71,7 +70,7 @@ export default {
         const parentKey = key.split(':').shift();
         const parent = map[parentKey] || this.createTreeLevel(parentKey);
 
-        map[parentKey] = parent;
+        Object.assign(map, { [parentKey]: parent });
 
         if (parentKey !== key) {
           parent.children[key] = this.createTreeLevel(key);
@@ -83,7 +82,7 @@ export default {
       this.valuesScopesMap = Object.keys(tree)
         .concat(scopesList)
         .reduce((map, key) => {
-          map[key] = true;
+          Object.assign(map, { [key]: true });
           return map;
         }, {});
       this.scopesTree = tree;

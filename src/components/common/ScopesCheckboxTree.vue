@@ -6,7 +6,7 @@
         :checked="valuesMap[level.key]"
         type="checkbox"
         @input="onChange(level, $event)"
-      />
+      >
       {{ level.title }}
     </label>
 
@@ -32,21 +32,15 @@ const ScopesCheckboxTree = {
   props: {
     children: {
       type: Object,
-      default: () => {
-        return {};
-      },
+      default: () => ({}),
     },
     valuesMap: {
       type: Object,
-      default: () => {
-        return {};
-      },
+      default: () => ({}),
     },
     level: {
       type: Object,
-      default: () => {
-        return {};
-      },
+      default: () => ({}),
     },
   },
 
@@ -62,7 +56,7 @@ const ScopesCheckboxTree = {
         .filter(key => key.indexOf(scope.key) === 0) // find all deep children with current level
         .reduce(
           (map, key) => {
-            map[key] = value;
+            Object.assign(map, { [key]: value });
             return map;
           },
           { ...this.valuesMap },

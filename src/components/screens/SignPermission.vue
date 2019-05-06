@@ -1,6 +1,10 @@
 <template>
   <screen @close="handleCancel">
-    <v-frame :loading="false" :closable="isDialog" @close="handleCancel">
+    <v-frame
+      :loading="false"
+      :closable="isDialog"
+      @close="handleCancel"
+    >
       <sign-password
         :with-logout-btn="true"
         :requester-url="ORIGIN_HOST"

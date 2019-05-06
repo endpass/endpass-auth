@@ -1,7 +1,10 @@
 <template>
   <accordion :is-collapsed="isCollapsed">
     <section class="widget-content">
-      <accordion :is-collapsed="isAccountsCollapsed" max-height="225px">
+      <accordion
+        :is-collapsed="isAccountsCollapsed"
+        max-height="225px"
+      >
         <option-button
           slot="control"
           :is-big="true"
