@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CompositeAuth render should correctly render CompositeAuth component 1`] = `
+<div>
+  <auth-form-stub inited="true"></auth-form-stub>
+</div>
+`;
+
+exports[`CompositeAuth render should render auth form by default 1`] = `
+<div>
+  <auth-form-stub inited="true"></auth-form-stub>
+</div>
+`;
+
+exports[`CompositeAuth render should render message form 1`] = `
+<div>
+  <message-form-stub message="" closable="true"></message-form-stub>
+</div>
+`;
+
+exports[`CompositeAuth render should render opt form 1`] = `
+<div>
+  <otp-block-form-stub></otp-block-form-stub>
+</div>
+`;

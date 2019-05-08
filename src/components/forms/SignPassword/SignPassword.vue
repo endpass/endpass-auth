@@ -13,7 +13,7 @@
       @logout="handleLogout"
     />
     <create-account-form
-      v-if="activeForm === FORMS.CREATE_ACCOUNT"
+      v-else-if="activeForm === FORMS.CREATE_ACCOUNT"
       @request="handleAccountRequest"
     />
   </div>
@@ -77,7 +77,7 @@ export default {
       'openCreateAccountPage',
       'logout',
       'checkAccountExists',
-      'awaitAccountCreate',
+      'waitAccountCreate',
     ]),
 
     handleAccountRequest() {
@@ -105,7 +105,7 @@ export default {
 
     if (!isExist) {
       this.activeForm = FORMS.CREATE_ACCOUNT;
-      await this.awaitAccountCreate();
+      await this.waitAccountCreate();
       this.activeForm = FORMS.SIGN;
     }
 

@@ -80,11 +80,6 @@ export default {
           this.queryParamsMap.consent_challenge,
         );
         this.scopesList = requested_scope;
-        // this.scopesList = [
-        //   'wallet:address:read',
-        //   'wallet:accounts:read',
-        //   'user:email:read',
-        // ];
       } catch (e) {
         this.setError('Something broken, when loading scopes');
       }

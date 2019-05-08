@@ -27,7 +27,7 @@ describe('SignPasswordForm', () => {
       actions: {
         openCreateAccountPage: jest.fn(),
         checkAccountExists: jest.fn(),
-        awaitAccountCreate: jest.fn(),
+        waitAccountCreate: jest.fn(),
         logout: jest.fn(),
       },
     };
@@ -70,7 +70,7 @@ describe('SignPasswordForm', () => {
 
       await global.flushPromises();
 
-      expect(accountsModule.actions.awaitAccountCreate).toBeCalled();
+      expect(accountsModule.actions.waitAccountCreate).toBeCalled();
       expect(wrapper.find('password-form-stub').exists()).toBe(true);
     });
 

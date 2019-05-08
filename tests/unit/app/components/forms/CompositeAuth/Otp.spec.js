@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Otp from '@/components/forms/Otp.vue';
+import Otp from '@/components/forms/CompositeAuth/Otp.vue';
 
 describe('Otp', () => {
   let wrapper;

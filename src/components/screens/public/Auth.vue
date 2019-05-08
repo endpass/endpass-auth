@@ -1,19 +1,26 @@
 <template>
   <screen>
-    <composite-auth-form
+    <v-frame
+      :loading="!inited"
       :closable="false"
-      :is-public="true"
-      @authorize="handleAuthorize"
-    />
+      @close="handleAuthCancel"
+    >
+      <composite-auth-form
+        :closable="false"
+        :is-public="true"
+        @authorize="handleAuthorize"
+      />
+    </v-frame>
   </screen>
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState, mapActions } from 'vuex';
 import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import { parseUrl } from '@/util/dom';
 
@@ -26,6 +33,10 @@ export default {
 
   methods: {
     ...mapMutations(['setAuthParams']),
+    ...mapState({
+      inited: state => state.core.inited,
+    }),
+    ...mapActions(['cancelAuth', 'dialogClose']),
 
     handleAuthorize() {
       const { redirect_url } = this.queryParamsMap;
@@ -46,6 +57,11 @@ export default {
         // this.$router.replace(redirectRoute);
       }
     },
+
+    handleAuthCancel() {
+      this.cancelAuth();
+      this.dialogClose();
+    },
   },
 
   mounted() {
@@ -62,6 +78,7 @@ export default {
 
   components: {
     Screen,
+    VFrame,
     CompositeAuthForm,
   },
 };

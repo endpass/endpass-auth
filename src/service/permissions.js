@@ -13,6 +13,20 @@ export const login = async ({ signature, challengeId }) =>
       return res;
     });
 
+export const getLoginDetails = async () => {
+  // TODO: await server api and move to new method
+
+  const [permissionRes, settings] = await Promise.all([
+    request.get(`${identityBaseUrl}/auth/permission`),
+    request.getSkipPermission(`${identityBaseUrl}/settings`),
+  ]);
+
+  return {
+    v3Keystore: permissionRes.keystore,
+    email: settings.email,
+  };
+};
+
 export const getConsentDetails = async consentChallenge =>
   request.get(`${identityBaseUrl}/oauth/consent/${consentChallenge}`);
 
@@ -31,4 +45,5 @@ export default {
   login,
   grantPermissions,
   getConsentDetails,
+  getLoginDetails,
 };

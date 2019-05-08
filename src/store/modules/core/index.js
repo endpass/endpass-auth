@@ -6,6 +6,7 @@ export const state = {
   loading: false,
   inited: false,
   isIdentityMode: false,
+  showCreateAccount: true,
 };
 
 export default {

@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils';
-import Message from '@/components/forms/Message.vue';
+import Message from '@/components/forms/CompositeAuth/Message.vue';
 
 describe('Message', () => {
   describe('render', () => {

@@ -10,8 +10,13 @@ const changeIdentityMode = (state, status) => {
   state.isIdentityMode = status;
 };
 
+const changeShowCreateAccount = (state, status) => {
+  state.showCreateAccount = status;
+};
+
 export default {
   changeInitStatus,
   changeLoadingStatus,
   changeIdentityMode,
+  changeShowCreateAccount,
 };

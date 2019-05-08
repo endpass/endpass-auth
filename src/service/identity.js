@@ -113,23 +113,7 @@ export const getAuthStatus = async () => {
   return res;
 };
 
-export const awaitLogoutConfirm = () =>
-  new Promise(resolve => {
-    /* eslint-disable-next-line */
-    const handler = async function() {
-      try {
-        await getAccounts();
-
-        createTimeout(handler);
-      } catch (err) {
-        return resolve();
-      }
-    };
-
-    createTimeout(handler);
-  });
-
-export const awaitAccountCreate = () =>
+export const waitAccountCreate = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
     const handler = async function() {
@@ -149,7 +133,7 @@ export const awaitAccountCreate = () =>
     createTimeout(handler);
   });
 
-export const awaitAuthConfirm = () =>
+export const waitLogin = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
     const handler = async function() {
@@ -208,9 +192,8 @@ export default {
   authWithGitHub,
   otpAuth,
   logout,
-  awaitLogoutConfirm,
-  awaitAccountCreate,
-  awaitAuthConfirm,
+  waitAccountCreate,
+  waitLogin,
   getRecoveryIdentifier,
   recover,
 };

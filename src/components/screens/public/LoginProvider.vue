@@ -20,7 +20,7 @@
 /* eslint-disable camelcase */
 
 import get from 'lodash/get';
-import { mapActions, mapState, mapGetters } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import SignPassword from '@/components/forms/SignPassword';
@@ -37,8 +37,8 @@ export default {
   computed: {
     ...mapState({
       isLoading: state => state.core.loading,
+      isLogin: state => state.accounts.isLogin,
     }),
-    ...mapGetters(['isAuthorized']),
   },
 
   methods: {
@@ -74,7 +74,7 @@ export default {
       return;
     }
 
-    if (!this.isAuthorized) {
+    if (!this.isLogin) {
       this.$router.replace(
         `/public/auth?redirect_url=${encodeURI(href)}&place=login`,
       );

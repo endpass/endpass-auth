@@ -25,7 +25,7 @@ describe('GitAuthButton', () => {
     let store;
     const actions = {
       authWithGitHub: jest.fn(),
-      awaitAuthConfirm: jest.fn(),
+      waitLogin: jest.fn(),
     };
     beforeEach(() => {
       store = new Vuex.Store({
@@ -64,7 +64,7 @@ describe('GitAuthButton', () => {
         code,
         undefined,
       );
-      expect(actions.awaitAuthConfirm).toHaveBeenCalled();
+      expect(actions.waitLogin).toHaveBeenCalled();
     });
   });
 });
