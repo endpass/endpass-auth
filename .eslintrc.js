@@ -117,7 +117,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['*.spec.js'],
+      files: ['*.spec.js', '*.mock.js'],
       rules: {
         'global-require': 'off',
       },

@@ -1,5 +1,5 @@
 import { shallowMount, mount } from '@vue/test-utils';
-import Auth from '@/components/forms/Auth.vue';
+import Auth from '@/components/forms/CompositeAuth/Auth.vue';
 import { IDENTITY_MODE } from '@/constants';
 
 describe('Auth', () => {

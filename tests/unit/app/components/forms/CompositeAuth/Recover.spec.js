@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import RecoverForm from '@/components/forms/Recover.vue';
+import RecoverForm from '@/components/forms/CompositeAuth/Recover.vue';
 
 describe('Otp', () => {
   const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';

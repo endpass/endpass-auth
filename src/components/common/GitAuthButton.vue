@@ -22,7 +22,7 @@ import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
   methods: {
-    ...mapActions(['authWithGitHub', 'awaitAuthConfirm']),
+    ...mapActions(['authWithGitHub', 'waitLogin', 'confirmAuth']),
     async loginWithGithub() {
       try {
         const response = await loginWithGithub({
@@ -30,7 +30,8 @@ export default {
           scope: 'user:email',
         });
         await this.authWithGitHub(response.code);
-        await this.awaitAuthConfirm();
+        await this.waitLogin();
+        this.confirmAuth();
       } catch (e) {
         this.handleAuthError(e);
       }

@@ -19,15 +19,14 @@ jest.mock('@/service/identity', () => {
     authWithGitHub: jest.fn(),
     otpAuth: jest.fn(),
     logout: jest.fn(),
-    awaitLogoutConfirm: jest.fn(),
-    awaitAccountCreate: jest.fn(),
+    waitAccountCreate: jest.fn(),
     getRecoveryIdentifier: jest
       .fn()
       .mockResolvedValue(getRecoveryIdentifierResponse.message),
     recover: jest.fn().mockResolvedValue(successResponse),
     getAuthPermission: jest.fn(),
     setAuthPermission: jest.fn(),
-    awaitAuthConfirm: jest.fn(),
+    waitLogin: jest.fn(),
   };
 });
 

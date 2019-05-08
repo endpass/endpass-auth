@@ -33,7 +33,7 @@ describe('accounts actions', () => {
     const requestFunction = jest.fn();
 
     it('should auth user and change link status', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       requestFunction.mockResolvedValueOnce({
         success: true,
@@ -45,9 +45,10 @@ describe('accounts actions', () => {
         { email, request, link: true },
       );
 
-      expect(commit).toBeCalledTimes(2);
+      expect(commit).toBeCalledTimes(3);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'setSentStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
     });
 
     it('should set otp email if challenge type equals to otp', async () => {
@@ -321,45 +322,15 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('awaitAuthConfirm', () => {
+  describe('waitLogin', () => {
     it('should await auth confirm and then request accounts', async () => {
       expect.assertions(1);
 
-      identityService.awaitAuthConfirm.mockResolvedValueOnce(200);
+      identityService.waitLogin.mockResolvedValueOnce(200);
 
-      await accountsActions.awaitAuthConfirm({ dispatch });
+      await accountsActions.waitLogin({ dispatch });
 
       expect(dispatch).toBeCalledWith('defineAuthStatus');
-    });
-  });
-
-  describe('awaitLogoutConfirm', () => {
-    it('should await logout confirm', async () => {
-      expect.assertions(3);
-
-      identityService.awaitLogoutConfirm.mockResolvedValueOnce();
-
-      await accountsActions.awaitLogoutConfirm({ commit });
-
-      expect(commit).toBeCalledTimes(2);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
-    });
-
-    it('should throw error', async done => {
-      expect.assertions(3);
-
-      identityService.awaitLogoutConfirm.mockRejectedValueOnce();
-
-      try {
-        await accountsActions.awaitLogoutConfirm({ commit });
-      } catch (err) {
-        done();
-      }
-
-      expect(commit).toBeCalledTimes(2);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
     });
   });
 

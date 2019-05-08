@@ -75,18 +75,13 @@ const authWithGitHub = async ({ commit }, code) => {
   }
 };
 
-const authWithHydra = async (
-  { commit, dispatch, rootState },
-  { challengeId, password },
-) => {
+const authWithHydra = async ({ commit }, { challengeId, password }) => {
   commit('changeLoadingStatus', true);
   let res;
 
   try {
-    await dispatch('defineSettings');
+    const { email, v3Keystore } = await permissionsService.getLoginDetails();
 
-    const { lastActiveAccount, email } = get(rootState, 'accounts.settings');
-    const v3Keystore = await dispatch('getAccount', lastActiveAccount);
     const { signature } = await signerService.signDataWithAccount({
       account: v3Keystore,
       data: email,
@@ -125,16 +120,13 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
     const type = get(res, 'challenge.challengeType');
     if (type === 'otp') {
       commit('setOtpEmail', email);
-      commit('changeLoadingStatus', false);
     } else if (link) {
       commit('setSentStatus', true);
     }
-
-    // todo: add check status 403
-    // replace('permission');
   } catch (err) {
-    commit('changeLoadingStatus', false);
     throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
   }
 };
 
@@ -290,26 +282,14 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
     : accounts.find(account => account.type !== 'PublicAccount') || null;
 };
 
-const awaitAccountCreate = async ({ commit }) => {
-  const res = await identityService.awaitAccountCreate();
+const waitAccountCreate = async ({ commit }) => {
+  const res = await identityService.waitAccountCreate();
 
   commit('setAccounts', res);
 };
 
 const openCreateAccountPage = async () => {
   window.open(`${ENV.VUE_APP_WALLET_URL}?closeAfterCreateWallet=true`);
-};
-
-const awaitLogoutConfirm = async ({ commit }) => {
-  commit('changeLoadingStatus', true);
-
-  try {
-    await identityService.awaitLogoutConfirm();
-  } catch (err) {
-    throw err;
-  } finally {
-    commit('changeLoadingStatus', false);
-  }
 };
 
 const closeAccount = async () => {
@@ -397,10 +377,10 @@ const cancelSignPermission = () => {
   permissionChannel.put(Answer.createFail());
 };
 
-const awaitAuthConfirm = async ({ dispatch }) => {
-  await identityService.awaitAuthConfirm();
+const waitLogin = async ({ dispatch }) => {
+  await identityService.waitLogin();
   await dispatch('defineAuthStatus');
-  authChannel.put(Answer.createOk());
+  // authChannel.put(Answer.createOk());
 };
 
 const defineAuthStatus = async ({ commit }) => {
@@ -458,9 +438,8 @@ export default {
   getSettings,
   defineOnlyV3Accounts,
   openCreateAccountPage,
-  awaitAccountCreate,
-  awaitAuthConfirm,
-  awaitLogoutConfirm,
+  waitAccountCreate,
+  waitLogin,
   setSettings,
   updateSettings,
   closeAccount,

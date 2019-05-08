@@ -32,6 +32,7 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   const {
     isIdentityMode,
     demoData,
+    showCreateAccount,
   } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
 
   if (isIdentityMode !== undefined) {
@@ -40,6 +41,10 @@ const startBridge = async ({ dispatch, commit, getters }) => {
 
   if (demoData) {
     await dispatch('setupDemoData', demoData);
+  }
+
+  if (showCreateAccount !== undefined) {
+    commit('changeShowCreateAccount', showCreateAccount);
   }
 
   initCoreStream();

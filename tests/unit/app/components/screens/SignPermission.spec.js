@@ -35,7 +35,7 @@ describe('SignPermission', () => {
           signPermission: jest.fn(),
           openCreateAccountPage: jest.fn(),
           checkAccountExists: jest.fn(),
-          awaitAccountCreate: jest.fn(),
+          waitAccountCreate: jest.fn(),
           logout: jest.fn(),
         },
       };
