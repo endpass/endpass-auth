@@ -186,17 +186,35 @@ describe('core actions', () => {
     it('should close widget if source equals to widget', async () => {
       expect.assertions(1);
 
-      await coreActions.logout({ commit }, DIRECTION.WIDGET);
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValue({
+        source: DIRECTION.WIDGET,
+      });
+
+      await coreActions.logout({ commit });
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_UNMOUNT);
     });
 
-    it('should not close anything if source is empty', async () => {
+    it('should close dialog', async () => {
       expect.assertions(1);
+
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValue({
+        source: DIRECTION.AUTH,
+      });
 
       await coreActions.logout({ commit });
 
-      expect(bridgeMessenger.send).not.toBeCalled();
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+    });
+
+    it('should close dialog by default', async () => {
+      expect.assertions(1);
+
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValue({});
+
+      await coreActions.logout({ commit });
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });
   });
 
