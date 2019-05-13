@@ -20,7 +20,7 @@ import { METHODS, ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
-  const redirectUrl = get(state, 'authParams.redirectUrl');
+  const redirectUrl = get(state, 'authParams.redirectUrl', '');
   const queryParamsToAppend = {
     mode: type,
   };

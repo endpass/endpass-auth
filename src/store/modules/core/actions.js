@@ -51,19 +51,20 @@ const startBridge = async ({ dispatch, commit, getters }) => {
   bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
 };
 
-const logout = async ({ commit }, source = null) => {
+const logout = async ({ commit }) => {
   commit('changeLoadingStatus', true);
 
-  const res = await bridgeMessenger.sendAndWaitResponse(METHODS.LOGOUT_REQUEST);
+  const { error, source } = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.LOGOUT_REQUEST,
+  );
 
   commit('changeLoadingStatus', false);
 
-  if (res.error) {
-    throw new Error(res.error);
+  if (error) {
+    throw new Error(error);
   }
 
-  // TODO: fix that shame
-  if (source === DIRECTION.AUTH) {
+  if (!source || source === DIRECTION.AUTH) {
     bridgeMessenger.send(METHODS.DIALOG_CLOSE);
   } else if (source === DIRECTION.WIDGET) {
     bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);

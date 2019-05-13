@@ -24,7 +24,6 @@
 <script>
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import { DIRECTION } from '@/constants';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 
@@ -99,7 +98,7 @@ export default {
 
     async handleLogout() {
       try {
-        this.logout(DIRECTION.WIDGET);
+        this.logout();
       } catch (err) {
         console.log(err);
       }
