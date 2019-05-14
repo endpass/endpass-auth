@@ -101,6 +101,20 @@ const authWithHydra = async ({ commit }, { challengeId, password }) => {
   return res;
 };
 
+const checkHydraLoginRequirements = async ({ commit }, challengeId) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    const res = await permissionsService.getLoginSkipStatus(challengeId);
+
+    return res;
+  } catch (err) {
+    throw new Error('Checking Hydra login status');
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
 const getConsentDetails = (ctx, consentChallenge) =>
   permissionsService.getConsentDetails(consentChallenge);
 
@@ -453,4 +467,5 @@ export default {
   getConsentDetails,
   getAccountBalance,
   subscribeOnBalanceUpdates,
+  checkHydraLoginRequirements,
 };

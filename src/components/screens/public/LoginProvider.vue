@@ -42,7 +42,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['authWithHydra']),
+    ...mapActions(['authWithHydra', 'checkHydraLoginRequirements']),
 
     async handlePasswordSubmit(password) {
       const { login_challenge } = this.queryParamsMap;
@@ -63,7 +63,7 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
     const { query } = get(this.$router, 'history.current', {});
     const { href } = window.location;
 
@@ -78,6 +78,14 @@ export default {
       this.$router.replace(
         `/public/auth?redirect_url=${encodeURI(href)}&place=login`,
       );
+    }
+
+    const res = await this.checkHydraLoginRequirements(
+      this.queryParamsMap.login_challenge,
+    );
+
+    if (res.skip) {
+      window.location.replace(res.redirect);
     }
   },
 
