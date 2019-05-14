@@ -78,6 +78,7 @@ export default {
       this.$router.replace(
         `/public/auth?redirect_url=${encodeURI(href)}&place=login`,
       );
+      return;
     }
 
     const res = await this.checkHydraLoginRequirements(

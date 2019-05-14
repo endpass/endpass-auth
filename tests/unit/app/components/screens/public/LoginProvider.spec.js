@@ -31,6 +31,9 @@ describe('LoginProvider', () => {
       },
       actions: {
         authWithHydra: jest.fn(),
+        checkHydraLoginRequirements: jest.fn().mockResolvedValue({
+          skip: false,
+        }),
       },
       getters: {
         isAuthorized: jest.fn(
@@ -108,6 +111,47 @@ describe('LoginProvider', () => {
       });
 
       expect($router.replace).toBeCalled();
+    });
+
+    describe('should takes query params from current location and check hydra oauth skip status', () => {
+      beforeEach(() => {
+        window.location = {
+          replace: jest.fn(),
+        };
+      });
+
+      it('should do not anything if skip status is falsy', async () => {
+        expect.assertions(1);
+        wrapper = shallowMount(LoginProvider, {
+          localVue,
+          store,
+          mocks: {
+            $router,
+          },
+        });
+        await global.flushPromises();
+        expect(window.location.replace).not.toBeCalled();
+      });
+
+      it('should make redirect if skip status is truthy on received redirect url', async () => {
+        expect.assertions(1);
+        const payload = {
+          skip: true,
+          redirect: 'http://foo.bar',
+        };
+        accountsModule.actions.checkHydraLoginRequirements.mockResolvedValueOnce(
+          payload,
+        );
+        wrapper = shallowMount(LoginProvider, {
+          localVue,
+          store,
+          mocks: {
+            $router,
+          },
+        });
+        await global.flushPromises();
+        expect(window.location.replace).toBeCalledWith(payload.redirect);
+      });
     });
 
     it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
