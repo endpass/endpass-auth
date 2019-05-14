@@ -41,9 +41,13 @@ export const grantPermissions = async ({ consentChallenge, scopesList }) =>
       return res;
     });
 
+export const getLoginSkipStatus = async challengeId =>
+  request.get(`${identityBaseUrl}/oauth/login?challenge=${challengeId}`);
+
 export default {
   login,
   grantPermissions,
   getConsentDetails,
   getLoginDetails,
+  getLoginSkipStatus,
 };
