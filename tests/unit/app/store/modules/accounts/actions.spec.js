@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
+import permissionsService from '@/service/permissions';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 import { v3KeyStore, accountAddress } from '@unitFixtures/accounts';
@@ -724,6 +725,30 @@ describe('accounts actions', () => {
       await global.flushPromises();
 
       expect(commit).not.toBeCalled();
+    });
+  });
+
+  describe('checkHydraLoginRequirements', () => {
+    it('should request oauth skip status with given challenge id', async () => {
+      expect.assertions(2);
+      const response = {
+        skip: false,
+      };
+      permissionsService.getLoginSkipStatus.mockResolvedValueOnce(response);
+      const res = await accountsActions.checkHydraLoginRequirements(
+        { commit },
+        'foo',
+      );
+      expect(res).toEqual(response);
+      expect(permissionsService.getLoginSkipStatus).toBeCalledWith('foo');
+    });
+
+    it('should throw error if someting went wrong', async () => {
+      expect.assertions(1);
+      permissionsService.getLoginSkipStatus.mockRejectedValueOnce();
+      expect(
+        accountsActions.checkHydraLoginRequirements({ commit }, 'foo'),
+      ).rejects.toThrow();
     });
   });
 });
