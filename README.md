@@ -1,7 +1,5 @@
 # Endpass Auth
 
-> Compatible with web3.js@0.37.0beta and below
-
 ## Table of contents
 
 - [Concept](#concept)
