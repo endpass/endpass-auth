@@ -1,5 +1,5 @@
 <template>
-  <v-frame>
+  <v-frame :closable="false">
     <v-error
       v-if="error.show"
       :hint="error.hint"
