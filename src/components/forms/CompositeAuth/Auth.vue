@@ -19,7 +19,9 @@
         <message
           :error="true"
           data-test="error-message"
-        >{{ error }}</message>
+        >
+          {{ error }}
+        </message>
       </form-field>
       <form-field>
         <div class="auth__fields-as-line">
@@ -37,7 +39,9 @@
             :submit="true"
             type="primary"
             data-test="submit-button"
-          >{{ primaryButtonLabel }}</v-button>
+          >
+            {{ primaryButtonLabel }}
+          </v-button>
         </div>
       </form-field>
       <template>
@@ -68,9 +72,7 @@
 
 <script>
 import Vue from 'vue';
-
 import VCheckbox from '@endpass/ui/components/VCheckbox';
-import VFrame from '@/components/common/VFrame.vue';
 import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
@@ -174,7 +176,6 @@ export default {
   },
   components: {
     VCheckbox,
-    VFrame,
     VButton,
     VInput,
     GoogleAuthButton,

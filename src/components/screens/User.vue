@@ -26,9 +26,7 @@
 </template>
 
 <script>
-import {
-  mapActions, mapMutations, mapState, mapGetters,
-} from 'vuex';
+import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import Network from '@endpass/class/Network';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
@@ -123,7 +121,8 @@ export default {
     },
 
     handleDonateSuccess() {
-      this.message = 'Donation request successfully sent. In the most cases it can takes a few time before you will receive funds.';
+      this.message =
+        'Donation request successfully sent. In the most cases it can takes a few time before you will receive funds.';
       this.changeLoadingStatus(false);
     },
 

@@ -1,7 +1,7 @@
 <template>
   <v-frame @close="handleClose">
     <p>Sorry, but place is not found</p>
-    <br >
+    <br>
     <small>Endpass Auth v{{ version }}</small>
   </v-frame>
 </template>

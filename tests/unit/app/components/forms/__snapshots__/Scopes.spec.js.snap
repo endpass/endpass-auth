@@ -10,7 +10,9 @@ exports[`Scopes render should correctly render component 1`] = `
   </form-field-stub>
   <form-field-stub></form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" fluid="true" data-test="submit-button">Allow</v-button-stub>
+    <v-button-stub disabled="true" type="primary" submit="true" fluid="true" data-test="submit-button">
+      Allow
+    </v-button-stub>
   </form-controls-stub>
 </form>
 `;
@@ -28,7 +30,9 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
     <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]"></scopes-checkbox-tree-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">Allow</v-button-stub>
+    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">
+      Allow
+    </v-button-stub>
   </form-controls-stub>
 </form>
 `;

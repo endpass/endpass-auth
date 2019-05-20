@@ -16,8 +16,6 @@
 </template>
 
 <script>
-import VFrame from '@/components/common/VFrame.vue';
-import VInput from '@/components/common/VInput.vue';
 import VButton from '@/components/common/VButton.vue';
 import Message from '@/components/common/Message.vue';
 import FormControls from '@/components/common/FormControls.vue';
@@ -36,9 +34,7 @@ export default {
   },
 
   components: {
-    VFrame,
     VButton,
-    VInput,
     Message,
     FormControls,
   },

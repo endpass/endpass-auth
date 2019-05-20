@@ -9,7 +9,9 @@
       <message
         :error="true"
         data-test="error-message"
-      >{{ error }}</message>
+      >
+        {{ error }}
+      </message>
     </form-field>
     <form-field>
       <v-input

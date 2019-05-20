@@ -6,10 +6,10 @@
 
     <form-field>
       <v-select
+        v-model="currentIdentityServerType"
         :disabled="!isInputAllowed"
         :options="availableIdentityServerTypes"
         :items="availableIdentityServerTypes"
-        v-model="currentIdentityServerType"
         :value="currentIdentityServerType"
         label="Identity Server"
         name="currentIdentityServerType"

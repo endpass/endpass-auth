@@ -17,7 +17,6 @@
 <script>
 import { loginWithGithub } from 'github-oauth-popup';
 import { mapActions } from 'vuex';
-import VButton from '@/components/common/VButton.vue';
 import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
@@ -41,12 +40,12 @@ export default {
     },
   },
   components: {
-    VButton,
     VSvgIcon,
   },
 };
 </script>
-<style type="postcss">
+
+<style lang="postcss">
 .github-button {
   display: flex;
   width: 180px;

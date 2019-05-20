@@ -13,7 +13,7 @@ console.log('ENV', ENV);
 module.exports = {
   productionSourceMap: false,
 
-  baseUrl: '/',
+  publicPath: '/',
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
