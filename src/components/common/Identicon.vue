@@ -40,4 +40,8 @@ export default {
   border: 1px solid #e2e2e2;
   box-sizing: content-box;
 }
+
+.identicon img {
+  width: 100%;
+}
 </style>
