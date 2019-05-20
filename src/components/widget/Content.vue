@@ -1,10 +1,7 @@
 <template>
   <accordion :is-collapsed="isCollapsed">
     <section class="widget-content">
-      <accordion
-        :is-collapsed="isAccountsCollapsed"
-        max-height="225px"
-      >
+      <accordion :is-collapsed="isAccountsCollapsed" max-height="225px">
         <option-button
           slot="control"
           :is-big="true"
@@ -18,8 +15,7 @@
           Change account
         </option-button>
         <option-button
-          v-for="account in accounts"
-          v-if="account.address"
+          v-for="account in actualAccounts"
           :key="account.address"
           :icon="currentAccount === account.address ? 'check' : null"
           :icon-fill="currentAccount === account.address ? '#4B0470' : null"
@@ -81,6 +77,12 @@ export default {
     isLoading: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  computed: {
+    actualAccounts() {
+      return this.accounts.filter(account => !!account.address);
     },
   },
 

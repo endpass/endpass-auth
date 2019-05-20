@@ -22,8 +22,12 @@ exports[`Sign render should change submit button text if loading and make it dis
     </v-code-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">Loading...</v-button-stub>
-    <v-button-stub disabled="true" data-test="cancel-button">Close</v-button-stub>
+    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+      Loading...
+    </v-button-stub>
+    <v-button-stub disabled="true" data-test="cancel-button">
+      Close
+    </v-button-stub>
   </form-controls-stub>
 </form>
 `;
@@ -50,8 +54,12 @@ exports[`Sign render should correctly render Sign component 1`] = `
     </v-code-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">Sign</v-button-stub>
-    <v-button-stub data-test="cancel-button">Close</v-button-stub>
+    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+      Sign
+    </v-button-stub>
+    <v-button-stub data-test="cancel-button">
+      Close
+    </v-button-stub>
   </form-controls-stub>
 </form>
 `;

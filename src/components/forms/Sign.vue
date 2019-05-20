@@ -22,7 +22,9 @@
       <message
         :error="true"
         data-test="error-message"
-      >{{ error }}</message>
+      >
+        {{ error }}
+      </message>
     </form-field>
     <form-field label="Your account password:">
       <v-input
@@ -46,12 +48,16 @@
         :submit="true"
         type="primary"
         data-test="submit-button"
-      >{{ primaryButtonLabel }}</v-button>
+      >
+        {{ primaryButtonLabel }}
+      </v-button>
       <v-button
         :disabled="!closable || loading"
         data-test="cancel-button"
         @click="emitCancel"
-      >Close</v-button>
+      >
+        Close
+      </v-button>
     </form-controls>
   </form>
 </template>
@@ -59,7 +65,6 @@
 <script>
 import get from 'lodash/get';
 import VInput from '@/components/common/VInput.vue';
-import VSelect from '@/components/common/VSelect.vue';
 import VCode from '@/components/common/VCode.vue';
 import VButton from '@/components/common/VButton.vue';
 import Message from '@/components/common/Message.vue';
@@ -131,7 +136,6 @@ export default {
   components: {
     VButton,
     VInput,
-    VSelect,
     VCode,
     Message,
     FormField,

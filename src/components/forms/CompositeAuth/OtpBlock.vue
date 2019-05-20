@@ -77,7 +77,8 @@ export default {
     },
 
     handleRecoverError(error) {
-      const msg = (error && error.message) || 'Recover failed. Please, try again';
+      const msg =
+        (error && error.message) || 'Recover failed. Please, try again';
       this.setError(msg);
     },
   },

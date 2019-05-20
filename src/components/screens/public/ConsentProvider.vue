@@ -22,7 +22,6 @@ import { mapActions, mapState } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
-import Spinner from '@/components/common/Spinner';
 
 export default {
   name: 'ConsentProvider',
@@ -117,7 +116,6 @@ export default {
   },
 
   components: {
-    Spinner,
     VError,
     VFrame,
     ScopesForm,

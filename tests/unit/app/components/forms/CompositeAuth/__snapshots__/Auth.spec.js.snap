@@ -12,7 +12,9 @@ exports[`Auth render should change submit button text if loading and make it dis
   <form-field-stub>
     <div class="auth__fields-as-line">
       <v-input-stub placeholder="Enter your email..." name="email" value="" invalid="true" autofocus="true" type="email" data-test="email-input"></v-input-stub>
-      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">Loading...</v-button-stub>
+      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+        Loading...
+      </v-button-stub>
     </div>
   </form-field-stub>
   <form-controls-stub>
@@ -44,7 +46,9 @@ exports[`Auth render should correctly render Auth component 1`] = `
   <form-field-stub>
     <div class="auth__fields-as-line">
       <v-input-stub placeholder="Enter your email..." name="email" value="" invalid="true" autofocus="true" type="email" data-test="email-input"></v-input-stub>
-      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">Log in</v-button-stub>
+      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+        Log in
+      </v-button-stub>
     </div>
   </form-field-stub>
   <form-controls-stub>

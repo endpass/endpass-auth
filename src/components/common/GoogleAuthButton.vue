@@ -18,7 +18,6 @@
 
 <script>
 import { mapActions } from 'vuex';
-import VButton from '@/components/common/VButton.vue';
 import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
@@ -79,7 +78,6 @@ export default {
     clearInterval(this.interval);
   },
   components: {
-    VButton,
     VSvgIcon,
   },
 };

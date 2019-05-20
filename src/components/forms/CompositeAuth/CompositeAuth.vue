@@ -26,11 +26,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import Screen from '@/components/common/Screen';
 import AuthForm from '@/components/forms/CompositeAuth/Auth';
 import OtpBlockForm from '@/components/forms/CompositeAuth/OtpBlock';
-import OtpForm from '@/components/forms/CompositeAuth/Otp';
-import RecoverForm from '@/components/forms/CompositeAuth/Recover';
 import MessageForm from '@/components/forms/CompositeAuth/Message';
 import { IDENTITY_MODE } from '@/constants';
 
@@ -137,11 +134,8 @@ export default {
   },
 
   components: {
-    Screen,
     AuthForm,
     OtpBlockForm,
-    OtpForm,
-    RecoverForm,
     MessageForm,
   },
 };

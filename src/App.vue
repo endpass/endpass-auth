@@ -10,7 +10,6 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import VFrame from '@/components/common/VFrame';
 import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
@@ -36,7 +35,6 @@ export default {
   },
   components: {
     LoadingScreen,
-    VFrame,
   },
 };
 </script>

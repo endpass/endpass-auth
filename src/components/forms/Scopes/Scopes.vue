@@ -23,13 +23,14 @@
         :fluid="true"
         type="primary"
         data-test="submit-button"
-      >{{ primaryButtonLabel }}</v-button>
+      >
+        {{ primaryButtonLabel }}
+      </v-button>
     </form-controls>
   </form>
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/components/VCheckbox';
 import VButton from '@/components/common/VButton.vue';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
@@ -128,7 +129,6 @@ export default {
   components: {
     ScopesCheckboxTree,
     VButton,
-    VCheckbox,
     Message,
     FormField,
     FormControls,
