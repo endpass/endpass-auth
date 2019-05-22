@@ -13,6 +13,7 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
+import { IDENTITY_MODE } from '@/constants';
 
 describe('accounts actions', () => {
   let dispatch;
@@ -161,6 +162,53 @@ describe('accounts actions', () => {
           serverMode: { ...serverMode, serverUrl },
         },
       );
+
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
+    });
+  });
+
+  describe('mode to query', () => {
+    const email = 'foo@bar.baz';
+    const request = 'kek';
+    const type = 'local';
+    const serverMode = { type };
+    const redirectUrl = 'redirectUrl';
+    const state = {
+      authParams: {
+        redirectUrl,
+      },
+    };
+
+    it('should call identityService.auth without mode in query url', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}`;
+
+      identityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth(
+        { state, dispatch },
+        {
+          email,
+          serverMode: {
+            type: IDENTITY_MODE.DEFAULT,
+          },
+        },
+      );
+
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
+    });
+
+    it('should call identityService.auth with correct mode in query url', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}?mode=${type}`;
+
+      identityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth({ state, dispatch }, { email, serverMode });
 
       expect(identityService.auth).toBeCalledTimes(1);
       expect(identityService.auth).toBeCalledWith(email, resultUrl);

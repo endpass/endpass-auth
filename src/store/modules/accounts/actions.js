@@ -16,14 +16,19 @@ import {
   permissionChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
-import { METHODS, ORIGIN_HOST } from '@/constants';
+import { IDENTITY_MODE, METHODS, ORIGIN_HOST } from '@/constants';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
   const redirectUrl = get(state, 'authParams.redirectUrl', '');
-  const queryParamsToAppend = {
-    mode: type,
-  };
+
+  const queryParamsToAppend = {};
+
+  if (type !== IDENTITY_MODE.DEFAULT) {
+    Object.assign(queryParamsToAppend, {
+      mode: type,
+    });
+  }
 
   if (serverUrl) {
     Object.assign(queryParamsToAppend, {
