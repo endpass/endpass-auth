@@ -734,18 +734,18 @@ describe('accounts actions', () => {
       const response = {
         skip: false,
       };
-      permissionsService.getLoginSkipStatus.mockResolvedValueOnce(response);
+      permissionsService.getLoginDetails.mockResolvedValueOnce(response);
       const res = await accountsActions.checkHydraLoginRequirements(
         { commit },
         'foo',
       );
       expect(res).toEqual(response);
-      expect(permissionsService.getLoginSkipStatus).toBeCalledWith('foo');
+      expect(permissionsService.getLoginDetails).toBeCalledWith('foo');
     });
 
     it('should throw error if someting went wrong', async () => {
       expect.assertions(1);
-      permissionsService.getLoginSkipStatus.mockRejectedValueOnce();
+      permissionsService.getLoginDetails.mockRejectedValueOnce();
       expect(
         accountsActions.checkHydraLoginRequirements({ commit }, 'foo'),
       ).rejects.toThrow();

@@ -1,3 +1,3 @@
 jest.mock('@/service/permissions', () => ({
-  getLoginSkipStatus: jest.fn(),
+  getLoginDetails: jest.fn(),
 }));
