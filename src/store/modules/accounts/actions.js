@@ -80,10 +80,13 @@ const authWithHydra = async ({ commit }, { challengeId, password }) => {
   let res;
 
   try {
-    const { email, v3Keystore } = await permissionsService.getLoginDetails();
+    const { email, keystore } = await permissionsService.getLoginDetails(
+      challengeId,
+    );
 
+    debugger;
     const { signature } = await signerService.signDataWithAccount({
-      account: v3Keystore,
+      account: keystore,
       data: email,
       password,
     });
@@ -105,7 +108,7 @@ const checkHydraLoginRequirements = async ({ commit }, challengeId) => {
   commit('changeLoadingStatus', true);
 
   try {
-    const res = await permissionsService.getLoginSkipStatus(challengeId);
+    const res = await permissionsService.getLoginDetails(challengeId);
 
     return res;
   } catch (err) {

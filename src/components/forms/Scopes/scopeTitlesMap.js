@@ -1,7 +1,7 @@
 export default {
   wallet: 'Read information about wallet',
   'wallet:address:read': 'Read only Address data',
-  'wallet:accounts:read': 'Read only Acoounts data',
+  'wallet:accounts:read': 'Read only Accounts data',
   user: 'Read user information',
   'user:email:read': 'Read email',
   'user:address:read': 'Read address',
