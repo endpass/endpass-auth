@@ -1,10 +1,9 @@
 import pick from 'lodash/pick';
 import { LS_SETTINGS } from '@/constants';
 
-export const getLocalSettingsKey = () =>
-  `${window.location.hostname}:${LS_SETTINGS}`;
+const getLocalSettingsKey = () => `${window.location.hostname}:${LS_SETTINGS}`;
 
-export const getLocalSettings = () => {
+const getLocalSettings = () => {
   const settings = localStorage.getItem(getLocalSettingsKey());
 
   if (!settings) return {};
@@ -12,7 +11,7 @@ export const getLocalSettings = () => {
   return JSON.parse(settings);
 };
 
-export const setLocalSettings = settings => {
+const setLocalSettings = settings => {
   const prevSettings = getLocalSettings();
   const updatedSettings = {
     ...prevSettings,
@@ -22,7 +21,7 @@ export const setLocalSettings = settings => {
   localStorage.setItem(getLocalSettingsKey(), JSON.stringify(updatedSettings));
 };
 
-export const clearLocalSettings = () => {
+const clearLocalSettings = () => {
   localStorage.removeItem(getLocalSettingsKey());
 };
 
@@ -33,7 +32,7 @@ export const clearLocalSettings = () => {
  * @param {Object} settings new settings
  * @returns {Object}
  */
-export const mergeSettings = settings => {
+const mergeSettings = settings => {
   const localSettings = getLocalSettings();
 
   return {

@@ -5,26 +5,25 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const createTimeout = handler => setTimeout(handler, 1500);
 
-export const getSettings = () => request.get(`${identityBaseUrl}/settings`);
+const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
-export const setSettings = settings =>
+const setSettings = settings =>
   request.post(`${identityBaseUrl}/settings`, settings);
 
-export const getOtpSettings = () =>
-  request.get(`${identityBaseUrl}/settings/otp`);
+const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
-export const getAccountsSkipPermission = () =>
+const getAccountsSkipPermission = () =>
   request.getSkipPermission(`${identityBaseUrl}/accounts`);
 
-export const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
+const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
 
-export const getAccount = address =>
+const getAccount = address =>
   request.get(`${identityBaseUrl}/account/${address}`);
 
-export const getAccountInfo = address =>
+const getAccountInfo = address =>
   request.get(`${identityBaseUrl}/account/${address}/info`);
 
-export const getAccountWithInfo = async address => {
+const getAccountWithInfo = async address => {
   const [v3keystore, info] = await Promise.all([
     getAccount(address),
     getAccountInfo(address),
@@ -33,7 +32,7 @@ export const getAccountWithInfo = async address => {
   return { ...v3keystore, info };
 };
 
-export const checkAccountExist = async () => {
+const checkAccountExist = async () => {
   let res = false;
   try {
     const list = await getAccountsSkipPermission();
@@ -42,7 +41,7 @@ export const checkAccountExist = async () => {
   return res;
 };
 
-export const auth = (email, redirectUrl) => {
+const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
     ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
     : `${identityBaseUrl}/auth`;
@@ -58,15 +57,15 @@ export const auth = (email, redirectUrl) => {
     });
 };
 
-export const getAuthPermission = () =>
+const getAuthPermission = () =>
   request.get(`${identityBaseUrl}/auth/permission`);
 
-export const setAuthPermission = signature =>
+const setAuthPermission = signature =>
   request.post(`${identityBaseUrl}/auth/permission`, {
     signature,
   });
 
-export const otpAuth = (email, code) =>
+const otpAuth = (email, code) =>
   request
     .post(`${identityBaseUrl}/auth/token`, {
       challengeType: 'otp',
@@ -79,7 +78,7 @@ export const otpAuth = (email, code) =>
       return res;
     });
 
-export const authWithGoogle = idToken =>
+const authWithGoogle = idToken =>
   request
     .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
     .then(res => {
@@ -90,7 +89,7 @@ export const authWithGoogle = idToken =>
       throw err.response.data;
     });
 
-export const authWithGitHub = code =>
+const authWithGitHub = code =>
   request
     .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
     .then(res => {
@@ -101,9 +100,9 @@ export const authWithGitHub = code =>
       throw err.response.data;
     });
 
-export const logout = () => request.post(`${identityBaseUrl}/logout`);
+const logout = () => request.post(`${identityBaseUrl}/logout`);
 
-export const getAuthStatus = async () => {
+const getAuthStatus = async () => {
   let res = 200;
   try {
     await request.get(`${identityBaseUrl}/auth/check`);
@@ -113,7 +112,7 @@ export const getAuthStatus = async () => {
   return res;
 };
 
-export const waitAccountCreate = () =>
+const waitAccountCreate = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
     const handler = async function() {
@@ -133,7 +132,7 @@ export const waitAccountCreate = () =>
     createTimeout(handler);
   });
 
-export const waitLogin = () =>
+const waitLogin = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
     const handler = async function() {
@@ -153,7 +152,7 @@ export const waitLogin = () =>
     createTimeout(handler);
   });
 
-export const getRecoveryIdentifier = email =>
+const getRecoveryIdentifier = email =>
   request
     .get(`${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`)
     .then(res => {
@@ -162,7 +161,7 @@ export const getRecoveryIdentifier = email =>
       return res.message;
     });
 
-export const recover = (email, signature, redirectUrl) =>
+const recover = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
       email,

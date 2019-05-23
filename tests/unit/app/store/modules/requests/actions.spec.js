@@ -2,14 +2,12 @@ import requestsActions from '@/store/modules/requests/actions';
 import { signChannel } from '@/class/singleton/channels';
 import Signer from '@/service/signer';
 
-jest.mock('@/service/signer', () => {
-  return {
-    recover: jest.fn(),
-    signWallet: jest.fn(),
-    recoverMessage: jest.fn(),
-    getSignedRequest: jest.fn(),
-  };
-});
+jest.mock('@/service/signer', () => ({
+  recover: jest.fn(),
+  signWallet: jest.fn(),
+  recoverMessage: jest.fn(),
+  getSignedRequest: jest.fn(),
+}));
 
 describe('requests actions', () => {
   const password = 'secret';

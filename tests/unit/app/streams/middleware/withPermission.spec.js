@@ -4,27 +4,23 @@ import router from '@/router';
 import store from '@/store';
 import Answer from '@/class/Answer';
 
-jest.mock('@/store', () => {
-  return {
-    dispatch: jest.fn(),
-    getters: { demoData: false },
-    state: {
-      accounts: {
-        isPermission: false,
-        isLogin: true,
-      },
+jest.mock('@/store', () => ({
+  dispatch: jest.fn(),
+  getters: { demoData: false },
+  state: {
+    accounts: {
+      isPermission: false,
+      isLogin: true,
     },
-  };
-});
+  },
+}));
 
-jest.mock('@/class/singleton/channels', () => {
-  return {
-    permissionChannel: {
-      take: jest.fn(),
-      put: jest.fn(),
-    },
-  };
-});
+jest.mock('@/class/singleton/channels', () => ({
+  permissionChannel: {
+    take: jest.fn(),
+    put: jest.fn(),
+  },
+}));
 
 describe('withPermission', () => {
   const options = {

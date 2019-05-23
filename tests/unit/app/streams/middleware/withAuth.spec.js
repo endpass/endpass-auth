@@ -4,26 +4,22 @@ import router from '@/router';
 import store from '@/store';
 import Answer from '@/class/Answer';
 
-jest.mock('@/store', () => {
-  return {
-    dispatch: jest.fn(),
-    getters: { demoData: false },
-    state: {
-      accounts: {
-        isLogin: false,
-      },
+jest.mock('@/store', () => ({
+  dispatch: jest.fn(),
+  getters: { demoData: false },
+  state: {
+    accounts: {
+      isLogin: false,
     },
-  };
-});
+  },
+}));
 
-jest.mock('@/class/singleton/channels', () => {
-  return {
-    authChannel: {
-      take: jest.fn(),
-      put: jest.fn(),
-    },
-  };
-});
+jest.mock('@/class/singleton/channels', () => ({
+  authChannel: {
+    take: jest.fn(),
+    put: jest.fn(),
+  },
+}));
 
 describe('withAuth', () => {
   const options = {
