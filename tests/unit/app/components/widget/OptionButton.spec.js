@@ -9,6 +9,6 @@ describe('OptionButton', () => {
   });
 
   it('should correctly render', () => {
-    expect(1 + 1).toBe(2);
+    expect(wrapper.find('div').exists()).toBe(false);
   });
 });

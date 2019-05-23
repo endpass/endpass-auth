@@ -1,6 +1,5 @@
 import Signer from '@/service/signer';
 import Wallet from '@/service/signer/Wallet';
-import { ORIGIN_HOST } from '@/constants';
 
 describe('Signer', () => {
   const password = 'secret';
