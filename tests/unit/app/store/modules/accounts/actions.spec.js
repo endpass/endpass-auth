@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import walletGen from '@endpass/utils/walletGen';
 
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
@@ -6,14 +7,14 @@ import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
-import { v3KeyStore, accountAddress } from '@unitFixtures/accounts';
+import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
 import {
   permissionChannel,
   accountChannel,
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { IDENTITY_MODE } from '@/constants';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
 describe('accounts actions', () => {
   let dispatch;
@@ -35,7 +36,7 @@ describe('accounts actions', () => {
     const requestFunction = jest.fn();
 
     it('should auth user and change link status', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       requestFunction.mockResolvedValueOnce({
         success: true,
@@ -47,14 +48,15 @@ describe('accounts actions', () => {
         { email, request, link: true },
       );
 
-      expect(commit).toBeCalledTimes(3);
+      expect(commit).toBeCalledTimes(4);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'setSentStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setOtpEmail', null);
+      expect(commit).toHaveBeenNthCalledWith(3, 'setSentStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(4, 'changeLoadingStatus', false);
     });
 
     it('should set otp email if challenge type equals to otp', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       requestFunction.mockResolvedValueOnce({
         success: true,
@@ -66,10 +68,11 @@ describe('accounts actions', () => {
       const request = requestFunction();
       await accountsActions.handleAuthRequest({ commit }, { email, request });
 
-      expect(commit).toBeCalledTimes(3);
+      expect(commit).toBeCalledTimes(4);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'setOtpEmail', email);
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(3, 'setSentStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(4, 'changeLoadingStatus', false);
     });
 
     it('should throw error if auth response is falsy', async () => {
@@ -797,6 +800,32 @@ describe('accounts actions', () => {
       expect(
         accountsActions.checkHydraLoginRequirements({ commit }, 'foo'),
       ).rejects.toThrow();
+    });
+  });
+
+  describe('createWallet', () => {
+    it('should create and set accounts', async () => {
+      walletGen.createComplex.mockResolvedValue({
+        seedKey: 'seedKey',
+        encryptedSeed: 'encryptedSeed',
+        v3KeystoreHdWallet: hdv3,
+        v3KeystoreChildWallet: v3KeyStore,
+      });
+
+      await accountsActions.createWallet({ commit }, { password: 'pwd' });
+
+      expect(identityService.saveAccount).toBeCalledTimes(2);
+      expect(identityService.saveAccount).toBeCalledWith(hdv3);
+      expect(identityService.saveAccountInfo).toBeCalledWith(hdv3.address, {
+        address: hdv3.address,
+        type: WALLET_TYPES.HD_MAIN,
+        hidden: false,
+      });
+      expect(identityService.backupSeed).toBeCalledWith('encryptedSeed');
+      expect(identityService.saveAccount).toBeCalledWith(v3KeyStore);
+      expect(identityService.updateAccountSettings).toBeCalledWith(
+        v3KeyStore.address,
+      );
     });
   });
 });

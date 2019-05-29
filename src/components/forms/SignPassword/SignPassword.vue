@@ -12,8 +12,8 @@
       @submit="handleSignSubmit"
       @logout="handleLogout"
     />
-    <create-account-form
-      v-else-if="activeForm === FORMS.CREATE_ACCOUNT"
+    <create-wallet-form
+      v-else-if="activeForm === FORMS.CREATE_WALLET"
       @request="handleAccountRequest"
     />
   </div>
@@ -22,11 +22,11 @@
 <script>
 import { mapActions, mapGetters } from 'vuex';
 import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
-import CreateAccountForm from '@/components/forms/CreateAccount';
+import CreateWalletForm from '@/components/forms/CreateWallet';
 
 const FORMS = {
   SIGN: 'SIGN',
-  CREATE_ACCOUNT: 'CREATE_ACCOUNT',
+  CREATE_WALLET: 'CREATE_WALLET',
 };
 
 export default {
@@ -104,7 +104,7 @@ export default {
     const isExist = await this.checkAccountExists();
 
     if (!isExist) {
-      this.activeForm = FORMS.CREATE_ACCOUNT;
+      this.activeForm = FORMS.CREATE_WALLET;
       await this.waitAccountCreate();
       this.activeForm = FORMS.SIGN;
     }
@@ -114,7 +114,7 @@ export default {
 
   components: {
     PasswordForm,
-    CreateAccountForm,
+    CreateWalletForm,
   },
 };
 </script>

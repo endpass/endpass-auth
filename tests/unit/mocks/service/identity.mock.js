@@ -7,6 +7,11 @@ jest.mock('@/service/identity', () => {
   } = require('@unitFixtures/services/identity');
 
   return {
+    saveAccount: jest.fn(),
+    saveAccountInfo: jest.fn(),
+    backupSeed: jest.fn(),
+    updateAccountSettings: jest.fn(),
+
     getSettings: jest.fn(),
     getOtpSettings: jest.fn(),
     getAccount: jest.fn(),
@@ -19,7 +24,6 @@ jest.mock('@/service/identity', () => {
     authWithGitHub: jest.fn(),
     otpAuth: jest.fn(),
     logout: jest.fn(),
-    waitAccountCreate: jest.fn(),
     getRecoveryIdentifier: jest
       .fn()
       .mockResolvedValue(getRecoveryIdentifierResponse.message),

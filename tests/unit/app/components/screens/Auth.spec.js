@@ -64,7 +64,7 @@ describe('Auth', () => {
 
       await global.flushPromises();
 
-      expect(wrapper.find('create-account-form-stub').exists()).toBe(true);
+      expect(wrapper.find('create-wallet-form-stub').exists()).toBe(true);
       expect(accountsModule.actions.waitAccountCreate).toBeCalled();
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -105,10 +105,10 @@ describe('Auth', () => {
     describe('create account form logic', () => {
       it('should open create account page on request event handling', () => {
         wrapper.setData({
-          activeForm: 'CREATE_ACCOUNT',
+          activeForm: 'CREATE_WALLET',
         });
 
-        wrapper.find('create-account-form-stub').vm.$emit('request');
+        wrapper.find('create-wallet-form-stub').vm.$emit('request');
 
         expect(accountsModule.actions.openCreateAccountPage).toBeCalled();
       });
