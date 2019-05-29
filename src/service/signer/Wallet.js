@@ -1,7 +1,8 @@
 import get from 'lodash/get';
 import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
-import keystore from '@endpass/utils/keystore';
+import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
+import isV3 from '@endpass/utils/isV3';
 
 import web3 from '@/service/signer/web3';
 
@@ -21,7 +22,7 @@ export default class Wallet {
       throw new Error(`${address} is not valid Etherium address!`);
     }
 
-    const isPublic = !keystore.isV3(v3);
+    const isPublic = !isV3(v3);
 
     this.address = address;
     this.index = get(v3, 'info.index');
@@ -48,7 +49,7 @@ export default class Wallet {
    * @returns {Promise<Buffer>} Private key buffer
    */
   async getPrivateKey(password) {
-    return keystore.decrypt(password, this.v3);
+    return keystoreKeyGen.getPrivateKey(password, this.v3);
   }
 
   /**

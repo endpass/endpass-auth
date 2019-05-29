@@ -25,20 +25,13 @@ import SignPassword from '@/components/forms/SignPassword';
 
 import { ORIGIN_HOST } from '@/constants';
 
-const FORMS = {
-  SIGN: 'SIGN',
-  CREATE_ACCOUNT: 'CREATE_ACCOUNT',
-};
-
 export default {
   name: 'SignPermission',
 
   data: () => ({
     error: null,
     isLoading: false,
-    FORMS,
     ORIGIN_HOST,
-    activeForm: FORMS.SIGN,
   }),
 
   computed: {

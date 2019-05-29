@@ -1,3 +1,25 @@
+export const hdv3 = {
+  address:
+    'xpub6DojZ5fC8cSLRwc95PFfzUDWUSRod2jSWSbhGKEWFJhoTDiJgRva4am9m7ex1Fm1Ege8MDQ7PNEFqkzdgsRS6UooRfDZpgHkD8vNHiMP3zq',
+  crypto: {
+    cipher: 'aes-128-ctr',
+    cipherparams: { iv: 'b58264d466c90f8924f3a6c13ee64463' },
+    ciphertext:
+      'fea516b5cf51e6d0b5d5c83fc1673a1f0e2563b4523fb409a655a9d53b1e0055586ff4182fbebf00a52a585f595abd917970ab79f8938e5dc60f841a170af265e77ecca1d20beff845db276f8bbe',
+    kdf: 'scrypt',
+    kdfparams: {
+      dklen: 32,
+      n: 4,
+      p: 8,
+      r: 1,
+      salt: '951266735f664dc8f0911b8c424d79b285cb962fc0b980b3937f821f912963e2',
+    },
+    mac: '5e7db9b83ca75c1be99c3587d5dc6882892b3c4556924606eb499da52e38b942',
+  },
+  id: '26c91dbc-f900-4d7c-8ec5-a9a59c0ecd81',
+  version: 3,
+};
+
 export const v3KeyStore = {
   crypto: {
     cipher: 'aes-128-ctr',

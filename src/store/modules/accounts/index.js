@@ -10,6 +10,7 @@ const state = {
   settings: null,
   balance: null,
   recoveryIdentifier: null,
+  isAccountCreated: false,
   isPermission: false,
   isLogin: false,
   demoData: null,

@@ -10,8 +10,8 @@
         :closable="isDialog"
         @authorize="handleAuthorize"
       />
-      <create-account-form
-        v-else-if="activeForm === FORMS.CREATE_ACCOUNT"
+      <create-wallet-form
+        v-else-if="activeForm === FORMS.CREATE_WALLET"
         @request="handleAccountRequest"
       />
     </v-frame>
@@ -23,11 +23,11 @@ import { mapState, mapGetters, mapActions } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
-import CreateAccountForm from '@/components/forms/CreateAccount';
+import CreateWalletForm from '@/components/forms/CreateWallet';
 
 const FORMS = {
   AUTH: 'AUTH',
-  CREATE_ACCOUNT: 'CREATE_ACCOUNT',
+  CREATE_WALLET: 'CREATE_WALLET',
 };
 
 export default {
@@ -70,7 +70,7 @@ export default {
     async openCreateAccount() {
       const isExist = await this.checkAccountExists();
       if (!isExist) {
-        this.activeForm = FORMS.CREATE_ACCOUNT;
+        this.activeForm = FORMS.CREATE_WALLET;
         await this.waitAccountCreate();
       }
     },
@@ -88,7 +88,7 @@ export default {
     Screen,
     VFrame,
     CompositeAuthForm,
-    CreateAccountForm,
+    CreateWalletForm,
   },
 };
 </script>

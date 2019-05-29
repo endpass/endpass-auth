@@ -45,3 +45,13 @@ export const DIRECTION = Object.freeze({
 export const ORIGIN_HOST = parseUrl(document.referrer).origin;
 
 export const WIDGET_RESIZE_DURATION = 300;
+
+export const ENCRYPT_OPTIONS = {
+  kdf: ENV.VUE_APP_KDF_PARAMS_KDF,
+  n: ENV.VUE_APP_KDF_PARAMS_N,
+};
+
+// TODO: merge with WALLET_TYPE from core/class
+export const WALLET_TYPES = {
+  HD_MAIN: 'HDMainAccount',
+};

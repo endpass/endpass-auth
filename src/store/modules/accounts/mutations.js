@@ -23,6 +23,10 @@ const setSentStatus = (state, status) => {
   state.linkSent = status;
 };
 
+const setAccountCreated = (state, status) => {
+  state.isAccountCreated = status;
+};
+
 const setAccounts = (state, accounts) => {
   state.accounts = isEmpty(accounts) ? [] : [...accounts];
 };
@@ -51,6 +55,7 @@ const logout = state => {
   state.accounts = [];
   state.settings = null;
   state.recoveryIdentifier = null;
+  state.isAccountCreated = false;
 };
 
 export default {
@@ -60,6 +65,7 @@ export default {
   setAuthStatus,
   setOtpEmail,
   setAccounts,
+  setAccountCreated,
   setSentStatus,
   setSettings,
   setRecoveryIdentifier,

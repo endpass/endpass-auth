@@ -9,6 +9,7 @@ import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
 
 import {
   accountChannel,
@@ -16,7 +17,14 @@ import {
   permissionChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
-import { IDENTITY_MODE, METHODS, ORIGIN_HOST } from '@/constants';
+import {
+  ENCRYPT_OPTIONS,
+  WALLET_TYPES,
+  IDENTITY_MODE,
+  METHODS,
+  ORIGIN_HOST,
+} from '@/constants';
+import filterXpub from '@/util/filterXpub';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -89,7 +97,6 @@ const authWithHydra = async ({ commit }, { challengeId, password }) => {
       challengeId,
     );
 
-    debugger;
     const { signature } = await signerService.signDataWithAccount({
       account: keystore,
       data: email,
@@ -123,6 +130,39 @@ const checkHydraLoginRequirements = async ({ commit }, challengeId) => {
   }
 };
 
+const createWallet = async ({ commit }, { password }) => {
+  const mod = await import('@endpass/utils/walletGen');
+  const walletGen = mod.default;
+
+  const {
+    seedKey,
+    encryptedSeed,
+    v3KeystoreHdWallet,
+    v3KeystoreChildWallet,
+  } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
+
+  const info = {
+    address: v3KeystoreHdWallet.address,
+    type: WALLET_TYPES.HD_MAIN,
+    hidden: false,
+  };
+
+  await identityService.saveAccount(v3KeystoreHdWallet);
+  await identityService.saveAccountInfo(v3KeystoreHdWallet.address, info);
+  await identityService.backupSeed(encryptedSeed);
+
+  await identityService.saveAccount(v3KeystoreChildWallet);
+  await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
+
+  commit('setAccounts', [v3KeystoreChildWallet.address]);
+
+  return seedKey;
+};
+
+const setWalletCreated = ({ commit }) => {
+  commit('setAccountCreated', true);
+};
+
 const getConsentDetails = (ctx, consentChallenge) =>
   permissionsService.getConsentDetails(consentChallenge);
 
@@ -140,11 +180,9 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
     settingsService.clearLocalSettings();
 
     const type = get(res, 'challenge.challengeType');
-    if (type === 'otp') {
-      commit('setOtpEmail', email);
-    } else if (link) {
-      commit('setSentStatus', true);
-    }
+
+    commit('setOtpEmail', type === 'otp' ? email : null);
+    commit('setSentStatus', !!link);
   } catch (err) {
     throw err;
   } finally {
@@ -251,7 +289,7 @@ const getAccounts = async ({ commit }) => {
 
     commit(
       'setAccounts',
-      accounts.filter(account => !/^xpub/.test(account.address)),
+      accounts.filter(account => filterXpub(account.address)),
     );
     commit('setAuthStatus', true);
   } catch (err) {
@@ -271,7 +309,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 
     const accounts = await Promise.all(
       res
-        .filter(address => !/^xpub/.test(address))
+        .filter(filterXpub)
         .map(address => identityService.getAccountWithInfo(address)),
     );
 
@@ -304,10 +342,8 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
     : accounts.find(account => account.type !== 'PublicAccount') || null;
 };
 
-const waitAccountCreate = async ({ commit }) => {
-  const res = await identityService.waitAccountCreate();
-
-  commit('setAccounts', res);
+const waitAccountCreate = async ({ state }) => {
+  await asyncCheckProperty(state, 'isAccountCreated');
 };
 
 const openCreateAccountPage = async () => {
@@ -447,6 +483,8 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithHydra,
+  createWallet,
+  setWalletCreated,
   checkAccountExists,
   grantPermissionsWithHydra,
   cancelAuth,

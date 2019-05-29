@@ -112,24 +112,30 @@ const getAuthStatus = async () => {
   return res;
 };
 
-const waitAccountCreate = () =>
-  new Promise((resolve, reject) => {
-    /* eslint-disable-next-line */
-    const handler = async function() {
-      try {
-        const res = await getAccountsSkipPermission();
+// saveAccount,
+//   saveAccountInfo,
+//   backupSeed,
 
-        if (res.filter(address => !/^xpub/.test(address)).length > 0) {
-          return resolve(res);
-        }
+const saveAccount = account =>
+  request.postSkipPermission(
+    `${identityBaseUrl}/account/${account.address}`,
+    account,
+  );
 
-        createTimeout(handler);
-      } catch (err) {
-        return reject(err);
-      }
-    };
+const saveAccountInfo = (address, info) =>
+  request.postSkipPermission(
+    `${identityBaseUrl}/account/${address}/info`,
+    info,
+  );
 
-    createTimeout(handler);
+const backupSeed = encryptedSeed =>
+  request.postSkipPermission(`${identityBaseUrl}/user/seed`, {
+    seed: encryptedSeed,
+  });
+
+const updateAccountSettings = address =>
+  request.postSkipPermission(`${identityBaseUrl}/settings`, {
+    lastActiveAccount: address,
   });
 
 const waitLogin = () =>
@@ -149,7 +155,7 @@ const waitLogin = () =>
       }
     };
 
-    createTimeout(handler);
+    return handler();
   });
 
 const getRecoveryIdentifier = email =>
@@ -175,24 +181,30 @@ const recover = (email, signature, redirectUrl) =>
     });
 
 export default {
-  getSettings,
-  getOtpSettings,
   getAccount,
   getAccounts,
   getAuthStatus,
   getAccountInfo,
   getAccountWithInfo,
+  checkAccountExist,
+  saveAccount,
+  saveAccountInfo,
+  backupSeed,
+  updateAccountSettings,
+
   getAuthPermission,
   setAuthPermission,
-  setSettings,
-  checkAccountExist,
   auth,
   authWithGoogle,
   authWithGitHub,
   otpAuth,
   logout,
-  waitAccountCreate,
   waitLogin,
+
+  getSettings,
+  getOtpSettings,
+  setSettings,
+
   getRecoveryIdentifier,
   recover,
 };

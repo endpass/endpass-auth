@@ -32,6 +32,9 @@ const request = {
   getSkipPermission: url => createAnswer(axios.get(url, configSkipPermission)),
 
   post: (url, body) => createAnswer(axios.post(url, body, configWithHeaders)),
+
+  postSkipPermission: (url, body) =>
+    createAnswer(axios.post(url, body, configSkipPermission)),
 };
 
 export default request;

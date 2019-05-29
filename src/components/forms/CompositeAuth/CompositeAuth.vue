@@ -71,7 +71,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['auth', 'cancelAuth', 'waitLogin', 'dialogClose']),
+    ...mapActions([
+      'auth',
+      'cancelAuth',
+      'waitLogin',
+      'dialogClose',
+      'defineAuthStatus',
+    ]),
 
     async handleOtpSubmit() {
       await this.waitLogin();
@@ -106,13 +112,16 @@ export default {
     },
 
     async handleLinkSent() {
-      this.message = this.isLogin
-        ? 'You are successfully authorized. Dialog will be closed in a few seconds.'
-        : 'An email with authorization link was sent on your address. Open it in the same browser to sign in. Also check spam folder and exclude Endpass from spam filters.';
-
-      this.currentForm = FORMS.MESSAGE;
-
-      await this.waitLogin();
+      await this.defineAuthStatus();
+      if (this.isLogin) {
+        this.message =
+          'You are successfully authorized. Dialog will be closed in a few seconds.';
+      } else {
+        this.message =
+          'An email with authorization link was sent on your address. Open it in the same browser to sign in. Also check spam folder and exclude Endpass from spam filters.';
+        this.currentForm = FORMS.MESSAGE;
+        await this.waitLogin();
+      }
 
       this.handleSubmit();
     },

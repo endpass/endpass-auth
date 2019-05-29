@@ -19,7 +19,7 @@ exports[`Auth render should render auth form if user authorized and have any acc
 exports[`Auth render should render create account form if user authorized but does not have any account 1`] = `
 <screen-stub>
   <v-frame-stub closable="true" loading="true">
-    <create-account-form-stub></create-account-form-stub>
+    <create-wallet-form-stub></create-wallet-form-stub>
   </v-frame-stub>
 </screen-stub>
 `;
