@@ -28,7 +28,6 @@
         >
           {{ error }}
         </message>
-        isLoading={{ isLoading }}
         <form-controls>
           <v-button
             :disabled="!canSubmit"
