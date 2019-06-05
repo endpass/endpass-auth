@@ -1,11 +1,7 @@
 <template>
-  <div
-    v-if="isLoading"
-    class="app_is-loading"
-  >
-    <LoadingScreen />
-  </div>
-  <router-view v-else />
+  <loading-screen :is-loading="isLoading">
+    <router-view />
+  </loading-screen>
 </template>
 
 <script>
@@ -71,17 +67,6 @@ select {
   body {
     background: #fff;
   }
-}
-
-.app_is-loading {
-  background: #fff;
-  position: relative;
-  padding: 30px 15px 15px;
-  font-size: 1em;
-  max-width: 100px;
-  margin: 0 auto;
-  border-radius: 4px;
-  margin-top: 20px;
 }
 
 .form-controls a {

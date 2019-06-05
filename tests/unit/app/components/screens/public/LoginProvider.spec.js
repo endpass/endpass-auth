@@ -30,8 +30,8 @@ describe('LoginProvider', () => {
         isPermission: true,
       },
       actions: {
-        authWithHydra: jest.fn(),
-        checkHydraLoginRequirements: jest.fn().mockResolvedValue({
+        authWithOauth: jest.fn(),
+        checkOauthLoginRequirements: jest.fn().mockResolvedValue({
           skip: false,
         }),
       },
@@ -79,6 +79,7 @@ describe('LoginProvider', () => {
       });
 
       expect(wrapper.html()).toMatchSnapshot();
+      expect(wrapper.find('[data-test=error-message]').exists()).toBe(false);
     });
   });
 
@@ -93,7 +94,6 @@ describe('LoginProvider', () => {
         },
       });
 
-      expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
       expect(wrapper.find('sign-password-stub').exists()).toBe(false);
       expect($router.replace).not.toBeCalled();
     });
@@ -122,6 +122,7 @@ describe('LoginProvider', () => {
 
       it('should do not anything if skip status is falsy', async () => {
         expect.assertions(1);
+
         wrapper = shallowMount(LoginProvider, {
           localVue,
           store,
@@ -130,16 +131,38 @@ describe('LoginProvider', () => {
           },
         });
         await global.flushPromises();
+
         expect(window.location.replace).not.toBeCalled();
+      });
+
+      it('should show error if check oauth if fault', async () => {
+        expect.assertions(1);
+
+        accountsModule.actions.checkOauthLoginRequirements.mockRejectedValueOnce(
+          'error',
+        );
+        wrapper = shallowMount(LoginProvider, {
+          localVue,
+          store,
+          mocks: {
+            $router,
+          },
+        });
+        await global.flushPromises();
+
+        console.log(wrapper.html());
+
+        expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
       });
 
       it('should make redirect if skip status is truthy on received redirect url', async () => {
         expect.assertions(1);
+
         const payload = {
           skip: true,
           redirect: 'http://foo.bar',
         };
-        accountsModule.actions.checkHydraLoginRequirements.mockResolvedValueOnce(
+        accountsModule.actions.checkOauthLoginRequirements.mockResolvedValueOnce(
           payload,
         );
         wrapper = shallowMount(LoginProvider, {
@@ -150,6 +173,7 @@ describe('LoginProvider', () => {
           },
         });
         await global.flushPromises();
+
         expect(window.location.replace).toBeCalledWith(payload.redirect);
       });
     });
@@ -165,58 +189,6 @@ describe('LoginProvider', () => {
 
       expect(wrapper.vm.error).toBeNull();
       expect($router.replace).not.toBeCalled();
-    });
-
-    describe('password submit', () => {
-      const password = 'foo';
-      const challengeId = 'bar';
-
-      it('should handle password submit and makes hydra login', async () => {
-        expect.assertions(2);
-
-        accountsModule.actions.authWithHydra.mockResolvedValueOnce({
-          redirect: 'new/path',
-        });
-
-        wrapper.setData({
-          queryParamsMap: {
-            login_challenge: challengeId,
-          },
-        });
-        wrapper.find('sign-password-stub').vm.$emit('submit', password);
-
-        expect(accountsModule.actions.authWithHydra).toBeCalledWith(
-          expect.any(Object),
-          {
-            password,
-            challengeId,
-          },
-          undefined,
-        );
-
-        await wrapper.vm.$nextTick();
-
-        expect(window.location.href).toBe('new/path');
-      });
-
-      it('should render error if submit failed', async () => {
-        expect.assertions(1);
-
-        const errorMessage = 'ivyweed perturbing Laparosticti';
-        const error = new Error(errorMessage);
-
-        accountsModule.actions.authWithHydra.mockRejectedValueOnce(error);
-        wrapper.setData({
-          queryParamsMap: {
-            challengeId,
-          },
-        });
-        wrapper.find('sign-password-stub').vm.$emit('submit', password);
-
-        await wrapper.vm.$nextTick();
-
-        expect(wrapper.vm.error).toBe(errorMessage);
-      });
     });
   });
 });

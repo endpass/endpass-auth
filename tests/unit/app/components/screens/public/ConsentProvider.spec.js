@@ -44,7 +44,7 @@ describe('ConsentProvider', () => {
         getConsentDetails: jest.fn().mockResolvedValue({
           requested_scope: [],
         }),
-        grantPermissionsWithHydra: jest.fn(),
+        grantPermissionsWithOauth: jest.fn(),
       },
     };
     storeData = {
@@ -141,7 +141,7 @@ describe('ConsentProvider', () => {
         .find('scopes-form-stub')
         .vm.$emit('submit', ['foo', 'bar', 'baz']);
 
-      expect(accountsModule.actions.grantPermissionsWithHydra).toBeCalledWith(
+      expect(accountsModule.actions.grantPermissionsWithOauth).toBeCalledWith(
         expect.any(Object),
         {
           consentChallenge: 'foo',

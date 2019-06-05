@@ -46,12 +46,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['grantPermissionsWithHydra', 'getConsentDetails']),
+    ...mapActions(['grantPermissionsWithOauth', 'getConsentDetails']),
 
     async handleScopesSubmit(scopesList) {
       this.isLoading = true;
       try {
-        const { redirect } = await this.grantPermissionsWithHydra({
+        const { redirect } = await this.grantPermissionsWithOauth({
           consentChallenge: this.queryParamsMap.consent_challenge,
           scopesList,
         });

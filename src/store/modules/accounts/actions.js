@@ -88,8 +88,7 @@ const authWithGitHub = async ({ commit }, code) => {
   }
 };
 
-const authWithHydra = async ({ commit }, { challengeId, password }) => {
-  commit('changeLoadingStatus', true);
+const authWithOauth = async (ctx, { challengeId, password }) => {
   let res;
 
   try {
@@ -110,13 +109,11 @@ const authWithHydra = async ({ commit }, { challengeId, password }) => {
   } catch (err) {
     console.error(err);
     throw new Error('Password is incorrect');
-  } finally {
-    commit('changeLoadingStatus', false);
   }
   return res;
 };
 
-const checkHydraLoginRequirements = async ({ commit }, challengeId) => {
+const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
   commit('changeLoadingStatus', true);
 
   try {
@@ -124,7 +121,7 @@ const checkHydraLoginRequirements = async ({ commit }, challengeId) => {
 
     return res;
   } catch (err) {
-    throw new Error('Checking Hydra login status');
+    throw new Error('Failed to check Oauth login status');
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -166,7 +163,7 @@ const setWalletCreated = ({ commit }) => {
 const getConsentDetails = (ctx, consentChallenge) =>
   permissionsService.getConsentDetails(consentChallenge);
 
-const grantPermissionsWithHydra = (ctx, { consentChallenge, scopesList }) =>
+const grantPermissionsWithOauth = (ctx, { consentChallenge, scopesList }) =>
   permissionsService.grantPermissions({ consentChallenge, scopesList });
 
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
@@ -482,11 +479,11 @@ export default {
   auth,
   authWithGoogle,
   authWithGitHub,
-  authWithHydra,
+  authWithOauth,
   createWallet,
   setWalletCreated,
   checkAccountExists,
-  grantPermissionsWithHydra,
+  grantPermissionsWithOauth,
   cancelAuth,
   confirmAuth,
   confirmAuthViaOtp,
@@ -513,5 +510,5 @@ export default {
   getConsentDetails,
   getAccountBalance,
   subscribeOnBalanceUpdates,
-  checkHydraLoginRequirements,
+  checkOauthLoginRequirements,
 };

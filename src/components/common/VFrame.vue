@@ -21,8 +21,9 @@
       </span>
     </header>
     <div class="frame__body">
-      <loading-screen v-if="loading" />
-      <slot v-else />
+      <loading-screen :is-loading="loading">
+        <slot />
+      </loading-screen>
     </div>
   </div>
 </template>
