@@ -11,7 +11,6 @@ describe('VFrame', () => {
 
     it('should correctly render VFrame component without loading screen by default', () => {
       expect(wrapper.name()).toBe('VFrame');
-      expect(wrapper.find('loading-screen-stub').exists()).toBe(false);
       expect(wrapper.find('[data-test="close-button"]').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });

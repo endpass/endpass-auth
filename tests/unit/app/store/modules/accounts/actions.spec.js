@@ -779,14 +779,14 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('checkHydraLoginRequirements', () => {
+  describe('checkOauthLoginRequirements', () => {
     it('should request oauth skip status with given challenge id', async () => {
       expect.assertions(2);
       const response = {
         skip: false,
       };
       permissionsService.getLoginDetails.mockResolvedValueOnce(response);
-      const res = await accountsActions.checkHydraLoginRequirements(
+      const res = await accountsActions.checkOauthLoginRequirements(
         { commit },
         'foo',
       );
@@ -798,7 +798,7 @@ describe('accounts actions', () => {
       expect.assertions(1);
       permissionsService.getLoginDetails.mockRejectedValueOnce();
       expect(
-        accountsActions.checkHydraLoginRequirements({ commit }, 'foo'),
+        accountsActions.checkOauthLoginRequirements({ commit }, 'foo'),
       ).rejects.toThrow();
     });
   });

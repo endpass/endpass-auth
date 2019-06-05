@@ -1,19 +1,18 @@
 <template>
-  <v-frame>
-    <message
-      v-if="!isReady"
-      :error="true"
-      data-test="error-message"
-    >
-      You should provide login_challenge param in url, add it and try again!
-    </message>
-    <sign-password
-      v-if="isReady"
-      :is-loading="isLoading"
-      :error="error"
-      @submit="handlePasswordSubmit"
+  <loading-screen :is-loading="isLoading">
+    <v-frame v-if="error">
+      <message
+        :error="true"
+        data-test="error-message"
+      >
+        {{ error }}
+      </message>
+    </v-frame>
+    <login-provider-password
+      v-else
+      :login-challenge="queryParamsMap.login_challenge"
     />
-  </v-frame>
+  </loading-screen>
 </template>
 
 <script>
@@ -21,9 +20,10 @@
 
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
+import LoadingScreen from '@/components/common/LoadingScreen';
+import LoginProviderPassword from './LoginProviderPassword';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import SignPassword from '@/components/forms/SignPassword';
 
 export default {
   name: 'LoginProvider',
@@ -31,46 +31,30 @@ export default {
   data: () => ({
     queryParamsMap: {},
     error: null,
-    isReady: true,
+    isLoading: true,
   }),
 
   computed: {
     ...mapState({
-      isLoading: state => state.core.loading,
       isLogin: state => state.accounts.isLogin,
     }),
   },
 
   methods: {
-    ...mapActions(['authWithHydra', 'checkHydraLoginRequirements']),
-
-    async handlePasswordSubmit(password) {
-      const { login_challenge } = this.queryParamsMap;
-
-      if (!login_challenge) {
-        throw new Error('Login challenge id is not defined');
-      }
-
-      try {
-        const { redirect } = await this.authWithHydra({
-          challengeId: login_challenge,
-          password,
-        });
-        window.location.href = redirect;
-      } catch (err) {
-        this.error = err.message;
-      }
-    },
+    ...mapActions(['checkOauthLoginRequirements']),
   },
 
   async mounted() {
+    this.isLoading = true;
+    this.error = null;
+
     const { query } = get(this.$router, 'history.current', {});
     const { href } = window.location;
 
     this.queryParamsMap = query;
 
     if (!this.queryParamsMap.login_challenge) {
-      this.isReady = false;
+      this.isLoading = false;
       return;
     }
 
@@ -81,19 +65,27 @@ export default {
       return;
     }
 
-    const res = await this.checkHydraLoginRequirements(
-      this.queryParamsMap.login_challenge,
-    );
+    try {
+      const res = await this.checkOauthLoginRequirements(
+        this.queryParamsMap.login_challenge,
+      );
 
-    if (res.skip) {
-      window.location.replace(res.redirect);
+      if (res.skip) {
+        window.location.replace(res.redirect);
+      } else {
+        this.isLoading = false;
+      }
+    } catch (e) {
+      this.error = 'Sorry, but login provider is not working';
+      this.isLoading = false;
     }
   },
 
   components: {
-    SignPassword,
-    Message,
+    LoadingScreen,
+    LoginProviderPassword,
     VFrame,
+    Message,
   },
 };
 </script>
