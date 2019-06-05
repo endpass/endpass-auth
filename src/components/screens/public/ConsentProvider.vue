@@ -75,9 +75,14 @@ export default {
 
       try {
         // load scopes
-        const { requested_scope } = await this.getConsentDetails(
-          this.queryParamsMap.consent_challenge,
-        );
+        const {
+          requested_scope,
+          skip,
+          redirect_url,
+        } = await this.getConsentDetails(this.queryParamsMap.consent_challenge);
+        if (skip) {
+          window.location.href = redirect_url;
+        }
         this.scopesList = requested_scope;
       } catch (e) {
         this.setError('Something broken, when loading scopes');
