@@ -97,6 +97,28 @@ describe('ConsentProvider', () => {
       expect($router.replace).not.toBeCalled();
     });
 
+    it('should should redirect if consent request provided skip', async () => {
+      expect.assertions(1);
+
+      // eslint-disable-next-line
+      const redirect_url = 'http://kek.kek';
+      accountsModule.actions.getConsentDetails.mockResolvedValue({
+        skip: true,
+        requested_scope: [],
+        redirect_url,
+      });
+      $router = createRouter();
+      wrapper = shallowMount(ConsentProvider, {
+        localVue,
+        store,
+        mocks: {
+          $router,
+        },
+      });
+      await wrapper.vm.$nextTick();
+      expect(window.location.href).toBe(redirect_url);
+    });
+
     it('should takes query params from current location and makes redirect if consentChallenge is not empty but authorization status is falsy', () => {
       $router = createRouter();
       accountsModule.state.isLogin = false;
