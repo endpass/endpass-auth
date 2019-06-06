@@ -20,7 +20,7 @@
     "build:dev": "rimraf ./dist && vue-cli-service build ./src/main.js --mode development ",
     "build:dev:version": "rimraf ./dist && vue-cli-service build ./src/main.js --mode version-dev",
     "build:test": "rimraf ./dist && vue-cli-service build ./src/main.js --mode test",
-    "serve:test": "rimraf ./dist && vue-cli-service serve ./src/main.js --mode e2e_connect_test",
+    "build:e2e": "rimraf ./dist && vue-cli-service build ./src/main.js --mode e2e-connect",
     "test": "vue-cli-service test:unit",
     "unit:watch": "vue-cli-service test:unit --watchAll",
     "inspect": "vue-cli-service inspect > inspect.js",
