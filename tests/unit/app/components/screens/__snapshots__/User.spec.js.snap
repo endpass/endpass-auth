@@ -2,7 +2,7 @@
 
 exports[`User render should correctly render User component 1`] = `
 <screen-stub>
-  <v-frame-stub closable="true">
+  <v-frame-stub title="Connect" closable="true">
     <account-form-stub closable="true" canlogout="true" accounts="[object Object],[object Object]" networks="[object Object],[object Object],[object Object],[object Object]" formdata="[object Object]"></account-form-stub>
   </v-frame-stub>
 </screen-stub>

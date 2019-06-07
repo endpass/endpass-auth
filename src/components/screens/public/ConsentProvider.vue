@@ -40,7 +40,7 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       isLogin: state => state.accounts.isLogin,
     }),
   },

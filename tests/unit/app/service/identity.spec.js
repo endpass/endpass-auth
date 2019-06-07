@@ -1,4 +1,4 @@
-import axios from 'axios';
+import http from '@/class/singleton/http';
 import MockAdapter from 'axios-mock-adapter';
 import {
   successResponse,
@@ -9,8 +9,12 @@ import identityService from '../../../../src/service/identity'; // must be not a
 
 jest.unmock('@/service/identity');
 
+jest.mock('@/store', () => ({
+  dispatch: jest.fn(), // mock store for http module
+}));
+
 describe('identity service', () => {
-  const axiosMock = new MockAdapter(axios);
+  const axiosMock = new MockAdapter(http);
   const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
   afterEach(() => {

@@ -17,7 +17,7 @@ describe('User', () => {
   beforeEach(() => {
     coreModule = {
       state: {
-        inited: true,
+        isInited: true,
         loading: false,
       },
       actions: {

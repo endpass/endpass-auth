@@ -6,7 +6,7 @@
         src="../../assets/logo.png"
         alt="Endpass"
       >
-      Connect
+      {{ title }}
       <span class="frame__close-btn">
         <v-button
           v-if="closable"
@@ -37,6 +37,10 @@ export default {
   name: 'VFrame',
 
   props: {
+    title: {
+      type: String,
+      default: 'Connect',
+    },
     closable: {
       type: Boolean,
       default: true,

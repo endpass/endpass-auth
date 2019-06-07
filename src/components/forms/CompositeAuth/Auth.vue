@@ -89,7 +89,7 @@ export default {
   name: 'AuthForm',
 
   props: {
-    inited: {
+    isInited: {
       type: Boolean,
       default: false,
     },

@@ -8,7 +8,7 @@ describe('Auth', () => {
   beforeEach(() => {
     wrapper = shallowMount(Auth, {
       propsData: {
-        inited: true,
+        isInited: true,
       },
     });
   });
@@ -74,7 +74,7 @@ describe('Auth', () => {
         wrapper = mount(Auth, {
           propsData: {
             message: 'foo',
-            inited: true,
+            isInited: true,
           },
         });
       });

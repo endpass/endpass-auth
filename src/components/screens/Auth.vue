@@ -1,7 +1,7 @@
 <template>
   <screen @close="handleAuthCancel">
     <v-frame
-      :loading="!inited"
+      :loading="!isInited"
       :closable="isDialog"
       @close="handleAuthCancel"
     >
@@ -41,7 +41,7 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       showCreateAccount: state => state.core.showCreateAccount,
     }),
 

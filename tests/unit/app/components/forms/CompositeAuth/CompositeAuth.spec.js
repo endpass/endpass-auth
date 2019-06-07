@@ -22,7 +22,7 @@ describe('CompositeAuth', () => {
 
     coreModule = {
       state: {
-        inited: true,
+        isInited: true,
         loading: false,
         isIdentityMode: false,
       },

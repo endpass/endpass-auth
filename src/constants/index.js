@@ -51,6 +51,8 @@ export const ENCRYPT_OPTIONS = {
   n: ENV.VUE_APP_KDF_PARAMS_N,
 };
 
+export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
+
 // TODO: merge with WALLET_TYPE from core/class
 export const WALLET_TYPES = {
   HD_MAIN: 'HDMainAccount',

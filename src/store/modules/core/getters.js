@@ -5,4 +5,5 @@ export default {
     }
     return window.self !== window.top;
   },
+  isRateLimit: state => state.rateLimitTimeout !== 0,
 };

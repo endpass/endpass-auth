@@ -1,4 +1,4 @@
-import axios from 'axios';
+import http from './http';
 import { ORIGIN_HOST } from '@/constants';
 import { parseUrl } from '@/util/dom';
 
@@ -27,14 +27,14 @@ function createAnswer(request) {
 }
 
 const request = {
-  get: url => createAnswer(axios.get(url, configWithHeaders)),
+  get: url => createAnswer(http.get(url, configWithHeaders)),
 
-  getSkipPermission: url => createAnswer(axios.get(url, configSkipPermission)),
+  getSkipPermission: url => createAnswer(http.get(url, configSkipPermission)),
 
-  post: (url, body) => createAnswer(axios.post(url, body, configWithHeaders)),
+  post: (url, body) => createAnswer(http.post(url, body, configWithHeaders)),
 
   postSkipPermission: (url, body) =>
-    createAnswer(axios.post(url, body, configSkipPermission)),
+    createAnswer(http.post(url, body, configSkipPermission)),
 };
 
 export default request;

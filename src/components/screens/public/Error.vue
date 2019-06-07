@@ -1,18 +1,24 @@
 <template>
-  <v-frame>
-    <v-error
-      :hint="errorHint"
-      :description="errorDescription"
-    />
+  <v-frame
+    :closable="isDialog"
+    @close="handleClose"
+  >
+    <div class="public-error">
+      <h1>
+        {{ errorHint }}
+      </h1>
+      <p>
+        {{ errorDescription }}
+      </p>
+    </div>
   </v-frame>
 </template>
 
 <script>
 /* eslint-disable camelcase */
 
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import VFrame from '@/components/common/VFrame';
-import VError from '@/components/common/VError';
 
 export default {
   name: 'Error',
@@ -22,6 +28,10 @@ export default {
       errorHint: '',
       errorDescription: '',
     };
+  },
+
+  computed: {
+    ...mapGetters(['isDialog']),
   },
 
   methods: {
@@ -40,7 +50,17 @@ export default {
 
   components: {
     VFrame,
-    VError,
   },
 };
 </script>
+
+<style lang="postcss">
+.public-error {
+  line-height: 1.5;
+}
+
+.public-error h1 {
+  font-size: 30px;
+  font-weight: bold;
+}
+</style>

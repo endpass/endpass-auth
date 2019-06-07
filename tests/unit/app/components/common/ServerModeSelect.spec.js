@@ -20,7 +20,7 @@ describe('ServerModeSelect', () => {
 
     coreModule = {
       state: {
-        inited: true,
+        isInited: true,
         loading: false,
       },
     };

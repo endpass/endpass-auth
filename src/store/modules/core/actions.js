@@ -13,14 +13,14 @@ const init = async ({ dispatch }) => {
 };
 
 const initDialog = async ({ state, commit }) => {
-  if (state.inited) return;
+  if (state.isInited) return;
 
   initDialogStream();
   commit('changeInitStatus', true);
 };
 
 const initWidget = async ({ state, commit }) => {
-  if (state.inited) return;
+  if (state.isInited) return;
 
   initWidgetStream();
   commit('changeInitStatus', true);
