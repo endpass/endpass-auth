@@ -2,7 +2,7 @@
 
 exports[`PublicAuth render should correctly render Auth public screen component 1`] = `
 <screen-stub>
-  <v-frame-stub>
+  <v-frame-stub title="Connect">
     <composite-auth-form-stub ispublic="true"></composite-auth-form-stub>
   </v-frame-stub>
 </screen-stub>

@@ -1,12 +1,13 @@
 <template>
   <loading-screen :is-loading="isLoading">
-    <router-view />
+    <layout-screen />
   </loading-screen>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
+import LayoutScreen from '@/components/screens/Layout';
 
 export default {
   name: 'App',
@@ -14,10 +15,6 @@ export default {
     return {
       isLoading: true,
     };
-  },
-
-  computed: {
-    ...mapGetters(['isDialog']),
   },
 
   methods: {
@@ -30,6 +27,7 @@ export default {
     this.isLoading = false;
   },
   components: {
+    LayoutScreen,
     LoadingScreen,
   },
 };

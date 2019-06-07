@@ -13,7 +13,7 @@
     />
     <auth-form
       v-else-if="currentForm === FORMS.AUTH"
-      :inited="inited"
+      :is-inited="isInited"
       :loading="loading"
       :error="error"
       :is-server-mode="isIdentityMode"
@@ -62,7 +62,7 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       loading: state => state.core.loading,
       otpEmail: state => state.accounts.otpEmail,
       isIdentityMode: state => state.core.isIdentityMode,

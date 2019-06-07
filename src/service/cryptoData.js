@@ -1,4 +1,4 @@
-import request from '@/util/request';
+import request from '@/class/singleton/request';
 
 const cryptoDataBaseUrl = ENV.VUE_APP_CRYPTODATA_API_URL;
 

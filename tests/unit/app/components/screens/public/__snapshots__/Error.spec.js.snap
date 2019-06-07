@@ -1,7 +1,14 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Error Screen render should correctly render Error component 1`] = `
-<v-frame-stub closable="true">
-  <v-error-stub hint="" description="bar"></v-error-stub>
+<v-frame-stub title="Connect" closable="true">
+  <div class="public-error">
+    <h1>
+
+    </h1>
+    <p>
+      bar
+    </p>
+  </div>
 </v-frame-stub>
 `;

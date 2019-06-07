@@ -32,7 +32,7 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       loading: state => state.core.loading,
       request: state => state.requests.request,
     }),

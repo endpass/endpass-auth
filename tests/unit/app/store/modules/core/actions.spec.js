@@ -52,7 +52,7 @@ describe('core actions', () => {
       expect.assertions(2);
 
       const state = {
-        inited: false,
+        isInited: false,
       };
 
       await coreActions.initDialog({ state, commit });
@@ -61,11 +61,11 @@ describe('core actions', () => {
       expect(commit).toBeCalledWith('changeInitStatus', true);
     });
 
-    it('should not do anything if inited is truthy', async () => {
+    it('should not do anything if isInited is truthy', async () => {
       expect.assertions(2);
 
       const state = {
-        inited: true,
+        isInited: true,
       };
 
       await coreActions.initDialog({ state, commit });
@@ -80,7 +80,7 @@ describe('core actions', () => {
       expect.assertions(2);
 
       const state = {
-        inited: false,
+        isInited: false,
       };
 
       await coreActions.initWidget({ state, commit });
@@ -89,11 +89,11 @@ describe('core actions', () => {
       expect(commit).toBeCalledWith('changeInitStatus', true);
     });
 
-    it('should not do anything if inited is truthy', async () => {
+    it('should not do anything if isInited is truthy', async () => {
       expect.assertions(2);
 
       const state = {
-        inited: true,
+        isInited: true,
       };
 
       await coreActions.initWidget({ state, commit });

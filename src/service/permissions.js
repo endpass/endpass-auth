@@ -1,4 +1,4 @@
-import request from '@/util/request';
+import request from '@/class/singleton/request';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 

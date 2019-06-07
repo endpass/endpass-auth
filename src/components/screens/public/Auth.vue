@@ -1,7 +1,7 @@
 <template>
   <screen>
     <v-frame
-      :loading="!inited"
+      :loading="!isInited"
       :closable="false"
       @close="handleAuthCancel"
     >
@@ -34,7 +34,7 @@ export default {
   methods: {
     ...mapMutations(['setAuthParams']),
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
     }),
     ...mapActions(['cancelAuth', 'dialogClose']),
 

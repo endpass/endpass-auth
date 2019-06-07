@@ -1,5 +1,6 @@
 // TODO: move it to the utils
 export function registerE2EWorker() {
+  // eslint-disable-next-line consistent-return
   return new Promise(async resolve => {
     if (!navigator.serviceWorker) return resolve();
 

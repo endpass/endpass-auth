@@ -11,8 +11,8 @@ const setAuthStatus = (state, flag) => {
 };
 
 const setAuthByCode = (state, code) => {
-  state.isLogin = code !== 401;
-  state.isPermission = !(code === 403 || code === 401);
+  state.isLogin = code === 403 || code === 200;
+  state.isPermission = code === 200;
 };
 
 const setOtpEmail = (state, email) => {
