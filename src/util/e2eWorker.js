@@ -1,39 +1,17 @@
-// TODO: move it to the utils
-export function registerE2EWorker() {
-  // eslint-disable-next-line consistent-return
-  return new Promise(async resolve => {
-    if (!navigator.serviceWorker) return resolve();
+import { SWE2EController } from '@endpass/utils/e2e';
+import { getServiceWorkerWithActivation } from '@endpass/utils/serviceWorkers';
 
-    const workerUrl = `${ENV.VUE_APP_E2E_CONNECT_BASE_URL}/e2e-sw.js`;
+export async function activateE2EWorker(target) {
+  const sw = await getServiceWorkerWithActivation(
+    `${ENV.VUE_APP_E2E_CONNECT_BASE_URL}/sw-e2e.js`,
+  );
+  const e2eController = new SWE2EController(sw);
 
-    try {
-      const registration = await navigator.serviceWorker.register(workerUrl);
-      const activateHandler = () =>
-        setTimeout(() => {
-          const isCurrentScope = new RegExp(window.location.origin).test(
-            registration.scope,
-          );
-          const isActivated = Boolean(registration.active);
-
-          if (isCurrentScope && isActivated) {
-            return resolve();
-          }
-
-          return activateHandler();
-        }, 500);
-
-      activateHandler();
-    } catch (err) {
-      /* eslint-disable */
-      console.error(`Can't register e2e worker from ${workerUrl}!`);
-      console.error(err);
-      /* eslint-enable */
-
-      return resolve();
-    }
+  Object.assign(target, {
+    e2eController,
   });
 }
 
 export default {
-  registerE2EWorker,
+  activateE2EWorker,
 };
