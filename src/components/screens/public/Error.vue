@@ -35,9 +35,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['dialogClose']),
+    ...mapActions(['cancelAllChannels', 'dialogClose']),
 
     handleClose() {
+      this.cancelAllChannels();
       this.dialogClose();
     },
   },
@@ -60,7 +61,7 @@ export default {
 }
 
 .public-error h1 {
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bold;
 }
 </style>
