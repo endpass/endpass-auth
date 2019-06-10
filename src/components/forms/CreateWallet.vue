@@ -127,7 +127,6 @@ export default {
       if (this.timerValue <= 0) {
         this.isTimerActive = false;
         this.$timer.stop('seedPhrase');
-        this.onContinue();
       }
     },
   },
