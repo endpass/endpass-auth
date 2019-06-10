@@ -432,6 +432,12 @@ const cancelSignPermission = () => {
   permissionChannel.put(Answer.createFail());
 };
 
+const cancelAllChannels = () => {
+  permissionChannel.put(Answer.createFail());
+  authChannel.put(Answer.createFail());
+  accountChannel.put(Answer.createFail());
+};
+
 const waitLogin = async ({ dispatch }) => {
   await identityService.waitLogin();
   await dispatch('defineAuthStatus');
@@ -507,6 +513,7 @@ export default {
   signPermission,
   cancelSignPermission,
   setupDemoData,
+  cancelAllChannels,
   getConsentDetails,
   getAccountBalance,
   subscribeOnBalanceUpdates,
