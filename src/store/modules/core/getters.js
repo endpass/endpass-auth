@@ -3,6 +3,7 @@ export default {
     if (ENV.VUE_APP_IS_E2E_CONNECT) {
       return true;
     }
+
     return window.self !== window.top;
   },
   isRateLimit: state => state.rateLimitTimeout !== 0,

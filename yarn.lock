@@ -1205,6 +1205,22 @@
     node-notifier "^5.4.0"
     secp256k1 "^3.7.0"
 
+"@endpass/utils@^1.6.1":
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.6.1.tgz#c9c6aab5886ab09c5b9d3c5e576e7208bc688450"
+  integrity sha512-DENybNiWzVVDs/rQvuwuViDkko4aZwr6Dsxw8bwtjxHO1hFtPVRD4+hTaFIl75wLISNaNhGi5B6G4dfiekpoIg==
+  dependencies:
+    bip39 "^3.0.2"
+    bs58check "^2.1.2"
+    dayjs "^1.8.14"
+    eth-ecies "^1.0.3"
+    ethereumjs-wallet "^0.6.3"
+    export-files "^2.1.1"
+    keythereum "^1.0.4"
+    lodash "^4.17.11"
+    node-notifier "^5.4.0"
+    secp256k1 "^3.7.0"
+
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/@intervolga/optimize-cssnano-plugin/-/optimize-cssnano-plugin-1.0.6.tgz#be7c7846128b88f6a9b1d1261a0ad06eb5c0fdf8"
