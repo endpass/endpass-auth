@@ -4,21 +4,22 @@ import router from '@/router';
 import store from '@/store';
 import Answer from '@/class/Answer';
 
-jest.mock('@/store', () => {
-  return {
-    dispatch: jest.fn(),
-    getters: { demoData: false },
-  };
-});
-
-jest.mock('@/class/singleton/channels', () => {
-  return {
-    authChannel: {
-      take: jest.fn(),
-      put: jest.fn(),
+jest.mock('@/store', () => ({
+  dispatch: jest.fn(),
+  getters: { demoData: false },
+  state: {
+    accounts: {
+      isLogin: false,
     },
-  };
-});
+  },
+}));
+
+jest.mock('@/class/singleton/channels', () => ({
+  authChannel: {
+    take: jest.fn(),
+    put: jest.fn(),
+  },
+}));
 
 describe('withAuth', () => {
   const options = {
@@ -40,7 +41,7 @@ describe('withAuth', () => {
   it('should redirect to auth', async () => {
     expect.assertions(2);
 
-    store.dispatch = jest.fn().mockResolvedValue(401);
+    store.state.accounts.isLogin = false;
     authChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withAuth(options, action);
@@ -56,7 +57,8 @@ describe('withAuth', () => {
   it('should redirect to auth and end stream', async () => {
     expect.assertions(3);
 
-    store.dispatch = jest.fn().mockResolvedValue(401);
+    store.state.accounts.isLogin = false;
+
     authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withAuth(options, action);
@@ -73,7 +75,7 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    store.dispatch = jest.fn().mockResolvedValue(403);
+    store.state.accounts.isLogin = true;
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

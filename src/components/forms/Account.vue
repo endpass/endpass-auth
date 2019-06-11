@@ -1,12 +1,20 @@
 <template>
   <form @submit.prevent="emitSubmit">
     <form-field v-if="message">
-      <message :success="true" data-test="success-message">{{
-        message
-      }}</message>
+      <message
+        :success="true"
+        data-test="success-message"
+      >
+        {{ message }}
+      </message>
     </form-field>
     <form-field v-if="error">
-      <message :error="true" data-test="error-message">{{ error }}</message>
+      <message
+        :error="true"
+        data-test="error-message"
+      >
+        {{ error }}
+      </message>
     </form-field>
     <form-field label="Active account address">
       <v-select
@@ -29,8 +37,9 @@
         type="primary"
         data-test="submit-button"
         fluid
-        >{{ primaryButtonLabel }}</v-button
       >
+        {{ primaryButtonLabel }}
+      </v-button>
     </form-field>
     <v-faucet-button
       v-if="isRopsten"
@@ -48,14 +57,16 @@
         type="danger"
         data-test="logout-button"
         @click="emitLogout"
-        >Logout</v-button
       >
+        Logout
+      </v-button>
       <v-button
         :disabled="!closable || loading"
         data-test="cancel-button"
         @click="emitCancel"
-        >Close</v-button
       >
+        Close
+      </v-button>
     </form-controls>
   </form>
 </template>

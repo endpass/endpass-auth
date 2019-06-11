@@ -2,15 +2,13 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/public/Auth.vue';
+import queryStringToMap from '@endpass/utils/queryStringToMap';
 
-jest.mock('@/util/url', () => ({
-  queryParamsToObject: jest.fn().mockImplementation(() => ({
-    redirectUrl: 'http://foo.bar',
+jest.mock('@endpass/utils/queryStringToMap', () =>
+  jest.fn().mockImplementation(() => ({
+    redirect_url: 'http://foo.bar',
   })),
-}));
-
-/* eslint-disable-next-line */
-import { queryParamsToObject } from '@/util/url';
+);
 
 const localVue = createLocalVue();
 
@@ -55,8 +53,8 @@ describe('PublicAuth', () => {
   describe('behavior', () => {
     it('should redirect to LoginProvider on auth form authorize event handling', () => {
       wrapper.setData({
-        params: {
-          redirectUrl: 'http://localhost/public/foo/bar',
+        queryParamsMap: {
+          redirect_url: 'http://localhost/public/foo/bar',
         },
       });
       wrapper.vm.$router.replace = jest.fn();
@@ -75,7 +73,7 @@ describe('PublicAuth', () => {
     });
 
     it('should not set auth params if redirectUrl not exists', () => {
-      queryParamsToObject.mockImplementation(() => ({}));
+      queryStringToMap.mockImplementation(() => ({}));
       accountsModule.mutations.setAuthParams.mockRestore();
       wrapper = shallowMount(Auth, {
         localVue,

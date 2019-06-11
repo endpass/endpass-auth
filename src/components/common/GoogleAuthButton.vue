@@ -18,7 +18,6 @@
 
 <script>
 import { mapActions } from 'vuex';
-import VButton from '@/components/common/VButton.vue';
 import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
@@ -29,8 +28,9 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['authWithGoogle', 'awaitAuthConfirm']),
+    ...mapActions(['authWithGoogle', 'waitLogin', 'confirmAuth']),
     async loginWithGoogle() {
+      // eslint-disable-next-line no-undef
       const auth = gapi.auth2.init({
         client_id: ENV.VUE_APP_GOOGLE_CLIENT_ID,
         scope: 'profile',
@@ -44,7 +44,8 @@ export default {
             .getEmail(),
           idToken: auth.currentUser.get().getAuthResponse().id_token,
         });
-        await this.awaitAuthConfirm();
+        await this.waitLogin();
+        this.confirmAuth();
       } catch (err) {
         this.handleAuthError(err);
       }
@@ -77,7 +78,6 @@ export default {
     clearInterval(this.interval);
   },
   components: {
-    VButton,
     VSvgIcon,
   },
 };

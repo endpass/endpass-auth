@@ -1,6 +1,10 @@
 <template>
   <screen @close="handleWindowClose">
-    <v-frame :loading="!request" :closable="isDialog" @close="handleSignCancel">
+    <v-frame
+      :loading="!request"
+      :closable="isDialog"
+      @close="handleSignCancel"
+    >
       <sign-form
         :loading="loading"
         :request="request"
@@ -28,7 +32,7 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       loading: state => state.core.loading,
       request: state => state.requests.request,
     }),
@@ -43,6 +47,7 @@ export default {
         await this.processRequest(res.password);
         this.error = null;
       } catch (err) {
+        console.log(err);
         this.error = err.message;
       }
     },

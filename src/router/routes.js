@@ -6,13 +6,23 @@ import User from '@/components/screens/User';
 import Loader from '@/components/screens/Loader';
 import SignPermission from '@/components/screens/SignPermission';
 import NotFound from '@/components/screens/NotFound';
-import LoginProvider from '@/components/screens/LoginProvider';
-import ConsentProvider from '@/components/screens/ConsentProvider';
 
 // Public routes
 import PublicAuth from '@/components/screens/public/Auth';
+import LoginProvider from '@/components/screens/public/LoginProvider';
+import ConsentProvider from '@/components/screens/public/ConsentProvider';
+import Widget from '@/components/widget/Widget';
+import Error from '@/components/screens/public/Error';
 
 const routes = [
+  {
+    path: '/public/widget',
+    name: 'Widget',
+    component: Widget,
+    meta: {
+      isWidget: true,
+    },
+  },
   {
     path: '/public/auth',
     name: 'PublicAuthScreen',
@@ -29,9 +39,17 @@ const routes = [
     component: ConsentProvider,
   },
   {
+    path: '/public/error',
+    name: 'Error',
+    component: Error,
+  },
+  {
     path: '/bridge',
     name: 'Bridge',
     component: Bridge,
+    meta: {
+      isDialog: true,
+    },
   },
   {
     path: '/loader',

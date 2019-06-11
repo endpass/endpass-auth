@@ -11,19 +11,35 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const needsDialogPresistance = to.meta.isDialog && !store.getters.isDialog;
+  const { isDialog, isWidget } = to.meta;
+  const needDialogRedirect = isDialog && !store.getters.isDialog;
 
-  if (to.query.code) {
+  // Github authentification handling and widget redirect preventing
+  if (to.query.code || isWidget) {
     return next();
   }
 
-  if (needsDialogPresistance && to.name !== 'Bridge') {
+  if (needDialogRedirect && to.name !== 'Bridge') {
     return next('bridge');
   }
 
   return next();
 });
 
-router.afterEach(() => {});
+router.afterEach(async to => {
+  const { isDialog, isWidget } = to.meta;
+
+  if (isDialog) {
+    await store.dispatch('initDialog');
+  }
+
+  if (isWidget) {
+    await store.dispatch('initWidget');
+  }
+
+  if (!isDialog && !isWidget) {
+    store.commit('changeInitStatus', true);
+  }
+});
 
 export default router;

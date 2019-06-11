@@ -1,7 +1,6 @@
 import Web3 from 'web3';
-import Bip39 from 'bip39';
-import HDKey from 'ethereumjs-wallet/hdkey';
 import Network from '@endpass/class/Network';
+import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
 import web3 from './web3';
 
@@ -21,9 +20,7 @@ export default {
   },
 
   async recover({ seedPhrase, recoveryIdentifier }) {
-    const seed = Bip39.mnemonicToSeed(seedPhrase);
-    const hdKey = HDKey.fromMasterSeed(seed);
-    const hdWallet = hdKey.derivePath(ENV.VUE_APP_HD_KEY_MNEMONIC_PATH);
+    const hdWallet = keystoreHDWallet.createHDWalletBySeed(seedPhrase);
     const wallet = hdWallet.deriveChild(0).getWallet();
     const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
     const web3Recover = new Web3(

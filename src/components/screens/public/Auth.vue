@@ -1,38 +1,50 @@
 <template>
   <screen>
-    <composite-auth-form
+    <v-frame
+      :loading="!isInited"
       :closable="false"
-      :is-public="true"
-      @authorize="handleAuthorize"
-    />
+      @close="handleAuthCancel"
+    >
+      <composite-auth-form
+        :closable="false"
+        :is-public="true"
+        @authorize="handleAuthorize"
+      />
+    </v-frame>
   </screen>
 </template>
 
 <script>
-import { mapMutations } from 'vuex';
-import { queryParamsToObject } from '@/util/url';
+/* eslint-disable camelcase */
+
+import { mapMutations, mapState, mapActions } from 'vuex';
+import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
+import { parseUrl } from '@/util/dom';
 
 export default {
   name: 'PublicAuth',
 
   data: () => ({
-    params: {},
+    queryParamsMap: {},
   }),
 
   methods: {
     ...mapMutations(['setAuthParams']),
+    ...mapState({
+      isInited: state => state.core.isInited,
+    }),
+    ...mapActions(['cancelAuth', 'dialogClose']),
 
     handleAuthorize() {
-      const { redirectUrl } = this.params;
+      const { redirect_url } = this.queryParamsMap;
 
-      if (redirectUrl) {
-        const fullPath = decodeURIComponent(redirectUrl);
+      if (redirect_url) {
+        const fullPath = decodeURIComponent(redirect_url);
 
-        const parser = document.createElement('a');
-        parser.href = window.location;
-        const { origin } = parser;
+        const { origin } = parseUrl(fullPath);
 
         const newPath = fullPath.replace(origin, '');
 
@@ -45,22 +57,28 @@ export default {
         // this.$router.replace(redirectRoute);
       }
     },
+
+    handleAuthCancel() {
+      this.cancelAuth();
+      this.dialogClose();
+    },
   },
 
   mounted() {
     const { search } = window.location;
 
-    this.params = queryParamsToObject(search);
+    this.queryParamsMap = queryStringToMap(search);
 
-    if (this.params.redirectUrl) {
+    if (this.queryParamsMap.redirect_url) {
       this.setAuthParams({
-        redirectUrl: decodeURIComponent(this.params.redirectUrl),
+        redirectUrl: decodeURIComponent(this.queryParamsMap.redirect_url),
       });
     }
   },
 
   components: {
     Screen,
+    VFrame,
     CompositeAuthForm,
   },
 };

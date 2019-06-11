@@ -1,10 +1,29 @@
 <template>
-  <div class="spinner" />
+  <div
+    :style="sizeStyles"
+    class="spinner"
+  />
 </template>
 
 <script>
 export default {
   name: 'Spinner',
+
+  props: {
+    size: {
+      type: Number,
+      default: 32,
+    },
+  },
+
+  computed: {
+    sizeStyles() {
+      return {
+        height: `${this.size}px`,
+        width: `${this.size}px`,
+      };
+    },
+  },
 };
 </script>
 
@@ -16,8 +35,6 @@ export default {
 }
 
 .spinner {
-  width: 32px;
-  height: 32px;
   border-radius: 50%;
   border: 3px solid #6d1f966e;
   border-top: 3px solid #6d1f96;

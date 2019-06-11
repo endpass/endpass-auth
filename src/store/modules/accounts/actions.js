@@ -1,12 +1,15 @@
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
-import { appendQueryParametersToUrl } from '@/util/url';
+import mapToQueryString from '@endpass/utils/mapToQueryString';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
+import cryptoDataService from '@/service/cryptoData';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
 
 import {
   accountChannel,
@@ -14,14 +17,26 @@ import {
   permissionChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
-import { ORIGIN_HOST } from '@/constants';
+import {
+  ENCRYPT_OPTIONS,
+  WALLET_TYPES,
+  IDENTITY_MODE,
+  METHODS,
+  ORIGIN_HOST,
+} from '@/constants';
+import filterXpub from '@/util/filterXpub';
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
-  const redirectUrl = get(state, 'authParams.redirectUrl');
-  const queryParamsToAppend = {
-    mode: type,
-  };
+  const redirectUrl = get(state, 'authParams.redirectUrl', '');
+
+  const queryParamsToAppend = {};
+
+  if (type !== IDENTITY_MODE.DEFAULT) {
+    Object.assign(queryParamsToAppend, {
+      mode: type,
+    });
+  }
 
   if (serverUrl) {
     Object.assign(queryParamsToAppend, {
@@ -31,7 +46,7 @@ const auth = async ({ state, dispatch }, { email, serverMode }) => {
 
   const request = identityService.auth(
     email,
-    appendQueryParametersToUrl(redirectUrl, queryParamsToAppend),
+    mapToQueryString(redirectUrl, queryParamsToAppend),
   );
 
   await dispatch('handleAuthRequest', {
@@ -73,38 +88,83 @@ const authWithGitHub = async ({ commit }, code) => {
   }
 };
 
-const authWithHydra = async (
-  { commit, dispatch, rootState },
-  { challengeId, password },
-) => {
-  commit('changeLoadingStatus', true);
+const authWithOauth = async (ctx, { challengeId, password }) => {
+  let res;
 
   try {
-    await dispatch('defineSettings');
+    const { email, keystore } = await permissionsService.getLoginDetails(
+      challengeId,
+    );
 
-    const { lastActiveAccount, email } = get(rootState, 'accounts.settings');
-    const v3Keystore = await dispatch('getAccount', lastActiveAccount);
     const { signature } = await signerService.signDataWithAccount({
-      account: v3Keystore,
+      account: keystore,
       data: email,
       password,
     });
 
-    await permissionsService.login({
+    res = await permissionsService.login({
       challengeId,
       signature,
     });
   } catch (err) {
-    console.log(err);
+    console.error(err);
     throw new Error('Password is incorrect');
+  }
+  return res;
+};
+
+const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    const res = await permissionsService.getLoginDetails(challengeId);
+
+    return res;
+  } catch (err) {
+    throw new Error('Failed to check Oauth login status');
   } finally {
     commit('changeLoadingStatus', false);
   }
 };
 
-const grantPermissionsWithHydra = async (ctx, { consentChallenge, scopes }) => {
-  await permissionsService.grantPermissions({ consentChallenge, scopes });
+const createWallet = async ({ commit }, { password }) => {
+  const mod = await import('@endpass/utils/walletGen');
+  const walletGen = mod.default;
+
+  const {
+    seedKey,
+    encryptedSeed,
+    v3KeystoreHdWallet,
+    v3KeystoreChildWallet,
+  } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
+
+  const info = {
+    address: v3KeystoreHdWallet.address,
+    type: WALLET_TYPES.HD_MAIN,
+    hidden: false,
+  };
+
+  await identityService.saveAccount(v3KeystoreHdWallet);
+  await identityService.saveAccountInfo(v3KeystoreHdWallet.address, info);
+  await identityService.backupSeed(encryptedSeed);
+
+  await identityService.saveAccount(v3KeystoreChildWallet);
+  await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
+
+  commit('setAccounts', [v3KeystoreChildWallet.address]);
+
+  return seedKey;
 };
+
+const setWalletCreated = ({ commit }) => {
+  commit('setAccountCreated', true);
+};
+
+const getConsentDetails = (ctx, consentChallenge) =>
+  permissionsService.getConsentDetails(consentChallenge);
+
+const grantPermissionsWithOauth = (ctx, { consentChallenge, scopesList }) =>
+  permissionsService.grantPermissions({ consentChallenge, scopesList });
 
 const handleAuthRequest = async ({ commit }, { email, request, link }) => {
   commit('changeLoadingStatus', true);
@@ -117,18 +177,13 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
     settingsService.clearLocalSettings();
 
     const type = get(res, 'challenge.challengeType');
-    if (type === 'otp') {
-      commit('setOtpEmail', email);
-      commit('changeLoadingStatus', false);
-    } else if (link) {
-      commit('setSentStatus', true);
-    }
 
-    // todo: add check status 403
-    // replace('permission');
+    commit('setOtpEmail', type === 'otp' ? email : null);
+    commit('setSentStatus', !!link);
   } catch (err) {
-    commit('changeLoadingStatus', false);
     throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
   }
 };
 
@@ -144,7 +199,7 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
   }
 };
 
-const confirmAuth = ({}, serverMode) => {
+const confirmAuth = (ctx, serverMode) => {
   authChannel.put(Answer.createOk(serverMode));
 };
 
@@ -174,9 +229,7 @@ const getSettings = async ({ dispatch }) => {
 
 const defineSettings = async ({ state, dispatch, commit, getters }) => {
   const { demoData } = getters;
-
   const settings = demoData ? state.settings : await dispatch('getSettings');
-
   const mergedSettings = settingsService.mergeSettings(settings);
 
   settingsService.setLocalSettings(mergedSettings);
@@ -198,17 +251,21 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
   try {
     await dispatch('setSettings', payload);
-
     await dispatch('defineSettings');
-    const { settings } = state;
 
+    const { settings } = state;
+    const settingsToSend = {
+      activeAccount: settings.lastActiveAccount,
+      activeNet: settings.net,
+    };
     const answer = Answer.createOk({
       type: 'update',
-      settings: {
-        activeAccount: settings.lastActiveAccount,
-        activeNet: settings.net,
-      },
+      settings: settingsToSend,
     });
+
+    commit('setBalance', null);
+
+    bridgeMessenger.send(METHODS.CHANGE_SETTINGS_REQUEST, settingsToSend);
     accountChannel.put(answer);
   } catch (err) {
     throw new Error('Something went wrong, try again later');
@@ -216,6 +273,8 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
     commit('changeLoadingStatus', false);
   }
 };
+
+const checkAccountExists = () => identityService.checkAccountExist();
 
 const getAccounts = async ({ commit }) => {
   // TODO: check `getAccounts` usages
@@ -227,7 +286,7 @@ const getAccounts = async ({ commit }) => {
 
     commit(
       'setAccounts',
-      accounts.filter(account => !/^xpub/.test(account.address)),
+      accounts.filter(account => filterXpub(account.address)),
     );
     commit('setAuthStatus', true);
   } catch (err) {
@@ -247,7 +306,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 
     const accounts = await Promise.all(
       res
-        .filter(address => !/^xpub/.test(address))
+        .filter(filterXpub)
         .map(address => identityService.getAccountWithInfo(address)),
     );
 
@@ -280,52 +339,16 @@ const getFirstPrivateAccount = async ({ state, dispatch }) => {
     : accounts.find(account => account.type !== 'PublicAccount') || null;
 };
 
-const awaitAccountCreate = async ({ commit }) => {
-  const res = await identityService.awaitAccountCreate();
-
-  commit('setAccounts', res);
+const waitAccountCreate = async ({ state }) => {
+  await asyncCheckProperty(state, 'isAccountCreated');
 };
 
 const openCreateAccountPage = async () => {
-  window.open(ENV.VUE_APP_WALLET_URL);
-};
-
-const awaitLogoutConfirm = async ({ commit }) => {
-  commit('changeLoadingStatus', true);
-
-  try {
-    await identityService.awaitLogoutConfirm();
-  } catch (err) {
-    throw err;
-  } finally {
-    commit('changeLoadingStatus', false);
-  }
+  window.open(`${ENV.VUE_APP_WALLET_URL}?closeAfterCreateWallet=true`);
 };
 
 const closeAccount = async () => {
   accountChannel.put(Answer.createOk({ type: 'close' }));
-};
-
-const logout = async ({ commit }) => {
-  commit('changeLoadingStatus', true);
-
-  try {
-    await identityService.logout();
-    settingsService.clearLocalSettings();
-    commit('logout');
-
-    accountChannel.put(
-      Answer.createOk({
-        type: 'logout',
-      }),
-    );
-  } catch (err) {
-    console.error(err);
-
-    throw new Error('Something went wrong, try again later');
-  } finally {
-    commit('changeLoadingStatus', false);
-  }
 };
 
 const getRecoveryIdentifier = async ({ state, commit }) => {
@@ -390,8 +413,9 @@ const setupDemoData = async ({ commit }, demoData) => {
 
 const signPermission = async (store, { password }) => {
   const res = await identityService.getAuthPermission();
+
   if (res.success === false) {
-    throw new Error('No permission');
+    throw new Error(res.message);
   }
   const signature = await signerService.getSignedRequest({
     v3KeyStore: res.keystore,
@@ -408,25 +432,64 @@ const cancelSignPermission = () => {
   permissionChannel.put(Answer.createFail());
 };
 
-const awaitAuthConfirm = async ({ dispatch }) => {
-  await identityService.awaitAuthConfirm();
-  await dispatch('defineOnlyV3Accounts');
-  authChannel.put(Answer.createOk());
+const cancelAllChannels = () => {
+  permissionChannel.put(Answer.createFail());
+  authChannel.put(Answer.createFail());
+  accountChannel.put(Answer.createFail());
 };
 
-const getAuthStatus = async ({ commit }) => {
+const waitLogin = async ({ dispatch }) => {
+  await identityService.waitLogin();
+  await dispatch('defineAuthStatus');
+  // authChannel.put(Answer.createOk());
+};
+
+const defineAuthStatus = async ({ commit }) => {
   const status = await identityService.getAuthStatus();
-  const isAuthority = status === 200;
-  commit('setAuthStatus', isAuthority);
+  commit('setAuthByCode', status);
   return status;
+};
+
+const getAccountBalance = async (ctx, { address, net }) => {
+  const { balance } = await cryptoDataService.getAccountBalance({
+    network: net,
+    address,
+  });
+
+  return balance;
+};
+
+const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
+  const handler = () =>
+    setTimeout(async () => {
+      const address = get(state.settings, 'lastActiveAccount');
+      const net = get(state.settings, 'net', 1);
+
+      if (address) {
+        try {
+          const balance = await dispatch('getAccountBalance', { address, net });
+
+          commit('setBalance', balance);
+        } catch (err) {
+          commit('setBalance', null);
+        }
+      }
+
+      handler();
+    }, 1500);
+
+  handler();
 };
 
 export default {
   auth,
   authWithGoogle,
   authWithGitHub,
-  authWithHydra,
-  grantPermissionsWithHydra,
+  authWithOauth,
+  createWallet,
+  setWalletCreated,
+  checkAccountExists,
+  grantPermissionsWithOauth,
   cancelAuth,
   confirmAuth,
   confirmAuthViaOtp,
@@ -438,18 +501,21 @@ export default {
   getSettings,
   defineOnlyV3Accounts,
   openCreateAccountPage,
-  awaitAccountCreate,
-  awaitAuthConfirm,
-  awaitLogoutConfirm,
+  waitAccountCreate,
+  waitLogin,
   setSettings,
   updateSettings,
-  logout,
   closeAccount,
   getRecoveryIdentifier,
   recover,
   validateCustomServer,
-  getAuthStatus,
+  defineAuthStatus,
   signPermission,
   cancelSignPermission,
   setupDemoData,
+  cancelAllChannels,
+  getConsentDetails,
+  getAccountBalance,
+  subscribeOnBalanceUpdates,
+  checkOauthLoginRequirements,
 };

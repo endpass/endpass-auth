@@ -1,17 +1,29 @@
 <template>
   <div class="frame">
     <header class="frame__header">
-      <img class="frame__logo" src="../../assets/logo.png" alt="Endpass" />
-      Connect
+      <img
+        class="frame__logo"
+        src="../../assets/logo.png"
+        alt="Endpass"
+      >
+      {{ title }}
       <span class="frame__close-btn">
-        <v-button v-if="closable" data-test="close-button" @click="emitClose">
-          <v-svg-icon name="x" fill="white" />
+        <v-button
+          v-if="closable"
+          data-test="close-button"
+          @click="emitClose"
+        >
+          <v-svg-icon
+            name="x"
+            fill="white"
+          />
         </v-button>
       </span>
     </header>
     <div class="frame__body">
-      <loading-screen v-if="loading" />
-      <slot v-else />
+      <loading-screen :is-loading="loading">
+        <slot />
+      </loading-screen>
     </div>
   </div>
 </template>
@@ -25,6 +37,10 @@ export default {
   name: 'VFrame',
 
   props: {
+    title: {
+      type: String,
+      default: 'Connect',
+    },
     closable: {
       type: Boolean,
       default: true,

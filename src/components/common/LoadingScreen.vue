@@ -1,8 +1,13 @@
 <template>
-  <div class="loading-screen">
-    <div class="loading-screen__spinner">
-      <Spinner />
+  <div v-if="isLoading">
+    <div class="loading-screen">
+      <div class="loading-screen__spinner">
+        <Spinner />
+      </div>
     </div>
+  </div>
+  <div v-else>
+    <slot />
   </div>
 </template>
 
@@ -12,6 +17,13 @@ import Spinner from '@/components/common/Spinner.vue';
 export default {
   name: 'LoadingScreen',
 
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: true,
+    },
+  },
+
   components: {
     Spinner,
   },
@@ -20,6 +32,7 @@ export default {
 
 <style lang="postcss">
 .loading-screen {
+  padding: 30px 15px 15px;
   position: absolute;
   display: flex;
   align-items: center;

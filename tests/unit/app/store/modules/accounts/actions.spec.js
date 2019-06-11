@@ -1,17 +1,20 @@
 import Web3 from 'web3';
+import walletGen from '@endpass/utils/walletGen';
 
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
+import cryptoDataService from '@/service/cryptoData';
+import permissionsService from '@/service/permissions';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
-
-import { v3KeyStore } from '@unitFixtures/accounts';
+import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
 import {
   permissionChannel,
   accountChannel,
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
 describe('accounts actions', () => {
   let dispatch;
@@ -33,7 +36,7 @@ describe('accounts actions', () => {
     const requestFunction = jest.fn();
 
     it('should auth user and change link status', async () => {
-      expect.assertions(3);
+      expect.assertions(5);
 
       requestFunction.mockResolvedValueOnce({
         success: true,
@@ -45,13 +48,15 @@ describe('accounts actions', () => {
         { email, request, link: true },
       );
 
-      expect(commit).toBeCalledTimes(2);
+      expect(commit).toBeCalledTimes(4);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'setSentStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setOtpEmail', null);
+      expect(commit).toHaveBeenNthCalledWith(3, 'setSentStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(4, 'changeLoadingStatus', false);
     });
 
     it('should set otp email if challenge type equals to otp', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       requestFunction.mockResolvedValueOnce({
         success: true,
@@ -63,10 +68,11 @@ describe('accounts actions', () => {
       const request = requestFunction();
       await accountsActions.handleAuthRequest({ commit }, { email, request });
 
-      expect(commit).toBeCalledTimes(3);
+      expect(commit).toBeCalledTimes(4);
       expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
       expect(commit).toHaveBeenNthCalledWith(2, 'setOtpEmail', email);
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(3, 'setSentStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(4, 'changeLoadingStatus', false);
     });
 
     it('should throw error if auth response is falsy', async () => {
@@ -159,6 +165,53 @@ describe('accounts actions', () => {
           serverMode: { ...serverMode, serverUrl },
         },
       );
+
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
+    });
+  });
+
+  describe('mode to query', () => {
+    const email = 'foo@bar.baz';
+    const request = 'kek';
+    const type = 'local';
+    const serverMode = { type };
+    const redirectUrl = 'redirectUrl';
+    const state = {
+      authParams: {
+        redirectUrl,
+      },
+    };
+
+    it('should call identityService.auth without mode in query url', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}`;
+
+      identityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth(
+        { state, dispatch },
+        {
+          email,
+          serverMode: {
+            type: IDENTITY_MODE.DEFAULT,
+          },
+        },
+      );
+
+      expect(identityService.auth).toBeCalledTimes(1);
+      expect(identityService.auth).toBeCalledWith(email, resultUrl);
+    });
+
+    it('should call identityService.auth with correct mode in query url', async () => {
+      expect.assertions(2);
+
+      const resultUrl = `${redirectUrl}?mode=${type}`;
+
+      identityService.auth.mockReturnValueOnce(request);
+
+      await accountsActions.auth({ state, dispatch }, { email, serverMode });
 
       expect(identityService.auth).toBeCalledTimes(1);
       expect(identityService.auth).toBeCalledWith(email, resultUrl);
@@ -321,81 +374,15 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('awaitAuthConfirm', () => {
+  describe('waitLogin', () => {
     it('should await auth confirm and then request accounts', async () => {
       expect.assertions(1);
 
-      identityService.awaitAuthConfirm.mockResolvedValueOnce(200);
+      identityService.waitLogin.mockResolvedValueOnce(200);
 
-      await accountsActions.awaitAuthConfirm({ dispatch });
+      await accountsActions.waitLogin({ dispatch });
 
-      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
-    });
-  });
-
-  describe('logout', () => {
-    it('it should logout user with identity service', async () => {
-      expect.assertions(5);
-
-      identityService.logout.mockResolvedValueOnce();
-
-      await accountsActions.logout({ dispatch, commit });
-
-      expect(accountChannel.put).toBeCalledWith({
-        status: true,
-        payload: {
-          type: 'logout',
-        },
-      });
-      expect(commit).toBeCalledTimes(3);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'logout');
-      expect(commit).toHaveBeenNthCalledWith(3, 'changeLoadingStatus', false);
-    });
-
-    it('it should throw error', async done => {
-      expect.assertions(2);
-
-      identityService.logout.mockRejectedValueOnce();
-
-      try {
-        await accountsActions.logout({ dispatch, commit });
-      } catch (err) {
-        done();
-      }
-
-      expect(commit).toBeCalledTimes(2);
-      expect(dispatch).not.toBeCalled();
-    });
-  });
-
-  describe('awaitLogoutConfirm', () => {
-    it('should await logout confirm', async () => {
-      expect.assertions(3);
-
-      identityService.awaitLogoutConfirm.mockResolvedValueOnce();
-
-      await accountsActions.awaitLogoutConfirm({ commit });
-
-      expect(commit).toBeCalledTimes(2);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
-    });
-
-    it('should throw error', async done => {
-      expect.assertions(3);
-
-      identityService.awaitLogoutConfirm.mockRejectedValueOnce();
-
-      try {
-        await accountsActions.awaitLogoutConfirm({ commit });
-      } catch (err) {
-        done();
-      }
-
-      expect(commit).toBeCalledTimes(2);
-      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+      expect(dispatch).toBeCalledWith('defineAuthStatus');
     });
   });
 
@@ -679,15 +666,15 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('getAuthStatus', () => {
+  describe('defineAuthStatus', () => {
     it('should return 200 status', async () => {
       expect.assertions(3);
 
       identityService.getAuthStatus.mockReturnValueOnce(200);
 
-      const status = await accountsActions.getAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 200);
       expect(status).toBe(200);
     });
 
@@ -696,10 +683,149 @@ describe('accounts actions', () => {
 
       identityService.getAuthStatus.mockReturnValueOnce(401);
 
-      const status = await accountsActions.getAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({ commit });
       expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 401);
       expect(status).toBe(401);
+    });
+  });
+
+  describe('getAccountBalance', () => {
+    it('should request account balance', async () => {
+      expect.assertions(2);
+
+      cryptoDataService.getAccountBalance.mockResolvedValueOnce({
+        balance: '1000',
+      });
+
+      const payload = {
+        address: accountAddress,
+        net: 1,
+      };
+      const res = await accountsActions.getAccountBalance(null, payload);
+
+      expect(cryptoDataService.getAccountBalance).toBeCalledWith({
+        address: payload.address,
+        network: payload.net,
+      });
+      expect(res).toBe('1000');
+    });
+  });
+
+  describe('subscribeOnBalanceUpdates', () => {
+    const settings = {
+      lastActiveAccount: accountAddress,
+      net: 1,
+    };
+
+    beforeAll(() => {
+      jest.useFakeTimers();
+    });
+
+    it('should sets up interval with requesting current account balance', async () => {
+      expect.assertions(2);
+
+      const balance = '1000';
+
+      dispatch.mockResolvedValueOnce(balance);
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings },
+        commit,
+        dispatch,
+      });
+
+      expect(commit).not.toBeCalled();
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).toBeCalledWith('setBalance', balance);
+    });
+
+    it('should set null balance if error annears during requesting', async () => {
+      expect.assertions(2);
+
+      dispatch.mockRejectedValueOnce();
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings },
+        commit,
+        dispatch,
+      });
+
+      expect(commit).not.toBeCalled();
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).toBeCalledWith('setBalance', null);
+    });
+
+    it('should not do anything if current account is empty', async () => {
+      expect.assertions(1);
+
+      accountsActions.subscribeOnBalanceUpdates({
+        state: { settings: {} },
+        commit,
+        dispatch,
+      });
+
+      jest.advanceTimersByTime(1500);
+
+      await global.flushPromises();
+
+      expect(commit).not.toBeCalled();
+    });
+  });
+
+  describe('checkOauthLoginRequirements', () => {
+    it('should request oauth skip status with given challenge id', async () => {
+      expect.assertions(2);
+      const response = {
+        skip: false,
+      };
+      permissionsService.getLoginDetails.mockResolvedValueOnce(response);
+      const res = await accountsActions.checkOauthLoginRequirements(
+        { commit },
+        'foo',
+      );
+      expect(res).toEqual(response);
+      expect(permissionsService.getLoginDetails).toBeCalledWith('foo');
+    });
+
+    it('should throw error if someting went wrong', async () => {
+      expect.assertions(1);
+      permissionsService.getLoginDetails.mockRejectedValueOnce();
+      expect(
+        accountsActions.checkOauthLoginRequirements({ commit }, 'foo'),
+      ).rejects.toThrow();
+    });
+  });
+
+  describe('createWallet', () => {
+    it('should create and set accounts', async () => {
+      walletGen.createComplex.mockResolvedValue({
+        seedKey: 'seedKey',
+        encryptedSeed: 'encryptedSeed',
+        v3KeystoreHdWallet: hdv3,
+        v3KeystoreChildWallet: v3KeyStore,
+      });
+
+      await accountsActions.createWallet({ commit }, { password: 'pwd' });
+
+      expect(identityService.saveAccount).toBeCalledTimes(2);
+      expect(identityService.saveAccount).toBeCalledWith(hdv3);
+      expect(identityService.saveAccountInfo).toBeCalledWith(hdv3.address, {
+        address: hdv3.address,
+        type: WALLET_TYPES.HD_MAIN,
+        hidden: false,
+      });
+      expect(identityService.backupSeed).toBeCalledWith('encryptedSeed');
+      expect(identityService.saveAccount).toBeCalledWith(v3KeyStore);
+      expect(identityService.updateAccountSettings).toBeCalledWith(
+        v3KeyStore.address,
+      );
     });
   });
 });

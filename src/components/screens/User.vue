@@ -1,6 +1,10 @@
 <template>
   <screen @close="handleWindowClose">
-    <v-frame :loading="!inited" :closable="isDialog" @close="handleCancel">
+    <v-frame
+      :loading="!isInited"
+      :closable="isDialog"
+      @close="handleCancel"
+    >
       <account-form
         :loading="loading"
         :closable="isDialog"
@@ -42,12 +46,13 @@ export default {
 
   computed: {
     ...mapState({
-      inited: state => state.core.inited,
+      isInited: state => state.core.isInited,
       loading: state => state.core.loading,
       settings: state => state.accounts.settings,
       isDemoMode: state => !!state.accounts.demoData,
+      accounts: state => state.accounts.accounts,
     }),
-    ...mapGetters(['availableAccounts', 'isDialog']),
+    ...mapGetters(['isDialog']),
 
     networksOptions() {
       return Object.values(Network.DEFAULT_NETWORKS).map(({ id, name }) => ({
@@ -57,7 +62,9 @@ export default {
     },
 
     accountsOptions() {
-      return this.availableAccounts.map(({ address }) => ({
+      if (!this.accounts) return [];
+
+      return this.accounts.map(({ address }) => ({
         value: address,
         label: address,
       }));

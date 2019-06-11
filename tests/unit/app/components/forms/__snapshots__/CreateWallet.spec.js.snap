@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateWallet render should correctly render CreateWallet component 1`] = `
+<div>
+  <div>
+    <form data-test="define-pwd-form">
+      <form-field-stub label="Please choose password:">
+        <v-input-stub placeholder="Enter password..." name="" value="" autofocus="true" type="password"></v-input-stub>
+      </form-field-stub>
+      <form-field-stub>
+        <v-input-stub placeholder="Confirm password..." name="" value="" autofocus="true" type="password"></v-input-stub>
+      </form-field-stub>
+      <!---->
+      <form-controls-stub>
+        <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+          Create Wallet
+        </v-button-stub>
+      </form-controls-stub>
+    </form>
+  </div>
+</div>
+`;

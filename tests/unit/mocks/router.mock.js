@@ -1,9 +1,7 @@
 import router from '@/router';
 
-jest.mock('@/router', () => {
-  return {
-    replace: jest.fn(),
-  };
-});
+jest.mock('@/router', () => ({
+  replace: jest.fn(),
+}));
 
 export default router;

@@ -1,12 +1,12 @@
-import axios from 'axios';
 import isEmpty from 'lodash/isEmpty';
+import http from '@/class/singleton/http';
 
 export const validateIdentityServer = async serverUrl => {
   const accountsError =
     'Your identity server does not have any accounts. Please add some accounts with your identity provider and reload this page.';
 
   try {
-    const { data: accounts } = await axios.get(`${serverUrl}/accounts`, {
+    const { data: accounts } = await http.get(`${serverUrl}/accounts`, {
       withCredentials: true,
     });
 

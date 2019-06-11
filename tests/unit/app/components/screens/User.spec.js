@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
-import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import User from '@/components/screens/User.vue';
+import { accounts } from '@unitFixtures/accounts';
 
 const localVue = createLocalVue();
 
@@ -16,11 +17,12 @@ describe('User', () => {
   beforeEach(() => {
     coreModule = {
       state: {
-        inited: true,
+        isInited: true,
         loading: false,
       },
       actions: {
         dialogClose: jest.fn(),
+        logout: jest.fn(),
       },
       getters: {
         isDialog: jest.fn(() => true),
@@ -29,25 +31,16 @@ describe('User', () => {
     accountsModule = {
       state: {
         linkSent: false,
-        accounts: null,
         settings: {
           lastActiveAccount: '0x0',
           net: 1,
         },
+        accounts,
       },
       actions: {
-        logout: jest.fn(),
         closeAccount: jest.fn(),
         updateSettings: jest.fn(),
         getAccounts: jest.fn(),
-      },
-      getters: {
-        availableAccounts: jest.fn(() => [
-          {
-            address: '0x0',
-            type: 'StandardAccount',
-          },
-        ]),
       },
     };
     storeData = {
@@ -96,7 +89,7 @@ describe('User', () => {
     it('should logout if logout button was pressed in form', () => {
       wrapper.find('account-form-stub').vm.$emit('logout');
 
-      expect(accountsModule.actions.logout).toBeCalled();
+      expect(coreModule.actions.logout).toBeCalled();
     });
 
     it('should close account if cancel button was pressed in form', () => {
@@ -105,10 +98,4 @@ describe('User', () => {
       expect(accountsModule.actions.closeAccount).toBeCalled();
     });
   });
-
-  // describe('watchers', () => {
-  //   it('should do something', () => {
-  //     expect('1 + 1').toBe(2)
-  //   })
-  // })
 });

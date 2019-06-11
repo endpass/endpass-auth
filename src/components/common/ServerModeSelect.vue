@@ -6,10 +6,10 @@
 
     <form-field>
       <v-select
+        v-model="currentIdentityServerType"
         :disabled="!isInputAllowed"
         :options="availableIdentityServerTypes"
         :items="availableIdentityServerTypes"
-        v-model="currentIdentityServerType"
         :value="currentIdentityServerType"
         label="Identity Server"
         name="currentIdentityServerType"
@@ -36,7 +36,10 @@
     </form-field>
 
     <form-field v-if="validationError">
-      <message :error="true" data-test="error-validation-message">
+      <message
+        :error="true"
+        data-test="error-validation-message"
+      >
         {{ validationError }}
       </message>
     </form-field>
@@ -95,17 +98,6 @@ export default {
     isValidating: false,
     validationError: '',
   }),
-  watch: {
-    currentIdentityServerType: {
-      handler() {
-        this.handleChange();
-      },
-      immediate: true,
-    },
-    customIdentityServer() {
-      this.handleChange();
-    },
-  },
   computed: {
     ...mapState({
       isLoading: state => state.core.loading,
@@ -129,6 +121,7 @@ export default {
 
     isServerUrlValid() {
       const regexp = new RegExp(
+        // eslint-disable-next-line
         /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/g,
       );
       const { customIdentityServer } = this;
@@ -149,6 +142,17 @@ export default {
       return (
         (isCustomValid || isLocalMode) && !validationError && isInputAllowed
       );
+    },
+  },
+  watch: {
+    currentIdentityServerType: {
+      handler() {
+        this.handleChange();
+      },
+      immediate: true,
+    },
+    customIdentityServer() {
+      this.handleChange();
     },
   },
   methods: {

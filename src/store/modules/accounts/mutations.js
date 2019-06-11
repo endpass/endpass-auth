@@ -4,8 +4,15 @@ const setAuthParams = (state, params) => {
   state.authParams = params;
 };
 
-const setAuthStatus = (state, status) => {
-  state.isAuthorized = status;
+const setAuthStatus = (state, flag) => {
+  // TODO: merge with setAuthByCode functionality
+  state.isLogin = flag;
+  state.isPermission = flag;
+};
+
+const setAuthByCode = (state, code) => {
+  state.isLogin = code === 403 || code === 200;
+  state.isPermission = code === 200;
 };
 
 const setOtpEmail = (state, email) => {
@@ -14,6 +21,10 @@ const setOtpEmail = (state, email) => {
 
 const setSentStatus = (state, status) => {
   state.linkSent = status;
+};
+
+const setAccountCreated = (state, status) => {
+  state.isAccountCreated = status;
 };
 
 const setAccounts = (state, accounts) => {
@@ -32,13 +43,19 @@ const setDemoData = (state, demoData) => {
   state.demoData = demoData;
 };
 
+const setBalance = (state, balance) => {
+  state.balance = balance;
+};
+
 const logout = state => {
   state.otpEmail = null;
   state.authParams = null;
-  state.isAuthorized = false;
+  state.isPermission = false;
+  state.isLogin = false;
   state.accounts = [];
   state.settings = null;
   state.recoveryIdentifier = null;
+  state.isAccountCreated = false;
 };
 
 export default {
@@ -48,7 +65,10 @@ export default {
   setAuthStatus,
   setOtpEmail,
   setAccounts,
+  setAccountCreated,
   setSentStatus,
   setSettings,
   setRecoveryIdentifier,
+  setAuthByCode,
+  setBalance,
 };

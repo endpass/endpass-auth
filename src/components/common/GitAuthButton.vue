@@ -1,5 +1,9 @@
 <template>
-  <button :submit="false" class="github-button" @click="loginWithGithub">
+  <button
+    :submit="false"
+    class="github-button"
+    @click="loginWithGithub"
+  >
     <v-svg-icon
       class="github-button__icon"
       name="github"
@@ -13,12 +17,11 @@
 <script>
 import { loginWithGithub } from 'github-oauth-popup';
 import { mapActions } from 'vuex';
-import VButton from '@/components/common/VButton.vue';
 import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
   methods: {
-    ...mapActions(['authWithGitHub', 'awaitAuthConfirm']),
+    ...mapActions(['authWithGitHub', 'waitLogin', 'confirmAuth']),
     async loginWithGithub() {
       try {
         const response = await loginWithGithub({
@@ -26,7 +29,8 @@ export default {
           scope: 'user:email',
         });
         await this.authWithGitHub(response.code);
-        await this.awaitAuthConfirm();
+        await this.waitLogin();
+        this.confirmAuth();
       } catch (e) {
         this.handleAuthError(e);
       }
@@ -36,12 +40,12 @@ export default {
     },
   },
   components: {
-    VButton,
     VSvgIcon,
   },
 };
 </script>
-<style type="postcss">
+
+<style lang="postcss">
 .github-button {
   display: flex;
   width: 180px;

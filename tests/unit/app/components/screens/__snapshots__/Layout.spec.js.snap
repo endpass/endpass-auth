@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Layout render should render rate limit 1`] = `<rate-limit-screen-stub></rate-limit-screen-stub>`;
+
+exports[`Layout render should render router 1`] = `<router-view-stub name="default"></router-view-stub>`;

@@ -1,27 +1,29 @@
-import request from '@/util/request';
+import request from '@/class/singleton/request';
 import get from 'lodash/get';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const createTimeout = handler => setTimeout(handler, 1500);
 
-export const getSettings = () => request.get(`${identityBaseUrl}/settings`);
+const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
-export const setSettings = settings =>
+const setSettings = settings =>
   request.post(`${identityBaseUrl}/settings`, settings);
 
-export const getOtpSettings = () =>
-  request.get(`${identityBaseUrl}/settings/otp`);
+const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
-export const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
+const getAccountsSkipPermission = () =>
+  request.getSkipPermission(`${identityBaseUrl}/accounts`);
 
-export const getAccount = address =>
+const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
+
+const getAccount = address =>
   request.get(`${identityBaseUrl}/account/${address}`);
 
-export const getAccountInfo = address =>
+const getAccountInfo = address =>
   request.get(`${identityBaseUrl}/account/${address}/info`);
 
-export const getAccountWithInfo = async address => {
+const getAccountWithInfo = async address => {
   const [v3keystore, info] = await Promise.all([
     getAccount(address),
     getAccountInfo(address),
@@ -30,7 +32,16 @@ export const getAccountWithInfo = async address => {
   return { ...v3keystore, info };
 };
 
-export const auth = (email, redirectUrl) => {
+const checkAccountExist = async () => {
+  let res = false;
+  try {
+    const list = await getAccountsSkipPermission();
+    res = list.length !== 0;
+  } catch (e) {}
+  return res;
+};
+
+const auth = (email, redirectUrl) => {
   const requestUrl = redirectUrl
     ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
     : `${identityBaseUrl}/auth`;
@@ -46,16 +57,15 @@ export const auth = (email, redirectUrl) => {
     });
 };
 
-export const getAuthPermission = () =>
+const getAuthPermission = () =>
   request.get(`${identityBaseUrl}/auth/permission`);
 
-export const setAuthPermission = signature => {
-  return request.post(`${identityBaseUrl}/auth/permission`, {
+const setAuthPermission = signature =>
+  request.post(`${identityBaseUrl}/auth/permission`, {
     signature,
   });
-};
 
-export const otpAuth = (email, code) =>
+const otpAuth = (email, code) =>
   request
     .post(`${identityBaseUrl}/auth/token`, {
       challengeType: 'otp',
@@ -68,7 +78,7 @@ export const otpAuth = (email, code) =>
       return res;
     });
 
-export const authWithGoogle = idToken =>
+const authWithGoogle = idToken =>
   request
     .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
     .then(res => {
@@ -79,7 +89,7 @@ export const authWithGoogle = idToken =>
       throw err.response.data;
     });
 
-export const authWithGitHub = code =>
+const authWithGitHub = code =>
   request
     .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
     .then(res => {
@@ -90,55 +100,45 @@ export const authWithGitHub = code =>
       throw err.response.data;
     });
 
-export const logout = () => request.post(`${identityBaseUrl}/logout`);
+const logout = () => request.post(`${identityBaseUrl}/logout`);
 
-export const getAuthStatus = async () => {
+const getAuthStatus = async () => {
   let res = 200;
   try {
-    await getAccounts();
+    await request.get(`${identityBaseUrl}/auth/check`);
   } catch (e) {
     res = get(e, ['response', 'status']);
   }
   return res;
 };
 
-export const awaitLogoutConfirm = () =>
-  new Promise(resolve => {
-    /* eslint-disable-next-line */
-    const handler = async function() {
-      try {
-        await getAccounts();
+// saveAccount,
+//   saveAccountInfo,
+//   backupSeed,
 
-        createTimeout(handler);
-      } catch (err) {
-        return resolve();
-      }
-    };
+const saveAccount = account =>
+  request.postSkipPermission(
+    `${identityBaseUrl}/account/${account.address}`,
+    account,
+  );
 
-    createTimeout(handler);
+const saveAccountInfo = (address, info) =>
+  request.postSkipPermission(
+    `${identityBaseUrl}/account/${address}/info`,
+    info,
+  );
+
+const backupSeed = encryptedSeed =>
+  request.postSkipPermission(`${identityBaseUrl}/user/seed`, {
+    seed: encryptedSeed,
   });
 
-export const awaitAccountCreate = () =>
-  new Promise((resolve, reject) => {
-    /* eslint-disable-next-line */
-    const handler = async function() {
-      try {
-        const res = await getAccounts();
-
-        if (res.filter(address => !/^xpub/.test(address)).length > 0) {
-          return resolve(res);
-        }
-
-        createTimeout(handler);
-      } catch (err) {
-        return reject(err);
-      }
-    };
-
-    createTimeout(handler);
+const updateAccountSettings = address =>
+  request.postSkipPermission(`${identityBaseUrl}/settings`, {
+    lastActiveAccount: address,
   });
 
-export const awaitAuthConfirm = () =>
+const waitLogin = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
     const handler = async function() {
@@ -155,10 +155,10 @@ export const awaitAuthConfirm = () =>
       }
     };
 
-    createTimeout(handler);
+    return handler();
   });
 
-export const getRecoveryIdentifier = email =>
+const getRecoveryIdentifier = email =>
   request
     .get(`${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`)
     .then(res => {
@@ -167,7 +167,7 @@ export const getRecoveryIdentifier = email =>
       return res.message;
     });
 
-export const recover = (email, signature, redirectUrl) =>
+const recover = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
       email,
@@ -181,24 +181,30 @@ export const recover = (email, signature, redirectUrl) =>
     });
 
 export default {
-  getSettings,
-  getOtpSettings,
   getAccount,
   getAccounts,
   getAuthStatus,
   getAccountInfo,
   getAccountWithInfo,
+  checkAccountExist,
+  saveAccount,
+  saveAccountInfo,
+  backupSeed,
+  updateAccountSettings,
+
   getAuthPermission,
   setAuthPermission,
-  setSettings,
   auth,
   authWithGoogle,
   authWithGitHub,
   otpAuth,
   logout,
-  awaitLogoutConfirm,
-  awaitAccountCreate,
-  awaitAuthConfirm,
+  waitLogin,
+
+  getSettings,
+  getOtpSettings,
+  setSettings,
+
   getRecoveryIdentifier,
   recover,
 };

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ConsentProvider render should correctly render ConsentProvider screen 1`] = `
+<v-frame-stub title="Connect">
+  <scopes-form-stub scopeslist=""></scopes-form-stub>
+</v-frame-stub>
+`;

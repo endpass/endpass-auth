@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `
-<v-frame-stub closable="true">
-  <password-form-stub></password-form-stub>
-</v-frame-stub>
-`;

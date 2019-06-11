@@ -8,8 +8,11 @@ const state = {
   otpEmail: null,
   accounts: [],
   settings: null,
+  balance: null,
   recoveryIdentifier: null,
-  isAuthorized: false,
+  isAccountCreated: false,
+  isPermission: false,
+  isLogin: false,
   demoData: null,
 };
 

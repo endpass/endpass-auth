@@ -4,8 +4,10 @@ import getters from './getters';
 
 export const state = {
   loading: false,
-  inited: false,
+  isInited: false,
+  rateLimitTimeout: 0,
   isIdentityMode: false,
+  showCreateAccount: true,
 };
 
 export default {

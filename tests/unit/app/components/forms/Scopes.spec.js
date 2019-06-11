@@ -16,18 +16,10 @@ describe('Scopes', () => {
 
     it('should render checkboxes with given scopes', () => {
       wrapper.setProps({
-        scopes: ['foo', 'bar'],
+        scopesList: ['foo', 'bar'],
       });
 
       expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    it('should render error', () => {
-      const error = 'error';
-
-      wrapper.setProps({ error });
-
-      expect(wrapper.find('[data-test=error-message]').text()).toBe(error);
     });
 
     it('should correctly disable submit button', () => {
@@ -45,23 +37,18 @@ describe('Scopes', () => {
       });
 
       expect(submitButton.text()).toBe('Allow');
-      expect(submitButton.attributes().disabled).toBeFalsy();
-
-      wrapper.setProps({
-        loading: false,
-        scopes: ['foo', 'bar'],
-      });
-      wrapper.setData({ checkedScopes: [] });
-
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
         loading: false,
-        scopes: ['foo', 'bar'],
+        scopesList: ['foo', 'bar'],
       });
-      wrapper.setData({ checkedScopes: ['foo', 'bar'] });
 
       expect(submitButton.attributes().disabled).toBeFalsy();
+
+      wrapper.vm.onChange({ foo: false, bar: false });
+
+      expect(submitButton.attributes().disabled).toBeTruthy();
     });
   });
 
@@ -69,21 +56,22 @@ describe('Scopes', () => {
     it('should submit form if all scopes are selected', () => {
       wrapper.setProps({
         loading: false,
-        scopes: ['foo', 'bar'],
+        scopesList: ['foo', 'bar'],
       });
-      wrapper.setData({ checkedScopes: ['foo', 'bar'] });
+
+      wrapper.vm.onChange({ foo: true, bar: false });
 
       wrapper.find('form').trigger('submit');
 
-      expect(wrapper.emitted().submit).toEqual([[['foo', 'bar']]]);
+      expect(wrapper.emitted().submit).toEqual([[['foo']]]);
     });
 
     it('should not submit form if at least one scope is not selected', () => {
       wrapper.setProps({
         loading: false,
-        scopes: ['foo', 'bar'],
+        scopesList: ['foo', 'bar'],
       });
-      wrapper.setData({ checkedScopes: [] });
+      wrapper.vm.onChange({ foo: false, bar: false });
 
       wrapper.find('form').trigger('submit');
 
