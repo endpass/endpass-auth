@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`GoogleAuthButton render should correctly render GoogleAuthButton component empty if auth2 isn't loaded 1`] = `
-<button disabled="disabled" data-test="submit-button" class="google-button">
+exports[`GoogleAuthButton render with gapi should correctly render GoogleAuthButton component if auth2 is loaded 1`] = `
+<button data-test="submit-button" class="google-button">
   <v-svg-icon-stub name="google" width="18px" fill="" height="18px" class="google-button__icon"></v-svg-icon-stub> <span class="google-button__text">Sign in with Google</span>
 </button>
 `;
 
-exports[`GoogleAuthButton render should correctly render GoogleAuthButton component if auth2 is loaded 1`] = `
-<button data-test="submit-button" class="google-button">
+exports[`GoogleAuthButton render without gapi should correctly render GoogleAuthButton component empty if auth2 isn't loaded 1`] = `
+<button disabled="disabled" data-test="submit-button" class="google-button">
   <v-svg-icon-stub name="google" width="18px" fill="" height="18px" class="google-button__icon"></v-svg-icon-stub> <span class="google-button__text">Sign in with Google</span>
 </button>
 `;

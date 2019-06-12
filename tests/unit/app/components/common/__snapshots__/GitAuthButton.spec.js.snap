@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`GitAuthButton render should correctly render GitAuthButton component empty if auth2 isn't loaded 1`] = `
-<button class="github-button">
+<button data-test="submit-button" class="github-button">
   <v-svg-icon-stub name="github" width="18px" fill="" height="18px" class="github-button__icon"></v-svg-icon-stub> <span class="github-button__text">Sign in with Github</span>
 </button>
 `;
