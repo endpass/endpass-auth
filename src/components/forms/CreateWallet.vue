@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!seedKey">
+    <div v-if="!isShowSeed">
       <form
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
@@ -79,7 +79,8 @@ export default {
     error: '',
     passwordConfirm: '',
     password: '',
-    seedKey: '',
+    seedKey: null,
+    isShowSeed: false,
     isLoading: false,
     isTimerActive: false,
     timerValue: SEED_PHRASE_TIMEOUT_SEC,
@@ -110,6 +111,7 @@ export default {
           this.timerValue = SEED_PHRASE_TIMEOUT_SEC;
           this.seedKey = await this.createWallet({ password: this.password });
           this.isTimerActive = true;
+          this.isShowSeed = true;
           this.$timer.start('seedPhrase');
         } catch (e) {
           console.error(e);
@@ -127,6 +129,7 @@ export default {
       if (this.timerValue <= 0) {
         this.isTimerActive = false;
         this.$timer.stop('seedPhrase');
+        this.seedKey = null;
       }
     },
   },
