@@ -1,5 +1,5 @@
 <template>
-  <loading-screen v-if="scopesList.length === 0 && !error.show" />
+  <loading-screen v-if="isLoadingScreen" />
   <v-frame
     v-else
     :closable="false"
@@ -34,6 +34,7 @@ export default {
     queryParamsMap: {},
     initialHref: window.location.href,
     isLoading: true,
+    isSkipped: false,
     scopesList: [],
     error: {
       show: false,
@@ -47,6 +48,12 @@ export default {
       isInited: state => state.core.isInited,
       isLogin: state => state.accounts.isLogin,
     }),
+
+    isLoadingScreen() {
+      return (
+        this.isSkipped || (this.scopesList.length === 0 && !this.error.show)
+      );
+    },
   },
 
   methods: {
@@ -88,6 +95,7 @@ export default {
         } = await this.getConsentDetails(this.queryParamsMap.consent_challenge);
 
         if (skip) {
+          this.isSkipped = true;
           window.location.href = redirect_url;
         }
 
