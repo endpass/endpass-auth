@@ -2,6 +2,8 @@
 
 exports[`ConsentProvider render should correctly render ConsentProvider screen 1`] = `
 <v-frame-stub title="Connect">
-  <scopes-form-stub scopeslist=""></scopes-form-stub>
+  <loading-screen-stub isloading="true"></loading-screen-stub>
+  <!---->
+  <!---->
 </v-frame-stub>
 `;
