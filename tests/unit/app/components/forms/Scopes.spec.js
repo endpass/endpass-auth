@@ -26,21 +26,21 @@ describe('Scopes', () => {
       const submitButton = wrapper.find('[data-test=submit-button]');
 
       wrapper.setProps({
-        loading: true,
+        isLoading: true,
       });
 
       expect(submitButton.text()).toBe('Loading...');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
       });
 
       expect(submitButton.text()).toBe('Allow');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
         scopesList: ['foo', 'bar'],
       });
 
@@ -55,7 +55,7 @@ describe('Scopes', () => {
   describe('behavior', () => {
     it('should submit form if all scopes are selected', () => {
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
         scopesList: ['foo', 'bar'],
       });
 
@@ -68,7 +68,7 @@ describe('Scopes', () => {
 
     it('should not submit form if at least one scope is not selected', () => {
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
         scopesList: ['foo', 'bar'],
       });
       wrapper.vm.onChange({ foo: false, bar: false });

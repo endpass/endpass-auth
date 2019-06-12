@@ -6,7 +6,7 @@
         these permissions.
       </message>
     </form-field>
-    <form-field v-if="!loading">
+    <form-field>
       <scopes-checkbox-tree
         v-for="level in scopesTree"
         :key="level.key"
@@ -18,7 +18,7 @@
     </form-field>
     <form-controls>
       <v-button
-        :disabled="!isFormValid || loading"
+        :disabled="!isFormValid || isLoading"
         :submit="true"
         :fluid="true"
         type="primary"
@@ -42,7 +42,7 @@ export default {
   name: 'ScopesForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -61,33 +61,40 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Allow' : 'Loading...';
+      return !this.isLoading ? 'Allow' : 'Loading...';
     },
   },
 
   watch: {
-    scopesList(scopesList) {
-      const tree = scopesList.reduce((map, key) => {
-        const parentKey = key.split(':').shift();
-        const parent = map[parentKey] || this.createTreeLevel(parentKey);
+    scopesList: {
+      handler(scopesList) {
+        const tree = scopesList.reduce((map, key) => {
+          const parentKey = key.split(':').shift();
+          const parent = map[parentKey] || this.createTreeLevel(parentKey);
 
-        Object.assign(map, { [parentKey]: parent });
+          Object.assign(map, { [parentKey]: parent });
 
-        if (parentKey !== key) {
-          parent.children[key] = this.createTreeLevel(key);
-        }
+          if (parentKey !== key) {
+            parent.children[key] = this.createTreeLevel(key);
+          }
 
-        return map;
-      }, {});
-
-      this.valuesScopesMap = Object.keys(tree)
-        .concat(scopesList)
-        .reduce((map, key) => {
-          Object.assign(map, { [key]: true });
           return map;
         }, {});
-      this.scopesTree = tree;
+
+        this.valuesScopesMap = Object.keys(tree)
+          .concat(scopesList)
+          .reduce(
+            (acc, key) =>
+              Object.assign(acc, {
+                [key]: true,
+              }),
+            {},
+          );
+        this.scopesTree = tree;
+      },
+      immediate: true,
     },
+
     valuesScopesMap: {
       handler() {
         const res = this.getCheckedScopes();
@@ -114,6 +121,7 @@ export default {
       if (!this.isFormValid) return;
 
       const res = this.getCheckedScopes();
+
       this.$emit('submit', res);
     },
 

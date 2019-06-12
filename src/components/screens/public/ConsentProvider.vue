@@ -1,13 +1,14 @@
 <template>
   <v-frame :closable="false">
+    <loading-screen v-if="scopesList.length === 0 && !error.show" />
     <v-error
       v-if="error.show"
       :hint="error.hint"
       :description="error.description"
     />
     <scopes-form
-      v-else
-      :loading="isLoading"
+      v-if="scopesList.length > 0"
+      :is-loading="isLoading"
       :scopes-list="scopesList"
       @submit="handleScopesSubmit"
     />
@@ -16,9 +17,9 @@
 
 <script>
 /* eslint-disable camelcase */
-
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
+import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
@@ -48,20 +49,6 @@ export default {
   methods: {
     ...mapActions(['grantPermissionsWithOauth', 'getConsentDetails']),
 
-    async handleScopesSubmit(scopesList) {
-      this.isLoading = true;
-      try {
-        const { redirect } = await this.grantPermissionsWithOauth({
-          consentChallenge: this.queryParamsMap.consent_challenge,
-          scopesList,
-        });
-        window.location.href = redirect;
-      } catch (err) {
-        this.setError(err.message);
-      }
-      this.isLoading = false;
-    },
-
     setError(hint, description = '') {
       this.error = {
         show: true,
@@ -70,24 +57,43 @@ export default {
       };
     },
 
+    async handleScopesSubmit(scopesList) {
+      this.isLoading = true;
+
+      try {
+        const { redirect } = await this.grantPermissionsWithOauth({
+          consentChallenge: this.queryParamsMap.consent_challenge,
+          scopesList,
+        });
+
+        window.location.href = redirect;
+      } catch (err) {
+        this.setError(err.message);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
     async loadScopes() {
       this.isLoading = true;
 
       try {
-        // load scopes
         const {
           requested_scope,
           skip,
           redirect_url,
         } = await this.getConsentDetails(this.queryParamsMap.consent_challenge);
+
         if (skip) {
           window.location.href = redirect_url;
         }
+
         this.scopesList = requested_scope;
-      } catch (e) {
+      } catch (err) {
         this.setError('Something broken, when loading scopes');
+      } finally {
+        this.isLoading = false;
       }
-      this.isLoading = false;
     },
   },
 
@@ -121,6 +127,7 @@ export default {
   },
 
   components: {
+    LoadingScreen,
     VError,
     VFrame,
     ScopesForm,
