@@ -1,6 +1,9 @@
 <template>
-  <v-frame :closable="false">
-    <loading-screen v-if="scopesList.length === 0 && !error.show" />
+  <loading-screen v-if="scopesList.length === 0 && !error.show" />
+  <v-frame
+    v-else
+    :closable="false"
+  >
     <v-error
       v-if="error.show"
       :hint="error.hint"
