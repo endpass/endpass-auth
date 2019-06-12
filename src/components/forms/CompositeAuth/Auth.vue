@@ -46,10 +46,16 @@
       </form-field>
       <template>
         <form-controls>
-          <google-auth-button @error="handleOauthError" />
+          <google-auth-button
+            @submit="handleSocialSubmit"
+            @error="handleOauthError"
+          />
         </form-controls>
         <form-controls>
-          <git-auth-button @error="handleOauthError" />
+          <git-auth-button
+            @submit="handleSocialSubmit"
+            @error="handleOauthError"
+          />
         </form-controls>
       </template>
       <form-controls>
@@ -168,6 +174,10 @@ export default {
       const { email, serverMode } = this;
 
       this.$emit('submit', { email, serverMode });
+    },
+
+    handleSocialSubmit() {
+      this.$emit('socialSubmit');
     },
 
     handleOauthError(err) {

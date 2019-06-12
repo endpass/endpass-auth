@@ -2,6 +2,7 @@
   <button
     :submit="false"
     class="github-button"
+    data-test="submit-button"
     @click="loginWithGithub"
   >
     <v-svg-icon
@@ -21,7 +22,7 @@ import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
   methods: {
-    ...mapActions(['authWithGitHub', 'waitLogin', 'confirmAuth']),
+    ...mapActions(['authWithGitHub']),
     async loginWithGithub() {
       try {
         const response = await loginWithGithub({
@@ -29,8 +30,7 @@ export default {
           scope: 'user:email',
         });
         await this.authWithGitHub(response.code);
-        await this.waitLogin();
-        this.confirmAuth();
+        this.$emit('submit');
       } catch (e) {
         this.handleAuthError(e);
       }

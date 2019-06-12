@@ -20,7 +20,7 @@ describe('GitAuthButton', () => {
     });
   });
 
-  describe('methods', () => {
+  describe('behaviour', () => {
     let wrapper;
     let store;
     const actions = {
@@ -44,17 +44,21 @@ describe('GitAuthButton', () => {
     it('should emit error when handle auth error', () => {
       const kek = new Error();
       wrapper.vm.handleAuthError(kek);
+
       expect(wrapper.emitted().error).toBeTruthy();
       expect(wrapper.emitted().error[0]).toEqual([kek]);
     });
 
-    it('should correctly authorize', async () => {
-      const code = 'kek';
+    it('should correctly submit', async () => {
       expect.assertions(3);
+
+      const code = 'kek';
       loginWithGithub.mockResolvedValue({
         code,
       });
-      await wrapper.vm.loginWithGithub();
+      wrapper.find('[data-test=submit-button]').trigger('click');
+      await global.flushPromises();
+
       expect(loginWithGithub).toHaveBeenCalledWith({
         client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',
@@ -64,7 +68,7 @@ describe('GitAuthButton', () => {
         code,
         undefined,
       );
-      expect(actions.waitLogin).toHaveBeenCalled();
+      expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });
 });

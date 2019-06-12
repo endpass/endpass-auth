@@ -28,7 +28,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['authWithGoogle', 'waitLogin', 'confirmAuth']),
+    ...mapActions(['authWithGoogle']),
     async loginWithGoogle() {
       // eslint-disable-next-line no-undef
       const auth = gapi.auth2.init({
@@ -36,6 +36,7 @@ export default {
         scope: 'profile',
       });
       await auth.signIn();
+
       try {
         await this.authWithGoogle({
           email: auth.currentUser
@@ -44,8 +45,7 @@ export default {
             .getEmail(),
           idToken: auth.currentUser.get().getAuthResponse().id_token,
         });
-        await this.waitLogin();
-        this.confirmAuth();
+        this.$emit('submit');
       } catch (err) {
         this.handleAuthError(err);
       }
@@ -97,7 +97,6 @@ export default {
   cursor: pointer;
   position: relative;
   text-align: center;
-  vertical-align: middle;
   white-space: nowrap;
   font-family: Roboto, arial, sans-serif;
   font-size: 14px;
