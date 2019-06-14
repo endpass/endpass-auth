@@ -10,11 +10,17 @@ jest.mock('@/streams', () => ({
   initDialogStream: jest.fn(),
   initWidgetStream: jest.fn(),
   initCoreStream: jest.fn(),
+  initDialogRequestStream: jest.fn(),
 }));
 
 /* eslint-disable */
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { initDialogStream, initWidgetStream, initCoreStream } from '@/streams';
+import {
+  initDialogStream,
+  initWidgetStream,
+  initCoreStream,
+  initDialogRequestStream,
+} from '@/streams';
 import { address } from '@unitFixtures/accounts';
 /* eslint-enable */
 
@@ -49,7 +55,7 @@ describe('core actions', () => {
 
   describe('initDialog', () => {
     it('should init dialog stream', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const state = {
         isInited: false,
@@ -58,11 +64,12 @@ describe('core actions', () => {
       await coreActions.initDialog({ state, commit });
 
       expect(initDialogStream).toBeCalled();
+      expect(initDialogRequestStream).toBeCalled();
       expect(commit).toBeCalledWith('changeInitStatus', true);
     });
 
     it('should not do anything if isInited is truthy', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const state = {
         isInited: true,
@@ -71,6 +78,7 @@ describe('core actions', () => {
       await coreActions.initDialog({ state, commit });
 
       expect(initDialogStream).not.toBeCalled();
+      expect(initDialogRequestStream).not.toBeCalled();
       expect(commit).not.toBeCalled();
     });
   });

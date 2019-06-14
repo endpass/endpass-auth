@@ -1,6 +1,7 @@
 import { SWController, SWControllerDuplexBridge } from '@endpass/e2e-utils';
 
 const registerWorker = url =>
+  // eslint-disable-next-line
   new Promise(async resolve => {
     if (!window.navigator.serviceWorker) return resolve(null);
 

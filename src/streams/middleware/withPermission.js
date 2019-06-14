@@ -1,5 +1,5 @@
 import store from '@/store';
-import dialogOpen from '../dialogOpen';
+import dialogOpen from '@/streams/Actions/dialogOpen';
 import { permissionChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 

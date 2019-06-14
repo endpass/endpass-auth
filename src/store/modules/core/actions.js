@@ -1,8 +1,13 @@
 import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { initDialogStream, initWidgetStream, initCoreStream } from '@/streams';
-// TODO: move it to the streams mehtods
-import dialogClose from '@/streams/dialogClose';
+import {
+  initDialogStream,
+  initWidgetStream,
+  initCoreStream,
+  initDialogRequestStream,
+} from '@/streams';
+// TODO: move it to the streams methods
+import dialogClose from '@/streams/Actions/dialogClose';
 
 const init = async ({ dispatch }) => {
   try {
@@ -16,6 +21,7 @@ const initDialog = async ({ state, commit }) => {
   if (state.isInited) return;
 
   initDialogStream();
+  initDialogRequestStream();
   commit('changeInitStatus', true);
 };
 

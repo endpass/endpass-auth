@@ -150,8 +150,6 @@ describe('LoginProvider', () => {
         });
         await global.flushPromises();
 
-        console.log(wrapper.html());
-
         expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
       });
 
