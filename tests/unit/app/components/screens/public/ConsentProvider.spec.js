@@ -158,6 +158,10 @@ describe('ConsentProvider', () => {
           $router,
         },
       });
+      wrapper.setData({
+        scopesList: ['foo', 'bar', 'baz'],
+        isLoading: false,
+      });
 
       wrapper
         .find('scopes-form-stub')

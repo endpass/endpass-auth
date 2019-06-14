@@ -8,12 +8,12 @@ import {
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
 import { Answer } from '@/class';
-import Queue from './Queue';
-import middleware from './middleware';
-import { initDialogResizeStream } from './dialogResize';
+import Queue from '@/streams/Queue';
+import middleware from '@/streams/middleware';
+import { initDialogResize } from '@/streams/Actions/dialogResize';
 
 function initDialogStream() {
-  initDialogResizeStream();
+  initDialogResize();
 
   const queueInst = new Queue({ middleware });
 

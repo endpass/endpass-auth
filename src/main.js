@@ -1,15 +1,13 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
-import { injectE2EResolver } from '@endpass/utils/e2e';
-import { activateE2EWorker } from '@/util/e2eWorker';
+import e2eSetup from '@/util/e2eSetup';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
 
 (async () => {
   if (ENV.VUE_APP_IS_E2E_CONNECT) {
-    await activateE2EWorker(window);
-    await injectE2EResolver(window);
+    await e2eSetup(window);
   }
 
   Vue.use(VShowSlide);

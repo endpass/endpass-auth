@@ -76,6 +76,7 @@ describe('CreateWallet', () => {
         passwordConfirm: 'pwd',
         password: 'pwd',
       });
+      accountsModule.actions.createWallet.mockRejectedValueOnce('kek');
 
       wrapper.find('[data-test=define-pwd-form]').trigger('submit');
       await global.flushPromises();
@@ -107,6 +108,18 @@ describe('CreateWallet', () => {
       expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
         true,
       );
+    });
+
+    it('should reset seedPhrase', () => {
+      const spy = jest.spyOn(wrapper.vm.$timer, 'stop');
+      wrapper.vm.seedKey = 'xxx';
+      wrapper.vm.timerValue = 0;
+
+      wrapper.vm.handleSeedPhraseTimer();
+
+      expect(wrapper.vm.$timer.stop).toHaveBeenCalledTimes(1);
+      expect(wrapper.vm.seedKey).toBeNull();
+      spy.mockRestore();
     });
   });
 });

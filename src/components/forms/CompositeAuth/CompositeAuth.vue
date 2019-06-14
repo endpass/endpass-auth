@@ -18,6 +18,7 @@
       :error="error"
       :is-server-mode="isIdentityMode"
       :is-public="isPublic"
+      @socialSubmit="handleSocialSubmit"
       @submit="handleAuthSubmit"
       @error="handleAuthError"
     />
@@ -87,6 +88,12 @@ export default {
 
     async handleOtpRecover() {
       await this.handleLinkSent();
+    },
+
+    async handleSocialSubmit() {
+      await this.waitLogin();
+
+      this.handleSubmit();
     },
 
     async handleAuthSubmit({ email, serverMode }) {
