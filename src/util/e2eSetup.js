@@ -1,7 +1,7 @@
 import { SWController, SWControllerDuplexBridge } from '@endpass/e2e-utils';
 
-const registerWorker = url => {
-  return new Promise(async resolve => {
+const registerWorker = url =>
+  new Promise(async resolve => {
     if (!window.navigator.serviceWorker) return resolve(null);
 
     try {
@@ -26,7 +26,6 @@ const registerWorker = url => {
       return resolve(null);
     }
   });
-};
 
 const e2eSetup = async () => {
   const sw = await registerWorker(
