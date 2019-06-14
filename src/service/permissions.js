@@ -20,9 +20,22 @@ export const grantPermissions = async ({ consentChallenge, scopesList }) =>
     grantScopes: scopesList,
   });
 
+export const exchangeCodeToToken = async fields => {
+  const formData = Object.keys(fields).reduce((form, key) => {
+    form.append(key, fields[key]);
+    return form;
+  }, new FormData());
+
+  const url = `${identityBaseUrl}/oauth/token`;
+
+  const data = await request.post(url, formData);
+  return data;
+};
+
 export default {
   login,
   grantPermissions,
   getConsentDetails,
   getLoginDetails,
+  exchangeCodeToToken,
 };

@@ -4,8 +4,10 @@ import { METHODS } from '@/constants';
 import withPayloadHandler from './middleware/withPayloadHandler';
 import answerToRequest from './middleware/answerToRequest';
 import Queue from './Queue';
+import { initDialogResize } from '@/streams/Actions/dialogResize';
 
 function initWidgetStream() {
+  initDialogResize();
   const queueInst = new Queue({
     middleware: [withPayloadHandler, answerToRequest],
   });

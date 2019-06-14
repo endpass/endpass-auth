@@ -1,4 +1,4 @@
-import dialogOpen from '../dialogOpen';
+import dialogOpen from '@/streams/Actions/dialogOpen';
 
 export default function toLoader(options) {
   if (options.routeName !== undefined) {
