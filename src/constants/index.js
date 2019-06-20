@@ -1,5 +1,9 @@
 import { parseUrl } from '@/util/dom';
 
+export const ERRORS = {
+  AUTH_CANCELED_BY_USER: 'AUTH_CANCELED_BY_USER',
+};
+
 export const METHODS = {
   SIGN: 'SIGN',
   ACCOUNT: 'ACCOUNT',

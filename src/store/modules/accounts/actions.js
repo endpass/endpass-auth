@@ -23,6 +23,7 @@ import {
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
+  ERRORS,
 } from '@/constants';
 import filterXpub from '@/util/filterXpub';
 
@@ -204,7 +205,7 @@ const confirmAuth = (ctx, serverMode) => {
 };
 
 const cancelAuth = () => {
-  authChannel.put(Answer.createFail('Auth was canceled by user!'));
+  authChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
 };
 
 const getSettings = async ({ dispatch }) => {
@@ -429,13 +430,13 @@ const signPermission = async (store, { password }) => {
 };
 
 const cancelSignPermission = () => {
-  permissionChannel.put(Answer.createFail());
+  permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
 };
 
 const cancelAllChannels = () => {
-  permissionChannel.put(Answer.createFail());
-  authChannel.put(Answer.createFail());
-  accountChannel.put(Answer.createFail());
+  permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
+  authChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
+  accountChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
 };
 
 const waitLogin = async ({ dispatch }) => {

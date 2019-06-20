@@ -14,7 +14,7 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
+import { ERRORS, IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
 describe('accounts actions', () => {
   let dispatch;
@@ -311,7 +311,7 @@ describe('accounts actions', () => {
 
       expect(authChannel.put).toBeCalledWith({
         status: false,
-        error: 'Auth was canceled by user!',
+        error: ERRORS.AUTH_CANCELED_BY_USER,
       });
     });
   });
@@ -659,7 +659,7 @@ describe('accounts actions', () => {
     });
 
     it('should cancel sign permission', async () => {
-      const fail = Answer.createFail();
+      const fail = Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER);
       accountsActions.cancelSignPermission();
 
       expect(permissionChannel.put).toBeCalledWith(fail);
