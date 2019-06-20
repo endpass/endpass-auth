@@ -1,5 +1,8 @@
 <template>
-  <header class="widget-header">
+  <header
+    class="widget-header"
+    @click="handleTogglerClick"
+  >
     <section class="widget-header-control">
       <h3 class="widget-header-title">
         balance
@@ -7,7 +10,6 @@
       <button
         class="widget-header-toggler"
         data-test="widget-header-toggler"
-        @click="handleTogglerClick"
       >
         {{ togglerLabel }}
       </button>
@@ -76,6 +78,7 @@ export default {
   background-position: 80% center;
   background-size: 55%;
   background-repeat: no-repeat;
+  cursor: pointer;
 }
 
 .widget-header-control {
