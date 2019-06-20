@@ -1,3 +1,4 @@
+import ConnectError from '@endpass/class/ConnectError';
 import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import {
@@ -60,14 +61,14 @@ const startBridge = async ({ dispatch, commit, getters }) => {
 const logout = async ({ commit }) => {
   commit('changeLoadingStatus', true);
 
-  const { error, source } = await bridgeMessenger.sendAndWaitResponse(
+  const { error, code, source } = await bridgeMessenger.sendAndWaitResponse(
     METHODS.LOGOUT_REQUEST,
   );
 
   commit('changeLoadingStatus', false);
 
-  if (error) {
-    throw new Error(error);
+  if (error || code) {
+    throw ConnectError.create(code, error);
   }
 
   if (!source || source === DIRECTION.AUTH) {
@@ -80,15 +81,15 @@ const logout = async ({ commit }) => {
 const changeAccount = async ({ commit }, address) => {
   commit('changeLoadingStatus', true);
 
-  const res = await bridgeMessenger.sendAndWaitResponse(
+  const { error, code } = await bridgeMessenger.sendAndWaitResponse(
     METHODS.CHANGE_SETTINGS_REQUEST,
     {
       address,
     },
   );
 
-  if (res.error) {
-    throw new Error(res.error);
+  if (error || code) {
+    throw ConnectError.create(code, error);
   }
 
   commit('changeLoadingStatus', false);
