@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
+import ConnectError from '@endpass/class/ConnectError';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
@@ -23,9 +24,11 @@ import {
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
-  ERRORS,
 } from '@/constants';
+
 import filterXpub from '@/util/filterXpub';
+
+const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -82,7 +85,6 @@ const authWithGitHub = async ({ commit }, code) => {
     }
   } catch (err) {
     console.error(err);
-
     throw new Error(err.message);
   } finally {
     commit('changeLoadingStatus', false);
@@ -205,7 +207,12 @@ const confirmAuth = (ctx, serverMode) => {
 };
 
 const cancelAuth = () => {
-  authChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
+  authChannel.put(
+    Answer.createFail(
+      ERRORS.AUTH_CANCELED_BY_USER,
+      'Auth was canceled by user!',
+    ),
+  );
 };
 
 const getSettings = async ({ dispatch }) => {

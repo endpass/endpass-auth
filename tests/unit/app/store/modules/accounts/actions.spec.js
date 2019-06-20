@@ -1,5 +1,6 @@
 import Web3 from 'web3';
 import walletGen from '@endpass/utils/walletGen';
+import ConnectError from '@endpass/class/ConnectError';
 
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
@@ -14,7 +15,9 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { ERRORS, IDENTITY_MODE, WALLET_TYPES } from '@/constants';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
+
+const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
   let dispatch;
@@ -311,7 +314,8 @@ describe('accounts actions', () => {
 
       expect(authChannel.put).toBeCalledWith({
         status: false,
-        error: ERRORS.AUTH_CANCELED_BY_USER,
+        error: 'Auth was canceled by user!',
+        code: ERRORS.AUTH_CANCELED_BY_USER,
       });
     });
   });
