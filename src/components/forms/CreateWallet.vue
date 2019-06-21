@@ -8,7 +8,13 @@
         <form-field label="Please choose password:">
           <v-input
             v-model="password"
+            v-validate="'required|min:8'"
+            data-vv-as="password"
+            data-vv-name="password"
+            label=""
+            :error="errors.first('password')"
             :autofocus="true"
+            required
             type="password"
             placeholder="Enter password..."
           />
@@ -16,6 +22,12 @@
         <form-field>
           <v-input
             v-model="passwordConfirm"
+            v-validate="'required|min:8'"
+            label=""
+            data-vv-as="password confirm"
+            data-vv-name="passwordConfirm"
+            :error="errors.first('passwordConfirm')"
+            required
             :autofocus="true"
             type="password"
             placeholder="Confirm password..."
@@ -34,7 +46,6 @@
             :submit="true"
             type="primary"
             data-test="submit-button"
-            @click="onCreateWallet"
           >
             {{ primaryButtonLabel }}
           </v-button>
@@ -53,23 +64,20 @@
         </p>
       </div>
       <v-button @click="onContinue">
-        Continue {{ timeoutTitle }}
+        Continue
       </v-button>
     </div>
   </div>
 </template>
 
 <script>
-import VueTimers from 'vue-timers/mixin';
 import { mapActions } from 'vuex';
 import VButton from '@/components/common/VButton.vue';
 import Message from '@/components/common/Message.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import VInput from '@/components/common/VInput.vue';
+import VInput from '@endpass/ui/components/VInput';
 import FormField from '@/components/common/FormField.vue';
-
-const SEED_PHRASE_TIMEOUT_SEC = 10;
-const UPDATE_SEED_PHRASE_INTERVAL_MSEC = 1000;
+import formMixin from '@/mixins/form';
 
 export default {
   name: 'CreateWalletForm',
@@ -82,13 +90,11 @@ export default {
     seedKey: null,
     isShowSeed: false,
     isLoading: false,
-    isTimerActive: false,
-    timerValue: SEED_PHRASE_TIMEOUT_SEC,
   }),
 
   computed: {
     canSubmit() {
-      return this.isPasswordEqual && !this.isLoading;
+      return this.isPasswordEqual && !this.isLoading && this.isFormValid;
     },
     isPasswordEqual() {
       return this.password && this.password === this.passwordConfirm;
@@ -96,55 +102,32 @@ export default {
     primaryButtonLabel() {
       return this.isLoading ? 'Loading...' : 'Create Wallet';
     },
-    timeoutTitle() {
-      return this.isTimerActive ? `(${this.timerValue})` : '';
-    },
   },
 
   methods: {
     ...mapActions(['createWallet', 'setWalletCreated']),
     async onCreateWallet() {
-      if (this.isPasswordEqual) {
-        this.isLoading = true;
-        try {
-          this.error = '';
-          this.timerValue = SEED_PHRASE_TIMEOUT_SEC;
-          this.seedKey = await this.createWallet({ password: this.password });
-          this.isTimerActive = true;
-          this.isShowSeed = true;
-          this.$timer.start('seedPhrase');
-        } catch (e) {
-          console.error(e);
-          this.error = 'Something broken, when trying to create new Wallet';
-        }
-        this.isLoading = false;
+      if (!this.canSubmit) {
+        return;
       }
+
+      this.isLoading = true;
+      try {
+        this.error = '';
+        this.seedKey = await this.createWallet({ password: this.password });
+        this.isShowSeed = true;
+      } catch (e) {
+        console.error(e);
+        this.error = 'Something broken, when trying to create new Wallet';
+      }
+      this.isLoading = false;
     },
     onContinue() {
       this.setWalletCreated();
     },
-    handleSeedPhraseTimer() {
-      this.timerValue = this.timerValue - 1;
-
-      if (this.timerValue <= 0) {
-        this.isTimerActive = false;
-        this.$timer.stop('seedPhrase');
-        this.seedKey = null;
-      }
-    },
   },
 
-  mixins: [VueTimers],
-
-  timers: {
-    seedPhrase: {
-      repeat: true,
-      time: UPDATE_SEED_PHRASE_INTERVAL_MSEC,
-      callback() {
-        this.handleSeedPhraseTimer();
-      },
-    },
-  },
+  mixins: [formMixin],
 
   components: {
     FormField,

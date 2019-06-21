@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
+import ConnectError from '@endpass/class/ConnectError';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
@@ -24,7 +25,10 @@ import {
   METHODS,
   ORIGIN_HOST,
 } from '@/constants';
+
 import filterXpub from '@/util/filterXpub';
+
+const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
   const { type, serverUrl } = serverMode;
@@ -81,7 +85,6 @@ const authWithGitHub = async ({ commit }, code) => {
     }
   } catch (err) {
     console.error(err);
-
     throw new Error(err.message);
   } finally {
     commit('changeLoadingStatus', false);
@@ -204,7 +207,12 @@ const confirmAuth = (ctx, serverMode) => {
 };
 
 const cancelAuth = () => {
-  authChannel.put(Answer.createFail('Auth was canceled by user!'));
+  authChannel.put(
+    Answer.createFail(
+      ERRORS.AUTH_CANCELED_BY_USER,
+      'Auth was canceled by user!',
+    ),
+  );
 };
 
 const getSettings = async ({ dispatch }) => {
@@ -429,13 +437,13 @@ const signPermission = async (store, { password }) => {
 };
 
 const cancelSignPermission = () => {
-  permissionChannel.put(Answer.createFail());
+  permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
 };
 
 const cancelAllChannels = () => {
-  permissionChannel.put(Answer.createFail());
-  authChannel.put(Answer.createFail());
-  accountChannel.put(Answer.createFail());
+  permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
+  authChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
+  accountChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
 };
 
 const waitLogin = async ({ dispatch }) => {

@@ -1133,10 +1133,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.14.4":
-  version "0.14.4"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.4.tgz#9b82f4bd838e9fe75c19e42ad5a846d3caea0079"
-  integrity sha512-cjtzFjjljSE/rhQ53EOi1TEUKggc8nM3bHThHchqNxIkA4k7jt/CnE+s5SWsBjbwrpGuiPs0GuknCcKVXFSBpA==
+"@endpass/class@^0.14.5":
+  version "0.14.5"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.5.tgz#66b4940c8f5a9bb9063c5e51b69f32a4fdf9e6e1"
+  integrity sha512-Yfr+3PMeUXiW1OYSYHalxvx5mZK0gYtsq2BzfnHnxew17FdOROmZHCVbdq/Ihkrf08XjxmjBv2Jz7BQZeCD7ww==
   dependencies:
     "@endpass/utils" "^1.4.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"
@@ -1155,10 +1155,10 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/class@^0.14.5":
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.5.tgz#66b4940c8f5a9bb9063c5e51b69f32a4fdf9e6e1"
-  integrity sha512-Yfr+3PMeUXiW1OYSYHalxvx5mZK0gYtsq2BzfnHnxew17FdOROmZHCVbdq/Ihkrf08XjxmjBv2Jz7BQZeCD7ww==
+"@endpass/class@^0.14.6":
+  version "0.14.6"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.6.tgz#11ed4f1c9b561897a06efbdb7bdfdc52941d3018"
+  integrity sha512-PeQhLrJzdpQU81BZyoGtAdHmhiGKCuOhi3sHOBrdvZAkSbC6xgwcKAckRRysfkGRsutOBhjpvr0GeUWSsf5bkA==
   dependencies:
     "@endpass/utils" "^1.4.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"
@@ -13381,6 +13381,11 @@ vary@^1, vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
   integrity sha1-IpnwLG3tMNSllhsLn3RSShj2NPw=
+
+vee-validate@^2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/vee-validate/-/vee-validate-2.2.11.tgz#80b4e4b1354e6460b72b2a864a21a9298e2d71ce"
+  integrity sha512-wQMhq1cPOk+eaE+iKVyoyEUp1mczpeSvL4V3sardi9+KMgDw853kCd6v0iajdH8uUSpj319BVdXkmDlx1qWFog==
 
 vendors@^1.0.0:
   version "1.0.2"

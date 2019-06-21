@@ -1,11 +1,13 @@
 import Vuex from 'vuex';
 import VueTimers from 'vue-timers/mixin';
+import validation from '@/validation';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CreateWallet from '@/components/forms/CreateWallet.vue';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+localVue.use(validation);
 
 jest.useFakeTimers();
 
@@ -47,11 +49,16 @@ describe('CreateWallet', () => {
     });
   });
 
+  async function doSubmit() {
+    await wrapper.vm.$nextTick();
+    wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+  }
+
   describe('behavior', () => {
     it('should not switch from password form', async () => {
       expect.assertions(2);
 
-      wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+      await doSubmit();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
@@ -61,14 +68,14 @@ describe('CreateWallet', () => {
         password: 'pw',
       });
 
-      wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+      await doSubmit();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
     });
 
-    it('should switch to seed box', async () => {
-      expect.assertions(3);
+    it('should not switch to seed box, if pwd less 8', async () => {
+      expect.assertions(2);
 
       expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
 
@@ -78,15 +85,29 @@ describe('CreateWallet', () => {
       });
       accountsModule.actions.createWallet.mockRejectedValueOnce('kek');
 
-      wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+      await doSubmit();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+    });
 
-      wrapper.vm.$timer.start('seedPhrase');
-      jest.runOnlyPendingTimers();
+    it('should validate pwd value and switch to seed box', async () => {
+      expect.assertions(2);
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+      expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
+        false,
+      );
+
+      wrapper.setData({
+        passwordConfirm: '12345678',
+        password: '12345678',
+      });
+      accountsModule.actions.createWallet.mockResolvedValueOnce('kek');
+
+      await doSubmit();
+      await global.flushPromises();
+
+      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(true);
     });
 
     it('should handle error, if create wallet broken', async () => {
@@ -102,24 +123,12 @@ describe('CreateWallet', () => {
       });
       accountsModule.actions.createWallet.mockRejectedValueOnce('kek');
 
-      wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+      await doSubmit();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
-        true,
+        false,
       );
-    });
-
-    it('should reset seedPhrase', () => {
-      const spy = jest.spyOn(wrapper.vm.$timer, 'stop');
-      wrapper.vm.seedKey = 'xxx';
-      wrapper.vm.timerValue = 0;
-
-      wrapper.vm.handleSeedPhraseTimer();
-
-      expect(wrapper.vm.$timer.stop).toHaveBeenCalledTimes(1);
-      expect(wrapper.vm.seedKey).toBeNull();
-      spy.mockRestore();
     });
   });
 });

@@ -21,14 +21,16 @@ describe('Answer class', () => {
 
   describe('create fail answer', () => {
     it('should return fail correct structure', () => {
-      const payload = {
+      const code = 'code';
+      const error = {
         data: 'data',
       };
-      const res = Answer.createFail(payload);
+      const res = Answer.createFail(code, error);
 
       expect(res).toEqual({
         status: false,
-        error: payload,
+        code,
+        error,
       });
     });
   });
