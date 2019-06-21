@@ -8,7 +8,13 @@
         <form-field label="Please choose password:">
           <v-input
             v-model="password"
+            v-validate="'required|min:8'"
+            data-vv-as="password"
+            data-vv-name="password"
+            label=""
+            :error="errors.first('password')"
             :autofocus="true"
+            required
             type="password"
             placeholder="Enter password..."
           />
@@ -16,6 +22,12 @@
         <form-field>
           <v-input
             v-model="passwordConfirm"
+            v-validate="'required|min:8'"
+            label=""
+            data-vv-as="password confirm"
+            data-vv-name="passwordConfirm"
+            :error="errors.first('passwordConfirm')"
+            required
             :autofocus="true"
             type="password"
             placeholder="Confirm password..."
@@ -63,8 +75,9 @@ import { mapActions } from 'vuex';
 import VButton from '@/components/common/VButton.vue';
 import Message from '@/components/common/Message.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import VInput from '@/components/common/VInput.vue';
+import VInput from '@endpass/ui/components/VInput';
 import FormField from '@/components/common/FormField.vue';
+import formMixin from '@/mixins/form';
 
 export default {
   name: 'CreateWalletForm',
@@ -81,7 +94,7 @@ export default {
 
   computed: {
     canSubmit() {
-      return this.isPasswordEqual && !this.isLoading;
+      return this.isPasswordEqual && !this.isLoading && this.isFormValid;
     },
     isPasswordEqual() {
       return this.password && this.password === this.passwordConfirm;
@@ -94,25 +107,27 @@ export default {
   methods: {
     ...mapActions(['createWallet', 'setWalletCreated']),
     async onCreateWallet() {
-      if (this.isPasswordEqual) {
-        this.isLoading = true;
-        try {
-          this.error = '';
-          this.seedKey = await this.createWallet({ password: this.password });
-          this.isShowSeed = true;
-        } catch (e) {
-          console.error(e);
-          this.error = 'Something broken, when trying to create new Wallet';
-        }
-        this.isLoading = false;
+      if (!this.canSubmit) {
+        return;
       }
+
+      this.isLoading = true;
+      try {
+        this.error = '';
+        this.seedKey = await this.createWallet({ password: this.password });
+        this.isShowSeed = true;
+      } catch (e) {
+        console.error(e);
+        this.error = 'Something broken, when trying to create new Wallet';
+      }
+      this.isLoading = false;
     },
     onContinue() {
       this.setWalletCreated();
     },
   },
 
-  mixins: [],
+  mixins: [formMixin],
 
   components: {
     FormField,
