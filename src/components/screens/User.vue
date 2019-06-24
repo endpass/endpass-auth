@@ -31,6 +31,7 @@ import Network from '@endpass/class/Network';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import AccountForm from '@/components/forms/Account';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'User',
@@ -121,8 +122,7 @@ export default {
     },
 
     handleDonateSuccess() {
-      this.message =
-        'Donation request successfully sent. In the most cases it can takes a few time before you will receive funds.';
+      this.message = i18n.t('components.user.donationSuccess');
       this.changeLoadingStatus(false);
     },
 

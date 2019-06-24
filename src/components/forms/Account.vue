@@ -16,14 +16,14 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field label="Active account address">
+    <form-field :label="$t('components.account.address')">
       <v-select
         v-model="formData.activeAccount"
         :items="accounts"
         name="activeAccount"
       />
     </form-field>
-    <form-field label="Active network">
+    <form-field :label="$t('components.account.activeNet')">
       <v-select
         v-model="formData.activeNet"
         :items="networks"
@@ -49,7 +49,7 @@
       @donate="emitDonateSuccess"
       @donate-error="emitDonateError"
     >
-      Request 1 ETH from faucet
+      {{ $t('components.account.requestEth') }}
     </v-faucet-button>
     <form-controls>
       <v-button
@@ -58,14 +58,14 @@
         data-test="logout-button"
         @click="emitLogout"
       >
-        Logout
+        {{ $t('global.logout') }}
       </v-button>
       <v-button
         :disabled="!closable || loading"
         data-test="cancel-button"
         @click="emitCancel"
       >
-        Close
+        {{ $t('global.close') }}
       </v-button>
     </form-controls>
   </form>
@@ -79,6 +79,7 @@ import VSelect from '@/components/common/VSelect.vue';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'AccountForm',
@@ -127,7 +128,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Update account' : 'Loading...';
+      return !this.loading
+        ? i18n.t('component.account.updateAccount')
+        : i18n.t('global.loading');
     },
 
     isRopsten() {
@@ -165,10 +168,7 @@ export default {
 
     emitDonateError(e) {
       if (e.message.includes('403')) {
-        this.$emit(
-          'donate-error',
-          'Something went wrong. Try request dontaion later!',
-        );
+        this.$emit('donate-error', i18n.t('component.account.donationError'));
       }
     },
   },

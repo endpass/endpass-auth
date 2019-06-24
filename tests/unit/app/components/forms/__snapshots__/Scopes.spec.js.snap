@@ -4,8 +4,7 @@ exports[`Scopes render should correctly render component 1`] = `
 <form>
   <form-field-stub>
     <message-stub>
-      Application requests following scopes. Press "Allow" button to grant
-      these permissions.
+      Application requests following scopes. Press "Allow" button to grant these permissions.
     </message-stub>
   </form-field-stub>
   <form-field-stub></form-field-stub>
@@ -21,8 +20,7 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
 <form>
   <form-field-stub>
     <message-stub>
-      Application requests following scopes. Press "Allow" button to grant
-      these permissions.
+      Application requests following scopes. Press "Allow" button to grant these permissions.
     </message-stub>
   </form-field-stub>
   <form-field-stub>

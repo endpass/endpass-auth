@@ -11,7 +11,7 @@
         data-test="cancel-button"
         @click="emitCancel"
       >
-        Close
+        {{ $t('global.close') }}
       </v-button>
     </form-controls>
   </div>

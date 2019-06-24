@@ -1,36 +1,24 @@
 <template>
-  <header
-    class="widget-header"
-    @click="handleTogglerClick"
-  >
+  <header class="widget-header" @click="handleTogglerClick">
     <section class="widget-header-control">
       <h3 class="widget-header-title">
-        balance
+        {{ $t('components.widgetHeader.balance') }}
       </h3>
-      <button
-        class="widget-header-toggler"
-        data-test="widget-header-toggler"
-      >
+      <button class="widget-header-toggler" data-test="widget-header-toggler">
         {{ togglerLabel }}
       </button>
     </section>
-    <p
-      v-if="balance"
-      class="widget-header-balace"
-      data-test="balance-label"
-    >
+    <p v-if="balance" class="widget-header-balace" data-test="balance-label">
       {{ formattedBalance }}
     </p>
-    <spinner
-      v-else
-      :size="24"
-    />
+    <spinner v-else :size="24" />
   </header>
 </template>
 
 <script>
 import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'WidgetHeader',
@@ -49,7 +37,9 @@ export default {
 
   computed: {
     togglerLabel() {
-      return this.isCollapsed ? 'Show more' : 'Show less';
+      return this.isCollapsed
+        ? i18n.t('components.widgetHeader.showMore')
+        : i18n.t('components.widgetHeader.showLess');
     },
 
     formattedBalance() {

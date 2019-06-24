@@ -11,8 +11,10 @@
       width="18px"
       height="18px"
     />
-    GitHub
-  </v-button>
+    <span class="github-button__text">{{
+      $t('components.gitAuthButton.authWithGitHub')
+    }}</span>
+  </button>
 </template>
 
 <script>

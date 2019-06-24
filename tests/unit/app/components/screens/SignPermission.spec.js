@@ -1,10 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import SignPermission from '@/components/screens/SignPermission.vue';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('SignPermission', () => {
   describe('render', () => {
@@ -55,6 +57,7 @@ describe('SignPermission', () => {
       wrapper = shallowMount(SignPermission, {
         localVue,
         store,
+        i18n,
       });
     });
 

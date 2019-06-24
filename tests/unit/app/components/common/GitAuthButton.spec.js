@@ -2,10 +2,12 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { loginWithGithub } from 'github-oauth-popup';
 import Vuex from 'vuex';
 import GitAuthButton from '@/components/common/GitAuthButton.vue';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('GitAuthButton', () => {
   describe('render', () => {
@@ -16,6 +18,8 @@ describe('GitAuthButton', () => {
         provide: {
           theme: 'default',
         },
+        localVue,
+        i18n,
       });
     });
 
@@ -45,6 +49,7 @@ describe('GitAuthButton', () => {
         provide: {
           theme: 'default',
         },
+        i18n,
       });
     });
 

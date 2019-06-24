@@ -1,5 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import http from '@/class/singleton/http';
+import i18n from '@/locales/i18n';
 
 export const validateIdentityServer = async serverUrl => {
   const accountsError =
@@ -24,14 +25,10 @@ export const validateIdentityServer = async serverUrl => {
 
     switch (respCode) {
       case 401:
-        throw new Error(
-          'You are not logged in at your identity server. Please log in with your identity provider, come back to this page, and try again.',
-        );
+        throw new Error(i18n.t('services.mode.notLogged'));
 
       default:
-        throw new Error(
-          'The URL you have entered does not point to a valid identity server. Please double check the address and try again.',
-        );
+        throw new Error(i18n.t('services.mode.serverInvalid'));
     }
   }
 };

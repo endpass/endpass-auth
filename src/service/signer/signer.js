@@ -3,6 +3,7 @@ import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
 import web3 from './web3';
+import i18n from '@/locales/i18n';
 
 function setWeb3Network(net = Network.NET_ID.MAIN) {
   const netUrl = Network.NETWORK_URL_HTTP[net][0];
@@ -51,7 +52,7 @@ export default {
       case 'eth_signTypedData':
         // const wallet = rootGetters['accounts/wallet'];
         // const request = getters.currentRequest;
-        throw new Error('Sign typed data not supported yet!');
+        throw new Error(i18n.t('services.signer.typedData'));
 
       default:
         // eslint-disable-next-line

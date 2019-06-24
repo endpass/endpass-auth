@@ -47,6 +47,8 @@ export const ORIGIN_HOST = parseUrl(document.referrer).origin;
 
 export const WIDGET_RESIZE_DURATION = 300;
 
+export const LOCALES = ['en'];
+
 export const ENCRYPT_OPTIONS = {
   kdf: ENV.VUE_APP_KDF_PARAMS_KDF,
   n: ENV.VUE_APP_KDF_PARAMS_N,

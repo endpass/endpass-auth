@@ -31,6 +31,7 @@ import AuthForm from '@/components/forms/CompositeAuth/Auth';
 import OtpBlockForm from '@/components/forms/CompositeAuth/OtpBlock';
 import MessageForm from '@/components/forms/CompositeAuth/Message';
 import { IDENTITY_MODE } from '@/constants';
+import i18n from '@/locales/i18n';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -121,11 +122,9 @@ export default {
     async handleLinkSent() {
       await this.defineAuthStatus();
       if (this.isLogin) {
-        this.message =
-          'You are successfully authorized. Dialog will be closed in a few seconds.';
+        this.message = i18n.t('components.compositeAuth.successAuthMessage');
       } else {
-        this.message =
-          'An email with authorization link was sent on your address. Open it in the same browser to sign in. Also check spam folder and exclude Endpass from spam filters.';
+        this.message = i18n.t('components.compositeAuth.linkSentMessage');
         this.currentForm = FORMS.MESSAGE;
         await this.waitLogin();
       }
@@ -139,7 +138,7 @@ export default {
     },
 
     handleAuthError() {
-      this.error = 'Auth failed. Please, try again';
+      this.error = i18n.t('components.compositeAuth.authFailed');
     },
 
     handleSubmit() {

@@ -12,8 +12,10 @@
       width="18px"
       height="18px"
     />
-    Google
-  </v-button>
+    <span class="google-button__text">{{
+      $t('components.googleAuthButton.authWithGoogle')
+    }}</span>
+  </button>
 </template>
 
 <script>

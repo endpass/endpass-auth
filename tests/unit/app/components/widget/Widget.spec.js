@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { accountAddress, accounts } from '@unitFixtures/accounts';
+import setupI18n from '@/locales/i18nSetup';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   subscribe: jest.fn(),
@@ -14,6 +15,7 @@ import Widget from '@/components/widget/Widget.vue';
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('Widget', () => {
   let wrapper;
@@ -67,6 +69,7 @@ describe('Widget', () => {
     wrapper = shallowMount(Widget, {
       localVue,
       store,
+      i18n,
     });
   });
 

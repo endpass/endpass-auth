@@ -1,10 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VShowSlide from 'v-show-slide';
 import Accordion from '@/components/widget/Accordion.vue';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(VShowSlide);
+const i18n = setupI18n(localVue);
 
 describe('Accordion', () => {
   let wrapper;
@@ -12,6 +14,7 @@ describe('Accordion', () => {
   beforeEach(() => {
     wrapper = shallowMount(Accordion, {
       localVue,
+      i18n,
     });
   });
 

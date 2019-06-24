@@ -8,9 +8,9 @@
         :href="requesterUrl"
         data-test="requester-url"
       >{{ requesterUrl }}</a>
-      requests sign action.
+      {{ $t('components.sign.requestSign') }}
     </form-field>
-    <form-field label="Requires request sign by:">
+    <form-field :label="$t('components.sign.requiresSignBy')">
       <message
         :ellipsis="true"
         data-test="account-address"
@@ -26,17 +26,17 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field label="Your account password:">
+    <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
         :autofocus="true"
         type="password"
-        placeholder="Enter your password..."
+        :placeholder="$t('components.sign.enterPass')"
       />
     </form-field>
     <form-field
       v-if="requestBody"
-      label="Request data:"
+      :label="$t('components.sign.requestdata')"
     >
       <v-code data-test="request-body">
         {{ JSON.stringify(requestBody, null, 2) }}
@@ -56,7 +56,7 @@
         data-test="cancel-button"
         @click="emitCancel"
       >
-        Close
+        {{ $t('global.close') }}
       </v-button>
     </form-controls>
   </form>
@@ -70,6 +70,7 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'SignForm',
@@ -114,7 +115,7 @@ export default {
     },
 
     primaryButtonLabel() {
-      return !this.loading ? 'Sign' : 'Loading...';
+      return !this.loading ? i18n.t('global.sign') : i18n.t('global.loading');
     },
   },
 

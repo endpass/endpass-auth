@@ -16,7 +16,7 @@
             required
             autofocus="true"
             type="password"
-            placeholder="Enter password..."
+            :placeholder="$t('components.createWallet.enterPass')"
           />
         </form-field>
         <form-field>
@@ -30,7 +30,7 @@
             required
             autofocus="true"
             type="password"
-            placeholder="Confirm password..."
+            :placeholder="$t('components.createWallet.confirmPass')"
           />
         </form-field>
         <message
@@ -54,7 +54,7 @@
     </div>
     <div v-else>
       <div class="box">
-        <p>Your wallet recovery phrase</p>
+        <p>{{ $t('components.createWallet.recoveryPhrase') }}</p>
         <br>
         <p
           class="code"
@@ -69,7 +69,7 @@
           size="big"
           @click="onContinue"
         >
-          Continue
+          {{ $t('global.continue') }}
         </v-button>
       </form-controls>
     </div>
@@ -84,6 +84,7 @@ import FormControls from '@/components/common/FormControls.vue';
 import VInput from '@endpass/ui/kit/VInput';
 import FormField from '@/components/common/FormField.vue';
 import formMixin from '@/mixins/form';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'CreateWalletForm',
@@ -106,7 +107,9 @@ export default {
       return this.password && this.password === this.passwordConfirm;
     },
     primaryButtonLabel() {
-      return this.isLoading ? 'Loading...' : 'Create Wallet';
+      return this.isLoading
+        ? i18n.t('components.createWallet.createWallet')
+        : i18n.t('global.confirm');
     },
   },
 
@@ -124,7 +127,7 @@ export default {
         this.isShowSeed = true;
       } catch (e) {
         console.error(e);
-        this.error = 'Something broken, when trying to create new Wallet';
+        this.error = i18n.t('components.createWallet.error');
       }
       this.isLoading = false;
     },

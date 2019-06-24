@@ -1,10 +1,12 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
 import Vuex from 'vuex';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('GoogleAuthButton', () => {
   const auth = {
@@ -48,6 +50,8 @@ describe('GoogleAuthButton', () => {
           provide: {
             theme: 'default',
           },
+          localVue,
+          i18n,
         });
       });
 
@@ -63,6 +67,8 @@ describe('GoogleAuthButton', () => {
           provide: {
             theme: 'default',
           },
+          localVue,
+          i18n,
         });
       });
 
@@ -95,6 +101,7 @@ describe('GoogleAuthButton', () => {
         provide: {
           theme: 'default',
         },
+        i18n,
       });
     });
 

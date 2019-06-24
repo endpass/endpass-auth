@@ -5,7 +5,7 @@
         class="v-modal-card-title"
         data-test="form-message"
       >
-        Enter recovery seed phrase of your wallet.
+      {{ $t('components.recover.enterSeed') }}
       </message>
     </form-field>
     <form-field v-if="error">
@@ -21,7 +21,7 @@
         v-model="seedPhrase"
         label="Seed phrase"
         name="seedPhrase"
-        placeholder="Seed phrase"
+        :placeholder="$t('components.recover.seedPhrase')"
         required
       />
     </form-field>
@@ -43,6 +43,7 @@ import VInput from '@endpass/ui/kit/VInput';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'RecoverForm',
@@ -65,7 +66,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Recover access' : 'Loading...';
+      return !this.loading
+        ? i18n.t('global.confirm')
+        : i18n.t('global.loading');
     },
 
     isSeedPhraseValid() {

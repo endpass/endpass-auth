@@ -2,10 +2,12 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
 import LoginProviderPassword from '@/components/screens/public/LoginProviderPassword';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('LoginProviderPassword', () => {
   let wrapper;
@@ -45,6 +47,7 @@ describe('LoginProviderPassword', () => {
     wrapper = shallowMount(LoginProviderPassword, {
       localVue,
       store,
+      i18n,
     });
   });
 
@@ -53,6 +56,7 @@ describe('LoginProviderPassword', () => {
       wrapper = shallowMount(LoginProviderPassword, {
         localVue,
         store,
+        i18n,
       });
 
       expect(wrapper.html()).toMatchSnapshot();
@@ -64,6 +68,7 @@ describe('LoginProviderPassword', () => {
       wrapper = shallowMount(LoginProviderPassword, {
         localVue,
         store,
+        i18n,
       });
 
       expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);

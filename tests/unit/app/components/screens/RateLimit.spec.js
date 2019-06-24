@@ -1,10 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import RateLimit from '@/components/screens/RateLimit';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('RateLimit', () => {
   let wrapper;
@@ -24,6 +26,7 @@ describe('RateLimit', () => {
     });
     wrapper = shallowMount(RateLimit, {
       store,
+      i18n,
       localVue,
     });
   });

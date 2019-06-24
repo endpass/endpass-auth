@@ -5,7 +5,7 @@
   >
     <form-field v-if="requesterUrl">
       <h3 class="v-modal-card-title">
-        Please apply connect to
+        {{ $t('components.passwordForm.applyConnectTo') }}
         <a
           :href="requesterUrl"
           data-test="requester-url"
@@ -35,7 +35,7 @@
         type="password"
         name="password"
         :label="passwordInputLabel"
-        placeholder="Enter your password..."
+        :placeholder="$t('components.passwordForm.enterWalletPassword')"
       />
     </form-field>
     <form-controls>
@@ -56,7 +56,7 @@
         data-test="logout-button"
         @click="emitLogout"
       >
-        Logout
+        {{ $t('global.logout') }}
       </v-button>
       <v-button
         :disabled="!closable || isLoading"
@@ -66,7 +66,7 @@
         data-test="cancel-button"
         @click="emitCancel"
       >
-        Close
+        {{ $t('global.close') }}
       </v-button>
     </form-controls>
   </form>
@@ -78,6 +78,7 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'PasswordForm',
@@ -125,15 +126,19 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.isLoading ? 'Apply' : 'Loading...';
+      return !this.isLoading
+        ? i18n.t('global.apply')
+        : i18n.t('global.loading');
     },
 
     passwordInputLabel() {
       if (this.email) {
-        return `Password for ${this.email}:`;
+        return i18n.t('components.passwordForm.passwordForEmail', {
+          email: this.email,
+        });
       }
 
-      return 'Your wallet account password:';
+      return i18n.t('components.passwordForm.walletPassword');
     },
 
     isFormValid() {

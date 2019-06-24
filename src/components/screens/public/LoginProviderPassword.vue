@@ -5,7 +5,7 @@
       :error="true"
       data-test="error-message"
     >
-      You should provide login_challenge param in url, add it and try again!
+      {{ $t('components.loginProviderPassword.loginChallenge') }}
     </message>
     <template v-else>
       <sign-password

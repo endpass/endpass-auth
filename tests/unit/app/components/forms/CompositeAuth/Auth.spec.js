@@ -2,6 +2,10 @@ import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/forms/CompositeAuth/Auth.vue';
 import VeeValidate from 'vee-validate';
 import { IDENTITY_MODE } from '@/constants';
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+const i18n = setupI18n(localVue);
 
 describe('Auth', () => {
   let wrapper;
@@ -18,6 +22,8 @@ describe('Auth', () => {
       provide: {
         theme: 'default',
       },
+      localVue,
+      i18n,
     });
   });
 
@@ -38,6 +44,8 @@ describe('Auth', () => {
         provide: {
           theme: 'default',
         },
+        localVue,
+        i18n,
       });
 
       expect(wrapper.findAll('[data-test=error-message]').exists()).toBe(true);
@@ -53,6 +61,8 @@ describe('Auth', () => {
         provide: {
           theme: 'default',
         },
+        localVue,
+        i18n,
       });
 
       const submitButton = wrapper.find('[data-test=submit-button]');
@@ -96,6 +106,8 @@ describe('Auth', () => {
           provide: {
             theme: 'default',
           },
+          localVue,
+          i18n,
         });
       });
 

@@ -24,6 +24,7 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import LoginProviderPassword from './LoginProviderPassword';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'LoginProvider',
@@ -84,7 +85,7 @@ export default {
 
       await this.defineSettingsWithoutPermission();
     } catch (e) {
-      this.error = 'Sorry, but login provider is not working';
+      this.error = i18n.t('components.loginProvider.notWorkingError');
     } finally {
       this.isLoading = false;
     }

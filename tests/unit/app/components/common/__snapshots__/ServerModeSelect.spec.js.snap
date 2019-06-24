@@ -6,7 +6,7 @@ exports[`ServerModeSelect render should correctly render ServerModeSelect compon
     Identity server
   </message-stub>
   <form-field-stub>
-    <v-content-switcher-stub items="[object Object],[object Object],[object Object]" data-test="mode-select"></v-content-switcher-stub>
+    <v-select-stub items="[object Object],[object Object],[object Object]" name="currentIdentityServerType" value="default" options="[object Object],[object Object],[object Object]" label="Identity server" data-test="mode-select"></v-select-stub>
   </form-field-stub>
   <!---->
   <!---->

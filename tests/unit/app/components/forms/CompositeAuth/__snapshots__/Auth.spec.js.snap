@@ -28,8 +28,10 @@ exports[`Auth render should change submit button text if loading and make it dis
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
       <a href="https://endpass.com/terms/" target="_blank">Terms of Service</a>
+
       and
-      <a href="https://endpass.com/privacy/" target="_blank">Privacy Policy</a>.
+      <a href="https://endpass.com/privacy/" target="_blank">
+        Privacy Policy</a>.
     </v-checkbox-stub>
   </form-controls-stub>
 </form>
@@ -63,8 +65,10 @@ exports[`Auth render should correctly render Auth component 1`] = `
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
       <a href="https://endpass.com/terms/" target="_blank">Terms of Service</a>
+
       and
-      <a href="https://endpass.com/privacy/" target="_blank">Privacy Policy</a>.
+      <a href="https://endpass.com/privacy/" target="_blank">
+        Privacy Policy</a>.
     </v-checkbox-stub>
   </form-controls-stub>
 </form>

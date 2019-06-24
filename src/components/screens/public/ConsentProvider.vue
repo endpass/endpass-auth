@@ -26,6 +26,7 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
+import i18n from '@/locales/i18n';
 
 export default {
   name: 'ConsentProvider',
@@ -101,7 +102,7 @@ export default {
 
         this.scopesList = requested_scope;
       } catch (err) {
-        this.setError('Something broken, when loading scopes');
+        this.setError(i18n.t('components.consentProvider.loadScopesError'));
       } finally {
         this.isLoading = false;
       }
@@ -119,9 +120,7 @@ export default {
     }
 
     if (!query.consent_challenge) {
-      this.setError(
-        'You should provide consent_challenge param in url, add it and try again!',
-      );
+      this.setError(i18n.t('components.consentProvider.urlError'));
       return;
     }
 
