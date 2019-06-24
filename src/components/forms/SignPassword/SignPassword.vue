@@ -8,6 +8,7 @@
       :with-logout-btn="withLogoutBtn"
       :requester-url="requesterUrl"
       :message="message"
+      :email="email"
       @cancel="handleCancel"
       @submit="handleSignSubmit"
       @logout="handleLogout"
@@ -46,6 +47,11 @@ export default {
     message: {
       type: String,
       default: '',
+    },
+
+    email: {
+      type: String,
+      default: null,
     },
 
     isLoading: {
