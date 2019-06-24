@@ -23,7 +23,7 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field :label="passwordInputPlaceholder">
+    <form-field :label="passwordInputLabel">
       <v-input
         v-model="password"
         :autofocus="true"
@@ -118,7 +118,7 @@ export default {
       return !this.isLoading ? 'Apply' : 'Loading...';
     },
 
-    passwordInputPlaceholder() {
+    passwordInputLabel() {
       if (this.email) {
         return `Password for ${this.email}:`;
       }

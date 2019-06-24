@@ -31,7 +31,7 @@ export default {
   data: () => ({
     queryParamsMap: {},
     error: null,
-    isLoading: false,
+    isLoading: true,
   }),
 
   computed: {
