@@ -23,7 +23,7 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field label="Your wallet account password:">
+    <form-field :label="passwordInputPlaceholder">
       <v-input
         v-model="password"
         :autofocus="true"
@@ -78,6 +78,11 @@ export default {
       default: false,
     },
 
+    email: {
+      type: String,
+      default: null,
+    },
+
     message: {
       type: String,
       default: '',
@@ -111,6 +116,14 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.isLoading ? 'Apply' : 'Loading...';
+    },
+
+    passwordInputPlaceholder() {
+      if (this.email) {
+        return `Password for ${this.email}:`;
+      }
+
+      return 'Your wallet account password:';
     },
 
     isFormValid() {
