@@ -47,6 +47,19 @@ describe('PasswordForm', () => {
       expect(submitButton.text()).toBe('Apply');
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
+
+    it('should render email in password input label', () => {
+      const email = 'foo@bar.baz';
+
+      wrapper.setProps({
+        isLoading: false,
+        email,
+      });
+
+      expect(wrapper.find('form-field-stub').attributes().label).toContain(
+        email,
+      );
+    });
   });
 
   describe('behavior', () => {
