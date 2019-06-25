@@ -7,12 +7,14 @@
     >
       You should provide login_challenge param in url, add it and try again!
     </message>
-    <sign-password
-      v-else
-      :is-loading="isLoading"
-      :error="error"
-      @submit="handlePasswordSubmit"
-    />
+    <template v-else>
+      <sign-password
+        :is-loading="isLoading"
+        :email="email"
+        :error="error"
+        @submit="handlePasswordSubmit"
+      />
+    </template>
   </v-frame>
 </template>
 
@@ -29,6 +31,11 @@ export default {
     loginChallenge: {
       type: String,
       default: '',
+    },
+
+    email: {
+      type: String,
+      default: null,
     },
   },
 

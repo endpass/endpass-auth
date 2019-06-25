@@ -10,6 +10,7 @@
     </v-frame>
     <login-provider-password
       v-else
+      :email="currentUserEmail"
       :login-challenge="queryParamsMap.login_challenge"
     />
   </loading-screen>
@@ -17,7 +18,6 @@
 
 <script>
 /* eslint-disable camelcase */
-
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
@@ -37,11 +37,16 @@ export default {
   computed: {
     ...mapState({
       isLogin: state => state.accounts.isLogin,
+      settings: state => state.accounts.settings,
     }),
+
+    currentUserEmail() {
+      return get(this.settings, 'email');
+    },
   },
 
   methods: {
-    ...mapActions(['checkOauthLoginRequirements']),
+    ...mapActions(['checkOauthLoginRequirements', 'defineSettings']),
   },
 
   async mounted() {
@@ -73,6 +78,7 @@ export default {
       if (res.skip) {
         window.location.replace(res.redirect);
       } else {
+        await this.defineSettings();
         this.isLoading = false;
       }
     } catch (e) {
