@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import walletGen from '@endpass/utils/walletGen';
 import ConnectError from '@endpass/class/ConnectError';
+import Network from '@endpass/class/Network';
 
 import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
@@ -616,6 +617,19 @@ describe('accounts actions', () => {
 
       expect(dispatch).toBeCalledTimes(0);
       expect(commit).toHaveBeenCalledWith('setSettings', state.settings);
+    });
+
+    it('should return default net', async () => {
+      expect.assertions(1);
+
+      identityService.getSettings.mockResolvedValueOnce({});
+
+      const result = await accountsActions.getSettings({ dispatch });
+
+      expect(result).toEqual({
+        lastActiveAccount: undefined,
+        net: Network.NET_ID.MAIN,
+      });
     });
   });
 

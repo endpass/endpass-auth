@@ -11,6 +11,7 @@ import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
+import Network from '@endpass/class/Network';
 
 import {
   accountChannel,
@@ -229,6 +230,12 @@ const getSettings = async ({ dispatch }) => {
 
     Object.assign(settings, {
       lastActiveAccount: get(lastAccount, 'address'),
+    });
+  }
+
+  if (!settings.net) {
+    Object.assign(settings, {
+      net: Network.NET_ID.MAIN,
     });
   }
 
