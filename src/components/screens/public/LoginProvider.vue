@@ -46,7 +46,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['checkOauthLoginRequirements', 'defineSettings']),
+    ...mapActions([
+      'checkOauthLoginRequirements',
+      'defineSettingsWithoutPermission',
+    ]),
   },
 
   async mounted() {
@@ -77,10 +80,12 @@ export default {
 
       if (res.skip) {
         window.location.replace(res.redirect);
-      } else {
-        await this.defineSettings();
-        this.isLoading = false;
+        return;
       }
+
+      await this.defineSettingsWithoutPermission();
+
+      this.isLoading = false;
     } catch (e) {
       this.error = 'Sorry, but login provider is not working';
       this.isLoading = false;
