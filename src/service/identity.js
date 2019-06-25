@@ -7,6 +7,9 @@ const createTimeout = handler => setTimeout(handler, 1500);
 
 const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
+const getSettingsSkipPermission = () =>
+  request.getSkipPermission(`${identityBaseUrl}/settings`);
+
 const setSettings = settings =>
   request.post(`${identityBaseUrl}/settings`, settings);
 
@@ -204,6 +207,7 @@ export default {
   getSettings,
   getOtpSettings,
   setSettings,
+  getSettingsSkipPermission,
 
   getRecoveryIdentifier,
   recover,
