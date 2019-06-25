@@ -242,6 +242,12 @@ const getSettings = async ({ dispatch }) => {
   return settings;
 };
 
+const getSettingsWithoutPermission = async () => {
+  const settings = await identityService.getSettingsSkipPermission();
+
+  return settings;
+};
+
 const defineSettings = async ({ state, dispatch, commit, getters }) => {
   const { demoData } = getters;
   const settings = demoData ? state.settings : await dispatch('getSettings');
@@ -249,6 +255,17 @@ const defineSettings = async ({ state, dispatch, commit, getters }) => {
 
   settingsService.setLocalSettings(mergedSettings);
 
+  const newSettings = {
+    ...settings,
+    ...mergedSettings,
+  };
+
+  commit('setSettings', newSettings);
+};
+
+const defineSettingsWithoutPermission = async ({ dispatch, commit }) => {
+  const settings = await dispatch('getSettingsWithoutPermission');
+  const mergedSettings = settingsService.mergeSettings(settings);
   const newSettings = {
     ...settings,
     ...mergedSettings,
@@ -533,4 +550,6 @@ export default {
   getAccountBalance,
   subscribeOnBalanceUpdates,
   checkOauthLoginRequirements,
+  getSettingsWithoutPermission,
+  defineSettingsWithoutPermission,
 };
