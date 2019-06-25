@@ -8,6 +8,7 @@
 
 <script>
 import { mapActions } from 'vuex';
+import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LayoutScreen from '@/components/screens/Layout';
 import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
@@ -30,6 +31,7 @@ export default {
     this.isLoading = false;
   },
   components: {
+    ThemeProvider,
     LayoutScreen,
     LoadingScreen,
     ThemeProvider,
@@ -39,9 +41,7 @@ export default {
 
 <style lang="postcss">
 @import '../node_modules/reset.css/reset.css';
-</style>
 
-<style lang="postcss">
 * {
   box-sizing: border-box;
 }
@@ -60,9 +60,7 @@ body,
 input,
 button,
 select {
-  font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Helvetica,
-    Arial, sans-serif;
+  font-family: 'Akkurat Pro', Helvetica, Arial, sans-serif;
 }
 
 @media (max-width: 768px) {

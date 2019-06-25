@@ -42,7 +42,9 @@ describe('Scopes', () => {
 
       wrapper.setProps({
         isLoading: false,
+        scopesList: ['foo', 'bar'],
       });
+      wrapper.vm.onChange({ foo: false, bar: false });
 
       expect(submitButton.text()).toBe('Allow');
       expect(submitButton.attributes().disabled).toBeTruthy();
@@ -51,12 +53,9 @@ describe('Scopes', () => {
         isLoading: false,
         scopesList: ['foo', 'bar'],
       });
+      wrapper.vm.onChange({ foo: true, bar: false });
 
       expect(submitButton.attributes().disabled).toBeFalsy();
-
-      wrapper.vm.onChange({ foo: false, bar: false });
-
-      expect(submitButton.attributes().disabled).toBeTruthy();
     });
   });
 
@@ -66,21 +65,18 @@ describe('Scopes', () => {
         isLoading: false,
         scopesList: ['foo', 'bar'],
       });
-
-      wrapper.vm.onChange({ foo: true, bar: false });
-
+      wrapper.vm.onChange({ foo: true, bar: true });
       wrapper.find('form').trigger('submit');
 
-      expect(wrapper.emitted().submit).toEqual([[['foo']]]);
+      expect(wrapper.emitted().submit).toEqual([[['foo', 'bar']]]);
     });
 
-    it('should not submit form if at least one scope is not selected', () => {
+    it('should not submit form if no one scope is not selected', () => {
       wrapper.setProps({
         isLoading: false,
         scopesList: ['foo', 'bar'],
       });
       wrapper.vm.onChange({ foo: false, bar: false });
-
       wrapper.find('form').trigger('submit');
 
       expect(wrapper.emitted().submit).toBeFalsy();

@@ -80,7 +80,7 @@ export default {
 
       if (res.skip) {
         window.location.replace(res.redirect);
-        return; // must show loader until redirect not happen
+        return;
       }
 
       await this.defineSettingsWithoutPermission();
