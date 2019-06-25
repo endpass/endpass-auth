@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import VButton from '@/components/common/VButton.vue';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
@@ -99,6 +99,7 @@ export default {
     valuesScopesMap: {
       handler() {
         const res = this.getCheckedScopes();
+
         this.isFormValid = res.length !== 0;
       },
       immediate: true,
