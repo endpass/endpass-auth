@@ -80,14 +80,12 @@ export default {
 
       if (res.skip) {
         window.location.replace(res.redirect);
-        return;
       }
 
       await this.defineSettingsWithoutPermission();
-
-      this.isLoading = false;
     } catch (e) {
       this.error = 'Sorry, but login provider is not working';
+    } finally {
       this.isLoading = false;
     }
   },

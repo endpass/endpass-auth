@@ -7,6 +7,7 @@ import Wallet from '@/service/signer/Wallet';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
+import settingsService from '@/service/settings';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
 import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
@@ -844,6 +845,48 @@ describe('accounts actions', () => {
       expect(identityService.updateAccountSettings).toBeCalledWith(
         v3KeyStore.address,
       );
+    });
+  });
+
+  describe('getSettingsWithoutPermission', () => {
+    it('should request settings from identity service without permission', async () => {
+      expect.assertions(1);
+
+      const payload = {
+        foo: 'bar',
+      };
+
+      identityService.getSettingsSkipPermission.mockResolvedValueOnce(payload);
+
+      const res = await accountsActions.getSettingsWithoutPermission();
+
+      expect(res).toEqual(payload);
+    });
+  });
+
+  describe('defineSettingsWithoutPermission', () => {
+    it('should request settings without permission, merge them with local settings and set it to the state', async () => {
+      expect.assertions(1);
+
+      const settingsResponse = {
+        foo: 'bar',
+      };
+      const localSettings = {
+        bar: 'baz',
+      };
+
+      dispatch.mockResolvedValueOnce(settingsResponse);
+      settingsService.mergeSettings.mockReturnValueOnce(localSettings);
+
+      await accountsActions.defineSettingsWithoutPermission({
+        dispatch,
+        commit,
+      });
+
+      expect(commit).toBeCalledWith('setSettings', {
+        foo: 'bar',
+        bar: 'baz',
+      });
     });
   });
 });

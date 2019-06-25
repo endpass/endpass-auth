@@ -31,6 +31,8 @@ jest.mock('@/service/identity', () => {
     getAuthPermission: jest.fn(),
     setAuthPermission: jest.fn(),
     waitLogin: jest.fn(),
+
+    getSettingsSkipPermission: jest.fn(),
   };
 });
 
