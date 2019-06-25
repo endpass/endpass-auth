@@ -34,6 +34,7 @@ describe('LoginProvider', () => {
         checkOauthLoginRequirements: jest.fn().mockResolvedValue({
           skip: false,
         }),
+        defineSettingsWithoutPermission: jest.fn().mockResolvedValue({}),
       },
       getters: {
         isAuthorized: jest.fn(
@@ -187,6 +188,20 @@ describe('LoginProvider', () => {
 
       expect(wrapper.vm.error).toBeNull();
       expect($router.replace).not.toBeCalled();
+    });
+
+    it('should request user settings', () => {
+      wrapper = shallowMount(LoginProvider, {
+        localVue,
+        store,
+        mocks: {
+          $router,
+        },
+      });
+
+      expect(
+        accountsModule.actions.defineSettingsWithoutPermission,
+      ).toBeCalled();
     });
   });
 });
