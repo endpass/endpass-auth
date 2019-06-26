@@ -11,7 +11,10 @@
     </form-field>
     <template v-if="isDefaultMode">
       <form-field>
-        <message data-test="form-message">
+        <message
+          class="v-modal-card-title"
+          data-test="form-message"
+        >
           Log in to your Endpass account to access site actions
         </message>
       </form-field>
@@ -24,40 +27,43 @@
         </message>
       </form-field>
       <form-field>
-        <div class="auth__fields-as-line">
-          <v-input
-            v-model="email"
-            :invalid="!isEmailValid"
-            :autofocus="true"
-            name="email"
-            type="email"
-            placeholder="Enter your email..."
-            data-test="email-input"
-          />
-          <v-button
-            :disabled="!isFormValid"
-            :submit="true"
-            type="primary"
-            data-test="submit-button"
-          >
-            {{ primaryButtonLabel }}
-          </v-button>
-        </div>
+        <v-input
+          v-model="email"
+          v-validate="'required|email'"
+          data-vv-as="email"
+          data-vv-name="email"
+          :error="errors.first('email')"
+          autofocus="true"
+          name="email"
+          type="email"
+          placeholder="Enter your email..."
+          data-test="email-input"
+        />
       </form-field>
-      <template>
-        <form-controls>
-          <google-auth-button
-            @submit="handleSocialSubmit"
-            @error="handleOauthError"
-          />
-        </form-controls>
-        <form-controls>
-          <git-auth-button
-            @submit="handleSocialSubmit"
-            @error="handleOauthError"
-          />
-        </form-controls>
-      </template>
+      <form-field>
+        <v-button
+          :disabled="!isFormValid"
+          size="big"
+          data-test="submit-button"
+        >
+          {{ primaryButtonLabel }}
+        </v-button>
+      </form-field>
+      <v-divider>or sign in with</v-divider>
+      <form-controls>
+        <google-auth-button
+          type="button"
+          @submit="handleSocialSubmit"
+          @error="handleOauthError"
+        />
+        <div class="social-buttons-gap" />
+        <git-auth-button
+          type="button"
+          @submit="handleSocialSubmit"
+          @error="handleOauthError"
+        />
+      </form-controls>
+      <v-divider />
       <form-controls>
         <v-checkbox v-model="isTermsAccepted">
           I accept the
@@ -77,10 +83,10 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import VCheckbox from '@endpass/ui/components/VCheckbox';
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
+import VCheckbox from '@endpass/ui/kit/VCheckbox';
+import VInput from '@endpass/ui/kit/VInput';
+import VButton from '@endpass/ui/kit/VButton';
+import VDivider from '@endpass/ui/kit/VDivider';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
 import GitAuthButton from '@/components/common/GitAuthButton.vue';
 import Message from '@/components/common/Message.vue';
@@ -88,8 +94,7 @@ import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
-
-Vue.component(VCheckbox);
+import formMixin from '@/mixins/form';
 
 export default {
   name: 'AuthForm',
@@ -132,7 +137,11 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Log in' : 'Loading...';
+      return !this.loading ? 'Login' : 'Loading...';
+    },
+
+    emailErrorMessage() {
+      return this.isEmailValid ? null : 'Invalid email';
     },
 
     isEmailValid() {
@@ -184,10 +193,12 @@ export default {
       this.$emit('error', err);
     },
   },
+  mixins: [formMixin],
   components: {
     VCheckbox,
     VButton,
     VInput,
+    VDivider,
     GoogleAuthButton,
     GitAuthButton,
     Message,
@@ -197,8 +208,9 @@ export default {
   },
 };
 </script>
-<style>
-.auth__fields-as-line {
-  display: flex;
+
+<style lang="postcss">
+.social-buttons-gap {
+  width: 30px;
 }
 </style>

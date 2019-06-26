@@ -2,8 +2,8 @@
 
 exports[`Sign render render should correctly render Sign component 1`] = `
 <screen-stub>
-  <v-frame-stub title="Connect" closable="true">
+  <v-modal-card-stub isclosable="true">
     <sign-form-stub request="[object Object]" closable="true"></sign-form-stub>
-  </v-frame-stub>
+  </v-modal-card-stub>
 </screen-stub>
 `;

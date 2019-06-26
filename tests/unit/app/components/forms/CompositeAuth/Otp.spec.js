@@ -1,11 +1,21 @@
-import { shallowMount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import Otp from '@/components/forms/CompositeAuth/Otp.vue';
+import VeeValidate from 'vee-validate';
+
+const localVue = createLocalVue();
+
+localVue.use(VeeValidate);
 
 describe('Otp', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Otp);
+    wrapper = shallowMount(Otp, {
+      localVue,
+      provide: {
+        theme: 'default',
+      },
+    });
   });
 
   describe('render', () => {

@@ -88,6 +88,7 @@ const routes = [
       isDialog: true,
     },
   },
+  { path: '/fonts' },
   {
     path: '*',
     name: 'NotFound',

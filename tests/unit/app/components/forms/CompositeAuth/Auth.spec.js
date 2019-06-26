@@ -1,14 +1,22 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/forms/CompositeAuth/Auth.vue';
+import VeeValidate from 'vee-validate';
 import { IDENTITY_MODE } from '@/constants';
 
 describe('Auth', () => {
   let wrapper;
 
+  const localVue = createLocalVue();
+  localVue.use(VeeValidate);
+
   beforeEach(() => {
     wrapper = shallowMount(Auth, {
+      localVue,
       propsData: {
         isInited: true,
+      },
+      provide: {
+        theme: 'default',
       },
     });
   });
@@ -22,9 +30,13 @@ describe('Auth', () => {
 
     it('should render error', () => {
       wrapper = shallowMount(Auth, {
+        localVue,
         propsData: {
           message: 'foo',
           error: 'bar',
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -33,9 +45,13 @@ describe('Auth', () => {
 
     it('should change submit button text if loading and make it disabled', () => {
       wrapper = shallowMount(Auth, {
+        localVue,
         propsData: {
           message: 'foo',
           loading: true,
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -72,9 +88,13 @@ describe('Auth', () => {
     describe('form', () => {
       beforeEach(() => {
         wrapper = mount(Auth, {
+          localVue,
           propsData: {
             message: 'foo',
             isInited: true,
+          },
+          provide: {
+            theme: 'default',
           },
         });
       });

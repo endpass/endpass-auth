@@ -1,7 +1,10 @@
 <template>
   <form @submit.prevent="emitSubmit">
     <form-field>
-      <message data-test="form-message">
+      <message
+        class="v-modal-card-title"
+        data-test="form-message"
+      >
         Enter recovery seed phrase of your wallet.
       </message>
     </form-field>
@@ -24,9 +27,8 @@
     </form-field>
     <form-controls>
       <v-button
+        type="submit"
         :disabled="!isSeedPhraseValid || loading"
-        :submit="true"
-        type="primary"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
@@ -36,8 +38,8 @@
 </template>
 
 <script>
-import VButton from '@/components/common/VButton.vue';
-import VInput from '@/components/common/VInput.vue';
+import VButton from '@endpass/ui/kit/VButton';
+import VInput from '@endpass/ui/kit/VInput';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
@@ -67,7 +69,7 @@ export default {
     },
 
     isSeedPhraseValid() {
-      return this.seedPhrase.split(' ').length >= 12;
+      return this.seedPhrase.length >= 12;
     },
   },
 

@@ -4,27 +4,28 @@ exports[`Auth render should change submit button text if loading and make it dis
 <form data-test="auth-form" message="foo">
   <!---->
   <form-field-stub>
-    <message-stub data-test="form-message">
+    <message-stub data-test="form-message" class="v-modal-card-title">
       Log in to your Endpass account to access site actions
     </message-stub>
   </form-field-stub>
   <!---->
   <form-field-stub>
-    <div class="auth__fields-as-line">
-      <v-input-stub placeholder="Enter your email..." name="email" value="" invalid="true" autofocus="true" type="email" data-test="email-input"></v-input-stub>
-      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
-        Loading...
-      </v-button-stub>
-    </div>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" autofocus="true" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
   </form-field-stub>
+  <form-field-stub>
+    <v-button-stub skin="primary" size="big" disabled="true" data-test="submit-button">
+      Loading...
+    </v-button-stub>
+  </form-field-stub>
+  <v-divider-stub>or sign in with</v-divider-stub>
   <form-controls-stub>
-    <google-auth-button-stub></google-auth-button-stub>
+    <google-auth-button-stub type="button"></google-auth-button-stub>
+    <div class="social-buttons-gap"></div>
+    <git-auth-button-stub type="button"></git-auth-button-stub>
   </form-controls-stub>
+  <v-divider-stub></v-divider-stub>
   <form-controls-stub>
-    <git-auth-button-stub></git-auth-button-stub>
-  </form-controls-stub>
-  <form-controls-stub>
-    <v-checkbox-stub value="true" name="checkbox">
+    <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
       <a href="https://endpass.com/terms/" target="_blank">Terms of Service</a>
       and
@@ -38,27 +39,28 @@ exports[`Auth render should correctly render Auth component 1`] = `
 <form data-test="auth-form">
   <!---->
   <form-field-stub>
-    <message-stub data-test="form-message">
+    <message-stub data-test="form-message" class="v-modal-card-title">
       Log in to your Endpass account to access site actions
     </message-stub>
   </form-field-stub>
   <!---->
   <form-field-stub>
-    <div class="auth__fields-as-line">
-      <v-input-stub placeholder="Enter your email..." name="email" value="" invalid="true" autofocus="true" type="email" data-test="email-input"></v-input-stub>
-      <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
-        Log in
-      </v-button-stub>
-    </div>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" autofocus="true" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
   </form-field-stub>
+  <form-field-stub>
+    <v-button-stub skin="primary" size="big" disabled="true" data-test="submit-button">
+      Login
+    </v-button-stub>
+  </form-field-stub>
+  <v-divider-stub>or sign in with</v-divider-stub>
   <form-controls-stub>
-    <google-auth-button-stub></google-auth-button-stub>
+    <google-auth-button-stub type="button"></google-auth-button-stub>
+    <div class="social-buttons-gap"></div>
+    <git-auth-button-stub type="button"></git-auth-button-stub>
   </form-controls-stub>
+  <v-divider-stub></v-divider-stub>
   <form-controls-stub>
-    <git-auth-button-stub></git-auth-button-stub>
-  </form-controls-stub>
-  <form-controls-stub>
-    <v-checkbox-stub value="true" name="checkbox">
+    <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
       <a href="https://endpass.com/terms/" target="_blank">Terms of Service</a>
       and

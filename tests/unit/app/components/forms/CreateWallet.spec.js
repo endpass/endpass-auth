@@ -39,6 +39,9 @@ describe('CreateWallet', () => {
       localVue,
       store,
       mixins: [VueTimers],
+      provide: {
+        theme: 'default',
+      },
     });
   });
 

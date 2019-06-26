@@ -5,6 +5,7 @@ import store from '@/store';
 import router from '@/router';
 import App from '@/App';
 import validation from './validation';
+import '@endpass/ui/kit/kit.theme-default.css';
 
 (async () => {
   if (ENV.VUE_APP_IS_E2E_CONNECT) {

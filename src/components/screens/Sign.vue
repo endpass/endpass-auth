@@ -1,8 +1,8 @@
 <template>
   <screen @close="handleWindowClose">
-    <v-frame
+    <v-modal-card
       :loading="!request"
-      :closable="isDialog"
+      :is-closable="isDialog"
       @close="handleSignCancel"
     >
       <sign-form
@@ -13,14 +13,14 @@
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
-    </v-frame>
+    </v-modal-card>
   </screen>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
-import VFrame from '@/components/common/VFrame';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 import SignForm from '@/components/forms/Sign';
 
 export default {
@@ -66,7 +66,7 @@ export default {
   components: {
     Screen,
     SignForm,
-    VFrame,
+    VModalCard,
   },
 };
 </script>
