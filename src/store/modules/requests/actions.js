@@ -1,7 +1,6 @@
 import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 import signerService from '@/service/signer';
-import i18n from '@/locales/i18n';
 
 const sendResponse = async ({ commit }, payload) => {
   signChannel.put(Answer.createOk(payload));
@@ -45,7 +44,7 @@ const processRequest = async (
     if (err.message.includes('message authentication code mismatch')) {
       commit('changeLoadingStatus', false);
 
-      throw new Error(i18n.t('store.requests.passIncorrect'));
+      throw new Error(this.$i18n.t('store.requests.passIncorrect'));
     } else {
       dispatch('sendResponse', {
         id: request.id,

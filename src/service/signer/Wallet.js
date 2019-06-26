@@ -3,9 +3,9 @@ import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
 import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
 import isV3 from '@endpass/utils/isV3';
+import i18n from '@/locales/i18n';
 
 import web3 from '@/service/signer/web3';
-import i18n from '@/locales/i18n';
 
 const { isAddress, bytesToHex, numberToHex } = Web3.utils;
 

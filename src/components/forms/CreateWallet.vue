@@ -84,7 +84,6 @@ import FormControls from '@/components/common/FormControls.vue';
 import VInput from '@endpass/ui/kit/VInput';
 import FormField from '@/components/common/FormField.vue';
 import formMixin from '@/mixins/form';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'CreateWalletForm',
@@ -108,8 +107,8 @@ export default {
     },
     primaryButtonLabel() {
       return this.isLoading
-        ? i18n.t('components.createWallet.createWallet')
-        : i18n.t('global.confirm');
+        ? this.$i18n.t('global.confirm')
+        : this.$i18n.t('components.createWallet.createWallet');
     },
   },
 
@@ -127,7 +126,7 @@ export default {
         this.isShowSeed = true;
       } catch (e) {
         console.error(e);
-        this.error = i18n.t('components.createWallet.error');
+        this.error = this.$i18n.t('components.createWallet.error');
       }
       this.isLoading = false;
     },

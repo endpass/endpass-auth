@@ -18,7 +18,6 @@
 <script>
 import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'WidgetHeader',
@@ -38,8 +37,8 @@ export default {
   computed: {
     togglerLabel() {
       return this.isCollapsed
-        ? i18n.t('components.widgetHeader.showMore')
-        : i18n.t('components.widgetHeader.showLess');
+        ? this.$i18n.t('components.widgetHeader.showMore')
+        : this.$i18n.t('components.widgetHeader.showLess');
     },
 
     formattedBalance() {

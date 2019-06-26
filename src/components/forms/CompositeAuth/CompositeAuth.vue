@@ -31,7 +31,6 @@ import AuthForm from '@/components/forms/CompositeAuth/Auth';
 import OtpBlockForm from '@/components/forms/CompositeAuth/OtpBlock';
 import MessageForm from '@/components/forms/CompositeAuth/Message';
 import { IDENTITY_MODE } from '@/constants';
-import i18n from '@/locales/i18n';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -122,9 +121,11 @@ export default {
     async handleLinkSent() {
       await this.defineAuthStatus();
       if (this.isLogin) {
-        this.message = i18n.t('components.compositeAuth.successAuthMessage');
+        this.message = this.$i18n.t(
+          'components.compositeAuth.successAuthMessage',
+        );
       } else {
-        this.message = i18n.t('components.compositeAuth.linkSentMessage');
+        this.message = this.$i18n.t('components.compositeAuth.linkSentMessage');
         this.currentForm = FORMS.MESSAGE;
         await this.waitLogin();
       }
@@ -138,7 +139,7 @@ export default {
     },
 
     handleAuthError() {
-      this.error = i18n.t('components.compositeAuth.authFailed');
+      this.error = this.$i18n.t('components.compositeAuth.authFailed');
     },
 
     handleSubmit() {

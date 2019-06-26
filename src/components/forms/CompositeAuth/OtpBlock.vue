@@ -20,7 +20,6 @@
 import { mapActions, mapState } from 'vuex';
 import OtpForm from '@/components/forms/CompositeAuth/Otp';
 import RecoverForm from '@/components/forms/CompositeAuth/Recover';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'OtpBlockForm',
@@ -49,7 +48,7 @@ export default {
         this.$emit('submit');
       } catch (err) {
         console.error('handle error', err);
-        this.setError(i18n.t('components.otpBlock.authFailed'));
+        this.setError(this.$i18n.t('components.otpBlock.authFailed'));
       }
     },
 
@@ -79,7 +78,8 @@ export default {
 
     handleRecoverError(error) {
       const msg =
-        (error && error.message) || i18n.t('components.otpBlock.recoverFailed');
+        (error && error.message) ||
+        this.$i18n.t('components.otpBlock.recoverFailed');
       this.setError(msg);
     },
   },

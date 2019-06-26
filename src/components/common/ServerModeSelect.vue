@@ -61,7 +61,6 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import formMixin from '@/mixins/form';
-import i18n from '@/locales/i18n';
 
 const availableIdentityServerTypes = [
   {
@@ -100,7 +99,7 @@ export default {
       isLoading: state => state.core.loading,
     }),
     serverModeSelectExample() {
-      return `${i18n.t(
+      return `${this.$i18n.t(
         'components.serverModeSelect.example',
       )}: https://yourserver.com/api`;
     },

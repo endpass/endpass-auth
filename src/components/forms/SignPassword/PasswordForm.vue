@@ -78,7 +78,6 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'PasswordForm',
@@ -127,18 +126,18 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.isLoading
-        ? i18n.t('global.apply')
-        : i18n.t('global.loading');
+        ? this.$i18n.t('global.apply')
+        : this.$i18n.t('global.loading');
     },
 
     passwordInputLabel() {
       if (this.email) {
-        return i18n.t('components.passwordForm.passwordForEmail', {
+        return this.$i18n.t('components.passwordForm.passwordForEmail', {
           email: this.email,
         });
       }
 
-      return i18n.t('components.passwordForm.walletPassword');
+      return this.$i18n.t('components.passwordForm.walletPassword');
     },
 
     isFormValid() {

@@ -36,7 +36,7 @@
     </form-field>
     <form-field
       v-if="requestBody"
-      :label="$t('components.sign.requestdata')"
+      :label="$t('components.sign.requestData')"
     >
       <v-code data-test="request-body">
         {{ JSON.stringify(requestBody, null, 2) }}
@@ -70,7 +70,6 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'SignForm',
@@ -115,7 +114,9 @@ export default {
     },
 
     primaryButtonLabel() {
-      return !this.loading ? i18n.t('global.sign') : i18n.t('global.loading');
+      return !this.loading
+        ? this.$i18n.t('global.sign')
+        : this.$i18n.t('global.loading');
     },
   },
 

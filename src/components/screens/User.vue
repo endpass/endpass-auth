@@ -31,7 +31,6 @@ import Network from '@endpass/class/Network';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 import AccountForm from '@/components/forms/Account';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'User',
@@ -122,7 +121,7 @@ export default {
     },
 
     handleDonateSuccess() {
-      this.message = i18n.t('components.user.donationSuccess');
+      this.message = this.$i18n.t('components.user.donationSuccess');
       this.changeLoadingStatus(false);
     },
 

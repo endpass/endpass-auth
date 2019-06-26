@@ -51,7 +51,6 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import formMixin from '@/mixins/form';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'OtpForm',
@@ -75,8 +74,8 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.loading
-        ? i18n.t('global.confirm')
-        : i18n.t('global.loading');
+        ? this.$i18n.t('global.confirm')
+        : this.$i18n.t('global.loading');
     },
 
     codeErrorMessage() {

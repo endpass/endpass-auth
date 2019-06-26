@@ -13,7 +13,7 @@ exports[`CreateWallet render should correctly render CreateWallet component 1`] 
       <!---->
       <form-controls-stub>
         <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
-          Confirm
+          Create wallet
         </v-button-stub>
       </form-controls-stub>
     </form>

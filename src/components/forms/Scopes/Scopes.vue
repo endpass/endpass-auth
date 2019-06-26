@@ -36,7 +36,6 @@ import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import ScopesCheckboxTree from '@/components/common/ScopesCheckboxTree';
 import scopeTitlesMap from './scopeTitlesMap';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'ScopesForm',
@@ -62,8 +61,8 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.isLoading
-        ? i18n.t('components.scopes.allow')
-        : i18n.t('global.loading');
+        ? this.$i18n.t('global.allow')
+        : this.$i18n.t('global.loading');
     },
   },
 

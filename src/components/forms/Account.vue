@@ -79,7 +79,6 @@ import VSelect from '@/components/common/VSelect.vue';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import i18n from '@/locales/i18n';
 
 export default {
   name: 'AccountForm',
@@ -129,8 +128,8 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.loading
-        ? i18n.t('component.account.updateAccount')
-        : i18n.t('global.loading');
+        ? this.$i18n.t('component.account.updateAccount')
+        : this.$i18n.t('global.loading');
     },
 
     isRopsten() {
@@ -168,7 +167,10 @@ export default {
 
     emitDonateError(e) {
       if (e.message.includes('403')) {
-        this.$emit('donate-error', i18n.t('component.account.donationError'));
+        this.$emit(
+          'donate-error',
+          this.$i18n.t('component.account.donationError'),
+        );
       }
     },
   },
