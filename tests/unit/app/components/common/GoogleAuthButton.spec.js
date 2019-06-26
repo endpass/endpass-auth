@@ -44,7 +44,11 @@ describe('GoogleAuthButton', () => {
     describe('without gapi', () => {
       beforeEach(() => {
         window.gapi = null;
-        wrapper = shallowMount(GoogleAuthButton);
+        wrapper = shallowMount(GoogleAuthButton, {
+          provide: {
+            theme: 'default',
+          },
+        });
       });
 
       it("should correctly render GoogleAuthButton component empty if auth2 isn't loaded", () => {
@@ -55,7 +59,11 @@ describe('GoogleAuthButton', () => {
     describe('with gapi', () => {
       beforeEach(() => {
         window.gapi = gapi;
-        wrapper = shallowMount(GoogleAuthButton);
+        wrapper = shallowMount(GoogleAuthButton, {
+          provide: {
+            theme: 'default',
+          },
+        });
       });
 
       it('should correctly render GoogleAuthButton component if auth2 is loaded', () => {
@@ -84,6 +92,9 @@ describe('GoogleAuthButton', () => {
       wrapper = shallowMount(GoogleAuthButton, {
         localVue,
         store,
+        provide: {
+          theme: 'default',
+        },
       });
     });
 

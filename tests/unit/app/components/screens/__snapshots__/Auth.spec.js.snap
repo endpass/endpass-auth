@@ -2,24 +2,24 @@
 
 exports[`Auth render should correctly render Auth screen component 1`] = `
 <screen-stub>
-  <v-frame-stub title="Connect" closable="true" loading="true">
+  <v-modal-card-stub isclosable="true" loading="true">
     <composite-auth-form-stub closable="true"></composite-auth-form-stub>
-  </v-frame-stub>
+  </v-modal-card-stub>
 </screen-stub>
 `;
 
 exports[`Auth render should render auth form if user authorized and have any account 1`] = `
 <screen-stub>
-  <v-frame-stub title="Connect" closable="true" loading="true">
+  <v-modal-card-stub isclosable="true" loading="true">
     <composite-auth-form-stub closable="true"></composite-auth-form-stub>
-  </v-frame-stub>
+  </v-modal-card-stub>
 </screen-stub>
 `;
 
 exports[`Auth render should render create account form if user authorized but does not have any account 1`] = `
 <screen-stub>
-  <v-frame-stub title="Connect" closable="true" loading="true">
+  <v-modal-card-stub isclosable="true" loading="true">
     <create-wallet-form-stub></create-wallet-form-stub>
-  </v-frame-stub>
+  </v-modal-card-stub>
 </screen-stub>
 `;

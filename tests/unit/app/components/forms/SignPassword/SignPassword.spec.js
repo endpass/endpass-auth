@@ -41,6 +41,9 @@ describe('SignPasswordForm', () => {
     wrapper = shallowMount(SignPasswordForm, {
       localVue,
       store,
+      provide: {
+        theme: 'default',
+      },
     });
   });
 
@@ -66,6 +69,9 @@ describe('SignPasswordForm', () => {
       wrapper = shallowMount(SignPasswordForm, {
         localVue,
         store,
+        provide: {
+          theme: 'default',
+        },
       });
 
       await global.flushPromises();

@@ -6,7 +6,11 @@ describe('Otp', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(RecoverForm);
+    wrapper = shallowMount(RecoverForm, {
+      provide: {
+        theme: 'default',
+      },
+    });
   });
 
   describe('render', () => {

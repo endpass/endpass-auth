@@ -1,13 +1,16 @@
 <template>
-  <loading-screen :is-loading="isLoading">
-    <layout-screen />
-  </loading-screen>
+  <theme-provider>
+    <loading-screen :is-loading="isLoading">
+      <layout-screen />
+    </loading-screen>
+  </theme-provider>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LayoutScreen from '@/components/screens/Layout';
+import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 
 export default {
   name: 'App',
@@ -29,6 +32,7 @@ export default {
   components: {
     LayoutScreen,
     LoadingScreen,
+    ThemeProvider,
   },
 };
 </script>

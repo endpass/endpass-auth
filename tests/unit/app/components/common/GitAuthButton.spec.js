@@ -12,7 +12,11 @@ describe('GitAuthButton', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = shallowMount(GitAuthButton);
+      wrapper = shallowMount(GitAuthButton, {
+        provide: {
+          theme: 'default',
+        },
+      });
     });
 
     it("should correctly render GitAuthButton component empty if auth2 isn't loaded", () => {
@@ -38,6 +42,9 @@ describe('GitAuthButton', () => {
       wrapper = shallowMount(GitAuthButton, {
         localVue,
         store,
+        provide: {
+          theme: 'default',
+        },
       });
     });
 

@@ -5,7 +5,11 @@ describe('PasswordForm', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(PasswordForm);
+    wrapper = shallowMount(PasswordForm, {
+      provide: {
+        theme: 'default',
+      },
+    });
   });
 
   describe('render', () => {
@@ -56,9 +60,7 @@ describe('PasswordForm', () => {
         email,
       });
 
-      expect(wrapper.find('form-field-stub').attributes().label).toContain(
-        email,
-      );
+      expect(wrapper.find('v-input-stub').attributes().label).toContain(email);
     });
   });
 

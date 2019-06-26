@@ -4,11 +4,15 @@
     @submit.prevent="emitSubmit"
   >
     <form-field v-if="requesterUrl">
-      Please apply connect to
-      <a
-        :href="requesterUrl"
-        data-test="requester-url"
-      >{{ requesterUrl }}</a>
+      <h3 class="v-modal-card-title">
+        Please apply connect to
+        <a
+          :href="requesterUrl"
+          data-test="requester-url"
+        >
+          {{ requesterUrl }}
+        </a>
+      </h3>
     </form-field>
     <form-field v-if="message">
       <message>
@@ -23,21 +27,22 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field :label="passwordInputLabel">
+    <form-field>
       <v-input
         v-model="password"
-        :autofocus="true"
-        :required="true"
+        autofocus="true"
+        required="true"
         type="password"
         name="password"
+        :label="passwordInputLabel"
         placeholder="Enter your password..."
       />
     </form-field>
     <form-controls>
       <v-button
         :disabled="isLoading || !isFormValid"
-        :submit="true"
-        type="primary"
+        type="submit"
+        class="button"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
@@ -45,7 +50,9 @@
       <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
-        type="danger"
+        skin="error"
+        class="button"
+        type="button"
         data-test="logout-button"
         @click="emitLogout"
       >
@@ -53,6 +60,9 @@
       </v-button>
       <v-button
         :disabled="!closable || isLoading"
+        skin="ghost"
+        type="button"
+        class="button"
         data-test="cancel-button"
         @click="emitCancel"
       >
@@ -63,8 +73,8 @@
 </template>
 
 <script>
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
+import VInput from '@endpass/ui/kit/VInput';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';

@@ -8,7 +8,7 @@ exports[`Message render should correctly render Message component 1`] = `
     </message-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" data-test="cancel-button">
+    <v-button-stub skin="primary" size="normal" disabled="true" data-test="cancel-button">
       Close
     </v-button-stub>
   </form-controls-stub>

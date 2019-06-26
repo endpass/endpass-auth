@@ -64,9 +64,9 @@
 
 <script>
 import get from 'lodash/get';
-import VInput from '@/components/common/VInput.vue';
+import VInput from '@endpass/ui/kit/VInput';
 import VCode from '@/components/common/VCode.vue';
-import VButton from '@/components/common/VButton.vue';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';

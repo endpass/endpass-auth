@@ -18,6 +18,9 @@ describe('Sign', () => {
         propsData: {
           request,
         },
+        provide: {
+          theme: 'default',
+        },
       });
     });
 
@@ -39,6 +42,9 @@ describe('Sign', () => {
             url: null,
           },
         },
+        provide: {
+          theme: 'default',
+        },
       });
 
       expect(wrapper.find('[data-test=requester-url]').exists()).toBe(false);
@@ -52,6 +58,9 @@ describe('Sign', () => {
             request: null,
           },
         },
+        provide: {
+          theme: 'default',
+        },
       });
 
       expect(wrapper.find('[data-test=request-body]').exists()).toBe(false);
@@ -62,6 +71,9 @@ describe('Sign', () => {
         propsData: {
           loading: true,
           request,
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -80,6 +92,9 @@ describe('Sign', () => {
       wrapper = mount(Sign, {
         propsData: {
           request,
+        },
+        provide: {
+          theme: 'default',
         },
       });
     });

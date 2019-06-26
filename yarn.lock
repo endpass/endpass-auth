@@ -1206,10 +1206,10 @@
     axios "^0.18.0"
     vue "^2.5.22"
 
-"@endpass/ui@^0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.6.0.tgz#db6aa2aca950cb31cd5afb409592284ed0ff1312"
-  integrity sha512-zreCYmDOA/23d//0pjRjesphs2teScB6nbB5Zi9s38dX7b+qRm9Fie8n4riVvTqprpoXIOg67WXiy6K4xoVzCg==
+"@endpass/ui@^0.12.10":
+  version "0.12.10"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.12.10.tgz#a1e97f9b7925885b1a73965d8ee54b3132026554"
+  integrity sha512-T2eM/x0iGNQwd1AgfnuYQoKhsBn5IXlYhbUKQiK5XjolawGSFasd2+FY3TrBhMVZBYojKOzhZNxYMwXr0XAfBg==
   dependencies:
     "@endpass/utils" "^1.3.5"
     vue "^2.5.21"

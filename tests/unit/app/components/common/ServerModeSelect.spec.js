@@ -2,10 +2,12 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ServerModeSelect from '@/components/common/ServerModeSelect.vue';
 import { IDENTITY_MODE } from '@/constants';
+import VeeValidate from 'vee-validate';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+localVue.use(VeeValidate);
 
 describe('ServerModeSelect', () => {
   let store;
@@ -49,9 +51,7 @@ describe('ServerModeSelect', () => {
     });
 
     it('should render default mode', () => {
-      expect(wrapper.find('[data-test=mode-select]').attributes().value).toBe(
-        IDENTITY_MODE.DEFAULT,
-      );
+      expect(wrapper.vm.currentIdentityServerType).toBe(IDENTITY_MODE.DEFAULT);
       expect(wrapper.find('[data-test=custom-server-input]').exists()).toBe(
         false,
       );
