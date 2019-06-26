@@ -1,7 +1,7 @@
 <template>
   <v-frame @close="handleClose">
     <p>{{ $t('components.notFound') }}</p>
-    <br />
+    <br>
     <small>{{ $t('global.version') }} {{ version }}</small>
   </v-frame>
 </template>

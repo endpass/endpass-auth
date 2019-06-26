@@ -1,17 +1,30 @@
 <template>
-  <header class="widget-header" @click="handleTogglerClick">
+  <header
+    class="widget-header"
+    @click="handleTogglerClick"
+  >
     <section class="widget-header-control">
       <h3 class="widget-header-title">
         {{ $t('components.widgetHeader.balance') }}
       </h3>
-      <button class="widget-header-toggler" data-test="widget-header-toggler">
+      <button
+        class="widget-header-toggler"
+        data-test="widget-header-toggler"
+      >
         {{ togglerLabel }}
       </button>
     </section>
-    <p v-if="balance" class="widget-header-balace" data-test="balance-label">
+    <p
+      v-if="balance"
+      class="widget-header-balace"
+      data-test="balance-label"
+    >
       {{ formattedBalance }}
     </p>
-    <spinner v-else :size="24" />
+    <spinner
+      v-else
+      :size="24"
+    />
   </header>
 </template>
 

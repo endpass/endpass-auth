@@ -107,7 +107,7 @@ export default {
     },
     primaryButtonLabel() {
       return this.isLoading
-        ? this.$i18n.t('global.confirm')
+        ? this.$i18n.t('global.loading')
         : this.$i18n.t('components.createWallet.createWallet');
     },
   },
