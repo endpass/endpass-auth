@@ -14,7 +14,7 @@
     <span class="github-button__text">{{
       $t('components.gitAuthButton.authWithGitHub')
     }}</span>
-  </button>
+  </v-button>
 </template>
 
 <script>

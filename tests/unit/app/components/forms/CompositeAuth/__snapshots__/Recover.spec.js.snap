@@ -3,7 +3,7 @@
 exports[`Recover render should correctly render component 1`] = `
 <form>
   <form-field-stub>
-    <message-stub data-test="form-message">
+    <message-stub data-test="form-message" class="v-modal-card-title">
       Enter recovery seed phrase of your wallet
     </message-stub>
   </form-field-stub>
@@ -12,7 +12,7 @@ exports[`Recover render should correctly render component 1`] = `
     <v-input-stub label="Seed phrase" value="" name="seedPhrase" placeholder="Seed phrase" required=""></v-input-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" type="submit" disabled="true" data-test="submit-button">
       Confirm
     </v-button-stub>
   </form-controls-stub>

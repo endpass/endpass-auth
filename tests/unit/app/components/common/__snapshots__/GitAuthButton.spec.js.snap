@@ -2,7 +2,6 @@
 
 exports[`GitAuthButton render should correctly render GitAuthButton component empty if auth2 isn't loaded 1`] = `
 <v-button-stub skin="social" size="normal" type="button" data-test="submit-button">
-  <v-svg-icon-stub name="github" width="18px" fill="" height="18px"></v-svg-icon-stub>
-  GitHub
+  <v-svg-icon-stub name="github" width="18px" fill="" height="18px"></v-svg-icon-stub> <span class="github-button__text">Sign in with Github</span>
 </v-button-stub>
 `;

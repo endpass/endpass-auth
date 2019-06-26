@@ -2,8 +2,8 @@ import i18n from '@/locales/i18n';
 
 export default {
   wallet: i18n.t('components.scopes.wallet'),
-  'wallet:address:read': i18n.t('components.scopes.address'),
-  'wallet:accounts:read': i18n.t('components.scopes.account'),
+  'wallet:address:read': i18n.t('components.scopes.onlyAddress'),
+  'wallet:accounts:read': i18n.t('components.scopes.onlyAccount'),
   user: i18n.t('components.scopes.user'),
   'user:email:read': i18n.t('components.scopes.email'),
   'user:address:read': i18n.t('components.scopes.address'),

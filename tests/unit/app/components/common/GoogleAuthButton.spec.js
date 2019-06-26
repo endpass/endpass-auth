@@ -5,8 +5,8 @@ import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
-localVue.use(Vuex);
 const i18n = setupI18n(localVue);
+localVue.use(Vuex);
 
 describe('GoogleAuthButton', () => {
   const auth = {

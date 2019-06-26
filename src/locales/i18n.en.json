@@ -4,6 +4,7 @@
     "close": "Close",
     "loading": "Loading...",
     "logout": "Logout",
+    "login": "Login",
     "sign": "Sign",
     "allow": "Allow",
     "apply": "Apply",
@@ -24,6 +25,7 @@
       "example": "Example"
     },
     "auth": {
+      "invalidEmail": "invalidEmail",
       "loginToContinue": "Log in to your Endpass account to access site actions",
       "enterEmail": "Enter your email...",
       "iAccept": "I accept the",
@@ -50,11 +52,11 @@
       "seedPhrase": "Seed phrase"
     },
     "scopes": {
-      "allowScopes": "Application requests following scopes. Press \"Allow\" button to grant these permissions.",
-      "wallet": "Read information about wallet",
-      "address": "Read only Address data",
-      "account": "Read only Accounts data",
-      "user": "Read user information",
+      "Scopes": "Application requests following scopes. Press \"Allow\" button to grant these permissions.",
+      "scopeWallet": "Read information about wallet",
+      "onlyAddress": "Read only Address data",
+      "onlyAccount": "Read only Accounts data",
+      "User": "Read user information",
       "email": "Read email",
       "address": "Read address",
       "phone": "Read phone",

@@ -1,28 +1,16 @@
 <template>
-  <form
-    data-test="auth-form"
-    @submit.prevent="handleSubmit"
-  >
+  <form data-test="auth-form" @submit.prevent="handleSubmit">
     <form-field v-if="isServerMode && !isPublic">
-      <server-mode-select
-        v-model="serverMode"
-        @confirm="handleSubmit"
-      />
+      <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
     </form-field>
     <template v-if="isDefaultMode">
       <form-field>
-        <message
-          class="v-modal-card-title"
-          data-test="form-message"
-        >
+        <message class="v-modal-card-title" data-test="form-message">
           {{ $t('components.auth.loginToContinue') }}
         </message>
       </form-field>
       <form-field v-if="error">
-        <message
-          :error="true"
-          data-test="error-message"
-        >
+        <message :error="true" data-test="error-message">
           {{ error }}
         </message>
       </form-field>
@@ -41,11 +29,7 @@
         />
       </form-field>
       <form-field>
-        <v-button
-          :disabled="!isFormValid"
-          size="big"
-          data-test="submit-button"
-        >
+        <v-button :disabled="!isFormValid" size="big" data-test="submit-button">
           {{ primaryButtonLabel }}
         </v-button>
       </form-field>
@@ -67,19 +51,14 @@
       <form-controls>
         <v-checkbox v-model="isTermsAccepted">
           {{ $t('components.auth.iAccept') }}
-          <a
-            href="https://endpass.com/terms/"
-            target="_blank"
-          >{{
-            $t('components.auth.termsOfService')
-          }}</a>
+          <a href="https://endpass.com/terms/" target="_blank">
+            {{ $t('components.auth.termsOfService') }}
+          </a>
 
           {{ $t('components.auth.and') }}
-          <a
-            href="https://endpass.com/privacy/"
-            target="_blank"
-          >
-            {{ $t('components.auth.privacyPolicy') }}</a>.
+          <a href="https://endpass.com/privacy/" target="_blank">
+            {{ $t('components.auth.privacyPolicy') }}
+          </a>
         </v-checkbox>
       </form-controls>
     </template>
@@ -141,11 +120,15 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Login' : 'Loading...';
+      return !this.loading
+        ? this.$i18n.t('global.login')
+        : this.$i18n.t('global.loading');
     },
 
     emailErrorMessage() {
-      return this.isEmailValid ? null : 'Invalid email';
+      return this.isEmailValid
+        ? null
+        : this.$i18n.t('components.auth.invalidEmail');
     },
 
     isEmailValid() {

@@ -4,14 +4,12 @@ import VeeValidate from 'vee-validate';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 
-const localVue = createLocalVue();
-const i18n = setupI18n(localVue);
-
 describe('Auth', () => {
   let wrapper;
 
   const localVue = createLocalVue();
   localVue.use(VeeValidate);
+  const i18n = setupI18n(localVue);
 
   beforeEach(() => {
     wrapper = shallowMount(Auth, {
@@ -22,7 +20,6 @@ describe('Auth', () => {
       provide: {
         theme: 'default',
       },
-      localVue,
       i18n,
     });
   });
@@ -44,7 +41,6 @@ describe('Auth', () => {
         provide: {
           theme: 'default',
         },
-        localVue,
         i18n,
       });
 
@@ -61,7 +57,6 @@ describe('Auth', () => {
         provide: {
           theme: 'default',
         },
-        localVue,
         i18n,
       });
 
@@ -106,7 +101,6 @@ describe('Auth', () => {
           provide: {
             theme: 'default',
           },
-          localVue,
           i18n,
         });
       });

@@ -13,9 +13,9 @@ jest.mock('@endpass/utils/queryStringToMap', () =>
 
 const localVue = createLocalVue();
 
+const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 localVue.use(VueRouter);
-const i18n = setupI18n(localVue);
 
 describe('PublicAuth', () => {
   let wrapper;
@@ -82,6 +82,7 @@ describe('PublicAuth', () => {
         localVue,
         router,
         store,
+        i18n,
       });
 
       expect(accountsModule.mutations.setAuthParams).not.toBeCalled();
