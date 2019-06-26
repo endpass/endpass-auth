@@ -52,7 +52,7 @@
       "seedPhrase": "Seed phrase"
     },
     "scopes": {
-      "Scopes": "Application requests following scopes. Press \"Allow\" button to grant these permissions.",
+      "allowScopes": "Application requests following scopes. Press \"Allow\" button to grant these permissions.",
       "scopeWallet": "Read information about wallet",
       "onlyAddress": "Read only Address data",
       "onlyAccount": "Read only Accounts data",

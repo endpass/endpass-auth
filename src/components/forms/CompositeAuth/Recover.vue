@@ -5,7 +5,7 @@
         class="v-modal-card-title"
         data-test="form-message"
       >
-      {{ $t('components.recover.enterSeed') }}
+        {{ $t('components.recover.enterSeed') }}
       </message>
     </form-field>
     <form-field v-if="error">

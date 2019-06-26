@@ -8,7 +8,7 @@
         class="v-modal-card-title"
         data-test="form-message"
       >
-      {{ $t('components.otp.enterCode') }}
+        {{ $t('components.otp.enterCode') }}
       </message>
     </form-field>
     <form-field>
