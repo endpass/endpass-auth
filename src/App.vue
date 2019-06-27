@@ -11,7 +11,6 @@ import { mapActions } from 'vuex';
 import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LayoutScreen from '@/components/screens/Layout';
-import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 
 export default {
   name: 'App',
@@ -34,7 +33,6 @@ export default {
     ThemeProvider,
     LayoutScreen,
     LoadingScreen,
-    ThemeProvider,
   },
 };
 </script>

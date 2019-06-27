@@ -5,7 +5,7 @@
         {{ $t('components.scopes.allowScopes') }}
       </message>
     </form-field>
-    <form-field>
+    <div class="form-field">
       <scopes-checkbox-tree
         v-for="level in scopesTree"
         :key="level.key"
@@ -14,7 +14,7 @@
         :values-map="valuesScopesMap"
         @change="onChange"
       />
-    </form-field>
+    </div>
     <form-controls>
       <v-button
         :disabled="!isFormValid || isLoading"

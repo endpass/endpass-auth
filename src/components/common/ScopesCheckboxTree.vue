@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <label class="checkbox">
+  <ul :class="{ 'scopes-checkbox-tree': true, child: isChild }">
+    <li class="scopes-checkbox-tree-item">
       <v-checkbox
         v-if="level.title"
         :model-value="valuesMap[level.key]"
@@ -9,20 +9,17 @@
       >
         {{ level.title }}
       </v-checkbox>
-    </label>
-    <scopes-checkbox-tree
-      v-for="childLevel in children"
-      :key="childLevel.key"
-      :level="childLevel"
-      :children="childLevel.children"
-      :values-map="valuesMap"
-      :class="{
-        'scope-level': true,
-        'scope-level_is-child': true,
-      }"
-      @change="onChangeLevel"
-    />
-  </div>
+      <scopes-checkbox-tree
+        v-for="childLevel in children"
+        :key="childLevel.key"
+        :level="childLevel"
+        :children="childLevel.children"
+        :values-map="valuesMap"
+        :is-child="true"
+        @change="onChangeLevel"
+      />
+    </li>
+  </ul>
 </template>
 
 <script>
@@ -47,6 +44,11 @@ const ScopesCheckboxTree = {
     level: {
       type: Object,
       default: () => ({}),
+    },
+
+    isChild: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -92,7 +94,9 @@ export default ScopesCheckboxTree;
 </script>
 
 <style lang="postcss">
-.scope-level_is-child {
-  margin: 10px 0 10px 23px;
+.scopes-checkbox-tree {
+  &.child {
+    margin: 10px 0 10px 23px;
+  }
 }
 </style>
