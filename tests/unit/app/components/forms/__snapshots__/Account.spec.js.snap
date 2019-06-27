@@ -12,7 +12,7 @@ exports[`Account render should correctly render Account component 1`] = `
   </form-field-stub>
   <form-field-stub>
     <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">
-      component.account.updateAccount
+      Update account
     </v-button-stub>
   </form-field-stub>
   <!---->

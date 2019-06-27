@@ -58,16 +58,6 @@
       >
         {{ $t('global.logout') }}
       </v-button>
-      <v-button
-        :disabled="!closable || isLoading"
-        skin="ghost"
-        type="button"
-        class="button"
-        data-test="cancel-button"
-        @click="emitCancel"
-      >
-        {{ $t('global.close') }}
-      </v-button>
     </form-controls>
   </form>
 </template>

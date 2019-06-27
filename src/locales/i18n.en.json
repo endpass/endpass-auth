@@ -56,7 +56,7 @@
       "scopeWallet": "Read information about wallet",
       "onlyAddress": "Read only Address data",
       "onlyAccount": "Read only Accounts data",
-      "User": "Read user information",
+      "user": "Read user information",
       "email": "Read email",
       "address": "Read address",
       "phone": "Read phone",
