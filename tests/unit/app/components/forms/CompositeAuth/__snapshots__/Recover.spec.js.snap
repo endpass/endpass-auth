@@ -7,7 +7,6 @@ exports[`Recover render should correctly render component 1`] = `
       Enter recovery seed phrase of your wallet
     </message-stub>
   </form-field-stub>
-  <!---->
   <form-field-stub>
     <v-input-stub label="Seed phrase" value="" name="seedPhrase" placeholder="Seed phrase" required=""></v-input-stub>
   </form-field-stub>

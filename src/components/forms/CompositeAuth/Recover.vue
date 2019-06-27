@@ -8,17 +8,10 @@
         {{ $t('components.recover.enterSeed') }}
       </message>
     </form-field>
-    <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field>
     <form-field>
       <v-input
         v-model="seedPhrase"
+        :error="error"
         label="Seed phrase"
         name="seedPhrase"
         :placeholder="$t('components.recover.seedPhrase')"
