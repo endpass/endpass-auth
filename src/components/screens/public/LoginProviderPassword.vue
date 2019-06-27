@@ -61,6 +61,7 @@ export default {
           password,
         });
         window.location.href = redirect;
+        return; // must show loader until redirect not happen
       } catch (err) {
         this.error = err.message;
       } finally {

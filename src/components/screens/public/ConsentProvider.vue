@@ -77,6 +77,7 @@ export default {
         });
 
         window.location.href = redirect;
+        return; // must show loader until redirect not happen
       } catch (err) {
         this.setError(err.message);
       } finally {
@@ -97,6 +98,7 @@ export default {
         if (skip) {
           this.isSkipped = true;
           window.location.href = redirect_url;
+          return; // must show loader until redirect not happen
         }
 
         this.scopesList = requested_scope;
