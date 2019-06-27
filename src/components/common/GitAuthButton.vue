@@ -11,7 +11,7 @@
       width="18px"
       height="18px"
     />
-    ${{ $t('components.gitAuthButton.authWithGitHub') }}
+    {{ $t('components.gitAuthButton.authWithGitHub') }}
   </v-button>
 </template>
 

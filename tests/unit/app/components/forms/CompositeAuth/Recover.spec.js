@@ -30,7 +30,7 @@ describe('Recover', () => {
 
       wrapper.setProps({ error });
 
-      expect(wrapper.find('[data-test=error-message]').text()).toBe(error);
+      expect(wrapper.find('v-input-stub').attributes('error')).toBe(error);
     });
 
     it('should correctly disable submit button', () => {

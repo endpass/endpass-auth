@@ -14,10 +14,10 @@
   },
   "components": {
     "gitAuthButton": {
-      "authWithGitHub": "Sign in with Github"
+      "authWithGitHub": "GitHub"
     },
     "googleAuthButton": {
-      "authWithGoogle": "Sign in with Google"
+      "authWithGoogle": "Google"
     },
     "serverModeSelect": {
       "identityServer": "Identity server",
