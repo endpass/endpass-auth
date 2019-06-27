@@ -3,9 +3,11 @@ import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CompositeAuth from '@/components/forms/CompositeAuth';
 import { IDENTITY_MODE } from '@/constants';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
+const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 localVue.use(VueRouter);
 
@@ -58,6 +60,7 @@ describe('CompositeAuth', () => {
       localVue,
       store,
       router,
+      i18n,
     });
   });
 

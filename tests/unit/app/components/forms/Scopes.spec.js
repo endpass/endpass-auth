@@ -1,11 +1,19 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ScopesForm from '@/components/forms/Scopes';
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+
+const i18n = setupI18n(localVue);
 
 describe('Scopes', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(ScopesForm);
+    wrapper = shallowMount(ScopesForm, {
+      localVue,
+      i18n,
+    });
   });
 
   describe('render', () => {

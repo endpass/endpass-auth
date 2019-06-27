@@ -1,12 +1,18 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Content from '@/components/widget/Content.vue';
 import { accounts } from '@unitFixtures/accounts';
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+const i18n = setupI18n(localVue);
 
 describe('Widget Content', () => {
   let wrapper;
 
   beforeEach(() => {
     wrapper = shallowMount(Content, {
+      localVue,
+      i18n,
       propsData: {
         accounts,
       },

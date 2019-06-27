@@ -44,7 +44,7 @@ const processRequest = async (
     if (err.message.includes('message authentication code mismatch')) {
       commit('changeLoadingStatus', false);
 
-      throw new Error('You have enter incorrect password');
+      throw new Error(this.$i18n.t('store.requests.passIncorrect'));
     } else {
       dispatch('sendResponse', {
         id: request.id,

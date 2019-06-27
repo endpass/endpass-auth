@@ -5,7 +5,7 @@
   >
     <section class="widget-header-control">
       <h3 class="widget-header-title">
-        balance
+        {{ $t('components.widgetHeader.balance') }}
       </h3>
       <button
         class="widget-header-toggler"
@@ -49,7 +49,9 @@ export default {
 
   computed: {
     togglerLabel() {
-      return this.isCollapsed ? 'Show more' : 'Show less';
+      return this.isCollapsed
+        ? this.$i18n.t('components.widgetHeader.showMore')
+        : this.$i18n.t('components.widgetHeader.showLess');
     },
 
     formattedBalance() {

@@ -14,7 +14,7 @@ exports[`Otp render should correctly render Otp component 1`] = `
       Don't know code?
     </a>
     <v-button-stub skin="primary" size="normal" disabled="true" type="submit" data-test="submit-button">
-      Submit code
+      Confirm
     </v-button-stub>
   </form-controls-stub>
 </form>

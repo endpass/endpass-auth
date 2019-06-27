@@ -1,8 +1,15 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Account from '@/components/forms/Account.vue';
 
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+
+const i18n = setupI18n(localVue);
 describe('Account', () => {
   const componentOptions = {
+    localVue,
+    i18n,
     propsData: {
       formData: {
         activeAccount: '0x0',

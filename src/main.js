@@ -6,6 +6,7 @@ import router from '@/router';
 import App from '@/App';
 import validation from './validation';
 import '@endpass/ui/kit/kit.theme-default.css';
+import i18n from '@/locales/i18n';
 
 (async () => {
   if (ENV.VUE_APP_IS_E2E_CONNECT) {
@@ -19,6 +20,7 @@ import '@endpass/ui/kit/kit.theme-default.css';
   new Vue({
     render: h => h(App),
     store,
+    i18n,
     router,
   }).$mount('#app');
 })();

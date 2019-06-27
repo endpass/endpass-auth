@@ -1,11 +1,17 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Header from '@/components/widget/Header.vue';
+import setupI18n from '@/locales/i18nSetup';
 
+const localVue = createLocalVue();
+const i18n = setupI18n(localVue);
 describe('Widget Header', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Header);
+    wrapper = shallowMount(Header, {
+      localVue,
+      i18n,
+    });
   });
 
   describe('render', () => {
@@ -22,6 +28,8 @@ describe('Widget Header', () => {
 
     it('should not render spinner if balance is passed and should render balance', () => {
       wrapper = shallowMount(Header, {
+        localVue,
+        i18n,
         propsData: {
           balance: '1000',
         },
@@ -33,6 +41,8 @@ describe('Widget Header', () => {
 
     it('should not render spinner if balance equals to stringified 0', () => {
       wrapper = shallowMount(Header, {
+        localVue,
+        i18n,
         propsData: {
           balance: '0',
         },
@@ -44,6 +54,8 @@ describe('Widget Header', () => {
 
     it('should change toggler label is collapsed is falsy', () => {
       wrapper = shallowMount(Header, {
+        localVue,
+        i18n,
         propsData: {
           isCollapsed: false,
         },

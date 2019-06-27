@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <message>
-      Identity server
+      {{ $t('components.serverModeSelect.identityServer') }}
     </message>
 
     <form-field>
@@ -21,12 +21,12 @@
         v-validate="'required|url'"
         :error="errors.first('customIdentityServer')"
         :disabled="!isInputAllowed"
-        label="Custom Identity Server"
+        :label="$t('components.serverModeSelect.customIdentityServer')"
         data-vv-as="customIdentityServer"
         data-vv-name="customIdentityServer"
         name="customIdentityServer"
-        placeholder="Custom Identity Server"
-        description="Example: https://yourserver.com/api"
+        :placeholder="$t('components.serverModeSelect.customIdentityServer')"
+        :description="serverModeSelectExample"
         data-test="custom-server-input"
       />
     </form-field>
@@ -47,7 +47,7 @@
       data-test="submit-button"
       @click="handleSubmit"
     >
-      Confirm
+      {{ $t('global.confirm') }}
     </v-button>
   </div>
 </template>
@@ -98,7 +98,11 @@ export default {
     ...mapState({
       isLoading: state => state.core.loading,
     }),
-
+    serverModeSelectExample() {
+      return `${this.$i18n.t(
+        'components.serverModeSelect.example',
+      )}: https://yourserver.com/api`;
+    },
     isInputAllowed() {
       return !this.isLoading && !this.isValidating;
     },

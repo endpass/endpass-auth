@@ -3,11 +3,13 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ServerModeSelect from '@/components/common/ServerModeSelect.vue';
 import { IDENTITY_MODE } from '@/constants';
 import VeeValidate from 'vee-validate';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 localVue.use(VeeValidate);
+const i18n = setupI18n(localVue);
 
 describe('ServerModeSelect', () => {
   let store;
@@ -41,6 +43,7 @@ describe('ServerModeSelect', () => {
     wrapper = shallowMount(ServerModeSelect, {
       localVue,
       store,
+      i18n,
     });
   });
 

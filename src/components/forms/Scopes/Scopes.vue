@@ -2,8 +2,7 @@
   <form @submit.prevent="handleSubmit">
     <form-field>
       <message>
-        Application requests following scopes. Press "Allow" button to grant
-        these permissions.
+        {{ $t('components.scopes.allowScopes') }}
       </message>
     </form-field>
     <form-field>
@@ -61,7 +60,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.isLoading ? 'Allow' : 'Loading...';
+      return !this.isLoading
+        ? this.$i18n.t('global.allow')
+        : this.$i18n.t('global.loading');
     },
   },
 

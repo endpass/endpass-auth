@@ -1,8 +1,8 @@
 <template>
   <v-frame @close="handleClose">
-    <p>Sorry, but place is not found</p>
+    <p>{{ $t('components.notFound') }}</p>
     <br>
-    <small>Endpass Auth v{{ version }}</small>
+    <small>{{ $t('global.version') }} {{ version }}</small>
   </v-frame>
 </template>
 

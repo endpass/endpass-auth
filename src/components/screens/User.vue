@@ -121,8 +121,7 @@ export default {
     },
 
     handleDonateSuccess() {
-      this.message =
-        'Donation request successfully sent. In the most cases it can takes a few time before you will receive funds.';
+      this.message = this.$i18n.t('components.user.donationSuccess');
       this.changeLoadingStatus(false);
     },
 

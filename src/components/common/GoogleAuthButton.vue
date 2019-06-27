@@ -12,7 +12,7 @@
       width="18px"
       height="18px"
     />
-    Google
+    {{ $t('components.googleAuthButton.authWithGoogle') }}
   </v-button>
 </template>
 

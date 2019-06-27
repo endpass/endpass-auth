@@ -1,5 +1,10 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+
+const i18n = setupI18n(localVue);
 
 describe('PasswordForm', () => {
   let wrapper;
@@ -9,6 +14,8 @@ describe('PasswordForm', () => {
       provide: {
         theme: 'default',
       },
+      localVue,
+      i18n,
     });
   });
 
@@ -52,7 +59,7 @@ describe('PasswordForm', () => {
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
 
-    it('should render email in password input label', () => {
+    it('should render email in password input label', async () => {
       const email = 'foo@bar.baz';
 
       wrapper.setProps({

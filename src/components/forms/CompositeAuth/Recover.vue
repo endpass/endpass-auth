@@ -5,7 +5,7 @@
         class="v-modal-card-title"
         data-test="form-message"
       >
-        Enter recovery seed phrase of your wallet.
+        {{ $t('components.recover.enterSeed') }}
       </message>
     </form-field>
     <form-field v-if="error">
@@ -21,7 +21,7 @@
         v-model="seedPhrase"
         label="Seed phrase"
         name="seedPhrase"
-        placeholder="Seed phrase"
+        :placeholder="$t('components.recover.seedPhrase')"
         required
       />
     </form-field>
@@ -65,7 +65,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Recover access' : 'Loading...';
+      return !this.loading
+        ? this.$i18n.t('global.confirm')
+        : this.$i18n.t('global.loading');
     },
 
     isSeedPhraseValid() {

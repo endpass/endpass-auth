@@ -15,7 +15,7 @@
           data-test="accounts-toggle-button"
           @click="handleAccountsButtonClick"
         >
-          Change account
+          {{ $t('components.widgetContent.changeAccount') }}
         </option-button>
         <option-button
           v-for="account in actualAccounts"
@@ -41,7 +41,7 @@
         data-test="logout-button"
         @click="handleLogoutButtonClick"
       >
-        Logout
+        {{ $t('global.logout') }}
       </option-button>
     </section>
   </accordion>

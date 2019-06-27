@@ -1,6 +1,6 @@
 <template>
   <v-frame :loading="true">
-    <p>Endpass Auth bridge v{{ version }}</p>
+    <p>{{ $t('global.version') }} {{ version }}</p>
   </v-frame>
 </template>
 
