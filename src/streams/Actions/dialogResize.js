@@ -1,6 +1,5 @@
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
-import { addResizeListener } from '@/util/resizeListener';
 
 let lastHeight = 0;
 let isInited = false;
@@ -26,12 +25,7 @@ export const initDialogResize = () => {
 
   document.body.style.overflow = 'hidden';
   window.addEventListener('resize', dialogResize);
-  const rootEl = document.body.querySelector('#root');
-  if (!rootEl) {
-    console.error('#root node is not defined! Resize will not work');
-    return;
-  }
-  addResizeListener(rootEl, dialogResize);
+  setInterval(dialogResize, 200);
 };
 
 export default {

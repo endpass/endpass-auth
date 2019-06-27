@@ -128,7 +128,7 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.loading
-        ? this.$i18n.t('component.account.updateAccount')
+        ? this.$i18n.t('components.account.updateAccount')
         : this.$i18n.t('global.loading');
     },
 
@@ -169,7 +169,7 @@ export default {
       if (e.message.includes('403')) {
         this.$emit(
           'donate-error',
-          this.$i18n.t('component.account.donationError'),
+          this.$i18n.t('components.account.donationError'),
         );
       }
     },
