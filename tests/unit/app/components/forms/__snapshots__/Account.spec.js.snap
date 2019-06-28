@@ -5,22 +5,22 @@ exports[`Account render should correctly render Account component 1`] = `
   <!---->
   <!---->
   <form-field-stub label="Active account address">
-    <v-select-stub items="" name="activeAccount" value="0x0"></v-select-stub>
+    <v-select-stub value="0x0" options="" name="activeAccount"></v-select-stub>
   </form-field-stub>
   <form-field-stub label="Active network">
-    <v-select-stub items="" name="activeNetwork" value="1"></v-select-stub>
+    <v-select-stub value="1" options="" name="activeNetwork"></v-select-stub>
   </form-field-stub>
   <form-field-stub>
-    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" type="button" data-test="submit-button" fluid="">
       Update account
     </v-button-stub>
   </form-field-stub>
   <!---->
   <form-controls-stub>
-    <v-button-stub type="danger" data-test="logout-button">
+    <v-button-stub skin="error" size="normal" type="button" data-test="logout-button">
       Logout
     </v-button-stub>
-    <v-button-stub data-test="cancel-button">
+    <v-button-stub skin="ghost" size="normal" type="button" data-test="cancel-button">
       Close
     </v-button-stub>
   </form-controls-stub>

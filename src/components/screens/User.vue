@@ -1,6 +1,6 @@
 <template>
   <screen @close="handleWindowClose">
-    <v-frame
+    <v-modal-card
       :loading="!isInited"
       :closable="isDialog"
       @close="handleCancel"
@@ -21,7 +21,7 @@
         @cancel="handleCancel"
         @logout="handleLogout"
       />
-    </v-frame>
+    </v-modal-card>
   </screen>
 </template>
 
@@ -29,8 +29,8 @@
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import Network from '@endpass/class/Network';
 import Screen from '@/components/common/Screen';
-import VFrame from '@/components/common/VFrame';
 import AccountForm from '@/components/forms/Account';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 
 export default {
   name: 'User',
@@ -56,8 +56,8 @@ export default {
 
     networksOptions() {
       return Object.values(Network.DEFAULT_NETWORKS).map(({ id, name }) => ({
-        value: id,
-        label: name,
+        val: id,
+        text: name,
       }));
     },
 
@@ -65,8 +65,8 @@ export default {
       if (!this.accounts) return [];
 
       return this.accounts.map(({ address }) => ({
-        value: address,
-        label: address,
+        val: address,
+        text: address,
       }));
     },
   },
@@ -143,8 +143,8 @@ export default {
   },
 
   components: {
+    VModalCard,
     Screen,
-    VFrame,
     AccountForm,
   },
 };

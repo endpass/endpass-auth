@@ -46,14 +46,14 @@ export default {
 
     async handleSignSubmit(password) {
       this.isLoading = true;
+      this.error = null;
+
       try {
         await this.signPermission({
           password,
         });
-
-        this.error = null;
       } catch (err) {
-        this.error = 'No permission';
+        this.error = this.$i18n.t('components.signPermission.authFailed');
       } finally {
         this.isLoading = false;
       }

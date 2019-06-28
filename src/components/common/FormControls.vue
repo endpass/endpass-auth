@@ -14,5 +14,9 @@
   .button + .button {
     margin-left: 10px;
   }
+
+  .v-button + .v-button {
+    margin-left: 10px;
+  }
 }
 </style>
