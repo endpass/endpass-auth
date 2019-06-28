@@ -19,30 +19,28 @@
         {{ message }}
       </message>
     </form-field>
-    <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field>
     <form-field>
       <v-input
+        id="password"
         v-model="password"
+        v-validate="'required|min:8'"
+        data-vv-as="Password"
+        data-vv-name="password"
         autofocus="true"
         required="true"
         type="password"
         name="password"
+        :error="errors.first('password') || errorTitle"
         :label="passwordInputLabel"
         :placeholder="$t('components.passwordForm.enterWalletPassword')"
+        data-test="password-input"
       />
     </form-field>
     <form-controls>
       <v-button
         :disabled="isLoading || !isFormValid"
         type="submit"
-        class="button"
+        size="big"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
@@ -51,8 +49,7 @@
         v-if="withLogoutBtn"
         :disabled="isLoading"
         skin="error"
-        class="button"
-        type="button"
+        size="big"
         data-test="logout-button"
         @click="emitLogout"
       >
@@ -68,6 +65,7 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import formMixin from '@/mixins/form';
 
 export default {
   name: 'PasswordForm',
@@ -111,9 +109,13 @@ export default {
 
   data: () => ({
     password: '',
+    showError: true,
   }),
 
   computed: {
+    errorTitle() {
+      return this.showError ? this.error : '';
+    },
     primaryButtonLabel() {
       return !this.isLoading
         ? this.$i18n.t('global.apply')
@@ -129,9 +131,18 @@ export default {
 
       return this.$i18n.t('components.passwordForm.walletPassword');
     },
+  },
 
-    isFormValid() {
-      return !!this.password;
+  watch: {
+    error: {
+      handler() {
+        this.showError = true;
+      },
+    },
+    password: {
+      handler() {
+        this.showError = false;
+      },
     },
   },
 
@@ -150,6 +161,7 @@ export default {
       this.$emit('logout');
     },
   },
+  mixins: [formMixin],
 
   components: {
     VButton,

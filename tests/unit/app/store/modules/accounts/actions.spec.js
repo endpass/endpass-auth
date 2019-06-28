@@ -316,7 +316,7 @@ describe('accounts actions', () => {
 
       expect(authChannel.put).toBeCalledWith({
         status: false,
-        error: 'Auth was canceled by user!',
+        error: 'Authentication was canceled by user!',
         code: ERRORS.AUTH_CANCELED_BY_USER,
       });
     });
