@@ -58,7 +58,7 @@
     "@endpass/class": "^0.14.6",
     "@endpass/e2e-utils": "^0.2.13",
     "@endpass/faucet": "^0.2.0",
-    "@endpass/ui": "^0.14.1",
+    "@endpass/ui": "^0.14.2",
     "@endpass/utils": "^1.7.0",
     "axios": "^0.19.0",
     "ethereum-blockies-base64": "^1.0.2",
