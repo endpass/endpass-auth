@@ -1,18 +1,21 @@
 <template>
   <header
     class="widget-header"
+    data-test="widget-header"
+    role="button"
+    tabindex="0"
     @click="handleTogglerClick"
   >
     <section class="widget-header-control">
       <h3 class="widget-header-title">
         {{ $t('components.widgetHeader.balance') }}
       </h3>
-      <button
-        class="widget-header-toggler"
-        data-test="widget-header-toggler"
+      <span
+        class="widget-header-status"
+        data-test="widget-header-status"
       >
-        {{ togglerLabel }}
-      </button>
+        {{ statusLabel }}
+      </span>
     </section>
     <p
       v-if="balance"
@@ -48,7 +51,7 @@ export default {
   },
 
   computed: {
-    togglerLabel() {
+    statusLabel() {
       return this.isCollapsed
         ? this.$i18n.t('components.widgetHeader.showMore')
         : this.$i18n.t('components.widgetHeader.showLess');
@@ -95,7 +98,7 @@ export default {
   font-size: 12px;
 }
 
-.widget-header-toggler {
+.widget-header-status {
   flex: 0 0 auto;
   margin-left: auto;
   border: none;

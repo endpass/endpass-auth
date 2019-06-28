@@ -21,28 +21,39 @@ const routes = [
     component: Widget,
     meta: {
       isWidget: true,
-      noBackground: true,
     },
   },
   {
     path: '/public/auth',
     name: 'PublicAuthScreen',
     component: PublicAuth,
+    meta: {
+      isBackground: true,
+    },
   },
   {
     path: '/public/login',
     name: 'LoginProvider',
     component: LoginProvider,
+    meta: {
+      isBackground: true,
+    },
   },
   {
     path: '/public/consent',
     name: 'ConsentProvider',
     component: ConsentProvider,
+    meta: {
+      isBackground: true,
+    },
   },
   {
     path: '/public/error',
     name: 'Error',
     component: Error,
+    meta: {
+      isBackground: true,
+    },
   },
   {
     path: '/bridge',
@@ -50,12 +61,16 @@ const routes = [
     component: Bridge,
     meta: {
       isDialog: true,
+      isBackground: true,
     },
   },
   {
     path: '/loader',
     name: 'Loader',
     component: Loader,
+    meta: {
+      isBackground: true,
+    },
   },
   {
     path: '/account',
@@ -63,6 +78,7 @@ const routes = [
     component: User,
     meta: {
       isDialog: true,
+      isBackground: true,
     },
   },
   {
@@ -71,6 +87,7 @@ const routes = [
     component: SignPermission,
     meta: {
       isDialog: true,
+      isBackground: true,
     },
   },
   {
@@ -79,6 +96,7 @@ const routes = [
     component: Auth,
     meta: {
       isDialog: true,
+      isBackground: true,
     },
   },
   {
@@ -87,6 +105,7 @@ const routes = [
     component: Sign,
     meta: {
       isDialog: true,
+      isBackground: true,
     },
   },
   { path: '/fonts' },
@@ -94,6 +113,9 @@ const routes = [
     path: '*',
     name: 'NotFound',
     component: NotFound,
+    meta: {
+      isBackground: true,
+    },
   },
 ];
 

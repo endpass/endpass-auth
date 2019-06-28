@@ -52,7 +52,6 @@ export default {
       settings: state => state.accounts.settings,
       balance: state => state.accounts.balance,
       loading: state => state.core.loading,
-
       isMobile: state => state.widget.isMobile,
       isExpanded: state => state.widget.isExpanded,
       isWidgetLoading: state => state.widget.isLoading,
@@ -83,7 +82,6 @@ export default {
   methods: {
     ...mapActions([
       'initWidget',
-
       'openWidget',
       'closeWidget',
       'openAccounts',
@@ -94,7 +92,6 @@ export default {
       'subscribeOnBalanceUpdates',
       'subscribeOnSettingsUpdates',
       'updateSettings',
-
       'expandMobileWidget',
       'collapseMobileWidget',
     ]),

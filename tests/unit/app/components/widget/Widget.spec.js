@@ -43,6 +43,7 @@ describe('Widget', () => {
     };
     widgetModule = {
       actions: {
+        initWidget: jest.fn(),
         openWidget: jest.fn(),
         closeWidget: jest.fn(),
         openAccounts: jest.fn(),
@@ -83,10 +84,11 @@ describe('Widget', () => {
 
   describe('behavior', () => {
     it('should request settings, accounts and subscribe on mount', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       await global.flushPromises();
 
+      expect(widgetModule.actions.initWidget).toBeCalled();
       expect(accountsModule.actions.defineSettings).toBeCalled();
       expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
       expect(accountsModule.actions.subscribeOnBalanceUpdates).toBeCalled();
