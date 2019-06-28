@@ -11,10 +11,10 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { isDialog, isWidget, noBackground } = to.meta;
+  const { isDialog, isWidget, isBackground } = to.meta;
   const needDialogRedirect = isDialog && !store.getters.isDialog;
 
-  if (noBackground) {
+  if (!isBackground) {
     document.body.classList.add('transparent');
   }
 

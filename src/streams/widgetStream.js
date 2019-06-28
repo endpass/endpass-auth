@@ -13,6 +13,11 @@ function initWidgetStream() {
   });
 
   const methodToOptions = {
+    [METHODS.WIDGET_CHANGE_MOBILE_MODE]: {
+      payloadHandler({ isMobile }) {
+        store.commit('setMobileModeStatus', isMobile);
+      },
+    },
     [METHODS.WIDGET_COLLAPSE_RESPONSE]: {
       payloadHandler() {
         store.dispatch('collapseMobileWidget');
