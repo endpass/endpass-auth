@@ -119,4 +119,11 @@ export default {
     color: #c0a6ce;
   }
 }
+
+@media (max-width: 1023px) {
+  .widget-header {
+    background-position: 95% center;
+    background-size: 150px;
+  }
+}
 </style>

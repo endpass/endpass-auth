@@ -52,6 +52,10 @@ body {
   background: linear-gradient(to bottom, #6d2198 0%, #4b0873 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
+
+  &.transparent {
+    background: none;
+  }
 }
 
 body,

@@ -13,6 +13,11 @@ function initWidgetStream() {
   });
 
   const methodToOptions = {
+    [METHODS.WIDGET_COLLAPSE_RESPONSE]: {
+      payloadHandler() {
+        store.dispatch('collapseMobileWidget');
+      },
+    },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
         store.commit('logout');
@@ -31,9 +36,7 @@ function initWidgetStream() {
   };
 
   bridgeMessenger.subscribe(async (payload, req) => {
-    // routing by methods
     const { method } = req;
-
     const options = methodToOptions[method] || {};
 
     queueInst.handleRequest(options, payload, req);

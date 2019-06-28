@@ -21,6 +21,7 @@ const routes = [
     component: Widget,
     meta: {
       isWidget: true,
+      noBackground: true,
     },
   },
   {

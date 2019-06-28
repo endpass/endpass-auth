@@ -1,23 +1,32 @@
 <template>
-  <div
-    ref="widget"
-    class="widget"
-  >
-    <widget-header
-      :balance="balance"
-      :is-collapsed="isCollapsed"
-      @toggle="handleWidgetToggle"
-    />
-    <widget-content
-      :is-collapsed="isCollapsed"
-      :is-accounts-collapsed="isAccountsCollapsed"
-      :accounts="accounts"
-      :current-account="currentAccount"
-      :is-loading="loading"
-      @account-change="handleAccountChange"
-      @accounts-toggle="handleAccountsToggle"
-      @logout="handleLogout"
-    />
+  <div class="widget">
+    <div v-if="isMobile" ref="trigger" class="widget-trigger">
+      <trigger-button
+        :is-loading="isWidgetLoading"
+        @click="handleMobileTriggerClick"
+      />
+    </div>
+    <div
+      v-show="isWidgetFrameVisible"
+      ref="widget"
+      :class="{ 'widget-frame': true, mobile: isMobile, visible: isExpanded }"
+    >
+      <widget-header
+        :balance="balance"
+        :is-collapsed="isCollapsed"
+        @toggle="handleWidgetToggle"
+      />
+      <widget-content
+        :is-collapsed="isCollapsed"
+        :is-accounts-collapsed="isAccountsCollapsed"
+        :accounts="accounts"
+        :current-account="currentAccount"
+        :is-loading="loading"
+        @account-change="handleAccountChange"
+        @accounts-toggle="handleAccountsToggle"
+        @logout="handleLogout"
+      />
+    </div>
   </div>
 </template>
 
@@ -26,6 +35,7 @@ import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
+import TriggerButton from './TriggerButton.vue';
 
 export default {
   name: 'Widget',
@@ -42,6 +52,10 @@ export default {
       settings: state => state.accounts.settings,
       balance: state => state.accounts.balance,
       loading: state => state.core.loading,
+
+      isMobile: state => state.widget.isMobile,
+      isExpanded: state => state.widget.isExpanded,
+      isWidgetLoading: state => state.widget.isLoading,
     }),
 
     currentNet() {
@@ -51,10 +65,25 @@ export default {
     currentAccount() {
       return get(this.settings, 'lastActiveAccount', null);
     },
+
+    isWidgetFrameVisible() {
+      return this.isMobile ? this.isExpanded : true;
+    },
+  },
+
+  watch: {
+    isExpanded(newValue) {
+      if (newValue) {
+        this.isCollapsed = true;
+        this.isAccountsCollapsed = true;
+      }
+    },
   },
 
   methods: {
     ...mapActions([
+      'initWidget',
+
       'openWidget',
       'closeWidget',
       'openAccounts',
@@ -65,6 +94,9 @@ export default {
       'subscribeOnBalanceUpdates',
       'subscribeOnSettingsUpdates',
       'updateSettings',
+
+      'expandMobileWidget',
+      'collapseMobileWidget',
     ]),
 
     handleWidgetToggle() {
@@ -90,6 +122,16 @@ export default {
       this.isAccountsCollapsed = !this.isAccountsCollapsed;
     },
 
+    handleMobileTriggerClick() {
+      if (this.isWidgetLoading) return;
+
+      if (this.isExpanded) {
+        this.collapseMobileWidget(this.$refs.trigger.clientWidth);
+      } else {
+        this.expandMobileWidget();
+      }
+    },
+
     async handleAccountChange(address) {
       await this.updateSettings({
         lastActiveAccount: address,
@@ -106,6 +148,7 @@ export default {
   },
 
   async mounted() {
+    await this.initWidget();
     await this.defineSettings();
     await this.defineOnlyV3Accounts();
     this.subscribeOnBalanceUpdates();
@@ -114,16 +157,21 @@ export default {
   components: {
     WidgetHeader,
     WidgetContent,
+    TriggerButton,
   },
 };
 </script>
 
 <style lang="postcss">
-body {
-  background: none !important;
+.widget-trigger {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  display: block;
 }
 
-.widget {
+.widget-frame {
   overflow: hidden;
   position: absolute;
   bottom: 0;
@@ -131,6 +179,18 @@ body {
   width: 240px;
   transform: translateX(-50%);
   border-radius: 4px;
-  /* box-shadow: 2px 6px 8px rgba(36, 43, 46, 0.15); */
+
+  &.mobile {
+    position: absolute;
+    left: 0;
+    z-index: 2;
+    display: none;
+    transform: none;
+    width: 100%;
+
+    &.visible {
+      display: block;
+    }
+  }
 }
 </style>
