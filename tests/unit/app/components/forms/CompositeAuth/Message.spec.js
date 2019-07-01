@@ -1,5 +1,10 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
 import Message from '@/components/forms/CompositeAuth/Message.vue';
+
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+const i18n = setupI18n(localVue);
 
 describe('Message', () => {
   describe('render', () => {
@@ -7,6 +12,8 @@ describe('Message', () => {
 
     beforeEach(() => {
       wrapper = shallowMount(Message, {
+        localVue,
+        i18n,
         propsData: {
           message: 'foo',
         },
@@ -24,6 +31,8 @@ describe('Message', () => {
 
     beforeEach(() => {
       wrapper = mount(Message, {
+        localVue,
+        i18n,
         propsData: {
           message: 'foo',
         },

@@ -1,5 +1,10 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import Sign from '@/components/forms/Sign.vue';
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+
+const i18n = setupI18n(localVue);
 
 const request = {
   address: '0x0',
@@ -15,8 +20,13 @@ describe('Sign', () => {
 
     beforeEach(() => {
       wrapper = shallowMount(Sign, {
+        localVue,
+        i18n,
         propsData: {
           request,
+        },
+        provide: {
+          theme: 'default',
         },
       });
     });
@@ -33,11 +43,16 @@ describe('Sign', () => {
 
     it('should not render requester url if it is not passed', () => {
       wrapper = shallowMount(Sign, {
+        localVue,
+        i18n,
         propsData: {
           request: {
             ...request,
             url: null,
           },
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -46,11 +61,16 @@ describe('Sign', () => {
 
     it('should not render request body code if it is not passed', () => {
       wrapper = shallowMount(Sign, {
+        localVue,
+        i18n,
         propsData: {
           request: {
             ...request,
             request: null,
           },
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -59,9 +79,14 @@ describe('Sign', () => {
 
     it('should change submit button text if loading and make it disabled', () => {
       wrapper = shallowMount(Sign, {
+        localVue,
+        i18n,
         propsData: {
           loading: true,
           request,
+        },
+        provide: {
+          theme: 'default',
         },
       });
 
@@ -78,8 +103,13 @@ describe('Sign', () => {
 
     beforeEach(() => {
       wrapper = mount(Sign, {
+        localVue,
+        i18n,
         propsData: {
           request,
+        },
+        provide: {
+          theme: 'default',
         },
       });
     });

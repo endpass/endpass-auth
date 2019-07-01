@@ -2,11 +2,13 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import OtpBlock from '@/components/forms/CompositeAuth/OtpBlock';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 localVue.use(VueRouter);
+const i18n = setupI18n(localVue);
 
 describe('OtpBlock', () => {
   let store;
@@ -44,6 +46,7 @@ describe('OtpBlock', () => {
     wrapper = shallowMount(OtpBlock, {
       localVue,
       store,
+      i18n,
       router,
     });
   });

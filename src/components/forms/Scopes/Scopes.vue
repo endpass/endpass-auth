@@ -2,11 +2,10 @@
   <form @submit.prevent="handleSubmit">
     <form-field>
       <message>
-        Application requests following scopes. Press "Allow" button to grant
-        these permissions.
+        {{ $t('components.scopes.allowScopes') }}
       </message>
     </form-field>
-    <form-field>
+    <div class="form-field">
       <scopes-checkbox-tree
         v-for="level in scopesTree"
         :key="level.key"
@@ -15,7 +14,7 @@
         :values-map="valuesScopesMap"
         @change="onChange"
       />
-    </form-field>
+    </div>
     <form-controls>
       <v-button
         :disabled="!isFormValid || isLoading"
@@ -31,7 +30,7 @@
 </template>
 
 <script>
-import VButton from '@/components/common/VButton.vue';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
@@ -61,7 +60,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.isLoading ? 'Allow' : 'Loading...';
+      return !this.isLoading
+        ? this.$i18n.t('global.allow')
+        : this.$i18n.t('global.loading');
     },
   },
 
@@ -98,6 +99,7 @@ export default {
     valuesScopesMap: {
       handler() {
         const res = this.getCheckedScopes();
+
         this.isFormValid = res.length !== 0;
       },
       immediate: true,

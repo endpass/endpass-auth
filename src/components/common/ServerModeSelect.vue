@@ -1,18 +1,14 @@
 <template>
   <div class="container">
     <message>
-      Identity server
+      {{ $t('components.serverModeSelect.identityServer') }}
     </message>
 
     <form-field>
-      <v-select
+      <v-content-switcher
         v-model="currentIdentityServerType"
-        :disabled="!isInputAllowed"
-        :options="availableIdentityServerTypes"
         :items="availableIdentityServerTypes"
-        :value="currentIdentityServerType"
-        label="Identity Server"
-        name="currentIdentityServerType"
+        :disabled="!isInputAllowed"
         data-test="mode-select"
       />
     </form-field>
@@ -22,17 +18,17 @@
         id="customIdentityServer"
         key="custom-identity-server"
         v-model="customIdentityServer"
+        v-validate="'required|url'"
+        :error="errors.first('customIdentityServer')"
         :disabled="!isInputAllowed"
-        label="Custom Identity Server"
+        :label="$t('components.serverModeSelect.customIdentityServer')"
+        data-vv-as="customIdentityServer"
         data-vv-name="customIdentityServer"
         name="customIdentityServer"
-        placeholder="Custom Identity Server"
-        help="Example: https://yourserver.com/api"
+        :placeholder="$t('components.serverModeSelect.customIdentityServer')"
+        :description="serverModeSelectExample"
         data-test="custom-server-input"
       />
-      <message>
-        Example: https://yourserver.com/api
-      </message>
     </form-field>
 
     <form-field v-if="validationError">
@@ -47,24 +43,24 @@
     <v-button
       v-if="!isDefaultMode"
       :disabled="!isFormValid"
-      type="primary"
+      type="button"
       data-test="submit-button"
       @click="handleSubmit"
     >
-      Confirm
+      {{ $t('global.confirm') }}
     </v-button>
   </div>
 </template>
 
 <script>
 import { mapActions, mapState } from 'vuex';
-
 import { IDENTITY_MODE } from '@/constants';
-import VSelect from '@/components/common/VSelect.vue';
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
+import VInput from '@endpass/ui/kit/VInput';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
+import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
+import formMixin from '@/mixins/form';
 
 const availableIdentityServerTypes = [
   {
@@ -102,7 +98,11 @@ export default {
     ...mapState({
       isLoading: state => state.core.loading,
     }),
-
+    serverModeSelectExample() {
+      return `${this.$i18n.t(
+        'components.serverModeSelect.example',
+      )}: https://yourserver.com/api`;
+    },
     isInputAllowed() {
       return !this.isLoading && !this.isValidating;
     },
@@ -209,12 +209,13 @@ export default {
       });
     },
   },
+  mixins: [formMixin],
   components: {
-    VSelect,
     VInput,
     VButton,
     FormField,
     Message,
+    VContentSwitcher,
   },
   // mixins: [error, formMixin],
 };

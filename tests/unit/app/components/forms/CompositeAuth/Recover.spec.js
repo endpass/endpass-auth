@@ -1,12 +1,22 @@
-import { shallowMount } from '@vue/test-utils';
+import { shallowMount, createLocalVue } from '@vue/test-utils';
 import RecoverForm from '@/components/forms/CompositeAuth/Recover.vue';
 
-describe('Otp', () => {
+import setupI18n from '@/locales/i18nSetup';
+
+const localVue = createLocalVue();
+const i18n = setupI18n(localVue);
+describe('Recover', () => {
   const seedPhrase = 'foo bar foo bar foo bar foo bar foo bar foo bar';
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(RecoverForm);
+    wrapper = shallowMount(RecoverForm, {
+      provide: {
+        theme: 'default',
+      },
+      localVue,
+      i18n,
+    });
   });
 
   describe('render', () => {
@@ -20,7 +30,7 @@ describe('Otp', () => {
 
       wrapper.setProps({ error });
 
-      expect(wrapper.find('[data-test=error-message]').text()).toBe(error);
+      expect(wrapper.find('v-input-stub').attributes('error')).toBe(error);
     });
 
     it('should correctly disable submit button', () => {
@@ -37,7 +47,7 @@ describe('Otp', () => {
         loading: false,
       });
 
-      expect(submitButton.text()).toBe('Recover access');
+      expect(submitButton.text()).toBe('Confirm');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
@@ -45,7 +55,7 @@ describe('Otp', () => {
       });
       wrapper.setData({ seedPhrase });
 
-      expect(submitButton.text()).toBe('Recover access');
+      expect(submitButton.text()).toBe('Confirm');
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
   });

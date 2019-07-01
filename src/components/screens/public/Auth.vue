@@ -1,8 +1,7 @@
 <template>
-  <screen>
-    <v-frame
+  <screen class="auth-screen-centered">
+    <v-modal-card
       :loading="!isInited"
-      :closable="false"
       @close="handleAuthCancel"
     >
       <composite-auth-form
@@ -10,7 +9,7 @@
         :is-public="true"
         @authorize="handleAuthorize"
       />
-    </v-frame>
+    </v-modal-card>
   </screen>
 </template>
 
@@ -20,7 +19,7 @@
 import { mapMutations, mapState, mapActions } from 'vuex';
 import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
-import VFrame from '@/components/common/VFrame';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import { parseUrl } from '@/util/dom';
 
@@ -78,8 +77,15 @@ export default {
 
   components: {
     Screen,
-    VFrame,
+    VModalCard,
     CompositeAuthForm,
   },
 };
 </script>
+
+<style>
+.auth-screen-centered {
+  display: flex;
+  justify-content: center;
+}
+</style>

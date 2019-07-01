@@ -4,13 +4,12 @@ exports[`Scopes render should correctly render component 1`] = `
 <form>
   <form-field-stub>
     <message-stub>
-      Application requests following scopes. Press "Allow" button to grant
-      these permissions.
+      Application requests following scopes. Press "Allow" button to grant these permissions.
     </message-stub>
   </form-field-stub>
-  <form-field-stub></form-field-stub>
+  <div class="form-field"></div>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" fluid="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" disabled="true" submit="true" fluid="true" type="primary" data-test="submit-button">
       Allow
     </v-button-stub>
   </form-controls-stub>
@@ -21,16 +20,15 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
 <form>
   <form-field-stub>
     <message-stub>
-      Application requests following scopes. Press "Allow" button to grant
-      these permissions.
+      Application requests following scopes. Press "Allow" button to grant these permissions.
     </message-stub>
   </form-field-stub>
-  <form-field-stub>
+  <div class="form-field">
     <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]"></scopes-checkbox-tree-stub>
     <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]"></scopes-checkbox-tree-stub>
-  </form-field-stub>
+  </div>
   <form-controls-stub>
-    <v-button-stub type="primary" submit="true" fluid="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" submit="true" fluid="true" type="primary" data-test="submit-button">
       Allow
     </v-button-stub>
   </form-controls-stub>

@@ -3,11 +3,15 @@ import VueTimers from 'vue-timers/mixin';
 import validation from '@/validation';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CreateWallet from '@/components/forms/CreateWallet.vue';
+import setupI18n from '@/locales/i18nSetup';
+import VeeValidate from 'vee-validate';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+localVue.use(VeeValidate);
 localVue.use(validation);
+const i18n = setupI18n(localVue);
 
 jest.useFakeTimers();
 
@@ -38,7 +42,11 @@ describe('CreateWallet', () => {
     wrapper = shallowMount(CreateWallet, {
       localVue,
       store,
+      i18n,
       mixins: [VueTimers],
+      provide: {
+        theme: 'default',
+      },
     });
   });
 

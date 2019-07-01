@@ -1,8 +1,8 @@
 <template>
   <screen @close="handleAuthCancel">
-    <v-frame
+    <v-modal-card
       :loading="!isInited"
-      :closable="isDialog"
+      :is-closable="isDialog"
       @close="handleAuthCancel"
     >
       <composite-auth-form
@@ -14,14 +14,14 @@
         v-else-if="activeForm === FORMS.CREATE_WALLET"
         @request="handleAccountRequest"
       />
-    </v-frame>
+    </v-modal-card>
   </screen>
 </template>
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
 import Screen from '@/components/common/Screen';
-import VFrame from '@/components/common/VFrame';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 
@@ -86,7 +86,7 @@ export default {
 
   components: {
     Screen,
-    VFrame,
+    VModalCard,
     CompositeAuthForm,
     CreateWalletForm,
   },

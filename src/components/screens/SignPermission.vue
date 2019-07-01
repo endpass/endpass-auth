@@ -1,8 +1,8 @@
 <template>
   <screen @close="handleCancel">
-    <v-frame
+    <v-modal-card
       :loading="false"
-      :closable="isDialog"
+      :is-closable="isDialog"
       @close="handleCancel"
     >
       <sign-password
@@ -13,14 +13,14 @@
         @submit="handleSignSubmit"
         @cancel="handleCancel"
       />
-    </v-frame>
+    </v-modal-card>
   </screen>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
-import VFrame from '@/components/common/VFrame';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 import SignPassword from '@/components/forms/SignPassword';
 
 import { ORIGIN_HOST } from '@/constants';
@@ -46,14 +46,14 @@ export default {
 
     async handleSignSubmit(password) {
       this.isLoading = true;
+      this.error = null;
+
       try {
         await this.signPermission({
           password,
         });
-
-        this.error = null;
       } catch (err) {
-        this.error = 'No permission';
+        this.error = this.$i18n.t('components.signPermission.authFailed');
       } finally {
         this.isLoading = false;
       }
@@ -68,7 +68,7 @@ export default {
   components: {
     SignPassword,
     Screen,
-    VFrame,
+    VModalCard,
   },
 };
 </script>

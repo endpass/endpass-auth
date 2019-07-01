@@ -6,7 +6,7 @@
       :closable="false"
     >
       <div class="v-rate-limit-body">
-        Too much request from your IP address, please wait...
+        {{ $t('components.rateLimit.toMuch') }}
         <div class="v-rate-limit-timeout">
           {{ viewTimeout }}
         </div>

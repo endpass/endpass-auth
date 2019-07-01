@@ -1,31 +1,32 @@
 <template>
-  <div>
-    <label class="checkbox">
-      <input
+  <ul :class="{ 'scopes-checkbox-tree': true, child: isChild }">
+    <li class="scopes-checkbox-tree-item">
+      <v-checkbox
         v-if="level.title"
-        :checked="valuesMap[level.key]"
+        :model-value="valuesMap[level.key]"
         type="checkbox"
-        @input="onChange(level, $event)"
+        @change="onChange(level, $event)"
       >
-      {{ level.title }}
-    </label>
-
-    <scopes-checkbox-tree
-      v-for="childLevel in children"
-      :key="childLevel.key"
-      :level="childLevel"
-      :children="childLevel.children"
-      :values-map="valuesMap"
-      :class="{
-        'scope-level': true,
-        'scope-level_is-child': true,
-      }"
-      @change="onChangeLevel"
-    />
-  </div>
+        {{ level.title }}
+      </v-checkbox>
+      <scopes-checkbox-tree
+        v-for="childLevel in children"
+        :key="childLevel.key"
+        :level="childLevel"
+        :children="childLevel.children"
+        :values-map="valuesMap"
+        :is-child="true"
+        @change="onChangeLevel"
+      />
+    </li>
+  </ul>
 </template>
 
 <script>
+import pickBy from 'lodash/pickBy';
+import isEmpty from 'lodash/isEmpty';
+import VCheckbox from '@endpass/ui/kit/VCheckbox';
+
 const ScopesCheckboxTree = {
   name: 'ScopesCheckboxTree',
 
@@ -34,13 +35,20 @@ const ScopesCheckboxTree = {
       type: Object,
       default: () => ({}),
     },
+
     valuesMap: {
       type: Object,
       default: () => ({}),
     },
+
     level: {
       type: Object,
       default: () => ({}),
+    },
+
+    isChild: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -49,36 +57,36 @@ const ScopesCheckboxTree = {
   }),
 
   methods: {
-    onChange(scope, ev) {
-      const value = ev.target.checked;
+    onChange(scope, value) {
+      const newValuesMap = { ...this.valuesMap };
 
-      const valuesMap = Object.keys(this.valuesMap)
-        .filter(key => key.indexOf(scope.key) === 0) // find all deep children with current level
-        .reduce(
-          (map, key) => {
-            Object.assign(map, { [key]: value });
-            return map;
-          },
-          { ...this.valuesMap },
-        );
+      Object.keys(newValuesMap).forEach(key => {
+        if (key.indexOf(scope.key) === 0) {
+          newValuesMap[key] = value;
+        }
+      });
 
-      this.$emit('change', valuesMap);
+      const [rootLevel] = scope.key.split(':');
+      const levelScopes = pickBy(
+        newValuesMap,
+        (_, key) => key !== rootLevel && key.indexOf(rootLevel) === 0,
+      );
+      const isLevelChecked = isEmpty(pickBy(levelScopes, val => !val));
+
+      if (scope.key !== rootLevel) {
+        newValuesMap[rootLevel] = isLevelChecked;
+      }
+
+      this.$emit('change', newValuesMap);
     },
 
     onChangeLevel(valuesMap) {
-      const childrenKeys = Object.keys(this.level.children);
-
-      const isLevelChecked = !childrenKeys
-        .map(key => valuesMap[key])
-        .includes(false);
-
-      const newValueMap = {
-        ...valuesMap,
-        [this.level.key]: isLevelChecked,
-      };
-
-      this.$emit('change', newValueMap);
+      this.$emit('change', valuesMap);
     },
+  },
+
+  components: {
+    VCheckbox,
   },
 };
 
@@ -86,7 +94,9 @@ export default ScopesCheckboxTree;
 </script>
 
 <style lang="postcss">
-.scope-level_is-child {
-  margin-left: 20px;
+.scopes-checkbox-tree {
+  &.child {
+    margin: 10px 0 10px 23px;
+  }
 }
 </style>

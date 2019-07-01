@@ -2,10 +2,12 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import '@mocks/window';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('ConsentProvider', () => {
   let $router;
@@ -68,6 +70,7 @@ describe('ConsentProvider', () => {
     wrapper = shallowMount(ConsentProvider, {
       localVue,
       store,
+      i18n,
       mocks: {
         $router: createRouter(),
       },
@@ -88,6 +91,7 @@ describe('ConsentProvider', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
+        i18n,
         mocks: {
           $router,
         },
@@ -111,6 +115,7 @@ describe('ConsentProvider', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
+        i18n,
         mocks: {
           $router,
         },
@@ -125,6 +130,7 @@ describe('ConsentProvider', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
+        i18n,
         mocks: {
           $router,
         },
@@ -137,6 +143,7 @@ describe('ConsentProvider', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
+        i18n,
         mocks: {
           $router,
         },
@@ -154,6 +161,7 @@ describe('ConsentProvider', () => {
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
+        i18n,
         mocks: {
           $router,
         },

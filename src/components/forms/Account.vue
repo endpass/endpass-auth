@@ -16,27 +16,28 @@
         {{ error }}
       </message>
     </form-field>
-    <form-field label="Active account address">
+    <form-field :label="$t('components.account.address')">
       <v-select
         v-model="formData.activeAccount"
-        :items="accounts"
+        :options="accounts"
         name="activeAccount"
       />
     </form-field>
-    <form-field label="Active network">
+    <form-field :label="$t('components.account.activeNet')">
       <v-select
         v-model="formData.activeNet"
-        :items="networks"
+        :options="networks"
         name="activeNetwork"
       />
     </form-field>
     <form-field>
       <v-button
-        :submit="true"
+        type="button"
         :disabled="loading"
-        type="primary"
+        skin="primary"
         data-test="submit-button"
         fluid
+        @click="emitSubmit"
       >
         {{ primaryButtonLabel }}
       </v-button>
@@ -49,23 +50,37 @@
       @donate="emitDonateSuccess"
       @donate-error="emitDonateError"
     >
-      Request 1 ETH from faucet
+      <v-button
+        slot-scope="{ sendRequest, isLoading }"
+        type="button"
+        :disabled="isLoading"
+        @click="sendRequest"
+      >
+        {{
+          isLoading
+            ? $t('components.account.requestEthLoading')
+            : $t('components.account.requestEth')
+        }}
+      </v-button>
     </v-faucet-button>
     <form-controls>
       <v-button
         :disabled="loading || !canLogout"
-        type="danger"
+        type="button"
+        skin="error"
         data-test="logout-button"
         @click="emitLogout"
       >
-        Logout
+        {{ $t('global.logout') }}
       </v-button>
       <v-button
         :disabled="!closable || loading"
+        type="button"
         data-test="cancel-button"
+        skin="ghost"
         @click="emitCancel"
       >
-        Close
+        {{ $t('global.close') }}
       </v-button>
     </form-controls>
   </form>
@@ -74,8 +89,8 @@
 <script>
 import { VFaucetButton } from '@endpass/faucet';
 import Network from '@endpass/class/Network';
-import VButton from '@/components/common/VButton.vue';
-import VSelect from '@/components/common/VSelect.vue';
+import VButton from '@endpass/ui/kit/VButton';
+import VSelect from '@endpass/ui/kit/VSelect';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
@@ -127,7 +142,9 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Update account' : 'Loading...';
+      return !this.loading
+        ? this.$i18n.t('components.account.updateAccount')
+        : this.$i18n.t('global.loading');
     },
 
     isRopsten() {
@@ -167,7 +184,7 @@ export default {
       if (e.message.includes('403')) {
         this.$emit(
           'donate-error',
-          'Something went wrong. Try request dontaion later!',
+          this.$i18n.t('components.account.donationError'),
         );
       }
     },

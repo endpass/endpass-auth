@@ -48,7 +48,7 @@ export default {
         this.$emit('submit');
       } catch (err) {
         console.error('handle error', err);
-        this.setError('Auth failed. Please, try again');
+        this.setError(this.$i18n.t('components.otpBlock.authFailed'));
       }
     },
 
@@ -78,7 +78,8 @@ export default {
 
     handleRecoverError(error) {
       const msg =
-        (error && error.message) || 'Recover failed. Please, try again';
+        (error && error.message) ||
+        this.$i18n.t('components.otpBlock.recoverFailed');
       this.setError(msg);
     },
   },

@@ -1,27 +1,24 @@
 <template>
   <div>
-    <form-field>
+    <form-item>
       <message data-test="form-message">
         {{ message }}
       </message>
-    </form-field>
-    <form-controls>
-      <v-button
-        :disabled="!closable"
-        data-test="cancel-button"
-        @click="emitCancel"
-      >
-        Close
-      </v-button>
-    </form-controls>
+    </form-item>
+    <v-button
+      :disabled="!closable"
+      data-test="cancel-button"
+      @click="emitCancel"
+    >
+      {{ $t('global.close') }}
+    </v-button>
   </div>
 </template>
 
 <script>
-import VButton from '@/components/common/VButton.vue';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'MessageForm',
@@ -47,8 +44,7 @@ export default {
   components: {
     VButton,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
   },
 };
 </script>

@@ -1,7 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`App-root App render should render "empty" markup 1`] = `
-<loading-screen-stub>
-  <layout-screen-stub></layout-screen-stub>
-</loading-screen-stub>
+<theme-provider-stub theme="default">
+  <loading-screen-stub>
+    <layout-screen-stub></layout-screen-stub>
+  </loading-screen-stub>
+</theme-provider-stub>
 `;

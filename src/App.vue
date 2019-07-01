@@ -1,11 +1,14 @@
 <template>
-  <loading-screen :is-loading="isLoading">
-    <layout-screen />
-  </loading-screen>
+  <theme-provider>
+    <loading-screen :is-loading="isLoading">
+      <layout-screen />
+    </loading-screen>
+  </theme-provider>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
+import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LayoutScreen from '@/components/screens/Layout';
 
@@ -27,6 +30,7 @@ export default {
     this.isLoading = false;
   },
   components: {
+    ThemeProvider,
     LayoutScreen,
     LoadingScreen,
   },
@@ -35,9 +39,7 @@ export default {
 
 <style lang="postcss">
 @import '../node_modules/reset.css/reset.css';
-</style>
 
-<style lang="postcss">
 * {
   box-sizing: border-box;
 }
@@ -50,15 +52,17 @@ body {
   background: linear-gradient(to bottom, #6d2198 0%, #4b0873 100%);
   background-repeat: no-repeat;
   background-attachment: fixed;
+
+  &.transparent {
+    background: none;
+  }
 }
 
 body,
 input,
 button,
 select {
-  font-family: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen,
-    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Helvetica,
-    Arial, sans-serif;
+  font-family: 'Akkurat Pro', Helvetica, Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -67,7 +71,8 @@ select {
   }
 }
 
-.form-controls a {
+.form-controls a,
+.form-row a {
   font-size: 0.85rem;
   color: #4d4d4d;
   text-decoration: none;

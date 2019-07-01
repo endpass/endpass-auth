@@ -5,7 +5,7 @@
       :error="true"
       data-test="error-message"
     >
-      You should provide login_challenge param in url, add it and try again!
+      {{ $t('components.loginProviderPassword.loginChallenge') }}
     </message>
     <template v-else>
       <sign-password
@@ -61,6 +61,7 @@ export default {
           password,
         });
         window.location.href = redirect;
+        return; // must show loader until redirect not happen
       } catch (err) {
         this.error = err.message;
       } finally {

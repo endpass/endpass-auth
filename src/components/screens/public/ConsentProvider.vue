@@ -77,6 +77,7 @@ export default {
         });
 
         window.location.href = redirect;
+        return; // must show loader until redirect not happen
       } catch (err) {
         this.setError(err.message);
       } finally {
@@ -97,11 +98,14 @@ export default {
         if (skip) {
           this.isSkipped = true;
           window.location.href = redirect_url;
+          return; // must show loader until redirect not happen
         }
 
         this.scopesList = requested_scope;
       } catch (err) {
-        this.setError('Something broken, when loading scopes');
+        this.setError(
+          this.$i18n.t('components.consentProvider.loadScopesError'),
+        );
       } finally {
         this.isLoading = false;
       }
@@ -119,9 +123,7 @@ export default {
     }
 
     if (!query.consent_challenge) {
-      this.setError(
-        'You should provide consent_challenge param in url, add it and try again!',
-      );
+      this.setError(this.$i18n.t('components.consentProvider.urlError'));
       return;
     }
 

@@ -19,11 +19,13 @@ export const initDialogResize = () => {
   if (isInited) {
     return;
   }
-  // dirty hack for detect resize, when 'resize' event not fired
-  setInterval(dialogResize, 200);
-
-  window.addEventListener('resize', dialogResize);
   isInited = true;
+
+  dialogResize();
+
+  document.body.style.overflow = 'hidden';
+  window.addEventListener('resize', dialogResize);
+  setInterval(dialogResize, 200);
 };
 
 export default {

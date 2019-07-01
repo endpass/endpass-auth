@@ -2,15 +2,13 @@
 
 exports[`Message render should correctly render Message component 1`] = `
 <div>
-  <form-field-stub>
+  <form-item-stub>
     <message-stub data-test="form-message">
       foo
     </message-stub>
-  </form-field-stub>
-  <form-controls-stub>
-    <v-button-stub disabled="true" data-test="cancel-button">
-      Close
-    </v-button-stub>
-  </form-controls-stub>
+  </form-item-stub>
+  <v-button-stub skin="primary" size="normal" disabled="true" data-test="cancel-button">
+    Close
+  </v-button-stub>
 </div>
 `;

@@ -2,10 +2,12 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import User from '@/components/screens/User.vue';
 import { accounts } from '@unitFixtures/accounts';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('User', () => {
   let store;
@@ -53,6 +55,7 @@ describe('User', () => {
     wrapper = shallowMount(User, {
       localVue,
       store,
+      i18n,
     });
   });
 

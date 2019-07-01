@@ -11,8 +11,12 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { isDialog, isWidget } = to.meta;
+  const { isDialog, isWidget, isBackground } = to.meta;
   const needDialogRedirect = isDialog && !store.getters.isDialog;
+
+  if (!isBackground) {
+    document.body.classList.add('transparent');
+  }
 
   // Github authentification handling and widget redirect preventing
   if (to.query.code || isWidget) {

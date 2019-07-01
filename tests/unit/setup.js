@@ -11,5 +11,7 @@ import './mocks/github-oauth-popup.mock';
 import './mocks/router.mock';
 import './mocks/web3.mock';
 import './mocks/walletGet.mock';
+import './mocks/locales/i18n.mock';
+import './mocks/locales/i18nSetup.mock';
 
 global.flushPromises = () => new Promise(resolve => setImmediate(resolve));

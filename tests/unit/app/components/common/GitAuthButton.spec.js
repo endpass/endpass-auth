@@ -2,17 +2,25 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { loginWithGithub } from 'github-oauth-popup';
 import Vuex from 'vuex';
 import GitAuthButton from '@/components/common/GitAuthButton.vue';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('GitAuthButton', () => {
   describe('render', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = shallowMount(GitAuthButton);
+      wrapper = shallowMount(GitAuthButton, {
+        provide: {
+          theme: 'default',
+        },
+        localVue,
+        i18n,
+      });
     });
 
     it("should correctly render GitAuthButton component empty if auth2 isn't loaded", () => {
@@ -38,6 +46,10 @@ describe('GitAuthButton', () => {
       wrapper = shallowMount(GitAuthButton, {
         localVue,
         store,
+        provide: {
+          theme: 'default',
+        },
+        i18n,
       });
     });
 

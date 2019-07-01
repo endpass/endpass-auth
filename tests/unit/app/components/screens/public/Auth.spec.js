@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/public/Auth.vue';
 import queryStringToMap from '@endpass/utils/queryStringToMap';
+import setupI18n from '@/locales/i18nSetup';
 
 jest.mock('@endpass/utils/queryStringToMap', () =>
   jest.fn().mockImplementation(() => ({
@@ -12,6 +13,7 @@ jest.mock('@endpass/utils/queryStringToMap', () =>
 
 const localVue = createLocalVue();
 
+const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 localVue.use(VueRouter);
 
@@ -41,6 +43,7 @@ describe('PublicAuth', () => {
       localVue,
       router,
       store,
+      i18n,
     });
   });
 
@@ -79,6 +82,7 @@ describe('PublicAuth', () => {
         localVue,
         router,
         store,
+        i18n,
       });
 
       expect(accountsModule.mutations.setAuthParams).not.toBeCalled();

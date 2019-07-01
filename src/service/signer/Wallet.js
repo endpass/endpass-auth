@@ -3,6 +3,7 @@ import Web3 from 'web3';
 import Tx from 'ethereumjs-tx';
 import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
 import isV3 from '@endpass/utils/isV3';
+import i18n from '@/locales/i18n';
 
 import web3 from '@/service/signer/web3';
 
@@ -19,7 +20,7 @@ export default class Wallet {
     const address = Wallet.normalizeAddress(v3.address);
 
     if (!isAddress(address)) {
-      throw new Error(`${address} is not valid Etherium address!`);
+      throw new Error(i18n.t('services.wallet.addressIncorrect', { address }));
     }
 
     const isPublic = !isV3(v3);

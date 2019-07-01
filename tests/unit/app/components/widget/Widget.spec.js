@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { accountAddress, accounts } from '@unitFixtures/accounts';
+import setupI18n from '@/locales/i18nSetup';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   subscribe: jest.fn(),
@@ -14,6 +15,7 @@ import Widget from '@/components/widget/Widget.vue';
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
+const i18n = setupI18n(localVue);
 
 describe('Widget', () => {
   let wrapper;
@@ -41,6 +43,7 @@ describe('Widget', () => {
     };
     widgetModule = {
       actions: {
+        initWidget: jest.fn(),
         openWidget: jest.fn(),
         closeWidget: jest.fn(),
         openAccounts: jest.fn(),
@@ -67,6 +70,7 @@ describe('Widget', () => {
     wrapper = shallowMount(Widget, {
       localVue,
       store,
+      i18n,
     });
   });
 
@@ -80,10 +84,11 @@ describe('Widget', () => {
 
   describe('behavior', () => {
     it('should request settings, accounts and subscribe on mount', async () => {
-      expect.assertions(3);
+      expect.assertions(4);
 
       await global.flushPromises();
 
+      expect(widgetModule.actions.initWidget).toBeCalled();
       expect(accountsModule.actions.defineSettings).toBeCalled();
       expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
       expect(accountsModule.actions.subscribeOnBalanceUpdates).toBeCalled();

@@ -1,6 +1,14 @@
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
+const initWidget = async ({ commit }) => {
+  const { isMobile } = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.WIDGET_INIT,
+  );
+
+  commit('setMobileModeStatus', isMobile);
+};
+
 const openWidget = async ({ dispatch }, { widgetNode, root = false }) => {
   await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_OPEN, {
     root,
@@ -11,6 +19,21 @@ const openWidget = async ({ dispatch }, { widgetNode, root = false }) => {
 const closeWidget = async ({ dispatch }, widgetNode) => {
   await bridgeMessenger.send(METHODS.WIDGET_CLOSE);
   dispatch('fitWidget', widgetNode);
+};
+
+const expandMobileWidget = async ({ commit }) => {
+  commit('setWidgetLoadingStatus', true);
+
+  await bridgeMessenger.sendAndWaitResponse(METHODS.WIDGET_EXPAND_REQUEST);
+
+  commit('setWidgetLoadingStatus', false);
+  commit('expandWidget');
+};
+
+const collapseMobileWidget = ({ commit }) => {
+  commit('minimizeWidget');
+
+  bridgeMessenger.send(METHODS.WIDGET_COLLAPSE_REQUEST);
 };
 
 const openAccounts = async ({ dispatch }, widgetNode) => {
@@ -36,10 +59,15 @@ const unmountWidget = () => {
 };
 
 export default {
+  initWidget,
+
   openWidget,
   closeWidget,
   openAccounts,
   closeAccounts,
   fitWidget,
   unmountWidget,
+
+  expandMobileWidget,
+  collapseMobileWidget,
 };

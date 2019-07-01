@@ -3,71 +3,72 @@
     data-test="sign-form"
     @submit.prevent="emitSubmit"
   >
-    <form-field v-if="requesterUrl">
-      Please apply connect to
+    <h3
+      v-if="requesterUrl"
+      class="v-modal-card-title"
+      v-html="$t('components.passwordForm.applyConnectTo')"
+    >
       <a
         :href="requesterUrl"
         data-test="requester-url"
-      >{{ requesterUrl }}</a>
-    </form-field>
-    <form-field v-if="message">
+      >
+        {{ requesterUrl }}
+      </a>
+    </h3>
+    <form-item v-if="message">
       <message>
         {{ message }}
       </message>
-    </form-field>
-    <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field>
-    <form-field :label="passwordInputLabel">
+    </form-item>
+    <form-item>
       <v-input
+        id="password"
         v-model="password"
-        :autofocus="true"
-        :required="true"
+        v-validate="'required|min:8'"
+        data-vv-as="Password"
+        data-vv-name="password"
+        autofocus="true"
+        required="true"
         type="password"
         name="password"
-        placeholder="Enter your password..."
+        :error="errors.first('password') || errorTitle"
+        :label="passwordInputLabel"
+        :placeholder="$t('components.passwordForm.enterWalletPassword')"
+        data-test="password-input"
       />
-    </form-field>
-    <form-controls>
+    </form-item>
+    <form-row>
       <v-button
         :disabled="isLoading || !isFormValid"
-        :submit="true"
-        type="primary"
+        size="big"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
       </v-button>
+      <v-spacer :width="16" />
       <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
-        type="danger"
+        skin="error"
+        type="button"
+        size="big"
         data-test="logout-button"
         @click="emitLogout"
       >
-        Logout
+        {{ $t('global.logout') }}
       </v-button>
-      <v-button
-        :disabled="!closable || isLoading"
-        data-test="cancel-button"
-        @click="emitCancel"
-      >
-        Close
-      </v-button>
-    </form-controls>
+    </form-row>
   </form>
 </template>
 
 <script>
-import VInput from '@/components/common/VInput.vue';
-import VButton from '@/components/common/VButton.vue';
+import VInput from '@endpass/ui/kit/VInput';
+import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import formMixin from '@/mixins/form';
+import FormRow from '@/components/common/FormRow';
+import VSpacer from '@/components/common/VSpacer';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'PasswordForm',
@@ -111,23 +112,40 @@ export default {
 
   data: () => ({
     password: '',
+    showError: true,
   }),
 
   computed: {
+    errorTitle() {
+      return this.showError ? this.error : '';
+    },
     primaryButtonLabel() {
-      return !this.isLoading ? 'Apply' : 'Loading...';
+      return !this.isLoading
+        ? this.$i18n.t('global.apply')
+        : this.$i18n.t('global.loading');
     },
 
     passwordInputLabel() {
       if (this.email) {
-        return `Password for ${this.email}:`;
+        return this.$i18n.t('components.passwordForm.passwordForEmail', {
+          email: this.email,
+        });
       }
 
-      return 'Your wallet account password:';
+      return this.$i18n.t('components.passwordForm.walletPassword');
     },
+  },
 
-    isFormValid() {
-      return !!this.password;
+  watch: {
+    error: {
+      handler() {
+        this.showError = true;
+      },
+    },
+    password: {
+      handler() {
+        this.showError = false;
+      },
     },
   },
 
@@ -146,13 +164,15 @@ export default {
       this.$emit('logout');
     },
   },
+  mixins: [formMixin],
 
   components: {
     VButton,
     VInput,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    VSpacer,
+    FormRow,
   },
 };
 </script>

@@ -12,7 +12,7 @@ exports[`Sign render should change submit button text if loading and make it dis
   </form-field-stub>
   <!---->
   <form-field-stub label="Your account password:">
-    <v-input-stub placeholder="Enter your password..." name="" value="" autofocus="true" type="password"></v-input-stub>
+    <v-input-stub value="" autofocus="true" type="password" placeholder="Enter your password..."></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request data:">
     <v-code-stub data-test="request-body">
@@ -22,10 +22,10 @@ exports[`Sign render should change submit button text if loading and make it dis
     </v-code-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" disabled="true" submit="true" type="primary" data-test="submit-button">
       Loading...
     </v-button-stub>
-    <v-button-stub disabled="true" data-test="cancel-button">
+    <v-button-stub skin="primary" size="normal" disabled="true" data-test="cancel-button">
       Close
     </v-button-stub>
   </form-controls-stub>
@@ -44,7 +44,7 @@ exports[`Sign render should correctly render Sign component 1`] = `
   </form-field-stub>
   <!---->
   <form-field-stub label="Your account password:">
-    <v-input-stub placeholder="Enter your password..." name="" value="" autofocus="true" type="password"></v-input-stub>
+    <v-input-stub value="" autofocus="true" type="password" placeholder="Enter your password..."></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request data:">
     <v-code-stub data-test="request-body">
@@ -54,10 +54,10 @@ exports[`Sign render should correctly render Sign component 1`] = `
     </v-code-stub>
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub disabled="true" type="primary" submit="true" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" disabled="true" submit="true" type="primary" data-test="submit-button">
       Sign
     </v-button-stub>
-    <v-button-stub data-test="cancel-button">
+    <v-button-stub skin="primary" size="normal" data-test="cancel-button">
       Close
     </v-button-stub>
   </form-controls-stub>

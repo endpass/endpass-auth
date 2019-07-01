@@ -1,9 +1,11 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Bridge from '@/components/screens/Bridge.vue';
+import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
 
+const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 
 describe('Bridge', () => {
@@ -24,6 +26,7 @@ describe('Bridge', () => {
     });
     wrapper = shallowMount(Bridge, {
       store,
+      i18n,
       localVue,
     });
   });

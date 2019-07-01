@@ -17,6 +17,9 @@ module.exports = {
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
+    resolve: {
+      symlinks: false,
+    },
 
     plugins: [
       new webpack.DefinePlugin({

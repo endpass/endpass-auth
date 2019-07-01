@@ -1,46 +1,38 @@
 <template>
   <form @submit.prevent="emitSubmit">
-    <form-field>
-      <message data-test="form-message">
-        Enter recovery seed phrase of your wallet.
-      </message>
-    </form-field>
-    <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field>
-    <form-field>
+    <message
+      class="v-modal-card-title"
+      data-test="form-message"
+      v-html="$t('components.recover.enterSeed')"
+    />
+    <form-item>
       <v-input
         v-model="seedPhrase"
+        :error="error"
         label="Seed phrase"
         name="seedPhrase"
-        placeholder="Seed phrase"
+        :placeholder="$t('components.recover.seedPhrase')"
         required
       />
-    </form-field>
-    <form-controls>
+    </form-item>
+    <form-row>
       <v-button
+        type="submit"
         :disabled="!isSeedPhraseValid || loading"
-        :submit="true"
-        type="primary"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-controls>
+    </form-row>
   </form>
 </template>
 
 <script>
-import VButton from '@/components/common/VButton.vue';
-import VInput from '@/components/common/VInput.vue';
+import VButton from '@endpass/ui/kit/VButton';
+import VInput from '@endpass/ui/kit/VInput';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
+import FormRow from '@/components/common/FormRow';
 
 export default {
   name: 'RecoverForm',
@@ -63,11 +55,13 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading ? 'Recover access' : 'Loading...';
+      return !this.loading
+        ? this.$i18n.t('global.confirm')
+        : this.$i18n.t('global.loading');
     },
 
     isSeedPhraseValid() {
-      return this.seedPhrase.split(' ').length >= 12;
+      return this.seedPhrase.length >= 12;
     },
   },
 
@@ -83,8 +77,8 @@ export default {
     VButton,
     VInput,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    FormRow,
   },
 };
 </script>
