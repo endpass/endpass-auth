@@ -5,7 +5,7 @@
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
       >
-        <form-field>
+        <form-item>
           <v-input
             v-model="password"
             v-validate="'required|min:8'"
@@ -18,8 +18,8 @@
             type="password"
             :placeholder="$t('components.createWallet.enterPass')"
           />
-        </form-field>
-        <form-field>
+        </form-item>
+        <form-item>
           <v-input
             v-model="passwordConfirm"
             v-validate="'required|min:8'"
@@ -32,7 +32,7 @@
             type="password"
             :placeholder="$t('components.createWallet.confirmPass')"
           />
-        </form-field>
+        </form-item>
         <message
           v-if="error"
           :error="true"
@@ -40,7 +40,8 @@
         >
           {{ error }}
         </message>
-        <form-controls>
+        <div>
+          <v-spacer :height="10" />
           <v-button
             :disabled="!canSubmit"
             size="big"
@@ -49,29 +50,29 @@
           >
             {{ primaryButtonLabel }}
           </v-button>
-        </form-controls>
+        </div>
       </form>
     </div>
     <div v-else>
-      <div class="box">
-        <p>{{ $t('components.createWallet.recoveryPhrase') }}</p>
-        <br>
-        <p
-          class="code"
-          data-test="seed-phrase"
-        >
-          {{ seedKey }}
-        </p>
-      </div>
-      <form-controls>
-        <v-button
-          type="button"
-          size="big"
-          @click="onContinue"
-        >
-          {{ $t('global.continue') }}
-        </v-button>
-      </form-controls>
+      <form-item>
+        <div class="box">
+          <p>{{ $t('components.createWallet.recoveryPhrase') }}</p>
+          <br>
+          <p
+            class="code"
+            data-test="seed-phrase"
+          >
+            {{ seedKey }}
+          </p>
+        </div>
+      </form-item>
+      <v-button
+        type="button"
+        size="big"
+        @click="onContinue"
+      >
+        {{ $t('global.continue') }}
+      </v-button>
     </div>
   </div>
 </template>
@@ -80,9 +81,9 @@
 import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
+import VSpacer from '@/components/common/VSpacer';
 import VInput from '@endpass/ui/kit/VInput';
-import FormField from '@/components/common/FormField.vue';
 import formMixin from '@/mixins/form';
 
 export default {
@@ -138,11 +139,11 @@ export default {
   mixins: [formMixin],
 
   components: {
-    FormField,
+    FormItem,
     VInput,
+    VSpacer,
     VButton,
     Message,
-    FormControls,
   },
 };
 </script>

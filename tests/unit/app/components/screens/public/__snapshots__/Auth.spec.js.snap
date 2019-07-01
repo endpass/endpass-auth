@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PublicAuth render should correctly render Auth public screen component 1`] = `
-<screen-stub>
-  <v-frame-stub title="Connect">
+<screen-stub class="auth-screen-centered">
+  <v-modal-card-stub>
     <composite-auth-form-stub ispublic="true"></composite-auth-form-stub>
-  </v-frame-stub>
+  </v-modal-card-stub>
 </screen-stub>
 `;
