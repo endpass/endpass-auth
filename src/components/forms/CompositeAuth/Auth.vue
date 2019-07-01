@@ -44,7 +44,7 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
-      <v-spacer height="3" />
+      <v-spacer :height="3" />
       <v-divider>or sign in with</v-divider>
       <form-row>
         <google-auth-button
