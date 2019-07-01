@@ -3,15 +3,12 @@
     class="form-otp"
     @submit.prevent="emitSubmit"
   >
-    <form-field>
-      <message
-        class="v-modal-card-title"
-        data-test="form-message"
-      >
-        {{ $t('components.otp.enterCode') }}
-      </message>
-    </form-field>
-    <form-field>
+    <message
+      class="v-modal-card-title"
+      data-test="form-message"
+      v-html="$t('components.otp.enterCode')"
+    />
+    <form-item>
       <v-input
         v-model="code"
         v-validate="'required|digits:6'"
@@ -23,8 +20,8 @@
         :placeholder="$t('components.otp.enterReceivedCode')"
         data-test="email-input"
       />
-    </form-field>
-    <form-controls>
+    </form-item>
+    <form-row>
       <a
         :disabled="loading"
         href="#"
@@ -40,16 +37,16 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-controls>
+    </form-row>
   </form>
 </template>
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import FormItem from '@/components/common/FormItem';
+import FormRow from '@/components/common/FormRow';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
 import formMixin from '@/mixins/form';
 
 export default {
@@ -106,8 +103,8 @@ export default {
     VButton,
     VInput,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    FormRow,
   },
 };
 </script>
@@ -115,7 +112,7 @@ export default {
 <style lang="postcss">
 .form-otp {
   a {
-    margin-right: 20px;
+    margin-right: 10px;
     width: 100%;
   }
 }

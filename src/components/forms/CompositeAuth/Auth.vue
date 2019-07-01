@@ -3,30 +3,27 @@
     data-test="auth-form"
     @submit.prevent="handleSubmit"
   >
-    <form-field v-if="isServerMode && !isPublic">
+    <form-item v-if="isServerMode && !isPublic">
       <server-mode-select
         v-model="serverMode"
         @confirm="handleSubmit"
       />
-    </form-field>
+    </form-item>
     <template v-if="isDefaultMode">
-      <form-field>
-        <message
-          class="v-modal-card-title"
-          data-test="form-message"
-        >
-          {{ $t('components.auth.loginToContinue') }}
-        </message>
-      </form-field>
-      <form-field v-if="error">
+      <message
+        class="v-modal-card-title"
+        data-test="form-message"
+        v-html="$t('components.auth.loginToContinue')"
+      />
+      <form-item v-if="error">
         <message
           :error="true"
           data-test="error-message"
         >
           {{ error }}
         </message>
-      </form-field>
-      <form-field>
+      </form-item>
+      <form-item>
         <v-input
           v-model="email"
           v-validate="'required|email'"
@@ -39,32 +36,31 @@
           :placeholder="$t('components.auth.enterEmail')"
           data-test="email-input"
         />
-      </form-field>
-      <form-field>
-        <v-button
-          :disabled="!isFormValid"
-          size="big"
-          data-test="submit-button"
-        >
-          {{ primaryButtonLabel }}
-        </v-button>
-      </form-field>
+      </form-item>
+      <v-button
+        :disabled="!isFormValid"
+        size="big"
+        data-test="submit-button"
+      >
+        {{ primaryButtonLabel }}
+      </v-button>
+      <v-spacer height="3" />
       <v-divider>or sign in with</v-divider>
-      <form-controls>
+      <form-row>
         <google-auth-button
           type="button"
           @submit="handleSocialSubmit"
           @error="handleOauthError"
         />
-        <div class="social-buttons-gap" />
+        <v-spacer :width="16" />
         <git-auth-button
           type="button"
           @submit="handleSocialSubmit"
           @error="handleOauthError"
         />
-      </form-controls>
+      </form-row>
       <v-divider />
-      <form-controls>
+      <form-row centered>
         <v-checkbox v-model="isTermsAccepted">
           {{ $t('components.auth.iAccept') }}
           <a
@@ -82,7 +78,7 @@
             {{ $t('components.auth.privacyPolicy') }}
           </a>
         </v-checkbox>
-      </form-controls>
+      </form-row>
     </template>
   </form>
 </template>
@@ -92,12 +88,13 @@ import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VDivider from '@endpass/ui/kit/VDivider';
+import FormItem from '@/components/common/FormItem';
+import FormRow from '@/components/common/FormRow';
+import VSpacer from '@/components/common/VSpacer';
+import ServerModeSelect from '@/components/common/ServerModeSelect';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
 import GitAuthButton from '@/components/common/GitAuthButton.vue';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
-import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 
@@ -207,19 +204,14 @@ export default {
     VCheckbox,
     VButton,
     VInput,
+    VSpacer,
     VDivider,
     GoogleAuthButton,
     GitAuthButton,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    FormRow,
     ServerModeSelect,
   },
 };
 </script>
-
-<style lang="postcss">
-.social-buttons-gap {
-  width: 30px;
-}
-</style>

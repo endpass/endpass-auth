@@ -3,23 +3,24 @@
     data-test="sign-form"
     @submit.prevent="emitSubmit"
   >
-    <form-field v-if="requesterUrl">
-      <h3 class="v-modal-card-title">
-        {{ $t('components.passwordForm.applyConnectTo') }}
-        <a
-          :href="requesterUrl"
-          data-test="requester-url"
-        >
-          {{ requesterUrl }}
-        </a>
-      </h3>
-    </form-field>
-    <form-field v-if="message">
+    <h3
+      v-if="requesterUrl"
+      class="v-modal-card-title"
+      v-html="$t('components.passwordForm.applyConnectTo')"
+    >
+      <a
+        :href="requesterUrl"
+        data-test="requester-url"
+      >
+        {{ requesterUrl }}
+      </a>
+    </h3>
+    <form-item v-if="message">
       <message>
         {{ message }}
       </message>
-    </form-field>
-    <form-field>
+    </form-item>
+    <form-item>
       <v-input
         id="password"
         v-model="password"
@@ -35,27 +36,28 @@
         :placeholder="$t('components.passwordForm.enterWalletPassword')"
         data-test="password-input"
       />
-    </form-field>
-    <form-controls>
+    </form-item>
+    <form-row>
       <v-button
         :disabled="isLoading || !isFormValid"
-        type="submit"
         size="big"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
       </v-button>
+      <v-spacer :width="16" />
       <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
         skin="error"
+        type="button"
         size="big"
         data-test="logout-button"
         @click="emitLogout"
       >
         {{ $t('global.logout') }}
       </v-button>
-    </form-controls>
+    </form-row>
   </form>
 </template>
 
@@ -63,9 +65,10 @@
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
 import formMixin from '@/mixins/form';
+import FormRow from '@/components/common/FormRow';
+import VSpacer from '@/components/common/VSpacer';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'PasswordForm',
@@ -167,8 +170,9 @@ export default {
     VButton,
     VInput,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    VSpacer,
+    FormRow,
   },
 };
 </script>

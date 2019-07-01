@@ -1,14 +1,11 @@
 <template>
   <form @submit.prevent="emitSubmit">
-    <form-field>
-      <message
-        class="v-modal-card-title"
-        data-test="form-message"
-      >
-        {{ $t('components.recover.enterSeed') }}
-      </message>
-    </form-field>
-    <form-field>
+    <message
+      class="v-modal-card-title"
+      data-test="form-message"
+      v-html="$t('components.recover.enterSeed')"
+    />
+    <form-item>
       <v-input
         v-model="seedPhrase"
         :error="error"
@@ -17,8 +14,8 @@
         :placeholder="$t('components.recover.seedPhrase')"
         required
       />
-    </form-field>
-    <form-controls>
+    </form-item>
+    <form-row>
       <v-button
         type="submit"
         :disabled="!isSeedPhraseValid || loading"
@@ -26,7 +23,7 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-controls>
+    </form-row>
   </form>
 </template>
 
@@ -34,8 +31,8 @@
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
+import FormRow from '@/components/common/FormRow';
 
 export default {
   name: 'RecoverForm',
@@ -80,8 +77,8 @@ export default {
     VButton,
     VInput,
     Message,
-    FormField,
-    FormControls,
+    FormItem,
+    FormRow,
   },
 };
 </script>

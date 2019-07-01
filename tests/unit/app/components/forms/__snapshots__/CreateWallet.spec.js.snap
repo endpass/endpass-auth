@@ -4,18 +4,19 @@ exports[`CreateWallet render should correctly render CreateWallet component 1`] 
 <div>
   <div>
     <form data-test="define-pwd-form">
-      <form-field-stub>
+      <form-item-stub>
         <v-input-stub label="Please choose password:" value="" data-vv-as="password" data-vv-name="password" required="" autofocus="true" type="password" placeholder="Enter password..."></v-input-stub>
-      </form-field-stub>
-      <form-field-stub>
+      </form-item-stub>
+      <form-item-stub>
         <v-input-stub label="" value="" data-vv-as="password confirm" data-vv-name="passwordConfirm" required="" autofocus="true" type="password" placeholder="Confirm password..."></v-input-stub>
-      </form-field-stub>
+      </form-item-stub>
       <!---->
-      <form-controls-stub>
+      <div>
+        <v-spacer-stub height="10" width="0"></v-spacer-stub>
         <v-button-stub skin="primary" size="big" disabled="true" type="submit" data-test="submit-button">
           Create wallet
         </v-button-stub>
-      </form-controls-stub>
+      </div>
     </form>
   </div>
 </div>
