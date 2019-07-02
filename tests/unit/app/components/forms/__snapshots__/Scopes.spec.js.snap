@@ -13,6 +13,11 @@ exports[`Scopes render should correctly render component 1`] = `
       Allow
     </v-button-stub>
   </form-controls-stub>
+  <form-controls-stub>
+    <v-button-stub skin="secondary" size="normal" fluid="true" data-test="cancel-button">
+      Deny
+    </v-button-stub>
+  </form-controls-stub>
 </form>
 `;
 
@@ -30,6 +35,11 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
   <form-controls-stub>
     <v-button-stub skin="primary" size="normal" submit="true" fluid="true" type="primary" data-test="submit-button">
       Allow
+    </v-button-stub>
+  </form-controls-stub>
+  <form-controls-stub>
+    <v-button-stub skin="secondary" size="normal" fluid="true" data-test="cancel-button">
+      Deny
     </v-button-stub>
   </form-controls-stub>
 </form>
