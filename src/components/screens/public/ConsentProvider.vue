@@ -14,6 +14,7 @@
       :is-loading="isLoading"
       :scopes-list="scopesList"
       @submit="handleScopesSubmit"
+      @cancel="handleAuthCancel"
     />
   </v-frame>
 </template>
@@ -57,7 +58,12 @@ export default {
   },
 
   methods: {
-    ...mapActions(['grantPermissionsWithOauth', 'getConsentDetails']),
+    ...mapActions([
+      'grantPermissionsWithOauth',
+      'getConsentDetails',
+      'cancelAuth',
+      'dialogClose',
+    ]),
 
     setError(hint, description = '') {
       this.error = {
@@ -83,6 +89,11 @@ export default {
       } finally {
         this.isLoading = false;
       }
+    },
+
+    handleAuthCancel() {
+      this.cancelAuth();
+      this.dialogClose();
     },
 
     async loadScopes() {

@@ -26,6 +26,18 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-controls>
+    <form-controls>
+      <v-button
+        :disabled="isLoading"
+        :submit="false"
+        :fluid="true"
+        skin="secondary"
+        data-test="cancel-button"
+        @click="handleCancel"
+      >
+        {{ $t('global.deny') }}
+      </v-button>
+    </form-controls>
   </form>
 </template>
 
@@ -126,7 +138,9 @@ export default {
 
       this.$emit('submit', res);
     },
-
+    handleCancel() {
+      this.$emit('cancel');
+    },
     getCheckedScopes() {
       const res = this.scopesList.filter(
         key => this.valuesScopesMap[key] === true,
