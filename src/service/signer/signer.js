@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
-import web3 from './web3';
+import web3 from '@/class/singleton/web3';
 import i18n from '@/locales/i18n';
 
 function setWeb3Network(net = Network.NET_ID.MAIN) {

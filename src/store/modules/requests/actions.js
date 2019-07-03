@@ -2,6 +2,7 @@ import i18n from '@/locales/i18n';
 import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 import signerService from '@/service/signer';
+import cryptoDataService from '@/service/cryptoData';
 
 const sendResponse = async ({ commit }, payload) => {
   signChannel.put(Answer.createOk(payload));
@@ -91,9 +92,17 @@ const cancelRequest = ({ state, dispatch }) => {
   });
 };
 
+// TODO: move to external module
+const getGasPrice = async (ctx, network) => {
+  const prices = await cryptoDataService.getGasPrice(network);
+
+  return prices;
+};
+
 export default {
   processRequest,
   recoverMessage,
   sendResponse,
   cancelRequest,
+  getGasPrice,
 };

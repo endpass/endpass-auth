@@ -93,7 +93,13 @@
       "requiresSignBy": "Requires request sign by:",
       "yourPass": "Your account password:",
       "enterPass": "Enter your password...",
-      "requestData": "Request data:"
+      "requestData": "Request data:",
+      "requestMessage": "Request message:",
+      "transactionTo": "To",
+      "transactionGasPrice": "Gas price",
+      "transactionGasLimit": "Gas limit",
+      "transactionValue": "Value",
+      "transactionData": "Data"
     },
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
