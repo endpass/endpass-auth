@@ -35,7 +35,12 @@
       />
     </form-field>
     <template v-if="isTransaction">
-      <form-field label="Value">
+      <form-field :label="$t('components.sign.transactionTo')">
+        <p class="message ellipsis">
+          {{ transaction.to }}
+        </p>
+      </form-field>
+      <form-field :label="$t('components.sign.transactionValue')">
         <v-input
           v-model="value"
           :disabled="true"
@@ -104,6 +109,7 @@
 import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapGetters } from 'vuex';
+import { web3, setWeb3Network } from '@/service/web3';
 import { transactionInEth } from '@/util/transaction';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
@@ -146,10 +152,10 @@ export default {
 
   data: () => ({
     password: '',
-    value: 0,
+    value: '0',
     data: '',
-    gasPrice: 0,
-    gasLimit: 21000,
+    gasPrice: '0',
+    gasLimit: '0',
   }),
 
   computed: {
@@ -157,6 +163,10 @@ export default {
 
     account() {
       return get(this.request, 'address');
+    },
+
+    network() {
+      return get(this.request, 'net');
     },
 
     requesterUrl() {
@@ -187,6 +197,16 @@ export default {
   },
 
   methods: {
+    async getInitialGasLimit(address) {
+      const code = await web3.eth.getCode(address);
+
+      if (code === '0x') {
+        return '21000';
+      }
+
+      return '200000';
+    },
+
     emitSubmit() {
       if (!this.password) return;
 
@@ -216,10 +236,18 @@ export default {
     },
   },
 
-  mounted() {
+  async mounted() {
+    setWeb3Network(this.network);
+
     if (!this.isTransaction) return;
 
-    const { value, gasPrice, data } = this.transaction;
+    const { to, value, gasPrice, gasLimit, data } = this.transaction;
+
+    if (!gasLimit || gasLimit === '0') {
+      this.gasLimit = await this.getInitialGasLimit(to);
+    } else {
+      this.gasLimit = gasLimit;
+    }
 
     this.value = value;
     this.gasPrice = gasPrice;

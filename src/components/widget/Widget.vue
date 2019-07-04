@@ -1,10 +1,6 @@
 <template>
   <div class="widget">
-    <div
-      v-if="isMobile"
-      ref="trigger"
-      class="widget-trigger"
-    >
+    <div v-if="isMobile" ref="trigger" class="widget-trigger">
       <trigger-button
         :is-loading="isWidgetLoading"
         @click="handleMobileTriggerClick"
@@ -150,6 +146,7 @@ export default {
       try {
         this.logout();
       } catch (err) {
+        /* eslint-disable-next-line */
         console.log(err);
       }
     },
