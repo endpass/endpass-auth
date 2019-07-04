@@ -34,7 +34,10 @@
         type="password"
       />
     </form-field>
-    <template v-if="isTransaction">
+    <div
+      v-if="isTransaction"
+      data-test="sign-form-transaction-params"
+    >
       <form-field :label="$t('components.sign.transactionTo')">
         <p class="message ellipsis">
           {{ transaction.to }}
@@ -77,10 +80,11 @@
           min="0"
         />
       </form-field>
-    </template>
+    </div>
     <form-field
       v-else-if="message"
-      :label="$t('components.sign.message')"
+      :label="$t('components.sign.requestMessage')"
+      data-test="sign-form-message"
     >
       {{ message }}
     </form-field>
