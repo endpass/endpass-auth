@@ -34,7 +34,7 @@
         type="password"
       />
     </form-field>
-    <template v-if="requestBody && isTransaction">
+    <template v-if="isTransaction">
       <form-field label="Value">
         <v-input
           v-model="value"
@@ -57,10 +57,10 @@
           type="number"
         />
       </form-field>
-      <form-field v-if="gasPrices">
+      <form-field v-if="labeledGasPricesList">
         <v-content-switcher
           v-model="gasPrice"
-          :items="gasPrices"
+          :items="labeledGasPricesList"
           step="0.0000000001"
           min="0"
         />
@@ -74,10 +74,10 @@
       </form-field>
     </template>
     <form-field
-      v-else-if="requestBody && !isTransaction"
-      :label="$t('components.sign.requestMessage')"
+      v-else-if="message"
+      :label="$t('components.sign.message')"
     >
-      {{ requestMessage }}
+      {{ message }}
     </form-field>
     <form-controls>
       <v-button
@@ -103,6 +103,7 @@
 <script>
 import Web3 from 'web3';
 import get from 'lodash/get';
+import { mapGetters } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
@@ -136,11 +137,6 @@ export default {
       default: true,
     },
 
-    gasPrices: {
-      type: Array,
-      default: null,
-    },
-
     isTransaction: {
       type: Boolean,
       default: false,
@@ -156,6 +152,8 @@ export default {
   }),
 
   computed: {
+    ...mapGetters(['labeledGasPricesList']),
+
     account() {
       return get(this.request, 'address');
     },
@@ -164,22 +162,16 @@ export default {
       return get(this.request, 'url');
     },
 
-    requestBody() {
-      return get(this.request, 'request');
+    message() {
+      const hexMessage = get(this.request, 'request.params[1]');
+
+      if (!hexMessage) return null;
+
+      return hexToUtf8(hexMessage);
     },
 
-    requestMessage() {
-      return hexToUtf8(this.requestBody.params[1]);
-    },
-
-    requestTransaction() {
-      return this.requestBody.params[0];
-    },
-
-    transactionValue() {
-      if (!this.requestTransaction) return 0;
-
-      return fromWei(this.requestTransaction.value);
+    transaction() {
+      return get(this.request, 'request.params[0]');
     },
 
     primaryButtonLabel() {
@@ -191,17 +183,33 @@ export default {
 
   methods: {
     emitSubmit() {
-      if (this.password) return;
+      if (!this.password) return;
+
+      if (!this.isTransaction) {
+        this.$emit('submit', {
+          account: this.account,
+          password: this.password,
+        });
+        return;
+      }
+
+      const updatedTransaction = {
+        ...this.transaction,
+        value: this.value,
+        gasPrice: this.gasPrice,
+        gasLimit: this.gasLimit,
+      };
+
+      if (this.data) {
+        Object.assign(updatedTransaction, {
+          data: this.data,
+        });
+      }
 
       this.$emit('submit', {
         account: this.account,
         password: this.password,
-        transaction: {
-          value: this.value,
-          data: this.data,
-          gasPrice: this.gasPrice,
-          gasLimit: this.gasLimit,
-        },
+        transaction: updatedTransaction,
       });
     },
 
@@ -213,9 +221,9 @@ export default {
   mounted() {
     if (!this.isTransaction) return;
 
-    this.value = fromWei(this.requestTransaction.value);
-    this.gasPrice = fromWei(this.requestTransaction.gasPrice);
-    this.data = this.requestTransaction.data;
+    this.value = fromWei(this.transaction.value);
+    this.gasPrice = fromWei(this.transaction.gasPrice);
+    this.data = this.transaction.data;
   },
 
   components: {

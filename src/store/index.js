@@ -5,6 +5,7 @@ import core from './modules/core';
 import widget from './modules/widget';
 import accounts from './modules/accounts';
 import requests from './modules/requests';
+import gasPrice from './modules/gasPrice';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ const store = new Vuex.Store({
     widget,
     accounts,
     requests,
+    gasPrice,
   },
 });
 
