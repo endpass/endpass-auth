@@ -18,22 +18,18 @@
     <form-controls>
       <v-button
         :disabled="!isFormValid || isLoading"
-        :submit="true"
         :fluid="true"
         type="primary"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-controls>
-    <form-controls>
       <v-button
         :disabled="isLoading"
-        :submit="false"
         :fluid="true"
         skin="secondary"
         data-test="cancel-button"
-        @click="handleCancel"
+        @click.prevent="handleCancel"
       >
         {{ $t('global.deny') }}
       </v-button>
