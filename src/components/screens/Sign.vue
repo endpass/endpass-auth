@@ -10,7 +10,6 @@
         :request="request"
         :error="error"
         :closable="isDialog"
-        :gas-prices="gasPrices"
         :is-transaction="isTransaction"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
@@ -20,21 +19,17 @@
 </template>
 
 <script>
-import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import SignForm from '@/components/forms/Sign';
 
-const { fromWei } = Web3.utils;
-
 export default {
   name: 'Sign',
 
   data: () => ({
     error: null,
-    gasPrices: null,
   }),
 
   computed: {
@@ -85,16 +80,8 @@ export default {
     if (!this.isTransaction) return;
 
     const { net } = this.request;
-    const gasPrices = await this.getGasPrice(net);
 
-    this.gasPrices = Object.keys(gasPrices).reduce(
-      (acc, key) =>
-        acc.concat({
-          label: `${gasPrices[key]} gwei`,
-          value: fromWei(gasPrices[key].toString(), 'gwei'),
-        }),
-      [],
-    );
+    await this.getGasPrice(net);
   },
 
   components: {
