@@ -59,7 +59,6 @@ export default {
         await this.processRequest(res);
         this.error = null;
       } catch (err) {
-        console.log(err);
         this.error = err.message;
       }
     },

@@ -51,8 +51,6 @@ const processRequest = async (
       jsonrpc: request.jsonrpc,
     });
   } catch (err) {
-    console.log(err.message);
-
     if (err.message.includes('message authentication code mismatch')) {
       commit('changeLoadingStatus', false);
 
