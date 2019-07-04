@@ -1,4 +1,5 @@
 import i18n from '@/locales/i18n';
+import { Transaction } from '@endpass/class';
 import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 import signerService from '@/service/signer';
@@ -10,7 +11,7 @@ const sendResponse = async ({ commit }, payload) => {
 
 const processRequest = async (
   { state, commit, dispatch, getters },
-  password,
+  { password, transaction },
 ) => {
   commit('changeLoadingStatus', true);
 
@@ -27,9 +28,19 @@ const processRequest = async (
   }
 
   try {
+    const requestToSign = {
+      ...request,
+    };
+
+    if (transaction) {
+      Object.assign(requestToSign, {
+        params: [Transaction.getApiObject(transaction)],
+      });
+    }
+
     const signResult = await signerService.getSignedRequest({
+      request: requestToSign,
       v3KeyStore,
-      request,
       password,
       net,
     });
