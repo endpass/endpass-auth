@@ -104,6 +104,7 @@
 import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapGetters } from 'vuex';
+import { transactionInEth } from '@/util/transaction';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
@@ -111,7 +112,7 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
-const { hexToUtf8, fromWei } = Web3.utils;
+const { hexToUtf8 } = Web3.utils;
 
 export default {
   name: 'SignForm',
@@ -171,7 +172,11 @@ export default {
     },
 
     transaction() {
-      return get(this.request, 'request.params[0]');
+      const trx = get(this.request, 'request.params[0]');
+
+      if (!trx) return null;
+
+      return transactionInEth(trx);
     },
 
     primaryButtonLabel() {
@@ -193,23 +198,16 @@ export default {
         return;
       }
 
-      const updatedTransaction = {
-        ...this.transaction,
-        value: this.value,
-        gasPrice: this.gasPrice,
-        gasLimit: this.gasLimit,
-      };
-
-      if (this.data) {
-        Object.assign(updatedTransaction, {
-          data: this.data,
-        });
-      }
-
       this.$emit('submit', {
         account: this.account,
         password: this.password,
-        transaction: updatedTransaction,
+        transaction: {
+          ...this.transaction,
+          value: this.value,
+          gasPrice: this.gasPrice,
+          gasLimit: this.gasLimit,
+          data: this.data,
+        },
       });
     },
 
@@ -221,9 +219,11 @@ export default {
   mounted() {
     if (!this.isTransaction) return;
 
-    this.value = fromWei(this.transaction.value);
-    this.gasPrice = fromWei(this.transaction.gasPrice);
-    this.data = this.transaction.data;
+    const { value, gasPrice, data } = this.transaction;
+
+    this.value = value;
+    this.gasPrice = gasPrice;
+    this.data = data || '';
   },
 
   components: {
