@@ -61,14 +61,12 @@ const unmountWidget = () => {
 
 export default {
   initWidget,
-
   openWidget,
   closeWidget,
   openAccounts,
   closeAccounts,
   fitWidget,
   unmountWidget,
-
   expandMobileWidget,
   collapseMobileWidget,
 };
