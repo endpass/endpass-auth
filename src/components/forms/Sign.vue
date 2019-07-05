@@ -18,20 +18,21 @@
         {{ account }}
       </message>
     </form-field>
-    <form-field v-if="error">
+    <!-- <form-field v-if="error">
       <message
         :error="true"
         data-test="error-message"
       >
         {{ error }}
       </message>
-    </form-field>
+    </form-field> -->
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
         :autofocus="true"
-        type="password"
         :placeholder="$t('components.sign.enterPass')"
+        :error="error"
+        type="password"
       />
     </form-field>
     <form-field
