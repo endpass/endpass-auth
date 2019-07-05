@@ -83,6 +83,15 @@ describe('Scopes', () => {
     });
 
     it('should emit cancel event on cancel click', () => {
+      wrapper = shallowMount(ScopesForm, {
+        localVue,
+        i18n,
+        computed: {
+          isPopup() {
+            return true;
+          },
+        },
+      });
       wrapper.setProps({
         isLoading: false,
         scopesList: ['foo', 'bar'],

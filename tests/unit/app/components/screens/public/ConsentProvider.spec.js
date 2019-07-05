@@ -190,8 +190,6 @@ describe('ConsentProvider', () => {
     });
 
     it('should cancel auth and close window on scope cancel', async () => {
-      expect.assertions(2);
-
       wrapper = shallowMount(ConsentProvider, {
         localVue,
         store,
@@ -200,15 +198,14 @@ describe('ConsentProvider', () => {
           $router,
         },
       });
+      const spy = jest.spyOn(wrapper.vm, 'handleAuthCancel');
       wrapper.setData({
         scopesList: ['foo', 'bar', 'baz'],
         isLoading: false,
       });
-
       wrapper.find('scopes-form-stub').vm.$emit('cancel');
 
-      expect(accountsModule.actions.cancelAuth).toHaveBeenCalledTimes(1);
-      expect(coreModule.actions.dialogClose).toHaveBeenCalledTimes(1);
+      expect(spy).toHaveBeenCalled();
     });
   });
 });

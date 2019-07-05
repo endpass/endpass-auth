@@ -25,11 +25,13 @@
         {{ primaryButtonLabel }}
       </v-button>
       <v-button
+        v-if="isPopup"
+        type="button"
         :disabled="isLoading"
         :fluid="true"
         skin="secondary"
         data-test="cancel-button"
-        @click.prevent="handleCancel"
+        @click="handleCancel"
       >
         {{ $t('global.deny') }}
       </v-button>
@@ -71,6 +73,10 @@ export default {
       return !this.isLoading
         ? this.$i18n.t('global.allow')
         : this.$i18n.t('global.loading');
+    },
+
+    isPopup() {
+      return !!window.opener;
     },
   },
 
