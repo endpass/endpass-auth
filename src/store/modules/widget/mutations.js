@@ -14,9 +14,14 @@ const setWidgetLoadingStatus = (state, status) => {
   state.isLoading = status;
 };
 
+const setWidgetPosition = (state, position) => {
+  state.position = position;
+};
+
 export default {
   expandWidget,
   minimizeWidget,
   setMobileModeStatus,
   setWidgetLoadingStatus,
+  setWidgetPosition,
 };

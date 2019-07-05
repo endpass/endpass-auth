@@ -2,11 +2,12 @@ import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const initWidget = async ({ commit }) => {
-  const { isMobile } = await bridgeMessenger.sendAndWaitResponse(
+  const { position, isMobile } = await bridgeMessenger.sendAndWaitResponse(
     METHODS.WIDGET_INIT,
   );
 
   commit('setMobileModeStatus', isMobile);
+  commit('setWidgetPosition', position);
 };
 
 const openWidget = async ({ dispatch }, { widgetNode, root = false }) => {
