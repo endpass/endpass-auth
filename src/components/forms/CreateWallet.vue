@@ -14,7 +14,6 @@
             data-vv-name="password"
             :error="errors.first('password')"
             required
-            autofocus="true"
             type="password"
             :placeholder="$t('components.createWallet.enterPass')"
           />
@@ -28,7 +27,6 @@
             data-vv-name="passwordConfirm"
             :error="errors.first('passwordConfirm')"
             required
-            autofocus="true"
             type="password"
             :placeholder="$t('components.createWallet.confirmPass')"
           />

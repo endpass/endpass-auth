@@ -10,9 +10,8 @@ exports[`Sign render should change submit button text if loading and make it dis
       0x0
     </message-stub>
   </form-field-stub>
-  <!---->
   <form-field-stub label="Your account password:">
-    <v-input-stub value="" autofocus="true" type="password" placeholder="Enter your password..."></v-input-stub>
+    <v-input-stub value="" placeholder="Enter your password..." type="password"></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request data:">
     <v-code-stub data-test="request-body">
@@ -42,9 +41,8 @@ exports[`Sign render should correctly render Sign component 1`] = `
       0x0
     </message-stub>
   </form-field-stub>
-  <!---->
   <form-field-stub label="Your account password:">
-    <v-input-stub value="" autofocus="true" type="password" placeholder="Enter your password..."></v-input-stub>
+    <v-input-stub value="" placeholder="Enter your password..." type="password"></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request data:">
     <v-code-stub data-test="request-body">

@@ -50,6 +50,10 @@ describe('Widget', () => {
         closeAccounts: jest.fn(),
         widgetLogout: jest.fn(),
       },
+      getters: {
+        isWidgetPinnedToTop: jest.fn(() => false),
+        isWidgetPinnedToBottom: jest.fn(() => true),
+      },
     };
     coreModule = {
       state: {

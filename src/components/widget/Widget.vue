@@ -13,7 +13,13 @@
     <div
       v-show="isWidgetFrameVisible"
       ref="widget"
-      :class="{ 'widget-frame': true, mobile: isMobile, visible: isExpanded }"
+      :class="{
+        'widget-frame': true,
+        mobile: isMobile,
+        visible: isExpanded,
+        top: isWidgetPinnedToTop,
+        bottom: isWidgetPinnedToBottom,
+      }"
     >
       <widget-header
         :balance="balance"
@@ -36,7 +42,7 @@
 
 <script>
 import get from 'lodash/get';
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
 import TriggerButton from './TriggerButton.vue';
@@ -60,6 +66,7 @@ export default {
       isExpanded: state => state.widget.isExpanded,
       isWidgetLoading: state => state.widget.isLoading,
     }),
+    ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
     currentNet() {
       return get(this.settings, 'net', 1);
@@ -175,15 +182,24 @@ export default {
 .widget-frame {
   overflow: hidden;
   position: absolute;
-  bottom: 0;
   left: 50%;
   width: 240px;
   transform: translateX(-50%);
   border-radius: 4px;
 
+  &.bottom {
+    bottom: 0;
+  }
+
+  &.top {
+    top: 0;
+  }
+
   &.mobile {
     position: absolute;
     left: 0;
+    bottom: 0;
+    top: auto;
     z-index: 2;
     display: none;
     transform: none;

@@ -81,5 +81,24 @@ describe('Scopes', () => {
 
       expect(wrapper.emitted().submit).toBeFalsy();
     });
+
+    it('should emit cancel event on cancel click', () => {
+      wrapper = shallowMount(ScopesForm, {
+        localVue,
+        i18n,
+        computed: {
+          isPopup() {
+            return true;
+          },
+        },
+      });
+      wrapper.setProps({
+        isLoading: false,
+        scopesList: ['foo', 'bar'],
+      });
+
+      wrapper.find('[data-test="cancel-button"]').vm.$emit('click');
+      expect(wrapper.emitted().cancel).toBeTruthy();
+    });
   });
 });

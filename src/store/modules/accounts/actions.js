@@ -77,8 +77,7 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success)
-      throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
 
     settingsService.clearLocalSettings();
 
@@ -377,10 +376,6 @@ const waitAccountCreate = async ({ state }) => {
   await asyncCheckProperty(state, 'isAccountCreated');
 };
 
-const openCreateAccountPage = async () => {
-  window.open(`${ENV.VUE_APP_WALLET_URL}?closeAfterCreateWallet=true`);
-};
-
 const closeAccount = async () => {
   accountChannel.put(Answer.createOk({ type: 'close' }));
 };
@@ -534,7 +529,6 @@ export default {
   getFirstPrivateAccount,
   getSettings,
   defineOnlyV3Accounts,
-  openCreateAccountPage,
   waitAccountCreate,
   waitLogin,
   setSettings,

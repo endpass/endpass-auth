@@ -10,10 +10,7 @@
         :closable="isDialog"
         @authorize="handleAuthorize"
       />
-      <create-wallet-form
-        v-else-if="activeForm === FORMS.CREATE_WALLET"
-        @request="handleAccountRequest"
-      />
+      <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
     </v-modal-card>
   </screen>
 </template>
@@ -53,18 +50,18 @@ export default {
       'confirmAuth',
       'cancelAuth',
       'dialogClose',
-      'openCreateAccountPage',
       'checkAccountExists',
       'waitAccountCreate',
+      'logout',
     ]),
 
-    handleAuthCancel() {
+    async handleAuthCancel() {
+      if (this.activeForm === FORMS.CREATE_WALLET) {
+        await this.logout();
+      }
+
       this.cancelAuth();
       this.dialogClose();
-    },
-
-    async handleAccountRequest() {
-      this.openCreateAccountPage();
     },
 
     async openCreateAccount() {

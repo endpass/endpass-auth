@@ -11,11 +11,32 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 describe('widget actions', () => {
   let dispatch;
+  let commit;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     dispatch = jest.fn();
+    commit = jest.fn();
+  });
+
+  describe('initWidget', () => {
+    it('should send init message and await response, then set mobile mode and position from request', async () => {
+      const position = {
+        top: '10px',
+        left: '10px',
+      };
+
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({
+        isMobile: false,
+        position,
+      });
+
+      await widgetActions.initWidget({ commit });
+
+      expect(commit).toHaveBeenNthCalledWith(1, 'setMobileModeStatus', false);
+      expect(commit).toHaveBeenNthCalledWith(2, 'setWidgetPosition', position);
+    });
   });
 
   describe('openWidget', () => {

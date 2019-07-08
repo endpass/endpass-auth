@@ -1,43 +1,31 @@
 <template>
-  <form
-    data-test="sign-form"
-    @submit.prevent="emitSubmit"
-  >
+  <form data-test="sign-form" @submit.prevent="emitSubmit">
     <form-field v-if="requesterUrl">
-      <a
-        :href="requesterUrl"
-        data-test="requester-url"
-      >{{ requesterUrl }}</a>
+      <a :href="requesterUrl" data-test="requester-url">{{ requesterUrl }}</a>
       {{ $t('components.sign.requestSign') }}
     </form-field>
     <form-field :label="$t('components.sign.requiresSignBy')">
-      <message
-        :ellipsis="true"
-        data-test="account-address"
-      >
+      <message :ellipsis="true" data-test="account-address">
         {{ account }}
       </message>
     </form-field>
-    <form-field v-if="error">
+    <!-- <form-field v-if="error">
       <message
         :error="true"
         data-test="error-message"
       >
         {{ error }}
       </message>
-    </form-field>
+    </form-field> -->
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
-        :autofocus="true"
-        type="password"
         :placeholder="$t('components.sign.enterPass')"
+        :error="error"
+        type="password"
       />
     </form-field>
-    <form-field
-      v-if="requestBody"
-      :label="$t('components.sign.requestData')"
-    >
+    <form-field v-if="requestBody" :label="$t('components.sign.requestData')">
       <v-code data-test="request-body">
         {{ JSON.stringify(requestBody, null, 2) }}
       </v-code>

@@ -13,10 +13,7 @@
       @submit="handleSignSubmit"
       @logout="handleLogout"
     />
-    <create-wallet-form
-      v-else-if="activeForm === FORMS.CREATE_WALLET"
-      @request="handleAccountRequest"
-    />
+    <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
   </div>
 </template>
 
@@ -79,16 +76,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'openCreateAccountPage',
-      'logout',
-      'checkAccountExists',
-      'waitAccountCreate',
-    ]),
-
-    handleAccountRequest() {
-      this.openCreateAccountPage();
-    },
+    ...mapActions(['logout', 'checkAccountExists', 'waitAccountCreate']),
 
     handleLogout() {
       this.logout();

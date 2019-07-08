@@ -17,8 +17,18 @@
     </div>
     <form-controls>
       <v-button
+        v-if="isPopup"
+        type="button"
+        :disabled="isLoading"
+        :fluid="true"
+        skin="quaternary"
+        data-test="cancel-button"
+        @click="handleCancel"
+      >
+        {{ $t('global.deny') }}
+      </v-button>
+      <v-button
         :disabled="!isFormValid || isLoading"
-        :submit="true"
         :fluid="true"
         type="primary"
         data-test="submit-button"
@@ -63,6 +73,10 @@ export default {
       return !this.isLoading
         ? this.$i18n.t('global.allow')
         : this.$i18n.t('global.loading');
+    },
+
+    isPopup() {
+      return !!window.opener;
     },
   },
 
@@ -126,7 +140,9 @@ export default {
 
       this.$emit('submit', res);
     },
-
+    handleCancel() {
+      this.$emit('cancel');
+    },
     getCheckedScopes() {
       const res = this.scopesList.filter(
         key => this.valuesScopesMap[key] === true,
