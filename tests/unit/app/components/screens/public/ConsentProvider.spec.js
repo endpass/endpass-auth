@@ -37,6 +37,9 @@ describe('ConsentProvider', () => {
       state: {
         loading: false,
       },
+      actions: {
+        dialogClose: jest.fn(),
+      },
     };
     accountsModule = {
       state: {
@@ -46,6 +49,7 @@ describe('ConsentProvider', () => {
         getConsentDetails: jest.fn().mockResolvedValue({
           requested_scope: [],
         }),
+        cancelAuth: jest.fn(),
         grantPermissionsWithOauth: jest.fn(),
       },
     };
@@ -183,6 +187,25 @@ describe('ConsentProvider', () => {
         },
         undefined,
       );
+    });
+
+    it('should cancel auth and close window on scope cancel', async () => {
+      wrapper = shallowMount(ConsentProvider, {
+        localVue,
+        store,
+        i18n,
+        mocks: {
+          $router,
+        },
+      });
+      const spy = jest.spyOn(wrapper.vm, 'handleAuthCancel');
+      wrapper.setData({
+        scopesList: ['foo', 'bar', 'baz'],
+        isLoading: false,
+      });
+      wrapper.find('scopes-form-stub').vm.$emit('cancel');
+
+      expect(spy).toHaveBeenCalled();
     });
   });
 });

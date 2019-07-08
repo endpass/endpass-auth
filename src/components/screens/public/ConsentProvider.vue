@@ -1,9 +1,6 @@
 <template>
   <loading-screen v-if="isLoadingScreen" />
-  <v-frame
-    v-else
-    :closable="false"
-  >
+  <v-frame v-else :closable="false">
     <v-error
       v-if="error.show"
       :hint="error.hint"
@@ -14,6 +11,7 @@
       :is-loading="isLoading"
       :scopes-list="scopesList"
       @submit="handleScopesSubmit"
+      @cancel="handleAuthCancel"
     />
   </v-frame>
 </template>
@@ -36,6 +34,7 @@ export default {
     isLoading: true,
     isSkipped: false,
     scopesList: [],
+    redirect: '',
     error: {
       show: false,
       hint: '',
@@ -48,7 +47,6 @@ export default {
       isInited: state => state.core.isInited,
       isLogin: state => state.accounts.isLogin,
     }),
-
     isLoadingScreen() {
       return (
         this.isSkipped || (this.scopesList.length === 0 && !this.error.show)
@@ -75,13 +73,19 @@ export default {
           consentChallenge: this.queryParamsMap.consent_challenge,
           scopesList,
         });
-
         window.location.href = redirect;
         return; // must show loader until redirect not happen
       } catch (err) {
         this.setError(err.message);
       } finally {
         this.isLoading = false;
+      }
+    },
+
+    handleAuthCancel() {
+      if (window.opener) {
+        window.self.opener = window.self;
+        window.self.close();
       }
     },
 
@@ -94,7 +98,7 @@ export default {
           skip,
           redirect_url,
         } = await this.getConsentDetails(this.queryParamsMap.consent_challenge);
-
+        this.redirect = redirect_url;
         if (skip) {
           this.isSkipped = true;
           window.location.href = redirect_url;
