@@ -15,7 +15,6 @@
         data-vv-as="code"
         data-vv-name="code"
         :error="errors.first('code') || error"
-        autofocus="true"
         name="code"
         :placeholder="$t('components.otp.enterReceivedCode')"
         data-test="email-input"
