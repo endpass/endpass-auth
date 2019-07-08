@@ -18,14 +18,6 @@
         {{ account }}
       </message>
     </form-field>
-    <!-- <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field> -->
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
@@ -178,7 +170,11 @@ export default {
     },
 
     message() {
-      const hexMessage = get(this.request, 'request.params[1]');
+      const method = get(this.request, 'request.method');
+      const hexMessage =
+        method === 'personal_sign'
+          ? get(this.request, 'request.params[0]')
+          : get(this.request, 'request.params[1]');
 
       if (!hexMessage) return null;
 
