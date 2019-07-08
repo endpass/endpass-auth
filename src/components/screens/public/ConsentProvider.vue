@@ -1,6 +1,9 @@
 <template>
   <loading-screen v-if="isLoadingScreen" />
-  <v-frame v-else :closable="false">
+  <v-frame
+    v-else
+    :closable="false"
+  >
     <v-error
       v-if="error.show"
       :hint="error.hint"
