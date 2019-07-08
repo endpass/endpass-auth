@@ -21,7 +21,7 @@
         type="button"
         :disabled="isLoading"
         :fluid="true"
-        skin="social"
+        skin="quaternary"
         data-test="cancel-button"
         @click="handleCancel"
       >
