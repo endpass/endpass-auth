@@ -6,7 +6,7 @@ exports[`Auth render should change submit button text if loading and make it dis
   <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
   <!---->
   <form-item-stub>
-    <v-input-stub value="" data-vv-as="email" data-vv-name="email" autofocus="true" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
   </form-item-stub>
   <v-button-stub skin="primary" size="big" disabled="true" data-test="submit-button">
     Loading...
@@ -40,7 +40,7 @@ exports[`Auth render should correctly render Auth component 1`] = `
   <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
   <!---->
   <form-item-stub>
-    <v-input-stub value="" data-vv-as="email" data-vv-name="email" autofocus="true" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
   </form-item-stub>
   <v-button-stub skin="primary" size="big" disabled="true" data-test="submit-button">
     Login

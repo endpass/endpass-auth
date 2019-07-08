@@ -30,7 +30,6 @@
           data-vv-as="email"
           data-vv-name="email"
           :error="errors.first('email')"
-          autofocus="true"
           name="email"
           type="email"
           :placeholder="$t('components.auth.enterEmail')"
