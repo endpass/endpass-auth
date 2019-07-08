@@ -1,10 +1,7 @@
 <template>
   <loading-screen :is-loading="isLoading">
-    <v-frame v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
+    <v-frame v-if="error" :closable="false">
+      <message :error="true" data-test="error-message">
         {{ error }}
       </message>
     </v-frame>
@@ -86,9 +83,8 @@ export default {
       await this.defineSettingsWithoutPermission();
     } catch (e) {
       this.error = this.$i18n.t('components.loginProvider.notWorkingError');
-    } finally {
-      this.isLoading = false;
     }
+    this.isLoading = false;
   },
 
   components: {

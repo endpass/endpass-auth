@@ -17,23 +17,23 @@
     </div>
     <form-controls>
       <v-button
+        v-if="isPopup"
+        type="button"
+        :disabled="isLoading"
+        :fluid="true"
+        skin="social"
+        data-test="cancel-button"
+        @click="handleCancel"
+      >
+        {{ $t('global.deny') }}
+      </v-button>
+      <v-button
         :disabled="!isFormValid || isLoading"
         :fluid="true"
         type="primary"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
-      </v-button>
-      <v-button
-        v-if="isPopup"
-        type="button"
-        :disabled="isLoading"
-        :fluid="true"
-        skin="secondary"
-        data-test="cancel-button"
-        @click="handleCancel"
-      >
-        {{ $t('global.deny') }}
       </v-button>
     </form-controls>
   </form>
