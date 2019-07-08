@@ -27,6 +27,7 @@ describe('Auth', () => {
       },
       actions: {
         dialogClose: jest.fn(),
+        logout: jest.fn(),
       },
     };
     accountsModule = {
@@ -106,14 +107,18 @@ describe('Auth', () => {
     });
 
     describe('create account form logic', () => {
-      it('should open create account page on request event handling', () => {
-        wrapper.setData({
-          activeForm: 'CREATE_WALLET',
-        });
+      it('should logout when create account skip', async () => {
+        expect.assertions(1);
 
-        wrapper.find('create-wallet-form-stub').vm.$emit('request');
+        accountsModule.actions.checkAccountExists.mockResolvedValue(false);
 
-        expect(accountsModule.actions.openCreateAccountPage).toBeCalled();
+        wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+
+        await wrapper.vm.$nextTick();
+
+        wrapper.find('v-modal-card-stub').vm.$emit('close');
+
+        expect(coreModule.actions.logout).toBeCalledTimes(1);
       });
     });
   });

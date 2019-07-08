@@ -58,12 +58,6 @@ describe('SignPasswordForm', () => {
   });
 
   describe('behavior', () => {
-    it('should open accounts create tab', () => {
-      wrapper.vm.handleAccountRequest();
-
-      expect(accountsModule.actions.openCreateAccountPage).toBeCalled();
-    });
-
     it('should show create account form', async () => {
       expect.assertions(2);
 
