@@ -5,12 +5,21 @@
       :is-closable="isDialog"
       @close="handleSignCancel"
     >
-      <sign-form
+      <sign-transaction-form
+        v-if="isTransaction"
         :loading="loading"
         :request="request"
         :error="error"
         :closable="isDialog"
-        :is-transaction="isTransaction"
+        @cancel="handleSignCancel"
+        @submit="handleSignSubmit"
+      />
+      <sign-message-form
+        v-else
+        :loading="loading"
+        :request="request"
+        :error="error"
+        :closable="isDialog"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
@@ -23,7 +32,8 @@ import get from 'lodash/get';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import SignForm from '@/components/forms/Sign';
+import SignMessageForm from '@/components/forms/SignMessage';
+import SignTransactionForm from '@/components/forms/SignTransaction';
 
 export default {
   name: 'Sign',
@@ -47,12 +57,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'processRequest',
-      'cancelRequest',
-      'dialogClose',
-      'getGasPrice',
-    ]),
+    ...mapActions(['processRequest', 'cancelRequest', 'dialogClose']),
 
     async handleSignSubmit(res) {
       try {
@@ -74,17 +79,10 @@ export default {
     },
   },
 
-  async created() {
-    if (!this.isTransaction) return;
-
-    const { net } = this.request;
-
-    await this.getGasPrice(net);
-  },
-
   components: {
     Screen,
-    SignForm,
+    SignMessageForm,
+    SignTransactionForm,
     VModalCard,
   },
 };

@@ -112,6 +112,14 @@ describe('requests actions', () => {
     });
 
     it('should process transaction if in passed in parameters', async () => {
+      const nonce = 8;
+
+      dispatch.mockImplementation(action => {
+        if (action === 'getNextNonce') {
+          return nonce;
+        }
+      });
+
       state = {
         request: requestWithTransaction,
       };
@@ -131,6 +139,7 @@ describe('requests actions', () => {
             gasPrice: '0x1f4',
             gasLimit: '0x5208',
             value: '0xb1a2bc2ec50000',
+            nonce: '0x8',
           },
         ],
       });

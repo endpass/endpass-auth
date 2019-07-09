@@ -3,7 +3,7 @@
 exports[`Sign render render should correctly render Sign component 1`] = `
 <screen-stub>
   <v-modal-card-stub isclosable="true">
-    <sign-form-stub request="[object Object]" closable="true"></sign-form-stub>
+    <sign-message-form-stub request="[object Object]" closable="true"></sign-message-form-stub>
   </v-modal-card-stub>
 </screen-stub>
 `;

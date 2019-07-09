@@ -1,6 +1,8 @@
 import Vuex from 'vuex';
+import VeeValidate from 'vee-validate';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import Sign from '@/components/forms/Sign.vue';
+import validation from '@/validation';
+import SignTransaction from '@/components/forms/SignTransaction.vue';
 import setupI18n from '@/locales/i18nSetup';
 import {
   requestWithMessage,
@@ -10,30 +12,23 @@ import {
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 
+localVue.use(VeeValidate);
+localVue.use(validation);
 localVue.use(Vuex);
 
-describe('Sign', () => {
+describe('SignTransaction', () => {
   let store;
   let storeData;
   let gasPriceModule;
 
   beforeEach(() => {
     gasPriceModule = {
-      getters: {
-        labeledGasPricesList: jest.fn(() => [
-          {
-            label: '1 gwei',
-            value: '2',
-          },
-          {
-            label: '2 gwei',
-            value: '2',
-          },
-          {
-            label: '3 gwei',
-            value: '1',
-          },
-        ]),
+      actions: {
+        getGasPrice: jest.fn().mockResolvedValue({
+          low: 1,
+          medium: 2,
+          high: 3,
+        }),
       },
     };
     storeData = {
@@ -46,10 +41,11 @@ describe('Sign', () => {
 
   describe('render', () => {
     const wrapperFactory = (props = {}) =>
-      shallowMount(Sign, {
+      shallowMount(SignTransaction, {
         localVue,
         i18n,
         store,
+        sync: false,
         propsData: props,
         provide: {
           theme: 'default',
@@ -64,9 +60,8 @@ describe('Sign', () => {
       });
     });
 
-    it('should correctly render Sign component', () => {
-      expect(wrapper.name()).toBe('SignForm');
-      expect(wrapper.find('[data-test=sign-form-message]').exists()).toBe(true);
+    it('should correctly render SignTransaction component', () => {
+      expect(wrapper.name()).toBe('SignTransactionForm');
       expect(wrapper.find('[data-test=requester-url]').text()).toBe(
         requestWithMessage.url,
       );
@@ -85,22 +80,6 @@ describe('Sign', () => {
       expect(wrapper.find('[data-test=requester-url]').exists()).toBe(false);
     });
 
-    it('should not render request body code if it is not passed', () => {
-      wrapper = wrapperFactory({
-        request: {
-          ...requestWithMessage,
-          request: null,
-        },
-      });
-
-      expect(
-        wrapper.find('[data-test=sign-form-transaction-params]').exists(),
-      ).toBe(false);
-      expect(wrapper.find('[data-test=sign-form-message]').exists()).toBe(
-        false,
-      );
-    });
-
     it('should change submit button text if loading and make it disabled', () => {
       wrapper = wrapperFactory({
         loading: true,
@@ -113,36 +92,15 @@ describe('Sign', () => {
       expect(submitButton.attributes().disabled).toBe('true');
       expect(wrapper.html()).toMatchSnapshot();
     });
-
-    it('should render message for requests with just messages', () => {
-      expect(
-        wrapper.find('[data-test=sign-form-transaction-params]').exists(),
-      ).toBe(false);
-      expect(wrapper.find('[data-test=sign-form-message]').exists()).toBe(true);
-    });
-
-    it('should render transaction form for requests with transactions', () => {
-      wrapper = wrapperFactory({
-        loading: false,
-        isTransaction: true,
-        request: requestWithTransaction,
-      });
-
-      expect(wrapper.find('[data-test=sign-form-message]').exists()).toBe(
-        false,
-      );
-      expect(
-        wrapper.find('[data-test=sign-form-transaction-params]').exists(),
-      ).toBe(true);
-    });
   });
 
   describe('behavior', () => {
     const wrapperFactory = (props = {}) =>
-      mount(Sign, {
+      mount(SignTransaction, {
         localVue,
         i18n,
         store,
+        sync: false,
         propsData: props,
         provide: {
           theme: 'default',
@@ -157,43 +115,46 @@ describe('Sign', () => {
     });
 
     it('should not allow submit form if password is empty', () => {
-      wrapper.find('form').trigger('submit');
+      wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
       expect(wrapper.emitted().submit).toBe(undefined);
     });
 
-    it('should allow submit of email is valid', () => {
+    it('should allow submit if password is valid', async () => {
+      expect.assertions(1);
+
       wrapper.setData({
-        password: 'foo',
+        password: 'foofoofoo',
       });
+      // TODO: crutch for correct form validation handling
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
 
-      wrapper.find('form').trigger('submit');
-
-      expect(wrapper.emitted().submit).toEqual([
-        [
-          {
-            password: 'foo',
-            account: requestWithMessage.address,
-          },
-        ],
-      ]);
+      expect(
+        wrapper.find('[data-test=submit-button]').attributes().disabled,
+      ).toBeFalsy();
     });
 
-    it('should submit transaction data', () => {
+    it('should submit transaction data', async () => {
+      expect.assertions(1);
+
       wrapper = wrapperFactory({
         request: requestWithTransaction,
         isTransaction: true,
       });
       wrapper.setData({
-        password: 'foo',
+        password: 'foofoofoo',
       });
+      // TODO: crutch for correct form validation handling
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
 
-      wrapper.find('form').trigger('submit');
+      wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
       expect(wrapper.emitted().submit).toEqual([
         [
           {
-            password: 'foo',
+            password: 'foofoofoo',
             account: requestWithMessage.address,
             transaction: expect.any(Object),
           },

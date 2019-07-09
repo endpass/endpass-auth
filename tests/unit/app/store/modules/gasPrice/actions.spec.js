@@ -11,7 +11,7 @@ describe('gasPrice actions', () => {
   });
 
   describe('getGasPrice', () => {
-    it('should request gas prices and set it to the state', async () => {
+    it('should request gas prices and return it', async () => {
       expect.assertions(2);
 
       const network = '2';
@@ -21,10 +21,10 @@ describe('gasPrice actions', () => {
         high: 3,
       };
 
-      await gasPriceActions.getGasPrice({ commit }, network);
+      const res = await gasPriceActions.getGasPrice({ commit }, network);
 
       expect(cryptoDataService.getGasPrice).toBeCalledWith(network);
-      expect(commit).toBeCalledWith('setGasPrices', gasPrices);
+      expect(res).toEqual(gasPrices);
     });
   });
 });

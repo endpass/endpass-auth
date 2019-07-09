@@ -2,7 +2,14 @@ import i18n from '@/locales/i18n';
 import { Transaction } from '@endpass/class';
 import { signChannel } from '@/class/singleton/channels';
 import { Answer } from '@/class';
+import { web3 } from '@/service/web3';
 import signerService from '@/service/signer';
+
+const getNextNonce = async (ctx, address) => {
+  const nonce = await web3.eth.getTransactionCount(address);
+
+  return nonce;
+};
 
 const sendResponse = async ({ commit }, payload) => {
   signChannel.put(Answer.createOk(payload));
@@ -33,8 +40,15 @@ const processRequest = async (
     };
 
     if (transaction) {
+      const nonce = await dispatch('getNextNonce');
+
       Object.assign(requestToSign, {
-        params: [Transaction.getApiObject(transaction)],
+        params: [
+          Transaction.getApiObject({
+            ...transaction,
+            nonce,
+          }),
+        ],
       });
     }
 
@@ -52,9 +66,9 @@ const processRequest = async (
     });
   } catch (err) {
     if (err.message.includes('message authentication code mismatch')) {
-      commit('changeLoadingStatus', false);
-
       throw new Error(i18n.t('store.requests.passIncorrect'));
+    } else if (err.message.includes('gas price is too low')) {
+      throw new Error(i18n.t('store.requests.gasTooLow'));
     } else {
       dispatch('sendResponse', {
         id: request.id,
@@ -101,6 +115,7 @@ const cancelRequest = ({ state, dispatch }) => {
 };
 
 export default {
+  getNextNonce,
   processRequest,
   recoverMessage,
   sendResponse,
