@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Sign render should change submit button text if loading and make it disabled 1`] = `
+exports[`SignMessage render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="sign-form">
   <form-field-stub><a href="http://localhost" data-test="requester-url">http://localhost</a>
     requests sign action.
@@ -11,23 +11,23 @@ exports[`Sign render should change submit button text if loading and make it dis
     </message-stub>
   </form-field-stub>
   <form-field-stub label="Your account password:">
-    <v-input-stub value="" placeholder="Enter your password..." type="password"></v-input-stub>
+    <v-input-stub value="" placeholder="Enter your password..." name="password" type="password"></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request message:" data-test="sign-form-message">
     hello
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub skin="primary" size="normal" disabled="true" submit="true" type="primary" data-test="submit-button">
-      Loading...
-    </v-button-stub>
     <v-button-stub skin="quaternary" size="normal" disabled="true" data-test="cancel-button">
       Close
+    </v-button-stub>
+    <v-button-stub skin="primary" size="normal" disabled="true" type="button" data-test="submit-button">
+      Loading...
     </v-button-stub>
   </form-controls-stub>
 </form>
 `;
 
-exports[`Sign render should correctly render Sign component 1`] = `
+exports[`SignMessage render should correctly render SignMessage component 1`] = `
 <form data-test="sign-form">
   <form-field-stub><a href="http://localhost" data-test="requester-url">http://localhost</a>
     requests sign action.
@@ -38,17 +38,17 @@ exports[`Sign render should correctly render Sign component 1`] = `
     </message-stub>
   </form-field-stub>
   <form-field-stub label="Your account password:">
-    <v-input-stub value="" placeholder="Enter your password..." type="password"></v-input-stub>
+    <v-input-stub value="" placeholder="Enter your password..." name="password" type="password"></v-input-stub>
   </form-field-stub>
   <form-field-stub label="Request message:" data-test="sign-form-message">
     hello
   </form-field-stub>
   <form-controls-stub>
-    <v-button-stub skin="primary" size="normal" disabled="true" submit="true" type="primary" data-test="submit-button">
-      Sign
-    </v-button-stub>
     <v-button-stub skin="quaternary" size="normal" data-test="cancel-button">
       Close
+    </v-button-stub>
+    <v-button-stub skin="primary" size="normal" type="button" data-test="submit-button" disabled="true">
+      Sign
     </v-button-stub>
   </form-controls-stub>
 </form>

@@ -1,8 +1,5 @@
 <template>
-  <form
-    data-test="sign-form"
-    @submit.prevent="emitSubmit"
-  >
+  <form data-test="sign-form">
     <form-field v-if="requesterUrl">
       <a
         :href="requesterUrl"
@@ -21,15 +18,14 @@
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
+        v-validate.immediate="'required|min:8'"
         :placeholder="$t('components.sign.enterPass')"
         :error="error"
+        name="password"
         type="password"
       />
     </form-field>
-    <div
-      v-if="isTransaction"
-      data-test="sign-form-transaction-params"
-    >
+    <div data-test="sign-form-transaction-params">
       <form-field :label="$t('components.sign.transactionTo')">
         <p class="message ellipsis">
           {{ transaction.to }}
@@ -38,7 +34,9 @@
       <form-field :label="$t('components.sign.transactionValue')">
         <v-input
           v-model="value"
+          v-validate="'required|min:0'"
           :disabled="true"
+          name="value"
           type="number"
         />
       </form-field>
@@ -54,41 +52,30 @@
       <form-field :label="$t('components.sign.transactionGasPrice')">
         <v-input
           v-model="gasPrice"
+          v-validate="'required|min:0'"
+          name="gasPrice"
           type="number"
+          min="0"
+          step="1"
         />
       </form-field>
       <form-field v-if="labeledGasPricesList">
         <v-content-switcher
           v-model="gasPrice"
+          v-validate="'required|min:0'"
           :items="labeledGasPricesList"
-          step="0.0000000001"
-          min="0"
         />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasLimit')">
         <v-input
           v-model="gasLimit"
+          name="gasLimit"
           type="number"
           min="0"
         />
       </form-field>
     </div>
-    <form-field
-      v-else-if="message"
-      :label="$t('components.sign.requestMessage')"
-      data-test="sign-form-message"
-    >
-      {{ message }}
-    </form-field>
     <form-controls>
-      <v-button
-        :disabled="loading || !password"
-        :submit="true"
-        type="primary"
-        data-test="submit-button"
-      >
-        {{ primaryButtonLabel }}
-      </v-button>
       <v-button
         :disabled="!closable || loading"
         skin="quaternary"
@@ -97,16 +84,24 @@
       >
         {{ $t('global.close') }}
       </v-button>
+      <v-button
+        :disabled="loading || !isFormValid"
+        type="button"
+        data-test="submit-button"
+        @click="emitSubmit"
+      >
+        {{ primaryButtonLabel }}
+      </v-button>
     </form-controls>
   </form>
 </template>
 
 <script>
 import Web3 from 'web3';
+import { mapActions } from 'vuex';
 import get from 'lodash/get';
-import { mapGetters } from 'vuex';
 import { web3, setWeb3Network } from '@/service/web3';
-import { transactionInEth } from '@/util/transaction';
+import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
@@ -114,10 +109,10 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
-const { hexToUtf8 } = Web3.utils;
+const { fromWei } = Web3.utils;
 
 export default {
-  name: 'SignForm',
+  name: 'SignTransactionForm',
 
   props: {
     loading: {
@@ -139,14 +134,10 @@ export default {
       type: Boolean,
       default: true,
     },
-
-    isTransaction: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data: () => ({
+    gasPrices: null,
     password: '',
     value: '0',
     data: '',
@@ -155,8 +146,6 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['labeledGasPricesList']),
-
     account() {
       return get(this.request, 'address');
     },
@@ -169,24 +158,12 @@ export default {
       return get(this.request, 'url');
     },
 
-    message() {
-      const method = get(this.request, 'request.method');
-      const hexMessage =
-        method === 'personal_sign'
-          ? get(this.request, 'request.params[0]')
-          : get(this.request, 'request.params[1]');
-
-      if (!hexMessage) return null;
-
-      return hexToUtf8(hexMessage);
-    },
-
     transaction() {
       const trx = get(this.request, 'request.params[0]');
 
       if (!trx) return null;
 
-      return transactionInEth(trx);
+      return trx;
     },
 
     primaryButtonLabel() {
@@ -194,9 +171,24 @@ export default {
         ? this.$i18n.t('global.sign')
         : this.$i18n.t('global.loading');
     },
+
+    labeledGasPricesList() {
+      if (!this.gasPrices) return null;
+
+      return Object.keys(this.gasPrices).reduce(
+        (acc, key) =>
+          acc.concat({
+            label: `${this.gasPrices[key]} gwei`,
+            value: this.gasPrices[key].toString(),
+          }),
+        [],
+      );
+    },
   },
 
   methods: {
+    ...mapActions(['getGasPrice']),
+
     async getInitialGasLimit(address) {
       const code = await web3.eth.getCode(address);
 
@@ -208,15 +200,7 @@ export default {
     },
 
     emitSubmit() {
-      if (!this.password) return;
-
-      if (!this.isTransaction) {
-        this.$emit('submit', {
-          account: this.account,
-          password: this.password,
-        });
-        return;
-      }
+      if (!this.isFormValid) return;
 
       this.$emit('submit', {
         account: this.account,
@@ -239,20 +223,22 @@ export default {
   async mounted() {
     setWeb3Network(this.network);
 
-    if (!this.isTransaction) return;
+    const { net } = this.request;
+    const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
 
-    const { to, value, gasPrice, gasLimit, data } = this.transaction;
+    this.gasPrices = await this.getGasPrice(net);
+    this.gasLimit = gas || gasLimit;
 
-    if (!gasLimit || gasLimit === '0') {
+    if (!gasLimit) {
       this.gasLimit = await this.getInitialGasLimit(to);
-    } else {
-      this.gasLimit = gasLimit;
     }
 
-    this.value = value;
-    this.gasPrice = gasPrice;
+    this.value = value ? fromWei(value) : '0';
+    this.gasPrice = gasPrice ? fromWei(gasPrice, 'gwei') : '0';
     this.data = data || '';
   },
+
+  mixins: [formMixin],
 
   components: {
     VButton,

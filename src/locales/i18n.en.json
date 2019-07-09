@@ -96,10 +96,11 @@
       "requestData": "Request data:",
       "requestMessage": "Request message:",
       "transactionTo": "To",
-      "transactionGasPrice": "Gas price",
+      "transactionGasPrice": "Gas price (in gwei)",
       "transactionGasLimit": "Gas limit",
       "transactionValue": "Value",
-      "transactionData": "Data"
+      "transactionData": "Data",
+      "transactionNonce": "Nonce"
     },
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
@@ -138,7 +139,8 @@
       "authCanceled": "Authentication was canceled by user!"
     },
     "requests": {
-      "passIncorrect": "You have enter incorrect password"
+      "passIncorrect": "You have enter incorrect password",
+      "gasTooLow": "Transaction gas to low. Try to increase gas price or gas limit"
     }
   },
   "services": {

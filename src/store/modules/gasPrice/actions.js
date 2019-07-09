@@ -1,9 +1,9 @@
 import cryptoDataService from '@/service/cryptoData';
 
-const getGasPrice = async ({ commit }, network) => {
+const getGasPrice = async (ctx, network) => {
   const prices = await cryptoDataService.getGasPrice(network);
 
-  commit('setGasPrices', prices);
+  return prices;
 };
 
 export default {
