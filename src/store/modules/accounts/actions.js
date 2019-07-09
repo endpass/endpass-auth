@@ -77,7 +77,8 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success)
+      throw new Error(res.message || i18n.t('store.auth.authFailed'));
 
     settingsService.clearLocalSettings();
 
@@ -510,6 +511,28 @@ const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
   handler();
 };
 
+const validatePassword = async (
+  { commit, dispatch },
+  { address, password },
+) => {
+  commit('changeLoadingStatus', true);
+
+  const v3KeyStore = await dispatch('getAccount', address);
+
+  try {
+    await signerService.validatePassword({
+      v3KeyStore,
+      password,
+    });
+
+    return true;
+  } catch (err) {
+    throw new Error(i18n.t('store.auth.passwordIncorrect'));
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
 export default {
   auth,
   authWithGoogle,
@@ -548,4 +571,5 @@ export default {
   checkOauthLoginRequirements,
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,
+  validatePassword,
 };

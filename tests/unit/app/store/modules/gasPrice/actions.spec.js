@@ -10,7 +10,7 @@ describe('gasPrice actions', () => {
     commit = jest.fn();
   });
 
-  describe('getGasPrice', () => {
+  describe('getGasPrices', () => {
     it('should request gas prices and return it', async () => {
       expect.assertions(2);
 
@@ -21,9 +21,9 @@ describe('gasPrice actions', () => {
         high: 3,
       };
 
-      const res = await gasPriceActions.getGasPrice({ commit }, network);
+      const res = await gasPriceActions.getGasPrices({ commit }, network);
 
-      expect(cryptoDataService.getGasPrice).toBeCalledWith(network);
+      expect(cryptoDataService.getGasPrices).toBeCalledWith(network);
       expect(res).toEqual(gasPrices);
     });
   });

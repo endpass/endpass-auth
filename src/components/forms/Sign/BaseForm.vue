@@ -1,5 +1,5 @@
 <template>
-  <form data-test="sign-form">
+  <div data-test="sign-form">
     <form-field v-if="error">
       <message
         :error="true"
@@ -26,20 +26,15 @@
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
-        v-validate.immediate="'required|min:8'"
+        v-validate="'required|min:8'"
         :placeholder="$t('components.sign.enterPass')"
-        :error="errors.firstById('invalidPassword')"
+        :error="errors.first('password')"
+        :data-vv-as="$t('components.sign.passwordField')"
         name="password"
         type="password"
       />
     </form-field>
-    <form-field
-      v-if="message"
-      :label="$t('components.sign.requestMessage')"
-      data-test="sign-form-message"
-    >
-      {{ message }}
-    </form-field>
+    <slot />
     <form-controls>
       <v-button
         :disabled="!closable || loading"
@@ -59,25 +54,23 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-controls>
-  </form>
+  </div>
 </template>
 
 <script>
-import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapActions } from 'vuex';
 import { setWeb3Network } from '@/service/web3';
-import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
-const { hexToUtf8 } = Web3.utils;
-
 export default {
-  name: 'SignMessageForm',
+  name: 'SignBaseForm',
+
+  inject: ['$validator'],
 
   props: {
     loading: {
@@ -99,6 +92,11 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    isFormValid: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({
@@ -118,18 +116,6 @@ export default {
       return get(this.request, 'url');
     },
 
-    message() {
-      const method = get(this.request, 'request.method');
-      const hexMessage =
-        method === 'personal_sign'
-          ? get(this.request, 'request.params[0]')
-          : get(this.request, 'request.params[1]');
-
-      if (!hexMessage) return null;
-
-      return hexToUtf8(hexMessage);
-    },
-
     primaryButtonLabel() {
       return !this.loading
         ? this.$i18n.t('global.sign')
@@ -139,8 +125,8 @@ export default {
 
   watch: {
     password() {
-      if (this.errors.has('password')) {
-        this.errors.removeById('invalidPassword');
+      if (this.errors.firstById('incorrectPassword')) {
+        this.errors.removeById('incorrectPassword');
       }
     },
   },
@@ -151,24 +137,22 @@ export default {
     async emitSubmit() {
       if (!this.isFormValid) return;
 
-      const isPasswordValid = await this.validatePassword({
-        address: this.account,
-        password: this.password,
-      });
-
-      if (!isPasswordValid) {
-        this.errors.add({
-          id: 'invalidPassword',
-          field: 'password',
-          msg: this.$t('store.auth.passwordIncorrect'),
+      try {
+        await this.validatePassword({
+          address: this.account,
+          password: this.password,
         });
-        return;
+        this.$emit('submit', {
+          account: this.account,
+          password: this.password,
+        });
+      } catch (err) {
+        this.errors.add({
+          id: 'incorrectPassword',
+          field: 'password',
+          msg: err.message,
+        });
       }
-
-      this.$emit('submit', {
-        account: this.account,
-        password: this.password,
-      });
     },
 
     emitCancel() {
@@ -177,10 +161,8 @@ export default {
   },
 
   async mounted() {
-    setWeb3Network(this.network);
+    await setWeb3Network(this.network);
   },
-
-  mixins: [formMixin],
 
   components: {
     VButton,

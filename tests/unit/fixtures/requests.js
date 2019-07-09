@@ -1,8 +1,13 @@
 export const requestTrx = {
   to: '0xaEF74e25181b0879d293396Dd9949Cf25b339407',
   value: '0x353030303030303030',
-  gasPrice: '0x333030303030',
+  gasPrice: '0x174876e800',
   gasLimit: '0x3231303030303030303030',
+};
+export const requestTrxWithoutGasLimit = {
+  to: '0xaEF74e25181b0879d293396Dd9949Cf25b339407',
+  value: '0x353030303030303030',
+  gasPrice: '0x174876e800',
 };
 export const requestWithMessage = {
   address: '0xaEF74e25181b0879d293396Dd9949Cf25b339407',
@@ -17,6 +22,14 @@ export const requestWithTransaction = {
   request: {
     method: 'eth_sendTransaction',
     params: [{ ...requestTrx }],
+  },
+};
+export const requestWithCuttedTransaction = {
+  address: '0xaEF74e25181b0879d293396Dd9949Cf25b339407',
+  url: 'http://localhost',
+  request: {
+    method: 'eth_sendTransaction',
+    params: [{ ...requestTrxWithoutGasLimit }],
   },
 };
 export const transactionInEth = {

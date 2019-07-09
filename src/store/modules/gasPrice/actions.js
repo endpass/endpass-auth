@@ -1,8 +1,8 @@
 import { web3 } from '@/service/web3';
 import cryptoDataService from '@/service/cryptoData';
 
-const getGasPrice = async (ctx, network) => {
-  const prices = await cryptoDataService.getGasPrice(network);
+const getGasPrices = async (ctx, network) => {
+  const prices = await cryptoDataService.getGasPrices(network);
 
   return prices;
 };
@@ -18,6 +18,6 @@ const getGasLimitByAddress = async (ctx, address) => {
 };
 
 export default {
-  getGasPrice,
+  getGasPrices,
   getGasLimitByAddress,
 };

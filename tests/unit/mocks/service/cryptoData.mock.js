@@ -5,7 +5,7 @@ jest.mock('@/service/cryptoData', () => ({
     balance: '100000000000000',
   }),
 
-  getGasPrice: jest.fn().mockResolvedValue({
+  getGasPrices: jest.fn().mockResolvedValue({
     low: 1,
     medium: 2,
     high: 3,
