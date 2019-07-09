@@ -13,7 +13,7 @@ export default {
     };
   },
 
-  async getGasPrice(network) {
+  async getGasPrices(network) {
     const prices = await request.get(
       `${cryptoDataBaseUrl}/${network}/gas/price`,
     );

@@ -16,21 +16,6 @@ const sendResponse = async ({ commit }, payload) => {
   commit('changeLoadingStatus', false);
 };
 
-const validatePassword = async ({ dispatch }, { address, password }) => {
-  const v3KeyStore = await dispatch('getAccount', address);
-
-  try {
-    await signerService.validatePassword({
-      v3KeyStore,
-      password,
-    });
-
-    return true;
-  } catch (err) {
-    return false;
-  }
-};
-
 const processRequest = async (
   { state, commit, dispatch, getters },
   { password, transaction },
@@ -39,7 +24,6 @@ const processRequest = async (
 
   const { address, request, net } = state.request;
   const { demoData } = getters;
-
   let v3KeyStore;
 
   if (demoData) {
@@ -55,15 +39,14 @@ const processRequest = async (
     };
 
     if (transaction) {
-      const nonce = await dispatch('getNextNonce');
+      const nonce = await dispatch('getNextNonce', address);
+      const transactionWithNonce = {
+        ...transaction,
+        nonce,
+      };
 
       Object.assign(requestToSign, {
-        params: [
-          Transaction.getApiObject({
-            ...transaction,
-            nonce,
-          }),
-        ],
+        params: [Transaction.getApiObject(transactionWithNonce)],
       });
     }
 
@@ -131,7 +114,6 @@ const cancelRequest = ({ state, dispatch }) => {
 
 export default {
   getNextNonce,
-  validatePassword,
   processRequest,
   recoverMessage,
   sendResponse,

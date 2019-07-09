@@ -96,11 +96,14 @@
       "requestData": "Request data:",
       "requestMessage": "Request message:",
       "transactionTo": "To",
-      "transactionGasPrice": "Gas price (in gwei)",
+      "transactionGasPrice": "Gas price (gwei)",
       "transactionGasLimit": "Gas limit",
       "transactionValue": "Value",
       "transactionData": "Data",
-      "transactionNonce": "Nonce"
+      "passwordField": "password",
+      "gasPriceField": "gas price",
+      "gasLimitField": "gas limit",
+      "valueField": "value"
     },
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
