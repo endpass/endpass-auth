@@ -21,7 +21,7 @@
       "authWithGoogle": "Google"
     },
     "serverModeSelect": {
-      "identityServer": "Identity server",
+      "identityServer": "Select Identity Server",
       "customIdentityServer": "Custom Identity Server",
       "example": "Example"
     },
