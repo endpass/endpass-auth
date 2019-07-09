@@ -6,6 +6,13 @@ import { setWeb3Network } from '@/service/web3';
 import i18n from '@/locales/i18n';
 
 export default {
+  async validatePassword({ v3KeyStore, password }) {
+    const wallet = new Wallet(v3KeyStore);
+    const isPasswordValid = await wallet.validatePassword(password);
+
+    return isPasswordValid;
+  },
+
   async signDataWithAccount({ account, data, password }) {
     const wallet = new Wallet(account);
     const res = await wallet.sign(data, password);

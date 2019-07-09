@@ -4,6 +4,10 @@ async function getSigner() {
 }
 
 export default {
+  async validatePassword(params) {
+    const Signer = await getSigner();
+    return Signer.validatePassword(params);
+  },
   async signDataWithAccount(params) {
     const Signer = await getSigner();
     return Signer.signDataWithAccount(params);

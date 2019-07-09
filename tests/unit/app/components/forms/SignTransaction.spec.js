@@ -20,6 +20,7 @@ describe('SignTransaction', () => {
   let store;
   let storeData;
   let gasPriceModule;
+  let requestsModule;
 
   beforeEach(() => {
     gasPriceModule = {
@@ -29,11 +30,18 @@ describe('SignTransaction', () => {
           medium: 2,
           high: 3,
         }),
+        getGasLimitByAddress: jest.fn().mockResolvedValue('21000'),
+      },
+    };
+    requestsModule = {
+      actions: {
+        validatePassword: jest.fn().mockResolvedValue(true),
       },
     };
     storeData = {
       modules: {
         gasPrices: gasPriceModule,
+        requests: requestsModule,
       },
     };
     store = new Vuex.Store(storeData);
@@ -129,6 +137,7 @@ describe('SignTransaction', () => {
       // TODO: crutch for correct form validation handling
       await wrapper.vm.$nextTick();
       await wrapper.vm.$nextTick();
+      await global.flushPromises();
 
       expect(
         wrapper.find('[data-test=submit-button]').attributes().disabled,
@@ -150,6 +159,8 @@ describe('SignTransaction', () => {
       await wrapper.vm.$nextTick();
 
       wrapper.find('[data-test=submit-button]').vm.$emit('click');
+
+      await global.flushPromises();
 
       expect(wrapper.emitted().submit).toEqual([
         [
