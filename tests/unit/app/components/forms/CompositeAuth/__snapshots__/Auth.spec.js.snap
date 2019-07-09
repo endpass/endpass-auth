@@ -2,6 +2,9 @@
 
 exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="auth-form" message="foo">
+  <message-stub class="v-modal-card-title">
+    Select Identity Server
+  </message-stub>
   <!---->
   <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
   <!---->
@@ -36,6 +39,9 @@ exports[`Auth render should change submit button text if loading and make it dis
 
 exports[`Auth render should correctly render Auth component 1`] = `
 <form data-test="auth-form">
+  <message-stub class="v-modal-card-title">
+    Select Identity Server
+  </message-stub>
   <!---->
   <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
   <!---->

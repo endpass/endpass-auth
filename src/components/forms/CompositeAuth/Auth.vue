@@ -1,13 +1,12 @@
 <template>
-  <form
-    data-test="auth-form"
-    @submit.prevent="handleSubmit"
-  >
+  <form data-test="auth-form" @submit.prevent="handleSubmit">
+    <message class="v-modal-card-title">
+      {{ $t('components.serverModeSelect.identityServer') }}
+    </message>
     <form-item v-if="isServerMode && !isPublic">
-      <server-mode-select
-        v-model="serverMode"
-        @confirm="handleSubmit"
-      />
+      <server-mode-select v-model="serverMode" @confirm="handleSubmit" />
+      <v-spacer :height="4" />
+      <v-divider />
     </form-item>
     <template v-if="isDefaultMode">
       <message
@@ -16,10 +15,7 @@
         v-html="$t('components.auth.loginToContinue')"
       />
       <form-item v-if="error">
-        <message
-          :error="true"
-          data-test="error-message"
-        >
+        <message :error="true" data-test="error-message">
           {{ error }}
         </message>
       </form-item>
@@ -36,11 +32,7 @@
           data-test="email-input"
         />
       </form-item>
-      <v-button
-        :disabled="!isFormValid"
-        size="big"
-        data-test="submit-button"
-      >
+      <v-button :disabled="!isFormValid" size="big" data-test="submit-button">
         {{ primaryButtonLabel }}
       </v-button>
       <v-spacer :height="3" />
@@ -62,18 +54,12 @@
       <form-row centered>
         <v-checkbox v-model="isTermsAccepted">
           {{ $t('components.auth.iAccept') }}
-          <a
-            href="https://endpass.com/terms/"
-            target="_blank"
-          >
+          <a href="https://endpass.com/terms/" target="_blank">
             {{ $t('components.auth.termsOfService') }}
           </a>
 
           {{ $t('components.auth.and') }}
-          <a
-            href="https://endpass.com/privacy/"
-            target="_blank"
-          >
+          <a href="https://endpass.com/privacy/" target="_blank">
             {{ $t('components.auth.privacyPolicy') }}
           </a>
         </v-checkbox>

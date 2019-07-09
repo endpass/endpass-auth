@@ -2,9 +2,6 @@
 
 exports[`ServerModeSelect render should correctly render ServerModeSelect component 1`] = `
 <div class="container">
-  <message-stub>
-    Identity server
-  </message-stub>
   <form-field-stub>
     <v-content-switcher-stub items="[object Object],[object Object],[object Object]" data-test="mode-select"></v-content-switcher-stub>
   </form-field-stub>
