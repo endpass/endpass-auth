@@ -1,9 +1,5 @@
 <template>
   <div class="container">
-    <message>
-      {{ $t('components.serverModeSelect.identityServer') }}
-    </message>
-
     <form-field>
       <v-content-switcher
         v-model="currentIdentityServerType"
