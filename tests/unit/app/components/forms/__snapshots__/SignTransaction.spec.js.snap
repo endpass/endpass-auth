@@ -2,6 +2,7 @@
 
 exports[`SignTransaction render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="sign-form">
+  <!---->
   <form-field-stub><a href="http://localhost" data-test="requester-url">http://localhost</a>
     requests sign action.
   </form-field-stub>
@@ -32,7 +33,7 @@ exports[`SignTransaction render should change submit button text if loading and 
     </form-field-stub>
   </div>
   <form-controls-stub>
-    <v-button-stub skin="quaternary" size="normal" disabled="true" data-test="cancel-button">
+    <v-button-stub skin="quaternary" size="normal" disabled="true" type="button" data-test="cancel-button">
       Close
     </v-button-stub>
     <v-button-stub skin="primary" size="normal" disabled="true" type="button" data-test="submit-button">
@@ -44,6 +45,7 @@ exports[`SignTransaction render should change submit button text if loading and 
 
 exports[`SignTransaction render should correctly render SignTransaction component 1`] = `
 <form data-test="sign-form">
+  <!---->
   <form-field-stub><a href="http://localhost" data-test="requester-url">http://localhost</a>
     requests sign action.
   </form-field-stub>
@@ -76,7 +78,7 @@ exports[`SignTransaction render should correctly render SignTransaction componen
     </form-field-stub>
   </div>
   <form-controls-stub>
-    <v-button-stub skin="quaternary" size="normal" data-test="cancel-button">
+    <v-button-stub skin="quaternary" size="normal" type="button" data-test="cancel-button">
       Close
     </v-button-stub>
     <v-button-stub skin="primary" size="normal" type="button" data-test="submit-button" disabled="true">

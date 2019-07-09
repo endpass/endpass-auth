@@ -1,17 +1,16 @@
 <template>
   <form data-test="sign-form">
+    <form-field v-if="error">
+      <message :error="true" data-test="account-address">
+        {{ error }}
+      </message>
+    </form-field>
     <form-field v-if="requesterUrl">
-      <a
-        :href="requesterUrl"
-        data-test="requester-url"
-      >{{ requesterUrl }}</a>
+      <a :href="requesterUrl" data-test="requester-url">{{ requesterUrl }}</a>
       {{ $t('components.sign.requestSign') }}
     </form-field>
     <form-field :label="$t('components.sign.requiresSignBy')">
-      <message
-        :ellipsis="true"
-        data-test="account-address"
-      >
+      <message :ellipsis="true" data-test="account-address">
         {{ account }}
       </message>
     </form-field>
@@ -20,7 +19,7 @@
         v-model="password"
         v-validate.immediate="'required|min:8'"
         :placeholder="$t('components.sign.enterPass')"
-        :error="error"
+        :error="errors.firstById('invalidPassword')"
         name="password"
         type="password"
       />
@@ -40,14 +39,8 @@
           type="number"
         />
       </form-field>
-      <form-field
-        v-if="data"
-        :label="$t('components.sign.transactionData')"
-      >
-        <v-input
-          v-model="data"
-          :disabled="true"
-        />
+      <form-field v-if="data" :label="$t('components.sign.transactionData')">
+        <v-input v-model="data" :disabled="true" />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasPrice')">
         <v-input
@@ -67,18 +60,14 @@
         />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasLimit')">
-        <v-input
-          v-model="gasLimit"
-          name="gasLimit"
-          type="number"
-          min="0"
-        />
+        <v-input v-model="gasLimit" name="gasLimit" type="number" min="0" />
       </form-field>
     </div>
     <form-controls>
       <v-button
         :disabled="!closable || loading"
         skin="quaternary"
+        type="button"
         data-test="cancel-button"
         @click="emitCancel"
       >
@@ -100,7 +89,7 @@
 import Web3 from 'web3';
 import { mapActions } from 'vuex';
 import get from 'lodash/get';
-import { web3, setWeb3Network } from '@/service/web3';
+import { setWeb3Network } from '@/service/web3';
 import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
@@ -186,21 +175,33 @@ export default {
     },
   },
 
-  methods: {
-    ...mapActions(['getGasPrice']),
-
-    async getInitialGasLimit(address) {
-      const code = await web3.eth.getCode(address);
-
-      if (code === '0x') {
-        return '21000';
+  watch: {
+    password() {
+      if (this.errors.has('password')) {
+        this.errors.removeById('invalidPassword');
       }
-
-      return '200000';
     },
+  },
 
-    emitSubmit() {
+  methods: {
+    ...mapActions(['getGasPrice', 'getGasLimitByAddress', 'validatePassword']),
+
+    async emitSubmit() {
       if (!this.isFormValid) return;
+
+      const isPasswordValid = await this.validatePassword({
+        address: this.account,
+        password: this.password,
+      });
+
+      if (!isPasswordValid) {
+        this.errors.add({
+          id: 'invalidPassword',
+          field: 'password',
+          msg: this.$t('store.auth.passwordIncorrect'),
+        });
+        return;
+      }
 
       this.$emit('submit', {
         account: this.account,
@@ -230,7 +231,7 @@ export default {
     this.gasLimit = gas || gasLimit;
 
     if (!gasLimit) {
-      this.gasLimit = await this.getInitialGasLimit(to);
+      this.gasLimit = await this.getGasLimitByAddress(to);
     }
 
     this.value = value ? fromWei(value) : '0';

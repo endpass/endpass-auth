@@ -1,3 +1,4 @@
+import Vuex from 'vuex';
 import VeeValidate from 'vee-validate';
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import validation from '@/validation';
@@ -8,15 +9,35 @@ import { requestWithMessage } from '@unitFixtures/requests';
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 
+localVue.use(Vuex);
 localVue.use(VeeValidate);
 localVue.use(validation);
 
 describe('SignMessage', () => {
+  let store;
+  let storeData;
+  let requestsModule;
+
+  beforeEach(() => {
+    requestsModule = {
+      actions: {
+        validatePassword: jest.fn().mockResolvedValue(true),
+      },
+    };
+    storeData = {
+      modules: {
+        requests: requestsModule,
+      },
+    };
+    store = new Vuex.Store(storeData);
+  });
+
   describe('render', () => {
     const wrapperFactory = (props = {}) =>
       shallowMount(SignMessage, {
         localVue,
         i18n,
+        store,
         sync: false,
         propsData: props,
         provide: {
@@ -71,6 +92,7 @@ describe('SignMessage', () => {
       mount(SignMessage, {
         localVue,
         i18n,
+        store,
         sync: false,
         propsData: props,
         provide: {
@@ -92,7 +114,7 @@ describe('SignMessage', () => {
     });
 
     it('should allow submit if password is valid', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
       wrapper.setData({
         password: 'foofoofoo',
@@ -102,6 +124,8 @@ describe('SignMessage', () => {
       await wrapper.vm.$nextTick();
 
       wrapper.find('[data-test=submit-button]').vm.$emit('click');
+
+      await global.flushPromises();
 
       expect(wrapper.emitted().submit).toEqual([
         [

@@ -1,5 +1,13 @@
 <template>
   <form data-test="sign-form">
+    <form-field v-if="error">
+      <message
+        :error="true"
+        data-test="account-address"
+      >
+        {{ error }}
+      </message>
+    </form-field>
     <form-field v-if="requesterUrl">
       <a
         :href="requesterUrl"
@@ -20,7 +28,7 @@
         v-model="password"
         v-validate.immediate="'required|min:8'"
         :placeholder="$t('components.sign.enterPass')"
-        :error="error"
+        :error="errors.firstById('invalidPassword')"
         name="password"
         type="password"
       />
@@ -36,6 +44,7 @@
       <v-button
         :disabled="!closable || loading"
         skin="quaternary"
+        type="button"
         data-test="cancel-button"
         @click="emitCancel"
       >
@@ -56,6 +65,7 @@
 <script>
 import Web3 from 'web3';
 import get from 'lodash/get';
+import { mapActions } from 'vuex';
 import { setWeb3Network } from '@/service/web3';
 import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
@@ -127,9 +137,33 @@ export default {
     },
   },
 
+  watch: {
+    password() {
+      if (this.errors.has('password')) {
+        this.errors.removeById('invalidPassword');
+      }
+    },
+  },
+
   methods: {
-    emitSubmit() {
+    ...mapActions(['validatePassword']),
+
+    async emitSubmit() {
       if (!this.isFormValid) return;
+
+      const isPasswordValid = await this.validatePassword({
+        address: this.account,
+        password: this.password,
+      });
+
+      if (!isPasswordValid) {
+        this.errors.add({
+          id: 'invalidPassword',
+          field: 'password',
+          msg: this.$t('store.auth.passwordIncorrect'),
+        });
+        return;
+      }
 
       this.$emit('submit', {
         account: this.account,
