@@ -12,4 +12,12 @@ export default {
       balance,
     };
   },
+
+  async getGasPrices(network) {
+    const prices = await request.get(
+      `${cryptoDataBaseUrl}/${network}/gas/price`,
+    );
+
+    return prices;
+  },
 };

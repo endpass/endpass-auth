@@ -1242,10 +1242,10 @@
     node-notifier "^5.4.0"
     secp256k1 "^3.7.0"
 
-"@endpass/utils@^1.7.0":
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.7.0.tgz#64742812109494eb5e8d51e4ab3d9b1028773be2"
-  integrity sha512-iO7mqo4UDNHM3nfUz5W25U10eRjzii67Ud3tplLInCJk0Gkn2Yb6L6n9zAY+YplzPBp+YQIbDUAP0hFsg5EvDw==
+"@endpass/utils@^1.8.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.8.0.tgz#075db12aaf102c2fb77762e9c03685be10e5d6db"
+  integrity sha512-F29NrYWkC2333qfycXdCWoz53IzJDq+4dfvIdqLNOgnuccoyTE8mEoFspo1X5Zi7sjy5PH1uVbxVY9JyTWFGDg==
   dependencies:
     bip39 "^3.0.2"
     bs58check "^2.1.2"

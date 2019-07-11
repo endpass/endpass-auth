@@ -4,6 +4,7 @@ import ConnectError from '@endpass/class/ConnectError';
 import Network from '@endpass/class/Network';
 
 import Wallet from '@/service/signer/Wallet';
+import Signer from '@/service/signer';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
@@ -887,6 +888,58 @@ describe('accounts actions', () => {
         foo: 'bar',
         bar: 'baz',
       });
+    });
+  });
+
+  describe('validatePassword', () => {
+    const address = '0x123';
+    const password = '123';
+    const v3 = {
+      foo: 'bar',
+    };
+
+    it('should validate password of given account through signer service', async () => {
+      expect.assertions(6);
+
+      dispatch.mockResolvedValueOnce(v3);
+
+      const validatorSpy = jest
+        .spyOn(Signer, 'validatePassword')
+        .mockResolvedValueOnce(true);
+
+      const res = await accountsActions.validatePassword(
+        { commit, dispatch },
+        { address, password },
+      );
+
+      expect(res).toBe(true);
+      expect(commit).toBeCalledTimes(2);
+      expect(commit).toHaveBeenNthCalledWith(1, 'changeLoadingStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(2, 'changeLoadingStatus', false);
+      expect(dispatch).toBeCalledWith('getAccount', address);
+      expect(Signer.validatePassword).toBeCalledWith({
+        v3KeyStore: v3,
+        password,
+      });
+      validatorSpy.mockRestore();
+    });
+
+    it('should throw error is something goes wrong', async () => {
+      expect.assertions(1);
+
+      dispatch.mockRejectedValueOnce();
+
+      const validatorSpy = jest
+        .spyOn(Signer, 'validatePassword')
+        .mockRejectedValueOnce();
+
+      expect(
+        accountsActions.validatePassword(
+          { commit, dispatch },
+          { address, password },
+        ),
+      ).rejects.toThrow(expect.any(Error));
+      validatorSpy.mockRestore();
     });
   });
 });

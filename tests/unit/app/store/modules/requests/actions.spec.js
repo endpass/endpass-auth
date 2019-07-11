@@ -1,6 +1,10 @@
 import requestsActions from '@/store/modules/requests/actions';
 import { signChannel } from '@/class/singleton/channels';
 import Signer from '@/service/signer';
+import {
+  requestWithTransaction,
+  transactionInEth,
+} from '@unitFixtures/requests';
 
 jest.mock('@/service/signer', () => ({
   recover: jest.fn(),
@@ -48,17 +52,15 @@ describe('requests actions', () => {
 
       await requestsActions.processRequest(
         { state, commit, dispatch, getters },
-        password,
+        { password },
       );
 
       expect(dispatch).toBeCalledTimes(2);
-
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
         state.request.address,
       );
-
       expect(Signer.getSignedRequest).toHaveBeenCalledWith({
         password,
         request: state.request.request,
@@ -85,11 +87,10 @@ describe('requests actions', () => {
 
       await requestsActions.processRequest(
         { state, commit, dispatch, getters },
-        password,
+        { password },
       );
 
       expect(dispatch).toBeCalledTimes(2);
-
       expect(Signer.getSignedRequest).toHaveBeenCalledWith({
         password,
         request: state.request.request,
@@ -97,18 +98,50 @@ describe('requests actions', () => {
           address: state.request.address,
         },
       });
-
       expect(dispatch).toHaveBeenNthCalledWith(
         1,
         'getAccount',
         state.request.address,
       );
-
       expect(dispatch).toHaveBeenNthCalledWith(2, 'sendResponse', {
         id: state.request.request.id,
         result: [],
         jsonrpc: state.request.request.jsonrpc,
         error,
+      });
+    });
+
+    it('should process transaction if in passed in parameters', async () => {
+      const nonce = 8;
+
+      dispatch.mockImplementation(action => {
+        if (action === 'getNextNonce') {
+          return nonce;
+        }
+      });
+
+      state = {
+        request: requestWithTransaction,
+      };
+
+      await requestsActions.processRequest(
+        { state, commit, dispatch, getters },
+        {
+          password,
+          transaction: transactionInEth,
+        },
+      );
+
+      expect(Signer.getSignedRequest.mock.calls[0][0].request).toMatchObject({
+        params: [
+          {
+            to: requestWithTransaction.address,
+            gasPrice: '0x1f4',
+            gasLimit: '0x5208',
+            value: '0xb1a2bc2ec50000',
+            nonce: '0x8',
+          },
+        ],
       });
     });
   });

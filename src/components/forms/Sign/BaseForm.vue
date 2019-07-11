@@ -1,8 +1,13 @@
 <template>
-  <form
-    data-test="sign-form"
-    @submit.prevent="emitSubmit"
-  >
+  <div data-test="sign-form">
+    <form-field v-if="error">
+      <message
+        :error="true"
+        data-test="account-address"
+      >
+        {{ error }}
+      </message>
+    </form-field>
     <form-field v-if="requesterUrl">
       <a
         :href="requesterUrl"
@@ -18,61 +23,54 @@
         {{ account }}
       </message>
     </form-field>
-    <!-- <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-    </form-field> -->
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
         v-model="password"
+        v-validate="'required|min:8'"
         :placeholder="$t('components.sign.enterPass')"
-        :error="error"
+        :error="errors.first('password')"
+        :data-vv-as="$t('components.sign.passwordField')"
+        name="password"
         type="password"
       />
     </form-field>
-    <form-field
-      v-if="requestBody"
-      :label="$t('components.sign.requestData')"
-    >
-      <v-code data-test="request-body">
-        {{ JSON.stringify(requestBody, null, 2) }}
-      </v-code>
-    </form-field>
+    <slot />
     <form-controls>
       <v-button
-        :disabled="loading || !password"
-        :submit="true"
-        type="primary"
-        data-test="submit-button"
-      >
-        {{ primaryButtonLabel }}
-      </v-button>
-      <v-button
         :disabled="!closable || loading"
+        skin="quaternary"
+        type="button"
         data-test="cancel-button"
         @click="emitCancel"
       >
         {{ $t('global.close') }}
       </v-button>
+      <v-button
+        :disabled="loading || !isFormValid"
+        type="button"
+        data-test="submit-button"
+        @click="emitSubmit"
+      >
+        {{ primaryButtonLabel }}
+      </v-button>
     </form-controls>
-  </form>
+  </div>
 </template>
 
 <script>
 import get from 'lodash/get';
+import { mapActions } from 'vuex';
+import { setWeb3Network } from '@/service/web3';
 import VInput from '@endpass/ui/kit/VInput';
-import VCode from '@/components/common/VCode.vue';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
 export default {
-  name: 'SignForm',
+  name: 'SignBaseForm',
+
+  inject: ['$validator'],
 
   props: {
     loading: {
@@ -94,6 +92,11 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    isFormValid: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({
@@ -105,12 +108,12 @@ export default {
       return get(this.request, 'address');
     },
 
-    requesterUrl() {
-      return get(this.request, 'url');
+    network() {
+      return get(this.request, 'net');
     },
 
-    requestBody() {
-      return get(this.request, 'request');
+    requesterUrl() {
+      return get(this.request, 'url');
     },
 
     primaryButtonLabel() {
@@ -120,12 +123,34 @@ export default {
     },
   },
 
+  watch: {
+    password() {
+      if (this.errors.firstById('incorrectPassword')) {
+        this.errors.removeById('incorrectPassword');
+      }
+    },
+  },
+
   methods: {
-    emitSubmit() {
-      if (this.password) {
+    ...mapActions(['validatePassword']),
+
+    async emitSubmit() {
+      if (!this.isFormValid) return;
+
+      try {
+        await this.validatePassword({
+          address: this.account,
+          password: this.password,
+        });
         this.$emit('submit', {
           account: this.account,
           password: this.password,
+        });
+      } catch (err) {
+        this.errors.add({
+          id: 'incorrectPassword',
+          field: 'password',
+          msg: err.message,
         });
       }
     },
@@ -135,10 +160,13 @@ export default {
     },
   },
 
+  async mounted() {
+    await setWeb3Network(this.network);
+  },
+
   components: {
     VButton,
     VInput,
-    VCode,
     Message,
     FormField,
     FormControls,

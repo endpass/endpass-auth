@@ -6,6 +6,7 @@ jest.mock('web3', () => {
     accounts: {
       sign: jest.fn().mockResolvedValue({}),
     },
+    getCode: jest.fn().mockResolvedValue('0x'),
   };
   const { utils } = originalWeb3;
   const mockWeb3 = jest.fn(() => ({

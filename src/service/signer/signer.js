@@ -2,17 +2,17 @@ import Web3 from 'web3';
 import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
-import web3 from './web3';
+import { setWeb3Network } from '@/service/web3';
 import i18n from '@/locales/i18n';
 
-function setWeb3Network(net = Network.NET_ID.MAIN) {
-  const netUrl = Network.NETWORK_URL_HTTP[net][0];
-  const provider = new web3.providers.HttpProvider(netUrl);
-
-  web3.setProvider(provider);
-}
-
 export default {
+  async validatePassword({ v3KeyStore, password }) {
+    const wallet = new Wallet(v3KeyStore);
+    const isPasswordValid = await wallet.validatePassword(password);
+
+    return isPasswordValid;
+  },
+
   async signDataWithAccount({ account, data, password }) {
     const wallet = new Wallet(account);
     const res = await wallet.sign(data, password);
@@ -33,6 +33,7 @@ export default {
     );
     return signature;
   },
+
   async recoverMessage({ account, request, net }) {
     setWeb3Network(net);
 
@@ -40,6 +41,7 @@ export default {
     const res = await wallet.recover(request.params[0], request.params[1]);
     return res;
   },
+
   async getSignedRequest({ v3KeyStore, request, password, net }) {
     setWeb3Network(net);
 

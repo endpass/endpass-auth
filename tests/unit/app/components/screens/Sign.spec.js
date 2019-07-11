@@ -68,6 +68,38 @@ describe('Sign', () => {
       });
     });
 
+    it('should render sign message form if request does not contains transaction', () => {
+      requestsModule.state.request = {
+        request: {
+          method: 'eth_sign',
+        },
+      };
+      wrapper = shallowMount(Sign, {
+        localVue,
+        store,
+        i18n,
+      });
+
+      expect(wrapper.find('sign-message-form-stub').exists()).toBe(true);
+      expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(false);
+    });
+
+    it('should render sign transaction form if request contains transaction', () => {
+      requestsModule.state.request = {
+        request: {
+          method: 'eth_sendTransaction',
+        },
+      };
+      wrapper = shallowMount(Sign, {
+        localVue,
+        store,
+        i18n,
+      });
+
+      expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(true);
+      expect(wrapper.find('sign-message-form-stub').exists()).toBe(false);
+    });
+
     describe('behavior', () => {
       it('should confirm current request with password', () => {
         // TODO Have troubles with triggering event from stub, solve it when possivble

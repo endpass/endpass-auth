@@ -93,7 +93,17 @@
       "requiresSignBy": "Requires request sign by:",
       "yourPass": "Your account password:",
       "enterPass": "Enter your password...",
-      "requestData": "Request data:"
+      "requestData": "Request data:",
+      "requestMessage": "Request message:",
+      "transactionTo": "To",
+      "transactionGasPrice": "Gas price (gwei)",
+      "transactionGasLimit": "Gas limit",
+      "transactionValue": "Value",
+      "transactionData": "Data",
+      "passwordField": "password",
+      "gasPriceField": "gas price",
+      "gasLimitField": "gas limit",
+      "valueField": "value"
     },
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
@@ -132,7 +142,8 @@
       "authCanceled": "Authentication was canceled by user!"
     },
     "requests": {
-      "passIncorrect": "You have enter incorrect password"
+      "passIncorrect": "You have enter incorrect password",
+      "gasTooLow": "Transaction gas to low. Try to increase gas price or gas limit"
     }
   },
   "services": {
