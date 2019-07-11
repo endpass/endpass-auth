@@ -1,7 +1,13 @@
 <template>
   <loading-screen :is-loading="isLoading">
-    <v-frame v-if="error" :closable="false">
-      <message :error="true" data-test="error-message">
+    <v-frame
+      v-if="error"
+      :closable="false"
+    >
+      <message
+        :error="true"
+        data-test="error-message"
+      >
         {{ error }}
       </message>
     </v-frame>

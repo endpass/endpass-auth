@@ -510,6 +510,20 @@ const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
   handler();
 };
 
+const subscribeOnAuthStatusChanging = () => {
+  const handler = () =>
+    setTimeout(async () => {
+      try {
+        await identityService.checkAuthStatus();
+        /* eslint-disable-next-line */
+      } catch (err) {}
+
+      handler();
+    }, 1500);
+
+  handler();
+};
+
 const validatePassword = async (
   { commit, dispatch },
   { address, password },
@@ -567,6 +581,7 @@ export default {
   getConsentDetails,
   getAccountBalance,
   subscribeOnBalanceUpdates,
+  subscribeOnAuthStatusChanging,
   checkOauthLoginRequirements,
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,

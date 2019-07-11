@@ -25,8 +25,14 @@
           type="number"
         />
       </form-field>
-      <form-field v-if="data" :label="$t('components.sign.transactionData')">
-        <v-input v-model="data" :disabled="true" />
+      <form-field
+        v-if="data"
+        :label="$t('components.sign.transactionData')"
+      >
+        <v-input
+          v-model="data"
+          :disabled="true"
+        />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasPrice')">
         <v-input
@@ -42,7 +48,10 @@
         />
       </form-field>
       <form-field v-if="labeledGasPricesList">
-        <v-content-switcher v-model="gasPrice" :items="labeledGasPricesList" />
+        <v-content-switcher
+          v-model="gasPrice"
+          :items="labeledGasPricesList"
+        />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasLimit')">
         <v-input

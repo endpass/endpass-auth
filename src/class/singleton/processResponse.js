@@ -8,6 +8,8 @@ const CODES = {
   RATE_LIMIT: 429,
   BAN: 423,
   DISABLED: 410,
+  UNAUTHORIZED: 401,
+  FORBIDDEN: 403,
 };
 
 const methods = {
@@ -39,10 +41,25 @@ const methods = {
       router.replace(path);
     }, 100);
   },
+  [CODES.UNAUTHORIZED]() {
+    const { isWidget } = router.currentRoute.meta;
+
+    if (isWidget) {
+      store.dispatch('unmountWidget');
+    }
+  },
+  [CODES.FORBIDDEN]() {
+    const { isWidget } = router.currentRoute.meta;
+
+    if (isWidget) {
+      store.dispatch('unmountWidget');
+    }
+  },
 };
 
 export default function(response = {}) {
   const { status: statusCode } = response;
+
   if (!methods[statusCode]) {
     return;
   }

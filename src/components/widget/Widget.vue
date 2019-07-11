@@ -102,6 +102,7 @@ export default {
       'defineSettings',
       'subscribeOnBalanceUpdates',
       'subscribeOnSettingsUpdates',
+      'subscribeOnAuthStatusChanging',
       'updateSettings',
       'expandMobileWidget',
       'collapseMobileWidget',
@@ -157,6 +158,7 @@ export default {
   },
 
   async mounted() {
+    this.subscribeOnAuthStatusChanging();
     await this.initWidget();
     await this.defineSettings();
     await this.defineOnlyV3Accounts();

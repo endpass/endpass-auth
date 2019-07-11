@@ -105,6 +105,12 @@ const authWithGitHub = code =>
 
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
+const checkAuthStatus = async () => {
+  const res = await request.get(`${identityBaseUrl}/auth/check`);
+
+  return res.status;
+};
+
 const getAuthStatus = async () => {
   let res = 200;
   try {
@@ -189,6 +195,7 @@ export default {
   getAuthStatus,
   getAccountInfo,
   getAccountWithInfo,
+  checkAuthStatus,
   checkAccountExist,
   saveAccount,
   saveAccountInfo,
