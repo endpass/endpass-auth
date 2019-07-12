@@ -39,4 +39,8 @@ export default {
   margin-bottom: 10px;
   font-size: 14px;
 }
+
+.form-field__content {
+  word-wrap: break-word;
+}
 </style>

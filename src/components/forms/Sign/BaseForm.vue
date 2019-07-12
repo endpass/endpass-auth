@@ -161,7 +161,12 @@ export default {
   },
 
   async mounted() {
+    this.$validator.resume();
     await setWeb3Network(this.network);
+  },
+
+  beforeDestroy() {
+    this.$validator.pause();
   },
 
   components: {
