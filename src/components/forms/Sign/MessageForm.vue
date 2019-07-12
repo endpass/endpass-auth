@@ -62,7 +62,11 @@ export default {
 
       if (!hexMessage) return null;
 
-      return hexToUtf8(hexMessage);
+      try {
+        return hexToUtf8(hexMessage);
+      } catch (e) {
+        return hexMessage;
+      }
     },
   },
 
