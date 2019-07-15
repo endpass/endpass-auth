@@ -301,5 +301,11 @@ export default {
   background: none;
   cursor: pointer;
   color: #044bda;
+  outline: none;
+  transition: color 0.25s;
+
+  &:focus {
+    color: #0029b0;
+  }
 }
 </style>
