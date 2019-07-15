@@ -37,10 +37,19 @@ describe('Sign > TransactionForm', () => {
       actions: {
         getGasPrices: jest.fn(),
         getGasLimitByAddress: jest.fn(),
+        getEtherPrice: jest.fn(),
+      },
+    };
+    accountsModule = {
+      state: {
+        settings: {
+          fiatCurrency: 'USD',
+        },
       },
     };
     storeData = {
       modules: {
+        accounts: accountsModule,
         gasPrice: gasPriceModule,
         accounts: accountsModule,
       },
@@ -70,11 +79,12 @@ describe('Sign > TransactionForm', () => {
   });
 
   describe('behavior', () => {
-    it('should requests gas prices on mount', async () => {
-      expect.assertions(2);
+    it('should requests gas prices and fiat price on mount', async () => {
+      expect.assertions(3);
 
       await global.flushPromises();
 
+      expect(gasPriceModule.actions.getEtherPrice).toBeCalledTimes(1);
       expect(gasPriceModule.actions.getGasPrices).toBeCalledTimes(1);
       expect(gasPriceModule.actions.getGasLimitByAddress).not.toBeCalled();
     });

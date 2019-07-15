@@ -27,4 +27,14 @@ describe('gasPrice actions', () => {
       expect(res).toEqual(gasPrices);
     });
   });
+
+  describe('getEtherPrice', () => {
+    it('should requests ether price by given fiat currency', async () => {
+      expect.assertions(1);
+
+      await gasPriceActions.getEtherPrice(null, 'USD');
+
+      expect(cryptoDataService.getEtherPrice).toBeCalledWith('USD');
+    });
+  });
 });

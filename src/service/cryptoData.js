@@ -20,4 +20,15 @@ export default {
 
     return prices;
   },
+
+  async getEtherPrice(currency = 'USD') {
+    const price = await request.get(`${cryptoDataBaseUrl}/price`, {
+      params: {
+        from: 'ETH',
+        to: currency,
+      },
+    });
+
+    return price[currency];
+  },
 };

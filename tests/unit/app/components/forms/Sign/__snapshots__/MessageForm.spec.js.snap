@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sign > MessageForm render should render component and has correct name 1`] = `
-<base-form-stub request="[object Object]" closable="true" isformvalid="true">
+<base-form-stub request="[object Object]" closable="true" title="Requires request sign by:" isformvalid="true">
   <form-field-stub label="Request message:" data-test="sign-form-message">
     hello
   </form-field-stub>

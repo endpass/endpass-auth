@@ -1,26 +1,32 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sign > TransactionForm render should render component and has correct name 1`] = `
-<base-form-stub request="[object Object]" closable="true">
+<base-form-stub request="[object Object]" closable="true" title="Requires payment by:">
   <div data-test="sign-form-transaction-params">
     <form-field-stub label="To">
-      <p class="message ellipsis">
-        0xaEF74e25181b0879d293396Dd9949Cf25b339407
-      </p>
+      <v-address-stub address="0xaEF74e25181b0879d293396Dd9949Cf25b339407"></v-address-stub>
     </form-field-stub>
-    <form-field-stub label="Value">
-      <v-input-stub value="981.149764202833915952" disabled="true" data-vv-as="value" name="value" type="number"></v-input-stub>
-    </form-field-stub>
-    <form-field-stub label="Data">
-      <v-input-stub value="0x" disabled="true"></v-input-stub>
-    </form-field-stub>
-    <form-field-stub label="Gas price (gwei)">
-      <v-input-stub value="100" data-vv-as="gas price" name="gasPrice" type="number" step="1" min="1" max="100"></v-input-stub>
-    </form-field-stub>
-    <!---->
-    <form-field-stub label="Gas limit">
-      <v-input-stub value="60678575854435905636937776" data-vv-as="gas limit" name="gasLimit" type="number" step="1000" min="21000" max="1000000"></v-input-stub>
-    </form-field-stub>
+    <div class="sign-transaction-form-values">
+      <form-field-stub label="Value (ETH)">
+        <v-input-stub value="0.000000" disabled="true" data-vv-as="value" name="value" type="number"></v-input-stub>
+      </form-field-stub>
+      <form-field-stub label="Value (USD)">
+        <v-input-stub value="NaN" disabled="true" name="value" type="number"></v-input-stub>
+      </form-field-stub>
+    </div>
+    <form-field-stub><button type="button" class="sign-transaction-form-toggler">
+        Open advanced settings
+      </button></form-field-stub>
+    <div style="display: none;">
+      <!---->
+      <form-field-stub label="Gas price (gwei)">
+        <v-input-stub value="0" data-vv-as="gas price" name="gasPrice" type="number" step="1" min="1" max="100"></v-input-stub>
+      </form-field-stub>
+      <!---->
+      <form-field-stub label="Gas limit">
+        <v-input-stub value="0" data-vv-as="gas limit" name="gasLimit" type="number" step="1000" min="21000" max="1000000"></v-input-stub>
+      </form-field-stub>
+    </div>
   </div>
 </base-form-stub>
 `;

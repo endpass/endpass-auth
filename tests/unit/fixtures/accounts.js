@@ -1,3 +1,5 @@
+export const address = '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca';
+
 export const hdv3 = {
   address:
     'xpub6DojZ5fC8cSLRwc95PFfzUDWUSRod2jSWSbhGKEWFJhoTDiJgRva4am9m7ex1Fm1Ege8MDQ7PNEFqkzdgsRS6UooRfDZpgHkD8vNHiMP3zq',

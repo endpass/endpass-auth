@@ -3,7 +3,7 @@
     <form-field v-if="error">
       <message
         :error="true"
-        data-test="account-address"
+        data-test="base-form-error"
       >
         {{ error }}
       </message>
@@ -15,13 +15,11 @@
       >{{ requesterUrl }}</a>
       {{ $t('components.sign.requestSign') }}
     </form-field>
-    <form-field :label="$t('components.sign.requiresSignBy')">
-      <message
-        :ellipsis="true"
+    <form-field :label="title">
+      <v-address
+        :address="account"
         data-test="account-address"
-      >
-        {{ account }}
-      </message>
+      />
     </form-field>
     <form-field :label="$t('components.sign.yourPass')">
       <v-input
@@ -64,6 +62,7 @@ import { setWeb3Network } from '@/service/web3';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
+import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 
@@ -91,6 +90,11 @@ export default {
     closable: {
       type: Boolean,
       default: true,
+    },
+
+    title: {
+      type: String,
+      default: null,
     },
 
     isFormValid: {
@@ -175,6 +179,7 @@ export default {
     Message,
     FormField,
     FormControls,
+    VAddress,
   },
 };
 </script>
