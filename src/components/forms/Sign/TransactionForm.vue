@@ -17,7 +17,7 @@
       <form-field :label="$t('components.sign.transactionValue')">
         <v-input
           v-model="value"
-          v-validate="'required|min:0'"
+          v-validate="`required|between:0,${maxAmount}`"
           :error="errors.first('value')"
           :disabled="true"
           :data-vv-as="$t('components.sign.valueField')"
@@ -25,13 +25,19 @@
           type="number"
         />
       </form-field>
-      <form-field v-if="data" :label="$t('components.sign.transactionData')">
-        <v-input v-model="data" :disabled="true" />
+      <form-field
+        v-if="data"
+        :label="$t('components.sign.transactionData')"
+      >
+        <v-input
+          v-model="data"
+          :disabled="true"
+        />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasPrice')">
         <v-input
           v-model="gasPrice"
-          v-validate="'required|numeric|integer|between:1,100'"
+          v-validate="'required|between:1,100'"
           :error="errors.first('gasPrice')"
           :data-vv-as="$t('components.sign.gasPriceField')"
           name="gasPrice"
@@ -42,7 +48,10 @@
         />
       </form-field>
       <form-field v-if="labeledGasPricesList">
-        <v-content-switcher v-model="gasPrice" :items="labeledGasPricesList" />
+        <v-content-switcher
+          v-model="gasPrice"
+          :items="labeledGasPricesList"
+        />
       </form-field>
       <form-field :label="$t('components.sign.transactionGasLimit')">
         <v-input
@@ -62,8 +71,9 @@
 </template>
 
 <script>
+import { BigNumber } from 'bignumber.js';
 import Web3 from 'web3';
-import { mapActions } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 import get from 'lodash/get';
 import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
@@ -71,7 +81,7 @@ import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import FormField from '@/components/common/FormField.vue';
 import BaseForm from './BaseForm.vue';
 
-const { fromWei, hexToNumberString } = Web3.utils;
+const { fromWei, toWei, hexToNumberString } = Web3.utils;
 
 export default {
   name: 'SignTransactionForm',
@@ -104,9 +114,14 @@ export default {
     data: '',
     gasPrice: '0',
     gasLimit: '0',
+    isInited: false,
   }),
 
   computed: {
+    ...mapState({
+      balance: state => state.accounts.balance,
+    }),
+
     transaction() {
       return get(this.request, 'request.params[0]', null);
     },
@@ -123,10 +138,27 @@ export default {
         [],
       );
     },
+
+    maxAmount() {
+      const { balance, gasPrice, gasLimit } = this;
+
+      if (!this.isInited || !balance || balance === '0') return '0';
+
+      const balanceBN = BigNumber(balance);
+      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
+      const maxAmountBN = balanceBN.minus(gasFeeBN);
+      const maxAmount = fromWei(maxAmountBN.toFixed());
+
+      return maxAmount > 0 ? maxAmount : 0;
+    },
   },
 
   methods: {
-    ...mapActions(['getGasPrices', 'getGasLimitByAddress']),
+    ...mapActions([
+      'getGasPrices',
+      'getGasLimitByAddress',
+      'subscribeOnBalanceUpdates',
+    ]),
 
     async emitSubmit({ account, password }) {
       this.$emit('submit', {
@@ -148,6 +180,10 @@ export default {
     },
   },
 
+  created() {
+    this.subscribeOnBalanceUpdates();
+  },
+
   async mounted() {
     const { net } = this.request;
     const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
@@ -164,6 +200,7 @@ export default {
     this.value = value ? fromWei(value) : '0';
     this.gasPrice = gasPrice ? fromWei(gasPrice, 'gwei') : '1';
     this.data = data || '0x';
+    this.isInited = true;
   },
 
   mixins: [formMixin],

@@ -20,10 +20,19 @@ describe('Sign > TransactionForm', () => {
   let store;
   let storeData;
   let gasPriceModule;
+  let accountsModule;
   let wrapperFactory;
   let wrapper;
 
   beforeEach(() => {
+    accountsModule = {
+      state: {
+        balance: '100000000',
+      },
+      actions: {
+        subscribeOnBalanceUpdates: jest.fn(),
+      },
+    };
     gasPriceModule = {
       actions: {
         getGasPrices: jest.fn(),
@@ -33,6 +42,7 @@ describe('Sign > TransactionForm', () => {
     storeData = {
       modules: {
         gasPrice: gasPriceModule,
+        accounts: accountsModule,
       },
     };
     store = new Vuex.Store(storeData);
