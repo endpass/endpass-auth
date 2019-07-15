@@ -17,7 +17,14 @@ const getGasLimitByAddress = async (ctx, address) => {
   return '200000';
 };
 
+const getEtherPrice = async (ctx, fiatCurrency) => {
+  const price = await cryptoDataService.getEtherPrice(fiatCurrency);
+
+  return price;
+};
+
 export default {
   getGasPrices,
   getGasLimitByAddress,
+  getEtherPrice,
 };

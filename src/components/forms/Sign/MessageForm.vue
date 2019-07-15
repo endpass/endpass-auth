@@ -5,6 +5,7 @@
     :loading="loading"
     :closable="closable"
     :is-form-valid="isFormValid"
+    :title="$t('components.sign.requiresSignBy')"
     @cancel="emitCancel"
     @submit="emitSubmit"
   >
