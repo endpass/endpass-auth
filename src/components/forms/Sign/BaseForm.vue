@@ -3,7 +3,7 @@
     <form-field v-if="error">
       <message
         :error="true"
-        data-test="account-address"
+        data-test="base-form-error"
       >
         {{ error }}
       </message>
@@ -16,7 +16,10 @@
       {{ $t('components.sign.requestSign') }}
     </form-field>
     <form-field :label="title">
-      <v-address :address="account" />
+      <v-address
+        :address="account"
+        data-test="account-address"
+      />
     </form-field>
     <form-field :label="$t('components.sign.yourPass')">
       <v-input

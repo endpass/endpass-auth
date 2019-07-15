@@ -10,6 +10,10 @@ jest.mock('@/service/cryptoData', () => ({
     medium: 2,
     high: 3,
   }),
+
+  getEtherPrice: jest.fn().mockResolvedValue({
+    USD: 100,
+  }),
 }));
 
 export default cryptoDataService;

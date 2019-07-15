@@ -50,8 +50,14 @@
         </button>
       </form-field>
       <div v-show="isAdvancedOptionsVisible">
-        <form-field v-if="data" :label="$t('components.sign.transactionData')">
-          <v-input v-model="data" :disabled="true" />
+        <form-field
+          v-if="data"
+          :label="$t('components.sign.transactionData')"
+        >
+          <v-input
+            v-model="data"
+            :disabled="true"
+          />
         </form-field>
         <form-field :label="$t('components.sign.transactionGasPrice')">
           <v-input
@@ -96,10 +102,8 @@
 <script>
 import { BigNumber } from 'bignumber.js';
 import Web3 from 'web3';
-
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import { BigNumber } from 'bignumber.js';
 import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
@@ -211,6 +215,10 @@ export default {
       'getEtherPrice',
       'subscribeOnBalanceUpdates',
     ]),
+
+    handleToggleAdvancedSettings() {
+      this.isAdvancedOptionsVisible = !this.isAdvancedOptionsVisible;
+    },
 
     async emitSubmit({ account, password }) {
       this.$emit('submit', {

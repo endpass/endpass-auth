@@ -6,10 +6,8 @@ exports[`Sign > BaseForm render should render component and has correct name 1`]
   <form-field-stub><a href="http://localhost" data-test="requester-url">http://localhost</a>
     requests sign action.
   </form-field-stub>
-  <form-field-stub label="Requires request sign by:">
-    <message-stub ellipsis="true" data-test="account-address">
-      0xaEF74e25181b0879d293396Dd9949Cf25b339407
-    </message-stub>
+  <form-field-stub>
+    <v-address-stub address="0xaEF74e25181b0879d293396Dd9949Cf25b339407" data-test="account-address"></v-address-stub>
   </form-field-stub>
   <form-field-stub label="Your account password:">
     <v-input-stub value="" placeholder="Enter your password..." data-vv-as="password" name="password" type="password"></v-input-stub>
