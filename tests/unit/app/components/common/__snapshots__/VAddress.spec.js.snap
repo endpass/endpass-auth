@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`VAddress render should correctly render VAddress component 1`] = `
+<p class="address"><span class="address-identicon"><identicon-stub address="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca"></identicon-stub></span>
+  <message-stub ellipsis="true">
+    0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca
+  </message-stub>
+</p>
+`;
