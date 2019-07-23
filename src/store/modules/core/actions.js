@@ -98,6 +98,14 @@ const changeAccount = async ({ commit }, address) => {
   commit('changeLoadingStatus', false);
 };
 
+const requestPassword = async () => {
+  const password = await bridgeMessenger.sendAndWaitResponse(
+    METHODS.PASSWORD_REQUEST,
+  );
+
+  return password;
+};
+
 const dialogCloseWrap = () => {
   dialogClose();
 };
@@ -109,5 +117,6 @@ export default {
   startBridge,
   logout,
   changeAccount,
+  requestPassword,
   dialogClose: dialogCloseWrap,
 };

@@ -4,6 +4,7 @@ import {
   accountChannel,
   authChannel,
   signChannel,
+  passwordChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
@@ -18,6 +19,11 @@ function initDialogStream() {
   const queueInst = new Queue({ middleware });
 
   const methodToOptions = {
+    [METHODS.PASSWORD_REQUEST]: {
+      routeName: 'password',
+      channel: passwordChannel,
+      needAuth: true,
+    },
     [METHODS.SIGN]: {
       commit(payload) {
         store.commit('setRequest', payload);

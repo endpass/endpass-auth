@@ -33,6 +33,9 @@
             <span>{{ formatAddress(account.address) }}</span>
           </span>
         </option-button>
+        <option-button @click="handleNewAccountClick">
+          {{ $t('components.widgetContent.newAccount') }}
+        </option-button>
       </accordion>
       <option-button
         :is-big="true"
@@ -92,6 +95,10 @@ export default {
   methods: {
     handleAccountsButtonClick() {
       this.$emit('accounts-toggle');
+    },
+
+    handleNewAccountClick() {
+      this.$emit('new-account');
     },
 
     handleAccountButtonClick(account) {

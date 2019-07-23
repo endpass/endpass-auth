@@ -1,10 +1,6 @@
 <template>
   <div class="widget">
-    <div
-      v-if="isMobile"
-      ref="trigger"
-      class="widget-trigger"
-    >
+    <div v-if="isMobile" ref="trigger" class="widget-trigger">
       <trigger-button
         :is-loading="isWidgetLoading"
         @click="handleMobileTriggerClick"
@@ -33,6 +29,7 @@
         :accounts="accounts"
         :current-account="currentAccount"
         :is-loading="loading"
+        @new-account="handleNewAccount"
         @account-change="handleAccountChange"
         @accounts-toggle="handleAccountsToggle"
         @logout="handleLogout"
@@ -110,6 +107,9 @@ export default {
       'updateSettings',
       'expandMobileWidget',
       'collapseMobileWidget',
+      'requestPassword',
+
+      'addWallet',
     ]),
 
     handleWidgetToggle() {
@@ -143,6 +143,14 @@ export default {
       } else {
         this.expandMobileWidget();
       }
+    },
+
+    async handleNewAccount() {
+      const password = await this.requestPassword();
+
+      await this.addWallet({
+        password,
+      });
     },
 
     async handleAccountChange(address) {

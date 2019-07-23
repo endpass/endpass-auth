@@ -5,6 +5,7 @@ import Sign from '@/components/screens/Sign';
 import User from '@/components/screens/User';
 import Loader from '@/components/screens/Loader';
 import SignPermission from '@/components/screens/SignPermission';
+import Password from '@/components/screens/Password';
 import NotFound from '@/components/screens/NotFound';
 
 // Public routes
@@ -85,6 +86,15 @@ const routes = [
     path: '/permission',
     name: 'SignPermission',
     component: SignPermission,
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
+  {
+    path: '/password',
+    name: 'Password',
+    component: Password,
     meta: {
       isDialog: true,
       isBackground: true,

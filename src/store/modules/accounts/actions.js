@@ -13,11 +13,11 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
 import Network from '@endpass/class/Network';
 import i18n from '@/locales/i18n';
-
 import {
   accountChannel,
   authChannel,
   permissionChannel,
+  passwordChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 import {
@@ -77,7 +77,9 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success) {
+      throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    }
 
     settingsService.clearLocalSettings();
 
@@ -112,7 +114,6 @@ const authWithOauth = async (ctx, { challengeId, password }) => {
       signature,
     });
   } catch (err) {
-    console.error(err);
     throw new Error(i18n.t('store.auth.passwordIncorrect'));
   }
   return res;
@@ -132,33 +133,59 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
   }
 };
 
-const createWallet = async ({ commit }, { password }) => {
+const createNewWallet = async (ctx, { password }) => {
   const mod = await import('@endpass/utils/walletGen');
   const walletGen = mod.default;
-
-  const {
-    seedKey,
-    encryptedSeed,
-    v3KeystoreHdWallet,
-    v3KeystoreChildWallet,
-  } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
-
+  const wallet = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
   const info = {
-    address: v3KeystoreHdWallet.address,
+    address: wallet.v3KeystoreHdWallet.address,
     type: WALLET_TYPES.HD_MAIN,
     hidden: false,
   };
 
-  await identityService.saveAccount(v3KeystoreHdWallet);
-  await identityService.saveAccountInfo(v3KeystoreHdWallet.address, info);
-  await identityService.backupSeed(encryptedSeed);
+  await identityService.saveAccount(wallet.v3KeystoreHdWallet);
+  await identityService.saveAccountInfo(
+    wallet.v3KeystoreHdWallet.address,
+    info,
+  );
+  await identityService.backupSeed(wallet.encryptedSeed);
+  await identityService.saveAccount(wallet.v3KeystoreChildWallet);
+  await identityService.updateAccountSettings(
+    wallet.v3KeystoreChildWallet.address,
+  );
 
-  await identityService.saveAccount(v3KeystoreChildWallet);
-  await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
+  return wallet;
+};
+
+const createWallet = async ({ commit, dispatch }, { password }) => {
+  const { v3KeystoreChildWallet, seedKey } = await dispatch('createNewWallet', {
+    password,
+  });
 
   commit('setAccounts', [v3KeystoreChildWallet.address]);
 
   return seedKey;
+};
+
+const addWallet = async ({ state, dispatch, commit }, { password }) => {
+  commit('setWidgetLoadingStatus', true);
+
+  const { v3KeystoreChildWallet } = await dispatch('createNewWallet', {
+    password,
+  });
+
+  commit(
+    'setAccounts',
+    state.accounts.concat({
+      address: v3KeystoreChildWallet.address,
+      type: WALLET_TYPES.STANDARD,
+      index: 0,
+    }),
+  );
+  await dispatch('updateSettings', {
+    lastActiveAccount: v3KeystoreChildWallet.address,
+  });
+  commit('setWidgetLoadingStatus', false);
 };
 
 const setWalletCreated = ({ commit }) => {
@@ -516,6 +543,27 @@ const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
   handler();
 };
 
+const signPassword = async ({ commit, dispatch }, { address, password }) => {
+  commit('changeLoadingStatus', true);
+
+  try {
+    await dispatch('validatePassword', {
+      address,
+      password,
+    });
+
+    passwordChannel.put(Answer.createOk(password));
+  } catch (err) {
+    throw err;
+  } finally {
+    commit('changeLoadingStatus', false);
+  }
+};
+
+const cancelSignPassword = async () => {
+  passwordChannel.put(Answer.createFail('PASSWORD NOPE'));
+};
+
 const validatePassword = async (
   { commit, dispatch },
   { address, password },
@@ -543,7 +591,9 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithOauth,
+  createNewWallet,
   createWallet,
+  addWallet,
   setWalletCreated,
   checkAccountExists,
   grantPermissionsWithOauth,
@@ -576,5 +626,7 @@ export default {
   checkOauthLoginRequirements,
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,
+  signPassword,
+  cancelSignPassword,
   validatePassword,
 };
