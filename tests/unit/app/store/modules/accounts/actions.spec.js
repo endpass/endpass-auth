@@ -693,6 +693,7 @@ describe('accounts actions', () => {
       identityService.getAuthStatus.mockReturnValueOnce(200);
 
       const status = await accountsActions.defineAuthStatus({ commit });
+
       expect(commit).toBeCalledTimes(1);
       expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 200);
       expect(status).toBe(200);
@@ -704,9 +705,44 @@ describe('accounts actions', () => {
       identityService.getAuthStatus.mockReturnValueOnce(401);
 
       const status = await accountsActions.defineAuthStatus({ commit });
+
       expect(commit).toBeCalledTimes(1);
       expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 401);
       expect(status).toBe(401);
+    });
+
+    it('should clear local settings if status code not equals to 200 and settings have stored', async () => {
+      expect.assertions(1);
+
+      identityService.getAuthStatus.mockReturnValueOnce(401);
+      settingsService.getLocalSettings.mockReturnValueOnce({
+        foo: 'bar',
+      });
+
+      await accountsActions.defineAuthStatus({ commit });
+
+      expect(settingsService.clearLocalSettings).toBeCalledTimes(1);
+    });
+
+    it('should not clear local settings if status code not equals to 200 and settings have not stored', async () => {
+      expect.assertions(1);
+
+      identityService.getAuthStatus.mockReturnValueOnce(401);
+      settingsService.getLocalSettings.mockReturnValueOnce({});
+
+      await accountsActions.defineAuthStatus({ commit });
+
+      expect(settingsService.clearLocalSettings).not.toBeCalled();
+    });
+
+    it('should not clear local settings if status code equals to 200', async () => {
+      expect.assertions(1);
+
+      identityService.getAuthStatus.mockReturnValueOnce(200);
+
+      await accountsActions.defineAuthStatus({ commit });
+
+      expect(settingsService.clearLocalSettings).not.toBeCalled();
     });
   });
 

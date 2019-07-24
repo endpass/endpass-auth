@@ -476,6 +476,12 @@ const waitLogin = async ({ dispatch }) => {
 
 const defineAuthStatus = async ({ commit }) => {
   const status = await identityService.getAuthStatus();
+  const settings = settingsService.getLocalSettings();
+
+  if (status !== 200 && !isEmpty(settings)) {
+    settingsService.clearLocalSettings();
+  }
+
   commit('setAuthByCode', status);
   return status;
 };
