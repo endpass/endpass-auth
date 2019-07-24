@@ -31,6 +31,10 @@ const setAccounts = (state, accounts) => {
   state.accounts = isEmpty(accounts) ? [] : [...accounts];
 };
 
+const addAccount = (state, account) => {
+  state.accounts = state.accounts.concat(account);
+};
+
 const setSettings = (state, settings) => {
   state.settings = settings;
 };
@@ -65,6 +69,7 @@ export default {
   setAuthStatus,
   setOtpEmail,
   setAccounts,
+  addAccount,
   setAccountCreated,
   setSentStatus,
   setSettings,

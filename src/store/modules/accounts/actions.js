@@ -17,7 +17,6 @@ import {
   accountChannel,
   authChannel,
   permissionChannel,
-  passwordChannel,
 } from '@/class/singleton/channels';
 import { Answer } from '@/class';
 import {
@@ -157,7 +156,7 @@ const createNewWallet = async (ctx, { password }) => {
   return wallet;
 };
 
-const createWallet = async ({ commit, dispatch }, { password }) => {
+const createInitialWallet = async ({ commit, dispatch }, { password }) => {
   const { v3KeystoreChildWallet, seedKey } = await dispatch('createNewWallet', {
     password,
   });
@@ -165,27 +164,6 @@ const createWallet = async ({ commit, dispatch }, { password }) => {
   commit('setAccounts', [v3KeystoreChildWallet.address]);
 
   return seedKey;
-};
-
-const addWallet = async ({ state, dispatch, commit }, { password }) => {
-  commit('setWidgetLoadingStatus', true);
-
-  const { v3KeystoreChildWallet } = await dispatch('createNewWallet', {
-    password,
-  });
-
-  commit(
-    'setAccounts',
-    state.accounts.concat({
-      address: v3KeystoreChildWallet.address,
-      type: WALLET_TYPES.STANDARD,
-      index: 0,
-    }),
-  );
-  await dispatch('updateSettings', {
-    lastActiveAccount: v3KeystoreChildWallet.address,
-  });
-  commit('setWidgetLoadingStatus', false);
 };
 
 const setWalletCreated = ({ commit }) => {
@@ -543,27 +521,6 @@ const subscribeOnBalanceUpdates = ({ state, commit, dispatch }) => {
   handler();
 };
 
-const signPassword = async ({ commit, dispatch }, { address, password }) => {
-  commit('changeLoadingStatus', true);
-
-  try {
-    await dispatch('validatePassword', {
-      address,
-      password,
-    });
-
-    passwordChannel.put(Answer.createOk(password));
-  } catch (err) {
-    throw err;
-  } finally {
-    commit('changeLoadingStatus', false);
-  }
-};
-
-const cancelSignPassword = async () => {
-  passwordChannel.put(Answer.createFail('PASSWORD NOPE'));
-};
-
 const validatePassword = async (
   { commit, dispatch },
   { address, password },
@@ -592,8 +549,7 @@ export default {
   authWithGitHub,
   authWithOauth,
   createNewWallet,
-  createWallet,
-  addWallet,
+  createInitialWallet,
   setWalletCreated,
   checkAccountExists,
   grantPermissionsWithOauth,
@@ -626,7 +582,5 @@ export default {
   checkOauthLoginRequirements,
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,
-  signPassword,
-  cancelSignPassword,
   validatePassword,
 };

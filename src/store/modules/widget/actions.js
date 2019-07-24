@@ -1,4 +1,4 @@
-import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
+import { METHODS, WIDGET_RESIZE_DURATION, WALLET_TYPES } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const initWidget = async ({ commit }) => {
@@ -59,6 +59,34 @@ const unmountWidget = () => {
   bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
 };
 
+const createWalletFromWidget = async (
+  { dispatch, commit },
+  { address, password },
+) => {
+  commit('setWidgetLoadingStatus', true);
+
+  try {
+    await dispatch('validatePassword', { address, password });
+
+    const { v3KeystoreChildWallet } = await dispatch('createNewWallet', {
+      password,
+    });
+
+    commit('addAccount', {
+      address: v3KeystoreChildWallet.address,
+      type: WALLET_TYPES.STANDARD,
+      index: 0,
+    });
+    await dispatch('updateSettings', {
+      lastActiveAccount: v3KeystoreChildWallet.address,
+    });
+  } catch (err) {
+    throw err;
+  } finally {
+    commit('setWidgetLoadingStatus', false);
+  }
+};
+
 export default {
   initWidget,
   openWidget,
@@ -69,4 +97,5 @@ export default {
   unmountWidget,
   expandMobileWidget,
   collapseMobileWidget,
+  createWalletFromWidget,
 };

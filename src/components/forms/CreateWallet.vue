@@ -122,7 +122,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['createWallet', 'setWalletCreated']),
+    ...mapActions(['createInitialWallet', 'setWalletCreated']),
 
     async onCreateWallet() {
       if (!this.canSubmit) {
@@ -133,7 +133,9 @@ export default {
 
       try {
         this.error = '';
-        this.seedKey = await this.createWallet({ password: this.password });
+        this.seedKey = await this.createInitialWallet({
+          password: this.password,
+        });
         this.isShowSeed = true;
       } catch (e) {
         console.error(e);

@@ -142,6 +142,11 @@
       "balance": "balance",
       "showMore": "Show more",
       "showLess": "Show less"
+    },
+    "widgetNewAccount": {
+      "createAccount": "Create account",
+      "cancel": "Cancel",
+      "creatingAccount": "Creating account..."
     }
   },
   "store": {
