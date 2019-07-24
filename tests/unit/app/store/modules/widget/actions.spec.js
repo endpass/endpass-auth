@@ -1,5 +1,6 @@
-import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
+import { METHODS, WALLET_TYPES, WIDGET_RESIZE_DURATION } from '@/constants';
 import widgetActions from '@/store/modules/widget/actions';
+import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   sendAndWaitResponse: jest.fn(),
@@ -115,6 +116,79 @@ describe('widget actions', () => {
       await widgetActions.unmountWidget();
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.WIDGET_UNMOUNT);
+    });
+  });
+
+  describe('createWalletFromWidget', () => {
+    it('should create new wallet by given password and address', async () => {
+      expect.assertions(8);
+
+      const wallet = {
+        v3KeystoreChildWallet: {
+          address: '0x0',
+        },
+      };
+
+      dispatch.mockResolvedValueOnce(true);
+      dispatch.mockResolvedValueOnce(wallet);
+
+      await widgetActions.createWalletFromWidget(
+        { dispatch, commit },
+        { address: accountAddress, password: 'pwd' },
+      );
+
+      expect(commit).toBeCalledTimes(3);
+      expect(commit).toHaveBeenNthCalledWith(1, 'setWidgetLoadingStatus', true);
+      expect(commit).toHaveBeenNthCalledWith(2, 'addAccount', {
+        address: wallet.v3KeystoreChildWallet.address,
+        type: WALLET_TYPES.STANDARD,
+        index: 0,
+      });
+      expect(commit).toHaveBeenNthCalledWith(
+        3,
+        'setWidgetLoadingStatus',
+        false,
+      );
+      expect(dispatch).toBeCalledTimes(3);
+      expect(dispatch).toHaveBeenNthCalledWith(1, 'validatePassword', {
+        address: accountAddress,
+        password: 'pwd',
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'createNewWallet', {
+        password: 'pwd',
+      });
+      expect(dispatch).toHaveBeenNthCalledWith(3, 'updateSettings', {
+        lastActiveAccount: wallet.v3KeystoreChildWallet.address,
+      });
+    });
+
+    it('should throw error if something went wrong', async () => {
+      expect.assertions(5);
+
+      const error = new Error('foo');
+
+      dispatch.mockRejectedValueOnce(error);
+
+      try {
+        await widgetActions.createWalletFromWidget(
+          { dispatch, commit },
+          { address: accountAddress, password: 'pwd' },
+        );
+      } catch (err) {
+        expect(err).toBe(error);
+        expect(dispatch).toBeCalledTimes(1);
+        expect(commit).toBeCalledTimes(2);
+        expect(commit).toHaveBeenNthCalledWith(
+          1,
+          'setWidgetLoadingStatus',
+          true,
+        );
+        expect(commit).toHaveBeenNthCalledWith(
+          2,
+          'setWidgetLoadingStatus',
+          false,
+        );
+      }
     });
   });
 });

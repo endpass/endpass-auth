@@ -5,13 +5,15 @@
       v-validate="'required|min:8'"
       :error="errors.first('password')"
       :disabled="isLoading"
+      :placeholder="$t('components.passwordForm.enterWalletPassword')"
+      data-test="new-account-password-input"
       type="password"
       name="password"
-      :placeholder="$t('components.passwordForm.enterWalletPassword')"
     />
     <option-button
       :is-big="true"
       type="submit"
+      data-test="new-account-submit-button"
       :disabled="!isFormValid || isLoading"
     >
       {{ submitButtonLabel }}
@@ -19,6 +21,7 @@
     <option-button
       :is-big="true"
       :disabled="isLoading"
+      data-test="new-account-cancel-button"
       @click="handleCancelClick"
     >
       {{ $t('components.widgetNewAccount.cancel') }}

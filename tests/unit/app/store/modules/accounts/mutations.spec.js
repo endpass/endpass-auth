@@ -30,6 +30,30 @@ describe('accounts mutations', () => {
     });
   });
 
+  describe('addAccount', () => {
+    it('should add account to exist accounts list', () => {
+      state = {
+        accounts: [
+          {
+            address: '0x1',
+          },
+        ],
+      };
+      const account = {
+        address: '0x0',
+      };
+
+      accountsMutations.addAccount(state, account);
+
+      expect(state.accounts).toEqual([
+        {
+          address: '0x1',
+        },
+        account,
+      ]);
+    });
+  });
+
   describe('setSentStatus', () => {
     it('should set link sent status', () => {
       accountsMutations.setSentStatus(state, true);

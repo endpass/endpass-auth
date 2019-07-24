@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components > widget > WidgetAccounts render should render given accounts list 1`] = `
+<div>
+  <accordion-stub maxheight="225px" iscollapsed="true">
+    <option-button-stub data-test="new-account-button">
+      New account
+    </option-button-stub>
+    <option-button-stub isbig="true" icon="arrow" iconfill="#C3C6CA" icontransform="none" data-test="accounts-toggle-button">
+      Change account
+    </option-button-stub>
+    <option-button-stub data-test="account-button"><span class="widget-accounts-item-address"><i class="widget-accounts-item-identicon"><identicon-stub address="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb"></identicon-stub></i> <span>0x68Aa50b...D250967Cb</span></span></option-button-stub>
+    <option-button-stub data-test="account-button"><span class="widget-accounts-item-address"><i class="widget-accounts-item-identicon"><identicon-stub address="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca"></identicon-stub></i> <span>0x68Aa50b...D250967Ca</span></span></option-button-stub>
+  </accordion-stub>
+  <option-button-stub isbig="true" icon="arrow" data-test="logout-button">
+    Logout
+  </option-button-stub>
+</div>
+`;
+
+exports[`components > widget > WidgetAccounts render should render initial component state 1`] = `
+<div>
+  <accordion-stub maxheight="225px" iscollapsed="true">
+    <option-button-stub data-test="new-account-button">
+      New account
+    </option-button-stub>
+    <option-button-stub isbig="true" icon="arrow" iconfill="#C3C6CA" icontransform="none" data-test="accounts-toggle-button">
+      Change account
+    </option-button-stub>
+  </accordion-stub>
+  <option-button-stub isbig="true" icon="arrow" data-test="logout-button">
+    Logout
+  </option-button-stub>
+</div>
+`;

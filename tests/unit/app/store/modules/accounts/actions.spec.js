@@ -859,17 +859,47 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('createWallet', () => {
-    it('should create and set accounts', async () => {
-      walletGen.createComplex.mockResolvedValue({
+  describe('createInitialWallet', () => {
+    it('should create account, set it and return seedKey', async () => {
+      expect.assertions(3);
+
+      dispatch.mockResolvedValueOnce({
         seedKey: 'seedKey',
         encryptedSeed: 'encryptedSeed',
         v3KeystoreHdWallet: hdv3,
         v3KeystoreChildWallet: v3KeyStore,
       });
 
-      await accountsActions.createWallet({ commit }, { password: 'pwd' });
+      const res = await accountsActions.createInitialWallet(
+        { commit, dispatch },
+        { password: 'pwd' },
+      );
 
+      expect(res).toEqual('seedKey');
+      expect(dispatch).toBeCalledWith('createNewWallet', {
+        password: 'pwd',
+      });
+      expect(commit).toBeCalledWith('setAccounts', [v3KeyStore.address]);
+    });
+  });
+
+  describe('createNewWallet', () => {
+    it('should create and set accounts', async () => {
+      const wallet = {
+        seedKey: 'seedKey',
+        encryptedSeed: 'encryptedSeed',
+        v3KeystoreHdWallet: hdv3,
+        v3KeystoreChildWallet: v3KeyStore,
+      };
+
+      walletGen.createComplex.mockResolvedValue(wallet);
+
+      const res = await accountsActions.createNewWallet(
+        { commit },
+        { password: 'pwd' },
+      );
+
+      expect(res).toEqual(wallet);
       expect(identityService.saveAccount).toBeCalledTimes(2);
       expect(identityService.saveAccount).toBeCalledWith(hdv3);
       expect(identityService.saveAccountInfo).toBeCalledWith(hdv3.address, {

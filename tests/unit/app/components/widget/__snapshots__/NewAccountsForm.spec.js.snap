@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewAccountForm render should correctly render NewAccountForm component 1`] = `
+<form>
+  <widget-input-stub value="" placeholder="Enter your password..." data-test="new-account-password-input" type="password" name="password"></widget-input-stub>
+  <option-button-stub isbig="true" type="submit" data-test="new-account-submit-button" disabled="true">
+    Create account
+  </option-button-stub>
+  <option-button-stub isbig="true" data-test="new-account-cancel-button">
+    Cancel
+  </option-button-stub>
+</form>
+`;

@@ -4,7 +4,10 @@
       :is-collapsed="isAccountsCollapsed"
       max-height="225px"
     >
-      <option-button @click="handleNewAccountClick">
+      <option-button
+        data-test="new-account-button"
+        @click="handleNewAccountClick"
+      >
         {{ $t('components.widgetContent.newAccount') }}
       </option-button>
       <option-button

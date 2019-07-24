@@ -116,7 +116,7 @@ describe('Widget', () => {
     });
 
     it('should correctly open widget accounts', () => {
-      wrapper.find('widget-content-stub').vm.$emit('accounts-toggle');
+      wrapper.find('widget-accounts-stub').vm.$emit('accounts-toggle');
 
       expect(widgetModule.actions.openAccounts).toBeCalled();
       expect(wrapper.vm.isAccountsCollapsed).toBe(false);
@@ -126,16 +126,25 @@ describe('Widget', () => {
       wrapper.setData({
         isAccountsCollapsed: false,
       });
-      wrapper.find('widget-content-stub').vm.$emit('accounts-toggle');
+      wrapper.find('widget-accounts-stub').vm.$emit('accounts-toggle');
 
       expect(widgetModule.actions.closeAccounts).toBeCalled();
       expect(wrapper.vm.isAccountsCollapsed).toBe(true);
     });
 
     it('should correctly handle logout event', () => {
-      wrapper.find('widget-content-stub').vm.$emit('logout');
+      wrapper.find('widget-accounts-stub').vm.$emit('logout');
 
       expect(coreModule.actions.logout).toBeCalled();
+    });
+
+    it('should render new account form on accounts newAccount action handle', async () => {
+      wrapper.find('widget-accounts-stub').vm.$emit('new-account');
+
+      await wrapper.vm.$nextTick();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('widget-new-account-form-stub').exists()).toBe(true);
     });
   });
 });
