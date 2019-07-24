@@ -77,7 +77,8 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success)
+      throw new Error(res.message || i18n.t('store.auth.authFailed'));
 
     settingsService.clearLocalSettings();
 

@@ -1,5 +1,6 @@
 import { METHODS, DIRECTION } from '@/constants';
 import coreActions from '@/store/modules/core/actions';
+import settingsService from '@/service/settings';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   send: jest.fn(),
@@ -223,6 +224,14 @@ describe('core actions', () => {
       await coreActions.logout({ commit });
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+    });
+
+    it('should clear localStorage settings', async () => {
+      expect.assertions(1);
+
+      await coreActions.logout({ commit });
+
+      expect(settingsService.clearLocalSettings).toBeCalled();
     });
   });
 
