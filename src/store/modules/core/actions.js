@@ -1,6 +1,7 @@
 import ConnectError from '@endpass/class/ConnectError';
 import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import settingsService from '@/service/settings';
 import {
   initDialogStream,
   initWidgetStream,
@@ -76,6 +77,8 @@ const logout = async ({ commit }) => {
   } else if (source === DIRECTION.WIDGET) {
     bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
   }
+
+  settingsService.clearLocalSettings();
 };
 
 const changeAccount = async ({ commit }, address) => {
