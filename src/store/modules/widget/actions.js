@@ -59,7 +59,7 @@ const unmountWidget = () => {
   bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
 };
 
-const createWalletFromWidget = async (
+const createAccountFromWidget = async (
   { dispatch, commit },
   { address, password },
 ) => {
@@ -67,19 +67,7 @@ const createWalletFromWidget = async (
 
   try {
     await dispatch('validatePassword', { address, password });
-
-    const { v3KeystoreChildWallet } = await dispatch('createNewWallet', {
-      password,
-    });
-
-    commit('addAccount', {
-      address: v3KeystoreChildWallet.address,
-      type: WALLET_TYPES.STANDARD,
-      index: 0,
-    });
-    await dispatch('updateSettings', {
-      lastActiveAccount: v3KeystoreChildWallet.address,
-    });
+    await dispatch('createAccount', { password });
   } catch (err) {
     throw err;
   } finally {
@@ -97,5 +85,5 @@ export default {
   unmountWidget,
   expandMobileWidget,
   collapseMobileWidget,
-  createWalletFromWidget,
+  createAccountFromWidget,
 };

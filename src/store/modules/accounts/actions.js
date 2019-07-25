@@ -3,12 +3,15 @@ import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
 import ConnectError from '@endpass/class/ConnectError';
+import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
+import { web3 } from '@/service/web3';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
+import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
 import Network from '@endpass/class/Network';
@@ -18,7 +21,7 @@ import {
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
-import { Answer } from '@/class';
+import { Answer, Wallet } from '@/class';
 import {
   ENCRYPT_OPTIONS,
   WALLET_TYPES,
@@ -132,38 +135,53 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
   }
 };
 
-const createNewWallet = async (ctx, { password }) => {
+const createInitialWallet = async ({ dispatch, commit }, { password }) => {
   const mod = await import('@endpass/utils/walletGen');
   const walletGen = mod.default;
-  const wallet = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
+  const {
+    v3KeystoreHdWallet,
+    v3KeystoreChildWallet,
+    encryptedSeed,
+    seedKey,
+  } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
   const info = {
-    address: wallet.v3KeystoreHdWallet.address,
+    address: v3KeystoreHdWallet.address,
     type: WALLET_TYPES.HD_MAIN,
     hidden: false,
   };
 
-  await identityService.saveAccount(wallet.v3KeystoreHdWallet);
-  await identityService.saveAccountInfo(
-    wallet.v3KeystoreHdWallet.address,
+  await userService.setAccount(v3KeystoreHdWallet.address, {
+    ...v3KeystoreHdWallet,
     info,
-  );
-  await identityService.backupSeed(wallet.encryptedSeed);
-  await identityService.saveAccount(wallet.v3KeystoreChildWallet);
-  await identityService.updateAccountSettings(
-    wallet.v3KeystoreChildWallet.address,
-  );
-
-  return wallet;
-};
-
-const createInitialWallet = async ({ commit, dispatch }, { password }) => {
-  const { v3KeystoreChildWallet, seedKey } = await dispatch('createNewWallet', {
-    password,
   });
-
-  commit('setAccounts', [v3KeystoreChildWallet.address]);
+  await identityService.backupSeed(encryptedSeed);
+  await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
+  await dispatch('getAccounts');
 
   return seedKey;
+};
+
+const createAccount = async ({ commit, getters, dispatch }, { password }) => {
+  const nextWallet = await userService.getNextWalletFromHD({
+    addresses: getters.addresses,
+    password,
+  });
+  const v3KeyStoreChild = nextWallet.toV3(
+    Buffer.from(password),
+    ENCRYPT_OPTIONS,
+  );
+  const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
+
+  await userService.setAccount(checksumAddress, v3KeyStoreChild);
+
+  commit('addAccount', {
+    address: checksumAddress,
+    type: WALLET_TYPES.STANDART,
+    hidden: false,
+  });
+  await dispatch('updateSettings', {
+    lastActiveAccount: checksumAddress,
+  });
 };
 
 const setWalletCreated = ({ commit }) => {
@@ -341,7 +359,6 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 
   try {
     const res = await identityService.getAccounts();
-
     const accounts = await Promise.all(
       res
         .filter(filterXpub)
@@ -548,7 +565,6 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithOauth,
-  createNewWallet,
   createInitialWallet,
   setWalletCreated,
   checkAccountExists,
@@ -583,4 +599,5 @@ export default {
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,
   validatePassword,
+  createAccount,
 };

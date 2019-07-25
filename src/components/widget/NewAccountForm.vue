@@ -75,13 +75,13 @@ export default {
   },
 
   methods: {
-    ...mapActions(['createWalletFromWidget']),
+    ...mapActions(['createAccountFromWidget']),
 
     async handleSubmit() {
       if (!this.isFormValid) return;
 
       try {
-        await this.createWalletFromWidget({
+        await this.createAccountFromWidget({
           address: this.currentAccount,
           password: this.password,
         });

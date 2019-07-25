@@ -25,7 +25,7 @@ describe('NewAccountForm', () => {
     jest.clearAllMocks();
     widgetModule = {
       actions: {
-        createWalletFromWidget: jest.fn(),
+        createAccountFromWidget: jest.fn(),
       },
     };
     storeData = {
@@ -96,7 +96,7 @@ describe('NewAccountForm', () => {
 
       await global.flushPromises();
 
-      expect(widgetModule.actions.createWalletFromWidget).toBeCalledWith(
+      expect(widgetModule.actions.createAccountFromWidget).toBeCalledWith(
         expect.any(Object),
         {
           password,
@@ -109,7 +109,7 @@ describe('NewAccountForm', () => {
     it('should set error if submit failed', async () => {
       const error = new Error('foo');
 
-      widgetModule.actions.createWalletFromWidget.mockRejectedValueOnce(error);
+      widgetModule.actions.createAccountFromWidget.mockRejectedValueOnce(error);
 
       const password = '12341234';
 

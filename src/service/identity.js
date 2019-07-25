@@ -5,6 +5,7 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const createTimeout = handler => setTimeout(handler, 1500);
 
+// TODO: move to user
 const getSettings = () => request.get(`${identityBaseUrl}/settings`);
 
 const getSettingsSkipPermission = () =>

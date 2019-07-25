@@ -119,7 +119,7 @@ describe('widget actions', () => {
     });
   });
 
-  describe('createWalletFromWidget', () => {
+  describe('createAccountFromWidget', () => {
     it('should create new wallet by given password and address', async () => {
       expect.assertions(8);
 
@@ -132,7 +132,7 @@ describe('widget actions', () => {
       dispatch.mockResolvedValueOnce(true);
       dispatch.mockResolvedValueOnce(wallet);
 
-      await widgetActions.createWalletFromWidget(
+      await widgetActions.createAccountFromWidget(
         { dispatch, commit },
         { address: accountAddress, password: 'pwd' },
       );
@@ -170,7 +170,7 @@ describe('widget actions', () => {
       dispatch.mockRejectedValueOnce(error);
 
       try {
-        await widgetActions.createWalletFromWidget(
+        await widgetActions.createAccountFromWidget(
           { dispatch, commit },
           { address: accountAddress, password: 'pwd' },
         );
