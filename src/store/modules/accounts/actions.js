@@ -77,7 +77,8 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success)
+      throw new Error(res.message || i18n.t('store.auth.authFailed'));
 
     settingsService.clearLocalSettings();
 
@@ -475,6 +476,12 @@ const waitLogin = async ({ dispatch }) => {
 
 const defineAuthStatus = async ({ commit }) => {
   const status = await identityService.getAuthStatus();
+  const settings = settingsService.getLocalSettings();
+
+  if (status !== 200 && !isEmpty(settings)) {
+    settingsService.clearLocalSettings();
+  }
+
   commit('setAuthByCode', status);
   return status;
 };
