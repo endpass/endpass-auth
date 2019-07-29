@@ -3,7 +3,7 @@
     :class="{ 'widget-input': true, 'is-error': isError }"
     :value="value"
     @input="handleInput"
-  />
+  >
 </template>
 
 <script>

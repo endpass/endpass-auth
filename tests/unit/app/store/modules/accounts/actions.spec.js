@@ -2,29 +2,37 @@ import Web3 from 'web3';
 import walletGen from '@endpass/utils/walletGen';
 import ConnectError from '@endpass/class/ConnectError';
 import Network from '@endpass/class/Network';
-
 import Wallet from '@/service/signer/Wallet';
 import Signer from '@/service/signer';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
+import userService from '@/service/user';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
-import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
+import {
+  hdv3,
+  v3KeyStore,
+  accountAddress,
+  addresses,
+} from '@unitFixtures/accounts';
 import {
   permissionChannel,
   accountChannel,
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
+import WalletClass from '@/class/Wallet';
+import { IDENTITY_MODE } from '@/constants';
 
+const WALLET_TYPES = WalletClass.getTypes();
 const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
   let dispatch;
   let commit;
+  let getters;
 
   accountChannel.put = jest.fn();
   authChannel.put = jest.fn();
@@ -35,6 +43,9 @@ describe('accounts actions', () => {
 
     dispatch = jest.fn();
     commit = jest.fn();
+    getters = {
+      addresses: jest.fn().mockReturnValue(addresses),
+    };
   });
 
   describe('handleAuthRequest', () => {
@@ -572,7 +583,7 @@ describe('accounts actions', () => {
     it('should change settings without demoData', async () => {
       expect.assertions(3);
 
-      const getters = {};
+      getters = {};
       const state = {
         settings: {
           storeSettings: 'storeSettings',
@@ -860,31 +871,9 @@ describe('accounts actions', () => {
   });
 
   describe('createInitialWallet', () => {
-    it('should create account, set it and return seedKey', async () => {
-      expect.assertions(3);
-
-      dispatch.mockResolvedValueOnce({
-        seedKey: 'seedKey',
-        encryptedSeed: 'encryptedSeed',
-        v3KeystoreHdWallet: hdv3,
-        v3KeystoreChildWallet: v3KeyStore,
-      });
-
-      const res = await accountsActions.createInitialWallet(
-        { commit, dispatch },
-        { password: 'pwd' },
-      );
-
-      expect(res).toEqual('seedKey');
-      expect(dispatch).toBeCalledWith('createNewWallet', {
-        password: 'pwd',
-      });
-      expect(commit).toBeCalledWith('setAccounts', [v3KeyStore.address]);
-    });
-  });
-
-  describe('createNewWallet', () => {
     it('should create and set accounts', async () => {
+      expect.assertions(7);
+
       const wallet = {
         seedKey: 'seedKey',
         encryptedSeed: 'encryptedSeed',
@@ -894,21 +883,20 @@ describe('accounts actions', () => {
 
       walletGen.createComplex.mockResolvedValue(wallet);
 
-      const res = await accountsActions.createNewWallet(
-        { commit },
+      const res = await accountsActions.createInitialWallet(
+        { commit, dispatch },
         { password: 'pwd' },
       );
 
-      expect(res).toEqual(wallet);
-      expect(identityService.saveAccount).toBeCalledTimes(2);
-      expect(identityService.saveAccount).toBeCalledWith(hdv3);
-      expect(identityService.saveAccountInfo).toBeCalledWith(hdv3.address, {
-        address: hdv3.address,
-        type: WALLET_TYPES.HD_MAIN,
-        hidden: false,
-      });
+      expect(res).toEqual(wallet.seedKey);
+      expect(dispatch).toBeCalledWith('getAccounts');
+      expect(userService.setAccount).toBeCalledTimes(2);
+      expect(userService.setAccount).toBeCalledWith(hdv3.address, hdv3);
+      expect(userService.setAccount).toBeCalledWith(
+        v3KeyStore.address,
+        v3KeyStore,
+      );
       expect(identityService.backupSeed).toBeCalledWith('encryptedSeed');
-      expect(identityService.saveAccount).toBeCalledWith(v3KeyStore);
       expect(identityService.updateAccountSettings).toBeCalledWith(
         v3KeyStore.address,
       );
@@ -1006,6 +994,45 @@ describe('accounts actions', () => {
         ),
       ).rejects.toThrow(expect.any(Error));
       validatorSpy.mockRestore();
+    });
+  });
+
+  describe('createAccount', () => {
+    it('should create new account with next address from hd wallet', async () => {
+      expect.assertions(3);
+
+      const password = 'pwd';
+      const v3KeyStoreChild = {
+        address: accountAddress,
+      };
+
+      userService.getNextWalletFromHD.mockResolvedValueOnce({
+        toV3: jest.fn().mockReturnValue(v3KeyStoreChild),
+      });
+
+      await accountsActions.createAccount(
+        {
+          commit,
+          dispatch,
+          getters,
+        },
+        {
+          password,
+        },
+      );
+
+      expect(userService.setAccount).toBeCalledWith(
+        v3KeyStoreChild.address,
+        v3KeyStoreChild,
+      );
+      expect(commit).toBeCalledWith('addAccount', {
+        ...v3KeyStoreChild,
+        type: WALLET_TYPES.STANDART,
+        hidden: false,
+      });
+      expect(dispatch).toBeCalledWith('updateSettings', {
+        lastActiveAccount: v3KeyStoreChild.address,
+      });
     });
   });
 });

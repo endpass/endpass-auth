@@ -6,7 +6,6 @@ import { Wallet } from '@/class';
 import isV3 from '@endpass/utils/isV3';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
-
 const WALLET_TYPES = Wallet.getTypes();
 
 export default {
@@ -29,7 +28,7 @@ export default {
   async setAccount(address, { info = {}, ...rest }) {
     const infoForSave = {
       address,
-      type: WALLET_TYPES.STANDARD,
+      type: WALLET_TYPES.STANDART,
       hidden: false,
       ...info,
     };

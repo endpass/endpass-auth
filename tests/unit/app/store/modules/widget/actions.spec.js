@@ -1,6 +1,6 @@
-import { METHODS, WALLET_TYPES, WIDGET_RESIZE_DURATION } from '@/constants';
+import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import widgetActions from '@/store/modules/widget/actions';
-import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
+import { accountAddress } from '@unitFixtures/accounts';
 
 jest.mock('@/class/singleton/bridgeMessenger', () => ({
   sendAndWaitResponse: jest.fn(),
@@ -121,7 +121,7 @@ describe('widget actions', () => {
 
   describe('createAccountFromWidget', () => {
     it('should create new wallet by given password and address', async () => {
-      expect.assertions(8);
+      expect.assertions(6);
 
       const wallet = {
         v3KeystoreChildWallet: {
@@ -137,28 +137,20 @@ describe('widget actions', () => {
         { address: accountAddress, password: 'pwd' },
       );
 
-      expect(commit).toBeCalledTimes(3);
+      expect(commit).toBeCalledTimes(2);
       expect(commit).toHaveBeenNthCalledWith(1, 'setWidgetLoadingStatus', true);
-      expect(commit).toHaveBeenNthCalledWith(2, 'addAccount', {
-        address: wallet.v3KeystoreChildWallet.address,
-        type: WALLET_TYPES.STANDARD,
-        index: 0,
-      });
       expect(commit).toHaveBeenNthCalledWith(
-        3,
+        2,
         'setWidgetLoadingStatus',
         false,
       );
-      expect(dispatch).toBeCalledTimes(3);
+      expect(dispatch).toBeCalledTimes(2);
       expect(dispatch).toHaveBeenNthCalledWith(1, 'validatePassword', {
         address: accountAddress,
         password: 'pwd',
       });
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'createNewWallet', {
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'createAccount', {
         password: 'pwd',
-      });
-      expect(dispatch).toHaveBeenNthCalledWith(3, 'updateSettings', {
-        lastActiveAccount: wallet.v3KeystoreChildWallet.address,
       });
     });
 

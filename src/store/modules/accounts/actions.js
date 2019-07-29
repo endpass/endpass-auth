@@ -3,7 +3,6 @@ import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
 import ConnectError from '@endpass/class/ConnectError';
-import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
@@ -24,14 +23,13 @@ import {
 import { Answer, Wallet } from '@/class';
 import {
   ENCRYPT_OPTIONS,
-  WALLET_TYPES,
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
 } from '@/constants';
-
 import filterXpub from '@/util/filterXpub';
 
+const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
@@ -135,7 +133,7 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
   }
 };
 
-const createInitialWallet = async ({ dispatch, commit }, { password }) => {
+const createInitialWallet = async ({ dispatch }, { password }) => {
   const mod = await import('@endpass/utils/walletGen');
   const walletGen = mod.default;
   const {
@@ -155,6 +153,10 @@ const createInitialWallet = async ({ dispatch, commit }, { password }) => {
     info,
   });
   await identityService.backupSeed(encryptedSeed);
+  await userService.setAccount(
+    v3KeystoreChildWallet.address,
+    v3KeystoreChildWallet,
+  );
   await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
   await dispatch('getAccounts');
 

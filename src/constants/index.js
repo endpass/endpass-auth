@@ -65,9 +65,3 @@ export const ENCRYPT_OPTIONS = {
 };
 
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
-
-// TODO: merge with WALLET_TYPE from core/class
-export const WALLET_TYPES = {
-  STANDARD: 'StandardAccount',
-  HD_MAIN: 'HDMainAccount',
-};
