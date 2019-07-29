@@ -17,21 +17,18 @@
         v-validate="'required|url'"
         :error="errors.first('customIdentityServer')"
         :disabled="!isInputAllowed"
-        :label="$t('components.serverModeSelect.customIdentityServer')"
+        :label="customServerInputLabel"
+        :description="customServerInputDescription"
+        :placeholder="$t('components.serverModeSelect.customIdentityServer')"
         data-vv-as="customIdentityServer"
         data-vv-name="customIdentityServer"
         name="customIdentityServer"
-        :placeholder="$t('components.serverModeSelect.customIdentityServer')"
-        :description="serverModeSelectExample"
         data-test="custom-server-input"
       />
     </form-field>
 
     <form-field v-if="validationError">
-      <message
-        :error="true"
-        data-test="error-validation-message"
-      >
+      <message :error="true" data-test="error-validation-message">
         {{ validationError }}
       </message>
     </form-field>
@@ -94,11 +91,29 @@ export default {
     ...mapState({
       isLoading: state => state.core.loading,
     }),
+
     serverModeSelectExample() {
       return `${this.$i18n.t(
         'components.serverModeSelect.example',
       )}: https://yourserver.com/api`;
     },
+
+    customServerInputLabel() {
+      if (!this.customIdentityServer) {
+        return null;
+      }
+
+      return this.$t('components.serverModeSelect.customIdentityServer');
+    },
+
+    customServerInputDescription() {
+      if (!this.customIdentityServer) {
+        return null;
+      }
+
+      return this.serverModeSelectExample;
+    },
+
     isInputAllowed() {
       return !this.isLoading && !this.isValidating;
     },
