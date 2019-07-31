@@ -46,10 +46,10 @@ describe('accounts mutations', () => {
       accountsMutations.addAccount(state, account);
 
       expect(state.accounts).toEqual([
+        account,
         {
           address: '0x1',
         },
-        account,
       ]);
     });
   });

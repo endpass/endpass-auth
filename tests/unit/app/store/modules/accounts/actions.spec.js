@@ -346,35 +346,6 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('getAccounts', () => {
-    it('should request accounts, bypass xpub accounts and set it', async () => {
-      expect.assertions(1);
-
-      userService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
-      userService.getAccountInfo.mockImplementation(acc => ({
-        address: acc,
-        type: 'StandardAccount',
-      }));
-
-      await accountsActions.getAccounts({ commit });
-
-      expect(commit).toBeCalledWith('setAccounts', [
-        { address: '0x0', type: 'StandardAccount' },
-        { address: '0x1', type: 'StandardAccount' },
-      ]);
-    });
-
-    it('should set empty accounts on error', async () => {
-      expect.assertions(1);
-
-      userService.getAccounts.mockRejectedValueOnce();
-
-      await accountsActions.getAccounts({ commit });
-
-      expect(commit).toBeCalledWith('setAccounts', null);
-    });
-  });
-
   describe('getAccount', () => {
     it('should request account and return it', async () => {
       expect.assertions(2);
@@ -584,12 +555,12 @@ describe('accounts actions', () => {
       expect.assertions(3);
 
       getters = {};
+
       const state = {
         settings: {
           storeSettings: 'storeSettings',
         },
       };
-
       const settings = {
         lastActiveAccount: '123',
       };
@@ -614,7 +585,6 @@ describe('accounts actions', () => {
       const settings = {
         lastActiveAccount: '123',
       };
-
       const state = {
         settings: { noData: 'noData' },
       };
@@ -635,7 +605,7 @@ describe('accounts actions', () => {
     it('should return default net', async () => {
       expect.assertions(1);
 
-      userService.getAccount.mockResolvedValueOnce({});
+      userService.getSettings.mockResolvedValueOnce({});
 
       const result = await accountsActions.getSettings({ dispatch });
 
@@ -889,7 +859,7 @@ describe('accounts actions', () => {
       );
 
       expect(res).toEqual(wallet.seedKey);
-      expect(dispatch).toBeCalledWith('getAccounts');
+      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
       expect(userService.setAccount).toBeCalledTimes(2);
       expect(userService.setAccount).toBeCalledWith(hdv3.address, hdv3);
       expect(userService.setAccount).toBeCalledWith(
@@ -911,7 +881,7 @@ describe('accounts actions', () => {
         foo: 'bar',
       };
 
-      userService.getAccountSkipPermission.mockResolvedValueOnce(payload);
+      userService.getSettingsSkipPermission.mockResolvedValueOnce(payload);
 
       const res = await accountsActions.getSettingsWithoutPermission();
 

@@ -27,7 +27,6 @@ import {
   METHODS,
   ORIGIN_HOST,
 } from '@/constants';
-import filterXpub from '@/util/filterXpub';
 
 const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
@@ -158,7 +157,7 @@ const createInitialWallet = async ({ dispatch }, { password }) => {
     v3KeystoreChildWallet,
   );
   await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
-  await dispatch('getAccounts');
+  await dispatch('defineOnlyV3Accounts');
 
   return seedKey;
 };
@@ -174,8 +173,10 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
   );
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
-  await userService.setAccount(checksumAddress, v3KeyStoreChild);
-
+  await userService.setAccount(checksumAddress, {
+    ...v3KeyStoreChild,
+    address: checksumAddress,
+  });
   commit('addAccount', {
     address: checksumAddress,
     type: WALLET_TYPES.STANDART,
@@ -269,7 +270,7 @@ const getSettings = async ({ dispatch }) => {
 };
 
 const getSettingsWithoutPermission = async () => {
-  const settings = await userService.getAccountSkipPermission();
+  const settings = await userService.getSettingsSkipPermission();
 
   return settings;
 };
@@ -341,10 +342,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
   }
 
   try {
-    const res = await userService.getAccounts();
-    const accounts = await Promise.all(
-      res.filter(filterXpub).map(address => userService.getAccount(address)),
-    );
+    const accounts = await userService.getV3Accounts();
 
     commit(
       'setAccounts',

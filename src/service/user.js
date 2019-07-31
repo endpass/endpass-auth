@@ -17,6 +17,10 @@ export default {
     return request.post(`${identityBaseUrl}/settings`, settings);
   },
 
+  getSettingsSkipPermission() {
+    return request.getSkipPermission(`${identityBaseUrl}/settings`);
+  },
+
   /**
    * Returns addresses of all of the user's accounts
    * @returns {[type]}
@@ -67,6 +71,12 @@ export default {
       request.get(`${identityBaseUrl}/account/${address}/info`),
     ]);
 
+    if (!info.address) {
+      Object.assign(info, {
+        address,
+      });
+    }
+
     return {
       ...account,
       address,
@@ -83,7 +93,7 @@ export default {
       .map(this.getAccount);
     const allAccounts = await Promise.all(allAcc);
 
-    return allAccounts;
+    return allAccounts.filter(isV3);
   },
 
   /**
@@ -94,34 +104,34 @@ export default {
   async getHDKey() {
     const accounts = await this.getAccounts();
 
-    const hdAddresses = accounts.filter(acc =>
-      keystoreHDKeyVerify.isExtendedPublicKey(acc),
+    const hdAddresses = accounts.filter(
+      keystoreHDKeyVerify.isExtendedPublicKey,
     );
 
     if (hdAddresses.length === 0) {
       return null;
     }
 
-    const hdAccounts = await Promise.all(
-      hdAddresses.map(acc => this.getAccount(acc)),
-    );
+    const hdAccounts = await Promise.all(hdAddresses.map(this.getAccount));
 
     const hdAccount =
       hdAccounts.find(
         account => get(account, 'info.type') === WALLET_TYPES.HD_MAIN,
-      ) || hdAccounts.find(acc => isV3(acc));
+      ) || hdAccounts.find(isV3);
 
     return hdAccount;
   },
 
   findNextWalletInHD({ hdWallet, addresses }) {
+    const lowercaseAddresses = addresses.map(address => address.toLowerCase());
     let idx = addresses.length;
     let nextWallet = null;
 
     while (!nextWallet) {
       const wallet = hdWallet.deriveChild(idx).getWallet();
+      const walletAddress = wallet.getChecksumAddressString().toLowerCase();
 
-      if (addresses.includes(wallet.getAddress())) {
+      if (lowercaseAddresses.includes(walletAddress)) {
         idx += 1;
       } else {
         nextWallet = wallet;

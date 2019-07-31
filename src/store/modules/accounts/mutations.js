@@ -32,7 +32,7 @@ const setAccounts = (state, accounts) => {
 };
 
 const addAccount = (state, account) => {
-  state.accounts = state.accounts.concat(account);
+  state.accounts = [account].concat(state.accounts);
 };
 
 const setSettings = (state, settings) => {
