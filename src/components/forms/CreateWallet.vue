@@ -5,11 +5,14 @@
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
       >
+        <message
+          class="v-modal-card-title"
+          v-html="$t('components.createWallet.choosePass')"
+        />
         <form-item>
           <v-input
             v-model="password"
             v-validate="'required|min:8'"
-            label="Please choose password:"
             data-vv-as="password"
             data-vv-name="password"
             :error="errors.first('password')"
@@ -52,12 +55,19 @@
       </form>
     </div>
     <div v-else>
+      <message
+        class="v-modal-card-title"
+        v-html="$t('components.createWallet.recoveryTitle')"
+      />
       <form-item>
         <div class="box">
-          <p>{{ $t('components.createWallet.recoveryPhrase') }}</p>
+          <span
+            class="create-wallet-subtitle"
+            v-html="$t('components.createWallet.recoverySubtitle')"
+          />
           <br>
           <p
-            class="code"
+            class="create-wallet-code"
             data-test="seed-phrase"
           >
             {{ seedKey }}
@@ -78,7 +88,7 @@
 <script>
 import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message.vue';
+import Message from '@/components/common/Message';
 import FormItem from '@/components/common/FormItem';
 import VSpacer from '@/components/common/VSpacer';
 import VInput from '@endpass/ui/kit/VInput';
@@ -145,3 +155,20 @@ export default {
   },
 };
 </script>
+<style lang="postcss">
+.create-wallet-subtitle {
+  /* TODO: change to grey-6 after update ui-kit*/
+  color: #697077;
+  line-height: 20px;
+  text-align: center;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.create-wallet-code {
+  font-weight: bold;
+  margin-bottom: 32px;
+  text-align: center;
+  line-height: 20px;
+}
+</style>

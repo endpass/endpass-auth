@@ -3,3 +3,5 @@ export const gasPrices = {
   medium: 2,
   high: 3,
 };
+
+export default gasPrices;
