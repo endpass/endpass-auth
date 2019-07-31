@@ -18,7 +18,7 @@
       </span>
     </section>
     <section class="widget-header-content">
-      <template v-if="balance">
+      <template v-if="!isLoading">
         <p
           :class="{
             'widget-header-balance': true,
@@ -76,7 +76,8 @@ export default {
   },
 
   data: () => ({
-    ethPriceInFiat: null,
+    ethPriceInFiat: 0,
+    isSubscribedOnPrices: false,
     isBalanceInFiat: false,
   }),
 
@@ -90,7 +91,9 @@ export default {
     actualBalance() {
       const balanceInEth = fromWei(this.balance);
 
-      console.log(balanceInEth, this.ethPriceInFiat);
+      if (BigNumber(balanceInEth).isZero()) {
+        return '0';
+      }
 
       if (this.isBalanceInFiat) {
         return BigNumber(balanceInEth)
@@ -106,9 +109,7 @@ export default {
     },
 
     formattedBalance() {
-      if (!this.isCuttedBalance) {
-        return this.actualBalance;
-      }
+      if (!this.isCuttedBalance) return this.actualBalance;
 
       // Splicing length equals to 7 – because we must handle dot symbol
       const splicedBalance = this.actualBalance.slice(0, 7);
@@ -119,24 +120,37 @@ export default {
 
       return splicedBalance;
     },
-  },
 
-  watch: {
-    fiatCurrency: {
-      async handler(val) {
-        console.log(val);
-        this.ethPriceInFiat = await this.getEtherPrice(val);
-      },
-      immediate: true,
+    isLoading() {
+      const { balance, isBalanceInFiat, ethPriceInFiat } = this;
+
+      return !balance || (isBalanceInFiat && !ethPriceInFiat);
     },
   },
 
   methods: {
     ...mapActions(['getEtherPrice']),
 
+    subscribeOnEthPrices() {
+      const handler = () =>
+        setTimeout(async () => {
+          if (this.isBalanceInFiat) {
+            this.ethPriceInFiat = await this.getEtherPrice(this.fiatCurrency);
+          }
+
+          handler();
+        }, 5000);
+
+      handler();
+    },
+
     handleTogglerClick() {
       this.$emit('toggle');
     },
+  },
+
+  mounted() {
+    this.subscribeOnEthPrices();
   },
 
   components: {

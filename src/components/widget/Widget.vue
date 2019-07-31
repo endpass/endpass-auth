@@ -1,6 +1,10 @@
 <template>
   <div class="widget">
-    <div v-if="isMobile" ref="trigger" class="widget-trigger">
+    <div
+      v-if="isMobile"
+      ref="trigger"
+      class="widget-trigger"
+    >
       <trigger-button
         :is-loading="isWidgetLoading"
         @click="handleMobileTriggerClick"
