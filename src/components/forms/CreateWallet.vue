@@ -55,12 +55,19 @@
       </form>
     </div>
     <div v-else>
+      <message
+        class="v-modal-card-title"
+        v-html="$t('components.createWallet.recoveryTitle')"
+      />
       <form-item>
         <div class="box">
-          <p>{{ $t('components.createWallet.recoveryPhrase') }}</p>
+          <span
+            class="create-wallet-subtitle"
+            v-html="$t('components.createWallet.recoverySubtitle')"
+          />
           <br>
           <p
-            class="code"
+            class="create-wallet-code"
             data-test="seed-phrase"
           >
             {{ seedKey }}
@@ -148,3 +155,20 @@ export default {
   },
 };
 </script>
+<style lang="postcss">
+.create-wallet-subtitle {
+  /* TODO: change to grey-6 after update ui-kit*/
+  color: #697077;
+  line-height: 20px;
+  text-align: center;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.create-wallet-code {
+  font-weight: bold;
+  margin-bottom: 32px;
+  text-align: center;
+  line-height: 20px;
+}
+</style>

@@ -118,6 +118,7 @@ describe('requests actions', () => {
         if (action === 'getNextNonce') {
           return nonce;
         }
+        return null;
       });
 
       state = {

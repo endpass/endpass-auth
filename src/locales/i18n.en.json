@@ -85,7 +85,8 @@
       "enterPass": "Enter password...",
       "confirmPass": "Confirm password...",
       "createWallet": "Create wallet",
-      "recoveryPhrase": "Your wallet recovery phrase",
+      "recoveryTitle": "Write down your Seed Phrase",
+      "recoverySubtitle": "The&nbsp;words below are&nbsp;called your&nbsp;seed phrase. They&nbsp;enable you to&nbsp;access your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. It&nbsp;is&nbsp;very important that these words down in&nbsp;order shown.",
       "error": "Something broken, when trying to create new Wallet"
     },
     "sign": {
