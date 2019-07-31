@@ -23,8 +23,15 @@ const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
 const getAccount = address =>
   request.get(`${identityBaseUrl}/account/${address}`);
 
-const getAccountInfo = address =>
-  request.get(`${identityBaseUrl}/account/${address}/info`);
+const getAccountInfo = async address => {
+  const ret = await request.get(`${identityBaseUrl}/account/${address}/info`);
+
+  // TODO: check wallet address in info object
+  if (!ret.address) {
+    ret.address = address;
+  }
+  return ret;
+};
 
 const getAccountWithInfo = async address => {
   const [v3keystore, info] = await Promise.all([

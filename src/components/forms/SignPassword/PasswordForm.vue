@@ -1,17 +1,11 @@
 <template>
-  <form
-    data-test="sign-form"
-    @submit.prevent="emitSubmit"
-  >
+  <form data-test="sign-form" @submit.prevent="emitSubmit">
     <h3
       v-if="requesterUrl"
       class="v-modal-card-title"
       v-html="$t('components.passwordForm.applyConnectTo')"
     >
-      <a
-        :href="requesterUrl"
-        data-test="requester-url"
-      >
+      <a :href="requesterUrl" data-test="requester-url">
         {{ requesterUrl }}
       </a>
     </h3>
@@ -39,14 +33,6 @@
     </form-item>
     <form-row>
       <v-button
-        :disabled="isLoading || !isFormValid"
-        size="big"
-        data-test="submit-button"
-      >
-        {{ primaryButtonLabel }}
-      </v-button>
-      <v-spacer :width="16" />
-      <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
         skin="error"
@@ -56,6 +42,14 @@
         @click="emitLogout"
       >
         {{ $t('global.logout') }}
+      </v-button>
+      <v-spacer v-if="withLogoutBtn" :width="16" />
+      <v-button
+        :disabled="isLoading || !isFormValid"
+        size="big"
+        data-test="submit-button"
+      >
+        {{ primaryButtonLabel }}
       </v-button>
     </form-row>
   </form>

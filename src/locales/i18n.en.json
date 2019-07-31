@@ -81,7 +81,7 @@
       "donationError": "Something went wrong. Try request dontaion later!"
     },
     "createWallet": {
-      "choosePass": "Please choose password:",
+      "choosePass": "Please choose password",
       "enterPass": "Enter password...",
       "confirmPass": "Confirm password...",
       "createWallet": "Create wallet",
