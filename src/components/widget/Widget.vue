@@ -1,10 +1,6 @@
 <template>
   <div class="widget">
-    <div
-      v-if="isMobile"
-      ref="trigger"
-      class="widget-trigger"
-    >
+    <div v-if="isMobile" ref="trigger" class="widget-trigger">
       <trigger-button
         :is-loading="isWidgetLoading"
         @click="handleMobileTriggerClick"
@@ -23,6 +19,7 @@
     >
       <widget-header
         :balance="balance"
+        :fiat-currency="fiatCurrency"
         :is-collapsed="isCollapsed"
         @toggle="handleWidgetToggle"
       />
@@ -67,6 +64,10 @@ export default {
       isWidgetLoading: state => state.widget.isLoading,
     }),
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
+
+    fiatCurrency() {
+      return get(this.settings, 'fiatCurrency', 'USD');
+    },
 
     currentNet() {
       return get(this.settings, 'net', 1);
@@ -184,7 +185,7 @@ export default {
   overflow: hidden;
   position: absolute;
   left: 50%;
-  width: 240px;
+  width: 280px;
   transform: translateX(-50%);
   border-radius: 4px;
 
