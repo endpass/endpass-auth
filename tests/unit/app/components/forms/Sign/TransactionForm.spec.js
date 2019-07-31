@@ -51,7 +51,6 @@ describe('Sign > TransactionForm', () => {
       modules: {
         accounts: accountsModule,
         gasPrice: gasPriceModule,
-        accounts: accountsModule,
       },
     };
     store = new Vuex.Store(storeData);
