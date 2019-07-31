@@ -9,6 +9,14 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 const WALLET_TYPES = Wallet.getTypes();
 
 export default {
+  getSettings() {
+    return request.get(`${identityBaseUrl}/settings`);
+  },
+
+  setSettings(settings) {
+    return request.post(`${identityBaseUrl}/settings`, settings);
+  },
+
   /**
    * Returns addresses of all of the user's accounts
    * @returns {[type]}
@@ -56,9 +64,7 @@ export default {
   async getAccount(address) {
     const [account, info] = await Promise.all([
       request.get(`${identityBaseUrl}/account/${address}`),
-      request
-        .get(`${identityBaseUrl}/account/${address}/info`)
-        .catch(() => ({})),
+      request.get(`${identityBaseUrl}/account/${address}/info`),
     ]);
 
     return {

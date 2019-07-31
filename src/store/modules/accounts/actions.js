@@ -243,7 +243,7 @@ const cancelAuth = () => {
 };
 
 const getSettings = async ({ dispatch }) => {
-  const settings = await identityService.getSettings();
+  const settings = await userService.getSettings();
   const { lastActiveAccount } = settings;
   let account = null;
 
@@ -269,7 +269,7 @@ const getSettings = async ({ dispatch }) => {
 };
 
 const getSettingsWithoutPermission = async () => {
-  const settings = await identityService.getSettingsSkipPermission();
+  const settings = await userService.getAccountSkipPermission();
 
   return settings;
 };
@@ -334,25 +334,6 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
 const checkAccountExists = () => identityService.checkAccountExist();
 
-const getAccounts = async ({ commit }) => {
-  // TODO: check `getAccounts` usages
-  try {
-    const res = await identityService.getAccounts();
-    const accounts = await Promise.all(
-      res.map(address => identityService.getAccountInfo(address)),
-    );
-
-    commit(
-      'setAccounts',
-      accounts.filter(account => filterXpub(account.address)),
-    );
-    commit('setAuthStatus', true);
-  } catch (err) {
-    commit('setAccounts', null);
-    commit('setAuthStatus', false);
-  }
-};
-
 const defineOnlyV3Accounts = async ({ commit, getters }) => {
   if (getters.demoData) {
     commit('setAuthStatus', true);
@@ -360,11 +341,9 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
   }
 
   try {
-    const res = await identityService.getAccounts();
+    const res = await userService.getAccounts();
     const accounts = await Promise.all(
-      res
-        .filter(filterXpub)
-        .map(address => identityService.getAccountWithInfo(address)),
+      res.filter(filterXpub).map(address => userService.getAccount(address)),
     );
 
     commit(
@@ -379,7 +358,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 };
 
 const getAccount = async (ctx, address) => {
-  const res = await identityService.getAccount(address);
+  const res = await userService.getAccount(address);
 
   return res;
 };
@@ -577,7 +556,6 @@ export default {
   handleAuthRequest,
   defineSettings,
   getAccount,
-  getAccounts,
   getFirstPrivateAccount,
   getSettings,
   defineOnlyV3Accounts,

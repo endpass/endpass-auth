@@ -350,8 +350,8 @@ describe('accounts actions', () => {
     it('should request accounts, bypass xpub accounts and set it', async () => {
       expect.assertions(1);
 
-      identityService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
-      identityService.getAccountInfo.mockImplementation(acc => ({
+      userService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
+      userService.getAccountInfo.mockImplementation(acc => ({
         address: acc,
         type: 'StandardAccount',
       }));
@@ -367,7 +367,7 @@ describe('accounts actions', () => {
     it('should set empty accounts on error', async () => {
       expect.assertions(1);
 
-      identityService.getAccounts.mockRejectedValueOnce();
+      userService.getAccounts.mockRejectedValueOnce();
 
       await accountsActions.getAccounts({ commit });
 
@@ -383,11 +383,11 @@ describe('accounts actions', () => {
         address: '0x0',
       };
 
-      identityService.getAccount.mockResolvedValueOnce(account);
+      userService.getAccount.mockResolvedValueOnce(account);
 
       const res = await accountsActions.getAccount(null, '0x0');
 
-      expect(identityService.getAccount).toBeCalledWith('0x0');
+      expect(userService.getAccount).toBeCalledWith('0x0');
       expect(res).toEqual(account);
     });
   });
@@ -635,7 +635,7 @@ describe('accounts actions', () => {
     it('should return default net', async () => {
       expect.assertions(1);
 
-      identityService.getSettings.mockResolvedValueOnce({});
+      userService.getAccount.mockResolvedValueOnce({});
 
       const result = await accountsActions.getSettings({ dispatch });
 
@@ -911,7 +911,7 @@ describe('accounts actions', () => {
         foo: 'bar',
       };
 
-      identityService.getSettingsSkipPermission.mockResolvedValueOnce(payload);
+      userService.getAccountSkipPermission.mockResolvedValueOnce(payload);
 
       const res = await accountsActions.getSettingsWithoutPermission();
 
