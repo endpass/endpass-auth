@@ -5,11 +5,14 @@
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
       >
+        <message
+          class="v-modal-card-title"
+          v-html="$t('components.createWallet.choosePass')"
+        />
         <form-item>
           <v-input
             v-model="password"
             v-validate="'required|min:8'"
-            label="Please choose password:"
             data-vv-as="password"
             data-vv-name="password"
             :error="errors.first('password')"
@@ -78,7 +81,7 @@
 <script>
 import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message.vue';
+import Message from '@/components/common/Message';
 import FormItem from '@/components/common/FormItem';
 import VSpacer from '@/components/common/VSpacer';
 import VInput from '@endpass/ui/kit/VInput';
