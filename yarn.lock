@@ -914,10 +914,10 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.4.5":
-  version "7.4.5"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
-  integrity sha512-TuI4qpWZP6lGOGIuGWtp9sPluqYICmbk8T/1vpSysqJxRPkudh/ofFWyqdcMsDf2s7KvDL4/YHgKyvcS3g9CJQ==
+"@babel/runtime@^7.5.5":
+  version "7.5.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
+  integrity sha512-28QvEGyQyNkB0/m2B4FU7IEZGK2NUrcMtT6BZEFALTguLk+AUT6ofsHtPk5QyjAdUkpMJ+/Em+quwz4HOt30AQ==
   dependencies:
     regenerator-runtime "^0.13.2"
 
@@ -1132,28 +1132,6 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.14.5":
-  version "0.14.5"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.5.tgz#66b4940c8f5a9bb9063c5e51b69f32a4fdf9e6e1"
-  integrity sha512-Yfr+3PMeUXiW1OYSYHalxvx5mZK0gYtsq2BzfnHnxew17FdOROmZHCVbdq/Ihkrf08XjxmjBv2Jz7BQZeCD7ww==
-  dependencies:
-    "@endpass/utils" "^1.4.2"
-    "@ledgerhq/hw-app-eth" "^4.24.0"
-    "@ledgerhq/hw-transport-u2f" "^4.24.0"
-    bignumber.js "^7.2.1"
-    dexie "^2.0.4"
-    eth-ens-namehash "^2.0.8"
-    ethereumjs-tx "^1.3.4"
-    ethereumjs-wallet "^0.6.0"
-    lodash "^4.17.11"
-    path-to-regexp "^2.4.0"
-    trezor-connect "^6.0.0"
-    web3 "1.0.0-beta.33"
-    web3-providers-http "1.0.0-beta.33"
-    web3-providers-ipc "1.0.0-beta.33"
-    web3-providers-ws "1.0.0-beta.33"
-    web3-utils "1.0.0-beta.33"
-
 "@endpass/class@^0.14.6":
   version "0.14.6"
   resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.6.tgz#11ed4f1c9b561897a06efbdb7bdfdc52941d3018"
@@ -1176,13 +1154,34 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/e2e-utils@^0.2.13":
-  version "0.2.13"
-  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.2.13.tgz#10545b416fe172e466dd757a2a8e286b3437baa6"
-  integrity sha512-7xF/OQV94VRFENdUKvVi/aw6d2Z/MoOACX+S0E4nJKeI3i5WA+uuJHGPh1l/pJ7kSL7vAO8IPb9JvIFMhILZDw==
+"@endpass/class@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.16.1.tgz#74e9cd7f0ab81a4a45be301c45f5a2cef2e1209f"
+  integrity sha512-OBZGXUDmazTmA/NTkalu5XgAd6FjcfOy2ijIkLzTcmy/fmhFJWbTDT1rjGOTyFbXvW2sZ3PoObQgDAt8h4o0nQ==
   dependencies:
-    "@babel/runtime" "^7.4.5"
-    "@endpass/class" "^0.14.5"
+    "@endpass/utils" "^1.8.2"
+    "@ledgerhq/hw-app-eth" "^4.24.0"
+    "@ledgerhq/hw-transport-u2f" "^4.24.0"
+    bignumber.js "^7.2.1"
+    dexie "^2.0.4"
+    eth-ens-namehash "^2.0.8"
+    ethereumjs-tx "^1.3.4"
+    ethereumjs-wallet "^0.6.0"
+    lodash "^4.17.15"
+    path-to-regexp "^2.4.0"
+    trezor-connect "^6.0.0"
+    web3-providers-http "1.0.0-beta.33"
+    web3-providers-ipc "1.0.0-beta.33"
+    web3-providers-ws "1.0.0-beta.33"
+    web3-utils "1.0.0-beta.33"
+
+"@endpass/e2e-utils@^0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.3.0.tgz#eb21cb7a0e6ad9e198f4baaf470a41d1e79e4704"
+  integrity sha512-rdRFNegm0e4HlmL4weVCnnKKHB4Mg/Bzga1ZH+PPCTuL7FewfrfKj5ezYdVObiz/KzrDBho+/ETa10OuYo8puw==
+  dependencies:
+    "@babel/runtime" "^7.5.5"
+    "@endpass/class" "^0.16.1"
     nanoid "^2.0.3"
 
 "@endpass/eslint-plugin-endpass@^0.1.0":
@@ -1257,6 +1256,22 @@
     lodash "^4.17.11"
     node-notifier "^5.4.0"
     secp256k1 "^3.7.0"
+
+"@endpass/utils@^1.8.2":
+  version "1.8.2"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.8.2.tgz#78ed3934485b0a96f451455f0de24c044306aff3"
+  integrity sha512-lXawdI/2LVx4aGu+8UJJmBfrbCo4WUOHOFdUJf/0xQWzBNCEmTnzG8Cp0LP9RrU2Cwex2VWwuvo91tMZblxVLw==
+  dependencies:
+    bip39 "^3.0.2"
+    bs58check "^2.1.2"
+    dayjs "^1.8.15"
+    eth-ecies "^1.0.3"
+    ethereumjs-wallet "^0.6.3"
+    export-files "^2.1.1"
+    keythereum "^1.0.4"
+    lodash "^4.17.15"
+    node-notifier "^5.4.0"
+    secp256k1 "^3.7.1"
 
 "@intervolga/optimize-cssnano-plugin@^1.0.5":
   version "1.0.6"
@@ -4317,6 +4332,11 @@ dayjs@^1.8.14:
   version "1.8.14"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.14.tgz#43e4f62830c2c3342c3fcd25934dc9162dbe6f38"
   integrity sha512-AVhDmRTe541iWirnoeFSSDDGvCT6HWaNQ4z2WmmzXMGZj6ph6ydao2teKq/eUtR43GPJXlYFD+C/SotG1P9wUQ==
+
+dayjs@^1.8.15:
+  version "1.8.15"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.15.tgz#7121bc04e6a7f2621ed6db566be4a8aaf8c3913e"
+  integrity sha512-HYHCI1nohG52B45vCQg8Re3hNDZbMroWPkhz50yaX7Lu0ATyjGsTdoYZBpjED9ar6chqTx2dmSmM8A51mojnAg==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -8590,6 +8610,11 @@ lodash@4.17.11, lodash@4.x, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.11, lo
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
 
+lodash@^4.17.15:
+  version "4.17.15"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.15.tgz#b447f6670a0455bbfeedd11392eff330ea097548"
+  integrity sha512-8xOcRHvCjnocdS5cpwXQXVzmmh5e5+saE2QGoeQmbKmRS6J3VQppPOIt0MnmE+4xlZoumy0GPG0D0MVIQbNA1A==
+
 log-symbols@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/log-symbols/-/log-symbols-1.0.2.tgz#376ff7b58ea3086a0f09facc74617eca501e1a18"
@@ -9164,7 +9189,7 @@ nan@^2.0.8, nan@^2.2.1, nan@^2.3.3, nan@^2.9.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
   integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
 
-nan@^2.12.1, nan@^2.13.2:
+nan@^2.12.1, nan@^2.13.2, nan@^2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -11755,6 +11780,20 @@ secp256k1@^3.7.0:
     drbg.js "^1.0.1"
     elliptic "^6.4.1"
     nan "^2.13.2"
+    safe-buffer "^5.1.2"
+
+secp256k1@^3.7.1:
+  version "3.7.1"
+  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.7.1.tgz#12e473e0e9a7c2f2d4d4818e722ad0e14cc1e2f1"
+  integrity sha512-1cf8sbnRreXrQFdH6qsg2H71Xw91fCCS9Yp021GnUNJzWJS/py96fS4lHbnTnouLp08Xj6jBoBB6V78Tdbdu5g==
+  dependencies:
+    bindings "^1.5.0"
+    bip66 "^1.1.5"
+    bn.js "^4.11.8"
+    create-hash "^1.2.0"
+    drbg.js "^1.0.1"
+    elliptic "^6.4.1"
+    nan "^2.14.0"
     safe-buffer "^5.1.2"
 
 seek-bzip@^1.0.5:
