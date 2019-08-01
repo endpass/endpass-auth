@@ -33,16 +33,19 @@ const e2eSetup = async () => {
     `${ENV.VUE_APP_E2E_CONNECT_BASE_URL}/sw-e2e.js`,
   );
 
-  if (!sw) return;
+  if (!sw) return null;
 
   const controller = new SWController(sw);
 
   const swDuplexBridge = new SWControllerDuplexBridge({
     controller,
+    target: window,
+    name: 'e2e-auth',
   });
 
   swDuplexBridge.subscribe();
-  await swDuplexBridge.awaitSetupFinishReceive();
+
+  return swDuplexBridge;
 };
 
 export default e2eSetup;
