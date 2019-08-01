@@ -128,15 +128,26 @@ export default {
     },
   },
 
+  watch: {
+    isBalanceInFiat(val) {
+      if (val && !this.isSubscribedOnPrices) {
+        this.subscribeOnEthPrices();
+      }
+    },
+  },
+
   methods: {
     ...mapActions(['getEtherPrice']),
 
     subscribeOnEthPrices() {
       const handler = () =>
         setTimeout(async () => {
-          if (this.isBalanceInFiat) {
-            this.ethPriceInFiat = await this.getEtherPrice(this.fiatCurrency);
+          if (!this.isBalanceInFiat) {
+            this.isSubscribedOnPrices = false;
+            return;
           }
+
+          this.ethPriceInFiat = await this.getEtherPrice(this.fiatCurrency);
 
           handler();
         }, 5000);
@@ -147,10 +158,6 @@ export default {
     handleTogglerClick() {
       this.$emit('toggle');
     },
-  },
-
-  mounted() {
-    this.subscribeOnEthPrices();
   },
 
   components: {
