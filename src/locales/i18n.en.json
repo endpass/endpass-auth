@@ -114,6 +114,9 @@
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
     },
+    "password": {
+      "incorrectPassword": "Entered password is incorrect. Please, try again."
+    },
     "consentProvider": {
       "loadScopesError": "Something broken, when loading scopes",
       "urlError": "You should provide consent_challenge param in url, add it and try again!"
@@ -132,12 +135,18 @@
       "donationSuccess": "Donation request successfully sent. In the most cases it can takes a few time before you will receive funds."
     },
     "widgetContent": {
-      "changeAccount": "Change account"
+      "changeAccount": "Change account",
+      "newAccount": "New account"
     },
     "widgetHeader": {
       "balance": "balance",
       "showMore": "Show more",
       "showLess": "Show less"
+    },
+    "widgetNewAccount": {
+      "createAccount": "Create account",
+      "cancel": "Cancel",
+      "creatingAccount": "Creating account..."
     }
   },
   "store": {

@@ -7,29 +7,28 @@ import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
+import { web3 } from '@/service/web3';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
+import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
 import Network from '@endpass/class/Network';
 import i18n from '@/locales/i18n';
-
 import {
   accountChannel,
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
-import { Answer } from '@/class';
+import { Answer, Wallet } from '@/class';
 import {
   ENCRYPT_OPTIONS,
-  WALLET_TYPES,
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
 } from '@/constants';
 
-import filterXpub from '@/util/filterXpub';
-
+const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
@@ -77,7 +76,9 @@ const authWithGitHub = async ({ commit }, code) => {
   try {
     const res = await identityService.authWithGitHub(code);
 
-    if (!res.success) throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    if (!res.success) {
+      throw new Error(res.message || i18n.t('store.auth.authFailed'));
+    }
 
     settingsService.clearLocalSettings();
 
@@ -112,7 +113,6 @@ const authWithOauth = async (ctx, { challengeId, password }) => {
       signature,
     });
   } catch (err) {
-    console.error(err);
     throw new Error(i18n.t('store.auth.passwordIncorrect'));
   }
   return res;
@@ -132,33 +132,59 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
   }
 };
 
-const createWallet = async ({ commit }, { password }) => {
+const createInitialWallet = async ({ dispatch }, { password }) => {
   const mod = await import('@endpass/utils/walletGen');
   const walletGen = mod.default;
-
   const {
-    seedKey,
-    encryptedSeed,
     v3KeystoreHdWallet,
     v3KeystoreChildWallet,
+    encryptedSeed,
+    seedKey,
   } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
-
   const info = {
     address: v3KeystoreHdWallet.address,
     type: WALLET_TYPES.HD_MAIN,
     hidden: false,
   };
 
-  await identityService.saveAccount(v3KeystoreHdWallet);
-  await identityService.saveAccountInfo(v3KeystoreHdWallet.address, info);
+  await userService.setAccount(v3KeystoreHdWallet.address, {
+    ...v3KeystoreHdWallet,
+    info,
+  });
   await identityService.backupSeed(encryptedSeed);
-
-  await identityService.saveAccount(v3KeystoreChildWallet);
+  await userService.setAccount(
+    v3KeystoreChildWallet.address,
+    v3KeystoreChildWallet,
+  );
   await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
-
-  commit('setAccounts', [v3KeystoreChildWallet.address]);
+  await dispatch('defineOnlyV3Accounts');
 
   return seedKey;
+};
+
+const createAccount = async ({ commit, getters, dispatch }, { password }) => {
+  const nextWallet = await userService.getNextWalletFromHD({
+    addresses: getters.addresses,
+    password,
+  });
+  const v3KeyStoreChild = nextWallet.toV3(
+    Buffer.from(password),
+    ENCRYPT_OPTIONS,
+  );
+  const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
+
+  await userService.setAccount(checksumAddress, {
+    ...v3KeyStoreChild,
+    address: checksumAddress,
+  });
+  commit('addAccount', {
+    address: checksumAddress,
+    type: WALLET_TYPES.STANDART,
+    hidden: false,
+  });
+  await dispatch('updateSettings', {
+    lastActiveAccount: checksumAddress,
+  });
 };
 
 const setWalletCreated = ({ commit }) => {
@@ -218,7 +244,7 @@ const cancelAuth = () => {
 };
 
 const getSettings = async ({ dispatch }) => {
-  const settings = await identityService.getSettings();
+  const settings = await userService.getSettings();
   const { lastActiveAccount } = settings;
   let account = null;
 
@@ -244,7 +270,7 @@ const getSettings = async ({ dispatch }) => {
 };
 
 const getSettingsWithoutPermission = async () => {
-  const settings = await identityService.getSettingsSkipPermission();
+  const settings = await userService.getSettingsSkipPermission();
 
   return settings;
 };
@@ -309,25 +335,6 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
 const checkAccountExists = () => identityService.checkAccountExist();
 
-const getAccounts = async ({ commit }) => {
-  // TODO: check `getAccounts` usages
-  try {
-    const res = await identityService.getAccounts();
-    const accounts = await Promise.all(
-      res.map(address => identityService.getAccountInfo(address)),
-    );
-
-    commit(
-      'setAccounts',
-      accounts.filter(account => filterXpub(account.address)),
-    );
-    commit('setAuthStatus', true);
-  } catch (err) {
-    commit('setAccounts', null);
-    commit('setAuthStatus', false);
-  }
-};
-
 const defineOnlyV3Accounts = async ({ commit, getters }) => {
   if (getters.demoData) {
     commit('setAuthStatus', true);
@@ -335,13 +342,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
   }
 
   try {
-    const res = await identityService.getAccounts();
-
-    const accounts = await Promise.all(
-      res
-        .filter(filterXpub)
-        .map(address => identityService.getAccountWithInfo(address)),
-    );
+    const accounts = await userService.getV3Accounts();
 
     commit(
       'setAccounts',
@@ -355,7 +356,7 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
 };
 
 const getAccount = async (ctx, address) => {
-  const res = await identityService.getAccount(address);
+  const res = await userService.getAccount(address);
 
   return res;
 };
@@ -543,7 +544,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   authWithOauth,
-  createWallet,
+  createInitialWallet,
   setWalletCreated,
   checkAccountExists,
   grantPermissionsWithOauth,
@@ -553,7 +554,6 @@ export default {
   handleAuthRequest,
   defineSettings,
   getAccount,
-  getAccounts,
   getFirstPrivateAccount,
   getSettings,
   defineOnlyV3Accounts,
@@ -577,4 +577,5 @@ export default {
   getSettingsWithoutPermission,
   defineSettingsWithoutPermission,
   validatePassword,
+  createAccount,
 };

@@ -11,12 +11,7 @@ jest.mock('@/service/identity', () => {
     saveAccountInfo: jest.fn(),
     backupSeed: jest.fn(),
     updateAccountSettings: jest.fn(),
-
-    getSettings: jest.fn(),
     getOtpSettings: jest.fn(),
-    getAccount: jest.fn(),
-    getAccounts: jest.fn(),
-    getAccountInfo: jest.fn(),
     defineAuthStatus: jest.fn(),
     getAuthStatus: jest.fn(),
     auth: jest.fn(),

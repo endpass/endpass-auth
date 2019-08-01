@@ -20,6 +20,12 @@ export const hdv3 = {
   },
   id: '26c91dbc-f900-4d7c-8ec5-a9a59c0ecd81',
   version: 3,
+  info: {
+    address:
+      'xpub6DojZ5fC8cSLRwc95PFfzUDWUSRod2jSWSbhGKEWFJhoTDiJgRva4am9m7ex1Fm1Ege8MDQ7PNEFqkzdgsRS6UooRfDZpgHkD8vNHiMP3zq',
+    hidden: false,
+    type: 'HDMainAccount',
+  },
 };
 
 export const v3KeyStore = {
@@ -52,4 +58,9 @@ export const accounts = [
   {
     address: '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca',
   },
+];
+
+export const addresses = [
+  '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb',
+  '0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Ca',
 ];
