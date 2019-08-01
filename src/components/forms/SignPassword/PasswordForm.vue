@@ -1,11 +1,19 @@
 <template>
-  <form data-test="sign-form" @submit.prevent="emitSubmit">
+  <form
+    data-test="sign-form"
+    @submit.prevent="emitSubmit"
+  >
     <h3
       v-if="requesterUrl"
       class="v-modal-card-title"
-      v-html="$t('components.passwordForm.applyConnectTo')"
     >
-      <a :href="requesterUrl" data-test="requester-url">
+      <span v-html="$t('components.passwordForm.applyConnectTo')" />
+      <a
+        :href="requesterUrl"
+        data-test="requester-url"
+        target="_blank"
+        class="password-form-request-url"
+      >
         {{ requesterUrl }}
       </a>
     </h3>
@@ -21,7 +29,6 @@
         v-validate="'required|min:8'"
         data-vv-as="Password"
         data-vv-name="password"
-        autofocus="true"
         required="true"
         type="password"
         name="password"
@@ -43,7 +50,10 @@
       >
         {{ $t('global.logout') }}
       </v-button>
-      <v-spacer v-if="withLogoutBtn" :width="16" />
+      <v-spacer
+        v-if="withLogoutBtn"
+        :width="16"
+      />
       <v-button
         :disabled="isLoading || !isFormValid"
         size="big"
@@ -158,6 +168,7 @@ export default {
       this.$emit('logout');
     },
   },
+
   mixins: [formMixin],
 
   components: {
@@ -170,3 +181,10 @@ export default {
   },
 };
 </script>
+<style lang="postcss">
+.password-form-request-url {
+  font-weight: normal;
+  font-size: 16px;
+  display: block;
+}
+</style>
