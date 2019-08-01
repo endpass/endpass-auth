@@ -23,19 +23,29 @@
     >
       <widget-header
         :balance="balance"
+        :fiat-currency="fiatCurrency"
         :is-collapsed="isCollapsed"
         @toggle="handleWidgetToggle"
       />
-      <widget-content
-        :is-collapsed="isCollapsed"
-        :is-accounts-collapsed="isAccountsCollapsed"
-        :accounts="accounts"
-        :current-account="currentAccount"
-        :is-loading="loading"
-        @account-change="handleAccountChange"
-        @accounts-toggle="handleAccountsToggle"
-        @logout="handleLogout"
-      />
+      <widget-content :is-collapsed="isCollapsed">
+        <widget-new-account-form
+          v-if="isAccountCreating"
+          :current-account="currentAccount"
+          :is-loading="isWidgetLoading"
+          @cancel="handleAccountCreationCancel"
+        />
+        <widget-accounts
+          v-else
+          :is-accounts-collapsed="isAccountsCollapsed"
+          :accounts="accounts"
+          :current-account="currentAccount"
+          :is-loading="loading"
+          @new-account="handleNewAccountStart"
+          @account-change="handleAccountChange"
+          @accounts-toggle="handleAccountsToggle"
+          @logout="handleLogout"
+        />
+      </widget-content>
     </div>
   </div>
 </template>
@@ -45,6 +55,8 @@ import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import WidgetHeader from './Header.vue';
 import WidgetContent from './Content.vue';
+import WidgetAccounts from './Accounts.vue';
+import WidgetNewAccountForm from './NewAccountForm.vue';
 import TriggerButton from './TriggerButton.vue';
 
 export default {
@@ -53,6 +65,7 @@ export default {
   data: () => ({
     widgetSettings: null,
     isCollapsed: true,
+    isAccountCreating: false,
     isAccountsCollapsed: true,
   }),
 
@@ -67,6 +80,10 @@ export default {
       isWidgetLoading: state => state.widget.isLoading,
     }),
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
+
+    fiatCurrency() {
+      return get(this.settings, 'fiatCurrency', 'USD');
+    },
 
     currentNet() {
       return get(this.settings, 'net', 1);
@@ -93,6 +110,7 @@ export default {
   methods: {
     ...mapActions([
       'initWidget',
+      'fitWidget',
       'openWidget',
       'closeWidget',
       'openAccounts',
@@ -105,6 +123,7 @@ export default {
       'updateSettings',
       'expandMobileWidget',
       'collapseMobileWidget',
+      'requestPassword',
     ]),
 
     handleWidgetToggle() {
@@ -140,6 +159,15 @@ export default {
       }
     },
 
+    handleNewAccountStart() {
+      this.isAccountCreating = true;
+    },
+
+    handleAccountCreationCancel() {
+      this.isAccountCreating = false;
+      this.fitWidget(this.$refs.widget);
+    },
+
     async handleAccountChange(address) {
       await this.updateSettings({
         lastActiveAccount: address,
@@ -157,8 +185,8 @@ export default {
   },
 
   async mounted() {
-    await this.initWidget();
     await this.defineSettings();
+    await this.initWidget();
     await this.defineOnlyV3Accounts();
     this.subscribeOnBalanceUpdates();
   },
@@ -166,6 +194,8 @@ export default {
   components: {
     WidgetHeader,
     WidgetContent,
+    WidgetNewAccountForm,
+    WidgetAccounts,
     TriggerButton,
   },
 };
@@ -184,7 +214,7 @@ export default {
   overflow: hidden;
   position: absolute;
   left: 50%;
-  width: 240px;
+  width: 280px;
   transform: translateX(-50%);
   border-radius: 4px;
 

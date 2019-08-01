@@ -91,7 +91,7 @@ export default {
   }
 
   &.disabled {
-    opacity: 0.7;
+    color: #a9a9a9;
     cursor: not-allowed;
   }
 

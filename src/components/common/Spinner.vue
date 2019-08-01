@@ -1,7 +1,7 @@
 <template>
   <div
     :style="sizeStyles"
-    class="spinner"
+    :class="{ spinner: true, 'is-white': isWhite }"
   />
 </template>
 
@@ -13,6 +13,11 @@ export default {
     size: {
       type: Number,
       default: 32,
+    },
+
+    isWhite: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -39,5 +44,10 @@ export default {
   border: 3px solid #6d1f966e;
   border-top: 3px solid #6d1f96;
   animation: rotate 750ms linear infinite;
+}
+
+.spinner.is-white {
+  border: 3px solid #ffffff6e;
+  border-top: 3px solid #fff;
 }
 </style>

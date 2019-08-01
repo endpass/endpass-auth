@@ -5,42 +5,10 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const createTimeout = handler => setTimeout(handler, 1500);
 
-const getSettings = () => request.get(`${identityBaseUrl}/settings`);
-
-const getSettingsSkipPermission = () =>
-  request.getSkipPermission(`${identityBaseUrl}/settings`);
-
-const setSettings = settings =>
-  request.post(`${identityBaseUrl}/settings`, settings);
-
 const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
 const getAccountsSkipPermission = () =>
   request.getSkipPermission(`${identityBaseUrl}/accounts`);
-
-const getAccounts = () => request.get(`${identityBaseUrl}/accounts`);
-
-const getAccount = address =>
-  request.get(`${identityBaseUrl}/account/${address}`);
-
-const getAccountInfo = async address => {
-  const ret = await request.get(`${identityBaseUrl}/account/${address}/info`);
-
-  // TODO: check wallet address in info object
-  if (!ret.address) {
-    ret.address = address;
-  }
-  return ret;
-};
-
-const getAccountWithInfo = async address => {
-  const [v3keystore, info] = await Promise.all([
-    getAccount(address),
-    getAccountInfo(address),
-  ]);
-
-  return { ...v3keystore, info };
-};
 
 const checkAccountExist = async () => {
   let res = false;
@@ -191,17 +159,12 @@ const recover = (email, signature, redirectUrl) =>
     });
 
 export default {
-  getAccount,
-  getAccounts,
   getAuthStatus,
-  getAccountInfo,
-  getAccountWithInfo,
   checkAccountExist,
   saveAccount,
   saveAccountInfo,
   backupSeed,
   updateAccountSettings,
-
   getAuthPermission,
   setAuthPermission,
   auth,
@@ -210,12 +173,7 @@ export default {
   otpAuth,
   logout,
   waitLogin,
-
-  getSettings,
   getOtpSettings,
-  setSettings,
-  getSettingsSkipPermission,
-
   getRecoveryIdentifier,
   recover,
 };

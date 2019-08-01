@@ -59,6 +59,22 @@ const unmountWidget = () => {
   bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
 };
 
+const createAccountFromWidget = async (
+  { dispatch, commit },
+  { address, password },
+) => {
+  commit('setWidgetLoadingStatus', true);
+
+  try {
+    await dispatch('validatePassword', { address, password });
+    await dispatch('createAccount', { password });
+  } catch (err) {
+    throw err;
+  } finally {
+    commit('setWidgetLoadingStatus', false);
+  }
+};
+
 export default {
   initWidget,
   openWidget,
@@ -69,4 +85,5 @@ export default {
   unmountWidget,
   expandMobileWidget,
   collapseMobileWidget,
+  createAccountFromWidget,
 };

@@ -1,18 +1,12 @@
 <template>
   <button
-    class="trigger-button"
+    :class="{ 'trigger-button': true, 'is-loading': isLoading }"
     type="button"
     @click="handleClick"
   >
-    <span class="trigger-button-icon">
-      <v-svg-icon
-        v-if="!isLoading"
-        name="widget-logo"
-        width="25px"
-        height="32px"
-      />
+    <span class="trigger-button-spinner">
       <spinner
-        v-else
+        v-if="isLoading"
         :size="32"
       />
     </span>
@@ -20,7 +14,6 @@
 </template>
 
 <script>
-import VSvgIcon from '@/components/common/VSvgIcon';
 import Spinner from '@/components/common/Spinner';
 
 export default {
@@ -40,7 +33,6 @@ export default {
   },
 
   components: {
-    VSvgIcon,
     Spinner,
   },
 };
@@ -56,11 +48,18 @@ export default {
   border-radius: 50%;
   border: none;
   cursor: pointer;
-  background-color: #4b016f;
   box-shadow: 2px 6px 8px rgba(36, 43, 46, 0.15);
+  background-image: url('../../assets/widget-button-backgroud.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
-.trigger-button-icon {
+.trigger-button.is-loading {
+  background-color: #4b016f;
+}
+
+.trigger-button-spinner {
   flex: 0 0 auto;
 }
 </style>

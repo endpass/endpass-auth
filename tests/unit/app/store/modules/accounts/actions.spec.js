@@ -2,29 +2,37 @@ import Web3 from 'web3';
 import walletGen from '@endpass/utils/walletGen';
 import ConnectError from '@endpass/class/ConnectError';
 import Network from '@endpass/class/Network';
-
 import Wallet from '@/service/signer/Wallet';
 import Signer from '@/service/signer';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
+import userService from '@/service/user';
 import accountsActions from '@/store/modules/accounts/actions';
 import { getRecoveryIdentifierResponse } from '@unitFixtures/services/identity';
-import { hdv3, v3KeyStore, accountAddress } from '@unitFixtures/accounts';
+import {
+  hdv3,
+  v3KeyStore,
+  accountAddress,
+  addresses,
+} from '@unitFixtures/accounts';
 import {
   permissionChannel,
   accountChannel,
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
+import WalletClass from '@/class/Wallet';
+import { IDENTITY_MODE } from '@/constants';
 
+const WALLET_TYPES = WalletClass.getTypes();
 const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
   let dispatch;
   let commit;
+  let getters;
 
   accountChannel.put = jest.fn();
   authChannel.put = jest.fn();
@@ -35,6 +43,9 @@ describe('accounts actions', () => {
 
     dispatch = jest.fn();
     commit = jest.fn();
+    getters = {
+      addresses: jest.fn().mockReturnValue(addresses),
+    };
   });
 
   describe('handleAuthRequest', () => {
@@ -335,35 +346,6 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('getAccounts', () => {
-    it('should request accounts, bypass xpub accounts and set it', async () => {
-      expect.assertions(1);
-
-      identityService.getAccounts.mockResolvedValueOnce(['0x0', '0x1', 'xpub']);
-      identityService.getAccountInfo.mockImplementation(acc => ({
-        address: acc,
-        type: 'StandardAccount',
-      }));
-
-      await accountsActions.getAccounts({ commit });
-
-      expect(commit).toBeCalledWith('setAccounts', [
-        { address: '0x0', type: 'StandardAccount' },
-        { address: '0x1', type: 'StandardAccount' },
-      ]);
-    });
-
-    it('should set empty accounts on error', async () => {
-      expect.assertions(1);
-
-      identityService.getAccounts.mockRejectedValueOnce();
-
-      await accountsActions.getAccounts({ commit });
-
-      expect(commit).toBeCalledWith('setAccounts', null);
-    });
-  });
-
   describe('getAccount', () => {
     it('should request account and return it', async () => {
       expect.assertions(2);
@@ -372,11 +354,11 @@ describe('accounts actions', () => {
         address: '0x0',
       };
 
-      identityService.getAccount.mockResolvedValueOnce(account);
+      userService.getAccount.mockResolvedValueOnce(account);
 
       const res = await accountsActions.getAccount(null, '0x0');
 
-      expect(identityService.getAccount).toBeCalledWith('0x0');
+      expect(userService.getAccount).toBeCalledWith('0x0');
       expect(res).toEqual(account);
     });
   });
@@ -572,13 +554,13 @@ describe('accounts actions', () => {
     it('should change settings without demoData', async () => {
       expect.assertions(3);
 
-      const getters = {};
+      getters = {};
+
       const state = {
         settings: {
           storeSettings: 'storeSettings',
         },
       };
-
       const settings = {
         lastActiveAccount: '123',
       };
@@ -603,7 +585,6 @@ describe('accounts actions', () => {
       const settings = {
         lastActiveAccount: '123',
       };
-
       const state = {
         settings: { noData: 'noData' },
       };
@@ -624,7 +605,7 @@ describe('accounts actions', () => {
     it('should return default net', async () => {
       expect.assertions(1);
 
-      identityService.getSettings.mockResolvedValueOnce({});
+      userService.getSettings.mockResolvedValueOnce({});
 
       const result = await accountsActions.getSettings({ dispatch });
 
@@ -859,26 +840,33 @@ describe('accounts actions', () => {
     });
   });
 
-  describe('createWallet', () => {
+  describe('createInitialWallet', () => {
     it('should create and set accounts', async () => {
-      walletGen.createComplex.mockResolvedValue({
+      expect.assertions(7);
+
+      const wallet = {
         seedKey: 'seedKey',
         encryptedSeed: 'encryptedSeed',
         v3KeystoreHdWallet: hdv3,
         v3KeystoreChildWallet: v3KeyStore,
-      });
+      };
 
-      await accountsActions.createWallet({ commit }, { password: 'pwd' });
+      walletGen.createComplex.mockResolvedValue(wallet);
 
-      expect(identityService.saveAccount).toBeCalledTimes(2);
-      expect(identityService.saveAccount).toBeCalledWith(hdv3);
-      expect(identityService.saveAccountInfo).toBeCalledWith(hdv3.address, {
-        address: hdv3.address,
-        type: WALLET_TYPES.HD_MAIN,
-        hidden: false,
-      });
+      const res = await accountsActions.createInitialWallet(
+        { commit, dispatch },
+        { password: 'pwd' },
+      );
+
+      expect(res).toEqual(wallet.seedKey);
+      expect(dispatch).toBeCalledWith('defineOnlyV3Accounts');
+      expect(userService.setAccount).toBeCalledTimes(2);
+      expect(userService.setAccount).toBeCalledWith(hdv3.address, hdv3);
+      expect(userService.setAccount).toBeCalledWith(
+        v3KeyStore.address,
+        v3KeyStore,
+      );
       expect(identityService.backupSeed).toBeCalledWith('encryptedSeed');
-      expect(identityService.saveAccount).toBeCalledWith(v3KeyStore);
       expect(identityService.updateAccountSettings).toBeCalledWith(
         v3KeyStore.address,
       );
@@ -893,7 +881,7 @@ describe('accounts actions', () => {
         foo: 'bar',
       };
 
-      identityService.getSettingsSkipPermission.mockResolvedValueOnce(payload);
+      userService.getSettingsSkipPermission.mockResolvedValueOnce(payload);
 
       const res = await accountsActions.getSettingsWithoutPermission();
 
@@ -976,6 +964,45 @@ describe('accounts actions', () => {
         ),
       ).rejects.toThrow(expect.any(Error));
       validatorSpy.mockRestore();
+    });
+  });
+
+  describe('createAccount', () => {
+    it('should create new account with next address from hd wallet', async () => {
+      expect.assertions(3);
+
+      const password = 'pwd';
+      const v3KeyStoreChild = {
+        address: accountAddress,
+      };
+
+      userService.getNextWalletFromHD.mockResolvedValueOnce({
+        toV3: jest.fn().mockReturnValue(v3KeyStoreChild),
+      });
+
+      await accountsActions.createAccount(
+        {
+          commit,
+          dispatch,
+          getters,
+        },
+        {
+          password,
+        },
+      );
+
+      expect(userService.setAccount).toBeCalledWith(
+        v3KeyStoreChild.address,
+        v3KeyStoreChild,
+      );
+      expect(commit).toBeCalledWith('addAccount', {
+        ...v3KeyStoreChild,
+        type: WALLET_TYPES.STANDART,
+        hidden: false,
+      });
+      expect(dispatch).toBeCalledWith('updateSettings', {
+        lastActiveAccount: v3KeyStoreChild.address,
+      });
     });
   });
 });
