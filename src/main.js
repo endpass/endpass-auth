@@ -13,6 +13,13 @@ import i18n from '@/locales/i18n';
   const isE2E = ENV.VUE_APP_IS_E2E_CONNECT;
   if (isE2E) {
     duplexBridge = await e2eSetup(window);
+    if (!duplexBridge) {
+      console.error(
+        'Doh! Something broken with duplex bridge initialization, check e2eSetup() method',
+      );
+    } else {
+      duplexBridge.finishSetup();
+    }
   }
 
   Vue.use(validation);
@@ -25,8 +32,4 @@ import i18n from '@/locales/i18n';
     i18n,
     router,
   }).$mount('#app');
-
-  if (isE2E && duplexBridge) {
-    duplexBridge.finishSetup();
-  }
 })();

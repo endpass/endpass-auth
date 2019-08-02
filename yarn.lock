@@ -1132,32 +1132,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.14.6":
-  version "0.14.6"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.14.6.tgz#11ed4f1c9b561897a06efbdb7bdfdc52941d3018"
-  integrity sha512-PeQhLrJzdpQU81BZyoGtAdHmhiGKCuOhi3sHOBrdvZAkSbC6xgwcKAckRRysfkGRsutOBhjpvr0GeUWSsf5bkA==
-  dependencies:
-    "@endpass/utils" "^1.4.2"
-    "@ledgerhq/hw-app-eth" "^4.24.0"
-    "@ledgerhq/hw-transport-u2f" "^4.24.0"
-    bignumber.js "^7.2.1"
-    dexie "^2.0.4"
-    eth-ens-namehash "^2.0.8"
-    ethereumjs-tx "^1.3.4"
-    ethereumjs-wallet "^0.6.0"
-    lodash "^4.17.11"
-    path-to-regexp "^2.4.0"
-    trezor-connect "^6.0.0"
-    web3 "1.0.0-beta.33"
-    web3-providers-http "1.0.0-beta.33"
-    web3-providers-ipc "1.0.0-beta.33"
-    web3-providers-ws "1.0.0-beta.33"
-    web3-utils "1.0.0-beta.33"
-
-"@endpass/class@^0.16.1":
-  version "0.16.1"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.16.1.tgz#74e9cd7f0ab81a4a45be301c45f5a2cef2e1209f"
-  integrity sha512-OBZGXUDmazTmA/NTkalu5XgAd6FjcfOy2ijIkLzTcmy/fmhFJWbTDT1rjGOTyFbXvW2sZ3PoObQgDAt8h4o0nQ==
+"@endpass/class@^0.17.0":
+  version "0.17.0"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.0.tgz#49f55ad21b427519b08b4f4ab6fad540a74284cc"
+  integrity sha512-U4OTmRADHLdSr8eAL8OVjrnlt9Uu1jtNoI7Yd+Buq3JiRlX+FZ+A+mThI0yD5nRmVozyhL7iw1rX9ufX9qnGUg==
   dependencies:
     "@endpass/utils" "^1.8.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"
@@ -1175,13 +1153,13 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/e2e-utils@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.3.0.tgz#eb21cb7a0e6ad9e198f4baaf470a41d1e79e4704"
-  integrity sha512-rdRFNegm0e4HlmL4weVCnnKKHB4Mg/Bzga1ZH+PPCTuL7FewfrfKj5ezYdVObiz/KzrDBho+/ETa10OuYo8puw==
+"@endpass/e2e-utils@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.3.1.tgz#4ebf91424642afde33de7088bfbc27782f48344b"
+  integrity sha512-9GJuZT12RTHiuEn+dlgo7BAIdeimTKkPIs7y3FK8+8JAGfUSrSU7v31qLgfoSMadZqRuHc2uUAc1gGWeGaIczw==
   dependencies:
     "@babel/runtime" "^7.5.5"
-    "@endpass/class" "^0.16.1"
+    "@endpass/class" "^0.17.0"
     nanoid "^2.0.3"
 
 "@endpass/eslint-plugin-endpass@^0.1.0":
@@ -1224,22 +1202,6 @@
     keythereum "^1.0.4"
     lodash "^4.17.11"
     node-notifier "^5.4.0"
-
-"@endpass/utils@^1.4.2":
-  version "1.4.2"
-  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.4.2.tgz#37a02dcf5769172f97d70e3df71aa219c4be8b2e"
-  integrity sha512-uqHg87zciB5mvEobL3al/7fnLEBv0npdm/wo15Nw9cuvyaaYjM/RDkFFpZaALT5fB5OEKvl5WqePAydP6WgVlQ==
-  dependencies:
-    bip39 "^3.0.2"
-    bs58check "^2.1.2"
-    dayjs "^1.8.14"
-    eth-ecies "^1.0.3"
-    ethereumjs-wallet "^0.6.3"
-    export-files "^2.1.1"
-    keythereum "^1.0.4"
-    lodash "^4.17.11"
-    node-notifier "^5.4.0"
-    secp256k1 "^3.7.0"
 
 "@endpass/utils@^1.8.0":
   version "1.8.0"

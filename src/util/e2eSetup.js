@@ -3,19 +3,32 @@ import { SWController, SWControllerDuplexBridge } from '@endpass/e2e-utils';
 const registerWorker = url =>
   // eslint-disable-next-line
   new Promise(async resolve => {
-    if (!window.navigator.serviceWorker) return resolve(null);
+    if (!window.navigator.serviceWorker) {
+      return resolve(null);
+    }
 
     try {
       const registration = await window.navigator.serviceWorker.register(url);
-      const updateHandler = () => {
-        registration.removeEventListener('updatefound', updateHandler);
-
-        return resolve(registration.active);
-      };
 
       if (registration.active) {
         return resolve(registration.active);
       }
+
+      const updateHandler = () => {
+        registration.removeEventListener('updatefound', updateHandler);
+        if (registration.active) {
+          return resolve(registration.active);
+        }
+
+        const installingWorker = registration.installing;
+        const onStatus = () => {
+          if (installingWorker.state === 'activated') {
+            installingWorker.removeEventListener('statechange', onStatus);
+            return resolve(registration.active);
+          }
+        };
+        installingWorker.addEventListener('statechange', onStatus);
+      };
 
       registration.addEventListener('updatefound', updateHandler);
     } catch (err) {
@@ -40,6 +53,7 @@ const e2eSetup = async () => {
   const swDuplexBridge = new SWControllerDuplexBridge({
     controller,
     target: window,
+    bus: window,
     name: 'e2e-auth',
   });
 
