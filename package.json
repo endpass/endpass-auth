@@ -59,7 +59,7 @@
     "@endpass/class": "^0.17.1",
     "@endpass/e2e-utils": "^0.5.0",
     "@endpass/faucet": "^0.2.1",
-    "@endpass/ui": "^0.15.34",
+    "@endpass/ui": "^0.15.36",
     "@endpass/utils": "^1.8.2",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
