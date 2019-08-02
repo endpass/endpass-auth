@@ -539,6 +539,8 @@ const validatePassword = async (
   }
 };
 
+const getSeedTemplateUrl = () => identityService.getSeedTemplateUrl();
+
 export default {
   auth,
   authWithGoogle,
@@ -578,4 +580,5 @@ export default {
   defineSettingsWithoutPermission,
   validatePassword,
   createAccount,
+  getSeedTemplateUrl,
 };

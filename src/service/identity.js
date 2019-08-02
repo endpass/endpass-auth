@@ -158,6 +158,8 @@ const recover = (email, signature, redirectUrl) =>
       return res;
     });
 
+const getSeedTemplateUrl = () => `${identityBaseUrl}/auth/recover/template`;
+
 export default {
   getAuthStatus,
   checkAccountExist,
@@ -176,4 +178,5 @@ export default {
   getOtpSettings,
   getRecoveryIdentifier,
   recover,
+  getSeedTemplateUrl,
 };
