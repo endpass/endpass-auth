@@ -18,7 +18,7 @@ import i18n from '@/locales/i18n';
         'Doh! Something broken with duplex bridge initialization, check e2eSetup() method',
       );
     } else {
-      duplexBridge.finishSetup();
+      await duplexBridge.awaitSetupFinish();
     }
   }
 
