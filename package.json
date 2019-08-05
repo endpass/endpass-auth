@@ -14,6 +14,7 @@
   "homepage": "https://github.com/endpass/endpass-auth",
   "scripts": {
     "dev": "SOURCE_MAP=true vue-cli-service serve ./src/main.js",
+    "dev:e2e": "vue-cli-service serve ./src/main.js --mode e2e-connect",
     "build": "rimraf ./dist && NODE_ENV=production vue-cli-service build ./src/main.js",
     "build:version": "rimraf ./dist && vue-cli-service build ./src/main.js --mode version",
     "report": "vue-cli-service build ./src/main.js --report ",
