@@ -21,13 +21,16 @@ const registerWorker = url =>
         }
 
         const installingWorker = registration.installing;
+        // eslint-disable-next-line consistent-return
         const onStatus = () => {
           if (installingWorker.state === 'activated') {
             installingWorker.removeEventListener('statechange', onStatus);
             return resolve(registration.active);
           }
+          return null;
         };
         installingWorker.addEventListener('statechange', onStatus);
+        return null;
       };
 
       registration.addEventListener('updatefound', updateHandler);

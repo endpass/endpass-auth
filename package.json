@@ -56,11 +56,11 @@
     }
   },
   "dependencies": {
-    "@endpass/class": "^0.17.0",
+    "@endpass/class": "^0.17.1",
     "@endpass/e2e-utils": "^0.4.0",
-    "@endpass/faucet": "^0.2.0",
-    "@endpass/ui": "^0.14.7",
-    "@endpass/utils": "^1.8.0",
+    "@endpass/faucet": "^0.2.1",
+    "@endpass/ui": "^0.15.34",
+    "@endpass/utils": "^1.8.2",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "ethereum-blockies-base64": "^1.0.2",
