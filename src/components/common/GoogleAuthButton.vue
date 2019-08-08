@@ -1,6 +1,7 @@
 <template lang="html">
   <v-button
     :disabled="!auth2Loaded"
+    :is-loading="!auth2Loaded"
     skin="social"
     type="button"
     data-test="submit-button"

@@ -44,6 +44,7 @@ const registerWorker = url =>
     }
   });
 
+// eslint-disable-next-line consistent-return
 const e2eSetup = async () => {
   const sw = await registerWorker(
     `${ENV.VUE_APP_E2E_CONNECT_BASE_URL}/sw-e2e.js`,
