@@ -1132,27 +1132,6 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.0.tgz#49f55ad21b427519b08b4f4ab6fad540a74284cc"
-  integrity sha512-U4OTmRADHLdSr8eAL8OVjrnlt9Uu1jtNoI7Yd+Buq3JiRlX+FZ+A+mThI0yD5nRmVozyhL7iw1rX9ufX9qnGUg==
-  dependencies:
-    "@endpass/utils" "^1.8.2"
-    "@ledgerhq/hw-app-eth" "^4.24.0"
-    "@ledgerhq/hw-transport-u2f" "^4.24.0"
-    bignumber.js "^7.2.1"
-    dexie "^2.0.4"
-    eth-ens-namehash "^2.0.8"
-    ethereumjs-tx "^1.3.4"
-    ethereumjs-wallet "^0.6.0"
-    lodash "^4.17.15"
-    path-to-regexp "^2.4.0"
-    trezor-connect "^6.0.0"
-    web3-providers-http "1.0.0-beta.33"
-    web3-providers-ipc "1.0.0-beta.33"
-    web3-providers-ws "1.0.0-beta.33"
-    web3-utils "1.0.0-beta.33"
-
 "@endpass/class@^0.17.1":
   version "0.17.1"
   resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.1.tgz#1c9f85e48b436d25ac3d957fa04b2fea52128836"
@@ -1174,13 +1153,13 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/e2e-utils@^0.4.0":
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.4.0.tgz#c196ab341d99d81a21d2f44341a375b40683cfbe"
-  integrity sha512-P4xwSMy+F+y8Kw6tE1WFpD5iX8L0xTwwYqnd72qoKtRKTAitDteZsl1sjuI7qDjZBNsPJ7b4io55iDMDkM02jw==
+"@endpass/e2e-utils@^0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.5.0.tgz#16b5f23b3f0f772c4a6b1dae1543fee25aba12be"
+  integrity sha512-sR1EBuhR86GY45AeAvqLaHdmowYJ8oN0POs1+diT1ULSSAAzEuT2WFSrDdcBJvmsvj/8hGfXX0kKJ6Xp96wgMw==
   dependencies:
     "@babel/runtime" "^7.5.5"
-    "@endpass/class" "^0.17.0"
+    "@endpass/class" "^0.17.1"
     nanoid "^2.0.3"
 
 "@endpass/eslint-plugin-endpass@^0.1.0":
