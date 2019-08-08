@@ -9,17 +9,8 @@ import '@endpass/ui/kit/kit.theme-default.css';
 import i18n from '@/locales/i18n';
 
 (async () => {
-  let duplexBridge;
-  const isE2E = ENV.VUE_APP_IS_E2E_CONNECT;
-  if (isE2E) {
-    duplexBridge = await e2eSetup(window);
-    if (!duplexBridge) {
-      console.error(
-        'Doh! Something broken with duplex bridge initialization, check e2eSetup() method',
-      );
-    } else {
-      await duplexBridge.awaitSetupFinish();
-    }
+  if (ENV.VUE_APP_IS_E2E_CONNECT) {
+    await e2eSetup(window);
   }
 
   Vue.use(validation);

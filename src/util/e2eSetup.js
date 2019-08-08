@@ -1,4 +1,4 @@
-import { SWController, SWControllerDuplexBridge } from '@endpass/e2e-utils';
+import { SWController, SWClient } from '@endpass/e2e-utils';
 
 const registerWorker = url =>
   // eslint-disable-next-line
@@ -53,16 +53,19 @@ const e2eSetup = async () => {
 
   const controller = new SWController(sw);
 
-  const swDuplexBridge = new SWControllerDuplexBridge({
+  const swClient = new SWClient({
     controller,
-    target: window,
-    bus: window,
+    setupTarget: window.parent,
     name: 'e2e-auth',
   });
 
-  swDuplexBridge.subscribe();
-
-  return swDuplexBridge;
+  if (!swClient) {
+    console.error(
+      'Doh! Something broken with SWClient initialization, check e2eSetup() method',
+    );
+  } else {
+    await swClient.awaitClientResume();
+  }
 };
 
 export default e2eSetup;

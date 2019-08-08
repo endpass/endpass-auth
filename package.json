@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "@endpass/class": "^0.17.1",
-    "@endpass/e2e-utils": "^0.4.0",
+    "@endpass/e2e-utils": "^0.5.0",
     "@endpass/faucet": "^0.2.1",
     "@endpass/ui": "^0.15.34",
     "@endpass/utils": "^1.8.2",
