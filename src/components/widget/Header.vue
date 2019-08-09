@@ -15,6 +15,13 @@
         data-test="widget-header-status"
       >
         {{ statusLabel }}
+        <span class="widget-header-status-icon">
+          <v-svg-icon
+            width="10px"
+            height="5px"
+            :name="statusIcon"
+          />
+        </span>
       </span>
     </section>
     <section class="widget-header-content">
@@ -53,6 +60,7 @@ import BigNumber from 'bignumber.js';
 import { mapActions } from 'vuex';
 import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
+import VSvgIcon from '@/components/common/VSvgIcon';
 import CurrencyToggler from './CurrencyToggler.vue';
 
 export default {
@@ -86,6 +94,10 @@ export default {
       return this.isCollapsed
         ? this.$i18n.t('components.widgetHeader.showMore')
         : this.$i18n.t('components.widgetHeader.showLess');
+    },
+
+    statusIcon() {
+      return this.isCollapsed ? 'chevron-down' : 'chevron-up';
     },
 
     actualBalance() {
@@ -156,12 +168,15 @@ export default {
     },
 
     handleTogglerClick() {
+      if (this.isLoading) return;
+
       this.$emit('toggle');
     },
   },
 
   components: {
     Spinner,
+    VSvgIcon,
     CurrencyToggler,
   },
 };
@@ -175,7 +190,9 @@ export default {
   background-color: #4b016f;
   background-repeat: no-repeat;
   background-size: cover;
+  background-position: center;
   cursor: pointer;
+  outline: none;
 }
 
 .widget-header-control {
@@ -192,8 +209,9 @@ export default {
 .widget-header-link {
   flex: 0 0 auto;
   color: #fff;
-  text-decoration: underline;
+  text-decoration: undeline;
   font-size: 8px;
+  font-weight: normal;
   line-height: 1.5;
   margin-left: auto;
 }
@@ -202,6 +220,9 @@ export default {
   flex: 0 0 auto;
   text-transform: uppercase;
   font-size: 12px;
+  font-weight: bold;
+  line-height: 1.35;
+  letter-spacing: 1px;
 }
 
 .widget-header-status {
@@ -210,14 +231,22 @@ export default {
   border: none;
   background: none;
   color: #fff;
-  font-size: 10px;
+  font-size: 12px;
+  line-height: 1;
   cursor: pointer;
+}
+
+.widget-header-status-icon {
+  width: 10px;
+  height: 5px;
+  margin-left: 4px;
 }
 
 .widget-header-balance {
   display: inline-block;
   vertical-align: middle;
   font-size: 24px;
+  font-weight: bold;
   line-height: 1;
   margin-right: 8px;
   letter-spacing: -0.3px;

@@ -42,12 +42,6 @@ describe('components > widget > WidgetAccounts', () => {
       });
     });
 
-    it('should emit accounts toggle on accounts control click', () => {
-      wrapper.find('[data-test=accounts-toggle-button]').vm.$emit('click');
-
-      expect(wrapper.emitted()['accounts-toggle']).toBeTruthy();
-    });
-
     it('should emit account change on account button click', () => {
       wrapper.find('[data-test=account-button]').vm.$emit('click');
 

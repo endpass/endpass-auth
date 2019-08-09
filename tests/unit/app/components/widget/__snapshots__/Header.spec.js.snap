@@ -7,7 +7,7 @@ exports[`Widget Header render should change status label is collapsed is falsy 1
       balance
     </h3> <span data-test="widget-header-status" class="widget-header-status">
       Show less
-    </span>
+      <span class="widget-header-status-icon"><v-svg-icon-stub name="chevron-up" width="10px" fill="" height="5px"></v-svg-icon-stub></span></span>
   </section>
   <section class="widget-header-content">
     <spinner-stub size="24" iswhite="true"></spinner-stub> <a href="https://wallet.endpass.com" target="_blank" class="widget-header-link">wallet.endpass.com</a>
@@ -22,7 +22,7 @@ exports[`Widget Header render should correctly render 1`] = `
       balance
     </h3> <span data-test="widget-header-status" class="widget-header-status">
       Show more
-    </span>
+      <span class="widget-header-status-icon"><v-svg-icon-stub name="chevron-down" width="10px" fill="" height="5px"></v-svg-icon-stub></span></span>
   </section>
   <section class="widget-header-content">
     <spinner-stub size="24" iswhite="true"></spinner-stub> <a href="https://wallet.endpass.com" target="_blank" class="widget-header-link">wallet.endpass.com</a>

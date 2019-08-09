@@ -1,46 +1,42 @@
 <template>
-  <div>
-    <accordion
-      :is-collapsed="isAccountsCollapsed"
-      max-height="225px"
-    >
-      <option-button
-        data-test="new-account-button"
-        @click="handleNewAccountClick"
-      >
-        {{ $t('components.widgetContent.newAccount') }}
-      </option-button>
-      <option-button
-        slot="control"
-        :is-big="true"
-        :icon-fill="isAccountsCollapsed ? '#C3C6CA' : '#4B0470'"
-        :icon-transform="isAccountsCollapsed ? 'none' : 'rotate(90deg)'"
-        :disabled="isLoading"
-        icon="arrow"
-        data-test="accounts-toggle-button"
-        @click="handleAccountsButtonClick"
-      >
-        {{ $t('components.widgetContent.changeAccount') }}
-      </option-button>
-      <option-button
-        v-for="account in actualAccounts"
-        :key="account.address"
-        :icon="currentAccount === account.address ? 'check' : null"
-        :icon-fill="currentAccount === account.address ? '#4B0470' : null"
-        :disabled="isLoading"
-        data-test="account-button"
-        @click="handleAccountButtonClick(account.address)"
-      >
-        <span class="widget-accounts-item-address">
-          <i class="widget-accounts-item-identicon">
-            <identicon :address="account.address" />
-          </i>
-          <span>{{ formatAddress(account.address) }}</span>
-        </span>
-      </option-button>
-    </accordion>
+  <div class="widget-accounts">
     <option-button
-      :is-big="true"
+      data-test="new-account-button"
+      @click="handleNewAccountClick"
+    >
+      {{ $t('components.widgetContent.newAccount') }}
+    </option-button>
+    <div class="widget-accounts-scroll-mask-wrapper">
+      <ul
+        ref="list"
+        class="widget-accounts-list"
+        :style="{ width: listWidth }"
+      >
+        <li
+          v-for="account in actualAccounts"
+          :key="account.address"
+        >
+          <option-button
+            :icon="currentAccount === account.address ? 'check' : null"
+            :disabled="isLoading"
+            icon-fill="#4B0470"
+            data-test="account-button"
+            @click="handleAccountButtonClick(account.address)"
+          >
+            <span class="widget-accounts-item-address">
+              <i class="widget-accounts-item-identicon">
+                <identicon
+                  :address="account.address"
+                  :is-small="true"
+                />
+              </i>
+              <span>{{ formatAddress(account.address) }}</span>
+            </span>
+          </option-button>
+        </li>
+      </ul>
+    </div>
+    <option-button
       :disabled="isLoading"
       icon="arrow"
       data-test="logout-button"
@@ -55,7 +51,6 @@
 import { getShortStringWithEllipsis } from '@endpass/utils/strings';
 import Identicon from '@/components/common/Identicon';
 import OptionButton from './OptionButton.vue';
-import Accordion from './Accordion.vue';
 
 export default {
   name: 'WidgetAccounts',
@@ -76,24 +71,33 @@ export default {
       default: true,
     },
 
-    isAccountsCollapsed: {
-      type: Boolean,
-      default: true,
-    },
-
     isLoading: {
       type: Boolean,
       default: false,
     },
   },
 
+  data: () => ({
+    scrollWidth: 0,
+  }),
+
   computed: {
     actualAccounts() {
       return this.accounts.filter(account => !!account.address);
     },
+
+    listWidth() {
+      return `calc(100% + ${this.scrollWidth}px)`;
+    },
   },
 
   methods: {
+    getScrollBarWidth() {
+      const { offsetWidth, clientWidth } = this.$refs.list;
+
+      return offsetWidth - clientWidth;
+    },
+
     handleAccountsButtonClick() {
       this.$emit('accounts-toggle');
     },
@@ -111,19 +115,35 @@ export default {
     },
 
     formatAddress(address) {
-      return getShortStringWithEllipsis(address, 9);
+      return getShortStringWithEllipsis(address, 11);
     },
+  },
+
+  updated() {
+    this.scrollWidth = this.getScrollBarWidth();
   },
 
   components: {
     Identicon,
-    Accordion,
     OptionButton,
   },
 };
 </script>
 
 <style lang="postcss">
+.widget-accounts-scroll-mask-wrapper {
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.widget-accounts-list {
+  overflow-y: auto;
+  max-height: 240px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 .widget-accounts-item-address {
   display: inline-flex;
   align-items: center;
@@ -132,5 +152,6 @@ export default {
 .widget-accounts-item-identicon {
   flex: 0 0 auto;
   margin-right: 13px;
+  margin-bottom: 3px;
 }
 </style>
