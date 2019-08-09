@@ -116,7 +116,7 @@ describe('GoogleAuthButton', () => {
     it('should correctly submit', async () => {
       expect.assertions(3);
 
-      wrapper.find('[data-test=submit-button]').trigger('click');
+      wrapper.find('[data-test=submit-button-google]').trigger('click');
       await global.flushPromises();
 
       expect(window.gapi.auth2.init).toHaveBeenCalledWith({
