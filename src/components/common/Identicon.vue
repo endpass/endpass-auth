@@ -1,5 +1,5 @@
 <template>
-  <div class="identicon">
+  <div :class="{ identicon: true, 'is-small': isSmall }">
     <img
       :src="image"
       :alt="address"
@@ -18,6 +18,11 @@ export default {
     address: {
       type: String,
       required: true,
+    },
+
+    isSmall: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -39,6 +44,11 @@ export default {
   overflow: hidden;
   border: 1px solid #e2e2e2;
   box-sizing: content-box;
+
+  &.is-small {
+    width: 14px;
+    height: 14px;
+  }
 }
 
 .identicon img {

@@ -36,7 +36,6 @@
         />
         <widget-accounts
           v-else
-          :is-accounts-collapsed="isAccountsCollapsed"
           :accounts="accounts"
           :current-account="currentAccount"
           :is-loading="loading"
