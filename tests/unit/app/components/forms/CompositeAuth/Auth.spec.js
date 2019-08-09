@@ -60,7 +60,7 @@ describe('Auth', () => {
         i18n,
       });
 
-      const submitButton = wrapper.find('[data-test=submit-button]');
+      const submitButton = wrapper.find('[data-test=submit-button-auth]');
 
       expect(wrapper.html()).toMatchSnapshot();
       expect(submitButton.text()).toBe('Loading...');
@@ -123,7 +123,7 @@ describe('Auth', () => {
                 });
 
                 expect(
-                  wrapper.find('[data-test=submit-button]').attributes()
+                  wrapper.find('[data-test=submit-button-auth]').attributes()
                     .disabled,
                 ).toBe('disabled');
               },
@@ -150,7 +150,8 @@ describe('Auth', () => {
 
           it('should enable submit button', () => {
             expect(
-              wrapper.find('[data-test=submit-button]').attributes().disabled,
+              wrapper.find('[data-test=submit-button-auth]').attributes()
+                .disabled,
             ).not.toBe('disabled');
           });
 
@@ -184,7 +185,8 @@ describe('Auth', () => {
 
           it('should disable submit button', () => {
             expect(
-              wrapper.find('[data-test=submit-button]').attributes().disabled,
+              wrapper.find('[data-test=submit-button-auth]').attributes()
+                .disabled,
             ).toBe('disabled');
           });
         });
@@ -204,7 +206,8 @@ describe('Auth', () => {
 
           it('should enable submit button', () => {
             expect(
-              wrapper.find('[data-test=submit-button]').attributes().disabled,
+              wrapper.find('[data-test=submit-button-auth]').attributes()
+                .disabled,
             ).not.toBe('disabled');
           });
         });

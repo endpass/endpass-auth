@@ -1,10 +1,7 @@
 <template>
   <div>
     <div v-if="!isShowSeed">
-      <form
-        data-test="define-pwd-form"
-        @submit.prevent="onCreateWallet"
-      >
+      <form data-test="define-pwd-form" @submit.prevent="onCreateWallet">
         <message
           class="v-modal-card-title"
           v-html="$t('components.createWallet.choosePass')"
@@ -15,6 +12,7 @@
             v-validate="'required|min:8'"
             data-vv-as="password"
             data-vv-name="password"
+            data-test="password-main"
             :error="errors.first('password')"
             required
             type="password"
@@ -28,17 +26,14 @@
             label=""
             data-vv-as="password confirm"
             data-vv-name="passwordConfirm"
+            data-test="password-confirm"
             :error="errors.first('passwordConfirm')"
             required
             type="password"
             :placeholder="$t('components.createWallet.confirmPass')"
           />
         </form-item>
-        <message
-          v-if="error"
-          :error="true"
-          data-test="create-wallet-error"
-        >
+        <message v-if="error" :error="true" data-test="create-wallet-error">
           {{ error }}
         </message>
         <div>
@@ -47,7 +42,7 @@
             :disabled="!canSubmit"
             size="big"
             type="submit"
-            data-test="submit-button"
+            data-test="submit-button-create-wallet"
           >
             {{ primaryButtonLabel }}
           </v-button>
@@ -65,28 +60,15 @@
             class="create-wallet-subtitle v-body is-small"
             v-html="$t('components.createWallet.recoverySubtitle')"
           />
-          <ul
-            class="create-wallet-seed"
-            data-test="seed-phrase"
-          >
-            <li
-              v-for="word in splittedSeedKey"
-              :key="word"
-            >
+          <ul class="create-wallet-seed" data-test="seed-phrase">
+            <li v-for="word in splittedSeedKey" :key="word">
               <v-tag skin="light-gray">
                 {{ word }}
               </v-tag>
             </li>
           </ul>
-          <div
-            v-if="seedTemplateUrl"
-            class="create-wallet-template-download"
-          >
-            <v-icon-control
-              icon="pdf"
-              :href="seedTemplateUrl"
-              target="_blank"
-            >
+          <div v-if="seedTemplateUrl" class="create-wallet-template-download">
+            <v-icon-control icon="pdf" :href="seedTemplateUrl" target="_blank">
               {{ $t('components.createWallet.downloadTemplate') }}
             </v-icon-control>
           </div>

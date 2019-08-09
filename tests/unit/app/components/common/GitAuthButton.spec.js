@@ -68,7 +68,7 @@ describe('GitAuthButton', () => {
       loginWithGithub.mockResolvedValue({
         code,
       });
-      wrapper.find('[data-test=submit-button]').trigger('click');
+      wrapper.find('[data-test=submit-button-github]').trigger('click');
       await global.flushPromises();
 
       expect(loginWithGithub).toHaveBeenCalledWith({

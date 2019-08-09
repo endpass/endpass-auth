@@ -4,7 +4,7 @@
     :is-loading="!auth2Loaded"
     skin="social"
     type="button"
-    data-test="submit-button"
+    data-test="submit-button-google"
     @click.native="loginWithGoogle"
   >
     <v-svg-icon
