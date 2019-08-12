@@ -1153,10 +1153,10 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/e2e-utils@^0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.5.0.tgz#16b5f23b3f0f772c4a6b1dae1543fee25aba12be"
-  integrity sha512-sR1EBuhR86GY45AeAvqLaHdmowYJ8oN0POs1+diT1ULSSAAzEuT2WFSrDdcBJvmsvj/8hGfXX0kKJ6Xp96wgMw==
+"@endpass/e2e-utils@^0.5.1":
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.5.1.tgz#212cfa39fac9b8d8a50e4ee613a3c30714415a80"
+  integrity sha512-ukRLsTyGmiSPBBqb8ruxgYZ28kJouUzZYvqfhS0duzdk2xS88itAQIvFzVvozOA/1wWLzTTw8jwCkJuJ1NBIUA==
   dependencies:
     "@babel/runtime" "^7.5.5"
     "@endpass/class" "^0.17.1"
