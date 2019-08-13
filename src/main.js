@@ -15,9 +15,7 @@ import i18n from '@/locales/i18n';
       window.XMLHttpRequest = window.parent.XMLHttpRequest;
       window.fetch = window.parent.fetch;
     }
-  } catch (e) {
-    console.error(e);
-  }
+  } catch (e) {}
 
   Vue.use(validation);
   Vue.use(VShowSlide);

@@ -1,5 +1,8 @@
 <template>
-  <div class="widget">
+  <div
+    class="widget"
+    data-test="widget-container"
+  >
     <div
       v-if="isMobile"
       ref="trigger"
