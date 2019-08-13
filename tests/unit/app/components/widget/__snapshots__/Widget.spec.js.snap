@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Widget render should correctly render 1`] = `
-<div class="widget">
+<div data-test="widget-container" class="widget">
   <!---->
   <div class="widget-frame bottom">
     <widget-header-stub fiatcurrency="USD" iscollapsed="true"></widget-header-stub>
