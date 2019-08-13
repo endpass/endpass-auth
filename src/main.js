@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
-import e2eSetup from '@/util/e2eSetup';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
@@ -9,8 +8,15 @@ import '@endpass/ui/kit/kit.theme-default.css';
 import i18n from '@/locales/i18n';
 
 (async () => {
-  if (ENV.VUE_APP_IS_E2E_CONNECT) {
-    await e2eSetup(window);
+  try {
+    if (window.parent.e2eBridge) {
+      console.warn('AUTH is working on E2E MODE');
+      await window.parent.e2eBridge.awaitClientResume();
+      window.XMLHttpRequest = window.parent.XMLHttpRequest;
+      window.fetch = window.parent.fetch;
+    }
+  } catch (e) {
+    console.error(e);
   }
 
   Vue.use(validation);
