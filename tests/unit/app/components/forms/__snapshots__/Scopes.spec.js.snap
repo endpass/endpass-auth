@@ -25,8 +25,8 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
     </message-stub>
   </form-field-stub>
   <div class="form-field">
-    <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]"></scopes-checkbox-tree-stub>
-    <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]"></scopes-checkbox-tree-stub>
+    <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]" data-test="scopes-tree"></scopes-checkbox-tree-stub>
+    <scopes-checkbox-tree-stub children="[object Object]" valuesmap="[object Object]" level="[object Object]" data-test="scopes-tree"></scopes-checkbox-tree-stub>
   </div>
   <form-controls-stub>
     <!---->

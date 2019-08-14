@@ -12,6 +12,7 @@
         :level="level"
         :children="level.children"
         :values-map="valuesScopesMap"
+        data-test="scopes-tree"
         @change="onChange"
       />
     </div>

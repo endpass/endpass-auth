@@ -23,6 +23,7 @@
             :data-vv-as="$t('components.sign.valueField')"
             name="value"
             type="number"
+            data-test="value-input"
           />
         </form-field>
         <form-field
@@ -37,6 +38,7 @@
             :disabled="true"
             name="value"
             type="number"
+            data-test="value-fiat-input"
           />
         </form-field>
       </div>
@@ -44,6 +46,7 @@
         <button
           class="sign-transaction-form-toggler"
           type="button"
+          data-test="advanced-settings-toggle"
           @click="handleToggleAdvancedSettings"
         >
           {{ advancedSettingsTogglerLabel }}
@@ -57,6 +60,7 @@
           <v-input
             v-model="data"
             :disabled="true"
+            data-test="data-input"
           />
         </form-field>
         <form-field :label="$t('components.sign.transactionGasPrice')">
@@ -70,6 +74,7 @@
             step="1"
             min="1"
             max="100"
+            data-test="gas-price-input"
           />
         </form-field>
         <form-field
@@ -92,6 +97,7 @@
             step="1000"
             min="21000"
             max="1000000"
+            data-test="gas-limit-input"
           />
         </form-field>
       </div>
