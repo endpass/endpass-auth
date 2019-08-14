@@ -13,6 +13,7 @@
         name="seedPhrase"
         :placeholder="$t('components.recover.seedPhrase')"
         required
+        data-test="seed-phrase"
       />
     </form-item>
     <form-row>

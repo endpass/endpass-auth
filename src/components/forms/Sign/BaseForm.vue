@@ -30,6 +30,7 @@
         :data-vv-as="$t('components.sign.passwordField')"
         name="password"
         type="password"
+        data-test="password-input"
       />
     </form-field>
     <slot />

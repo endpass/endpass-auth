@@ -21,6 +21,7 @@
         v-model="formData.activeAccount"
         :options="accounts"
         name="activeAccount"
+        data-test="active-account-select"
       />
     </form-field>
     <form-field :label="$t('components.account.activeNet')">
@@ -28,6 +29,7 @@
         v-model="formData.activeNet"
         :options="networks"
         name="activeNetwork"
+        data-test="active-network-select"
       />
     </form-field>
     <form-field>
@@ -53,6 +55,7 @@
       <v-button
         slot-scope="{ sendRequest, isLoading }"
         type="button"
+        data-test="faucet-button"
         :disabled="isLoading"
         @click="sendRequest"
       >

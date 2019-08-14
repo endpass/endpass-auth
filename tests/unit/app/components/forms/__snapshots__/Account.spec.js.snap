@@ -5,10 +5,10 @@ exports[`Account render should correctly render Account component 1`] = `
   <!---->
   <!---->
   <form-field-stub label="Active account address">
-    <v-select-stub value="0x0" options="" skin="primary" name="activeAccount"></v-select-stub>
+    <v-select-stub value="0x0" options="" skin="primary" name="activeAccount" data-test="active-account-select"></v-select-stub>
   </form-field-stub>
   <form-field-stub label="Active network">
-    <v-select-stub value="1" options="" skin="primary" name="activeNetwork"></v-select-stub>
+    <v-select-stub value="1" options="" skin="primary" name="activeNetwork" data-test="active-network-select"></v-select-stub>
   </form-field-stub>
   <form-field-stub>
     <v-button-stub skin="primary" size="normal" type="button" data-test="submit-button" fluid="">
