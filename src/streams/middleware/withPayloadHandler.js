@@ -1,4 +1,4 @@
-import { Answer } from '@/class';
+import Answer from '@/class/Answer';
 
 export default async function withPayloadHandler(options, action) {
   const { payloadHandler } = options;

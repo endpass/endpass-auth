@@ -20,15 +20,15 @@ import {
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
-import { Answer, Wallet } from '@/class';
+import Answer from '@/class/Answer';
 import {
   ENCRYPT_OPTIONS,
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
+  WALLET_TYPES,
 } from '@/constants';
 
-const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {

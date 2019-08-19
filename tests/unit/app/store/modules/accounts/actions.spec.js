@@ -23,10 +23,8 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import WalletClass from '@/class/Wallet';
-import { IDENTITY_MODE } from '@/constants';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
-const WALLET_TYPES = WalletClass.getTypes();
 const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
