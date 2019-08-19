@@ -37,4 +37,8 @@ export default {
     const Singer = await getSigner();
     return Singer.getWeb3Instance();
   },
+  async getTransactionClass() {
+    const Singer = await getSigner();
+    return Singer.getTransactionClass();
+  },
 };
