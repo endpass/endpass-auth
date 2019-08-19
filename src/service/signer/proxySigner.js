@@ -24,4 +24,9 @@ export default {
     const Singer = await getSigner();
     return Singer.getSignedRequest(params);
   },
+
+  async decryptHDWallet(password, v3KeyStore) {
+    const Singer = await getSigner();
+    return Singer.decryptHDWallet(password, v3KeyStore);
+  },
 };

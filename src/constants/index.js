@@ -53,6 +53,12 @@ export const DIRECTION = Object.freeze({
   CONNECT: 'connect',
 });
 
+// TODO: move to wallet constants in @endpass/class
+export const WALLET_TYPES = Object.freeze({
+  STANDART: 'StandardAccount',
+  HD_MAIN: 'HDMainAccount',
+});
+
 export const ORIGIN_HOST = parseUrl(document.referrer).origin;
 
 export const WIDGET_RESIZE_DURATION = 300;

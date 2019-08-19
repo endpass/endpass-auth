@@ -62,4 +62,8 @@ export default {
         return signature;
     }
   },
+
+  decryptHDWallet(password, v3KeyStore) {
+    return keystoreHDWallet.decryptHDWallet(password, v3KeyStore);
+  },
 };
