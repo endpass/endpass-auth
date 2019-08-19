@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
-import { setWeb3Network } from '@/service/web3';
+import { setWeb3Network, web3 } from '@/service/web3';
 import i18n from '@/locales/i18n';
 
 export default {
@@ -68,4 +68,7 @@ export default {
   },
 
   setWeb3Network,
+  getWeb3Instance() {
+    return web3;
+  },
 };

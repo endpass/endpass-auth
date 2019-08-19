@@ -7,7 +7,6 @@ import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
-import { web3 } from '@/service/web3';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
@@ -171,6 +170,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
     Buffer.from(password),
     ENCRYPT_OPTIONS,
   );
+  const web3 = await signerService.getWeb3Instance();
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
   await userService.setAccount(checksumAddress, {

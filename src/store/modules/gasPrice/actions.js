@@ -1,4 +1,4 @@
-import { web3 } from '@/service/web3';
+import signerService from '@/service/signer';
 import cryptoDataService from '@/service/cryptoData';
 
 const getGasPrices = async (ctx, network) => {
@@ -8,6 +8,7 @@ const getGasPrices = async (ctx, network) => {
 };
 
 const getGasLimitByAddress = async (ctx, address) => {
+  const web3 = await signerService.getWeb3Instance();
   const code = await web3.eth.getCode(address);
 
   if (code === '0x') {
