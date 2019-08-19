@@ -29,4 +29,8 @@ export default {
     const Singer = await getSigner();
     return Singer.decryptHDWallet(password, v3KeyStore);
   },
+  async setWeb3Network(network) {
+    const Singer = await getSigner();
+    return Singer.setWeb3Network(network);
+  },
 };
