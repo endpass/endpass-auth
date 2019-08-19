@@ -79,9 +79,10 @@ export default {
 
   components: {
     Screen,
-    SignMessageForm: () => import('@/components/forms/Sign/MessageForm'),
+    SignMessageForm: () =>
+      import(/* webpackChunkName: "msgForm" */ '@/components/forms/Sign/MessageForm'),
     SignTransactionForm: () =>
-      import('@/components/forms/Sign/TransactionForm'),
+      import(/* webpackChunkName: "trxForm" */ '@/components/forms/Sign/TransactionForm'),
     VModalCard,
   },
 };
