@@ -132,8 +132,9 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
 };
 
 const createInitialWallet = async ({ dispatch }, { password }) => {
-  const mod = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
-  const walletGen = mod.default;
+  const {
+    default: walletGen,
+  } = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
   const {
     v3KeystoreHdWallet,
     v3KeystoreChildWallet,

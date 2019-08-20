@@ -63,10 +63,6 @@ export default {
     }
   },
 
-  decryptHDWallet(password, v3KeyStore) {
-    return keystoreHDWallet.decryptHDWallet(password, v3KeyStore);
-  },
-
   setWeb3Network,
   getWeb3Instance() {
     return web3;
