@@ -1,7 +1,14 @@
 <template>
   <screen>
-    <v-frame :title="'Rate limit exceed!'" :loading="false" :closable="false">
-      <div class="v-rate-limit-body" data-test="rate-limit-body">
+    <v-frame
+      :title="$t('components.rateLimit.title')"
+      :loading="false"
+      :closable="false"
+    >
+      <div
+        class="v-rate-limit-body"
+        data-test="rate-limit-body"
+      >
         {{ $t('components.rateLimit.toMuch') }}
         <div class="v-rate-limit-timeout">
           {{ viewTimeout }}

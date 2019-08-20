@@ -23,10 +23,8 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import WalletClass from '@/class/Wallet';
-import { IDENTITY_MODE } from '@/constants';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
-const WALLET_TYPES = WalletClass.getTypes();
 const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
@@ -997,7 +995,7 @@ describe('accounts actions', () => {
       );
       expect(commit).toBeCalledWith('addAccount', {
         ...v3KeyStoreChild,
-        type: WALLET_TYPES.STANDART,
+        type: WALLET_TYPES.STANDARD,
         hidden: false,
       });
       expect(dispatch).toBeCalledWith('updateSettings', {

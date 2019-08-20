@@ -1,12 +1,10 @@
 import get from 'lodash/get';
 import keystoreHDKeyVerify from '@endpass/utils/keystoreHDKeyVerify';
-import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import request from '@/class/singleton/request';
-import { Wallet } from '@/class';
 import isV3 from '@endpass/utils/isV3';
+import { WALLET_TYPES } from '@/constants';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
-const WALLET_TYPES = Wallet.getTypes();
 
 export default {
   getSettings() {
@@ -40,7 +38,7 @@ export default {
   async setAccount(address, { info = {}, ...rest }) {
     const infoForSave = {
       address,
-      type: WALLET_TYPES.STANDART,
+      type: WALLET_TYPES.STANDARD,
       hidden: false,
       ...info,
     };
@@ -143,7 +141,11 @@ export default {
 
   async getNextWalletFromHD({ addresses, password }) {
     const v3KeyStore = await this.getHDKey();
-    const hdWallet = keystoreHDWallet.decryptHDWallet(password, v3KeyStore);
+    const {
+      default: walletGen,
+    } = await import(/* webpackChunkName: "keystore-hd-wallet" */ '@endpass/utils/keystoreHDWallet');
+
+    const hdWallet = await walletGen.decryptHDWallet(password, v3KeyStore);
 
     return this.findNextWalletInHD({ hdWallet, addresses });
   },

@@ -131,6 +131,7 @@
     },
     "notFound": "Sorry, but place is not found",
     "rateLimit": {
+      "title": "Rate limit exceed!",
       "toMuch": "Too much request from your IP address, please wait..."
     },
     "user": {

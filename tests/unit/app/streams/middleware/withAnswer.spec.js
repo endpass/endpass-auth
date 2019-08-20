@@ -1,4 +1,4 @@
-import { Answer } from '@/class';
+import Answer from '@/class/Answer';
 import withPayloadHandler from '@/streams/middleware/withPayloadHandler';
 
 describe('withPayloadHandler', () => {

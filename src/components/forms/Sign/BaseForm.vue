@@ -59,7 +59,7 @@
 <script>
 import get from 'lodash/get';
 import { mapActions } from 'vuex';
-import { setWeb3Network } from '@/service/web3';
+import signerService from '@/service/signer';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
@@ -167,7 +167,7 @@ export default {
 
   async mounted() {
     this.$validator.resume();
-    await setWeb3Network(this.network);
+    await signerService.setWeb3Network(this.network);
   },
 
   beforeDestroy() {

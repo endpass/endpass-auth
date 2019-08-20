@@ -7,7 +7,6 @@ import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
-import { web3 } from '@/service/web3';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
@@ -20,15 +19,15 @@ import {
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
-import { Answer, Wallet } from '@/class';
+import Answer from '@/class/Answer';
 import {
   ENCRYPT_OPTIONS,
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
+  WALLET_TYPES,
 } from '@/constants';
 
-const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
@@ -133,8 +132,9 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
 };
 
 const createInitialWallet = async ({ dispatch }, { password }) => {
-  const mod = await import('@endpass/utils/walletGen');
-  const walletGen = mod.default;
+  const {
+    default: walletGen,
+  } = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
   const {
     v3KeystoreHdWallet,
     v3KeystoreChildWallet,
@@ -171,6 +171,8 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
     Buffer.from(password),
     ENCRYPT_OPTIONS,
   );
+  // TODO: change to utils get
+  const web3 = await signerService.getWeb3Instance();
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
   await userService.setAccount(checksumAddress, {
@@ -179,7 +181,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
   });
   commit('addAccount', {
     address: checksumAddress,
-    type: WALLET_TYPES.STANDART,
+    type: WALLET_TYPES.STANDARD,
     hidden: false,
   });
   await dispatch('updateSettings', {

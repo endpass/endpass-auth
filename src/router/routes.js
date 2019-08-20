@@ -1,7 +1,6 @@
 // Dialog routes
 import Bridge from '@/components/screens/Bridge';
 import Auth from '@/components/screens/Auth';
-import Sign from '@/components/screens/Sign';
 import User from '@/components/screens/User';
 import Loader from '@/components/screens/Loader';
 import SignPermission from '@/components/screens/SignPermission';
@@ -11,14 +10,14 @@ import NotFound from '@/components/screens/NotFound';
 import PublicAuth from '@/components/screens/public/Auth';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
-import Widget from '@/components/widget/Widget';
 import Error from '@/components/screens/public/Error';
 
 const routes = [
   {
     path: '/public/widget',
     name: 'Widget',
-    component: Widget,
+    component: () =>
+      import(/* webpackChunkName: "widget" */ '@/components/widget/Widget'),
     meta: {
       isWidget: true,
     },
@@ -100,9 +99,11 @@ const routes = [
     },
   },
   {
+    // TODO: change to lazy load instead of sub components
     path: '/sign',
     name: 'SignScreen',
-    component: Sign,
+    component: () =>
+      import(/* webpackChunkName: "screen-sign" */ '@/components/screens/Sign'),
     meta: {
       isDialog: true,
       isBackground: true,
