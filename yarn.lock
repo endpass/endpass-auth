@@ -1125,10 +1125,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.17.1":
-  version "0.17.1"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.1.tgz#1c9f85e48b436d25ac3d957fa04b2fea52128836"
-  integrity sha512-5YLNduotHd9+D/DDGtRjkO9AeXhsVmJZj//cHRjMaLhphsY49H+I+PJB5Z5uLbhnXxLI6zd+u8t7CC/6hXYe2Q==
+"@endpass/class@^0.17.3":
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.3.tgz#7877c816f20333bf5e6890fafca7c6eabe57c571"
+  integrity sha512-RbzHhH+y2sDHjYh75bWS/xwO8XBtt588x+wk0Gu0/klAUTWTPklXPNK8Fo0Rn877F4KI7GI1ozWBMilA+k/SNg==
   dependencies:
     "@endpass/utils" "^1.8.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"
