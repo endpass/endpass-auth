@@ -132,7 +132,7 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
 };
 
 const createInitialWallet = async ({ dispatch }, { password }) => {
-  const mod = await import('@endpass/utils/walletGen');
+  const mod = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
   const walletGen = mod.default;
   const {
     v3KeystoreHdWallet,
@@ -170,6 +170,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
     Buffer.from(password),
     ENCRYPT_OPTIONS,
   );
+  // TODO: change to utils get
   const web3 = await signerService.getWeb3Instance();
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
@@ -179,7 +180,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
   });
   commit('addAccount', {
     address: checksumAddress,
-    type: WALLET_TYPES.STANDART,
+    type: WALLET_TYPES.STANDARD,
     hidden: false,
   });
   await dispatch('updateSettings', {

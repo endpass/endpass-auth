@@ -32,6 +32,8 @@ import get from 'lodash/get';
 import { mapActions, mapGetters, mapState } from 'vuex';
 import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import SignMessageForm from '@/components/forms/Sign/MessageForm';
+import SignTransactionForm from '@/components/forms/Sign/TransactionForm';
 
 export default {
   name: 'Sign',
@@ -79,10 +81,8 @@ export default {
 
   components: {
     Screen,
-    SignMessageForm: () =>
-      import(/* webpackChunkName: "msgForm" */ '@/components/forms/Sign/MessageForm'),
-    SignTransactionForm: () =>
-      import(/* webpackChunkName: "trxForm" */ '@/components/forms/Sign/TransactionForm'),
+    SignMessageForm,
+    SignTransactionForm,
     VModalCard,
   },
 };

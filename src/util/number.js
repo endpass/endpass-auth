@@ -1,4 +1,5 @@
-export const fillWeiStringWithZeros = wei => {
+// TODO: move to core/utils?
+const fillWeiStringWithZeros = wei => {
   const valueLenght = wei.length;
 
   if (valueLenght > 19) return wei;
@@ -10,7 +11,7 @@ export const fillWeiStringWithZeros = wei => {
     .join('')}${wei}`;
 };
 
-export const discardFloatingZeros = numericString => {
+const discardFloatingZeros = numericString => {
   const preprocessedString = numericString.replace(/\.?0{1,}$/, '');
 
   return preprocessedString;
@@ -35,7 +36,5 @@ export const fromWei = (wei, symbols = 6) => {
 };
 
 export default {
-  fillWeiStringWithZeros,
-  discardFloatingZeros,
   fromWei,
 };

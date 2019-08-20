@@ -995,7 +995,7 @@ describe('accounts actions', () => {
       );
       expect(commit).toBeCalledWith('addAccount', {
         ...v3KeyStoreChild,
-        type: WALLET_TYPES.STANDART,
+        type: WALLET_TYPES.STANDARD,
         hidden: false,
       });
       expect(dispatch).toBeCalledWith('updateSettings', {

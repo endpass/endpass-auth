@@ -48,6 +48,7 @@
 <script>
 import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
+import WidgetHeader from './Header';
 import WidgetContent from './Content.vue';
 import WidgetAccounts from './Accounts.vue';
 import WidgetNewAccountForm from './NewAccountForm.vue';
@@ -186,8 +187,7 @@ export default {
   },
 
   components: {
-    WidgetHeader: () =>
-      import(/* webpackChunkName: "widgetHeader" */ './Header.vue'),
+    WidgetHeader,
     WidgetContent,
     WidgetNewAccountForm,
     WidgetAccounts,

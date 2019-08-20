@@ -44,7 +44,10 @@ const processRequest = async (
         nonce,
       };
 
-      const Transaction = await signerService.getTransactionClass();
+      const {
+        Transaction,
+      } = await import(/* webpackChunkName: "endpass-class" */ '@endpass/class');
+
       Object.assign(requestToSign, {
         params: [Transaction.getApiObject(transactionWithNonce)],
       });

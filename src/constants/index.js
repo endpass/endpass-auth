@@ -55,7 +55,7 @@ export const DIRECTION = Object.freeze({
 
 // TODO: move to wallet constants in @endpass/class
 export const WALLET_TYPES = Object.freeze({
-  STANDART: 'StandardAccount',
+  STANDARD: 'StandardAccount',
   HD_MAIN: 'HDMainAccount',
 });
 

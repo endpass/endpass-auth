@@ -4,7 +4,6 @@ import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
 import { setWeb3Network, web3 } from '@/service/web3';
 import i18n from '@/locales/i18n';
-import { Transaction } from '@endpass/class';
 
 export default {
   async validatePassword({ v3KeyStore, password }) {
@@ -71,8 +70,5 @@ export default {
   setWeb3Network,
   getWeb3Instance() {
     return web3;
-  },
-  getTransactionClass() {
-    return Transaction;
   },
 };

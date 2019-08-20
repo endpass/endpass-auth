@@ -39,7 +39,7 @@ export default {
   async setAccount(address, { info = {}, ...rest }) {
     const infoForSave = {
       address,
-      type: WALLET_TYPES.STANDART,
+      type: WALLET_TYPES.STANDARD,
       hidden: false,
       ...info,
     };

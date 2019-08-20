@@ -1,7 +1,7 @@
 <template>
   <screen>
     <v-frame
-      :title="'Rate limit exceed!'"
+      :title="$t('components.rateLimit.title')"
       :loading="false"
       :closable="false"
     >

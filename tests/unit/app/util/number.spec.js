@@ -1,31 +1,6 @@
-import {
-  fillWeiStringWithZeros,
-  discardFloatingZeros,
-  fromWei,
-} from '@/util/number';
+import { fromWei } from '@/util/number';
 
 describe('number', () => {
-  describe('fillWeiStringWithZeros', () => {
-    it('should append zeros at start if wei string lenght less than 18 symbols', () => {
-      expect(fillWeiStringWithZeros('1000000000000000000')).toBe(
-        '1000000000000000000',
-      );
-      expect(fillWeiStringWithZeros('100000000000')).toBe(
-        '0000000100000000000',
-      );
-    });
-  });
-
-  describe('discardFloatingZeros', () => {
-    it('should discard floating zeros', () => {
-      expect(discardFloatingZeros('1.100000')).toBe('1.1');
-      expect(discardFloatingZeros('1.000100')).toBe('1.0001');
-      expect(discardFloatingZeros('1.100010')).toBe('1.10001');
-      expect(discardFloatingZeros('1.100001')).toBe('1.100001');
-      expect(discardFloatingZeros('1.000000')).toBe('1');
-    });
-  });
-
   describe('fromWei', () => {
     it('should convert wei to ether', () => {
       expect(fromWei('0')).toBe('0');
