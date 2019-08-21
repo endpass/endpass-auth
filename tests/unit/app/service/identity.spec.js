@@ -1,4 +1,4 @@
-import http from '@/class/singleton/http';
+import http from '@/class/singleton/request/http';
 import MockAdapter from 'axios-mock-adapter';
 import {
   successResponse,
