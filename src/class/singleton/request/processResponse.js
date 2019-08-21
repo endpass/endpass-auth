@@ -8,6 +8,7 @@ const CODES = {
   RATE_LIMIT: 429,
   BAN: 423,
   DISABLED: 410,
+  SUCCESS: 200,
 };
 
 const methods = {

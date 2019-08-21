@@ -4,12 +4,6 @@ const setAuthParams = (state, params) => {
   state.authParams = params;
 };
 
-const setAuthStatus = (state, flag) => {
-  // TODO: merge with setAuthByCode functionality
-  state.isLogin = flag;
-  state.isPermission = flag;
-};
-
 const setAuthByCode = (state, code) => {
   state.isLogin = code === 403 || code === 200;
   state.isPermission = code === 200;
@@ -66,7 +60,6 @@ export default {
   logout,
   setDemoData,
   setAuthParams,
-  setAuthStatus,
   setOtpEmail,
   setAccounts,
   addAccount,

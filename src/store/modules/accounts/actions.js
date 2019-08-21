@@ -337,9 +337,9 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
 const checkAccountExists = () => identityService.checkAccountExist();
 
-const defineOnlyV3Accounts = async ({ commit, getters }) => {
+const defineOnlyV3Accounts = async ({ dispatch, commit, getters }) => {
   if (getters.demoData) {
-    commit('setAuthStatus', true);
+    await dispatch('changeAuthStatusByCode', 200);
     return;
   }
 
@@ -350,10 +350,10 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
       'setAccounts',
       accounts.filter(account => isV3(account)).map(({ info }) => info),
     );
-    commit('setAuthStatus', true);
+    await dispatch('changeAuthStatusByCode', 200);
   } catch (err) {
     commit('setAccounts', null);
-    commit('setAuthStatus', false);
+    await dispatch('changeAuthStatusByCode', 401);
   }
 };
 
@@ -476,7 +476,7 @@ const waitLogin = async ({ dispatch }) => {
   // authChannel.put(Answer.createOk());
 };
 
-const defineAuthStatus = async ({ commit }) => {
+const defineAuthStatus = async ({ dispatch }) => {
   const status = await identityService.getAuthStatus();
   const settings = settingsService.getLocalSettings();
 
@@ -484,7 +484,7 @@ const defineAuthStatus = async ({ commit }) => {
     settingsService.clearLocalSettings();
   }
 
-  commit('setAuthByCode', status);
+  await dispatch('changeAuthStatusByCode', status);
   return status;
 };
 
@@ -543,11 +543,21 @@ const validatePassword = async (
 
 const getSeedTemplateUrl = () => identityService.getSeedTemplateUrl();
 
+const changeAuthStatusByCode = ({ commit, getters }, code) => {
+  const { isAuthorized } = getters;
+  commit('setAuthByCode', code);
+  const isAuthorizedNew = getters.isAuthorized;
+  if (isAuthorizedNew !== isAuthorized) {
+    bridgeMessenger.send(METHODS.AUTH_STATUS, isAuthorizedNew);
+  }
+};
+
 export default {
   auth,
   authWithGoogle,
   authWithGitHub,
   authWithOauth,
+  changeAuthStatusByCode,
   createInitialWallet,
   setWalletCreated,
   checkAccountExists,

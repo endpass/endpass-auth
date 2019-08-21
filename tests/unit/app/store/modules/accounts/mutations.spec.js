@@ -1,7 +1,7 @@
 import { state as accountsState } from '@/store/modules/accounts';
 import accountsMutations from '@/store/modules/accounts/mutations';
 
-jest.mock('@/class/singleton/http', () => ({
+jest.mock('@/class/singleton/request/http', () => ({
   get: jest.fn(),
   post: jest.fn(),
 }));
@@ -11,15 +11,6 @@ describe('accounts mutations', () => {
 
   beforeEach(() => {
     state = { ...accountsState };
-  });
-
-  describe('setAuthStatus', () => {
-    it('should set auth status', () => {
-      accountsMutations.setAuthStatus(state, true);
-
-      expect(state.isLogin).toBe(true);
-      expect(state.isPermission).toBe(true);
-    });
   });
 
   describe('setAccounts', () => {
