@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
-import e2eSetup from '@/util/e2eSetup';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
@@ -9,18 +8,30 @@ import '@endpass/ui/kit/kit.theme-default.css';
 import i18n from '@/locales/i18n';
 
 (async () => {
-  let duplexBridge;
-  const isE2E = ENV.VUE_APP_IS_E2E_CONNECT;
-  if (isE2E) {
-    duplexBridge = await e2eSetup(window);
-    if (!duplexBridge) {
-      console.error(
-        'Doh! Something broken with duplex bridge initialization, check e2eSetup() method',
-      );
-    } else {
-      duplexBridge.finishSetup();
+  try {
+    if (!window.parent.e2eBridge) {
+      throw new Error();
     }
-  }
+
+    /* eslint-disable-next-line */
+    const { web3, setWeb3Network } = require('@/service/web3');
+
+    /* eslint-disable-next-line */
+    console.warn('AUTH is working on E2E MODE');
+
+    window.Cypress = true;
+    window.parent.setWeb3AuthProvider = net => {
+      setWeb3Network(net);
+      window.parent.web3AuthNet = net;
+      window.parent.web3Auth = web3;
+    };
+
+    await window.parent.e2eBridge.awaitClientResume();
+
+    window.XMLHttpRequest = window.parent.XMLHttpRequest;
+    window.fetch = window.parent.fetch;
+    /* eslint-disable-next-line */
+  } catch (e) {}
 
   Vue.use(validation);
   Vue.use(VShowSlide);

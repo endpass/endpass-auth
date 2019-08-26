@@ -2,7 +2,7 @@
   <v-button
     skin="social"
     type="button"
-    data-test="submit-button"
+    data-test="submit-button-github"
     @click.native="loginWithGithub"
   >
     <v-svg-icon

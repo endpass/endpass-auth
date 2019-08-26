@@ -138,5 +138,32 @@ describe('CreateWallet', () => {
         false,
       );
     });
+
+    it('should not submit if seed phrase is not checked', async () => {
+      wrapper.setData({
+        isShowSeed: true,
+        seedKey: 'foo bar baz',
+      });
+
+      wrapper.find('[data-test=continue-button]').vm.$emit('click');
+
+      await global.flushPromises();
+
+      expect(accountsModule.actions.setWalletCreated).not.toBeCalled();
+    });
+
+    it('should submit if seed phrase is checked', async () => {
+      wrapper.setData({
+        isShowSeed: true,
+        isSeedConfirmed: true,
+        seedKey: 'foo bar baz',
+      });
+
+      wrapper.find('[data-test=continue-button]').vm.$emit('click');
+
+      await global.flushPromises();
+
+      expect(accountsModule.actions.setWalletCreated).toBeCalled();
+    });
   });
 });

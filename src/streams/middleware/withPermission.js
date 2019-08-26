@@ -1,7 +1,7 @@
 import store from '@/store';
 import dialogOpen from '@/streams/Actions/dialogOpen';
 import { permissionChannel } from '@/class/singleton/channels';
-import { Answer } from '@/class';
+import Answer from '@/class/Answer';
 
 export default async function withPermission(options, action) {
   if (!options.needPermission) {

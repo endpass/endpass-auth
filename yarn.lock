@@ -914,13 +914,6 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.5.5":
-  version "7.5.5"
-  resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.5.5.tgz#74fba56d35efbeca444091c7850ccd494fd2f132"
-  integrity sha512-28QvEGyQyNkB0/m2B4FU7IEZGK2NUrcMtT6BZEFALTguLk+AUT6ofsHtPk5QyjAdUkpMJ+/Em+quwz4HOt30AQ==
-  dependencies:
-    regenerator-runtime "^0.13.2"
-
 "@babel/template@^7.1.0", "@babel/template@^7.1.2", "@babel/template@^7.2.2":
   version "7.2.2"
   resolved "https://registry.yarnpkg.com/@babel/template/-/template-7.2.2.tgz#005b3fdf0ed96e88041330379e0da9a708eb2907"
@@ -1132,10 +1125,10 @@
   dependencies:
     find-up "^2.1.0"
 
-"@endpass/class@^0.17.0":
-  version "0.17.0"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.0.tgz#49f55ad21b427519b08b4f4ab6fad540a74284cc"
-  integrity sha512-U4OTmRADHLdSr8eAL8OVjrnlt9Uu1jtNoI7Yd+Buq3JiRlX+FZ+A+mThI0yD5nRmVozyhL7iw1rX9ufX9qnGUg==
+"@endpass/class@^0.17.3":
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.3.tgz#7877c816f20333bf5e6890fafca7c6eabe57c571"
+  integrity sha512-RbzHhH+y2sDHjYh75bWS/xwO8XBtt588x+wk0Gu0/klAUTWTPklXPNK8Fo0Rn877F4KI7GI1ozWBMilA+k/SNg==
   dependencies:
     "@endpass/utils" "^1.8.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"
@@ -1153,15 +1146,6 @@
     web3-providers-ws "1.0.0-beta.33"
     web3-utils "1.0.0-beta.33"
 
-"@endpass/e2e-utils@^0.3.1":
-  version "0.3.1"
-  resolved "https://registry.yarnpkg.com/@endpass/e2e-utils/-/e2e-utils-0.3.1.tgz#4ebf91424642afde33de7088bfbc27782f48344b"
-  integrity sha512-9GJuZT12RTHiuEn+dlgo7BAIdeimTKkPIs7y3FK8+8JAGfUSrSU7v31qLgfoSMadZqRuHc2uUAc1gGWeGaIczw==
-  dependencies:
-    "@babel/runtime" "^7.5.5"
-    "@endpass/class" "^0.17.0"
-    nanoid "^2.0.3"
-
 "@endpass/eslint-plugin-endpass@^0.1.0":
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/@endpass/eslint-plugin-endpass/-/eslint-plugin-endpass-0.1.0.tgz#daaef060e1728f8bbd5ed1a713659849de2b7173"
@@ -1174,52 +1158,23 @@
     eslint-plugin-prettier "^3.1.0"
     eslint-plugin-vue "^5.2.2"
 
-"@endpass/faucet@^0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@endpass/faucet/-/faucet-0.2.0.tgz#786947e5224aa8cfbd35b5c187ec8008b367fdc0"
-  integrity sha512-t/nsnlUFLq6ZgxCEfNkaBAjkjc6FtdmpRa0p5kaWyNRf95SdMTGS0jUSkNuQiiaEftzolZ1h5A6GAJDKojN9pw==
+"@endpass/faucet@^0.2.1":
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/@endpass/faucet/-/faucet-0.2.1.tgz#b25d2c179993251deab37a6e23ebbcb0a614f88c"
+  integrity sha512-XWz3/rULrbHX0c4DX114jTqPtPnNLG13CkoAj36mztqq4/NPaQuT+optVSsgytZm3Q4iivufencIv8jRkbJLOw==
   dependencies:
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.14.7":
-  version "0.14.7"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.14.7.tgz#856481dc0879fb18eeef3b5622f483c542407a9d"
-  integrity sha512-2uCd1HlHPCkTPZLtZRM5QdOIPtJCoMHDXXP9F5NDfnLW1Cm30eA4LcBm508zgzCIxfD4MZPaMBVbGl8G4w33lA==
+"@endpass/ui@^0.15.39":
+  version "0.15.39"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.15.39.tgz#8a92ab6c0d9b69994bf26ec7c38b0ec0697867fb"
+  integrity sha512-dg8FKDi9IlSeDxq3t/vBOgtZtX+QO93k3eFymbLBZEb9b4mlKg8IL4Vb89K+0qtZztiWbGGIB8zbIaqD9Z1G/w==
   dependencies:
-    "@endpass/utils" "^1.3.5"
+    "@endpass/utils" "^1.8.1"
     vue "^2.5.21"
 
-"@endpass/utils@^1.3.5":
-  version "1.3.5"
-  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.3.5.tgz#d1f51a734dc347a0d306877475302182c68bb505"
-  integrity sha512-2A+zQV1uk7Q8l2kmw41VZgB82FzWdjmAi2EC0RICHmUqLMj/0e8UdtaExyNOIVWha469u6y5DT6Ox19nmtDdow==
-  dependencies:
-    bs58check "^2.1.2"
-    dayjs "^1.7.8"
-    ethereumjs-wallet "^0.6.2"
-    export-files "^2.1.1"
-    keythereum "^1.0.4"
-    lodash "^4.17.11"
-    node-notifier "^5.4.0"
-
-"@endpass/utils@^1.8.0":
-  version "1.8.0"
-  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.8.0.tgz#075db12aaf102c2fb77762e9c03685be10e5d6db"
-  integrity sha512-F29NrYWkC2333qfycXdCWoz53IzJDq+4dfvIdqLNOgnuccoyTE8mEoFspo1X5Zi7sjy5PH1uVbxVY9JyTWFGDg==
-  dependencies:
-    bip39 "^3.0.2"
-    bs58check "^2.1.2"
-    dayjs "^1.8.14"
-    eth-ecies "^1.0.3"
-    ethereumjs-wallet "^0.6.3"
-    export-files "^2.1.1"
-    keythereum "^1.0.4"
-    lodash "^4.17.11"
-    node-notifier "^5.4.0"
-    secp256k1 "^3.7.0"
-
-"@endpass/utils@^1.8.2":
+"@endpass/utils@^1.8.1", "@endpass/utils@^1.8.2":
   version "1.8.2"
   resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.8.2.tgz#78ed3934485b0a96f451455f0de24c044306aff3"
   integrity sha512-lXawdI/2LVx4aGu+8UJJmBfrbCo4WUOHOFdUJf/0xQWzBNCEmTnzG8Cp0LP9RrU2Cwex2VWwuvo91tMZblxVLw==
@@ -4285,16 +4240,6 @@ date-now@^0.1.4:
   resolved "https://registry.yarnpkg.com/date-now/-/date-now-0.1.4.tgz#eaf439fd4d4848ad74e5cc7dbef200672b9e345b"
   integrity sha1-6vQ5/U1ISK105cx9vvIAZyueNFs=
 
-dayjs@^1.7.8:
-  version "1.8.4"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.4.tgz#e5a8fe080a7955e210045e6c26c5d1d4c88cf602"
-  integrity sha512-Gd2W9A8f40Dwr17/O1W12cC61PSq8aUGKBWRVMs7n4XQNwPPIM9m7YzZPHMlW465Sia6t5KlKK52rYd5oT2T6A==
-
-dayjs@^1.8.14:
-  version "1.8.14"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.14.tgz#43e4f62830c2c3342c3fcd25934dc9162dbe6f38"
-  integrity sha512-AVhDmRTe541iWirnoeFSSDDGvCT6HWaNQ4z2WmmzXMGZj6ph6ydao2teKq/eUtR43GPJXlYFD+C/SotG1P9wUQ==
-
 dayjs@^1.8.15:
   version "1.8.15"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.15.tgz#7121bc04e6a7f2621ed6db566be4a8aaf8c3913e"
@@ -5344,7 +5289,7 @@ ethereumjs-util@^6.0.0:
     safe-buffer "^5.1.1"
     secp256k1 "^3.0.1"
 
-ethereumjs-wallet@^0.6.0, ethereumjs-wallet@^0.6.2, ethereumjs-wallet@^0.6.3:
+ethereumjs-wallet@^0.6.0, ethereumjs-wallet@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/ethereumjs-wallet/-/ethereumjs-wallet-0.6.3.tgz#b0eae6f327637c2aeb9ccb9047b982ac542e6ab1"
   integrity sha512-qiXPiZOsStem+Dj/CQHbn5qex+FVkuPmGH7SvSnA9F3tdRDt8dLMyvIj3+U05QzVZNPYh4HXEdnzoYI4dZkr9w==
@@ -9151,7 +9096,7 @@ nan@^2.0.8, nan@^2.2.1, nan@^2.3.3, nan@^2.9.2:
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.12.1.tgz#7b1aa193e9aa86057e3c7bbd0ac448e770925552"
   integrity sha512-JY7V6lRkStKcKTvHO5NVSQRv+RV+FIL5pvDoLiAtSL9pKlC5x9PKQcZDsq7m4FO4d57mkhC6Z+QhAh3Jdk5JFw==
 
-nan@^2.12.1, nan@^2.13.2, nan@^2.14.0:
+nan@^2.12.1, nan@^2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
@@ -9160,11 +9105,6 @@ nano-json-stream-parser@^0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/nano-json-stream-parser/-/nano-json-stream-parser-0.1.2.tgz#0cc8f6d0e2b622b479c40d499c46d64b755c6f5f"
   integrity sha1-DMj20OK2IrR5xA1JnEbWS3Vcb18=
-
-nanoid@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/nanoid/-/nanoid-2.0.3.tgz#dde999e173bc9d7bd2ee2746b89909ade98e075e"
-  integrity sha512-NbaoqdhIYmY6FXDRB4eYtDVC9Z9eCbn8TyaiC16LNKtpPv/aqa0tOPD8y6gNE4yUNnaZ7LLhYtXOev/6+cBtfw==
 
 nanomatch@^1.2.1, nanomatch@^1.2.9:
   version "1.2.13"
@@ -11729,20 +11669,6 @@ secp256k1@^3.0.1:
     elliptic "^6.2.3"
     nan "^2.2.1"
     safe-buffer "^5.1.0"
-
-secp256k1@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/secp256k1/-/secp256k1-3.7.0.tgz#e85972f847b586cc4b2acd69497d3f80afaa7505"
-  integrity sha512-YlUIghD6ilkMkzmFJpIdVjiamv2S8lNZ9YMwm1XII9JC0NcR5qQiv2DOp/G37sExBtaMStzba4VDJtvBXEbmMQ==
-  dependencies:
-    bindings "^1.5.0"
-    bip66 "^1.1.5"
-    bn.js "^4.11.8"
-    create-hash "^1.2.0"
-    drbg.js "^1.0.1"
-    elliptic "^6.4.1"
-    nan "^2.13.2"
-    safe-buffer "^5.1.2"
 
 secp256k1@^3.7.1:
   version "3.7.1"

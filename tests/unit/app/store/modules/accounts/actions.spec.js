@@ -23,10 +23,8 @@ import {
   authChannel,
 } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import WalletClass from '@/class/Wallet';
-import { IDENTITY_MODE } from '@/constants';
+import { IDENTITY_MODE, WALLET_TYPES } from '@/constants';
 
-const WALLET_TYPES = WalletClass.getTypes();
 const { ERRORS } = ConnectError;
 
 describe('accounts actions', () => {
@@ -673,10 +671,17 @@ describe('accounts actions', () => {
 
       identityService.getAuthStatus.mockReturnValueOnce(200);
 
-      const status = await accountsActions.defineAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({
+        commit,
+        dispatch,
+      });
 
-      expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 200);
+      expect(dispatch).toBeCalledTimes(1);
+      expect(dispatch).toHaveBeenNthCalledWith(
+        1,
+        'changeAuthStatusByCode',
+        200,
+      );
       expect(status).toBe(200);
     });
 
@@ -685,10 +690,14 @@ describe('accounts actions', () => {
 
       identityService.getAuthStatus.mockReturnValueOnce(401);
 
-      const status = await accountsActions.defineAuthStatus({ commit });
+      const status = await accountsActions.defineAuthStatus({ dispatch });
 
-      expect(commit).toBeCalledTimes(1);
-      expect(commit).toHaveBeenNthCalledWith(1, 'setAuthByCode', 401);
+      expect(dispatch).toBeCalledTimes(1);
+      expect(dispatch).toHaveBeenNthCalledWith(
+        1,
+        'changeAuthStatusByCode',
+        401,
+      );
       expect(status).toBe(401);
     });
 
@@ -700,7 +709,7 @@ describe('accounts actions', () => {
         foo: 'bar',
       });
 
-      await accountsActions.defineAuthStatus({ commit });
+      await accountsActions.defineAuthStatus({ dispatch });
 
       expect(settingsService.clearLocalSettings).toBeCalledTimes(1);
     });
@@ -711,7 +720,7 @@ describe('accounts actions', () => {
       identityService.getAuthStatus.mockReturnValueOnce(401);
       settingsService.getLocalSettings.mockReturnValueOnce({});
 
-      await accountsActions.defineAuthStatus({ commit });
+      await accountsActions.defineAuthStatus({ dispatch });
 
       expect(settingsService.clearLocalSettings).not.toBeCalled();
     });
@@ -721,7 +730,7 @@ describe('accounts actions', () => {
 
       identityService.getAuthStatus.mockReturnValueOnce(200);
 
-      await accountsActions.defineAuthStatus({ commit });
+      await accountsActions.defineAuthStatus({ dispatch });
 
       expect(settingsService.clearLocalSettings).not.toBeCalled();
     });
@@ -997,7 +1006,7 @@ describe('accounts actions', () => {
       );
       expect(commit).toBeCalledWith('addAccount', {
         ...v3KeyStoreChild,
-        type: WALLET_TYPES.STANDART,
+        type: WALLET_TYPES.STANDARD,
         hidden: false,
       });
       expect(dispatch).toBeCalledWith('updateSettings', {

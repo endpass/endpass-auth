@@ -123,9 +123,22 @@ describe('Widget Header', () => {
   });
 
   describe('behavior', () => {
-    it('should emit toggle event on header click', async () => {
+    it('should emit not toggle event on header click if loading is truthy', async () => {
       expect.assertions(1);
 
+      wrapper.find('[data-test=widget-header]').trigger('click');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.emitted().toggle).toBeFalsy();
+    });
+
+    it('should emit toggle event on header click if loading is falsy', async () => {
+      expect.assertions(1);
+
+      wrapper.setProps({
+        balance: '10000000000',
+      });
       wrapper.find('[data-test=widget-header]').trigger('click');
 
       await wrapper.vm.$nextTick();

@@ -70,7 +70,7 @@ module.exports = {
 
     config.module
       .rule('images')
-      .test(/\.(png|jpe?g|gif|ico)(\?.*)?$/)
+      .test(/\.(png|jpe?g|gif|ico|pdf)(\?.*)?$/)
       .use('url-loader')
       .loader('url-loader')
       .options({

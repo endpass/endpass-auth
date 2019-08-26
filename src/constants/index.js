@@ -6,6 +6,7 @@ export const METHODS = {
   RECOVER: 'RECOVER',
   GET_SETTINGS: 'GET_SETTINGS',
   AUTH: 'AUTH',
+  AUTH_STATUS: 'AUTH_STATUS',
   LOGOUT: 'LOGOUT',
   INITIATE: 'INITIATE',
   READY_STATE_BRIDGE: 'READY_STATE_BRIDGE',
@@ -51,6 +52,12 @@ export const DIRECTION = Object.freeze({
   AUTH: 'auth',
   WIDGET: 'widget',
   CONNECT: 'connect',
+});
+
+// TODO: move to wallet constants in @endpass/class
+export const WALLET_TYPES = Object.freeze({
+  STANDARD: 'StandardAccount',
+  HD_MAIN: 'HDMainAccount',
 });
 
 export const ORIGIN_HOST = parseUrl(document.referrer).origin;

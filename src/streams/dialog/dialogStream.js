@@ -7,7 +7,7 @@ import {
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
-import { Answer } from '@/class';
+import Answer from '@/class/Answer';
 import Queue from '@/streams/Queue';
 import middleware from '@/streams/middleware';
 import { initDialogResize } from '@/streams/Actions/dialogResize';

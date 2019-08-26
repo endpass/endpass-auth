@@ -1,10 +1,6 @@
 <template>
-  <div class="widget">
-    <div
-      v-if="isMobile"
-      ref="trigger"
-      class="widget-trigger"
-    >
+  <div class="widget" data-test="widget-container">
+    <div v-if="isMobile" ref="trigger" class="widget-trigger">
       <trigger-button
         :is-loading="isWidgetLoading"
         @click="handleMobileTriggerClick"
@@ -36,7 +32,6 @@
         />
         <widget-accounts
           v-else
-          :is-accounts-collapsed="isAccountsCollapsed"
           :accounts="accounts"
           :current-account="currentAccount"
           :is-loading="loading"
@@ -53,7 +48,7 @@
 <script>
 import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
-import WidgetHeader from './Header.vue';
+import WidgetHeader from './Header';
 import WidgetContent from './Content.vue';
 import WidgetAccounts from './Accounts.vue';
 import WidgetNewAccountForm from './NewAccountForm.vue';

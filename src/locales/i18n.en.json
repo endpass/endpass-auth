@@ -87,7 +87,9 @@
       "createWallet": "Create wallet",
       "recoveryTitle": "Write down your Seed Phrase",
       "recoverySubtitle": "The&nbsp;words below are&nbsp;called your&nbsp;seed phrase. They&nbsp;enable you to&nbsp;access your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. It&nbsp;is&nbsp;very important that these words down in&nbsp;order shown.",
-      "error": "Something broken, when trying to create new Wallet"
+      "error": "Something broken, when trying to create new Wallet",
+      "downloadTemplate": "Download template",
+      "seedConfirmation": "I have written down the words and stored them in a secure place"
     },
     "sign": {
       "requestSign": "requests sign action.",
@@ -129,6 +131,7 @@
     },
     "notFound": "Sorry, but place is not found",
     "rateLimit": {
+      "title": "Rate limit exceed!",
       "toMuch": "Too much request from your IP address, please wait..."
     },
     "user": {

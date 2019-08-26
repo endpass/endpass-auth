@@ -44,7 +44,7 @@
       <v-button
         :disabled="!isFormValid"
         size="big"
-        data-test="submit-button"
+        data-test="submit-button-auth"
       >
         {{ primaryButtonLabel }}
       </v-button>

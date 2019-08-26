@@ -7,7 +7,6 @@ import signerService from '@/service/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
-import { web3 } from '@/service/web3';
 import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
@@ -20,15 +19,15 @@ import {
   authChannel,
   permissionChannel,
 } from '@/class/singleton/channels';
-import { Answer, Wallet } from '@/class';
+import Answer from '@/class/Answer';
 import {
   ENCRYPT_OPTIONS,
   IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
+  WALLET_TYPES,
 } from '@/constants';
 
-const WALLET_TYPES = Wallet.getTypes();
 const { ERRORS } = ConnectError;
 
 const auth = async ({ state, dispatch }, { email, serverMode }) => {
@@ -133,8 +132,9 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
 };
 
 const createInitialWallet = async ({ dispatch }, { password }) => {
-  const mod = await import('@endpass/utils/walletGen');
-  const walletGen = mod.default;
+  const {
+    default: walletGen,
+  } = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
   const {
     v3KeystoreHdWallet,
     v3KeystoreChildWallet,
@@ -171,6 +171,8 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
     Buffer.from(password),
     ENCRYPT_OPTIONS,
   );
+  // TODO: change to utils get
+  const web3 = await signerService.getWeb3Instance();
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
   await userService.setAccount(checksumAddress, {
@@ -179,7 +181,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
   });
   commit('addAccount', {
     address: checksumAddress,
-    type: WALLET_TYPES.STANDART,
+    type: WALLET_TYPES.STANDARD,
     hidden: false,
   });
   await dispatch('updateSettings', {
@@ -335,9 +337,9 @@ const updateSettings = async ({ state, commit, dispatch }, payload) => {
 
 const checkAccountExists = () => identityService.checkAccountExist();
 
-const defineOnlyV3Accounts = async ({ commit, getters }) => {
+const defineOnlyV3Accounts = async ({ dispatch, commit, getters }) => {
   if (getters.demoData) {
-    commit('setAuthStatus', true);
+    await dispatch('changeAuthStatusByCode', 200);
     return;
   }
 
@@ -348,10 +350,10 @@ const defineOnlyV3Accounts = async ({ commit, getters }) => {
       'setAccounts',
       accounts.filter(account => isV3(account)).map(({ info }) => info),
     );
-    commit('setAuthStatus', true);
+    await dispatch('changeAuthStatusByCode', 200);
   } catch (err) {
     commit('setAccounts', null);
-    commit('setAuthStatus', false);
+    await dispatch('changeAuthStatusByCode', 401);
   }
 };
 
@@ -474,7 +476,7 @@ const waitLogin = async ({ dispatch }) => {
   // authChannel.put(Answer.createOk());
 };
 
-const defineAuthStatus = async ({ commit }) => {
+const defineAuthStatus = async ({ dispatch }) => {
   const status = await identityService.getAuthStatus();
   const settings = settingsService.getLocalSettings();
 
@@ -482,7 +484,7 @@ const defineAuthStatus = async ({ commit }) => {
     settingsService.clearLocalSettings();
   }
 
-  commit('setAuthByCode', status);
+  await dispatch('changeAuthStatusByCode', status);
   return status;
 };
 
@@ -539,11 +541,23 @@ const validatePassword = async (
   }
 };
 
+const getSeedTemplateUrl = () => identityService.getSeedTemplateUrl();
+
+const changeAuthStatusByCode = ({ commit, getters }, code) => {
+  const { isAuthorized } = getters;
+  commit('setAuthByCode', code);
+  const isAuthorizedNew = getters.isAuthorized;
+  if (isAuthorizedNew !== isAuthorized) {
+    bridgeMessenger.send(METHODS.AUTH_STATUS, isAuthorizedNew);
+  }
+};
+
 export default {
   auth,
   authWithGoogle,
   authWithGitHub,
   authWithOauth,
+  changeAuthStatusByCode,
   createInitialWallet,
   setWalletCreated,
   checkAccountExists,
@@ -578,4 +592,5 @@ export default {
   defineSettingsWithoutPermission,
   validatePassword,
   createAccount,
+  getSeedTemplateUrl,
 };

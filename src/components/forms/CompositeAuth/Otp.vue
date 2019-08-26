@@ -17,7 +17,7 @@
         :error="errors.first('code') || error"
         name="code"
         :placeholder="$t('components.otp.enterReceivedCode')"
-        data-test="email-input"
+        data-test="code-input"
       />
     </form-item>
     <form-row>

@@ -1,11 +1,10 @@
 import i18n from '@/locales/i18n';
-import { Transaction } from '@endpass/class';
 import { signChannel } from '@/class/singleton/channels';
-import { Answer } from '@/class';
-import { web3 } from '@/service/web3';
+import Answer from '@/class/Answer';
 import signerService from '@/service/signer';
 
 const getNextNonce = async (ctx, address) => {
+  const web3 = await signerService.getWeb3Instance();
   const nonce = await web3.eth.getTransactionCount(address);
 
   return nonce;
@@ -44,6 +43,10 @@ const processRequest = async (
         ...transaction,
         nonce,
       };
+
+      const {
+        Transaction,
+      } = await import(/* webpackChunkName: "endpass-class" */ '@endpass/class');
 
       Object.assign(requestToSign, {
         params: [Transaction.getApiObject(transactionWithNonce)],

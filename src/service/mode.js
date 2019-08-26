@@ -1,5 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
-import http from '@/class/singleton/http';
+import http from '@/class/singleton/request/http';
 import i18n from '@/locales/i18n';
 
 export const validateIdentityServer = async serverUrl => {

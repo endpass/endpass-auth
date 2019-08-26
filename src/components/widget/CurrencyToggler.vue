@@ -65,6 +65,8 @@ export default {
   border: 1px solid rgba(255, 255, 255, 0.5);
   color: #fff;
   font-size: 10px;
+  font-weight: bold;
+  letter-spacing: 1px;
   text-transform: uppercase;
   transition: 0.25s;
 }

@@ -1,6 +1,6 @@
 <template>
   <button
-    :class="{ 'option-button': true, big: isBig, disabled: disabled }"
+    :class="{ 'option-button': true, disabled: disabled }"
     :disabled="disabled"
     type="button"
     @click="emitClick"
@@ -8,14 +8,14 @@
     <slot />
     <div
       v-if="icon"
-      :style="{ transform: iconTransform }"
+      :style="{ transform: iconTransform, color: iconFill }"
       class="option-button-icon"
     >
       <v-svg-icon
         :name="icon"
         :fill="iconFill"
-        width="12px"
-        height="12px"
+        width="16px"
+        height="16px"
       />
     </div>
   </button>
@@ -28,11 +28,6 @@ export default {
   name: 'OptionButton',
 
   props: {
-    isBig: {
-      type: Boolean,
-      default: false,
-    },
-
     icon: {
       type: String,
       default: null,
@@ -71,12 +66,14 @@ export default {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 14.5px 20px;
+  height: 48px;
+  padding: 15px 12px 17px;
   margin: 0;
   border: none;
   border-bottom: 1px solid #f2f4f7;
   background: none;
-  font-size: 12px;
+  font-size: 14px;
+  line-height: 1.42;
   color: #13171a;
   cursor: pointer;
   transition: background-color 0.25s;
@@ -84,11 +81,7 @@ export default {
   text-overflow: ellipsis;
   width: 100%;
   white-space: nowrap;
-
-  &.big {
-    padding: 26px 20px;
-    font-size: 16px;
-  }
+  outline: none;
 
   &.disabled {
     color: #a9a9a9;
@@ -108,6 +101,7 @@ export default {
 .option-button-icon {
   flex: 0 0 auto;
   margin-left: auto;
+  margin-top: 5px;
   transition: transform 0.35s linear;
   transform-origin: center;
 }
