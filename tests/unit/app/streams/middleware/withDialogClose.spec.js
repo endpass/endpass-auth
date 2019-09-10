@@ -7,13 +7,32 @@ jest.mock('@/class/singleton/bridgeMessenger', () => ({
 }));
 
 describe('withDialogClose', () => {
-  it('should call withDialogClose', () => {
-    const options = {
-      routeName: 'dialogPath',
-    };
+  const options = {
+    routeName: 'dialogPath',
+  };
+  const action = {
+    req: {
+      method: 'method',
+    },
+  };
 
-    withDialogClose(options);
+  beforeEach(() => {
+    bridgeMessenger.send = jest.fn();
+  });
+
+  it('should call withDialogClose', () => {
+    withDialogClose(options, action);
 
     expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+  });
+
+  it('should not call withDialogClose', () => {
+    withDialogClose(options, {
+      req: {
+        method: METHODS.DIALOG_CLOSE,
+      },
+    });
+
+    expect(bridgeMessenger.send).not.toBeCalled();
   });
 });
