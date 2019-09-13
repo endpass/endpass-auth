@@ -1,35 +1,38 @@
 language: node_js
 node_js:
-- '10'
+  - '10'
 cache:
   directories:
-  - "~/.cache"
-install: yarn install --frozen-lockfile
+    - "~/.cache"
+install: 
+  - pip install --user awscli
+  - export PATH=$PATH:$HOME/.local/bin
+  - yarn install --frozen-lockfile
 stages:
-- name: test
-- name: deploy
+  - name: test
+  - name: dev
+    if: branch = master
+  - name: staging
+    if: branch = release
 jobs:
   include:
   - stage: test
     script: yarn test
-  - stage: deploy
+
+  - stage: dev
     script: yarn build:dev
-    before_deploy:
-    - pip install --user awscli
-    - export PATH=$PATH:$HOME/.local/bin
     deploy:
     - provider: script
       script: aws s3 sync dist/app s3://auth-dev.endpass.com --region=us-east-1 --delete
       skip_cleanup: true
-      on:
-        all_branches: true
-        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
+
+  - stage: staging
+    script: yarn build:staging
+    deploy:
     - provider: script
       script: aws s3 sync dist/app s3://auth-staging.endpass.com --region=us-east-1 --delete
       skip_cleanup: true
-      on:
-        all_branches: true
-        condition: "$TRAVIS_BRANCH =~ ^release$|^v[0-9]+\\.[0-9]+$"
+
 notifications:
   slack:
     secure: OvL+M3IOVRAQNmuV5BNjClpv9UrVap89FhHcLrmckoV731LPNLg+2bfB1UZYNe7RQc/5W4mcC0BMl9ZU3wMa1hucJYS10ymDA12MIFlwFf+etaBMCmhFH+j2rd5nHm+EbkmU4X0itjJWkOL59OnBpqT0d/iAfLPoQw4BtlI/KM8dLOT/ugyKvv8YZDo3FOL7UtPUzdDcIOc6RUYRNM41ctK+9dlHV2YveKbl6gmW5ZzMptg+pWJcp6Cp4NaQCrBQ4AjpDP8n0+VCe3D8g7AjI3rfbs1Yib79kFoV2pgu/jUzfBn7HQ7JvZgEjl7tmPSAYiw6VpNg4GmOaYECnGwGTvSqF8BoM2YC14SVNQCSJhb4ZLfLhScIa8K52/6A+FFciKFduz6988JjWEp6KSR21f9bmClkZu91JOgjINnNC5dS8Q20SxRojxEEXabnUKHyUMFaDx9nz/uPBJZow66WZ6cY/YiERnvewQi0OKem8G8kbiixMpY7Xw5N6GMDfHKaB5lk+fOLIIRH2VcjLjkbMpZ9h//4vb7NRXnlpoTPpS9EeGtAxvEDoaJhoDIkVinDmFFnpwsP0J143nu/FtJaQXFEqSJ1s3o9vOyLo1VMo9vk0D7PJcSOngfDsElRsWnMnVcm7/HmghMNNmwoD1M13iLHa17BBY7md4ubZqcAdNg=
