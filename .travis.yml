@@ -25,6 +25,9 @@ jobs:
     - provider: script
       script: aws s3 sync dist/app s3://auth-dev.endpass.com --region=us-east-1 --delete
       skip_cleanup: true
+      on:
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^master$|^v[0-9]+\\.[0-9]+$"
 
   - stage: staging
     script: yarn build:staging
@@ -32,6 +35,9 @@ jobs:
     - provider: script
       script: aws s3 sync dist/app s3://auth-staging.endpass.com --region=us-east-1 --delete
       skip_cleanup: true
+      on:
+        all_branches: true
+        condition: "$TRAVIS_BRANCH =~ ^release$|^v[0-9]+\\.[0-9]+$"
 
 notifications:
   slack:
