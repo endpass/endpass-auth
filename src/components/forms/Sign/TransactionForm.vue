@@ -125,7 +125,7 @@ import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
-import { gasPrice as gasPriceStore } from '@/store';
+import { gasPriceStore } from '@/store';
 
 const { fromWei, hexToNumberString } = Web3.utils;
 

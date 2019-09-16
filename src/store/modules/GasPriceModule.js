@@ -5,12 +5,22 @@ import signerService from '@/service/signer';
 
 @Module({ generateMutationSetters: true })
 class GasPriceModule extends VuexModule {
+  /**
+   *
+   * @param {string} network
+   * @return {Promise<GasPrices>}
+   */
   async getGasPrices(network) {
     const prices = await cryptoDataService.getGasPrices(network);
 
     return prices;
   }
 
+  /**
+   *
+   * @param {string} address
+   * @return {Promise<string>}
+   */
   async getGasLimitByAddress(address) {
     const web3 = await signerService.getWeb3Instance();
     const code = await web3.eth.getCode(address);
@@ -22,6 +32,11 @@ class GasPriceModule extends VuexModule {
     return '200000';
   }
 
+  /**
+   *
+   * @param {string} fiatCurrency
+   * @return {Promise<string>}
+   */
   async getEtherPrice(fiatCurrency) {
     const price = await cryptoDataService.getEtherPrice(fiatCurrency);
 

@@ -1,3 +1,4 @@
+// @ts-check
 import createStore from '@/store/createStore';
 import registerStores from '@/store/registerStores';
 import createStoreModule from '@/store/createStoreModule';
@@ -18,6 +19,6 @@ const createModule = (Module, name) => createStoreModule(store, Module, name);
 // old way
 registerStores(store);
 
-export const gasPrice = createModule(GasPriceModule, 'gasPrice');
+export const gasPriceStore = createModule(GasPriceModule, 'gasPrice');
 
 export default store;
