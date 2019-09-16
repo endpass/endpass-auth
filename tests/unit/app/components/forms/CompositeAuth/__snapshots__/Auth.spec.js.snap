@@ -13,7 +13,7 @@ exports[`Auth render should change submit button text if loading and make it dis
   </v-button-stub>
   <v-spacer-stub height="3" width="0"></v-spacer-stub>
   <v-divider-stub>or sign in with</v-divider-stub>
-  <form-row-stub>
+  <form-row-stub class="auth-form-social-buttons">
     <google-auth-button-stub type="button"></google-auth-button-stub>
     <v-spacer-stub height="0" width="16"></v-spacer-stub>
     <git-auth-button-stub type="button"></git-auth-button-stub>
@@ -47,7 +47,7 @@ exports[`Auth render should correctly render Auth component 1`] = `
   </v-button-stub>
   <v-spacer-stub height="3" width="0"></v-spacer-stub>
   <v-divider-stub>or sign in with</v-divider-stub>
-  <form-row-stub>
+  <form-row-stub class="auth-form-social-buttons">
     <google-auth-button-stub type="button"></google-auth-button-stub>
     <v-spacer-stub height="0" width="16"></v-spacer-stub>
     <git-auth-button-stub type="button"></git-auth-button-stub>

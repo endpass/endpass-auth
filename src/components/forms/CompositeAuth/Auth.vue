@@ -50,7 +50,7 @@
       </v-button>
       <v-spacer :height="3" />
       <v-divider>or sign in with</v-divider>
-      <form-row>
+      <form-row class="auth-form-social-buttons">
         <google-auth-button
           type="button"
           @submit="handleSocialSubmit"
@@ -219,3 +219,15 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+@media (max-width: 360px) {
+  .auth-form-social-buttons {
+    display: block;
+  }
+
+  .auth-form-social-buttons > button:not(:last-child) {
+    margin-bottom: 16px;
+  }
+}
+</style>
