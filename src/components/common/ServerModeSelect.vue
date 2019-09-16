@@ -28,10 +28,7 @@
     </form-field>
 
     <form-field v-if="validationError">
-      <message
-        :error="true"
-        data-test="error-validation-message"
-      >
+      <message :error="true" data-test="error-validation-message">
         {{ validationError }}
       </message>
     </form-field>
@@ -50,12 +47,12 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import { IDENTITY_MODE } from '@/constants';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
+import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
+import { IDENTITY_MODE } from '@/constants';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
-import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import formMixin from '@/mixins/form';
 
 const availableIdentityServerTypes = [

@@ -14,7 +14,10 @@
         <v-address :address="transaction.to" />
       </form-field>
       <div class="sign-transaction-form-values">
-        <form-field :label="$t('components.sign.transactionValue')">
+        <form-field
+          key="trxValue"
+          :label="$t('components.sign.transactionValue')"
+        >
           <v-input
             v-model="valueToDisplay"
             v-validate="'required|min:0'"
@@ -53,10 +56,20 @@
         </button>
       </form-field>
       <div v-show="isAdvancedOptionsVisible">
-        <form-field v-if="data" :label="$t('components.sign.transactionData')">
-          <v-input v-model="data" :disabled="true" data-test="data-input" />
+        <form-field
+          v-if="data"
+          :label="$t('components.sign.transactionData')"
+        >
+          <v-input
+            v-model="data"
+            :disabled="true"
+            data-test="data-input"
+          />
         </form-field>
-        <form-field :label="$t('components.sign.transactionGasPrice')">
+        <form-field
+          key="gasPrice"
+          :label="$t('components.sign.transactionGasPrice')"
+        >
           <v-input
             v-model="gasPrice"
             v-validate="'required|between:1,100'"
@@ -79,7 +92,10 @@
             :items="labeledGasPricesList"
           />
         </form-field>
-        <form-field :label="$t('components.sign.transactionGasLimit')">
+        <form-field
+          key="gasLimit"
+          :label="$t('components.sign.transactionGasLimit')"
+        >
           <v-input
             v-model="gasLimit"
             v-validate="'required|numeric|integer|between:21000,1000000'"
@@ -111,7 +127,7 @@ import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
 import { gasPrice as gasPriceStore } from '@/store';
 
-const { fromWei, toWei, hexToNumberString } = Web3.utils;
+const { fromWei, hexToNumberString } = Web3.utils;
 
 export default {
   name: 'SignTransactionForm',
@@ -192,19 +208,6 @@ export default {
       return BigNumber(this.value)
         .times(this.ethPrice)
         .toFixed(2);
-    },
-
-    maxAmount() {
-      const { balance, gasPrice, gasLimit } = this;
-
-      if (!this.isInited || !balance || balance === '0') return '0';
-
-      const balanceBN = BigNumber(balance);
-      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
-      const maxAmountBN = balanceBN.minus(gasFeeBN);
-      const maxAmount = fromWei(maxAmountBN.toFixed());
-
-      return maxAmount > 0 ? maxAmount : 0;
     },
   },
 

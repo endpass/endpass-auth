@@ -17,8 +17,8 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex';
-import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 

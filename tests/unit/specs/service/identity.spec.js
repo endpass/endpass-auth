@@ -5,9 +5,8 @@ import {
   getRecoveryIdentifierResponse,
 } from '@unitFixtures/services/identity';
 import http from '@/class/singleton/request/http';
-import identityService from '@/service/identity'; // must be not alias path!
 
-jest.unmock('@/service/identity');
+const identityService = require.requireActual('@/service/identity').default;
 
 jest.mock('@/store', () => ({
   dispatch: jest.fn(), // mock store for http module

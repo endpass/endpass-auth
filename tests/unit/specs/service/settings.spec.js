@@ -1,6 +1,4 @@
-import settingService from '@/service/settings'; // must be not alias path!
-
-jest.unmock('@/service/settings');
+const settingService = require.requireActual('@/service/settings').default;
 
 describe('settings service', () => {
   describe('mergeSettings', () => {

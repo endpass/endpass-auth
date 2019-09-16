@@ -59,9 +59,9 @@
 <script>
 import get from 'lodash/get';
 import { mapActions } from 'vuex';
-import signerService from '@/service/signer';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
+import signerService from '@/service/signer';
 import Message from '@/components/common/Message.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';

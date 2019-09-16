@@ -7,6 +7,10 @@ jest.mock('@/service/web3', () => {
   return {
     web3: {
       utils,
+      eth: {
+        sendSignedTransaction: jest.fn(),
+        getCode: jest.fn().mockResolvedValue('0x'),
+      },
     },
     setWeb3Network: jest.fn(),
   };

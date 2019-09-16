@@ -19,7 +19,6 @@ localVue.use(validation);
 describe('Sign > TransactionForm', () => {
   let store;
   let storeData;
-  let gasPriceModule;
   let accountsModule;
   let wrapperFactory;
   let wrapper;
@@ -28,22 +27,17 @@ describe('Sign > TransactionForm', () => {
     accountsModule = {
       state: {
         balance: '100000000',
+        settings: {
+          fiatCurrency: 'USD',
+        },
       },
       actions: {
         subscribeOnBalanceUpdates: jest.fn(),
       },
     };
-    accountsModule = {
-      state: {
-        settings: {
-          fiatCurrency: 'USD',
-        },
-      },
-    };
     storeData = {
       modules: {
         accounts: accountsModule,
-        gasPrice: gasPriceModule,
       },
     };
     store = new Vuex.Store(storeData);
@@ -72,24 +66,32 @@ describe('Sign > TransactionForm', () => {
 
   describe('behavior', () => {
     it('should requests gas prices and fiat price on mount', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       await global.flushPromises();
 
-      expect(gasPriceModule.actions.getEtherPrice).toBeCalledTimes(1);
-      expect(gasPriceModule.actions.getGasPrices).toBeCalledTimes(1);
-      expect(gasPriceModule.actions.getGasLimitByAddress).not.toBeCalled();
+      expect(
+        wrapper.find('[data-test=value-fiat-input]').attributes().value,
+      ).toBe('98114.98');
+      expect(
+        wrapper.find('[data-test=gas-limit-input]').attributes().value,
+      ).toBe('60678575854435905636937776');
     });
 
     it('should requests gas limit on mount if it is not defined in transaction', async () => {
-      expect.assertions(1);
+      expect.assertions(2);
 
       wrapper = wrapperFactory({
         request: requestWithCuttedTransaction,
       });
       await global.flushPromises();
 
-      expect(gasPriceModule.actions.getGasLimitByAddress).toBeCalledTimes(1);
+      expect(
+        wrapper.find('[data-test=value-fiat-input]').attributes().value,
+      ).toBe('98114.98');
+      expect(
+        wrapper.find('[data-test=gas-limit-input]').attributes().value,
+      ).toBe('21000');
     });
 
     it('should handle base form submit and bubble it', () => {
