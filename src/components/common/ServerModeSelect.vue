@@ -28,7 +28,10 @@
     </form-field>
 
     <form-field v-if="validationError">
-      <message :error="true" data-test="error-validation-message">
+      <message
+        :error="true"
+        data-test="error-validation-message"
+      >
         {{ validationError }}
       </message>
     </form-field>

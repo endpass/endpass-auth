@@ -38,14 +38,14 @@
   "lint-staged": {
     "*.{js,json}": [
       "vue-i18n-translate-checker",
-      "vue-cli-service lint --fix --quiet",
+      "eslint --fix",
       "prettier --write",
       "git add"
     ],
     "*.vue": [
       "vue-i18n-translate-checker",
       "prettier --write",
-      "vue-cli-service lint --fix --quiet",
+      "eslint --fix",
       "git add"
     ]
   },
