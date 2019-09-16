@@ -1,25 +1,17 @@
 import Vuex from 'vuex';
-import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/public/Auth.vue';
-import queryStringToMap from '@endpass/utils/queryStringToMap';
 import setupI18n from '@/locales/i18nSetup';
-
-jest.mock('@endpass/utils/queryStringToMap', () =>
-  jest.fn().mockImplementation(() => ({
-    redirect_url: 'http://foo.bar',
-  })),
-);
 
 const localVue = createLocalVue();
 
 const i18n = setupI18n(localVue);
 localVue.use(Vuex);
-localVue.use(VueRouter);
 
 describe('PublicAuth', () => {
   let wrapper;
-  let router;
+  let $router;
+  let $route;
   let store;
   let storeData;
   let accountsModule;
@@ -27,10 +19,16 @@ describe('PublicAuth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    router = new VueRouter();
+    $router = {
+      replace: jest.fn(),
+    };
     accountsModule = {
       mutations: {
         setAuthParams: jest.fn(),
+      },
+      actions: {
+        checkAccountExists: jest.fn(),
+        waitAccountCreate: jest.fn(),
       },
     };
     storeData = {
@@ -39,9 +37,17 @@ describe('PublicAuth', () => {
       },
     };
     store = new Vuex.Store(storeData);
+    $route = {
+      query: {
+        redirectUrl: 'http://foo.bar',
+      },
+    };
     wrapper = shallowMount(Auth, {
       localVue,
-      router,
+      mocks: {
+        $route,
+        $router,
+      },
       store,
       i18n,
     });
@@ -54,14 +60,20 @@ describe('PublicAuth', () => {
   });
 
   describe('behavior', () => {
-    it('should redirect to LoginProvider on auth form authorize event handling', () => {
+    it('should redirect to LoginProvider on auth form authorize event handling', async () => {
+      expect.assertions(1);
+
       wrapper.setData({
         queryParamsMap: {
-          redirect_url: 'http://localhost/public/foo/bar',
+          redirectUrl: 'http://localhost/public/foo/bar',
         },
       });
-      wrapper.vm.$router.replace = jest.fn();
+      wrapper.vm.checkAccountExists = jest
+        .fn()
+        .mockImplementationOnce(async () => true);
+
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
+      await global.flushPromises();
 
       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
     });
@@ -76,11 +88,15 @@ describe('PublicAuth', () => {
     });
 
     it('should not set auth params if redirectUrl not exists', () => {
-      queryStringToMap.mockImplementation(() => ({}));
       accountsModule.mutations.setAuthParams.mockRestore();
       wrapper = shallowMount(Auth, {
         localVue,
-        router,
+        mocks: {
+          $route: {
+            query: {},
+          },
+          $router,
+        },
         store,
         i18n,
       });

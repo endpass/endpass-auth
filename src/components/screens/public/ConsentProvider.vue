@@ -20,8 +20,6 @@
 </template>
 
 <script>
-/* eslint-disable camelcase */
-import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
@@ -32,12 +30,10 @@ export default {
   name: 'ConsentProvider',
 
   data: () => ({
-    queryParamsMap: {},
-    initialHref: window.location.href,
+    consentChallenge: null,
     isLoading: true,
     isSkipped: false,
     scopesList: [],
-    redirect: '',
     error: {
       show: false,
       hint: '',
@@ -73,14 +69,12 @@ export default {
 
       try {
         const { redirect } = await this.grantPermissionsWithOauth({
-          consentChallenge: this.queryParamsMap.consent_challenge,
+          consentChallenge: this.consentChallenge,
           scopesList,
         });
         window.location.href = redirect;
-        return; // must show loader until redirect not happen
       } catch (err) {
         this.setError(err.message);
-      } finally {
         this.isLoading = false;
       }
     },
@@ -97,18 +91,17 @@ export default {
 
       try {
         const {
-          requested_scope,
+          requested_scope: requestedScope,
           skip,
-          redirect_url,
-        } = await this.getConsentDetails(this.queryParamsMap.consent_challenge);
-        this.redirect = redirect_url;
+          redirect_url: redirectUrl,
+        } = await this.getConsentDetails(this.consentChallenge);
+
         if (skip) {
           this.isSkipped = true;
-          window.location.href = redirect_url;
-          return; // must show loader until redirect not happen
+          window.location.href = redirectUrl;
         }
 
-        this.scopesList = requested_scope;
+        this.scopesList = requestedScope;
       } catch (err) {
         this.setError(
           this.$i18n.t('components.consentProvider.loadScopesError'),
@@ -120,26 +113,33 @@ export default {
   },
 
   async mounted() {
-    const { query } = get(this.$router, 'history.current', {});
+    const { query } = this.$route;
+    const { consent_challenge: consentChallenge, error } = query;
 
-    this.queryParamsMap = query;
+    this.consentChallenge = consentChallenge;
 
-    if (query.error) {
-      this.setError(query.error_hint, query.error_description);
+    if (error) {
+      const {
+        error_hint: errorHint,
+        error_description: errorDescription,
+      } = query;
+      this.setError(errorHint, errorDescription);
       return;
     }
 
-    if (!query.consent_challenge) {
+    if (!consentChallenge) {
       this.setError(this.$i18n.t('components.consentProvider.urlError'));
       return;
     }
 
     if (!this.isLogin) {
-      this.$router.replace(
-        `/public/auth?redirect_url=${encodeURI(
-          this.initialHref,
-        )}&place=consent`,
-      );
+      this.$router.replace({
+        name: 'PublicAuthScreen',
+        query: {
+          redirectUrl: encodeURI(window.location.href),
+          place: 'consent',
+        },
+      });
       return;
     }
 

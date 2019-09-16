@@ -1,5 +1,8 @@
 <template>
-  <div class="form-row">
+  <div
+    :class="$attrs.class"
+    class="form-row"
+  >
     <slot />
   </div>
 </template>
