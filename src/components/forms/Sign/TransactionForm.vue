@@ -53,15 +53,8 @@
         </button>
       </form-field>
       <div v-show="isAdvancedOptionsVisible">
-        <form-field
-          v-if="data"
-          :label="$t('components.sign.transactionData')"
-        >
-          <v-input
-            v-model="data"
-            :disabled="true"
-            data-test="data-input"
-          />
+        <form-field v-if="data" :label="$t('components.sign.transactionData')">
+          <v-input v-model="data" :disabled="true" data-test="data-input" />
         </form-field>
         <form-field :label="$t('components.sign.transactionGasPrice')">
           <v-input
@@ -110,12 +103,13 @@ import { BigNumber } from 'bignumber.js';
 import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
+import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
+import { gasPrice as gasPriceStore } from '@/store';
 
 const { fromWei, toWei, hexToNumberString } = Web3.utils;
 
@@ -215,12 +209,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'getGasPrices',
-      'getGasLimitByAddress',
-      'getEtherPrice',
-      'subscribeOnBalanceUpdates',
-    ]),
+    ...mapActions(['subscribeOnBalanceUpdates']),
 
     handleToggleAdvancedSettings() {
       this.isAdvancedOptionsVisible = !this.isAdvancedOptionsVisible;
@@ -255,11 +244,11 @@ export default {
     const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
     const trxGasLimit = gas || gasLimit;
 
-    this.ethPrice = await this.getEtherPrice(this.fiatCurrency);
-    this.gasPrices = await this.getGasPrices(net);
+    this.ethPrice = await gasPriceStore.getEtherPrice(this.fiatCurrency);
+    this.gasPrices = await gasPriceStore.getGasPrices(net);
 
     if (!trxGasLimit) {
-      this.gasLimit = await this.getGasLimitByAddress(to);
+      this.gasLimit = await gasPriceStore.getGasLimitByAddress(to);
     } else {
       this.gasLimit = hexToNumberString(trxGasLimit);
     }

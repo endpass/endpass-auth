@@ -57,11 +57,11 @@
 
 <script>
 import BigNumber from 'bignumber.js';
-import { mapActions } from 'vuex';
 import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
 import VSvgIcon from '@/components/common/VSvgIcon';
 import CurrencyToggler from './CurrencyToggler.vue';
+import { gasPrice } from '@/store';
 
 export default {
   name: 'WidgetHeader',
@@ -149,8 +149,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['getEtherPrice']),
-
     subscribeOnEthPrices() {
       const handler = () =>
         setTimeout(async () => {
@@ -159,7 +157,7 @@ export default {
             return;
           }
 
-          this.ethPriceInFiat = await this.getEtherPrice(this.fiatCurrency);
+          this.ethPriceInFiat = await gasPrice.getEtherPrice(this.fiatCurrency);
 
           handler();
         }, 5000);
