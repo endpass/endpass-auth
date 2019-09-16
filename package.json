@@ -31,15 +31,19 @@
     "format:prettier:vue": "prettier --write '**/*.vue'",
     "format:eslint": "vue-cli-service lint --ext .json,.js,.vue src/ --fix --quiet || exit 0",
     "format": "yarn format:prettier:vue && yarn format:eslint && yarn format:prettier",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "check-types": "tsc",
+    "check-i18n": "yarn vue-i18n-translate-checker"
   },
   "lint-staged": {
     "*.{js,json}": [
+      "vue-i18n-translate-checker",
       "vue-cli-service lint --fix --quiet",
       "prettier --write",
       "git add"
     ],
     "*.vue": [
+      "vue-i18n-translate-checker",
       "prettier --write",
       "vue-cli-service lint --fix --quiet",
       "git add"
@@ -87,6 +91,7 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@endpass/eslint-plugin-endpass": "^0.2.5",
+    "@endpass/vue-i18n-translate-checker": "^0.0.2",
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.16",
     "@vue/cli-plugin-babel": "^3.11.0",
