@@ -11,6 +11,7 @@ const i18n = setupI18n(localVue);
 
 describe('LoginProvider', () => {
   let $router;
+  let $route;
   let wrapper;
   let store;
   let storeData;
@@ -62,12 +63,18 @@ describe('LoginProvider', () => {
       },
       replace: jest.fn(),
     };
+    $route = {
+      query: {
+        login_challenge: 'foo',
+      },
+    };
     wrapper = shallowMount(LoginProvider, {
       localVue,
       store,
       i18n,
       mocks: {
         $router,
+        $route,
       },
     });
   });
@@ -80,6 +87,7 @@ describe('LoginProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
 
@@ -90,13 +98,15 @@ describe('LoginProvider', () => {
 
   describe('behavior', () => {
     it('should takes query params from current location and assign error if challengeId is not in params', () => {
-      $router.history.current.query = {};
       wrapper = shallowMount(LoginProvider, {
         localVue,
         store,
         i18n,
         mocks: {
           $router,
+          $route: {
+            query: {},
+          },
         },
       });
 
@@ -114,6 +124,7 @@ describe('LoginProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
 
@@ -136,6 +147,7 @@ describe('LoginProvider', () => {
           i18n,
           mocks: {
             $router,
+            $route,
           },
         });
         await global.flushPromises();
@@ -155,6 +167,7 @@ describe('LoginProvider', () => {
           i18n,
           mocks: {
             $router,
+            $route,
           },
         });
         await global.flushPromises();
@@ -178,6 +191,7 @@ describe('LoginProvider', () => {
           i18n,
           mocks: {
             $router,
+            $route,
           },
         });
         await global.flushPromises();
@@ -193,6 +207,7 @@ describe('LoginProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
 
@@ -206,6 +221,7 @@ describe('LoginProvider', () => {
         store,
         mocks: {
           $router,
+          $route,
         },
       });
 

@@ -2,32 +2,40 @@
   <screen class="auth-screen-centered">
     <v-modal-card
       :loading="!isInited"
+      :is-closable="false"
       @close="handleAuthCancel"
     >
       <composite-auth-form
+        v-if="activeForm === FORMS.AUTH"
         :closable="false"
         :is-public="true"
         @authorize="handleAuthorize"
       />
+      <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
     </v-modal-card>
   </screen>
 </template>
 
 <script>
-/* eslint-disable camelcase */
-
 import { mapMutations, mapState, mapActions } from 'vuex';
-import queryStringToMap from '@endpass/utils/queryStringToMap';
 import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
+import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
+
+const FORMS = {
+  AUTH: 'AUTH',
+  CREATE_WALLET: 'CREATE_WALLET',
+};
 
 export default {
   name: 'PublicAuth',
 
   data: () => ({
     queryParamsMap: {},
+    FORMS,
+    activeForm: FORMS.AUTH,
   }),
 
   methods: {
@@ -35,26 +43,36 @@ export default {
     ...mapState({
       isInited: state => state.core.isInited,
     }),
-    ...mapActions(['cancelAuth', 'dialogClose']),
+    ...mapActions([
+      'cancelAuth',
+      'dialogClose',
+      'checkAccountExists',
+      'waitAccountCreate',
+    ]),
 
-    handleAuthorize() {
-      const { redirect_url } = this.queryParamsMap;
+    async handleAuthorize() {
+      const isAccountExist = await this.checkAccountExists();
 
-      if (redirect_url) {
-        const fullPath = decodeURIComponent(redirect_url);
-
-        const { origin } = parseUrl(fullPath);
-
-        const newPath = fullPath.replace(origin, '');
-
-        // const redirectRoute = decodeURIComponent(redirectUrl).replace(
-        //   /^(https?:\/\/[a-z.]+(:\d+)?)/gm,
-        //   '',
-        // );
-
-        this.$router.replace(newPath);
-        // this.$router.replace(redirectRoute);
+      if (!isAccountExist) {
+        this.activeForm = FORMS.CREATE_WALLET;
+        await this.waitAccountCreate();
       }
+
+      const { redirectUrl, withHost } = this.queryParamsMap;
+
+      if (!redirectUrl) return;
+
+      const fullPath = decodeURIComponent(redirectUrl);
+
+      if (withHost) {
+        window.location.href = fullPath;
+        return;
+      }
+
+      const { origin } = parseUrl(fullPath);
+      const newPath = fullPath.replace(origin, '');
+
+      this.$router.replace(newPath);
     },
 
     handleAuthCancel() {
@@ -64,13 +82,14 @@ export default {
   },
 
   mounted() {
-    const { search } = window.location;
+    const { query } = this.$route;
+    const { redirectUrl } = query;
 
-    this.queryParamsMap = queryStringToMap(search);
+    this.queryParamsMap = query;
 
-    if (this.queryParamsMap.redirect_url) {
+    if (redirectUrl) {
       this.setAuthParams({
-        redirectUrl: decodeURIComponent(this.queryParamsMap.redirect_url),
+        redirectUrl: decodeURIComponent(redirectUrl),
       });
     }
   },
@@ -79,6 +98,7 @@ export default {
     Screen,
     VModalCard,
     CompositeAuthForm,
+    CreateWalletForm,
   },
 };
 </script>

@@ -1,26 +1,19 @@
 <template>
   <loading-screen :is-loading="isLoading">
-    <v-frame
-      v-if="error"
-      :closable="false"
-    >
-      <message
-        :error="true"
-        data-test="error-message"
-      >
+    <v-frame v-if="error" :closable="false">
+      <message :error="true" data-test="error-message">
         {{ error }}
       </message>
     </v-frame>
     <login-provider-password
       v-else
       :email="currentUserEmail"
-      :login-challenge="queryParamsMap.login_challenge"
+      :login-challenge="loginChallenge"
     />
   </loading-screen>
 </template>
 
 <script>
-/* eslint-disable camelcase */
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
@@ -32,7 +25,7 @@ export default {
   name: 'LoginProvider',
 
   data: () => ({
-    queryParamsMap: {},
+    loginChallenge: null,
     error: null,
     isLoading: true,
   }),
@@ -59,27 +52,29 @@ export default {
     this.isLoading = true;
     this.error = null;
 
-    const { query } = get(this.$router, 'history.current', {});
-    const { href } = window.location;
+    const { query } = this.$route;
+    const { login_challenge: loginChallenge } = query;
 
-    this.queryParamsMap = query;
+    this.loginChallenge = loginChallenge;
 
-    if (!this.queryParamsMap.login_challenge) {
+    if (!loginChallenge) {
       this.isLoading = false;
       return;
     }
 
     if (!this.isLogin) {
-      this.$router.replace(
-        `/public/auth?redirect_url=${encodeURI(href)}&place=login`,
-      );
+      this.$router.replace({
+        name: 'PublicAuthScreen',
+        query: {
+          redirectUrl: encodeURI(window.location.href),
+          place: 'login',
+        },
+      });
       return;
     }
 
     try {
-      const res = await this.checkOauthLoginRequirements(
-        this.queryParamsMap.login_challenge,
-      );
+      const res = await this.checkOauthLoginRequirements(loginChallenge);
 
       if (res.skip) {
         window.location.replace(res.redirect);
