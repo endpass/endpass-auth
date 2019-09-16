@@ -20,13 +20,11 @@
 </template>
 
 <script>
-import Web3 from 'web3';
 import get from 'lodash/get';
+import { hexToUtf8 } from 'web3-utils';
 import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import BaseForm from './BaseForm.vue';
-
-const { hexToUtf8 } = Web3.utils;
 
 export default {
   name: 'SignMessageForm',

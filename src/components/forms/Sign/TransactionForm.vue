@@ -116,18 +116,16 @@
 
 <script>
 import { BigNumber } from 'bignumber.js';
-import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
+import { fromWei, hexToNumberString } from 'web3-utils';
 import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
 import { gasPriceStore } from '@/store';
-
-const { fromWei, hexToNumberString } = Web3.utils;
 
 export default {
   name: 'SignTransactionForm',

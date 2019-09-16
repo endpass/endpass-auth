@@ -213,9 +213,6 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     commit('setOtpEmail', type === 'otp' ? email : null);
     commit('setSentStatus', !!link);
-    // eslint-disable-next-line no-useless-catch
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -226,9 +223,6 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
 
   try {
     await identityService.otpAuth(email, code);
-    // eslint-disable-next-line no-useless-catch
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -394,9 +388,6 @@ const getRecoveryIdentifier = async ({ state, commit }) => {
     );
 
     commit('setRecoveryIdentifier', identifier);
-    // eslint-disable-next-line no-useless-catch
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -420,9 +411,6 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
     commit('setSentStatus', true);
 
     return success;
-    // eslint-disable-next-line no-useless-catch
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }

@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { bytesToHex } from 'web3-utils';
 import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Wallet from '@/service/signer/Wallet';
@@ -23,7 +24,7 @@ export default {
   async recover({ seedPhrase, recoveryIdentifier }) {
     const hdWallet = keystoreHDWallet.createHDWalletBySeed(seedPhrase);
     const wallet = hdWallet.deriveChild(0).getWallet();
-    const privateKey = Web3.utils.bytesToHex(wallet.getPrivateKey());
+    const privateKey = bytesToHex(wallet.getPrivateKey());
     const web3Recover = new Web3(
       Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0],
     );
