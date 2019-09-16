@@ -11,6 +11,7 @@ const i18n = setupI18n(localVue);
 
 describe('ConsentProvider', () => {
   let $router;
+  let $route;
   let wrapper;
   let store;
   let storeData;
@@ -60,23 +61,20 @@ describe('ConsentProvider', () => {
       },
     };
     store = new Vuex.Store(storeData);
-    $router = {
-      history: {
-        current: {
-          query: {
-            consent_challenge: 'foo',
-            scopes: 'foo bar baz',
-          },
-        },
+    $router = createRouter();
+    $route = {
+      query: {
+        consent_challenge: 'foo',
+        scopes: 'foo bar baz',
       },
-      replace: jest.fn(),
     };
     wrapper = shallowMount(ConsentProvider, {
       localVue,
       store,
       i18n,
       mocks: {
-        $router: createRouter(),
+        $router,
+        $route,
       },
     });
   });
@@ -98,6 +96,9 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route: {
+            query: {},
+          },
         },
       });
 
@@ -122,6 +123,7 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
       await wrapper.vm.$nextTick();
@@ -137,6 +139,7 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
 
@@ -150,6 +153,7 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
 
@@ -168,6 +172,7 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
       wrapper.setData({
@@ -196,6 +201,7 @@ describe('ConsentProvider', () => {
         i18n,
         mocks: {
           $router,
+          $route,
         },
       });
       const spy = jest.spyOn(wrapper.vm, 'handleAuthCancel');
