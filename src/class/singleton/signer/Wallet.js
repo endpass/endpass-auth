@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import Tx from 'ethereumjs-tx';
 import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
 import isV3 from '@endpass/utils/isV3';
+import Signer from '@endpass/class/Signer';
 import i18n from '@/locales/i18n';
 import { web3 } from '@/class/singleton/signer/web3';
 
@@ -87,7 +88,7 @@ export default class Wallet {
   async sign(data, password) {
     const privateKey = await this.getPrivateKeyString(password);
 
-    return web3.eth.accounts.sign(data, privateKey);
+    return Signer.sign(data, privateKey);
   }
 
   /**

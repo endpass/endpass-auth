@@ -1,6 +1,7 @@
 import Web3 from 'web3';
 import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
+import Signer from '@endpass/class/Signer';
 import Wallet from '@/class/singleton/signer/Wallet';
 import { setWeb3Network, web3 } from '@/class/singleton/signer/web3';
 import i18n from '@/locales/i18n';
@@ -29,9 +30,10 @@ export default {
     const web3Recover = new Web3(
       Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0],
     );
+    const correctPrivateKey = Signer.privateKeyToStr(privateKey);
     const { signature } = await web3Recover.eth.accounts.sign(
       recoveryIdentifier,
-      privateKey,
+      correctPrivateKey,
     );
     return signature;
   },
