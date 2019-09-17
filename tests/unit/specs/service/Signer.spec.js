@@ -1,5 +1,5 @@
-import Signer from '@/service/signer';
-import Wallet from '@/service/signer/Wallet';
+import Signer from '@/class/singleton/signer';
+import Wallet from '@/class/singleton/signer/Wallet';
 
 describe('Signer', () => {
   const password = 'secret';

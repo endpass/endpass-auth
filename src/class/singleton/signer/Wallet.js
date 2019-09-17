@@ -2,9 +2,10 @@ import get from 'lodash/get';
 import Tx from 'ethereumjs-tx';
 import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
 import isV3 from '@endpass/utils/isV3';
-import { isAddress, bytesToHex, numberToHex } from 'web3-utils';
 import i18n from '@/locales/i18n';
-import { web3 } from '@/service/web3';
+import { web3 } from '@/class/singleton/signer/web3';
+
+const { isAddress, bytesToHex, numberToHex } = web3.utils;
 
 /**
  * A Wallet represents a single Ethereum account that can send transactions

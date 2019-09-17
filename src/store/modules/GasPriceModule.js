@@ -1,7 +1,7 @@
 // @ts-check
 import { VuexModule, Module } from 'vuex-class-modules';
 import cryptoDataService from '@/service/cryptoData';
-import signerService from '@/service/signer';
+import signer from '@/class/singleton/signer';
 
 @Module({ generateMutationSetters: true })
 class GasPriceModule extends VuexModule {
@@ -22,7 +22,7 @@ class GasPriceModule extends VuexModule {
    * @return {Promise<string>}
    */
   async getGasLimitByAddress(address) {
-    const web3 = await signerService.getWeb3Instance();
+    const web3 = await signer.getWeb3Instance();
     const code = await web3.eth.getCode(address);
 
     if (code === '0x') {

@@ -1313,10 +1313,10 @@
   dependencies:
     find-up "^4.0.0"
 
-"@endpass/class@^0.17.5":
-  version "0.17.5"
-  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.5.tgz#e22478b447ddb97908e9de9f614d552a7a2b7d58"
-  integrity sha512-V/PuI1DlAoQQUUiPS7ZEqdSD+VsIiAxnEd9eDCUSJsMud82L3/OgMB56eTzsRuUGrj9SqOsnDw1vrZHZm8U9Uw==
+"@endpass/class@^0.17.6":
+  version "0.17.6"
+  resolved "https://registry.yarnpkg.com/@endpass/class/-/class-0.17.6.tgz#7c5d835e2d8babe6364954ea8f46ee012013a844"
+  integrity sha512-FanRY1lAS2RX5WXGbdfKTHPY1aiafbfNSGyaCBxkS8a8wQ7gyzgfnCnsuULW8bcAT0ZPlEdX1QLp5U5H6X+yaQ==
   dependencies:
     "@endpass/utils" "^1.8.2"
     "@ledgerhq/hw-app-eth" "^4.24.0"

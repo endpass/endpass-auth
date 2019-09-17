@@ -14,7 +14,7 @@ import i18n from '@/locales/i18n';
     }
 
     /* eslint-disable-next-line */
-    const { web3, setWeb3Network } = require('@/service/web3');
+    const { web3, setWeb3Network } = require('@/class/singleton/signer/web3');
 
     /* eslint-disable-next-line */
     console.warn('AUTH is working on E2E MODE');

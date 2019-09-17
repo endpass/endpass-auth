@@ -1,4 +1,4 @@
-jest.mock('@/service/signer/Wallet', () => {
+jest.mock('@/class/singleton/signer/Wallet', () => {
   class Wallet {}
 
   const p = Wallet.prototype;

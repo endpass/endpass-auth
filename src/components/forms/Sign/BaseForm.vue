@@ -61,7 +61,7 @@ import get from 'lodash/get';
 import { mapActions } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
-import signerService from '@/service/signer';
+import signer from '@/class/singleton/signer';
 import Message from '@/components/common/Message.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';
@@ -167,7 +167,7 @@ export default {
 
   async mounted() {
     this.$validator.resume();
-    await signerService.setWeb3Network(this.network);
+    await signer.setWeb3Network(this.network);
   },
 
   beforeDestroy() {

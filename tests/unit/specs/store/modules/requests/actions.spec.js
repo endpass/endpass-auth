@@ -4,9 +4,9 @@ import {
 } from '@unitFixtures/requests';
 import requestsActions from '@/store/modules/requests/actions';
 import { signChannel } from '@/class/singleton/channels';
-import Signer from '@/service/signer';
+import Signer from '@/class/singleton/signer';
 
-jest.mock('@/service/signer', () => ({
+jest.mock('@/class/singleton/signer', () => ({
   recover: jest.fn(),
   signWallet: jest.fn(),
   recoverMessage: jest.fn(),

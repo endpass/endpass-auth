@@ -9,8 +9,8 @@ import {
   accountAddress,
   addresses,
 } from '@unitFixtures/accounts';
-import Wallet from '@/service/signer/Wallet';
-import Signer from '@/service/signer';
+import Wallet from '@/class/singleton/signer/Wallet';
+import Signer from '@/class/singleton/signer';
 import identityService from '@/service/identity';
 import cryptoDataService from '@/service/cryptoData';
 import permissionsService from '@/service/permissions';
