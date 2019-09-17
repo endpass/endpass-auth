@@ -36,7 +36,6 @@ const processRequest = async (
     const requestToSign = {
       ...request,
     };
-
     if (transaction) {
       const nonce = await dispatch('getNextNonce', address);
       const transactionWithNonce = {
@@ -44,7 +43,7 @@ const processRequest = async (
         nonce,
       };
 
-      const Transaction = await import(
+      const { default: Transaction } = await import(
         /* webpackChunkName: "endpass-class-transaction" */ '@endpass/class/Transaction'
       );
 
