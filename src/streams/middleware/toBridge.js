@@ -1,5 +1,6 @@
 import router from '@/router';
 
 export default function toBridge() {
-  router.replace('/bridge');
+  // eslint-disable-next-line no-unused-vars
+  router.replace('/bridge').catch(err => {});
 }

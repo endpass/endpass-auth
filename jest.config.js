@@ -8,7 +8,9 @@ module.exports = {
       'jest-transform-stub',
     '^.+\\.js$': 'babel-jest',
   },
-  transformIgnorePatterns: ['node_modules/(?!(vue-timers|@endpass/class))'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(vue-timers|@endpass/class|vuex-class-modules))',
+  ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '^@unitFixtures/(.*)$': '<rootDir>/tests/unit/fixtures/$1',

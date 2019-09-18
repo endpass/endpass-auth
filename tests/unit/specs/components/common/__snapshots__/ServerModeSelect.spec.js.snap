@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ServerModeSelect render should correctly render ServerModeSelect component 1`] = `
+<div class="container">
+  <form-field-stub>
+    <v-content-switcher-stub items="[object Object],[object Object],[object Object]" data-test="mode-select" value="default"></v-content-switcher-stub>
+  </form-field-stub>
+  <!---->
+  <!---->
+  <!---->
+</div>
+`;

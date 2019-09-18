@@ -6,7 +6,6 @@ import './mocks/service/cryptoData.mock';
 import './mocks/service/permissions.mock';
 import './mocks/service/user.mock';
 import './mocks/util/core-class';
-import './mocks/service/web3.mock';
 import './mocks/service/Signer/web3.mock';
 import './mocks/service/Signer/Wallet.mock';
 import './mocks/github-oauth-popup.mock';

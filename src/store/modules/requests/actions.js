@@ -1,10 +1,10 @@
 import i18n from '@/locales/i18n';
 import { signChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import signerService from '@/service/signer';
+import signer from '@/class/singleton/signer';
 
 const getNextNonce = async (ctx, address) => {
-  const web3 = await signerService.getWeb3Instance();
+  const web3 = await signer.getWeb3Instance();
   const nonce = await web3.eth.getTransactionCount(address);
 
   return nonce;
@@ -36,7 +36,6 @@ const processRequest = async (
     const requestToSign = {
       ...request,
     };
-
     if (transaction) {
       const nonce = await dispatch('getNextNonce', address);
       const transactionWithNonce = {
@@ -44,16 +43,16 @@ const processRequest = async (
         nonce,
       };
 
-      const {
-        Transaction,
-      } = await import(/* webpackChunkName: "endpass-class" */ '@endpass/class');
+      const { default: Transaction } = await import(
+        /* webpackChunkName: "endpass-class-transaction" */ '@endpass/class/Transaction'
+      );
 
       Object.assign(requestToSign, {
         params: [Transaction.getApiObject(transactionWithNonce)],
       });
     }
 
-    const signResult = await signerService.getSignedRequest({
+    const signResult = await signer.getSignedRequest({
       request: requestToSign,
       v3KeyStore,
       password,
@@ -88,7 +87,7 @@ const recoverMessage = async ({ dispatch }, payload) => {
 
   try {
     const account = await dispatch('getAccount', address);
-    const res = await signerService.recoverMessage({ account, request, net });
+    const res = await signer.recoverMessage({ account, request, net });
 
     return {
       id: request.id,

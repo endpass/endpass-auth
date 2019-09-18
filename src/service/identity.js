@@ -1,5 +1,5 @@
-import request from '@/class/singleton/request';
 import get from 'lodash/get';
+import request from '@/class/singleton/request';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 

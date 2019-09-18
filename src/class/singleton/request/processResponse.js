@@ -1,8 +1,7 @@
+import mapToQueryString from '@endpass/utils/mapToQueryString';
 import store from '@/store';
 import router from '@/router';
 import { DEFAULT_RATE_LIMIT_TIMEOUT } from '@/constants';
-
-import mapToQueryString from '@endpass/utils/mapToQueryString';
 
 const CODES = {
   RATE_LIMIT: 429,

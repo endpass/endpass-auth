@@ -30,8 +30,8 @@
 <script>
 import get from 'lodash/get';
 import { mapActions, mapGetters, mapState } from 'vuex';
-import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import Screen from '@/components/common/Screen';
 import SignMessageForm from '@/components/forms/Sign/MessageForm';
 import SignTransactionForm from '@/components/forms/Sign/TransactionForm';
 

@@ -3,7 +3,9 @@ import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import mapToQueryString from '@endpass/utils/mapToQueryString';
 import ConnectError from '@endpass/class/ConnectError';
-import signerService from '@/service/signer';
+import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
+import Network from '@endpass/class/Network';
+import signer from '@/class/singleton/signer';
 import identityService from '@/service/identity';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
@@ -11,8 +13,6 @@ import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import asyncCheckProperty from '@endpass/utils/asyncCheckProperty';
-import Network from '@endpass/class/Network';
 import i18n from '@/locales/i18n';
 import {
   accountChannel,
@@ -101,7 +101,7 @@ const authWithOauth = async (ctx, { challengeId, password }) => {
       challengeId,
     );
 
-    const { signature } = await signerService.signDataWithAccount({
+    const { signature } = await signer.signDataWithAccount({
       account: keystore,
       data: email,
       password,
@@ -132,9 +132,9 @@ const checkOauthLoginRequirements = async ({ commit }, challengeId) => {
 };
 
 const createInitialWallet = async ({ dispatch }, { password }) => {
-  const {
-    default: walletGen,
-  } = await import(/* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen');
+  const { default: walletGen } = await import(
+    /* webpackChunkName: "wallet-gen" */ '@endpass/utils/walletGen'
+  );
   const {
     v3KeystoreHdWallet,
     v3KeystoreChildWallet,
@@ -172,7 +172,7 @@ const createAccount = async ({ commit, getters, dispatch }, { password }) => {
     ENCRYPT_OPTIONS,
   );
   // TODO: change to utils get
-  const web3 = await signerService.getWeb3Instance();
+  const web3 = await signer.getWeb3Instance();
   const checksumAddress = web3.utils.toChecksumAddress(v3KeyStoreChild.address);
 
   await userService.setAccount(checksumAddress, {
@@ -213,8 +213,6 @@ const handleAuthRequest = async ({ commit }, { email, request, link }) => {
 
     commit('setOtpEmail', type === 'otp' ? email : null);
     commit('setSentStatus', !!link);
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -225,8 +223,6 @@ const confirmAuthViaOtp = async ({ commit }, { email, code }) => {
 
   try {
     await identityService.otpAuth(email, code);
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -392,8 +388,6 @@ const getRecoveryIdentifier = async ({ state, commit }) => {
     );
 
     commit('setRecoveryIdentifier', identifier);
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -403,7 +397,7 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
   commit('changeLoadingStatus', true);
 
   try {
-    const signature = await signerService.recover({
+    const signature = await signer.recover({
       seedPhrase,
       recoveryIdentifier: state.recoveryIdentifier,
     });
@@ -417,8 +411,6 @@ const recover = async ({ state, commit }, { seedPhrase }) => {
     commit('setSentStatus', true);
 
     return success;
-  } catch (err) {
-    throw err;
   } finally {
     commit('changeLoadingStatus', false);
   }
@@ -449,7 +441,7 @@ const signPermission = async (store, { password }) => {
   if (res.success === false) {
     throw new Error(res.message);
   }
-  const signature = await signerService.getSignedRequest({
+  const signature = await signer.getSignedRequest({
     v3KeyStore: res.keystore,
     password,
     request: {
@@ -528,7 +520,7 @@ const validatePassword = async (
   const v3KeyStore = await dispatch('getAccount', address);
 
   try {
-    await signerService.validatePassword({
+    await signer.validatePassword({
       v3KeyStore,
       password,
     });
