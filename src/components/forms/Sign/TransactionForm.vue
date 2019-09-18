@@ -20,7 +20,7 @@
         >
           <v-input
             v-model="valueToDisplay"
-            v-validate="`required|between:0,${maxAmount()}`"
+            v-validate="`required|between:0,${maxAmount}`"
             :error="errors.first('value')"
             :disabled="true"
             :data-vv-as="$t('components.sign.valueField')"
@@ -171,6 +171,16 @@ export default {
       balance: state => state.accounts.balance,
     }),
 
+    maxAmount() {
+      const { balance, gasPrice, gasLimit } = this;
+      if (!this.isInited || !balance || balance === '0') return '0';
+      const balanceBN = BigNumber(balance);
+      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
+      const maxAmountBN = balanceBN.minus(gasFeeBN);
+      const maxAmount = fromWei(maxAmountBN.toFixed());
+      return maxAmount > 0 ? maxAmount : 0;
+    },
+
     transaction() {
       return get(this.request, 'request.params[0]', null);
     },
@@ -231,16 +241,6 @@ export default {
         account,
         password,
       });
-    },
-
-    maxAmount() {
-      const { balance, gasPrice, gasLimit } = this;
-      if (!this.isInited || !balance || balance === '0') return '0';
-      const balanceBN = BigNumber(balance);
-      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
-      const maxAmountBN = balanceBN.minus(gasFeeBN);
-      const maxAmount = fromWei(maxAmountBN.toFixed());
-      return maxAmount > 0 ? maxAmount : 0;
     },
 
     emitCancel() {
