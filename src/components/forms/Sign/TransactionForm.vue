@@ -20,7 +20,7 @@
         >
           <v-input
             v-model="valueToDisplay"
-            v-validate="'required|min:0'"
+            v-validate="`required|between:0,${maxAmount()}`"
             :error="errors.first('value')"
             :disabled="true"
             :data-vv-as="$t('components.sign.valueField')"
@@ -120,7 +120,7 @@ import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
-import { fromWei, hexToNumberString } from 'web3-utils';
+import { fromWei, toWei, hexToNumberString } from 'web3-utils';
 import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
@@ -151,6 +151,8 @@ export default {
       default: true,
     },
   },
+
+  gasPriceStore,
 
   data: () => ({
     gasPrices: null,
@@ -231,6 +233,16 @@ export default {
       });
     },
 
+    maxAmount() {
+      const { balance, gasPrice, gasLimit } = this;
+      if (!this.isInited || !balance || balance === '0') return '0';
+      const balanceBN = BigNumber(balance);
+      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
+      const maxAmountBN = balanceBN.minus(gasFeeBN);
+      const maxAmount = fromWei(maxAmountBN.toFixed());
+      return maxAmount > 0 ? maxAmount : 0;
+    },
+
     emitCancel() {
       this.$emit('cancel');
     },
@@ -245,11 +257,15 @@ export default {
     const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
     const trxGasLimit = gas || gasLimit;
 
-    this.ethPrice = await gasPriceStore.getEtherPrice(this.fiatCurrency);
-    this.gasPrices = await gasPriceStore.getGasPrices(net);
+    this.ethPrice = await this.$options.gasPriceStore.getEtherPrice(
+      this.fiatCurrency,
+    );
+    this.gasPrices = await this.$options.gasPriceStore.getGasPrices(net);
 
     if (!trxGasLimit) {
-      this.gasLimit = await gasPriceStore.getGasLimitByAddress(to);
+      this.gasLimit = await this.$options.gasPriceStore.getGasLimitByAddress(
+        to,
+      );
     } else {
       this.gasLimit = hexToNumberString(trxGasLimit);
     }

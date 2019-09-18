@@ -89,6 +89,8 @@ export default {
     isBalanceInFiat: false,
   }),
 
+  gasPriceStore,
+
   computed: {
     statusLabel() {
       return this.isCollapsed
@@ -157,7 +159,7 @@ export default {
             return;
           }
 
-          this.ethPriceInFiat = await gasPriceStore.getEtherPrice(
+          this.ethPriceInFiat = await this.$options.gasPriceStore.getEtherPrice(
             this.fiatCurrency,
           );
 
