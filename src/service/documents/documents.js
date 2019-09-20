@@ -1,61 +1,17 @@
 // @ts-check
-import mapToQueryString from '@endpass/utils/mapToQueryString';
+import omitBy from 'lodash.omitby';
+import isNil from 'lodash.isnil';
 import request from '@/class/singleton/request';
-import documentAdapter from './documentAdapter';
-import { filterNullableParams, getFileFormData } from '@/services/shared/utils';
 
 const baseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
 
 export default {
   /**
-   * @param {string} id
-   * @return {Promise<UserDocument>}
-   */
-  async getDocument(id) {
-    const res = await request.get(`${baseURL}/${id}`);
-    return documentAdapter(res);
-  },
-
-  /**
-   *
-   * @param {string} id document id
-   * @return {Promise<UserDocumentLog[]>}
-   */
-  async getDocumentStatusLog(id) {
-    return request.get(`${baseURL}/${id}/status/log`);
-  },
-
-  /**
-   * @param {object} params
-   * @param {number} [params.offset]
-   * @param {number} [params.limit]
-   * @param {string} [params.status]
-   * @return {Promise<{total: number, items: UserDocument[]}>}
-   */
-  async getDocumentList({ offset = 0, limit = 10, status }) {
-    const path = mapToQueryString(
-      baseURL,
-      filterNullableParams({
-        offset,
-        limit,
-        status,
-      }),
-    );
-
-    const { items, total } = await request.get(path);
-
-    return {
-      items: items.map(documentAdapter),
-      total,
-    };
-  },
-
-  /**
    * @param {File} file UserDocument file
    * @returns {Promise}
    */
   async checkFile(file) {
-    return request.upload(`${baseURL}/file/check`, getFileFormData(file));
+    return request.upload(`${baseURL}/file/check`, { file });
   },
 
   /**
@@ -66,7 +22,7 @@ export default {
   async createDocument({ type, description }) {
     const { message: docId } = await request.post(
       baseURL,
-      filterNullableParams({ type, description }),
+      omitBy({ type, description }, isNil),
     );
 
     if (!docId) {
@@ -84,11 +40,7 @@ export default {
    * @return {Promise<void>}
    */
   async uploadFrontFile({ file, docId }, config) {
-    return request.upload(
-      `${baseURL}/${docId}/front`,
-      getFileFormData(file),
-      config,
-    );
+    return request.upload(`${baseURL}/${docId}/front`, { file }, config);
   },
 
   /**
@@ -99,19 +51,7 @@ export default {
    * @return {Promise<void>}
    */
   async uploadBackFile({ file, docId }, config) {
-    return request.upload(
-      `${baseURL}/${docId}/back`,
-      getFileFormData(file),
-      config,
-    );
-  },
-
-  /**
-   * @param {string} id
-   * @return {Promise<>}
-   */
-  async removeDocument(id) {
-    return request.delete(`${baseURL}/${id}`);
+    return request.upload(`${baseURL}/${docId}/back`, { file }, config);
   },
 
   /**
@@ -121,9 +61,5 @@ export default {
    */
   getDocumentsUploadStatusById(id) {
     return request.get(`${baseURL}/${id}/status/upload`);
-  },
-
-  getDocumentsUploadStatus() {
-    return request.get(`${baseURL}/status/upload`);
   },
 };
