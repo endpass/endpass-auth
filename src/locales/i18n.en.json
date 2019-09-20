@@ -105,7 +105,6 @@
       "requiresPaymentBy": "Requires payment by:",
       "yourPass": "Your account password:",
       "enterPass": "Enter your password...",
-      "requestData": "Request data:",
       "requestMessage": "Request message:",
       "transactionTo": "To",
       "transactionGasPrice": "Gas price (gwei)",
@@ -146,7 +145,6 @@
       "donationSuccess": "Donation request successfully sent. In the most cases it can takes a few time before you will receive funds."
     },
     "widgetContent": {
-      "changeAccount": "Change account",
       "newAccount": "New account"
     },
     "widgetHeader": {
@@ -161,8 +159,6 @@
     },
     "uploadDocument": {
       "default": "Something broken, when file upload.",
-      "exist": "File already exist, please upload other file",
-      "sizeLimit": "Maximum file size exceeded",
       "uploadDocument": "Upload document",
       "documentType": "Document type",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
@@ -174,7 +170,6 @@
       "readyForUpload": "Front File selected",
       "readyForUploadBack": "Back File selected",
       "errorSizeLimit": "Size of file is more than 10Mb, please select other file.",
-      "errorOther": "An error occurred during file upload, so try to upload the file again.",
       "uploading": "Uploading",
       "recognition": "Recognition"
     }
