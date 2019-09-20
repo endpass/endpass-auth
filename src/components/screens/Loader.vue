@@ -1,5 +1,5 @@
 <template>
-  <v-frame :loading="true">
+  <v-frame :is-loading="true">
     <p>{{ $t('global.version') }} {{ version }}</p>
   </v-frame>
 </template>

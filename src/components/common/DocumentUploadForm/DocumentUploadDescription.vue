@@ -1,5 +1,5 @@
 <template>
-  <div class="document-upload-description has-text-centered">
+  <div class="document-upload-description">
     <v-description
       disabled
       :description="$t('components.uploadDocument.supportFiles')"
@@ -24,5 +24,6 @@ export default {
 <style scoped lang="postcss">
 .document-upload-description {
   padding-top: 16px;
+  text-align: center;
 }
 </style>

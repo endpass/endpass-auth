@@ -13,9 +13,8 @@ export default {
   name: 'DocumentCreate',
 
   methods: {
-    onClose() {
-      // TODO: add return data
-      this.$options.documentCreateController.finishCreate();
+    onClose(isUploaded) {
+      this.$options.documentCreateController.finishCreate(isUploaded);
     },
   },
 

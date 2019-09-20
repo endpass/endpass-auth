@@ -1,6 +1,6 @@
 <template>
   <v-frame
-    :closable="isDialog"
+    :is-closable="isDialog"
     @close="handleClose"
   >
     <div class="public-error">

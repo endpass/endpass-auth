@@ -2,7 +2,7 @@
   <screen @close="handleWindowClose">
     <v-modal-card
       :loading="!isInited"
-      :closable="isDialog"
+      :is-closable="isDialog"
       @close="handleCancel"
     >
       <account-form
