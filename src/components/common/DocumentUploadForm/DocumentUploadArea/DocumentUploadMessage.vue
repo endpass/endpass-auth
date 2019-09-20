@@ -30,7 +30,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .document-upload-message-text {
   letter-spacing: 1.1px;
   text-transform: uppercase;

@@ -21,7 +21,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .document-upload-description {
   padding-top: 16px;
 }

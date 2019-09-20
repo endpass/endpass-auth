@@ -4,7 +4,7 @@ import get from 'lodash/get';
 import generators from '@endpass/utils/generators';
 import createController from '@/controllers/createController';
 
-import documentsService from '@/services/documents';
+import documentsService from '@/service/documents';
 import TranslateObjectFactory from '@/class/TranslateObjectFactory';
 import { UPLOAD_STATUSES, DOCUMENT_SIDES } from '@/constants';
 

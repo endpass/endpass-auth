@@ -15,6 +15,12 @@
     "version": "Endpass Auth bridge v",
     "somethingWrong": "Something went wrong, try again later"
   },
+  "constants": {
+    "documentType": {
+      "passport": "Passport",
+      "driverLicense": "Driver Licence"
+    }
+  },
   "components": {
     "gitAuthButton": {
       "authWithGitHub": "GitHub"

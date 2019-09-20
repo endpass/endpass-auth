@@ -50,7 +50,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .document-upload-file {
   margin: 6px 0;
   font-weight: bold;

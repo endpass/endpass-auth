@@ -29,7 +29,7 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="postcss">
 .document-upload-progress {
   display: flex;
   align-items: center;

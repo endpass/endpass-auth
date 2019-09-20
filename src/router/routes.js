@@ -109,6 +109,18 @@ const routes = [
       isBackground: true,
     },
   },
+  {
+    path: '/document-create',
+    name: 'DocumentCreate',
+    component: () =>
+      import(
+        /* webpackChunkName: "document-create" */ '@/components/screens/DocumentCreate'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
   { path: '/fonts' },
   {
     path: '*',

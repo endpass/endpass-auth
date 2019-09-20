@@ -1,6 +1,6 @@
 <template>
-  <v-base-form>
-    <v-base-form-field>
+  <form>
+    <form-item>
       <v-select
         :value="documentType"
         :options="$options.documentTypes"
@@ -8,8 +8,8 @@
         :disabled="!isDocTypeSelectable"
         @input="onChangeDocumentType"
       />
-    </v-base-form-field>
-    <v-base-form-field>
+    </form-item>
+    <form-item>
       <document-upload-area
         :file="file"
         :label="$t('components.uploadDocument.selectFile')"
@@ -26,19 +26,18 @@
         />
       </document-upload-area>
       <document-upload-description />
-    </v-base-form-field>
-  </v-base-form>
+    </form-item>
+  </form>
 </template>
 
 <script>
 import VSelect from '@endpass/ui/kit/VSelect';
-import VBaseForm from '@/components/common/VBaseForm';
-import VBaseFormField from '@/components/common/VBaseFormField';
 import { DOC_TYPES } from '@/constants';
 import { CONSTANT_TRANSLATES } from '@/constants/translates';
 import DocumentUploadArea from './DocumentUploadArea/DocumentUploadArea';
 import DocumentUploadProgress from './DocumentUploadProgress';
 import DocumentUploadDescription from './DocumentUploadDescription';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'DocumentUploadForm',
@@ -99,11 +98,10 @@ export default {
     },
   },
   components: {
+    FormItem,
     DocumentUploadDescription,
     DocumentUploadProgress,
     VSelect,
-    VBaseForm,
-    VBaseFormField,
     DocumentUploadArea,
   },
 };

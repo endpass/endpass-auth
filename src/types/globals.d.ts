@@ -18,3 +18,8 @@ declare module '@endpass/utils/mapToQueryString' {
   function mapToQueryString(url: string, params: object): string;
   export = mapToQueryString;
 }
+
+declare module '@endpass/utils/generators' {
+  function repeatWithInterval(ms: number): Generator;
+  function sleep<T>(ms: number, result: T): Promise<T>;
+}
