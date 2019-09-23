@@ -1,6 +1,7 @@
 <template>
   <div class="frame">
     <v-modal-card
+      class="frame-modal-card"
       :is-closable="isClosable"
       @close="emitClose"
     >
@@ -67,6 +68,10 @@ export default {
   box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.15);
   background-color: #fff;
   animation: slideIn 0.75s;
+}
+
+.frame-modal-card {
+  max-width: initial !important;
 }
 
 .frame-spinner {
