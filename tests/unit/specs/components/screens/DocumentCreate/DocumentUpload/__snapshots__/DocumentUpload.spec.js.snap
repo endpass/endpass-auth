@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentUpload should match snapshot 1`] = `
+<v-modal-card-stub isclosable="true" data-test="document-create-modal"><template></template>
+  <document-upload-form-stub messageadd="Add front File" messageready="Front File selected" documenttype="Passport" isdoctypeselectable="true" progressvalue="0" progresslabel=""></document-upload-form-stub>
+  <modal-controls-stub>
+    <v-button-stub skin="ghost" size="normal" data-test="cancel-button">
+      Cancel
+    </v-button-stub>
+    <v-button-stub skin="primary" size="normal" data-test="submit-button">
+      Confirm
+    </v-button-stub>
+  </modal-controls-stub>
+</v-modal-card-stub>
+`;

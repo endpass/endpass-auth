@@ -14,10 +14,13 @@
         <v-address :address="transaction.to" />
       </form-field>
       <div class="sign-transaction-form-values">
-        <form-field :label="$t('components.sign.transactionValue')">
+        <form-field
+          key="trxValue"
+          :label="$t('components.sign.transactionValue')"
+        >
           <v-input
             v-model="valueToDisplay"
-            v-validate="'required|min:0'"
+            v-validate="`required|between:0,${maxAmount}`"
             :error="errors.first('value')"
             :disabled="true"
             :data-vv-as="$t('components.sign.valueField')"
@@ -63,7 +66,10 @@
             data-test="data-input"
           />
         </form-field>
-        <form-field :label="$t('components.sign.transactionGasPrice')">
+        <form-field
+          key="gasPrice"
+          :label="$t('components.sign.transactionGasPrice')"
+        >
           <v-input
             v-model="gasPrice"
             v-validate="'required|between:1,100'"
@@ -86,7 +92,10 @@
             :items="labeledGasPricesList"
           />
         </form-field>
-        <form-field :label="$t('components.sign.transactionGasLimit')">
+        <form-field
+          key="gasLimit"
+          :label="$t('components.sign.transactionGasLimit')"
+        >
           <v-input
             v-model="gasLimit"
             v-validate="'required|numeric|integer|between:21000,1000000'"
@@ -107,17 +116,16 @@
 
 <script>
 import { BigNumber } from 'bignumber.js';
-import Web3 from 'web3';
 import get from 'lodash/get';
 import { mapActions, mapState } from 'vuex';
-import formMixin from '@/mixins/form';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
+import { fromWei, toWei, hexToNumberString } from 'web3-utils';
+import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
-
-const { fromWei, toWei, hexToNumberString } = Web3.utils;
+import { gasPriceStore } from '@/store';
 
 export default {
   name: 'SignTransactionForm',
@@ -144,6 +152,8 @@ export default {
     },
   },
 
+  gasPriceStore,
+
   data: () => ({
     gasPrices: null,
     value: '0',
@@ -160,6 +170,16 @@ export default {
       settings: state => state.accounts.settings,
       balance: state => state.accounts.balance,
     }),
+
+    maxAmount() {
+      const { balance, gasPrice, gasLimit } = this;
+      if (!this.isInited || !balance || balance === '0') return '0';
+      const balanceBN = BigNumber(balance);
+      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
+      const maxAmountBN = balanceBN.minus(gasFeeBN);
+      const maxAmount = fromWei(maxAmountBN.toFixed());
+      return maxAmount > 0 ? maxAmount : 0;
+    },
 
     transaction() {
       return get(this.request, 'request.params[0]', null);
@@ -199,28 +219,10 @@ export default {
         .times(this.ethPrice)
         .toFixed(2);
     },
-
-    maxAmount() {
-      const { balance, gasPrice, gasLimit } = this;
-
-      if (!this.isInited || !balance || balance === '0') return '0';
-
-      const balanceBN = BigNumber(balance);
-      const gasFeeBN = BigNumber(toWei(gasPrice, 'gwei')).times(gasLimit);
-      const maxAmountBN = balanceBN.minus(gasFeeBN);
-      const maxAmount = fromWei(maxAmountBN.toFixed());
-
-      return maxAmount > 0 ? maxAmount : 0;
-    },
   },
 
   methods: {
-    ...mapActions([
-      'getGasPrices',
-      'getGasLimitByAddress',
-      'getEtherPrice',
-      'subscribeOnBalanceUpdates',
-    ]),
+    ...mapActions(['subscribeOnBalanceUpdates']),
 
     handleToggleAdvancedSettings() {
       this.isAdvancedOptionsVisible = !this.isAdvancedOptionsVisible;
@@ -255,11 +257,15 @@ export default {
     const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
     const trxGasLimit = gas || gasLimit;
 
-    this.ethPrice = await this.getEtherPrice(this.fiatCurrency);
-    this.gasPrices = await this.getGasPrices(net);
+    this.ethPrice = await this.$options.gasPriceStore.getEtherPrice(
+      this.fiatCurrency,
+    );
+    this.gasPrices = await this.$options.gasPriceStore.getGasPrices(net);
 
     if (!trxGasLimit) {
-      this.gasLimit = await this.getGasLimitByAddress(to);
+      this.gasLimit = await this.$options.gasPriceStore.getGasLimitByAddress(
+        to,
+      );
     } else {
       this.gasLimit = hexToNumberString(trxGasLimit);
     }

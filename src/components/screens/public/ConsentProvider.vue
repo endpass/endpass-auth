@@ -2,7 +2,7 @@
   <loading-screen v-if="isLoadingScreen" />
   <v-frame
     v-else
-    :closable="false"
+    :is-closable="false"
   >
     <v-error
       v-if="error.show"

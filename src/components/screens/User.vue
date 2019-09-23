@@ -1,8 +1,7 @@
 <template>
   <screen @close="handleWindowClose">
     <v-modal-card
-      :loading="!isInited"
-      :closable="isDialog"
+      :is-closable="isDialog"
       @close="handleCancel"
     >
       <account-form
@@ -28,9 +27,9 @@
 <script>
 import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import Network from '@endpass/class/Network';
+import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import AccountForm from '@/components/forms/Account';
-import VModalCard from '@endpass/ui/kit/VModalCard';
 
 export default {
   name: 'User',

@@ -1,7 +1,6 @@
 <template>
   <screen @close="handleCancel">
     <v-modal-card
-      :loading="false"
       :is-closable="isDialog"
       @close="handleCancel"
     >
@@ -19,8 +18,8 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import Screen from '@/components/common/Screen';
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import Screen from '@/components/common/Screen';
 import SignPassword from '@/components/forms/SignPassword';
 
 import { ORIGIN_HOST } from '@/constants';

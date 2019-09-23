@@ -2,6 +2,8 @@
   "global": {
     "confirm": "Confirm",
     "close": "Close",
+    "error": "Error",
+    "cancel": "Cancel",
     "deny": "Deny",
     "loading": "Loading...",
     "logout": "Logout",
@@ -12,6 +14,12 @@
     "continue": "Continue",
     "version": "Endpass Auth bridge v",
     "somethingWrong": "Something went wrong, try again later"
+  },
+  "constants": {
+    "documentType": {
+      "passport": "Passport",
+      "driverLicense": "Driver Licence"
+    }
   },
   "components": {
     "gitAuthButton": {
@@ -97,7 +105,6 @@
       "requiresPaymentBy": "Requires payment by:",
       "yourPass": "Your account password:",
       "enterPass": "Enter your password...",
-      "requestData": "Request data:",
       "requestMessage": "Request message:",
       "transactionTo": "To",
       "transactionGasPrice": "Gas price (gwei)",
@@ -138,7 +145,6 @@
       "donationSuccess": "Donation request successfully sent. In the most cases it can takes a few time before you will receive funds."
     },
     "widgetContent": {
-      "changeAccount": "Change account",
       "newAccount": "New account"
     },
     "widgetHeader": {
@@ -150,6 +156,22 @@
       "createAccount": "Create account",
       "cancel": "Cancel",
       "creatingAccount": "Creating account..."
+    },
+    "uploadDocument": {
+      "default": "Something broken, when file upload.",
+      "uploadDocument": "Upload document",
+      "documentType": "Document type",
+      "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
+      "addFile": "Add front File",
+      "addBackSide": "Add back side",
+      "orDrop": "or drop file here",
+      "fileSize": "10Mb max file size.",
+      "selectFile": "Select File",
+      "readyForUpload": "Front File selected",
+      "readyForUploadBack": "Back File selected",
+      "errorSizeLimit": "Size of file is more than 10Mb, please select other file.",
+      "uploading": "Uploading",
+      "recognition": "Recognition"
     }
   },
   "store": {
@@ -162,6 +184,17 @@
     "requests": {
       "passIncorrect": "You have enter incorrect password",
       "gasTooLow": "Transaction gas to low. Try to increase gas price or gas limit"
+    },
+    "error": {
+      "checkFile": {
+        "default": "Something broken during checking file.",
+        "invalidFile": "Uploaded file is broken or has unknown format."
+      },
+      "uploadDocument": {
+        "default": "Something broken, when file upload.",
+        "exist": "File already exist, please upload other file",
+        "sizeLimit": "Maximum file size exceeded"
+      }
     }
   },
   "services": {

@@ -1,37 +1,25 @@
 <template>
   <div class="frame">
-    <header class="frame__header">
-      <img
-        class="frame__logo"
-        src="../../assets/logo.png"
-        alt="Endpass"
-      >
-      {{ title }}
-      <span class="frame__close-btn">
-        <v-button
-          v-if="closable"
-          data-test="close-button"
-          @click="emitClose"
-        >
-          <v-svg-icon
-            name="x"
-            fill="white"
-          />
-        </v-button>
-      </span>
-    </header>
-    <div class="frame__body">
-      <loading-screen :is-loading="loading">
-        <slot />
-      </loading-screen>
-    </div>
+    <v-modal-card
+      class="frame-modal-card"
+      :is-closable="isClosable"
+      @close="emitClose"
+    >
+      <template slot="title">
+        {{ title }}
+      </template>
+      <spinner
+        v-if="isLoading"
+        class="frame-spinner"
+      />
+      <slot v-else />
+    </v-modal-card>
   </div>
 </template>
 
 <script>
-import LoadingScreen from '@/components/common/LoadingScreen.vue';
-import VButton from '@/components/common/VButton';
-import VSvgIcon from '@/components/common/VSvgIcon.vue';
+import VModalCard from '@endpass/ui/kit/VModalCard';
+import Spinner from '@/components/common/Spinner';
 
 export default {
   name: 'VFrame',
@@ -41,11 +29,11 @@ export default {
       type: String,
       default: 'Connect',
     },
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -58,9 +46,8 @@ export default {
   },
 
   components: {
-    LoadingScreen,
-    VButton,
-    VSvgIcon,
+    Spinner,
+    VModalCard,
   },
 };
 </script>
@@ -83,34 +70,13 @@ export default {
   animation: slideIn 0.75s;
 }
 
-.frame__close-btn {
-  margin-left: auto;
-  path {
-    fill: #fff;
-  }
+.frame-modal-card {
+  max-width: initial !important;
 }
 
-.frame__header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  font-size: 1.5em;
-  background-color: #4b0472;
-  color: #fff;
-}
-
-.frame__logo {
-  flex: 0 0 auto;
-  width: 32px;
-  height: 32px;
-  margin-right: 12.5px;
-}
-
-.frame__body {
+.frame-spinner {
   position: relative;
-  padding: 30px 15px 15px;
-  min-height: 100px;
-  font-size: 1em;
+  margin: 0 auto;
 }
 
 @media (max-width: 768px) {

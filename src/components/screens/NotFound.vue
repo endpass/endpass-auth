@@ -7,9 +7,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
-import { mapActions } from 'vuex';
 
 export default {
   name: 'NotFound',

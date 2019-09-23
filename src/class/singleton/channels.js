@@ -4,10 +4,12 @@ export const authChannel = new Channel('auth');
 export const signChannel = new Channel('sign');
 export const accountChannel = new Channel('account');
 export const permissionChannel = new Channel('permission');
+export const documentChannel = new Channel('document');
 
 export default {
   authChannel,
   signChannel,
   accountChannel,
   permissionChannel,
+  documentChannel,
 };

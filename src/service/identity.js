@@ -1,5 +1,6 @@
-import request from '@/class/singleton/request';
 import get from 'lodash/get';
+import request from '@/class/singleton/request';
+import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
@@ -8,7 +9,7 @@ const createTimeout = handler => setTimeout(handler, 1500);
 const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
 const getAccountsSkipPermission = () =>
-  request.getSkipPermission(`${identityBaseUrl}/accounts`);
+  requestSkipPermission.get(`${identityBaseUrl}/accounts`);
 
 const checkAccountExist = async () => {
   let res = false;
@@ -95,24 +96,24 @@ const getAuthStatus = async () => {
 //   backupSeed,
 
 const saveAccount = account =>
-  request.postSkipPermission(
+  requestSkipPermission.post(
     `${identityBaseUrl}/account/${account.address}`,
     account,
   );
 
 const saveAccountInfo = (address, info) =>
-  request.postSkipPermission(
+  requestSkipPermission.post(
     `${identityBaseUrl}/account/${address}/info`,
     info,
   );
 
 const backupSeed = encryptedSeed =>
-  request.postSkipPermission(`${identityBaseUrl}/user/seed`, {
+  requestSkipPermission.post(`${identityBaseUrl}/user/seed`, {
     seed: encryptedSeed,
   });
 
 const updateAccountSettings = address =>
-  request.postSkipPermission(`${identityBaseUrl}/settings`, {
+  requestSkipPermission.post(`${identityBaseUrl}/settings`, {
     lastActiveAccount: address,
   });
 

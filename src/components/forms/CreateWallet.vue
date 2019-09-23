@@ -115,13 +115,13 @@
 <script>
 import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message';
-import FormItem from '@/components/common/FormItem';
-import VSpacer from '@/components/common/VSpacer';
 import VInput from '@endpass/ui/kit/VInput';
 import VTag from '@endpass/ui/kit/VTag';
 import VIconControl from '@endpass/ui/kit/VIconControl';
 import VCheckbox from '@endpass/ui/kit/VCheckbox';
+import VSpacer from '@/components/common/VSpacer';
+import FormItem from '@/components/common/FormItem';
+import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 
 export default {
