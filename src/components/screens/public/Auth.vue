@@ -1,7 +1,6 @@
 <template>
   <screen class="auth-screen-centered">
     <v-modal-card
-      :loading="!isInited"
       :is-closable="false"
       @close="handleAuthCancel"
     >

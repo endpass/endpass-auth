@@ -2,6 +2,7 @@ import get from 'lodash/get';
 import keystoreHDKeyVerify from '@endpass/utils/keystoreHDKeyVerify';
 import isV3 from '@endpass/utils/isV3';
 import request from '@/class/singleton/request';
+import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
 import { WALLET_TYPES } from '@/constants';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
@@ -16,7 +17,7 @@ export default {
   },
 
   getSettingsSkipPermission() {
-    return request.getSkipPermission(`${identityBaseUrl}/settings`);
+    return requestSkipPermission.get(`${identityBaseUrl}/settings`);
   },
 
   /**
@@ -43,7 +44,7 @@ export default {
       ...info,
     };
 
-    await request.postSkipPermission(
+    await requestSkipPermission.post(
       `${identityBaseUrl}/account/${address}`,
       rest,
     );
@@ -56,7 +57,7 @@ export default {
    * @param {[type]} info
    */
   setAccountInfo(address, info) {
-    return request.postSkipPermission(
+    return requestSkipPermission.post(
       `${identityBaseUrl}/account/${address}/info`,
       info,
     );

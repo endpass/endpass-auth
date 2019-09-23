@@ -2,8 +2,8 @@
   <screen>
     <v-frame
       :title="$t('components.rateLimit.title')"
-      :loading="false"
-      :closable="false"
+      :is-loading="false"
+      :is-closable="false"
     >
       <div
         class="v-rate-limit-body"

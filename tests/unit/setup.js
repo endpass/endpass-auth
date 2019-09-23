@@ -3,6 +3,7 @@ import 'jest-localstorage-mock';
 import './mocks/service/identity.mock';
 import './mocks/service/settings.mock';
 import './mocks/service/cryptoData.mock';
+import './mocks/service/documents.mock';
 import './mocks/service/permissions.mock';
 import './mocks/service/user.mock';
 import './mocks/util/core-class';

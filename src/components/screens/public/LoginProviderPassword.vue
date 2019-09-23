@@ -1,5 +1,5 @@
 <template>
-  <v-frame :closable="false">
+  <v-frame :is-closable="false">
     <message
       v-if="!hasLoginChallenge"
       :error="true"

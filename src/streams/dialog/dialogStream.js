@@ -4,6 +4,7 @@ import {
   accountChannel,
   authChannel,
   signChannel,
+  documentChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
@@ -24,6 +25,12 @@ function initDialogStream() {
       },
       routeName: 'sign',
       channel: signChannel,
+      needAuth: true,
+      needPermission: true,
+    },
+    [METHODS.CREATE_DOCUMENT]: {
+      routeName: 'document-create',
+      channel: documentChannel,
       needAuth: true,
       needPermission: true,
     },
