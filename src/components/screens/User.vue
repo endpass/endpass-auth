@@ -1,7 +1,6 @@
 <template>
   <screen @close="handleWindowClose">
     <v-modal-card
-      :loading="!isInited"
       :is-closable="isDialog"
       @close="handleCancel"
     >
