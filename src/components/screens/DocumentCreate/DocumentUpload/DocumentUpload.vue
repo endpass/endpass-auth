@@ -60,7 +60,7 @@ export default {
     currentSide: DOCUMENT_SIDES.FRONT,
   }),
 
-  uploadController: createUploadController(),
+  uploadController: null,
 
   computed: {
     isFrontSide() {
@@ -135,6 +135,10 @@ export default {
         this.error = e.message;
       }
     },
+  },
+
+  beforeCreate() {
+    this.$options.uploadController = createUploadController();
   },
 
   components: {

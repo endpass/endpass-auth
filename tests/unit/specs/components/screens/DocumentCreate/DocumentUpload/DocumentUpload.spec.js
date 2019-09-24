@@ -13,17 +13,29 @@ localVue.use(UIComponents);
 describe('DocumentUpload', () => {
   let wrapper;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    wrapper = shallowMount(DocumentUpload, {
+  const createWrapper = () => {
+    return shallowMount(DocumentUpload, {
       localVue,
       i18n,
       sync: false,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    wrapper = createWrapper();
   });
 
   it('should match snapshot', () => {
     expect(wrapper.html()).toMatchSnapshot();
+  });
+
+  it('should create new instance of uploadController for new component', () => {
+    const wrapperSecond = createWrapper();
+    const { uploadController: checkController } = wrapperSecond.vm.$options;
+
+    expect(checkController).not.toBe(null);
+    expect(checkController).not.toBe(undefined);
+    expect(checkController).not.toBe(wrapper.vm.$options.uploadController);
   });
 });
