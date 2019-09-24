@@ -20,18 +20,11 @@ const { $t, createGetters } = TranslateObjectFactory;
 /**
  * @type {{ [key: string]: string }} fields UserDocument object for upload
  */
-const checkCodeErrors = createGetters({
-  default: $t('store.error.checkFile.default'),
-  422: $t('store.error.checkFile.invalidFile'),
-});
-
-/**
- * @type {{ [key: string]: string }} fields UserDocument object for upload
- */
-const uploadCodeErrors = createGetters({
+const codeErrors = createGetters({
   default: $t('store.error.uploadDocument.default'),
   409: $t('store.error.uploadDocument.exist'),
   406: $t('store.error.uploadDocument.sizeLimit'),
+  422: $t('store.error.uploadDocument.invalidFile'),
 });
 
 const docMethods = {
@@ -160,20 +153,6 @@ class DocumentUploadController extends VuexModule {
   }
 
   /**
-   * @param {File} file UserDocument
-   */
-  @Action
-  async checkFile(file) {
-    try {
-      await documentsService.checkFile(file);
-    } catch (err) {
-      err.message = checkCodeErrors[err.code] || checkCodeErrors.default;
-
-      throw err;
-    }
-  }
-
-  /**
    *
    * @param {object} props
    * @param {File} props.file
@@ -187,7 +166,7 @@ class DocumentUploadController extends VuexModule {
       time: 10000,
     });
 
-    await this.checkFile(file);
+    await documentsService.checkFile(file);
     if (!this.docId) {
       this.docId = await documentsService.createDocument({ type });
     }
@@ -259,8 +238,9 @@ class DocumentUploadController extends VuexModule {
 
     this.isUploading = true;
     this.isTimersPlay = true;
+    let docId;
     try {
-      const docId = await this.stepPrepareDocument({
+      docId = await this.stepPrepareDocument({
         file,
         type,
       });
@@ -279,7 +259,7 @@ class DocumentUploadController extends VuexModule {
         docId,
       });
     } catch (e) {
-      e.message = uploadCodeErrors[e.code] || uploadCodeErrors.default;
+      e.message = codeErrors[e.code] || codeErrors.default;
       throw e;
     } finally {
       this.dropProgress();
@@ -287,6 +267,7 @@ class DocumentUploadController extends VuexModule {
       this.isProcessing = false;
       this.isTimersPlay = false;
     }
+    return docId;
   }
 }
 

@@ -13,8 +13,8 @@ export default {
   name: 'DocumentCreate',
 
   methods: {
-    onClose(isUploaded) {
-      this.$options.documentCreateController.finishCreate(isUploaded);
+    onClose(documentId) {
+      this.$options.documentCreateController.finishCreate(documentId);
     },
   },
 

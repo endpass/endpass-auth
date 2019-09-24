@@ -13,12 +13,14 @@ const { ERRORS } = ConnectError;
 class DocumentCreateController extends VuexModule {
   /**
    *
-   * @param {boolean} isUploaded
+   * @param {string} documentId
    */
   @Action
-  finishCreate(isUploaded) {
-    const result = isUploaded
-      ? Answer.createOk()
+  finishCreate(documentId) {
+    const result = documentId
+      ? Answer.createOk({
+          id: documentId,
+        })
       : Answer.createFail(ERRORS.CREATE_DOCUMENT);
 
     documentChannel.put(result);

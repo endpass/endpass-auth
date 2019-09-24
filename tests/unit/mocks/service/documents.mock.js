@@ -7,10 +7,11 @@ jest.mock('@/service/documents', () => {
       message: 'document uploaded',
       success: true,
     }),
-    removeDocument: jest.fn().mockResolvedValue({
-      message: 'document removed',
+    uploadBackFile: jest.fn().mockResolvedValue({
+      message: 'document uploaded',
       success: true,
     }),
-    getDocumentsUploadStatus: jest.fn().mockResolvedValue(docStatusesMap),
+    createDocument: jest.fn(),
+    getDocumentsUploadStatusById: jest.fn().mockResolvedValue(docStatusesMap),
   };
 });
