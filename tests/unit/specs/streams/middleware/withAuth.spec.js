@@ -1,18 +1,8 @@
 import withAuth from '@/streams/middleware/withAuth';
 import { authChannel } from '@/class/singleton/channels';
 import router from '@/router';
-import store from '@/store';
 import Answer from '@/class/Answer';
-
-jest.mock('@/store', () => ({
-  dispatch: jest.fn(),
-  getters: { demoData: false },
-  state: {
-    accounts: {
-      isLogin: false,
-    },
-  },
-}));
+import identityService from '@/service/identity';
 
 jest.mock('@/class/singleton/channels', () => ({
   authChannel: {
@@ -41,7 +31,7 @@ describe('withAuth', () => {
   it('should redirect to auth', async () => {
     expect.assertions(2);
 
-    store.state.accounts.isLogin = false;
+    identityService.getAuthStatus.mockResolvedValueOnce(400);
     authChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withAuth(options, action);
@@ -57,7 +47,7 @@ describe('withAuth', () => {
   it('should redirect to auth and end stream', async () => {
     expect.assertions(3);
 
-    store.state.accounts.isLogin = false;
+    identityService.getAuthStatus.mockResolvedValueOnce(400);
 
     authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
@@ -75,7 +65,7 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    store.state.accounts.isLogin = true;
+    identityService.getAuthStatus.mockResolvedValueOnce(200);
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

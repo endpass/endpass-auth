@@ -1,4 +1,4 @@
-import store, { accountsStore } from '@/store';
+import { accountsStore } from '@/store';
 import dialogOpen from '@/streams/Actions/dialogOpen';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
@@ -10,7 +10,7 @@ export default async function withAuth(options, action) {
 
   await accountsStore.defineAuthStatus();
 
-  if (store.state.accounts.isLogin) {
+  if (accountsStore.isLogin) {
     authChannel.put(Answer.createOk());
     return;
   }
