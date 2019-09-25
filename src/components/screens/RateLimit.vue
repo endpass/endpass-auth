@@ -20,10 +20,11 @@
 
 <script>
 import VueTimers from 'vue-timers/mixin';
-import { mapState, mapMutations } from 'vuex';
+import { mapState } from 'vuex';
 import dateUtils from '@endpass/utils/date';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
+import { coreStore } from '@/store';
 
 export default {
   name: 'RateLimit',
@@ -42,13 +43,11 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['setRateLimitTimeout']),
-
     onTime() {
       const newTime = this.rateLimitTimeout - 1;
 
       if (newTime >= 0) {
-        this.setRateLimitTimeout(newTime);
+        coreStore.setRateLimitTimeout(newTime);
       }
     },
   },

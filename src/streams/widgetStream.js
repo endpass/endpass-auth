@@ -1,4 +1,4 @@
-import store from '@/store';
+import store, { accountsStore } from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
 import withPayloadHandler from './middleware/withPayloadHandler';
@@ -25,17 +25,17 @@ function initWidgetStream() {
     },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
-        store.commit('logout');
+        accountsStore.logout();
         store.dispatch('unmountWidget');
       },
     },
     [METHODS.CHANGE_SETTINGS_RESPONSE]: {
-      payloadHandler({ activeAccount, activeNet }) {
-        store.dispatch('setSettings', {
+      async payloadHandler({ activeAccount, activeNet }) {
+        accountsStore.setSettings({
           lastActiveAccount: activeAccount,
           net: activeNet,
         });
-        store.dispatch('defineSettings');
+        await accountsStore.defineSettings();
       },
     },
   };

@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import ThemeProvider from '@endpass/ui/kit/ThemeProvider';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LayoutScreen from '@/components/screens/Layout';
+import { coreStore } from '@/store';
 
 export default {
   name: 'App',
@@ -20,13 +20,9 @@ export default {
     };
   },
 
-  methods: {
-    ...mapActions(['init']),
-  },
-
   async created() {
     this.isLoading = true;
-    await this.init(this.$router);
+    await coreStore.init(this.$router);
     this.isLoading = false;
   },
   components: {

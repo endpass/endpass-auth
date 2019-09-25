@@ -16,12 +16,13 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
+import { accountsStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -38,7 +39,6 @@ export default {
   }),
 
   methods: {
-    ...mapMutations(['setAuthParams']),
     ...mapState({
       isInited: state => state.core.isInited,
     }),
@@ -87,7 +87,7 @@ export default {
     this.queryParamsMap = query;
 
     if (redirectUrl) {
-      this.setAuthParams({
+      accountsStore.setAuthParams({
         redirectUrl: decodeURIComponent(redirectUrl),
       });
     }
