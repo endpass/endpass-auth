@@ -1,16 +1,18 @@
 <template>
-  <v-progress-circle
-    v-if="isLoading"
-    :progress="25"
-  />
-  <component
-    :is="currentComponent"
-    v-else
-    @next="onNext"
-    @ready="onReady"
-    @end="onEnd"
-    @cancel="onCancel"
-  />
+  <div>
+    <v-progress-circle
+      v-if="isLoading"
+      :progress="25"
+    />
+    <component
+      :is="currentStep"
+      v-show="!isLoading"
+      @next="onNext"
+      @ready="onReady"
+      @end="onEnd"
+      @cancel="onCancel"
+    />
+  </div>
 </template>
 
 <script>
@@ -19,7 +21,7 @@ import VProgressCircle from '@endpass/ui/kit/VProgressCircle';
 export default {
   name: 'MiddlewareForm',
   props: {
-    components: {
+    steps: {
       type: Array,
       default: () => [],
     },
@@ -30,14 +32,14 @@ export default {
   }),
 
   computed: {
-    currentComponent() {
-      return this.components[this.index];
+    currentStep() {
+      return this.steps[this.index];
     },
   },
 
   methods: {
     onNext() {
-      if (this.components[this.index + 1]) {
+      if (this.steps[this.index + 1]) {
         this.$emit('end');
         return;
       }

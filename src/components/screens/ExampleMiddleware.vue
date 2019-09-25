@@ -1,7 +1,7 @@
 <template>
   <screen @close="onCancel">
     <middleware-form
-      :components="components"
+      :steps="steps"
       @end="onEnd"
       @cancel="onCancel"
     />
@@ -10,27 +10,26 @@
 
 <script>
 import Screen from '@/components/common/Screen';
-import CreateWalletForm from '@/components/forms/CreateWallet';
+import { coreStore, accountsStore } from '@/store';
 import MiddlewareForm from '@/components/middleware/MiddlewareForm';
-import MessageForm from '@/components/forms/Sign/MessageForm';
-import Otp from '@/components/forms/Otp';
-import Recover from '@/components/forms/Recover';
-import Auth from '@/components/forms/Auth';
+
+import MessageForm from '@/components/middleware/steps/Message';
 
 export default {
-  name: 'Auth',
+  name: 'ExampleMiddleware',
 
   data: () => ({
-    components: [Otp, Recover, MessageForm, CreateWalletForm, Auth],
+    steps: [MessageForm],
   }),
 
   methods: {
     onCancel() {
       // cancel logic, drop channel for example
-      this.dialogClose();
+      accountsStore.cancelAllChannels();
+      coreStore.dialogClose();
     },
     onEnd() {
-      this.dialogClose();
+      coreStore.dialogClose();
     },
   },
 
