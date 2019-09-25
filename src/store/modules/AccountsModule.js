@@ -41,7 +41,7 @@ class AccountsModule extends VuexModule {
 
   accounts = [];
 
-  settings = null;
+  settings = {};
 
   balance = null;
 
@@ -404,7 +404,7 @@ class AccountsModule extends VuexModule {
       const accounts = await userService.getV3Accounts();
 
       this.accounts = accounts
-        .filter(account => isV3(account))
+        .filter(account => isV3(account) && account.info)
         .map(({ info }) => info);
       await this.changeAuthStatusByCode(200);
     } catch (err) {
@@ -620,7 +620,7 @@ class AccountsModule extends VuexModule {
     this.isPermission = false;
     this.isLogin = false;
     this.accounts = [];
-    this.settings = null;
+    this.settings = {};
     this.recoveryIdentifier = null;
     this.isAccountCreated = false;
   }

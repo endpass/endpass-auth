@@ -145,11 +145,11 @@ describe('widget actions', () => {
         false,
       );
       expect(dispatch).toBeCalledTimes(2);
-      expect(dispatch).toHaveBeenNthCalledWith(1, 'validatePassword', {
+      expect(dispatch).toHaveBeenNthCalledWith(1, 'accounts/validatePassword', {
         address: accountAddress,
         password: 'pwd',
       });
-      expect(dispatch).toHaveBeenNthCalledWith(2, 'createAccount', {
+      expect(dispatch).toHaveBeenNthCalledWith(2, 'accounts/createAccount', {
         password: 'pwd',
       });
     });

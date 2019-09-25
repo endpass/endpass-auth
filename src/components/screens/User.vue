@@ -24,7 +24,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import Network from '@endpass/class/Network';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
@@ -44,12 +43,17 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      settings: state => state.accounts.settings,
-      accounts: state => state.accounts.accounts,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
+
+    loading() {
+      return coreStore.loading;
+    },
+
+    settings() {
+      return accountsStore.settings;
+    },
 
     isDialog() {
       return coreStore.isDialog;
@@ -63,9 +67,9 @@ export default {
     },
 
     accountsOptions() {
-      if (!this.accounts) return [];
+      if (!accountsStore.accounts) return [];
 
-      return this.accounts.map(({ address }) => ({
+      return accountsStore.accounts.map(({ address }) => ({
         val: address,
         text: address,
       }));

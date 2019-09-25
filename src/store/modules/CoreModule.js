@@ -12,6 +12,7 @@ import {
 } from '@/streams';
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/Actions/dialogClose';
+import isDialog from '@/util/isDialog';
 
 @Module({ generateMutationSetters: true })
 class CoreModule extends VuexModule {
@@ -23,6 +24,8 @@ class CoreModule extends VuexModule {
 
   rateLimitTimeout = 0;
 
+  isDialog = isDialog;
+
   constructor(props, { accountsStore, sharedStore }) {
     super(props);
     this.accountsStore = accountsStore;
@@ -32,14 +35,6 @@ class CoreModule extends VuexModule {
   get loading() {
     // for old code support
     return this.sharedStore.isLoading;
-  }
-
-  get isDialog() {
-    if (ENV.VUE_APP_IS_E2E_CONNECT) {
-      return !!window.parent.e2eBridge;
-    }
-
-    return window.self !== window.top;
   }
 
   get isRateLimit() {
@@ -130,6 +125,7 @@ class CoreModule extends VuexModule {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
     }
 
+    this.accountsStore.logout();
     settingsService.clearLocalSettings();
   }
 
