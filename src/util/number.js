@@ -1,38 +1,17 @@
-// TODO: move to core/utils?
-const fillWeiStringWithZeros = wei => {
-  const valueLenght = wei.length;
-
-  if (valueLenght > 19) return wei;
-
-  const diff = 19 - valueLenght;
-
-  return `${Array(diff)
-    .fill(0)
-    .join('')}${wei}`;
-};
-
-const discardFloatingZeros = numericString => {
-  const preprocessedString = numericString.replace(/\.?0{1,}$/, '');
-
-  return preprocessedString;
-};
+const WEI_FLOAT_LENGTH = 18;
 
 export const fromWei = (wei, symbols = 6) => {
   if (wei === '0') return wei;
 
-  const filledWeiString = fillWeiStringWithZeros(wei);
-  const diff = Math.abs(18 - filledWeiString.length);
-  const floatPart = filledWeiString.slice(diff, diff + symbols);
-  const numbericFloatPart = Number(floatPart).toFixed(symbols);
+  const filledWeiString = wei.padStart(19, '0');
+  const floatPart = filledWeiString.slice(
+    -WEI_FLOAT_LENGTH,
+    symbols - WEI_FLOAT_LENGTH,
+  );
+  const integerPart = filledWeiString.slice(0, -18);
+  const numericStr = `${integerPart}.${floatPart}`;
 
-  if (diff === 0) {
-    return discardFloatingZeros(numbericFloatPart.toString());
-  }
-
-  const integerPart = filledWeiString.slice(0, diff);
-  const numbericValue = Number(`${integerPart}.${floatPart}`).toFixed(symbols);
-
-  return discardFloatingZeros(numbericValue.toString());
+  return numericStr.replace(/\.?0{1,}$/, '');
 };
 
 export default {
