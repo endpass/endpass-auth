@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
+import { coreStore } from '@/store';
 
 export default {
   name: 'Loader',
@@ -19,10 +19,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(['dialogClose']),
-
     handleClose() {
-      this.dialogClose();
+      coreStore.dialogClose();
     },
   },
 

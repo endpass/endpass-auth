@@ -20,11 +20,12 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
+import { accountsStore } from '@/store';
 
 export default {
   name: 'ConsentProvider',
@@ -54,8 +55,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['grantPermissionsWithOauth', 'getConsentDetails']),
-
     setError(hint, description = '') {
       this.error = {
         show: true,
@@ -68,7 +67,7 @@ export default {
       this.isLoading = true;
 
       try {
-        const { redirect } = await this.grantPermissionsWithOauth({
+        const { redirect } = await accountsStore.grantPermissionsWithOauth({
           consentChallenge: this.consentChallenge,
           scopesList,
         });
@@ -94,7 +93,7 @@ export default {
           requested_scope: requestedScope,
           skip,
           redirect_url: redirectUrl,
-        } = await this.getConsentDetails(this.consentChallenge);
+        } = await accountsStore.getConsentDetails(this.consentChallenge);
 
         if (skip) {
           this.isSkipped = true;

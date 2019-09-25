@@ -18,9 +18,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters } from 'vuex';
 import PasswordForm from '@/components/forms/PasswordForm';
 import CreateWalletForm from '@/components/forms/CreateWallet';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   SIGN: 'SIGN',
@@ -69,17 +70,15 @@ export default {
   }),
 
   computed: {
-    ...mapGetters(['isDialog']),
+    ...mapGetters('core', ['isDialog']),
     isLoadProcess() {
       return this.isLoading || this.isCheckingAccount;
     },
   },
 
   methods: {
-    ...mapActions(['logout', 'checkAccountExists', 'waitAccountCreate']),
-
     handleLogout() {
-      this.logout();
+      coreStore.logout();
       this.handleCancel();
     },
 
@@ -95,11 +94,11 @@ export default {
   async mounted() {
     this.isCheckingAccount = true;
 
-    const isExist = await this.checkAccountExists();
+    const isExist = await accountsStore.checkAccountExists();
 
     if (!isExist) {
       this.activeForm = FORMS.CREATE_WALLET;
-      await this.waitAccountCreate();
+      await accountsStore.waitAccountCreate();
       this.activeForm = FORMS.SIGN;
     }
 

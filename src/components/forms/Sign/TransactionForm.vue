@@ -222,7 +222,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['subscribeOnBalanceUpdates']),
+    ...mapActions('accounts', ['subscribeOnBalanceUpdates']),
 
     handleToggleAdvancedSettings() {
       this.isAdvancedOptionsVisible = !this.isAdvancedOptionsVisible;

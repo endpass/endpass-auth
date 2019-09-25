@@ -30,7 +30,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(['authWithGoogle']),
+    ...mapActions('accounts', ['authWithGoogle']),
     async loginWithGoogle() {
       // eslint-disable-next-line no-undef
       const auth = gapi.auth2.init({

@@ -170,7 +170,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['validateCustomServer']),
+    ...mapActions('accounts', ['validateCustomServer']),
     async validateServer(serverUrl) {
       this.isValidating = true;
 

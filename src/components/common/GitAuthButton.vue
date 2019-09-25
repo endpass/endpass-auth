@@ -23,7 +23,7 @@ import VSvgIcon from '@/components/common/VSvgIcon.vue';
 
 export default {
   methods: {
-    ...mapActions(['authWithGitHub']),
+    ...mapActions('accounts', ['authWithGitHub']),
     async loginWithGithub() {
       try {
         const response = await loginWithGithub({

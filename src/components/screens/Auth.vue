@@ -15,11 +15,12 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -40,33 +41,26 @@ export default {
       showCreateAccount: state => state.core.showCreateAccount,
     }),
 
-    ...mapGetters(['isDialog']),
+    isDialog() {
+      return coreStore.isDialog;
+    },
   },
 
   methods: {
-    ...mapActions([
-      'confirmAuth',
-      'cancelAuth',
-      'dialogClose',
-      'checkAccountExists',
-      'waitAccountCreate',
-      'logout',
-    ]),
-
     async handleAuthCancel() {
       if (this.activeForm === FORMS.CREATE_WALLET) {
-        await this.logout();
+        await coreStore.logout();
       }
 
-      this.cancelAuth();
-      this.dialogClose();
+      accountsStore.cancelAuth();
+      coreStore.dialogClose();
     },
 
     async openCreateAccount() {
-      const isExist = await this.checkAccountExists();
+      const isExist = await accountsStore.checkAccountExists();
       if (!isExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await this.waitAccountCreate();
+        await accountsStore.waitAccountCreate();
       }
     },
 
@@ -75,7 +69,7 @@ export default {
         await this.openCreateAccount();
       }
 
-      this.confirmAuth(serverMode);
+      accountsStore.confirmAuth(serverMode);
     },
   },
 

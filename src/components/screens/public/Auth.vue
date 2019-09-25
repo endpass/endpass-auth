@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
-import { accountsStore } from '@/store';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -42,19 +42,13 @@ export default {
     ...mapState({
       isInited: state => state.core.isInited,
     }),
-    ...mapActions([
-      'cancelAuth',
-      'dialogClose',
-      'checkAccountExists',
-      'waitAccountCreate',
-    ]),
 
     async handleAuthorize() {
-      const isAccountExist = await this.checkAccountExists();
+      const isAccountExist = await accountsStore.checkAccountExists();
 
       if (!isAccountExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await this.waitAccountCreate();
+        await accountsStore.waitAccountCreate();
       }
 
       const { redirectUrl, withHost } = this.queryParamsMap;
@@ -75,8 +69,8 @@ export default {
     },
 
     handleAuthCancel() {
-      this.cancelAuth();
-      this.dialogClose();
+      accountsStore.cancelAuth();
+      coreStore.dialogClose();
     },
   },
 

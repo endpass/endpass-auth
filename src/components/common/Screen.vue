@@ -11,7 +11,7 @@ export default {
   name: 'Screen',
 
   methods: {
-    ...mapGetters(['isDialog']),
+    ...mapGetters('core', ['isDialog']),
 
     handleWindowClose() {
       this.$emit('close');

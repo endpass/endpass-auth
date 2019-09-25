@@ -162,7 +162,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
+    ...mapActions('accounts', [
       'createInitialWallet',
       'setWalletCreated',
       'getSeedTemplateUrl',

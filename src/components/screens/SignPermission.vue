@@ -17,12 +17,13 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import SignPassword from '@/components/formsComposite/SignPassword';
 
 import { ORIGIN_HOST } from '@/constants';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'SignPermission',
@@ -37,18 +38,16 @@ export default {
     ...mapState({
       isInited: state => state.core.isInited,
     }),
-    ...mapGetters(['isDialog']),
+    ...mapGetters('core', ['isDialog']),
   },
 
   methods: {
-    ...mapActions(['signPermission', 'cancelSignPermission', 'dialogClose']),
-
     async handleSignSubmit(password) {
       this.isLoading = true;
       this.error = null;
 
       try {
-        await this.signPermission({
+        await accountsStore.signPermission({
           password,
         });
       } catch (err) {
@@ -59,8 +58,8 @@ export default {
     },
 
     handleCancel() {
-      this.cancelSignPermission();
-      this.dialogClose();
+      accountsStore.cancelSignPermission();
+      coreStore.dialogClose();
     },
   },
 

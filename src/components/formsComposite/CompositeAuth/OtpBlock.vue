@@ -37,7 +37,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['confirmAuthViaOtp', 'getRecoveryIdentifier', 'recover']),
+    ...mapActions('accounts', [
+      'confirmAuthViaOtp',
+      'getRecoveryIdentifier',
+      'recover',
+    ]),
 
     async handleOtpSubmit(code) {
       try {

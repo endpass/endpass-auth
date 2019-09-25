@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import SignPassword from '@/components/formsComposite/SignPassword';
+import { accountsStore } from '@/store';
 
 export default {
   name: 'LoginProvider',
@@ -51,12 +51,10 @@ export default {
   },
 
   methods: {
-    ...mapActions(['authWithOauth']),
-
     async handlePasswordSubmit(password) {
       try {
         this.isLoading = true;
-        const { redirect } = await this.authWithOauth({
+        const { redirect } = await accountsStore.authWithOauth({
           challengeId: this.loginChallenge,
           password,
         });

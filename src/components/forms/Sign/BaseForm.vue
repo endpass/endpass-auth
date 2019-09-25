@@ -137,7 +137,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['validatePassword']),
+    ...mapActions('accounts', ['validatePassword']),
 
     async emitSubmit() {
       if (!this.isFormValid) return;

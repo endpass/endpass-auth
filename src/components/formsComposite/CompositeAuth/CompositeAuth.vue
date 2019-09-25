@@ -26,11 +26,12 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapState } from 'vuex';
 import AuthForm from '@/components/forms/Auth';
 import OtpBlockForm from '@/components/formsComposite/CompositeAuth/OtpBlock';
 import MessageForm from '@/components/forms/Message';
 import { IDENTITY_MODE } from '@/constants';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -72,16 +73,8 @@ export default {
   },
 
   methods: {
-    ...mapActions([
-      'auth',
-      'cancelAuth',
-      'waitLogin',
-      'dialogClose',
-      'defineAuthStatus',
-    ]),
-
     async handleOtpSubmit() {
-      await this.waitLogin();
+      await accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -91,7 +84,7 @@ export default {
     },
 
     async handleSocialSubmit() {
-      await this.waitLogin();
+      await accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -105,7 +98,7 @@ export default {
           return;
         }
 
-        await this.auth({ email, serverMode });
+        await accountsStore.auth({ email, serverMode });
 
         if (this.otpEmail) {
           this.currentForm = FORMS.OTP;
@@ -119,7 +112,7 @@ export default {
     },
 
     async handleLinkSent() {
-      await this.defineAuthStatus();
+      await accountsStore.defineAuthStatus();
       if (this.isLogin) {
         this.message = this.$i18n.t(
           'components.compositeAuth.successAuthMessage',
@@ -127,15 +120,15 @@ export default {
       } else {
         this.message = this.$i18n.t('components.compositeAuth.linkSentMessage');
         this.currentForm = FORMS.MESSAGE;
-        await this.waitLogin();
+        await accountsStore.waitLogin();
       }
 
       this.handleSubmit();
     },
 
     handleAuthCancel() {
-      this.cancelAuth();
-      this.dialogClose();
+      accountsStore.cancelAuth();
+      coreStore.dialogClose();
     },
 
     handleAuthError() {
