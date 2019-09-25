@@ -11,6 +11,7 @@ import PublicAuth from '@/components/screens/public/Auth';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import Error from '@/components/screens/public/Error';
+import ExampleMiddleware from '@/components/screens/ExampleMiddleware';
 
 const routes = [
   {
@@ -95,6 +96,14 @@ const routes = [
     component: Auth,
     meta: {
       isDialog: true,
+      isBackground: true,
+    },
+  },
+  {
+    path: '/middleware',
+    name: 'ExampleMiddleware',
+    component: ExampleMiddleware,
+    meta: {
       isBackground: true,
     },
   },
