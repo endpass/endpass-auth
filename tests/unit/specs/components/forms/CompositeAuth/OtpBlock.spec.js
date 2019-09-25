@@ -12,40 +12,15 @@ const i18n = setupI18n(localVue);
 
 describe('OtpBlock', () => {
   let store;
-  let storeData;
   let wrapper;
   let accountsModule;
-  let coreModule;
   const router = new VueRouter();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        loading: false,
-      },
-    };
-    accountsModule = {
-      state: {
-        otpEmail: null,
-      },
-      actions: {
-        confirmAuthViaOtp: jest.fn(),
-        getRecoveryIdentifier: jest.fn(),
-        recover: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     wrapper = shallowMount(OtpBlock, {
       localVue,
-      store,
       i18n,
       router,
     });
@@ -67,7 +42,7 @@ describe('OtpBlock', () => {
 
       wrapper.find('otp-form-stub').vm.$emit('recover');
 
-      await wrapper.vm.$nextTick();
+      await global.flushPromises();
 
       expect(wrapper.find('recover-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
@@ -86,7 +61,7 @@ describe('OtpBlock', () => {
 
           wrapper.find('otp-form-stub').vm.$emit('recover');
 
-          await wrapper.vm.$nextTick();
+          await global.flushPromises();
 
           expect(
             accountsModule.actions.getRecoveryIdentifier,

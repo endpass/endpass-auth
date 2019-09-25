@@ -1,8 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { loginWithGithub } from 'github-oauth-popup';
 import Vuex from 'vuex';
-import GitAuthButton from '@/components/common/GitAuthButton.vue';
+import GitAuthButton from '@/components/common/GitAuthButton';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
 
 const localVue = createLocalVue();
 
@@ -30,22 +31,10 @@ describe('GitAuthButton', () => {
 
   describe('behaviour', () => {
     let wrapper;
-    let store;
-    const actions = {
-      authWithGitHub: jest.fn(),
-      waitLogin: jest.fn(),
-    };
+
     beforeEach(() => {
-      store = new Vuex.Store({
-        modules: {
-          accounts: {
-            actions,
-          },
-        },
-      });
       wrapper = shallowMount(GitAuthButton, {
         localVue,
-        store,
         provide: {
           theme: 'default',
         },
@@ -62,9 +51,12 @@ describe('GitAuthButton', () => {
     });
 
     it('should correctly submit', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       const code = 'kek';
+      identityService.authWithGitHub.mockResolvedValueOnce({
+        success: true,
+      });
       loginWithGithub.mockResolvedValue({
         code,
       });
@@ -75,11 +67,6 @@ describe('GitAuthButton', () => {
         client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',
       });
-      expect(actions.authWithGitHub).toHaveBeenCalledWith(
-        expect.any(Object),
-        code,
-        undefined,
-      );
       expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });

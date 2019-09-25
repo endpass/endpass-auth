@@ -13,7 +13,7 @@ localVue.use(VueRouter);
 
 describe('CompositeAuth', () => {
   let store;
-  let storeData;
+
   let wrapper;
   let accountsModule;
   let coreModule;
@@ -22,43 +22,8 @@ describe('CompositeAuth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        isInited: true,
-        loading: false,
-        isIdentityMode: false,
-      },
-      actions: {
-        dialogClose: jest.fn(),
-      },
-      getters: {
-        isDialog: jest.fn(() => true),
-      },
-    };
-    accountsModule = {
-      state: {
-        linkSent: false,
-        accounts: null,
-        isLogin: false,
-        isPermission: false,
-        otpEmail: null,
-      },
-      actions: {
-        auth: jest.fn(),
-        cancelAuth: jest.fn(),
-        waitLogin: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     wrapper = shallowMount(CompositeAuth, {
       localVue,
-      store,
       router,
       i18n,
     });

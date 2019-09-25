@@ -1,7 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
+import GoogleAuthButton from '@/components/common/GoogleAuthButton';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
 
 const localVue = createLocalVue();
 
@@ -40,19 +41,23 @@ describe('GoogleAuthButton', () => {
     },
   };
 
+  const createWrapper = gapi => {
+    window.gapi = gapi;
+    return shallowMount(GoogleAuthButton, {
+      provide: {
+        theme: 'default',
+      },
+      localVue,
+      i18n,
+    });
+  };
+
   describe('render', () => {
     let wrapper;
 
     describe('without gapi', () => {
       beforeEach(() => {
-        window.gapi = null;
-        wrapper = shallowMount(GoogleAuthButton, {
-          provide: {
-            theme: 'default',
-          },
-          localVue,
-          i18n,
-        });
+        wrapper = createWrapper();
       });
 
       it("should correctly render GoogleAuthButton component empty if auth2 isn't loaded", () => {
@@ -62,14 +67,7 @@ describe('GoogleAuthButton', () => {
 
     describe('with gapi', () => {
       beforeEach(() => {
-        window.gapi = gapi;
-        wrapper = shallowMount(GoogleAuthButton, {
-          provide: {
-            theme: 'default',
-          },
-          localVue,
-          i18n,
-        });
+        wrapper = createWrapper(gapi);
       });
 
       it('should correctly render GoogleAuthButton component if auth2 is loaded', () => {
@@ -80,29 +78,8 @@ describe('GoogleAuthButton', () => {
 
   describe('behaviour', () => {
     let wrapper;
-    let store;
-    const actions = {
-      authWithGoogle: jest.fn(),
-      waitLogin: jest.fn(),
-    };
     beforeEach(() => {
-      window.gapi = gapi;
-
-      store = new Vuex.Store({
-        modules: {
-          accounts: {
-            actions,
-          },
-        },
-      });
-      wrapper = shallowMount(GoogleAuthButton, {
-        localVue,
-        store,
-        provide: {
-          theme: 'default',
-        },
-        i18n,
-      });
+      wrapper = createWrapper(gapi);
     });
 
     it('should emit error when handle auth error', () => {
@@ -115,6 +92,9 @@ describe('GoogleAuthButton', () => {
 
     it('should correctly submit', async () => {
       expect.assertions(3);
+      identityService.authWithGoogle.mockResolvedValueOnce({
+        success: true,
+      });
 
       wrapper.find('[data-test=submit-button-google]').trigger('click');
       await global.flushPromises();
@@ -123,11 +103,8 @@ describe('GoogleAuthButton', () => {
         client_id: ENV.VUE_APP_GOOGLE_CLIENT_ID,
         scope: 'profile',
       });
-      expect(actions.authWithGoogle).toHaveBeenCalledWith(
-        expect.any(Object),
-        { email: 'email', idToken: 'id_token' },
-        undefined,
-      );
+
+      expect(identityService.authWithGoogle).toHaveBeenCalledWith('id_token');
       expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });

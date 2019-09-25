@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
 import VSvgIcon from '@/components/common/VSvgIcon';
+import { accountsStore } from '@/store';
 
 export default {
   data() {
@@ -30,7 +30,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions('accounts', ['authWithGoogle']),
     async loginWithGoogle() {
       // eslint-disable-next-line no-undef
       const auth = gapi.auth2.init({
@@ -40,7 +39,7 @@ export default {
       await auth.signIn();
 
       try {
-        await this.authWithGoogle({
+        await accountsStore.authWithGoogle({
           email: auth.currentUser
             .get()
             .getBasicProfile()

@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import RateLimit from '@/components/screens/Layout';
+import createStore from '@/store/createStore';
 
 const localVue = createLocalVue();
 
@@ -9,26 +10,21 @@ localVue.use(Vuex);
 localVue.use(VueRouter);
 
 describe('Layout', () => {
-  function creator(modules) {
+  function creator(coreStore = {}) {
     const router = new VueRouter();
-    const store = new Vuex.Store({
-      router,
-      modules,
-    });
+    const store = createStore();
     return shallowMount(RateLimit, {
       store,
+      router,
       localVue,
+      coreStore,
     });
   }
 
   describe('render', () => {
     it('should render router', () => {
       const wrapper = creator({
-        core: {
-          getters: {
-            isRateLimit: jest.fn(() => false),
-          },
-        },
+        isRateLimit: false,
       });
 
       expect(wrapper.html()).toMatchSnapshot();
@@ -36,11 +32,7 @@ describe('Layout', () => {
 
     it('should render rate limit', () => {
       const wrapper = creator({
-        core: {
-          getters: {
-            isRateLimit: jest.fn(() => true),
-          },
-        },
+        isRateLimit: true,
       });
 
       expect(wrapper.html()).toMatchSnapshot();

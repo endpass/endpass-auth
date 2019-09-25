@@ -17,9 +17,9 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 import OtpForm from '@/components/forms/Otp';
 import RecoverForm from '@/components/forms/Recover';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'OtpBlockForm',
@@ -30,22 +30,18 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      loading: state => state.core.loading,
-      otpEmail: state => state.accounts.otpEmail,
-    }),
+    loading() {
+      return coreStore.loading;
+    },
+    otpEmail() {
+      return accountsStore.otpEmail;
+    },
   },
 
   methods: {
-    ...mapActions('accounts', [
-      'confirmAuthViaOtp',
-      'getRecoveryIdentifier',
-      'recover',
-    ]),
-
     async handleOtpSubmit(code) {
       try {
-        await this.confirmAuthViaOtp({
+        await accountsStore.confirmAuthViaOtp({
           email: this.otpEmail,
           code,
         });
@@ -58,7 +54,7 @@ export default {
 
     async handleRecoverSubmit(seedPhrase) {
       try {
-        await this.recover({ seedPhrase });
+        await accountsStore.recover({ seedPhrase });
         this.$emit('recover');
       } catch (err) {
         console.error(err);
@@ -68,7 +64,7 @@ export default {
 
     async showOtpRecover() {
       try {
-        await this.getRecoveryIdentifier();
+        await accountsStore.getRecoveryIdentifier();
         this.showOtp = false;
       } catch (err) {
         console.error(err);
