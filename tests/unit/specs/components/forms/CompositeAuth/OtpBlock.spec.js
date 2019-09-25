@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import OtpBlock from '@/components/forms/CompositeAuth/OtpBlock';
+import OtpBlock from '@/components/formsComposite/CompositeAuth/OtpBlock';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

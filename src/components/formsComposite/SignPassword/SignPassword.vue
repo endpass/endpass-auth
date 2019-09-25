@@ -19,7 +19,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
+import PasswordForm from '@/components/forms/PasswordForm';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 
 const FORMS = {

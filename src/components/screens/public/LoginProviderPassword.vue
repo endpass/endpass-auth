@@ -22,7 +22,7 @@
 import { mapActions } from 'vuex';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import SignPassword from '@/components/forms/SignPassword';
+import SignPassword from '@/components/formsComposite/SignPassword';
 
 export default {
   name: 'LoginProvider',

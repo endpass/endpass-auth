@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
-import SignPasswordForm from '@/components/forms/SignPassword';
+import SignPasswordForm from '@/components/formsComposite/SignPassword';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

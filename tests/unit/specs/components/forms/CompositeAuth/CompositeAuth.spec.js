@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import CompositeAuth from '@/components/forms/CompositeAuth';
+import CompositeAuth from '@/components/formsComposite/CompositeAuth';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 

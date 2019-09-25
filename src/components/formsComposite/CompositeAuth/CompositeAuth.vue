@@ -27,9 +27,9 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import AuthForm from '@/components/forms/CompositeAuth/Auth';
-import OtpBlockForm from '@/components/forms/CompositeAuth/OtpBlock';
-import MessageForm from '@/components/forms/CompositeAuth/Message';
+import AuthForm from '@/components/forms/Auth';
+import OtpBlockForm from '@/components/formsComposite/CompositeAuth/OtpBlock';
+import MessageForm from '@/components/forms/Message';
 import { IDENTITY_MODE } from '@/constants';
 
 const FORMS = {

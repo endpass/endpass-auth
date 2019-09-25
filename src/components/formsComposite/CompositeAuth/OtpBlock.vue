@@ -18,8 +18,8 @@
 
 <script>
 import { mapActions, mapState } from 'vuex';
-import OtpForm from '@/components/forms/CompositeAuth/Otp';
-import RecoverForm from '@/components/forms/CompositeAuth/Recover';
+import OtpForm from '@/components/forms/Otp';
+import RecoverForm from '@/components/forms/Recover';
 
 export default {
   name: 'OtpBlockForm',
