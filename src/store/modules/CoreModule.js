@@ -34,10 +34,6 @@ class CoreModule extends VuexModule {
     return this.sharedStore.isLoading;
   }
 
-  set loading(val) {
-    this.sharedStore.changeLoadingStatus(val);
-  }
-
   get isDialog() {
     if (ENV.VUE_APP_IS_E2E_CONNECT) {
       return !!window.parent.e2eBridge;
@@ -116,13 +112,13 @@ class CoreModule extends VuexModule {
 
   @Action
   async logout() {
-    this.loading = true;
+    this.sharedStore.changeLoadingStatus(true);
 
     const { error, code, source } = await bridgeMessenger.sendAndWaitResponse(
       METHODS.LOGOUT_REQUEST,
     );
 
-    this.loading = false;
+    this.sharedStore.changeLoadingStatus(false);
 
     if (error || code) {
       throw ConnectError.create(code, error);
@@ -139,7 +135,7 @@ class CoreModule extends VuexModule {
 
   @Action
   async changeAccount(address) {
-    this.loading = true;
+    this.sharedStore.changeLoadingStatus(true);
 
     const { error, code } = await bridgeMessenger.sendAndWaitResponse(
       METHODS.CHANGE_SETTINGS_REQUEST,
@@ -152,7 +148,7 @@ class CoreModule extends VuexModule {
       throw ConnectError.create(code, error);
     }
 
-    this.loading = false;
+    this.sharedStore.changeLoadingStatus(false);
   }
 
   @Action

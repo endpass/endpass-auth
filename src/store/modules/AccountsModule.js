@@ -238,7 +238,7 @@ class AccountsModule extends VuexModule {
     });
   }
 
-  @Mutation
+  @Action
   setWalletCreated() {
     this.isAccountCreated = true;
   }

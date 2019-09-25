@@ -40,7 +40,7 @@ export const coreStore = createModule(CoreModule, 'core', {
   sharedStore,
 });
 
-export const requestStore = createModule(RequestsModule, 'request', {
+export const requestStore = createModule(RequestsModule, 'requests', {
   accountsStore,
   sharedStore,
 });
