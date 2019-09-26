@@ -3,7 +3,9 @@ jest.mock('@/class/singleton/signer/Wallet', () => {
 
   const p = Wallet.prototype;
 
-  p.sign = jest.fn();
+  p.sign = jest.fn().mockReturnValue({
+    signature: 'signature',
+  });
   p.getNextNonce = jest.fn();
   p.signTransaction = jest.fn();
   p.sendSignedTransaction = jest.fn();

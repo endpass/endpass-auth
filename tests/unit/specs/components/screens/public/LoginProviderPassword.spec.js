@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
 import LoginProviderPassword from '@/components/screens/public/LoginProviderPassword';
 import setupI18n from '@/locales/i18nSetup';
+import permissionsService from '@/service/permissions';
 
 const localVue = createLocalVue();
 
@@ -12,7 +13,6 @@ const i18n = setupI18n(localVue);
 describe('LoginProviderPassword', () => {
   let wrapper;
   let store;
-  let storeData;
   let accountsModule;
 
   beforeEach(() => {
@@ -37,16 +37,9 @@ describe('LoginProviderPassword', () => {
         ),
       },
     };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
 
     wrapper = shallowMount(LoginProviderPassword, {
       localVue,
-      store,
       i18n,
     });
   });
@@ -80,9 +73,10 @@ describe('LoginProviderPassword', () => {
       const challengeId = 'bar';
 
       it('should handle password submit and makes hydra login', async () => {
-        expect.assertions(2);
+        expect.assertions(1);
 
-        accountsModule.actions.authWithOauth.mockResolvedValueOnce({
+        permissionsService.getLoginDetails.mockResolvedValueOnce({});
+        permissionsService.login.mockResolvedValueOnce({
           redirect: 'new/path',
         });
 
@@ -91,16 +85,7 @@ describe('LoginProviderPassword', () => {
         });
         wrapper.find('sign-password-stub').vm.$emit('submit', password);
 
-        expect(accountsModule.actions.authWithOauth).toBeCalledWith(
-          expect.any(Object),
-          {
-            password,
-            challengeId,
-          },
-          undefined,
-        );
-
-        await wrapper.vm.$nextTick();
+        await global.flushPromises();
 
         expect(window.location.href).toBe('new/path');
       });
@@ -111,15 +96,15 @@ describe('LoginProviderPassword', () => {
         const errorMessage = 'ivyweed perturbing Laparosticti';
         const error = new Error(errorMessage);
 
-        accountsModule.actions.authWithOauth.mockRejectedValueOnce(error);
+        permissionsService.getLoginDetails.mockRejectedValueOnce(error);
         wrapper.setProps({
           loginChallenge: challengeId,
         });
         wrapper.find('sign-password-stub').vm.$emit('submit', password);
 
-        await wrapper.vm.$nextTick();
+        await global.flushPromises();
 
-        expect(wrapper.vm.error).toBe(errorMessage);
+        expect(wrapper.vm.error).toBe('Password is incorrect');
       });
     });
   });

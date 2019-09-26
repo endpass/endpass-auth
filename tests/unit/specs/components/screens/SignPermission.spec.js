@@ -4,7 +4,6 @@ import { v3KeyStore } from '@unitFixtures/accounts';
 import SignPermission from '@/components/screens/SignPermission';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import Wallet from '@/class/singleton/signer/Wallet';
 
 const localVue = createLocalVue();
 
@@ -36,17 +35,12 @@ describe('SignPermission', () => {
         identityService.getAuthPermission.mockReturnValueOnce({
           keystore: v3KeyStore,
         });
-        const signature = 'signature';
-        const spyon = jest.spyOn(Wallet.prototype, 'sign');
-        spyon.mockReturnValueOnce({
-          signature,
-        });
 
         wrapper.find('sign-password-stub').vm.$emit('submit', 'foopwd');
 
         await global.flushPromises();
 
-        expect(identityService.setAuthPermission).toBeCalledWith(signature);
+        expect(identityService.setAuthPermission).toBeCalledWith('signature');
       });
     });
   });
