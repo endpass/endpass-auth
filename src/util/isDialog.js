@@ -1,9 +1,5 @@
-const isDialog = () => {
-  if (ENV.VUE_APP_IS_E2E_CONNECT) {
-    return !!window.parent.e2eBridge;
-  }
+const isDialog = ENV.VUE_APP_IS_E2E_CONNECT
+  ? !!window.parent.e2eBridge
+  : window.self !== window.top;
 
-  return window.self !== window.top;
-};
-
-export default isDialog();
+export default isDialog;

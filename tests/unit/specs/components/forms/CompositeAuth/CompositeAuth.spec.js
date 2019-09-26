@@ -88,13 +88,14 @@ describe('CompositeAuth', () => {
     });
 
     it('should show message after submit if not otp', async () => {
-      expect.assertions(4);
+      expect.assertions(5);
 
       identityService.auth.mockResolvedValueOnce({
         success: true,
-        challenge: {},
+        challenge: { challengeType: 'other' },
       });
 
+      expect(wrapper.find('message-form-stub').exists()).toBe(false);
       expect(accountsStore.linkSent).toBe(false);
 
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);

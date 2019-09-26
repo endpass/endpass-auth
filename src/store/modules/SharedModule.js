@@ -2,7 +2,8 @@ import { VuexModule, Module, Mutation } from 'vuex-class-modules';
 
 @Module({ generateMutationSetters: true })
 class SharedModule extends VuexModule {
-  isLoading = false; // old this.loading from core
+  // old this.loading from core
+  isLoading = false;
 
   @Mutation
   changeLoadingStatus(value) {

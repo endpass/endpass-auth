@@ -68,9 +68,6 @@ const createAccountFromWidget = async (
   try {
     await dispatch('accounts/validatePassword', { address, password });
     await dispatch('accounts/createAccount', { password });
-    // eslint-disable-next-line no-useless-catch
-  } catch (err) {
-    throw err;
   } finally {
     commit('setWidgetLoadingStatus', false);
   }

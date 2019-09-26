@@ -35,7 +35,7 @@ function initWidgetStream() {
           lastActiveAccount: activeAccount,
           net: activeNet,
         });
-        await accountsStore.defineSettings();
+        accountsStore.defineSettings();
       },
     },
   };
