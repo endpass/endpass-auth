@@ -1,8 +1,11 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { accountAddress, accounts } from '@unitFixtures/accounts';
+import { accountAddress, hdv3 } from '@unitFixtures/accounts';
 import setupI18n from '@/locales/i18nSetup';
-import Widget from '@/components/widget/Widget.vue';
+import Widget from '@/components/widget/Widget';
+import { accountsStore } from '@/store';
+import userService from '@/service/user';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
@@ -13,27 +16,25 @@ describe('Widget', () => {
   let wrapper;
   let storeData;
   let store;
-  let coreModule;
   let widgetModule;
-  let accountsModule;
 
-  beforeEach(() => {
-    accountsModule = {
-      state: {
-        settings: {
-          lastActiveAccount: accountAddress,
-          net: 1,
-        },
-        accounts,
-      },
-      actions: {
-        defineSettings: jest.fn(),
-        defineOnlyV3Accounts: jest.fn(),
-        updateSettings: jest.fn(),
-        subscribeOnBalanceUpdates: jest.fn(),
-      },
-    };
+  userService.getSettings.mockResolvedValue({
+    lastActiveAccount: accountAddress,
+    net: 1,
+  });
+
+  afterEach(() => {
+    jest.clearAllTimers();
+  });
+
+  beforeEach(async () => {
+    jest.useFakeTimers();
+
+    accountsStore.logout();
+    accountsStore.setAuthByCode(200);
+
     widgetModule = {
+      namespaced: true,
       actions: {
         initWidget: jest.fn(),
         openWidget: jest.fn(),
@@ -47,18 +48,9 @@ describe('Widget', () => {
         isWidgetPinnedToBottom: jest.fn(() => true),
       },
     };
-    coreModule = {
-      state: {
-        loading: false,
-      },
-      actions: {
-        logout: jest.fn(),
-      },
-    };
+
     storeData = {
       modules: {
-        core: coreModule,
-        accounts: accountsModule,
         widget: widgetModule,
       },
     };
@@ -74,20 +66,27 @@ describe('Widget', () => {
     it('should correctly render', async () => {
       expect.assertions(1);
 
+      await global.flushPromises();
+
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
     it('should request settings, accounts and subscribe on mount', async () => {
-      expect.assertions(4);
+      expect.assertions(6);
 
+      expect(accountsStore.accounts).toEqual([]);
+      expect(accountsStore.balance).toBe(null);
+
+      await global.flushPromises();
+      jest.runOnlyPendingTimers();
       await global.flushPromises();
 
       expect(widgetModule.actions.initWidget).toBeCalled();
-      expect(accountsModule.actions.defineSettings).toBeCalled();
-      expect(accountsModule.actions.defineOnlyV3Accounts).toBeCalled();
-      expect(accountsModule.actions.subscribeOnBalanceUpdates).toBeCalled();
+      expect(userService.getV3Accounts).toBeCalled();
+      expect(accountsStore.accounts).toEqual([hdv3.info]);
+      expect(accountsStore.balance).toBe('100000000000000');
     });
 
     it('should correctly open widget', () => {
@@ -124,17 +123,25 @@ describe('Widget', () => {
       expect(wrapper.vm.isAccountsCollapsed).toBe(true);
     });
 
-    it('should correctly handle logout event', () => {
+    it('should correctly handle logout event', async () => {
+      expect.assertions(2);
+
+      await global.flushPromises();
+
+      expect(accountsStore.isLogin).toBe(true);
+
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
       wrapper.find('widget-accounts-stub').vm.$emit('logout');
 
-      expect(coreModule.actions.logout).toBeCalled();
+      await global.flushPromises();
+
+      expect(accountsStore.isLogin).toBe(false);
     });
 
     it('should render new account form on accounts newAccount action handle', async () => {
       wrapper.find('widget-accounts-stub').vm.$emit('new-account');
 
-      await wrapper.vm.$nextTick();
-      await wrapper.vm.$nextTick();
+      await global.flushPromises();
 
       expect(wrapper.find('widget-new-account-form-stub').exists()).toBe(true);
     });

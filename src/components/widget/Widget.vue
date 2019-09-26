@@ -74,15 +74,23 @@ export default {
 
   computed: {
     ...mapState({
-      accounts: state => state.accounts.accounts,
-      settings: state => state.accounts.settings,
-      balance: state => state.accounts.balance,
-      loading: state => state.core.loading,
       isMobile: state => state.widget.isMobile,
       isExpanded: state => state.widget.isExpanded,
       isWidgetLoading: state => state.widget.isLoading,
     }),
-    ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
+    accounts() {
+      return accountsStore.accounts;
+    },
+    settings() {
+      return accountsStore.settings;
+    },
+    balance() {
+      return accountsStore.balance;
+    },
+    loading() {
+      return coreStore.loading;
+    },
+    ...mapGetters('widget', ['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
     fiatCurrency() {
       return get(this.settings, 'fiatCurrency', 'USD');
@@ -111,7 +119,7 @@ export default {
   },
 
   methods: {
-    ...mapActions([
+    ...mapActions('widget', [
       'initWidget',
       'fitWidget',
       'openWidget',
