@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import PasswordForm from '@/components/forms/PasswordForm';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { accountsStore, coreStore } from '@/store';
@@ -70,7 +69,9 @@ export default {
   }),
 
   computed: {
-    ...mapGetters('core', ['isDialog']),
+    isDialog() {
+      return coreStore.isDialog;
+    },
     isLoadProcess() {
       return this.isLoading || this.isCheckingAccount;
     },

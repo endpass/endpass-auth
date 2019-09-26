@@ -2,56 +2,37 @@ import Vuex from 'vuex';
 import { createLocalVue, shallowMount } from '@vue/test-utils';
 import SignPasswordForm from '@/components/formsComposite/SignPassword';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
+import { accountsStore } from '@/store';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('SignPasswordForm', () => {
-  let store;
-  let storeData;
-  let wrapper;
-  let accountsModule;
-  let coreModule;
+jest.useFakeTimers();
 
-  beforeEach(() => {
-    coreModule = {
-      state: {
-        isInited: true,
-        loading: false,
-      },
-      getters: {
-        isDialog: jest.fn(() => true),
-      },
-    };
-    accountsModule = {
-      actions: {
-        openCreateAccountPage: jest.fn(),
-        checkAccountExists: jest.fn(),
-        waitAccountCreate: jest.fn(),
-        logout: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
-    wrapper = shallowMount(SignPasswordForm, {
+describe('SignPasswordForm', () => {
+  let wrapper;
+
+  const createWrapper = () => {
+    return shallowMount(SignPasswordForm, {
       localVue,
-      store,
       provide: {
         theme: 'default',
       },
       i18n,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllTimers();
   });
 
   describe('render', () => {
     it('should correctly render component', () => {
+      wrapper = createWrapper();
       expect(wrapper.name()).toBe('SignPasswordForm');
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -61,26 +42,36 @@ describe('SignPasswordForm', () => {
     it('should show create account form', async () => {
       expect.assertions(2);
 
-      accountsModule.actions.checkAccountExists.mockResolvedValueOnce(false);
+      identityService.checkAccountExist.mockResolvedValueOnce(false);
 
-      wrapper = shallowMount(SignPasswordForm, {
-        localVue,
-        store,
-        provide: {
-          theme: 'default',
-        },
-      });
+      wrapper = createWrapper();
 
       await global.flushPromises();
 
-      expect(accountsModule.actions.waitAccountCreate).toBeCalled();
+      expect(wrapper.find('create-wallet-form-stub').exists()).toBe(true);
+
+      accountsStore.setWalletCreated();
+      jest.runOnlyPendingTimers();
+      await global.flushPromises();
+
       expect(wrapper.find('password-form-stub').exists()).toBe(true);
     });
 
-    it('should do logout', () => {
-      wrapper.vm.handleLogout();
+    it('should do logout', async () => {
+      expect.assertions(3);
 
-      expect(accountsModule.actions.logout).toBeCalled();
+      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
+      accountsStore.setAuthByCode(200);
+
+      expect(accountsStore.isLogin).toBe(true);
+
+      wrapper = createWrapper();
+
+      wrapper.find('password-form-stub').vm.$emit('logout');
+
+      await global.flushPromises();
+
+      expect(accountsStore.isLogin).toBe(false);
       expect(wrapper.emitted().cancel).toBeTruthy();
     });
   });

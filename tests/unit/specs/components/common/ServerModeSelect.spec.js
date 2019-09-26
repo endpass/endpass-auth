@@ -1,9 +1,10 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import ServerModeSelect from '@/components/common/ServerModeSelect.vue';
+import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
+import modeService from '@/service/mode';
 
 const localVue = createLocalVue();
 
@@ -12,37 +13,13 @@ localVue.use(VeeValidate);
 const i18n = setupI18n(localVue);
 
 describe('ServerModeSelect', () => {
-  let store;
-  let storeData;
   let wrapper;
-  let accountsModule;
-  let coreModule;
-  const validateCustomServer = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        isInited: true,
-        loading: false,
-      },
-    };
-    accountsModule = {
-      actions: {
-        validateCustomServer,
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     wrapper = shallowMount(ServerModeSelect, {
       localVue,
-      store,
       i18n,
     });
   });
@@ -153,7 +130,7 @@ describe('ServerModeSelect', () => {
           };
 
           beforeEach(() => {
-            validateCustomServer.mockResolvedValueOnce(true);
+            modeService.validateIdentityServer.mockResolvedValueOnce(true);
 
             wrapper
               .find('[data-test=custom-server-input]')
@@ -178,7 +155,7 @@ describe('ServerModeSelect', () => {
           const error = new Error('error');
 
           beforeEach(() => {
-            validateCustomServer.mockRejectedValueOnce(error);
+            modeService.validateIdentityServer.mockRejectedValueOnce(error);
 
             wrapper
               .find('[data-test=custom-server-input]')

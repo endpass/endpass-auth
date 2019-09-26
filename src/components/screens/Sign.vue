@@ -28,12 +28,11 @@
 
 <script>
 import get from 'lodash/get';
-import { mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import SignMessageForm from '@/components/forms/Sign/MessageForm';
 import SignTransactionForm from '@/components/forms/Sign/TransactionForm';
-import { coreStore, requestStore } from '@/store';
+import { accountsStore, coreStore, requestStore } from '@/store';
 
 export default {
   name: 'Sign',
@@ -43,12 +42,18 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      request: state => state.requests.request,
-      settings: state => state.accounts.settings,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
+    loading() {
+      return coreStore.loading;
+    },
+    request() {
+      return requestStore.request;
+    },
+    settings() {
+      return accountsStore.settings;
+    },
 
     isDialog() {
       return coreStore.isDialog;

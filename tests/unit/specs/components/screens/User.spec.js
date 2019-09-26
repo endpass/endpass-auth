@@ -5,6 +5,7 @@ import setupI18n from '@/locales/i18nSetup';
 import { accountsStore } from '@/store';
 import { accountChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
@@ -17,6 +18,7 @@ describe('User', () => {
   beforeEach(async () => {
     await accountsStore.defineSettings();
     await accountsStore.defineOnlyV3Accounts();
+    bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
     wrapper = shallowMount(User, {
       localVue,
@@ -40,6 +42,8 @@ describe('User', () => {
     });
 
     it('should update settings of form submit', async () => {
+      expect.assertions(1);
+
       const dataPromise = accountChannel.take();
       const { activeAccount, activeNet } = wrapper.vm.formData;
 

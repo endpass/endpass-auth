@@ -113,7 +113,6 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VTag from '@endpass/ui/kit/VTag';
@@ -123,6 +122,7 @@ import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
 import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
+import { accountsStore } from '@/store';
 
 export default {
   name: 'CreateWalletForm',
@@ -162,12 +162,6 @@ export default {
   },
 
   methods: {
-    ...mapActions('accounts', [
-      'createInitialWallet',
-      'setWalletCreated',
-      'getSeedTemplateUrl',
-    ]),
-
     async onCreateWallet() {
       if (!this.canSubmit) {
         return;
@@ -177,7 +171,7 @@ export default {
 
       try {
         this.error = '';
-        this.seedKey = await this.createInitialWallet({
+        this.seedKey = await accountsStore.createInitialWallet({
           password: this.password,
         });
         this.isShowSeed = true;
@@ -190,12 +184,12 @@ export default {
     onContinue() {
       if (!this.isSeedConfirmed) return;
 
-      this.setWalletCreated();
+      accountsStore.setWalletCreated();
     },
   },
 
   async mounted() {
-    this.seedTemplateUrl = await this.getSeedTemplateUrl();
+    this.seedTemplateUrl = await accountsStore.getSeedTemplateUrl();
   },
 
   mixins: [formMixin],

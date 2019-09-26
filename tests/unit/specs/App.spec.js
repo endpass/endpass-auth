@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import App from '@/App';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
@@ -15,6 +16,7 @@ describe('App-root', () => {
     wrapper = shallowMount(App, {
       localVue,
     });
+    bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
   });
 
   describe('App render', () => {

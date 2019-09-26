@@ -1,8 +1,6 @@
 import { accountAddress } from '@unitFixtures/accounts';
 import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
 import widgetActions from '@/store/modules/widget/actions';
-
-/* eslint-disable-next-line */
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 describe('widget actions', () => {

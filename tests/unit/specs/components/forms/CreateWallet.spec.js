@@ -2,9 +2,13 @@ import Vuex from 'vuex';
 import VueTimers from 'vue-timers/mixin';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
+import { hdv3, v3KeyStore } from '@unitFixtures/accounts';
+import walletGen from '@endpass/utils/walletGen';
 import validation from '@/validation';
-import CreateWallet from '@/components/forms/CreateWallet.vue';
+import CreateWallet from '@/components/forms/CreateWallet';
 import setupI18n from '@/locales/i18nSetup';
+import userService from '@/service/user';
+import { accountsStore } from '@/store';
 
 const localVue = createLocalVue();
 
@@ -17,31 +21,20 @@ jest.useFakeTimers();
 
 describe('CreateWallet', () => {
   let wrapper;
-  let store;
-  let storeData;
-  let accountsModule;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    accountsModule = {
-      state: {
-        isAccountCreated: false,
-      },
-      actions: {
-        createWallet: jest.fn(),
-        setWalletCreated: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
+    const wallet = {
+      seedKey: 'seedKey',
+      encryptedSeed: 'encryptedSeed',
+      v3KeystoreHdWallet: hdv3,
+      v3KeystoreChildWallet: v3KeyStore,
     };
 
-    store = new Vuex.Store(storeData);
+    walletGen.createComplex.mockResolvedValueOnce(wallet);
+
     wrapper = shallowMount(CreateWallet, {
       localVue,
-      store,
       i18n,
       mixins: [VueTimers],
       provide: {
@@ -91,7 +84,6 @@ describe('CreateWallet', () => {
         passwordConfirm: 'pwd',
         password: 'pwd',
       });
-      accountsModule.actions.createWallet.mockRejectedValueOnce('kek');
 
       await doSubmit();
       await global.flushPromises();
@@ -110,7 +102,6 @@ describe('CreateWallet', () => {
         passwordConfirm: '12345678',
         password: '12345678',
       });
-      accountsModule.actions.createWallet.mockResolvedValueOnce('kek');
 
       await doSubmit();
       await global.flushPromises();
@@ -121,25 +112,29 @@ describe('CreateWallet', () => {
     it('should handle error, if create wallet broken', async () => {
       expect.assertions(2);
 
+      userService.setAccount.mockRejectedValueOnce('');
       expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
         false,
       );
 
       wrapper.setData({
-        passwordConfirm: 'pwd',
-        password: 'pwd',
+        passwordConfirm: 'pwd123123123',
+        password: 'pwd123123123',
       });
-      accountsModule.actions.createWallet.mockRejectedValueOnce('kek');
 
       await doSubmit();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
-        false,
+        true,
       );
     });
 
     it('should not submit if seed phrase is not checked', async () => {
+      expect.assertions(2);
+
+      expect(accountsStore.isAccountCreated).toBe(false);
+
       wrapper.setData({
         isShowSeed: true,
         seedKey: 'foo bar baz',
@@ -149,10 +144,14 @@ describe('CreateWallet', () => {
 
       await global.flushPromises();
 
-      expect(accountsModule.actions.setWalletCreated).not.toBeCalled();
+      expect(accountsStore.isAccountCreated).toBe(false);
     });
 
     it('should submit if seed phrase is checked', async () => {
+      expect.assertions(2);
+
+      expect(accountsStore.isAccountCreated).toBe(false);
+
       wrapper.setData({
         isShowSeed: true,
         isSeedConfirmed: true,
@@ -163,7 +162,7 @@ describe('CreateWallet', () => {
 
       await global.flushPromises();
 
-      expect(accountsModule.actions.setWalletCreated).toBeCalled();
+      expect(accountsStore.isAccountCreated).toBe(true);
     });
   });
 });
