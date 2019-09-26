@@ -467,10 +467,12 @@ class AccountsModule extends VuexModule {
         recoveryIdentifier: this.recoveryIdentifier,
       });
 
+      const redirectUrl = get(this, 'authParams.redirectUrl', '');
+
       const { success } = await identityService.recover(
         this.otpEmail,
         signature,
-        this.authParams.redirectUrl,
+        redirectUrl,
       );
 
       this.linkSent = true;
