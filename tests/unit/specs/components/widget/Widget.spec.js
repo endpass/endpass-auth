@@ -2,15 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { accountAddress, accounts } from '@unitFixtures/accounts';
 import setupI18n from '@/locales/i18nSetup';
-
-jest.mock('@/class/singleton/bridgeMessenger', () => ({
-  subscribe: jest.fn(),
-}));
-
-/* eslint-disable */
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import Widget from '@/components/widget/Widget.vue';
-/* eslint-enable */
 
 const localVue = createLocalVue();
 

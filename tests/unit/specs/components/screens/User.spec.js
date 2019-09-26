@@ -11,12 +11,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-jest.mock('@/class/singleton/bridgeMessenger', () => ({
-  send: jest.fn(),
-  sendAndWaitResponse: jest.fn().mockReturnValue({}),
-  subscribe: jest.fn(),
-}));
-
 describe('User', () => {
   let wrapper;
 

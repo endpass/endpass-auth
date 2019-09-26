@@ -2,11 +2,6 @@ import { METHODS, DIRECTION } from '@/constants';
 import coreActions from '@/store/modules/core/actions';
 import settingsService from '@/service/settings';
 
-jest.mock('@/class/singleton/bridgeMessenger', () => ({
-  send: jest.fn(),
-  sendAndWaitResponse: jest.fn(),
-  subscribe: jest.fn(),
-}));
 jest.mock('@/streams', () => ({
   initDialogStream: jest.fn(),
   initWidgetStream: jest.fn(),
