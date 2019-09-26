@@ -16,7 +16,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
@@ -39,9 +38,9 @@ export default {
   }),
 
   methods: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
 
     async handleAuthorize() {
       const isAccountExist = await accountsStore.checkAccountExists();

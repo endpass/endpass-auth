@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import AuthForm from '@/components/forms/Auth';
 import OtpBlockForm from '@/components/formsComposite/CompositeAuth/OtpBlock';
 import MessageForm from '@/components/forms/Message';
@@ -63,13 +62,21 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      otpEmail: state => state.accounts.otpEmail,
-      isIdentityMode: state => state.core.isIdentityMode,
-      isLogin: state => state.accounts.isLogin,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
+    loading() {
+      return coreStore.loading;
+    },
+    otpEmail() {
+      return accountsStore.otpEmail;
+    },
+    isIdentityMode() {
+      return coreStore.isIdentityMode;
+    },
+    isLogin() {
+      return accountsStore.isLogin;
+    },
   },
 
   methods: {

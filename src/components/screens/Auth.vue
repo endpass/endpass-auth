@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
@@ -36,10 +35,13 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      showCreateAccount: state => state.core.showCreateAccount,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
+
+    showCreateAccount() {
+      return coreStore.showCreateAccount;
+    },
 
     isDialog() {
       return coreStore.isDialog;

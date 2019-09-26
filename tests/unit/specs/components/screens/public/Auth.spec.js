@@ -1,7 +1,9 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Auth from '@/components/screens/public/Auth.vue';
+import Auth from '@/components/screens/public/Auth';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
+import { accountsStore } from '@/store';
 
 const localVue = createLocalVue();
 
@@ -12,9 +14,18 @@ describe('PublicAuth', () => {
   let wrapper;
   let $router;
   let $route;
-  let store;
-  let storeData;
-  let accountsModule;
+
+  const createWrapper = options => {
+    return shallowMount(Auth, {
+      localVue,
+      mocks: {
+        $route,
+        $router,
+      },
+      i18n,
+      ...options,
+    });
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -22,39 +33,17 @@ describe('PublicAuth', () => {
     $router = {
       replace: jest.fn(),
     };
-    accountsModule = {
-      mutations: {
-        setAuthParams: jest.fn(),
-      },
-      actions: {
-        checkAccountExists: jest.fn(),
-        waitAccountCreate: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     $route = {
       query: {
         redirectUrl: 'http://foo.bar',
       },
     };
-    wrapper = shallowMount(Auth, {
-      localVue,
-      mocks: {
-        $route,
-        $router,
-      },
-      store,
-      i18n,
-    });
+    accountsStore.setAuthParams(null);
   });
 
   describe('render', () => {
     it('should correctly render Auth public screen component', () => {
+      wrapper = createWrapper();
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -63,14 +52,14 @@ describe('PublicAuth', () => {
     it('should redirect to LoginProvider on auth form authorize event handling', async () => {
       expect.assertions(1);
 
+      wrapper = createWrapper();
       wrapper.setData({
         queryParamsMap: {
           redirectUrl: 'http://localhost/public/foo/bar',
         },
       });
-      wrapper.vm.checkAccountExists = jest
-        .fn()
-        .mockImplementationOnce(async () => true);
+
+      identityService.checkAccountExist.mockResolvedValueOnce(true);
 
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
       await global.flushPromises();
@@ -79,29 +68,28 @@ describe('PublicAuth', () => {
     });
 
     it('should set auth params if redirectUrl exists', () => {
-      expect(accountsModule.mutations.setAuthParams).toBeCalledWith(
-        expect.any(Object),
-        {
-          redirectUrl: 'http://foo.bar',
-        },
-      );
+      expect(accountsStore.authParams).toBe(null);
+
+      wrapper = createWrapper();
+
+      expect(accountsStore.authParams).toEqual({
+        redirectUrl: 'http://foo.bar',
+      });
     });
 
     it('should not set auth params if redirectUrl not exists', () => {
-      accountsModule.mutations.setAuthParams.mockRestore();
-      wrapper = shallowMount(Auth, {
-        localVue,
+      expect(accountsStore.authParams).toBe(null);
+
+      wrapper = createWrapper({
         mocks: {
           $route: {
             query: {},
           },
           $router,
         },
-        store,
-        i18n,
       });
 
-      expect(accountsModule.mutations.setAuthParams).not.toBeCalled();
+      expect(accountsStore.authParams).toBe(null);
     });
   });
 });

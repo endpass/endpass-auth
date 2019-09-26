@@ -20,12 +20,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
-import { accountsStore } from '@/store';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'ConsentProvider',
@@ -43,10 +42,12 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      isLogin: state => state.accounts.isLogin,
-    }),
+    isInited() {
+      return coreStore.isInited;
+    },
+    isLogin() {
+      return accountsStore.isLogin;
+    },
     isLoadingScreen() {
       return (
         this.isSkipped || (this.scopesList.length === 0 && !this.error.show)
@@ -87,7 +88,6 @@ export default {
 
     async loadScopes() {
       this.isLoading = true;
-
       try {
         const {
           requested_scope: requestedScope,
