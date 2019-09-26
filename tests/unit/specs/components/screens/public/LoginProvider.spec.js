@@ -3,6 +3,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import setupI18n from '@/locales/i18nSetup';
+import { accountsStore } from '@/store';
+import permissionsService from '@/service/permissions';
+import userService from '@/service/user';
 
 const localVue = createLocalVue();
 
@@ -13,46 +16,23 @@ describe('LoginProvider', () => {
   let $router;
   let $route;
   let wrapper;
-  let store;
-  let storeData;
-  let coreModule;
-  let accountsModule;
+
+  const createWrapper = options => {
+    return shallowMount(LoginProvider, {
+      localVue,
+      i18n,
+      mocks: {
+        $router,
+        $route,
+      },
+      ...options,
+    });
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
     window.location.href = jest.fn();
 
-    coreModule = {
-      state: {
-        loading: false,
-      },
-    };
-    accountsModule = {
-      state: {
-        isLogin: true,
-        isPermission: true,
-      },
-      actions: {
-        authWithOauth: jest.fn(),
-        checkOauthLoginRequirements: jest.fn().mockResolvedValue({
-          skip: false,
-        }),
-        defineSettingsWithoutPermission: jest.fn().mockResolvedValue({}),
-      },
-      getters: {
-        isAuthorized: jest.fn(
-          () =>
-            accountsModule.state.isLogin && accountsModule.state.isPermission,
-        ),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     $router = {
       history: {
         current: {
@@ -68,28 +48,11 @@ describe('LoginProvider', () => {
         login_challenge: 'foo',
       },
     };
-    wrapper = shallowMount(LoginProvider, {
-      localVue,
-      store,
-      i18n,
-      mocks: {
-        $router,
-        $route,
-      },
-    });
   });
 
   describe('render', () => {
     it('should correctly render LoginProvider screen', () => {
-      wrapper = shallowMount(LoginProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.html()).toMatchSnapshot();
       expect(wrapper.find('[data-test=error-message]').exists()).toBe(false);
@@ -98,10 +61,7 @@ describe('LoginProvider', () => {
 
   describe('behavior', () => {
     it('should takes query params from current location and assign error if challengeId is not in params', () => {
-      wrapper = shallowMount(LoginProvider, {
-        localVue,
-        store,
-        i18n,
+      wrapper = createWrapper({
         mocks: {
           $router,
           $route: {
@@ -115,18 +75,9 @@ describe('LoginProvider', () => {
     });
 
     it('should takes query params from current location and makes redirect if challengeId is not empty but authorization status is falsy', () => {
-      accountsModule.state.isLogin = false;
-      accountsModule.state.isPermission = false;
+      accountsStore.setAuthByCode(400);
 
-      wrapper = shallowMount(LoginProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+      wrapper = createWrapper();
 
       expect($router.replace).toBeCalled();
     });
@@ -141,15 +92,7 @@ describe('LoginProvider', () => {
       it('should do not anything if skip status is falsy', async () => {
         expect.assertions(1);
 
-        wrapper = shallowMount(LoginProvider, {
-          localVue,
-          store,
-          i18n,
-          mocks: {
-            $router,
-            $route,
-          },
-        });
+        wrapper = createWrapper();
         await global.flushPromises();
 
         expect(window.location.replace).not.toBeCalled();
@@ -158,18 +101,10 @@ describe('LoginProvider', () => {
       it('should show error if check oauth if fault', async () => {
         expect.assertions(1);
 
-        accountsModule.actions.checkOauthLoginRequirements.mockRejectedValueOnce(
-          'error',
-        );
-        wrapper = shallowMount(LoginProvider, {
-          localVue,
-          store,
-          i18n,
-          mocks: {
-            $router,
-            $route,
-          },
-        });
+        accountsStore.setAuthByCode(200);
+        permissionsService.getLoginDetails.mockRejectedValueOnce('error');
+
+        wrapper = createWrapper();
         await global.flushPromises();
 
         expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
@@ -178,56 +113,46 @@ describe('LoginProvider', () => {
       it('should make redirect if skip status is truthy on received redirect url', async () => {
         expect.assertions(1);
 
+        accountsStore.setAuthByCode(200);
         const payload = {
           skip: true,
           redirect: 'http://foo.bar',
         };
-        accountsModule.actions.checkOauthLoginRequirements.mockResolvedValueOnce(
-          payload,
-        );
-        wrapper = shallowMount(LoginProvider, {
-          localVue,
-          store,
-          i18n,
-          mocks: {
-            $router,
-            $route,
-          },
-        });
+        permissionsService.getLoginDetails.mockResolvedValueOnce(payload);
+        wrapper = createWrapper();
         await global.flushPromises();
 
         expect(window.location.replace).toBeCalledWith(payload.redirect);
       });
     });
 
-    it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
-      wrapper = shallowMount(LoginProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
+    it('should not do anything on mounting if challengeId is present in query params and user authorized', async () => {
+      expect.assertions(2);
+
+      accountsStore.setAuthByCode(200);
+      permissionsService.getLoginDetails.mockResolvedValueOnce({
+        skip: false,
       });
+
+      wrapper = createWrapper();
+      await global.flushPromises();
 
       expect(wrapper.vm.error).toBeNull();
       expect($router.replace).not.toBeCalled();
     });
 
-    it('should request user settings', () => {
-      wrapper = shallowMount(LoginProvider, {
-        localVue,
-        store,
-        mocks: {
-          $router,
-          $route,
-        },
+    it('should request user settings', async () => {
+      expect.assertions(1);
+
+      accountsStore.setAuthByCode(200);
+      permissionsService.getLoginDetails.mockResolvedValueOnce({
+        skip: false,
       });
 
-      expect(
-        accountsModule.actions.defineSettingsWithoutPermission,
-      ).toBeCalled();
+      wrapper = createWrapper();
+      await global.flushPromises();
+
+      expect(userService.getSettingsSkipPermission).toBeCalled();
     });
   });
 });

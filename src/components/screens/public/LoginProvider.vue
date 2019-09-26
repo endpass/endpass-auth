@@ -21,7 +21,6 @@
 
 <script>
 import get from 'lodash/get';
-import { mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LoginProviderPassword from './LoginProviderPassword';
 import VFrame from '@/components/common/VFrame';
@@ -38,10 +37,12 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isLogin: state => state.accounts.isLogin,
-      settings: state => state.accounts.settings,
-    }),
+    isLogin() {
+      return accountsStore.isLogin;
+    },
+    settings() {
+      return accountsStore.settings;
+    },
 
     currentUserEmail() {
       return get(this.settings, 'email');
@@ -56,7 +57,6 @@ export default {
     const { login_challenge: loginChallenge } = query;
 
     this.loginChallenge = loginChallenge;
-
     if (!loginChallenge) {
       this.isLoading = false;
       return;
