@@ -8,6 +8,7 @@ import './mocks/service/permissions.mock';
 import './mocks/service/user.mock';
 import './mocks/util/core-class';
 import './mocks/util/isDialog';
+import './mocks/CrossWindowMessenger.mock';
 import './mocks/service/Signer/web3.mock';
 import './mocks/service/Signer/Wallet.mock';
 import './mocks/github-oauth-popup.mock';

@@ -17,7 +17,6 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import SignPassword from '@/components/formsComposite/SignPassword';
@@ -35,10 +34,12 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-    }),
-    ...mapGetters('core', ['isDialog']),
+    isInited() {
+      return coreStore.isInited;
+    },
+    isDialog() {
+      return coreStore.isDialog;
+    },
   },
 
   methods: {

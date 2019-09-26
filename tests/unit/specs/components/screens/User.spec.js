@@ -45,18 +45,24 @@ describe('User', () => {
       });
     });
 
-    it.skip('should update settings of form submit', () => {
-      // const { activeAccount, activeNet } = wrapper.vm.formData;
-      //
-      // wrapper.find('account-form-stub').vm.$emit('submit');
-      // expect(accountsModule.actions.updateSettings).toBeCalledWith(
-      //   expect.any(Object),
-      //   {
-      //     lastActiveAccount: activeAccount,
-      //     net: activeNet,
-      //   },
-      //   undefined,
-      // );
+    it('should update settings of form submit', async () => {
+      const dataPromise = accountChannel.take();
+      const { activeAccount, activeNet } = wrapper.vm.formData;
+
+      wrapper.find('account-form-stub').vm.$emit('submit');
+
+      await global.flushPromises();
+      const res = await dataPromise;
+
+      expect(res).toEqual(
+        Answer.createOk({
+          settings: {
+            activeAccount,
+            activeNet,
+          },
+          type: 'update',
+        }),
+      );
     });
 
     it('should logout if logout button was pressed in form', async () => {

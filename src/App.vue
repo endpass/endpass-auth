@@ -22,7 +22,7 @@ export default {
 
   async created() {
     this.isLoading = true;
-    await coreStore.init(this.$router);
+    await coreStore.init();
     this.isLoading = false;
   },
   components: {
