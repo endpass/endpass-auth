@@ -17,35 +17,14 @@ localVue.use(VeeValidate);
 localVue.use(validation);
 
 describe('Sign > TransactionForm', () => {
-  let store;
-  let storeData;
-  let accountsModule;
   let wrapperFactory;
   let wrapper;
 
   beforeEach(() => {
-    accountsModule = {
-      state: {
-        balance: '100000000',
-        settings: {
-          fiatCurrency: 'USD',
-        },
-      },
-      actions: {
-        subscribeOnBalanceUpdates: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     wrapperFactory = (props = {}) =>
       shallowMount(TransactionForm, {
         localVue,
         i18n,
-        store,
         sync: false,
         propsData: props,
         provide: {

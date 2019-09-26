@@ -13,7 +13,6 @@ const i18n = setupI18n(localVue);
 
 describe('Sign', () => {
   describe('render', () => {
-    let store;
     let wrapper;
     const request = {
       address: '0x0',
@@ -47,7 +46,6 @@ describe('Sign', () => {
       });
       wrapper = shallowMount(Sign, {
         localVue,
-        store,
         i18n,
       });
 
@@ -63,7 +61,6 @@ describe('Sign', () => {
       });
       wrapper = shallowMount(Sign, {
         localVue,
-        store,
         i18n,
       });
 

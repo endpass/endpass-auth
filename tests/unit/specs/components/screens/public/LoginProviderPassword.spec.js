@@ -12,31 +12,10 @@ const i18n = setupI18n(localVue);
 
 describe('LoginProviderPassword', () => {
   let wrapper;
-  let store;
-  let accountsModule;
 
   beforeEach(() => {
     jest.clearAllMocks();
     window.location.href = jest.fn();
-
-    accountsModule = {
-      state: {
-        isLogin: true,
-        isPermission: true,
-      },
-      actions: {
-        authWithOauth: jest.fn(),
-        checkOauthLoginRequirements: jest.fn().mockResolvedValue({
-          skip: false,
-        }),
-      },
-      getters: {
-        isAuthorized: jest.fn(
-          () =>
-            accountsModule.state.isLogin && accountsModule.state.isPermission,
-        ),
-      },
-    };
 
     wrapper = shallowMount(LoginProviderPassword, {
       localVue,
@@ -48,7 +27,6 @@ describe('LoginProviderPassword', () => {
     it('should correctly render LoginProviderPassword screen', () => {
       wrapper = shallowMount(LoginProviderPassword, {
         localVue,
-        store,
         i18n,
       });
 
@@ -60,7 +38,6 @@ describe('LoginProviderPassword', () => {
     it('should show error if challengeId is not in props', () => {
       wrapper = shallowMount(LoginProviderPassword, {
         localVue,
-        store,
         i18n,
       });
 
