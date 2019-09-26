@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import RateLimit from '@/components/screens/RateLimit';
 import setupI18n from '@/locales/i18nSetup';
+import { coreStore } from '@/store';
 
 const localVue = createLocalVue();
 
@@ -10,22 +11,9 @@ const i18n = setupI18n(localVue);
 
 describe('RateLimit', () => {
   let wrapper;
-  let store;
-  let coreModule;
-
   beforeEach(() => {
-    coreModule = {
-      state: {
-        rateLimitTimeout: 10,
-      },
-    };
-    store = new Vuex.Store({
-      modules: {
-        core: coreModule,
-      },
-    });
+    coreStore.setRateLimitTimeout(10);
     wrapper = shallowMount(RateLimit, {
-      store,
       i18n,
       localVue,
     });

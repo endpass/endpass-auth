@@ -5,21 +5,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { coreStore } from '@/store';
 
 export default {
   name: 'Screen',
 
   methods: {
-    ...mapGetters('core', ['isDialog']),
-
     handleWindowClose() {
       this.$emit('close');
     },
   },
 
   created() {
-    if (this.isDialog) {
+    if (coreStore.isDialog) {
       window.addEventListener('beforeunload', this.handleWindowClose);
     }
   },

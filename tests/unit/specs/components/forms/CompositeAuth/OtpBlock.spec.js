@@ -53,7 +53,7 @@ describe('OtpBlock', () => {
     describe('otp form', () => {
       describe('recover event', () => {
         beforeEach(() => {
-          store.state.accounts.otpEmail = 'foo@bar.baz';
+          // store.state.accounts.otpEmail = 'foo@bar.baz';
         });
 
         it('should handle recover event', async () => {

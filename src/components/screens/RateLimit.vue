@@ -20,7 +20,6 @@
 
 <script>
 import VueTimers from 'vue-timers/mixin';
-import { mapState } from 'vuex';
 import dateUtils from '@endpass/utils/date';
 import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
@@ -30,9 +29,9 @@ export default {
   name: 'RateLimit',
 
   computed: {
-    ...mapState({
-      rateLimitTimeout: state => state.core.rateLimitTimeout,
-    }),
+    rateLimitTimeout() {
+      return coreStore.rateLimitTimeout;
+    },
 
     viewTimeout() {
       return dateUtils.formateDate(

@@ -75,7 +75,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['createAccountFromWidget']),
+    ...mapActions('widget', ['createAccountFromWidget']),
 
     async handleSubmit() {
       if (!this.isFormValid) return;
