@@ -12,11 +12,13 @@ localVue.use(VueRouter);
 
 describe('Layout', () => {
   let wrapper;
+  let coreStore;
 
   beforeEach(() => {
     const router = new VueRouter();
     const store = createStore();
-    const { coreStore } = createStores(store);
+    const { coreStore: coreStoreModule } = createStores(store);
+    coreStore = coreStoreModule;
     wrapper = shallowMount(Layout, {
       coreStore,
       router,

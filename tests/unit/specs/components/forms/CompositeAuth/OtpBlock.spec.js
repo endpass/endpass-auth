@@ -16,15 +16,19 @@ const i18n = setupI18n(localVue);
 describe('OtpBlock', () => {
   let wrapper;
   const router = new VueRouter();
+  let accountsStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
-
+    const { accountsStore: accountsStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(OtpBlock, {
-      accountsStore, coreStore,
+      accountsStore,
+      coreStore,
       localVue,
       i18n,
       router,

@@ -13,20 +13,24 @@ localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
 describe('GitAuthButton', () => {
-  describe('render', () => {
-    let wrapper;
+  let wrapper;
+
+  const createWrapper = () => {
     const store = createStore();
     const { accountsStore } = createStores(store);
+    return shallowMount(GitAuthButton, {
+      provide: {
+        theme: 'default',
+      },
+      accountsStore,
+      localVue,
+      i18n,
+    });
+  };
 
+  describe('render', () => {
     beforeEach(() => {
-      wrapper = shallowMount(GitAuthButton, {
-        provide: {
-          theme: 'default',
-        },
-        accountsStore,
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
     });
 
     it("should correctly render GitAuthButton component empty if auth2 isn't loaded", () => {
@@ -35,16 +39,8 @@ describe('GitAuthButton', () => {
   });
 
   describe('behaviour', () => {
-    let wrapper;
-
     beforeEach(() => {
-      wrapper = shallowMount(GitAuthButton, {
-        localVue,
-        provide: {
-          theme: 'default',
-        },
-        i18n,
-      });
+      wrapper = createWrapper();
     });
 
     it('should emit error when handle auth error', () => {

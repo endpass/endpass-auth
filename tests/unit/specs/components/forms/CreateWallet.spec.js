@@ -22,6 +22,7 @@ jest.useFakeTimers();
 
 describe('CreateWallet', () => {
   let wrapper;
+  let accountsStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,8 +36,8 @@ describe('CreateWallet', () => {
     walletGen.createComplex.mockResolvedValueOnce(wallet);
 
     const store = createStore();
-    const { accountsStore } = createStores(store);
-
+    const { accountsStore: accountsStoreModule } = createStores(store);
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(CreateWallet, {
       accountsStore,
       localVue,

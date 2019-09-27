@@ -15,10 +15,14 @@ describe('PublicAuth', () => {
   let wrapper;
   let $router;
   let $route;
+  let accountsStore;
 
   const createWrapper = options => {
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
+    const { accountsStore: accountsStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountsStoreModule;
 
     return shallowMount(Auth, {
       accountsStore,
@@ -44,7 +48,6 @@ describe('PublicAuth', () => {
         redirectUrl: 'http://foo.bar',
       },
     };
-    accountsStore.setAuthParams(null);
   });
 
   describe('render', () => {
@@ -74,18 +77,24 @@ describe('PublicAuth', () => {
     });
 
     it('should set auth params if redirectUrl exists', () => {
-      expect(accountsStore.authParams).toBe(null);
-
-      wrapper = createWrapper();
+      const redirectUrl = 'http://my.redirect.url';
+      wrapper = createWrapper({
+        mocks: {
+          $route: {
+            query: {
+              redirectUrl,
+            },
+          },
+          $router,
+        },
+      });
 
       expect(accountsStore.authParams).toEqual({
-        redirectUrl: 'http://foo.bar',
+        redirectUrl,
       });
     });
 
     it('should not set auth params if redirectUrl not exists', () => {
-      expect(accountsStore.authParams).toBe(null);
-
       wrapper = createWrapper({
         mocks: {
           $route: {

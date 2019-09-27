@@ -30,12 +30,13 @@ describe('ConsentProvider', () => {
     };
   }
 
-  const createWrapper = options => {
+  const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
     const { accountsStore, coreStore } = createStores(store);
-
+    accountsStore.setAuthByCode(isAuthed === false ? 400 : 200);
     return shallowMount(ConsentProvider, {
-      accountsStore, coreStore,
+      accountsStore,
+      coreStore,
       localVue,
       i18n,
       mocks: {
@@ -56,7 +57,6 @@ describe('ConsentProvider', () => {
         scopes: 'foo bar baz',
       },
     };
-    accountsStore.setAuthByCode(200);
   });
 
   describe('render', () => {
@@ -101,9 +101,7 @@ describe('ConsentProvider', () => {
     });
 
     it('should takes query params from current location and makes redirect if consentChallenge is not empty but authorization status is falsy', () => {
-      accountsStore.setAuthByCode(400);
-
-      wrapper = createWrapper();
+      wrapper = createWrapper({ isAuthed: false });
 
       expect($router.replace).toBeCalled();
     });

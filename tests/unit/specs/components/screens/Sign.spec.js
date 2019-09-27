@@ -13,11 +13,16 @@ localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
 describe('Sign', () => {
+  let requestStore;
 
   const createWrapper = options => {
     const store = createStore();
-    const { accountsStore, requestStore, coreStore } = createStores(store);
-
+    const {
+      accountsStore,
+      requestStore: requestStoreModule,
+      coreStore,
+    } = createStores(store);
+    requestStore = requestStoreModule;
     return shallowMount(Sign, {
       accountsStore,
       requestStore,
@@ -52,24 +57,24 @@ describe('Sign', () => {
     });
 
     it('should render sign message form if request does not contains transaction', () => {
+      wrapper = createWrapper();
       requestStore.setRequest({
         request: {
           method: 'eth_sign',
         },
       });
-      wrapper = createWrapper();
 
       expect(wrapper.find('sign-message-form-stub').exists()).toBe(true);
       expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(false);
     });
 
     it('should render sign transaction form if request contains transaction', () => {
+      wrapper = createWrapper();
       requestStore.setRequest({
         request: {
           method: 'eth_sendTransaction',
         },
       });
-      wrapper = createWrapper();
 
       expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(true);
       expect(wrapper.find('sign-message-form-stub').exists()).toBe(false);

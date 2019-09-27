@@ -18,6 +18,7 @@ describe('Widget', () => {
   let storeData;
   let store;
   let widgetModule;
+  let accountsStore;
 
   userService.getSettings.mockResolvedValue({
     lastActiveAccount: accountAddress,
@@ -53,8 +54,10 @@ describe('Widget', () => {
     };
 
     store = createStore(storeData);
-    const { accountsStore, coreStore } = createStores(store);
-
+    const { accountsStore: accountsStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountsStoreModule;
     accountsStore.setAuthByCode(200);
 
     wrapper = shallowMount(Widget, {

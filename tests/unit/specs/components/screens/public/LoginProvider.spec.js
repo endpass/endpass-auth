@@ -18,9 +18,16 @@ describe('LoginProvider', () => {
   let $route;
   let wrapper;
 
-  const createWrapper = options => {
+  const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
     const { accountsStore } = createStores(store);
+
+    if (isAuthed === true) {
+      accountsStore.setAuthByCode(200);
+    }
+    if (isAuthed === false) {
+      accountsStore.setAuthByCode(400);
+    }
 
     return shallowMount(LoginProvider, {
       accountsStore,
@@ -80,9 +87,7 @@ describe('LoginProvider', () => {
     });
 
     it('should takes query params from current location and makes redirect if challengeId is not empty but authorization status is falsy', () => {
-      accountsStore.setAuthByCode(400);
-
-      wrapper = createWrapper();
+      wrapper = createWrapper({ isAuthed: false });
 
       expect($router.replace).toBeCalled();
     });
@@ -106,10 +111,9 @@ describe('LoginProvider', () => {
       it('should show error if check oauth if fault', async () => {
         expect.assertions(1);
 
-        accountsStore.setAuthByCode(200);
         permissionsService.getLoginDetails.mockRejectedValueOnce('error');
 
-        wrapper = createWrapper();
+        wrapper = createWrapper({ isAuthed: true });
         await global.flushPromises();
 
         expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
@@ -118,13 +122,12 @@ describe('LoginProvider', () => {
       it('should make redirect if skip status is truthy on received redirect url', async () => {
         expect.assertions(1);
 
-        accountsStore.setAuthByCode(200);
         const payload = {
           skip: true,
           redirect: 'http://foo.bar',
         };
         permissionsService.getLoginDetails.mockResolvedValueOnce(payload);
-        wrapper = createWrapper();
+        wrapper = createWrapper({ isAuthed: true });
         await global.flushPromises();
 
         expect(window.location.replace).toBeCalledWith(payload.redirect);
@@ -134,12 +137,11 @@ describe('LoginProvider', () => {
     it('should not do anything on mounting if challengeId is present in query params and user authorized', async () => {
       expect.assertions(2);
 
-      accountsStore.setAuthByCode(200);
       permissionsService.getLoginDetails.mockResolvedValueOnce({
         skip: false,
       });
 
-      wrapper = createWrapper();
+      wrapper = createWrapper({ isAuthed: true });
       await global.flushPromises();
 
       expect(wrapper.vm.error).toBeNull();
@@ -149,12 +151,11 @@ describe('LoginProvider', () => {
     it('should request user settings', async () => {
       expect.assertions(1);
 
-      accountsStore.setAuthByCode(200);
       permissionsService.getLoginDetails.mockResolvedValueOnce({
         skip: false,
       });
 
-      wrapper = createWrapper();
+      wrapper = createWrapper({ isAuthed: true });
       await global.flushPromises();
 
       expect(userService.getSettingsSkipPermission).toBeCalled();

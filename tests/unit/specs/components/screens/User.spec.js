@@ -15,12 +15,18 @@ const i18n = setupI18n(localVue);
 
 describe('User', () => {
   let wrapper;
+  let accountsStore;
 
   beforeEach(async () => {
     bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
     const store = createStore();
-    const { accountsStore, coreStore, sharedStore } = createStores(store);
+    const {
+      accountsStore: accountStoreModule,
+      coreStore,
+      sharedStore,
+    } = createStores(store);
+    accountsStore = accountStoreModule;
 
     await accountsStore.defineSettings();
     await accountsStore.defineOnlyV3Accounts();

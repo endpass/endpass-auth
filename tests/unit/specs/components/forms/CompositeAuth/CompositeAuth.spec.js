@@ -21,14 +21,17 @@ localVue.use(VueRouter);
 
 describe('CompositeAuth', () => {
   let wrapper;
+  let accountsStore;
   const router = new VueRouter();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
-
+    const { accountsStore: accountsStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(CompositeAuth, {
       accountsStore,
       coreStore,

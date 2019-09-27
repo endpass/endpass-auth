@@ -16,13 +16,17 @@ jest.useFakeTimers();
 
 describe('SignPasswordForm', () => {
   let wrapper;
+  let accountsStore;
 
   const createWrapper = () => {
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
-
+    const { accountsStore: accountStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountStoreModule;
     return shallowMount(SignPasswordForm, {
-      accountsStore, coreStore,
+      accountsStore,
+      coreStore,
       localVue,
       provide: {
         theme: 'default',

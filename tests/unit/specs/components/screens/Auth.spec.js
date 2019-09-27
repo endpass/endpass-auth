@@ -19,13 +19,16 @@ const i18n = setupI18n(localVue);
 
 describe('Auth', () => {
   let wrapper;
+  let accountsStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
-
+    const { accountsStore: accountsStoreModule, coreStore } = createStores(
+      store,
+    );
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(Auth, {
       accountsStore,
       coreStore,

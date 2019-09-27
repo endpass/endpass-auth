@@ -15,26 +15,27 @@ const i18n = setupI18n(localVue);
 describe('LoginProviderPassword', () => {
   let wrapper;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    window.location.href = jest.fn();
-
+  const createWrapper = () => {
     const store = createStore();
     const { accountsStore } = createStores(store);
 
-    wrapper = shallowMount(LoginProviderPassword, {
+    return shallowMount(LoginProviderPassword, {
       accountsStore,
       localVue,
       i18n,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    window.location.href = jest.fn();
+
+    wrapper = createWrapper();
   });
 
   describe('render', () => {
     it('should correctly render LoginProviderPassword screen', () => {
-      wrapper = shallowMount(LoginProviderPassword, {
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -42,10 +43,7 @@ describe('LoginProviderPassword', () => {
 
   describe('behavior', () => {
     it('should show error if challengeId is not in props', () => {
-      wrapper = shallowMount(LoginProviderPassword, {
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
       expect(wrapper.find('sign-password-stub').exists()).toBe(false);
