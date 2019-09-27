@@ -4,7 +4,8 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import OtpBlock from '@/components/formsComposite/CompositeAuth/OtpBlock';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import { accountsStore } from '@/store';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -19,7 +20,11 @@ describe('OtpBlock', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     wrapper = shallowMount(OtpBlock, {
+      accountsStore, coreStore,
       localVue,
       i18n,
       router,

@@ -2,10 +2,11 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import User from '@/components/screens/User';
 import setupI18n from '@/locales/i18nSetup';
-import { accountsStore } from '@/store';
 import { accountChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -16,11 +17,18 @@ describe('User', () => {
   let wrapper;
 
   beforeEach(async () => {
-    await accountsStore.defineSettings();
-    await accountsStore.defineOnlyV3Accounts();
     bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
+    const store = createStore();
+    const { accountsStore, coreStore, sharedStore } = createStores(store);
+
+    await accountsStore.defineSettings();
+    await accountsStore.defineOnlyV3Accounts();
+
     wrapper = shallowMount(User, {
+      accountsStore,
+      coreStore,
+      sharedStore,
       localVue,
       i18n,
     });

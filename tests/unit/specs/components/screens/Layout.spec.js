@@ -2,7 +2,8 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Layout from '@/components/screens/Layout';
-import { coreStore } from '@/store';
+import createStores from '@/store/createStores';
+import createStore from '@/store/createStore';
 
 const localVue = createLocalVue();
 
@@ -14,7 +15,10 @@ describe('Layout', () => {
 
   beforeEach(() => {
     const router = new VueRouter();
+    const store = createStore();
+    const { coreStore } = createStores(store);
     wrapper = shallowMount(Layout, {
+      coreStore,
       router,
       localVue,
     });

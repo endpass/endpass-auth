@@ -6,10 +6,11 @@ import CompositeAuth from '@/components/formsComposite/CompositeAuth';
 import { IDENTITY_MODE, METHODS } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import { accountsStore } from '@/store';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 const { ERRORS } = ConnectError;
@@ -25,7 +26,12 @@ describe('CompositeAuth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     wrapper = shallowMount(CompositeAuth, {
+      accountsStore,
+      coreStore,
       localVue,
       router,
       i18n,

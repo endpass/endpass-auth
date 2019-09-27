@@ -3,7 +3,8 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/public/Auth';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import { accountsStore } from '@/store';
+import createStores from '@/store/createStores';
+import createStore from '@/store/createStore';
 
 const localVue = createLocalVue();
 
@@ -16,7 +17,12 @@ describe('PublicAuth', () => {
   let $route;
 
   const createWrapper = options => {
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     return shallowMount(Auth, {
+      accountsStore,
+      coreStore,
       localVue,
       mocks: {
         $route,

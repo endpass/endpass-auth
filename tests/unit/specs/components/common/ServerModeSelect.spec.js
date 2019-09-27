@@ -5,6 +5,8 @@ import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 import modeService from '@/service/mode';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -18,7 +20,12 @@ describe('ServerModeSelect', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     wrapper = shallowMount(ServerModeSelect, {
+      accountsStore,
+      coreStore,
       localVue,
       i18n,
     });

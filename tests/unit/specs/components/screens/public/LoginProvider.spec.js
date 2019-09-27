@@ -3,9 +3,10 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import setupI18n from '@/locales/i18nSetup';
-import { accountsStore } from '@/store';
 import permissionsService from '@/service/permissions';
 import userService from '@/service/user';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -18,7 +19,11 @@ describe('LoginProvider', () => {
   let wrapper;
 
   const createWrapper = options => {
+    const store = createStore();
+    const { accountsStore } = createStores(store);
+
     return shallowMount(LoginProvider, {
+      accountsStore,
       localVue,
       i18n,
       mocks: {

@@ -20,7 +20,11 @@ import VButton from '@endpass/ui/kit/VButton';
 import Message from '@/components/common/Message.vue';
 import FormItem from '@/components/common/FormItem';
 import StepContainer from '@/components/middleware/StepContainer';
-import { coreStore, accountsStore } from '@/store';
+import store from '@/store';
+
+console.log('store', store);
+
+const { coreStore, accountsStore } = store;
 
 export default {
   name: 'MessageForm',

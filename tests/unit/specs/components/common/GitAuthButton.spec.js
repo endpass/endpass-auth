@@ -4,6 +4,8 @@ import Vuex from 'vuex';
 import GitAuthButton from '@/components/common/GitAuthButton';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -13,12 +15,15 @@ const i18n = setupI18n(localVue);
 describe('GitAuthButton', () => {
   describe('render', () => {
     let wrapper;
+    const store = createStore();
+    const { accountsStore } = createStores(store);
 
     beforeEach(() => {
       wrapper = shallowMount(GitAuthButton, {
         provide: {
           theme: 'default',
         },
+        accountsStore,
         localVue,
         i18n,
       });

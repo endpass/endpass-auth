@@ -7,7 +7,8 @@ import identityService from '@/service/identity';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { accountsStore } from '@/store';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -22,7 +23,12 @@ describe('Auth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
 
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     wrapper = shallowMount(Auth, {
+      accountsStore,
+      coreStore,
       localVue,
       i18n,
     });

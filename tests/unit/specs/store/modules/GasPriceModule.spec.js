@@ -2,6 +2,7 @@ import createStore from '@/store/createStore';
 import createStoreModule from '@/store/createStoreModule';
 import GasPriceModule from '@/store/modules/GasPriceModule';
 import cryptoDataService from '@/service/cryptoData';
+import createStores from '@/store/createStores';
 
 describe('GasPrice module', () => {
   let gasPrice;
@@ -9,7 +10,8 @@ describe('GasPrice module', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     const store = createStore();
-    gasPrice = createStoreModule(store, GasPriceModule, 'gasPrice');
+    const { gasPriceStore } = createStores(store);
+    gasPrice = gasPriceStore;
   });
 
   describe('getGasPrices', () => {

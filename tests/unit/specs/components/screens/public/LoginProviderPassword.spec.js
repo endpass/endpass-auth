@@ -4,6 +4,8 @@ import '@mocks/window';
 import LoginProviderPassword from '@/components/screens/public/LoginProviderPassword';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -17,7 +19,11 @@ describe('LoginProviderPassword', () => {
     jest.clearAllMocks();
     window.location.href = jest.fn();
 
+    const store = createStore();
+    const { accountsStore } = createStores(store);
+
     wrapper = shallowMount(LoginProviderPassword, {
+      accountsStore,
       localVue,
       i18n,
     });

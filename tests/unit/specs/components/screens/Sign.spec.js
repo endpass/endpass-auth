@@ -2,9 +2,10 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Sign from '@/components/screens/Sign';
 import setupI18n from '@/locales/i18nSetup';
-import { requestStore } from '@/store';
 import { signChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -12,6 +13,21 @@ localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
 describe('Sign', () => {
+
+  const createWrapper = options => {
+    const store = createStore();
+    const { accountsStore, requestStore, coreStore } = createStores(store);
+
+    return shallowMount(Sign, {
+      accountsStore,
+      requestStore,
+      coreStore,
+      localVue,
+      i18n,
+      ...options,
+    });
+  };
+
   describe('render', () => {
     let wrapper;
     const request = {
@@ -24,10 +40,7 @@ describe('Sign', () => {
     };
 
     beforeEach(() => {
-      wrapper = shallowMount(Sign, {
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
     });
 
     describe('render', () => {
@@ -44,10 +57,7 @@ describe('Sign', () => {
           method: 'eth_sign',
         },
       });
-      wrapper = shallowMount(Sign, {
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.find('sign-message-form-stub').exists()).toBe(true);
       expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(false);
@@ -59,10 +69,7 @@ describe('Sign', () => {
           method: 'eth_sendTransaction',
         },
       });
-      wrapper = shallowMount(Sign, {
-        localVue,
-        i18n,
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(true);
       expect(wrapper.find('sign-message-form-stub').exists()).toBe(false);

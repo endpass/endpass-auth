@@ -3,9 +3,10 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { accountAddress, hdv3 } from '@unitFixtures/accounts';
 import setupI18n from '@/locales/i18nSetup';
 import Widget from '@/components/widget/Widget';
-import { accountsStore } from '@/store';
 import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -30,9 +31,6 @@ describe('Widget', () => {
   beforeEach(async () => {
     jest.useFakeTimers();
 
-    accountsStore.logout();
-    accountsStore.setAuthByCode(200);
-
     widgetModule = {
       actions: {
         initWidget: jest.fn(),
@@ -53,8 +51,15 @@ describe('Widget', () => {
         widget: widgetModule,
       },
     };
-    store = new Vuex.Store(storeData);
+
+    store = createStore(storeData);
+    const { accountsStore, coreStore } = createStores(store);
+
+    accountsStore.setAuthByCode(200);
+
     wrapper = shallowMount(Widget, {
+      accountsStore,
+      coreStore,
       localVue,
       store,
       i18n,

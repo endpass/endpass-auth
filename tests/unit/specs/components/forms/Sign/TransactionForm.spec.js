@@ -6,8 +6,10 @@ import {
   requestWithCuttedTransaction,
 } from '@unitFixtures/requests';
 import validation from '@/validation';
-import TransactionForm from '@/components/forms/Sign/TransactionForm.vue';
+import TransactionForm from '@/components/forms/Sign/TransactionForm';
 import setupI18n from '@/locales/i18nSetup';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -21,8 +23,12 @@ describe('Sign > TransactionForm', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapperFactory = (props = {}) =>
-      shallowMount(TransactionForm, {
+    wrapperFactory = (props = {}) => {
+      const store = createStore();
+      const { accountsStore, gasPriceStore } = createStores(store);
+      return shallowMount(TransactionForm, {
+        accountsStore,
+        gasPriceStore,
         localVue,
         i18n,
         sync: false,
@@ -31,6 +37,7 @@ describe('Sign > TransactionForm', () => {
           theme: 'default',
         },
       });
+    };
     wrapper = wrapperFactory({
       request: requestWithTransaction,
     });

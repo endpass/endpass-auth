@@ -2,7 +2,7 @@ import VeeValidate from 'vee-validate';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { requestWithMessage } from '@unitFixtures/requests';
 import validation from '@/validation';
-import MessageForm from '@/components/forms/Sign/MessageForm.vue';
+import MessageForm from '@/components/forms/Sign/MessageForm';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

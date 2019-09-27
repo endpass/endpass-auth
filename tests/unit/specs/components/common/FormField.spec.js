@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import FormField from '@/components/common/FormField.vue';
+import FormField from '@/components/common/FormField';
 
 describe('FormField', () => {
   describe('render', () => {

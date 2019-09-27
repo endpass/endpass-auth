@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import Otp from '@/components/forms/Otp.vue';
+import Otp from '@/components/forms/Otp';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

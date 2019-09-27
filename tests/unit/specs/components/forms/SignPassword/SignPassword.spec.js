@@ -3,8 +3,9 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import SignPasswordForm from '@/components/formsComposite/SignPassword';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import { accountsStore } from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -17,7 +18,11 @@ describe('SignPasswordForm', () => {
   let wrapper;
 
   const createWrapper = () => {
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     return shallowMount(SignPasswordForm, {
+      accountsStore, coreStore,
       localVue,
       provide: {
         theme: 'default',

@@ -4,6 +4,8 @@ import { v3KeyStore } from '@unitFixtures/accounts';
 import SignPermission from '@/components/screens/SignPermission';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -15,7 +17,12 @@ describe('SignPermission', () => {
     let wrapper;
 
     beforeEach(() => {
+      const store = createStore();
+      const { accountsStore, coreStore } = createStores(store);
+
       wrapper = shallowMount(SignPermission, {
+        accountsStore,
+        coreStore,
         localVue,
         i18n,
       });

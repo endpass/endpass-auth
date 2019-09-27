@@ -4,7 +4,8 @@ import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import '@mocks/window';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
-import { accountsStore } from '@/store';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -30,7 +31,11 @@ describe('ConsentProvider', () => {
   }
 
   const createWrapper = options => {
+    const store = createStore();
+    const { accountsStore, coreStore } = createStores(store);
+
     return shallowMount(ConsentProvider, {
+      accountsStore, coreStore,
       localVue,
       i18n,
       mocks: {

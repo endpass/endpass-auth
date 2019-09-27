@@ -3,6 +3,8 @@ import Vuex from 'vuex';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
+import createStore from '@/store/createStore';
+import createStores from '@/store/createStores';
 
 const localVue = createLocalVue();
 
@@ -43,7 +45,11 @@ describe('GoogleAuthButton', () => {
 
   const createWrapper = gapi => {
     window.gapi = gapi;
+    const store = createStore();
+    const { accountsStore } = createStores(store);
+
     return shallowMount(GoogleAuthButton, {
+      accountsStore,
       provide: {
         theme: 'default',
       },

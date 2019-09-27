@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Content from '@/components/widget/Content.vue';
+import Content from '@/components/widget/Content';
 
 describe('Widget Content', () => {
   let wrapper;
