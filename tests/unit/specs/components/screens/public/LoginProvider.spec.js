@@ -6,7 +6,7 @@ import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import userService from '@/service/user';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -20,7 +20,7 @@ describe('LoginProvider', () => {
 
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
-    const { accountsStore } = createStores(store);
+    const { accountsStore } = createStoreModules(store);
 
     if (isAuthed === true) {
       accountsStore.setAuthByCode(200);

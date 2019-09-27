@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import Header from '@/components/widget/Header';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -17,7 +17,7 @@ describe('Widget Header', () => {
   beforeEach(() => {
     wrapperFactory = (options = {}) => {
       const store = createStore();
-      const { gasPriceStore } = createStores(store);
+      const { gasPriceStore } = createStoreModules(store);
       return shallowMount(Header, {
         gasPriceStore,
         localVue,

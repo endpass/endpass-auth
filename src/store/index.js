@@ -1,6 +1,6 @@
 // @ts-check
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 import widget from './modules/widget';
 
 const store = createStore();
@@ -14,6 +14,6 @@ export const {
   accountsStore,
   coreStore,
   requestStore,
-} = createStores(store);
+} = createStoreModules(store);
 
 export default store;

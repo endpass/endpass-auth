@@ -5,7 +5,7 @@ import OtpBlock from '@/components/formsComposite/CompositeAuth/OtpBlock';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -22,9 +22,10 @@ describe('OtpBlock', () => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { accountsStore: accountsStoreModule, coreStore } = createStores(
-      store,
-    );
+    const {
+      accountsStore: accountsStoreModule,
+      coreStore,
+    } = createStoreModules(store);
     accountsStore = accountsStoreModule;
     wrapper = shallowMount(OtpBlock, {
       accountsStore,

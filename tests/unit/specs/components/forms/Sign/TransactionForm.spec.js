@@ -9,7 +9,7 @@ import validation from '@/validation';
 import TransactionForm from '@/components/forms/Sign/TransactionForm';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -25,7 +25,7 @@ describe('Sign > TransactionForm', () => {
   beforeEach(() => {
     wrapperFactory = (props = {}) => {
       const store = createStore();
-      const { accountsStore, gasPriceStore } = createStores(store);
+      const { accountsStore, gasPriceStore } = createStoreModules(store);
       return shallowMount(TransactionForm, {
         accountsStore,
         gasPriceStore,

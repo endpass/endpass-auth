@@ -6,7 +6,7 @@ import Widget from '@/components/widget/Widget';
 import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -54,9 +54,10 @@ describe('Widget', () => {
     };
 
     store = createStore(storeData);
-    const { accountsStore: accountsStoreModule, coreStore } = createStores(
-      store,
-    );
+    const {
+      accountsStore: accountsStoreModule,
+      coreStore,
+    } = createStoreModules(store);
     accountsStore = accountsStoreModule;
     accountsStore.setAuthByCode(200);
 

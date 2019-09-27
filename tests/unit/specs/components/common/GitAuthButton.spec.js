@@ -5,7 +5,7 @@ import GitAuthButton from '@/components/common/GitAuthButton';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -17,7 +17,7 @@ describe('GitAuthButton', () => {
 
   const createWrapper = () => {
     const store = createStore();
-    const { accountsStore } = createStores(store);
+    const { accountsStore } = createStoreModules(store);
     return shallowMount(GitAuthButton, {
       provide: {
         theme: 'default',

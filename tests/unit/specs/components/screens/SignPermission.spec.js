@@ -5,7 +5,7 @@ import SignPermission from '@/components/screens/SignPermission';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -18,7 +18,7 @@ describe('SignPermission', () => {
 
     beforeEach(() => {
       const store = createStore();
-      const { accountsStore, coreStore } = createStores(store);
+      const { accountsStore, coreStore } = createStoreModules(store);
 
       wrapper = shallowMount(SignPermission, {
         accountsStore,

@@ -5,7 +5,7 @@ import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -20,7 +20,7 @@ describe('SignPasswordForm', () => {
 
   const createWrapper = () => {
     const store = createStore();
-    const { accountsStore: accountStoreModule, coreStore } = createStores(
+    const { accountsStore: accountStoreModule, coreStore } = createStoreModules(
       store,
     );
     accountsStore = accountStoreModule;

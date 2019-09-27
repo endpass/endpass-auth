@@ -5,7 +5,7 @@ import '@mocks/window';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -32,7 +32,7 @@ describe('ConsentProvider', () => {
 
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
+    const { accountsStore, coreStore } = createStoreModules(store);
     accountsStore.setAuthByCode(isAuthed === false ? 400 : 200);
     return shallowMount(ConsentProvider, {
       accountsStore,

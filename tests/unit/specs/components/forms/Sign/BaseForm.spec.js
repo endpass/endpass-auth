@@ -7,7 +7,7 @@ import BaseForm from '@/components/forms/Sign/BaseForm';
 import setupI18n from '@/locales/i18nSetup';
 import Wallet from '@/class/singleton/signer/Wallet';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -23,7 +23,7 @@ describe('Sign > BaseForm', () => {
   beforeEach(() => {
     wrapperFactory = (props = {}) => {
       const store = createStore();
-      const { accountsStore } = createStores(store);
+      const { accountsStore } = createStoreModules(store);
 
       return shallowMount(BaseForm, {
         accountsStore,

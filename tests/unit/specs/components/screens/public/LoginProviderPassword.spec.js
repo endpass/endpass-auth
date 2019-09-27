@@ -5,7 +5,7 @@ import LoginProviderPassword from '@/components/screens/public/LoginProviderPass
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -17,7 +17,7 @@ describe('LoginProviderPassword', () => {
 
   const createWrapper = () => {
     const store = createStore();
-    const { accountsStore } = createStores(store);
+    const { accountsStore } = createStoreModules(store);
 
     return shallowMount(LoginProviderPassword, {
       accountsStore,

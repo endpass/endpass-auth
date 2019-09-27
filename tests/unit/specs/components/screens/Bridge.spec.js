@@ -3,7 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Bridge from '@/components/screens/Bridge';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -15,7 +15,7 @@ describe('Bridge', () => {
 
   beforeEach(() => {
     const store = createStore();
-    const { coreStore } = createStores(store);
+    const { coreStore } = createStoreModules(store);
 
     wrapper = shallowMount(Bridge, {
       coreStore,

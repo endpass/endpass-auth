@@ -3,7 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import RateLimit from '@/components/screens/RateLimit';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -14,7 +14,7 @@ describe('RateLimit', () => {
   let wrapper;
   beforeEach(() => {
     const store = createStore();
-    const { coreStore } = createStores(store);
+    const { coreStore } = createStoreModules(store);
 
     coreStore.setRateLimitTimeout(10);
     wrapper = shallowMount(RateLimit, {

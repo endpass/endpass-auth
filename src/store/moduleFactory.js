@@ -18,7 +18,7 @@ export default store =>
    * @param {{ [key: string]: import('vuex-class-modules').VuexModule }=} [modules]
    * @returns {T} Vuex class module registered in the store
    */
-    (Module, name, modules) => {
+  (Module, name, modules) => {
     return new Module(
       {
         store,

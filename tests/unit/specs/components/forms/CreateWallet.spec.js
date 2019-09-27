@@ -9,7 +9,7 @@ import CreateWallet from '@/components/forms/CreateWallet';
 import setupI18n from '@/locales/i18nSetup';
 import userService from '@/service/user';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -36,7 +36,7 @@ describe('CreateWallet', () => {
     walletGen.createComplex.mockResolvedValueOnce(wallet);
 
     const store = createStore();
-    const { accountsStore: accountsStoreModule } = createStores(store);
+    const { accountsStore: accountsStoreModule } = createStoreModules(store);
     accountsStore = accountsStoreModule;
     wrapper = shallowMount(CreateWallet, {
       accountsStore,

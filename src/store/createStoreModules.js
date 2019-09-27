@@ -3,10 +3,10 @@ import SharedModule from '@/store/modules/SharedModule';
 import AccountsModule from '@/store/modules/AccountsModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
-import createStoreModule from '@/store/createStoreModule';
+import moduleFactory from '@/store/moduleFactory';
 
 export default store => {
-  const createModule = createStoreModule(store);
+  const createModule = moduleFactory(store);
 
   const gasPriceStore = createModule(GasPriceModule, 'gasPrice');
 
@@ -32,5 +32,5 @@ export default store => {
     accountsStore,
     coreStore,
     requestStore,
-  }
-}
+  };
+};

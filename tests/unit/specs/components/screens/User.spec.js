@@ -6,7 +6,7 @@ import { accountChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -25,7 +25,7 @@ describe('User', () => {
       accountsStore: accountStoreModule,
       coreStore,
       sharedStore,
-    } = createStores(store);
+    } = createStoreModules(store);
     accountsStore = accountStoreModule;
 
     await accountsStore.defineSettings();

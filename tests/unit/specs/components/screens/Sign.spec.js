@@ -5,7 +5,7 @@ import setupI18n from '@/locales/i18nSetup';
 import { signChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -21,7 +21,7 @@ describe('Sign', () => {
       accountsStore,
       requestStore: requestStoreModule,
       coreStore,
-    } = createStores(store);
+    } = createStoreModules(store);
     requestStore = requestStoreModule;
     return shallowMount(Sign, {
       accountsStore,

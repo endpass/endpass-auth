@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ErrorScreen from '@/components/screens/public/Error';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -21,7 +21,7 @@ describe('Error Screen', () => {
     };
 
     const store = createStore();
-    const { accountsStore, coreStore } = createStores(store);
+    const { accountsStore, coreStore } = createStoreModules(store);
 
     wrapper = shallowMount(ErrorScreen, {
       accountsStore,

@@ -10,7 +10,7 @@ import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
-import createStores from '@/store/createStores';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const { ERRORS } = ConnectError;
@@ -28,9 +28,10 @@ describe('CompositeAuth', () => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { accountsStore: accountsStoreModule, coreStore } = createStores(
-      store,
-    );
+    const {
+      accountsStore: accountsStoreModule,
+      coreStore,
+    } = createStoreModules(store);
     accountsStore = accountsStoreModule;
     wrapper = shallowMount(CompositeAuth, {
       accountsStore,
