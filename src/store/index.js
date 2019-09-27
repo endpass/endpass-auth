@@ -16,14 +16,14 @@ const store = createStore();
  * @param {
     new (
       options: import('vuex-class-modules').RegisterOptions,
-      params: { [key: string]: import('vuex-class-modules').VuexModule }
+      modules?: { [key: string]: any }
     ) => T
   } Module Vuex class module
  * @param {string} name Module name
- * @param {object=} [params] params for Module
+ * @param {{ [key: string]: import('vuex-class-modules').VuexModule }=} [modules] modules for Module
  */
-const createModule = (Module, name, params) =>
-  createStoreModule(store, Module, name, params);
+const createModule = (Module, name, modules) =>
+  createStoreModule(store, Module, name, modules);
 
 // old way
 registerStores(store);

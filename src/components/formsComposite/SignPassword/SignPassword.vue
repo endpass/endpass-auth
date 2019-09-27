@@ -68,9 +68,12 @@ export default {
     activeForm: FORMS.SIGN,
   }),
 
+  accountsStore,
+  coreStore,
+
   computed: {
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
     isLoadProcess() {
       return this.isLoading || this.isCheckingAccount;
@@ -79,7 +82,7 @@ export default {
 
   methods: {
     handleLogout() {
-      coreStore.logout();
+      this.$options.coreStore.logout();
       this.handleCancel();
     },
 
@@ -95,11 +98,11 @@ export default {
   async mounted() {
     this.isCheckingAccount = true;
 
-    const isExist = await accountsStore.checkAccountExists();
+    const isExist = await this.$options.accountsStore.checkAccountExists();
 
     if (!isExist) {
       this.activeForm = FORMS.CREATE_WALLET;
-      await accountsStore.waitAccountCreate();
+      await this.$options.accountsStore.waitAccountCreate();
       this.activeForm = FORMS.SIGN;
     }
 

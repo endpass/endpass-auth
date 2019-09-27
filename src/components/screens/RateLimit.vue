@@ -27,10 +27,11 @@ import { coreStore } from '@/store';
 
 export default {
   name: 'RateLimit',
+  coreStore,
 
   computed: {
     rateLimitTimeout() {
-      return coreStore.rateLimitTimeout;
+      return this.$options.coreStore.rateLimitTimeout;
     },
 
     viewTimeout() {
@@ -46,7 +47,7 @@ export default {
       const newTime = this.rateLimitTimeout - 1;
 
       if (newTime >= 0) {
-        coreStore.setRateLimitTimeout(newTime);
+        this.$options.coreStore.setRateLimitTimeout(newTime);
       }
     },
   },

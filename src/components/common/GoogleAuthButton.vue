@@ -29,6 +29,7 @@ export default {
       interval: null,
     };
   },
+  accountsStore,
   methods: {
     async loginWithGoogle() {
       // eslint-disable-next-line no-undef
@@ -39,7 +40,7 @@ export default {
       await auth.signIn();
 
       try {
-        await accountsStore.authWithGoogle({
+        await this.$options.accountsStore.authWithGoogle({
           email: auth.currentUser
             .get()
             .getBasicProfile()

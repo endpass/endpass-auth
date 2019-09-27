@@ -24,6 +24,9 @@ import { accountsStore, coreStore } from '@/store';
 export default {
   name: 'OtpBlockForm',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     error: null,
     showOtp: true,
@@ -31,17 +34,17 @@ export default {
 
   computed: {
     loading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
     otpEmail() {
-      return accountsStore.otpEmail;
+      return this.$options.accountsStore.otpEmail;
     },
   },
 
   methods: {
     async handleOtpSubmit(code) {
       try {
-        await accountsStore.confirmAuthViaOtp({
+        await this.$options.accountsStore.confirmAuthViaOtp({
           email: this.otpEmail,
           code,
         });
@@ -54,7 +57,7 @@ export default {
 
     async handleRecoverSubmit(seedPhrase) {
       try {
-        await accountsStore.recover({ seedPhrase });
+        await this.$options.accountsStore.recover({ seedPhrase });
         this.$emit('recover');
       } catch (err) {
         console.error(err);
@@ -64,7 +67,7 @@ export default {
 
     async showOtpRecover() {
       try {
-        await accountsStore.getRecoveryIdentifier();
+        await this.$options.accountsStore.getRecoveryIdentifier();
         this.showOtp = false;
       } catch (err) {
         console.error(err);

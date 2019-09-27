@@ -12,6 +12,8 @@ import { coreStore } from '@/store';
 export default {
   name: 'Loader',
 
+  coreStore,
+
   computed: {
     version() {
       return pkg.version;
@@ -20,7 +22,7 @@ export default {
 
   methods: {
     handleClose() {
-      coreStore.dialogClose();
+      this.$options.coreStore.dialogClose();
     },
   },
 

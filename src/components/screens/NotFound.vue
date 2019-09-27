@@ -13,6 +13,7 @@ import { coreStore } from '@/store';
 
 export default {
   name: 'NotFound',
+  coreStore,
   data() {
     return {
       version: pkg.version,
@@ -21,7 +22,7 @@ export default {
 
   methods: {
     handleClose() {
-      coreStore.dialogClose();
+      this.$options.coreStore.dialogClose();
     },
   },
 

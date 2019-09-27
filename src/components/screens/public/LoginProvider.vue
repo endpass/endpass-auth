@@ -30,6 +30,8 @@ import { accountsStore } from '@/store';
 export default {
   name: 'LoginProvider',
 
+  accountsStore,
+
   data: () => ({
     loginChallenge: null,
     error: null,
@@ -38,10 +40,10 @@ export default {
 
   computed: {
     isLogin() {
-      return accountsStore.isLogin;
+      return this.$options.accountsStore.isLogin;
     },
     settings() {
-      return accountsStore.settings;
+      return this.$options.accountsStore.settings;
     },
 
     currentUserEmail() {
@@ -74,7 +76,7 @@ export default {
     }
 
     try {
-      const res = await accountsStore.checkOauthLoginRequirements(
+      const res = await this.$options.accountsStore.checkOauthLoginRequirements(
         loginChallenge,
       );
 
@@ -83,7 +85,7 @@ export default {
         return;
       }
 
-      await accountsStore.defineSettingsWithoutPermission();
+      await this.$options.accountsStore.defineSettingsWithoutPermission();
     } catch (e) {
       this.error = this.$i18n.t('components.loginProvider.notWorkingError');
     }

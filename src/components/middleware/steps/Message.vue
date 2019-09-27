@@ -25,6 +25,9 @@ import { coreStore, accountsStore } from '@/store';
 export default {
   name: 'MessageForm',
 
+  accountsStore,
+  coreStore,
+
   data() {
     return {
       message: '',
@@ -33,7 +36,7 @@ export default {
 
   computed: {
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
   },
 
@@ -44,7 +47,7 @@ export default {
   },
 
   beforeMount() {
-    if (accountsStore.isLogin) {
+    if (this.$options.accountsStore.isLogin) {
       this.message = this.$i18n.t(
         'components.compositeAuth.successAuthMessage',
       );

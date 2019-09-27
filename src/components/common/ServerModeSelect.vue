@@ -90,9 +90,11 @@ export default {
     isValidating: false,
     validationError: '',
   }),
+  accountsStore,
+  coreStore,
   computed: {
     isLoading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
 
     serverModeSelectExample() {
@@ -174,7 +176,7 @@ export default {
       this.isValidating = true;
 
       try {
-        await accountsStore.validateCustomServer(serverUrl);
+        await this.$options.accountsStore.validateCustomServer(serverUrl);
       } catch (e) {
         this.validationError = e.message;
         throw e;

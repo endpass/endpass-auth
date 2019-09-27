@@ -27,6 +27,9 @@ import { accountsStore, coreStore } from '@/store';
 export default {
   name: 'SignPermission',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     error: null,
     isLoading: false,
@@ -35,10 +38,10 @@ export default {
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
   },
 
@@ -48,7 +51,7 @@ export default {
       this.error = null;
 
       try {
-        await accountsStore.signPermission({
+        await this.$options.accountsStore.signPermission({
           password,
         });
       } catch (err) {
@@ -59,8 +62,8 @@ export default {
     },
 
     handleCancel() {
-      accountsStore.cancelSignPermission();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelSignPermission();
+      this.$options.coreStore.dialogClose();
     },
   },
 

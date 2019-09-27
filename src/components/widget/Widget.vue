@@ -64,6 +64,8 @@ import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'Widget',
+  accountsStore,
+  coreStore,
 
   data: () => ({
     widgetSettings: null,
@@ -79,16 +81,16 @@ export default {
       isWidgetLoading: state => state.widget.isLoading,
     }),
     accounts() {
-      return accountsStore.accounts;
+      return this.$options.accountsStore.accounts;
     },
     settings() {
-      return accountsStore.settings;
+      return this.$options.accountsStore.settings;
     },
     balance() {
-      return accountsStore.balance;
+      return this.$options.accountsStore.balance;
     },
     loading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
@@ -173,14 +175,14 @@ export default {
     },
 
     async handleAccountChange(address) {
-      await accountsStore.updateSettings({
+      await this.$options.accountsStore.updateSettings({
         lastActiveAccount: address,
       });
     },
 
     async handleLogout() {
       try {
-        coreStore.logout();
+        this.$options.coreStore.logout();
       } catch (err) {
         /* eslint-disable-next-line */
         console.log(err);
@@ -189,10 +191,10 @@ export default {
   },
 
   async mounted() {
-    await accountsStore.defineSettings();
+    await this.$options.accountsStore.defineSettings();
     await this.initWidget();
-    await accountsStore.defineOnlyV3Accounts();
-    accountsStore.subscribeOnBalanceUpdates();
+    await this.$options.accountsStore.defineOnlyV3Accounts();
+    this.$options.accountsStore.subscribeOnBalanceUpdates();
   },
 
   components: {

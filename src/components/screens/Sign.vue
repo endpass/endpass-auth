@@ -37,26 +37,30 @@ import { accountsStore, coreStore, requestStore } from '@/store';
 export default {
   name: 'Sign',
 
+  accountsStore,
+  coreStore,
+  requestStore,
+
   data: () => ({
     error: null,
   }),
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
     loading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
     request() {
-      return requestStore.request;
+      return this.$options.requestStore.request;
     },
     settings() {
-      return accountsStore.settings;
+      return this.$options.accountsStore.settings;
     },
 
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
 
     isTransaction() {
@@ -67,7 +71,7 @@ export default {
   methods: {
     async handleSignSubmit(res) {
       try {
-        await requestStore.processRequest(res);
+        await this.$options.requestStore.processRequest(res);
         this.error = null;
       } catch (err) {
         this.error = err.message;
@@ -75,13 +79,13 @@ export default {
     },
 
     handleSignCancel() {
-      requestStore.cancelRequest();
-      coreStore.dialogClose();
+      this.$options.requestStore.cancelRequest();
+      this.$options.coreStore.dialogClose();
     },
 
     handleWindowClose() {
-      requestStore.cancelRequest();
-      coreStore.dialogClose();
+      this.$options.requestStore.cancelRequest();
+      this.$options.coreStore.dialogClose();
     },
   },
 

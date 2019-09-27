@@ -33,6 +33,10 @@ import { accountsStore, coreStore, sharedStore } from '@/store';
 export default {
   name: 'User',
 
+  accountsStore,
+  coreStore,
+  sharedStore,
+
   data: () => ({
     formData: {
       activeAccount: null,
@@ -44,19 +48,19 @@ export default {
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
 
     loading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
 
     settings() {
-      return accountsStore.settings;
+      return this.$options.accountsStore.settings;
     },
 
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
 
     networksOptions() {
@@ -67,9 +71,9 @@ export default {
     },
 
     accountsOptions() {
-      if (!accountsStore.accounts) return [];
+      if (!this.$options.accountsStore.accounts) return [];
 
-      return accountsStore.accounts.map(({ address }) => ({
+      return this.$options.accountsStore.accounts.map(({ address }) => ({
         val: address,
         text: address,
       }));
@@ -98,7 +102,7 @@ export default {
       try {
         this.error = null;
 
-        await accountsStore.updateSettings({
+        await this.$options.accountsStore.updateSettings({
           lastActiveAccount: activeAccount,
           net: activeNet,
         });
@@ -110,31 +114,31 @@ export default {
     },
 
     async handleLogout() {
-      await coreStore.logout();
+      await this.$options.coreStore.logout();
     },
 
     handleCancel() {
-      accountsStore.closeAccount();
-      coreStore.dialogClose();
+      this.$options.accountsStore.closeAccount();
+      this.$options.coreStore.dialogClose();
     },
 
     handleDonateRequest() {
-      sharedStore.changeLoadingStatus(true);
+      this.$options.sharedStore.changeLoadingStatus(true);
     },
 
     handleDonateSuccess() {
       this.message = this.$i18n.t('components.user.donationSuccess');
-      sharedStore.changeLoadingStatus(false);
+      this.$options.sharedStore.changeLoadingStatus(false);
     },
 
     handleDonateError(e) {
       this.error = e;
-      sharedStore.changeLoadingStatus(false);
+      this.$options.sharedStore.changeLoadingStatus(false);
     },
 
     handleWindowClose() {
-      accountsStore.closeAccount();
-      coreStore.dialogClose();
+      this.$options.accountsStore.closeAccount();
+      this.$options.coreStore.dialogClose();
     },
   },
 

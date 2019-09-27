@@ -9,9 +9,10 @@ import { coreStore } from '@/store';
 
 export default {
   name: 'LayoutScreen',
+  coreStore,
   computed: {
     isRateLimit() {
-      return coreStore.isRateLimit;
+      return this.$options.coreStore.isRateLimit;
     },
   },
 

@@ -126,6 +126,7 @@ import { accountsStore } from '@/store';
 
 export default {
   name: 'CreateWalletForm',
+  accountsStore,
 
   data: () => ({
     seedTemplateUrl: null,
@@ -171,7 +172,7 @@ export default {
 
       try {
         this.error = '';
-        this.seedKey = await accountsStore.createInitialWallet({
+        this.seedKey = await this.$options.accountsStore.createInitialWallet({
           password: this.password,
         });
         this.isShowSeed = true;
@@ -184,12 +185,12 @@ export default {
     onContinue() {
       if (!this.isSeedConfirmed) return;
 
-      accountsStore.setWalletCreated();
+      this.$options.accountsStore.setWalletCreated();
     },
   },
 
   async mounted() {
-    this.seedTemplateUrl = await accountsStore.getSeedTemplateUrl();
+    this.seedTemplateUrl = await this.$options.accountsStore.getSeedTemplateUrl();
   },
 
   mixins: [formMixin],

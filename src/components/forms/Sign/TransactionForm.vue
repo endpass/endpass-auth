@@ -152,6 +152,7 @@ export default {
   },
 
   gasPriceStore,
+  accountsStore,
 
   data: () => ({
     gasPrices: null,
@@ -166,11 +167,11 @@ export default {
 
   computed: {
     settings() {
-      return accountsStore.settings;
+      return this.$options.accountsStore.settings;
     },
 
     balance() {
-      return accountsStore.balance;
+      return this.$options.accountsStore.balance;
     },
 
     maxAmount() {
@@ -249,7 +250,7 @@ export default {
   },
 
   created() {
-    accountsStore.subscribeOnBalanceUpdates();
+    this.$options.accountsStore.subscribeOnBalanceUpdates();
   },
 
   async mounted() {

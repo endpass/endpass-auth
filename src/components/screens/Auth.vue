@@ -29,6 +29,9 @@ const FORMS = {
 export default {
   name: 'Auth',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     FORMS,
     activeForm: FORMS.AUTH,
@@ -36,33 +39,33 @@ export default {
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
 
     showCreateAccount() {
-      return coreStore.showCreateAccount;
+      return this.$options.coreStore.showCreateAccount;
     },
 
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
   },
 
   methods: {
     async handleAuthCancel() {
       if (this.activeForm === FORMS.CREATE_WALLET) {
-        await coreStore.logout();
+        await this.$options.coreStore.logout();
       }
 
-      accountsStore.cancelAuth();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
 
     async openCreateAccount() {
-      const isExist = await accountsStore.checkAccountExists();
+      const isExist = await this.$options.accountsStore.checkAccountExists();
       if (!isExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await accountsStore.waitAccountCreate();
+        await this.$options.accountsStore.waitAccountCreate();
       }
     },
 
@@ -71,7 +74,7 @@ export default {
         await this.openCreateAccount();
       }
 
-      accountsStore.confirmAuth(serverMode);
+      this.$options.accountsStore.confirmAuth(serverMode);
     },
   },
 

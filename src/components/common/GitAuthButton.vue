@@ -22,6 +22,7 @@ import VSvgIcon from '@/components/common/VSvgIcon.vue';
 import { accountsStore } from '@/store';
 
 export default {
+  accountsStore,
   methods: {
     async loginWithGithub() {
       try {
@@ -29,7 +30,7 @@ export default {
           client_id: ENV.VUE_APP_GIT_CLIENT_ID,
           scope: 'user:email',
         });
-        await accountsStore.authWithGitHub(response.code);
+        await this.$options.accountsStore.authWithGitHub(response.code);
         this.$emit('submit');
       } catch (e) {
         this.handleAuthError(e);

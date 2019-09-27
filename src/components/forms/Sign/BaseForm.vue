@@ -104,6 +104,8 @@ export default {
     },
   },
 
+  accountsStore,
+
   data: () => ({
     password: '',
   }),
@@ -141,7 +143,7 @@ export default {
       if (!this.isFormValid) return;
 
       try {
-        await accountsStore.validatePassword({
+        await this.$options.accountsStore.validatePassword({
           address: this.account,
           password: this.password,
         });

@@ -23,6 +23,9 @@ import { accountsStore, coreStore } from '@/store';
 export default {
   name: 'Error',
 
+  accountsStore,
+  coreStore,
+
   data() {
     return {
       errorHint: '',
@@ -32,14 +35,14 @@ export default {
 
   computed: {
     isDialog() {
-      return coreStore.isDialog;
+      return this.$options.coreStore.isDialog;
     },
   },
 
   methods: {
     handleClose() {
-      accountsStore.cancelAllChannels();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.dialogClose();
     },
   },
 

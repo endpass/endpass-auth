@@ -53,6 +53,9 @@ export default {
     },
   },
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     error: null,
     serverMode: null,
@@ -63,25 +66,25 @@ export default {
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
     loading() {
-      return coreStore.loading;
+      return this.$options.coreStore.loading;
     },
     otpEmail() {
-      return accountsStore.otpEmail;
+      return this.$options.accountsStore.otpEmail;
     },
     isIdentityMode() {
-      return coreStore.isIdentityMode;
+      return this.$options.coreStore.isIdentityMode;
     },
     isLogin() {
-      return accountsStore.isLogin;
+      return this.$options.accountsStore.isLogin;
     },
   },
 
   methods: {
     async handleOtpSubmit() {
-      await accountsStore.waitLogin();
+      await this.$options.accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -91,7 +94,7 @@ export default {
     },
 
     async handleSocialSubmit() {
-      await accountsStore.waitLogin();
+      await this.$options.accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -105,7 +108,7 @@ export default {
           return;
         }
 
-        await accountsStore.auth({ email, serverMode });
+        await this.$options.accountsStore.auth({ email, serverMode });
 
         if (this.otpEmail) {
           this.currentForm = FORMS.OTP;
@@ -119,7 +122,7 @@ export default {
     },
 
     async handleLinkSent() {
-      await accountsStore.defineAuthStatus();
+      await this.$options.accountsStore.defineAuthStatus();
       if (this.isLogin) {
         this.message = this.$i18n.t(
           'components.compositeAuth.successAuthMessage',
@@ -127,15 +130,15 @@ export default {
       } else {
         this.message = this.$i18n.t('components.compositeAuth.linkSentMessage');
         this.currentForm = FORMS.MESSAGE;
-        await accountsStore.waitLogin();
+        await this.$options.accountsStore.waitLogin();
       }
 
       this.handleSubmit();
     },
 
     handleAuthCancel() {
-      accountsStore.cancelAuth();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
 
     handleAuthError() {

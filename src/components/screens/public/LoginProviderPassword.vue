@@ -26,6 +26,7 @@ import { accountsStore } from '@/store';
 
 export default {
   name: 'LoginProvider',
+  accountsStore,
 
   props: {
     loginChallenge: {
@@ -54,7 +55,7 @@ export default {
     async handlePasswordSubmit(password) {
       try {
         this.isLoading = true;
-        const { redirect } = await accountsStore.authWithOauth({
+        const { redirect } = await this.$options.accountsStore.authWithOauth({
           challengeId: this.loginChallenge,
           password,
         });

@@ -31,6 +31,9 @@ const FORMS = {
 export default {
   name: 'PublicAuth',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     queryParamsMap: {},
     FORMS,
@@ -39,15 +42,15 @@ export default {
 
   methods: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
 
     async handleAuthorize() {
-      const isAccountExist = await accountsStore.checkAccountExists();
+      const isAccountExist = await this.$options.accountsStore.checkAccountExists();
 
       if (!isAccountExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await accountsStore.waitAccountCreate();
+        await this.$options.accountsStore.waitAccountCreate();
       }
 
       const { redirectUrl, withHost } = this.queryParamsMap;
@@ -68,8 +71,8 @@ export default {
     },
 
     handleAuthCancel() {
-      accountsStore.cancelAuth();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
   },
 
@@ -80,7 +83,7 @@ export default {
     this.queryParamsMap = query;
 
     if (redirectUrl) {
-      accountsStore.setAuthParams({
+      this.$options.accountsStore.setAuthParams({
         redirectUrl: decodeURIComponent(redirectUrl),
       });
     }

@@ -29,6 +29,9 @@ import { accountsStore, coreStore } from '@/store';
 export default {
   name: 'ConsentProvider',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     consentChallenge: null,
     isLoading: true,
@@ -43,10 +46,10 @@ export default {
 
   computed: {
     isInited() {
-      return coreStore.isInited;
+      return this.$options.coreStore.isInited;
     },
     isLogin() {
-      return accountsStore.isLogin;
+      return this.$options.accountsStore.isLogin;
     },
     isLoadingScreen() {
       return (
@@ -68,7 +71,9 @@ export default {
       this.isLoading = true;
 
       try {
-        const { redirect } = await accountsStore.grantPermissionsWithOauth({
+        const {
+          redirect,
+        } = await this.$options.accountsStore.grantPermissionsWithOauth({
           consentChallenge: this.consentChallenge,
           scopesList,
         });
@@ -93,7 +98,9 @@ export default {
           requested_scope: requestedScope,
           skip,
           redirect_url: redirectUrl,
-        } = await accountsStore.getConsentDetails(this.consentChallenge);
+        } = await this.$options.accountsStore.getConsentDetails(
+          this.consentChallenge,
+        );
 
         if (skip) {
           this.isSkipped = true;

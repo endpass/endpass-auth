@@ -18,6 +18,9 @@ import MessageForm from '@/components/middleware/steps/Message';
 export default {
   name: 'ExampleMiddleware',
 
+  coreStore,
+  accountsStore,
+
   data: () => ({
     steps: [MessageForm],
   }),
@@ -25,11 +28,11 @@ export default {
   methods: {
     onCancel() {
       // cancel logic, drop channel for example
-      accountsStore.cancelAllChannels();
-      coreStore.dialogClose();
+      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.dialogClose();
     },
     onEnd() {
-      coreStore.dialogClose();
+      this.$options.coreStore.dialogClose();
     },
   },
 
