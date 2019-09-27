@@ -24,7 +24,6 @@ describe('NewAccountForm', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     widgetModule = {
-      namespaced: true,
       actions: {
         createAccountFromWidget: jest.fn(),
       },

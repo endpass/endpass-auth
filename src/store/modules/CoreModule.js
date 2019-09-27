@@ -1,4 +1,3 @@
-// @ts-check
 import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
 import ConnectError from '@endpass/class/ConnectError';
 import { METHODS, DIRECTION } from '@/constants';
@@ -10,6 +9,7 @@ import {
   initCoreStream,
   initDialogRequestStream,
 } from '@/streams';
+
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/Actions/dialogClose';
 import isDialog from '@/util/isDialog';

@@ -34,7 +34,6 @@ describe('Widget', () => {
     accountsStore.setAuthByCode(200);
 
     widgetModule = {
-      namespaced: true,
       actions: {
         initWidget: jest.fn(),
         openWidget: jest.fn(),

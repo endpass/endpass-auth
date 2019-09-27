@@ -90,7 +90,7 @@ export default {
     loading() {
       return coreStore.loading;
     },
-    ...mapGetters('widget', ['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
+    ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
     fiatCurrency() {
       return get(this.settings, 'fiatCurrency', 'USD');
@@ -119,7 +119,7 @@ export default {
   },
 
   methods: {
-    ...mapActions('widget', [
+    ...mapActions([
       'initWidget',
       'fitWidget',
       'openWidget',
