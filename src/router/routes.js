@@ -1,17 +1,3 @@
-// Dialog routes
-import Bridge from '@/components/screens/Bridge';
-import Auth from '@/components/screens/Auth';
-import User from '@/components/screens/User';
-import Loader from '@/components/screens/Loader';
-import SignPermission from '@/components/screens/SignPermission';
-import NotFound from '@/components/screens/NotFound';
-
-// Public routes
-import PublicAuth from '@/components/screens/public/Auth';
-import LoginProvider from '@/components/screens/public/LoginProvider';
-import ConsentProvider from '@/components/screens/public/ConsentProvider';
-import Error from '@/components/screens/public/Error';
-
 const routes = [
   {
     path: '/public/widget',
@@ -25,7 +11,11 @@ const routes = [
   {
     path: '/public/auth',
     name: 'PublicAuthScreen',
-    component: PublicAuth,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-public-auth" */ '@/components/screens/public/Auth'
+      ),
+
     meta: {
       isBackground: true,
     },
@@ -33,7 +23,11 @@ const routes = [
   {
     path: '/public/login',
     name: 'LoginProvider',
-    component: LoginProvider,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-login-provider" */ '@/components/screens/public/LoginProvider'
+      ),
+
     meta: {
       isBackground: true,
     },
@@ -41,7 +35,11 @@ const routes = [
   {
     path: '/public/consent',
     name: 'ConsentProvider',
-    component: ConsentProvider,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-consent-provider" */ '@/components/screens/public/ConsentProvider'
+      ),
+
     meta: {
       isBackground: true,
     },
@@ -49,7 +47,11 @@ const routes = [
   {
     path: '/public/error',
     name: 'Error',
-    component: Error,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-error" */ '@/components/screens/public/Error'
+      ),
+
     meta: {
       isBackground: true,
     },
@@ -57,7 +59,11 @@ const routes = [
   {
     path: '/bridge',
     name: 'Bridge',
-    component: Bridge,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-bridge" */ '@/components/screens/Bridge'
+      ),
+
     meta: {
       isDialog: true,
       isBackground: true,
@@ -66,7 +72,11 @@ const routes = [
   {
     path: '/loader',
     name: 'Loader',
-    component: Loader,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-loader" */ '@/components/screens/Loader'
+      ),
+
     meta: {
       isBackground: true,
     },
@@ -74,7 +84,11 @@ const routes = [
   {
     path: '/account',
     name: 'User',
-    component: User,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-user" */ '@/components/screens/User'
+      ),
+
     meta: {
       isDialog: true,
       isBackground: true,
@@ -83,7 +97,11 @@ const routes = [
   {
     path: '/permission',
     name: 'SignPermission',
-    component: SignPermission,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-sign-permission" */ '@/components/screens/SignPermission'
+      ),
+
     meta: {
       isDialog: true,
       isBackground: true,
@@ -92,7 +110,11 @@ const routes = [
   {
     path: '/auth',
     name: 'AuthScreen',
-    component: Auth,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-auth" */ '@/components/screens/Auth'
+      ),
+
     meta: {
       isDialog: true,
       isBackground: true,
@@ -136,7 +158,11 @@ const routes = [
   {
     path: '*',
     name: 'NotFound',
-    component: NotFound,
+    component: () =>
+      import(
+        /* webpackChunkName: "component-not-found" */ '@/components/screens/NotFound'
+      ),
+
     meta: {
       isBackground: true,
     },
