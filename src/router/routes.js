@@ -11,7 +11,6 @@ import PublicAuth from '@/components/screens/public/Auth';
 import LoginProvider from '@/components/screens/public/LoginProvider';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import Error from '@/components/screens/public/Error';
-import ExampleMiddleware from '@/components/screens/ExampleMiddleware';
 
 const routes = [
   {
@@ -102,7 +101,10 @@ const routes = [
   {
     path: '/middleware',
     name: 'ExampleMiddleware',
-    component: ExampleMiddleware,
+    component: () =>
+      import(
+        /* webpackChunkName: "example-middleware" */ '@/components/screens/ExampleMiddleware'
+      ),
     meta: {
       isBackground: true,
     },

@@ -1,6 +1,4 @@
 import createStore from '@/store/createStore';
-import createStoreModule from '@/store/createStoreModule';
-import GasPriceModule from '@/store/modules/GasPriceModule';
 import cryptoDataService from '@/service/cryptoData';
 import createStores from '@/store/createStores';
 
