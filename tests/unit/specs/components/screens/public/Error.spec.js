@@ -1,6 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import ErrorScreen from '@/components/screens/public/Error.vue';
+import ErrorScreen from '@/components/screens/public/Error';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -11,11 +13,6 @@ describe('Error Screen', () => {
   let wrapper;
 
   beforeEach(() => {
-    const coreModule = {
-      actions: {
-        dialogClose: jest.fn(),
-      },
-    };
     $route = {
       query: {
         error_hint: 'foo',
@@ -23,12 +20,12 @@ describe('Error Screen', () => {
       },
     };
 
-    const store = new Vuex.Store({
-      modules: {
-        core: coreModule,
-      },
-    });
+    const store = createStore();
+    const { accountsStore, coreStore } = createStoreModules(store);
+
     wrapper = shallowMount(ErrorScreen, {
+      accountsStore,
+      coreStore,
       localVue,
       store,
       mocks: {

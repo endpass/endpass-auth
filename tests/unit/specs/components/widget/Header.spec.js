@@ -1,7 +1,9 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import Header from '@/components/widget/Header.vue';
+import Header from '@/components/widget/Header';
 import setupI18n from '@/locales/i18nSetup';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -11,29 +13,19 @@ localVue.use(Vuex);
 describe('Widget Header', () => {
   let wrapperFactory;
   let wrapper;
-  let store;
-  let storeData;
-  let gasPriceModule;
 
   beforeEach(() => {
-    gasPriceModule = {
-      actions: {
-        getEtherPrice: jest.fn().mockResolvedValue('100'),
-      },
-    };
-    storeData = {
-      modules: {
-        gasPriceModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
-    wrapperFactory = (options = {}) =>
-      shallowMount(Header, {
+    wrapperFactory = (options = {}) => {
+      const store = createStore();
+      const { gasPriceStore } = createStoreModules(store);
+      return shallowMount(Header, {
+        gasPriceStore,
         localVue,
         i18n,
-        store,
         ...options,
       });
+    };
+
     wrapper = wrapperFactory();
   });
 

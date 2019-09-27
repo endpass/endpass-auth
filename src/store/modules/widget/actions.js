@@ -66,10 +66,8 @@ const createAccountFromWidget = async (
   commit('setWidgetLoadingStatus', true);
 
   try {
-    await dispatch('validatePassword', { address, password });
-    await dispatch('createAccount', { password });
-  } catch (err) {
-    throw err;
+    await dispatch('accounts/validatePassword', { address, password });
+    await dispatch('accounts/createAccount', { password });
   } finally {
     commit('setWidgetLoadingStatus', false);
   }

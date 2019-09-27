@@ -1,64 +1,42 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import CompositeAuth from '@/components/forms/CompositeAuth';
-import { IDENTITY_MODE } from '@/constants';
+import ConnectError from '@endpass/class/ConnectError';
+import CompositeAuth from '@/components/formsComposite/CompositeAuth';
+import { IDENTITY_MODE, METHODS } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
+import { authChannel } from '@/class/singleton/channels';
+import Answer from '@/class/Answer';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
+const { ERRORS } = ConnectError;
 
 const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 localVue.use(VueRouter);
 
 describe('CompositeAuth', () => {
-  let store;
-  let storeData;
   let wrapper;
-  let accountsModule;
-  let coreModule;
+  let accountsStore;
   const router = new VueRouter();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        isInited: true,
-        loading: false,
-        isIdentityMode: false,
-      },
-      actions: {
-        dialogClose: jest.fn(),
-      },
-      getters: {
-        isDialog: jest.fn(() => true),
-      },
-    };
-    accountsModule = {
-      state: {
-        linkSent: false,
-        accounts: null,
-        isLogin: false,
-        isPermission: false,
-        otpEmail: null,
-      },
-      actions: {
-        auth: jest.fn(),
-        cancelAuth: jest.fn(),
-        waitLogin: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
+    const store = createStore();
+    const {
+      accountsStore: accountsStoreModule,
+      coreStore,
+    } = createStoreModules(store);
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(CompositeAuth, {
+      accountsStore,
+      coreStore,
       localVue,
-      store,
       router,
       i18n,
     });
@@ -103,7 +81,7 @@ describe('CompositeAuth', () => {
     };
 
     it('should not call auth if mode is not default', async () => {
-      expect.assertions(3);
+      expect.assertions(2);
 
       wrapper.find('auth-form-stub').vm.$emit('submit', {
         email: 'email',
@@ -112,8 +90,8 @@ describe('CompositeAuth', () => {
 
       await global.flushPromises();
 
-      expect(accountsModule.actions.auth).not.toBeCalled();
-      expect(accountsModule.actions.waitLogin).not.toBeCalled();
+      expect(identityService.auth).not.toBeCalled();
+
       expect(wrapper.emitted().authorize[0]).toEqual([
         { serverMode: { type: 'custom' } },
       ]);
@@ -122,19 +100,20 @@ describe('CompositeAuth', () => {
     it('should show message after submit if not otp', async () => {
       expect.assertions(5);
 
+      identityService.auth.mockResolvedValueOnce({
+        success: true,
+        challenge: { challengeType: 'other' },
+      });
+
+      expect(wrapper.find('message-form-stub').exists()).toBe(false);
+      expect(accountsStore.linkSent).toBe(false);
+
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
 
       await global.flushPromises();
 
       expect(wrapper.find('message-form-stub').exists()).toBe(true);
-
-      expect(accountsModule.actions.auth).toBeCalledTimes(1);
-      expect(accountsModule.actions.auth).toBeCalledWith(
-        expect.any(Object),
-        authParams,
-        undefined,
-      );
-      expect(accountsModule.actions.waitLogin).toBeCalledTimes(1);
+      expect(accountsStore.linkSent).toBe(true);
       expect(wrapper.emitted().authorize[0]).toEqual([
         { serverMode: authParams.serverMode },
       ]);
@@ -142,9 +121,12 @@ describe('CompositeAuth', () => {
 
     describe('otp behavior', () => {
       it('should show otp block after submit', async () => {
-        expect.assertions(5);
+        expect.assertions(2);
 
-        store.state.accounts.otpEmail = authParams.email;
+        identityService.auth.mockResolvedValueOnce({
+          success: true,
+          challenge: { challengeType: 'otp' },
+        });
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
 
@@ -152,20 +134,16 @@ describe('CompositeAuth', () => {
 
         expect(wrapper.find('otp-block-form-stub').exists()).toBe(true);
 
-        expect(accountsModule.actions.auth).toBeCalledTimes(1);
-        expect(accountsModule.actions.auth).toBeCalledWith(
-          expect.any(Object),
-          authParams,
-          undefined,
-        );
         expect(wrapper.emitted().authorize).toBeFalsy();
-        expect(accountsModule.actions.waitLogin).not.toBeCalled();
       });
 
       it('should submit otp', async () => {
         expect.assertions(3);
 
-        store.state.accounts.otpEmail = authParams.email;
+        identityService.auth.mockResolvedValueOnce({
+          success: true,
+          challenge: { challengeType: 'otp' },
+        });
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
         await global.flushPromises();
@@ -174,7 +152,7 @@ describe('CompositeAuth', () => {
 
         expect(wrapper.find('otp-block-form-stub').exists()).toBe(true);
 
-        expect(accountsModule.actions.waitLogin).toBeCalledTimes(1);
+        expect(identityService.waitLogin).toBeCalledTimes(1);
         expect(wrapper.emitted().authorize[0]).toEqual([
           { serverMode: authParams.serverMode },
         ]);
@@ -183,7 +161,10 @@ describe('CompositeAuth', () => {
       it('should recover otp', async () => {
         expect.assertions(3);
 
-        store.state.accounts.otpEmail = authParams.email;
+        identityService.auth.mockResolvedValueOnce({
+          success: true,
+          challenge: { challengeType: 'otp' },
+        });
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
         await global.flushPromises();
@@ -191,8 +172,7 @@ describe('CompositeAuth', () => {
         await global.flushPromises();
 
         expect(wrapper.find('message-form-stub').exists()).toBe(true);
-
-        expect(accountsModule.actions.waitLogin).toBeCalledTimes(1);
+        expect(identityService.waitLogin).toBeCalledTimes(1);
         expect(wrapper.emitted().authorize[0]).toEqual([
           { serverMode: authParams.serverMode },
         ]);
@@ -202,14 +182,23 @@ describe('CompositeAuth', () => {
     it('should cancel auth', async () => {
       expect.assertions(2);
 
+      identityService.auth.mockResolvedValueOnce({
+        success: true,
+      });
+      const dataPromise = authChannel.take();
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
-
       await global.flushPromises();
-
       wrapper.find('message-form-stub').vm.$emit('cancel');
+      const res = await dataPromise;
 
-      expect(accountsModule.actions.cancelAuth).toBeCalled();
-      expect(coreModule.actions.dialogClose).toBeCalled();
+      expect(res).toEqual(
+        Answer.createFail(
+          ERRORS.AUTH_CANCELED_BY_USER,
+          'Authentication was canceled by user!',
+        ),
+      );
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });
   });
 });

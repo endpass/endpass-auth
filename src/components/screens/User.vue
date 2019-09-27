@@ -10,7 +10,6 @@
         :accounts="accountsOptions"
         :networks="networksOptions"
         :form-data="formData"
-        :can-logout="!isDemoMode"
         :error="error"
         :message="message"
         @donate-request="handleDonateRequest"
@@ -25,14 +24,18 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState, mapGetters } from 'vuex';
 import Network from '@endpass/class/Network';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import AccountForm from '@/components/forms/Account';
+import { accountsStore, coreStore, sharedStore } from '@/store';
 
 export default {
   name: 'User',
+
+  accountsStore,
+  coreStore,
+  sharedStore,
 
   data: () => ({
     formData: {
@@ -44,14 +47,21 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      settings: state => state.accounts.settings,
-      isDemoMode: state => !!state.accounts.demoData,
-      accounts: state => state.accounts.accounts,
-    }),
-    ...mapGetters(['isDialog']),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
+
+    loading() {
+      return this.$options.coreStore.loading;
+    },
+
+    settings() {
+      return this.$options.accountsStore.settings;
+    },
+
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
 
     networksOptions() {
       return Object.values(Network.DEFAULT_NETWORKS).map(({ id, name }) => ({
@@ -61,9 +71,9 @@ export default {
     },
 
     accountsOptions() {
-      if (!this.accounts) return [];
+      if (!this.$options.accountsStore.accounts) return [];
 
-      return this.accounts.map(({ address }) => ({
+      return this.$options.accountsStore.accounts.map(({ address }) => ({
         val: address,
         text: address,
       }));
@@ -86,16 +96,13 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['changeLoadingStatus']),
-    ...mapActions(['logout', 'closeAccount', 'updateSettings', 'dialogClose']),
-
     async handleAccountFormSubmit() {
       const { activeAccount, activeNet } = this.formData;
 
       try {
         this.error = null;
 
-        await this.updateSettings({
+        await this.$options.accountsStore.updateSettings({
           lastActiveAccount: activeAccount,
           net: activeNet,
         });
@@ -107,31 +114,31 @@ export default {
     },
 
     async handleLogout() {
-      this.logout();
+      await this.$options.coreStore.logout();
     },
 
     handleCancel() {
-      this.closeAccount();
-      this.dialogClose();
+      this.$options.accountsStore.closeAccount();
+      this.$options.coreStore.dialogClose();
     },
 
     handleDonateRequest() {
-      this.changeLoadingStatus(true);
+      this.$options.sharedStore.changeLoadingStatus(true);
     },
 
     handleDonateSuccess() {
       this.message = this.$i18n.t('components.user.donationSuccess');
-      this.changeLoadingStatus(false);
+      this.$options.sharedStore.changeLoadingStatus(false);
     },
 
     handleDonateError(e) {
       this.error = e;
-      this.changeLoadingStatus(false);
+      this.$options.sharedStore.changeLoadingStatus(false);
     },
 
     handleWindowClose() {
-      this.closeAccount();
-      this.dialogClose();
+      this.$options.accountsStore.closeAccount();
+      this.$options.coreStore.dialogClose();
     },
   },
 

@@ -58,7 +58,6 @@
 
 <script>
 import get from 'lodash/get';
-import { mapActions } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import signer from '@/class/singleton/signer';
@@ -66,6 +65,7 @@ import Message from '@/components/common/Message.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import { accountsStore } from '@/store';
 
 export default {
   name: 'SignBaseForm',
@@ -104,6 +104,8 @@ export default {
     },
   },
 
+  accountsStore,
+
   data: () => ({
     password: '',
   }),
@@ -137,13 +139,11 @@ export default {
   },
 
   methods: {
-    ...mapActions(['validatePassword']),
-
     async emitSubmit() {
       if (!this.isFormValid) return;
 
       try {
-        await this.validatePassword({
+        await this.$options.accountsStore.validatePassword({
           address: this.account,
           password: this.password,
         });

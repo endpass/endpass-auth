@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Identicon from '@/components/common/Identicon.vue';
+import Identicon from '@/components/common/Identicon';
 
 describe('Identicon', () => {
   describe('render', () => {

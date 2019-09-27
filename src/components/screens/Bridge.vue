@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
+import { coreStore } from '@/store';
 
 if (ENV.VUE_APP_SHOW_VERSION_INFO) {
   // eslint-disable-next-line no-console
@@ -26,10 +26,8 @@ export default {
   },
 
   methods: {
-    ...mapActions(['dialogClose']),
-
     handleClose() {
-      this.dialogClose();
+      coreStore.dialogClose();
     },
   },
 

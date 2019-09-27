@@ -1,19 +1,8 @@
 import withPermission from '@/streams/middleware/withPermission';
 import { permissionChannel } from '@/class/singleton/channels';
 import router from '@/router';
-import store from '@/store';
 import Answer from '@/class/Answer';
-
-jest.mock('@/store', () => ({
-  dispatch: jest.fn(),
-  getters: { demoData: false },
-  state: {
-    accounts: {
-      isPermission: false,
-      isLogin: true,
-    },
-  },
-}));
+import identityService from '@/service/identity';
 
 jest.mock('@/class/singleton/channels', () => ({
   permissionChannel: {
@@ -41,8 +30,7 @@ describe('withPermission', () => {
 
   it('should redirect to permission', async () => {
     expect.assertions(2);
-
-    store.state.accounts.isPermission = false;
+    identityService.getAuthStatus.mockResolvedValueOnce(403);
     permissionChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withPermission(options, action);
@@ -58,7 +46,7 @@ describe('withPermission', () => {
   it('should redirect to permission and end stream', async () => {
     expect.assertions(3);
 
-    store.state.accounts.isPermission = false;
+    identityService.getAuthStatus.mockResolvedValueOnce(403);
     permissionChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withPermission(options, action);
@@ -75,7 +63,7 @@ describe('withPermission', () => {
   it('should not redirect to permission', async () => {
     expect.assertions(3);
 
-    store.state.accounts.isPermission = true;
+    identityService.getAuthStatus.mockResolvedValueOnce(200);
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);
@@ -88,8 +76,7 @@ describe('withPermission', () => {
   it('should not redirect to permission with isLogin', async () => {
     expect.assertions(3);
 
-    store.state.accounts.isPermission = false;
-    store.state.accounts.isLogin = false;
+    identityService.getAuthStatus.mockResolvedValueOnce(400);
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);

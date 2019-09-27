@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
@@ -57,6 +56,7 @@ import { IDENTITY_MODE } from '@/constants';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import formMixin from '@/mixins/form';
+import { accountsStore, coreStore } from '@/store';
 
 const availableIdentityServerTypes = [
   {
@@ -90,10 +90,12 @@ export default {
     isValidating: false,
     validationError: '',
   }),
+  accountsStore,
+  coreStore,
   computed: {
-    ...mapState({
-      isLoading: state => state.core.loading,
-    }),
+    isLoading() {
+      return this.$options.coreStore.loading;
+    },
 
     serverModeSelectExample() {
       return `${this.$i18n.t(
@@ -170,12 +172,11 @@ export default {
     },
   },
   methods: {
-    ...mapActions(['validateCustomServer']),
     async validateServer(serverUrl) {
       this.isValidating = true;
 
       try {
-        await this.validateCustomServer(serverUrl);
+        await this.$options.accountsStore.validateCustomServer(serverUrl);
       } catch (e) {
         this.validationError = e.message;
         throw e;

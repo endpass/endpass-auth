@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import store from '@/store';
+import { coreStore } from '@/store';
 import routes from './routes';
 
 Vue.use(Router);
@@ -12,7 +12,7 @@ const router = new Router({
 
 router.beforeEach(async (to, from, next) => {
   const { isDialog, isWidget, isBackground } = to.meta;
-  const needDialogRedirect = isDialog && !store.getters.isDialog;
+  const needDialogRedirect = isDialog && !coreStore.isDialog;
 
   if (!isBackground) {
     document.body.classList.add('transparent');
@@ -34,15 +34,15 @@ router.afterEach(async to => {
   const { isDialog, isWidget } = to.meta;
 
   if (isDialog) {
-    await store.dispatch('initDialog');
+    await coreStore.initDialog();
   }
 
   if (isWidget) {
-    await store.dispatch('initWidget');
+    await coreStore.initWidget();
   }
 
   if (!isDialog && !isWidget) {
-    store.commit('changeInitStatus', true);
+    coreStore.changeInitStatus(true);
   }
 });
 

@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
+import PasswordForm from '@/components/forms/PasswordForm';
 import setupI18n from '@/locales/i18nSetup';
 import validation from '@/validation';
 

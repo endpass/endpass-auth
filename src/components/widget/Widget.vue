@@ -60,9 +60,12 @@ import WidgetContent from './Content.vue';
 import WidgetAccounts from './Accounts.vue';
 import WidgetNewAccountForm from './NewAccountForm.vue';
 import TriggerButton from './TriggerButton.vue';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'Widget',
+  accountsStore,
+  coreStore,
 
   data: () => ({
     widgetSettings: null,
@@ -73,14 +76,22 @@ export default {
 
   computed: {
     ...mapState({
-      accounts: state => state.accounts.accounts,
-      settings: state => state.accounts.settings,
-      balance: state => state.accounts.balance,
-      loading: state => state.core.loading,
       isMobile: state => state.widget.isMobile,
       isExpanded: state => state.widget.isExpanded,
       isWidgetLoading: state => state.widget.isLoading,
     }),
+    accounts() {
+      return this.$options.accountsStore.accounts;
+    },
+    settings() {
+      return this.$options.accountsStore.settings;
+    },
+    balance() {
+      return this.$options.accountsStore.balance;
+    },
+    loading() {
+      return this.$options.coreStore.loading;
+    },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
     fiatCurrency() {
@@ -117,15 +128,8 @@ export default {
       'closeWidget',
       'openAccounts',
       'closeAccounts',
-      'logout',
-      'defineOnlyV3Accounts',
-      'defineSettings',
-      'subscribeOnBalanceUpdates',
-      'subscribeOnSettingsUpdates',
-      'updateSettings',
       'expandMobileWidget',
       'collapseMobileWidget',
-      'requestPassword',
     ]),
 
     handleWidgetToggle() {
@@ -171,14 +175,14 @@ export default {
     },
 
     async handleAccountChange(address) {
-      await this.updateSettings({
+      await this.$options.accountsStore.updateSettings({
         lastActiveAccount: address,
       });
     },
 
     async handleLogout() {
       try {
-        this.logout();
+        this.$options.coreStore.logout();
       } catch (err) {
         /* eslint-disable-next-line */
         console.log(err);
@@ -187,10 +191,10 @@ export default {
   },
 
   async mounted() {
-    await this.defineSettings();
+    await this.$options.accountsStore.defineSettings();
     await this.initWidget();
-    await this.defineOnlyV3Accounts();
-    this.subscribeOnBalanceUpdates();
+    await this.$options.accountsStore.defineOnlyV3Accounts();
+    this.$options.accountsStore.subscribeOnBalanceUpdates();
   },
 
   components: {

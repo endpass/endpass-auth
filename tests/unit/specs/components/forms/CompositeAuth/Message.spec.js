@@ -1,5 +1,5 @@
 import { shallowMount, createLocalVue, mount } from '@vue/test-utils';
-import Message from '@/components/forms/CompositeAuth/Message.vue';
+import Message from '@/components/forms/Message';
 
 import setupI18n from '@/locales/i18nSetup';
 

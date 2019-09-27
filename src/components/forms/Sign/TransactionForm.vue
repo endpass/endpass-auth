@@ -117,7 +117,6 @@
 <script>
 import { BigNumber } from 'bignumber.js';
 import get from 'lodash/get';
-import { mapActions, mapState } from 'vuex';
 import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import { fromWei, toWei, hexToNumberString } from 'web3-utils';
@@ -125,7 +124,7 @@ import formMixin from '@/mixins/form';
 import FormField from '@/components/common/FormField.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import BaseForm from './BaseForm.vue';
-import { gasPriceStore } from '@/store';
+import { accountsStore, gasPriceStore } from '@/store';
 
 export default {
   name: 'SignTransactionForm',
@@ -153,6 +152,7 @@ export default {
   },
 
   gasPriceStore,
+  accountsStore,
 
   data: () => ({
     gasPrices: null,
@@ -166,10 +166,13 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      settings: state => state.accounts.settings,
-      balance: state => state.accounts.balance,
-    }),
+    settings() {
+      return this.$options.accountsStore.settings;
+    },
+
+    balance() {
+      return this.$options.accountsStore.balance;
+    },
 
     maxAmount() {
       const { balance, gasPrice, gasLimit } = this;
@@ -222,8 +225,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['subscribeOnBalanceUpdates']),
-
     handleToggleAdvancedSettings() {
       this.isAdvancedOptionsVisible = !this.isAdvancedOptionsVisible;
     },
@@ -249,7 +250,7 @@ export default {
   },
 
   created() {
-    this.subscribeOnBalanceUpdates();
+    this.$options.accountsStore.subscribeOnBalanceUpdates();
   },
 
   async mounted() {

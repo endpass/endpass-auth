@@ -1,4 +1,4 @@
-import store from '@/store';
+import { accountsStore, requestStore } from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import {
   accountChannel,
@@ -21,7 +21,7 @@ function initDialogStream() {
   const methodToOptions = {
     [METHODS.SIGN]: {
       commit(payload) {
-        store.commit('setRequest', payload);
+        requestStore.setRequest(payload);
       },
       routeName: 'sign',
       channel: signChannel,
@@ -36,7 +36,7 @@ function initDialogStream() {
     },
     [METHODS.AUTH]: {
       commit(payload) {
-        store.commit('setAuthParams', payload);
+        accountsStore.setAuthParams(payload);
       },
       channel: authChannel,
       needAuth: true,
@@ -49,28 +49,28 @@ function initDialogStream() {
       needPermission: true,
       async beforeShow() {
         await Promise.all([
-          store.dispatch('defineOnlyV3Accounts'),
-          store.dispatch('defineSettings'),
+          accountsStore.defineOnlyV3Accounts(),
+          accountsStore.defineSettings(),
         ]);
       },
     },
     [METHODS.GET_SETTINGS]: {
       needPermission: true,
       async payloadHandler() {
-        await store.dispatch('defineSettings');
-        const { settings } = store.state.accounts;
+        await accountsStore.defineSettings();
+        const { settings } = accountsStore;
         return { settings };
       },
     },
     [METHODS.RECOVER]: {
       needPermission: true,
       payloadHandler(payload) {
-        return store.dispatch('recoverMessage', payload);
+        return requestStore.recoverMessage(payload);
       },
     },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
-        store.commit('logout');
+        accountsStore.logout();
         accountChannel.put(
           Answer.createOk({
             type: 'logout',

@@ -17,12 +17,15 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import OtpForm from '@/components/forms/CompositeAuth/Otp';
-import RecoverForm from '@/components/forms/CompositeAuth/Recover';
+import OtpForm from '@/components/forms/Otp';
+import RecoverForm from '@/components/forms/Recover';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'OtpBlockForm',
+
+  accountsStore,
+  coreStore,
 
   data: () => ({
     error: null,
@@ -30,18 +33,18 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      loading: state => state.core.loading,
-      otpEmail: state => state.accounts.otpEmail,
-    }),
+    loading() {
+      return this.$options.coreStore.loading;
+    },
+    otpEmail() {
+      return this.$options.accountsStore.otpEmail;
+    },
   },
 
   methods: {
-    ...mapActions(['confirmAuthViaOtp', 'getRecoveryIdentifier', 'recover']),
-
     async handleOtpSubmit(code) {
       try {
-        await this.confirmAuthViaOtp({
+        await this.$options.accountsStore.confirmAuthViaOtp({
           email: this.otpEmail,
           code,
         });
@@ -54,7 +57,7 @@ export default {
 
     async handleRecoverSubmit(seedPhrase) {
       try {
-        await this.recover({ seedPhrase });
+        await this.$options.accountsStore.recover({ seedPhrase });
         this.$emit('recover');
       } catch (err) {
         console.error(err);
@@ -64,7 +67,7 @@ export default {
 
     async showOtpRecover() {
       try {
-        await this.getRecoveryIdentifier();
+        await this.$options.accountsStore.getRecoveryIdentifier();
         this.showOtp = false;
       } catch (err) {
         console.error(err);

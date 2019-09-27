@@ -2,7 +2,7 @@
   <div v-if="isLoading">
     <div class="loading-screen">
       <div class="loading-screen__spinner">
-        <Spinner />
+        <spinner />
       </div>
     </div>
   </div>
@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import Spinner from '@/components/common/Spinner.vue';
+import Spinner from '@/components/common/Spinner';
 
 export default {
   name: 'LoadingScreen',

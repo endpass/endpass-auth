@@ -3,6 +3,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
 import '@mocks/window';
 import setupI18n from '@/locales/i18nSetup';
+import permissionsService from '@/service/permissions';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -13,10 +16,6 @@ describe('ConsentProvider', () => {
   let $router;
   let $route;
   let wrapper;
-  let store;
-  let storeData;
-  let coreModule;
-  let accountsModule;
 
   function createRouter() {
     return {
@@ -31,36 +30,26 @@ describe('ConsentProvider', () => {
     };
   }
 
+  const createWrapper = ({ isAuthed, ...options } = {}) => {
+    const store = createStore();
+    const { accountsStore, coreStore } = createStoreModules(store);
+    accountsStore.setAuthByCode(isAuthed === false ? 400 : 200);
+    return shallowMount(ConsentProvider, {
+      accountsStore,
+      coreStore,
+      localVue,
+      i18n,
+      mocks: {
+        $router,
+        $route,
+      },
+      ...options,
+    });
+  };
+
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        loading: false,
-      },
-      actions: {
-        dialogClose: jest.fn(),
-      },
-    };
-    accountsModule = {
-      state: {
-        isLogin: true,
-      },
-      actions: {
-        getConsentDetails: jest.fn().mockResolvedValue({
-          requested_scope: [],
-        }),
-        cancelAuth: jest.fn(),
-        grantPermissionsWithOauth: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
     $router = createRouter();
     $route = {
       query: {
@@ -68,19 +57,11 @@ describe('ConsentProvider', () => {
         scopes: 'foo bar baz',
       },
     };
-    wrapper = shallowMount(ConsentProvider, {
-      localVue,
-      store,
-      i18n,
-      mocks: {
-        $router,
-        $route,
-      },
-    });
   });
 
   describe('render', () => {
     it('should correctly render ConsentProvider screen', () => {
+      wrapper = createWrapper();
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -90,10 +71,7 @@ describe('ConsentProvider', () => {
       $router = createRouter();
       $router.history.current.query = {};
 
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
+      wrapper = createWrapper({
         mocks: {
           $router,
           $route: {
@@ -109,53 +87,27 @@ describe('ConsentProvider', () => {
     it('should should redirect if consent request provided skip', async () => {
       expect.assertions(1);
 
-      // eslint-disable-next-line
-      const redirect_url = 'http://kek.kek';
-      accountsModule.actions.getConsentDetails.mockResolvedValue({
+      const redirectUrl = 'http://kek.kek';
+      permissionsService.getConsentDetails.mockResolvedValueOnce({
         skip: true,
         requested_scope: [],
-        redirect_url,
+        redirect_url: redirectUrl,
       });
-      $router = createRouter();
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
-      await wrapper.vm.$nextTick();
-      expect(window.location.href).toBe(redirect_url);
+
+      wrapper = createWrapper();
+      await global.flushPromises();
+
+      expect(window.location.href).toBe(redirectUrl);
     });
 
     it('should takes query params from current location and makes redirect if consentChallenge is not empty but authorization status is falsy', () => {
-      $router = createRouter();
-      accountsModule.state.isLogin = false;
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+      wrapper = createWrapper({ isAuthed: false });
 
       expect($router.replace).toBeCalled();
     });
 
     it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+      wrapper = createWrapper();
 
       expect(wrapper.vm.error).toEqual({
         show: false,
@@ -165,45 +117,30 @@ describe('ConsentProvider', () => {
       expect($router.replace).not.toBeCalled();
     });
 
-    it('should grant permissions on scopes form submit', () => {
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+    it('should grant permissions on scopes form submit', async () => {
+      expect.assertions(1);
+
+      const redirectUrl = 'http://kek.kek';
+      wrapper = createWrapper();
       wrapper.setData({
         scopesList: ['foo', 'bar', 'baz'],
         isLoading: false,
       });
 
+      permissionsService.grantPermissions.mockResolvedValueOnce({
+        redirect: redirectUrl,
+      });
+
       wrapper
         .find('scopes-form-stub')
         .vm.$emit('submit', ['foo', 'bar', 'baz']);
+      await global.flushPromises();
 
-      expect(accountsModule.actions.grantPermissionsWithOauth).toBeCalledWith(
-        expect.any(Object),
-        {
-          consentChallenge: 'foo',
-          scopesList: ['foo', 'bar', 'baz'],
-        },
-        undefined,
-      );
+      expect(window.location.href).toBe(redirectUrl);
     });
 
     it('should cancel auth and close window on scope cancel', async () => {
-      wrapper = shallowMount(ConsentProvider, {
-        localVue,
-        store,
-        i18n,
-        mocks: {
-          $router,
-          $route,
-        },
-      });
+      wrapper = createWrapper();
       const spy = jest.spyOn(wrapper.vm, 'handleAuthCancel');
       wrapper.setData({
         scopesList: ['foo', 'bar', 'baz'],

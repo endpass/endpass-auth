@@ -1,7 +1,11 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Sign from '@/components/screens/Sign.vue';
+import Sign from '@/components/screens/Sign';
 import setupI18n from '@/locales/i18nSetup';
+import { signChannel } from '@/class/singleton/channels';
+import Answer from '@/class/Answer';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -9,75 +13,55 @@ localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
 describe('Sign', () => {
+  let requestStore;
+
+  const createWrapper = options => {
+    const store = createStore();
+    const {
+      accountsStore,
+      requestStore: requestStoreModule,
+      coreStore,
+    } = createStoreModules(store);
+    requestStore = requestStoreModule;
+    return shallowMount(Sign, {
+      accountsStore,
+      requestStore,
+      coreStore,
+      localVue,
+      i18n,
+      ...options,
+    });
+  };
+
   describe('render', () => {
-    let store;
-    let storeData;
     let wrapper;
-    let accountsModule;
-    let requestsModule;
-    let coreModule;
+    const request = {
+      address: '0x0',
+      request: {
+        id: 1,
+        params: ['foo', 'bar'],
+        jsonrpc: '2.0',
+      },
+    };
 
     beforeEach(() => {
-      coreModule = {
-        state: {
-          isInited: true,
-          loading: false,
-        },
-        actions: {
-          sendReadyMessage: jest.fn(),
-          dialogClose: jest.fn(),
-        },
-        getters: {
-          isDialog: jest.fn(() => true),
-        },
-      };
-      accountsModule = {
-        state: {
-          accounts: [],
-        },
-      };
-      requestsModule = {
-        state: {
-          request: {},
-        },
-        actions: {
-          awaitRequestMessage: jest.fn(),
-          processRequest: jest.fn(),
-          cancelRequest: jest.fn(),
-        },
-      };
-      storeData = {
-        modules: {
-          accounts: accountsModule,
-          core: coreModule,
-          requests: requestsModule,
-        },
-      };
-      store = new Vuex.Store(storeData);
-      wrapper = shallowMount(Sign, {
-        localVue,
-        store,
-        i18n,
-      });
+      wrapper = createWrapper();
     });
 
     describe('render', () => {
       it('should correctly render Sign component', () => {
+        requestStore.setRequest(request);
         expect(wrapper.name()).toBe('Sign');
         expect(wrapper.html()).toMatchSnapshot();
       });
     });
 
     it('should render sign message form if request does not contains transaction', () => {
-      requestsModule.state.request = {
+      wrapper = createWrapper();
+      requestStore.setRequest({
         request: {
           method: 'eth_sign',
         },
-      };
-      wrapper = shallowMount(Sign, {
-        localVue,
-        store,
-        i18n,
       });
 
       expect(wrapper.find('sign-message-form-stub').exists()).toBe(true);
@@ -85,15 +69,11 @@ describe('Sign', () => {
     });
 
     it('should render sign transaction form if request contains transaction', () => {
-      requestsModule.state.request = {
+      wrapper = createWrapper();
+      requestStore.setRequest({
         request: {
           method: 'eth_sendTransaction',
         },
-      };
-      wrapper = shallowMount(Sign, {
-        localVue,
-        store,
-        i18n,
       });
 
       expect(wrapper.find('sign-transaction-form-stub').exists()).toBe(true);
@@ -101,20 +81,47 @@ describe('Sign', () => {
     });
 
     describe('behavior', () => {
-      it('should confirm current request with password', () => {
-        // TODO Have troubles with triggering event from stub, solve it when possivble
-        wrapper.vm.handleSignSubmit({
+      it('should confirm current request with password', async () => {
+        expect.assertions(1);
+
+        requestStore.setRequest(request);
+        const dataPromise = signChannel.take();
+        wrapper.find('sign-message-form-stub').vm.$emit('submit', {
           password: 'foo',
         });
 
-        expect(requestsModule.actions.processRequest).toBeCalled();
+        await global.flushPromises();
+        const res = await dataPromise;
+
+        expect(res).toEqual(
+          Answer.createOk({
+            id: 1,
+            jsonrpc: '2.0',
+            result: 'signature',
+          }),
+        );
       });
 
-      it('should cancel current request', () => {
-        // TODO Have troubles with triggering event from stub, solve it when possivble
-        wrapper.vm.handleSignCancel();
+      it('should cancel current request', async () => {
+        expect.assertions(1);
 
-        expect(requestsModule.actions.cancelRequest).toBeCalled();
+        requestStore.setRequest(request);
+        const dataPromise = signChannel.take();
+
+        wrapper.find('sign-message-form-stub').vm.$emit('cancel', {
+          password: 'foo',
+        });
+
+        await global.flushPromises();
+        const res = await dataPromise;
+
+        expect(res).toEqual(
+          Answer.createOk({
+            id: 1,
+            error: 'canceled',
+            result: [],
+          }),
+        );
       });
     });
   });
