@@ -1,5 +1,5 @@
 import mapToQueryString from '@endpass/utils/mapToQueryString';
-import store from '@/store';
+import { coreStore } from '@/store';
 import router from '@/router';
 import { DEFAULT_RATE_LIMIT_TIMEOUT } from '@/constants';
 
@@ -12,8 +12,7 @@ const CODES = {
 
 const methods = {
   [CODES.RATE_LIMIT](response) {
-    store.commit(
-      'setRateLimitTimeout',
+    coreStore.setRateLimitTimeout(
       response.timeout || DEFAULT_RATE_LIMIT_TIMEOUT,
     );
   },
