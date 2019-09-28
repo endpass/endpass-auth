@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import Otp from '@/components/forms/Otp';
+import OtpForm from '@/components/forms/CompositeAuth/Otp/OtpForm';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -12,7 +12,7 @@ describe('Otp', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallowMount(Otp, {
+    wrapper = shallowMount(OtpForm, {
       localVue,
       provide: {
         theme: 'default',

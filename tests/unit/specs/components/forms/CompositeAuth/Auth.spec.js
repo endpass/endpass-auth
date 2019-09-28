@@ -1,6 +1,6 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import Auth from '@/components/forms/Auth';
+import Auth from '@/components/forms/CompositeAuth/Auth';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 

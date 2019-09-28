@@ -20,6 +20,6 @@ exports[`CompositeAuth render should render message form 1`] = `
 
 exports[`CompositeAuth render should render opt form 1`] = `
 <div>
-  <otp-block-form-stub></otp-block-form-stub>
+  <otp-form-stub></otp-form-stub>
 </div>
 `;

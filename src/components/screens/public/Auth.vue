@@ -18,7 +18,7 @@
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
+import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
 import { accountsStore, coreStore } from '@/store';
