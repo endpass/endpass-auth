@@ -17,12 +17,12 @@
 </template>
 
 <script>
-import OtpForm from '@/components/forms/Otp';
-import RecoverForm from '@/components/forms/Recover';
+import OtpForm from './OtpForm';
+import RecoverForm from './RecoverForm';
 import { accountsStore, coreStore } from '@/store';
 
 export default {
-  name: 'OtpBlockForm',
+  name: 'Otp',
 
   accountsStore,
   coreStore,

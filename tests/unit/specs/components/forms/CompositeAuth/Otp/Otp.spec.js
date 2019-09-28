@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import OtpBlock from '@/components/formsComposite/CompositeAuth/OtpBlock';
+import Otp from '@/components/forms/CompositeAuth/Otp/Otp';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
@@ -13,7 +13,7 @@ localVue.use(Vuex);
 localVue.use(VueRouter);
 const i18n = setupI18n(localVue);
 
-describe('OtpBlock', () => {
+describe('Otp', () => {
   let wrapper;
   const router = new VueRouter();
   let accountsStore;
@@ -27,7 +27,7 @@ describe('OtpBlock', () => {
       coreStore,
     } = createStoreModules(store);
     accountsStore = accountsStoreModule;
-    wrapper = shallowMount(OtpBlock, {
+    wrapper = shallowMount(Otp, {
       accountsStore,
       coreStore,
       localVue,
@@ -37,8 +37,8 @@ describe('OtpBlock', () => {
   });
 
   describe('render', () => {
-    it('should correctly render OtpBlock component', () => {
-      expect(wrapper.name()).toBe('OtpBlockForm');
+    it('should correctly render Otp component', () => {
+      expect(wrapper.name()).toBe('Otp');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

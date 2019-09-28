@@ -1,5 +1,5 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import RecoverForm from '@/components/forms/Recover';
+import RecoverForm from '@/components/forms/CompositeAuth/Otp/RecoverForm.vue';
 
 import setupI18n from '@/locales/i18nSetup';
 

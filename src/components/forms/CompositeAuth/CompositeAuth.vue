@@ -1,18 +1,7 @@
 <template>
   <div>
-    <otp-block-form
-      v-if="currentForm === FORMS.OTP"
-      @submit="handleOtpSubmit"
-      @recover="handleOtpRecover"
-    />
-    <message-form
-      v-else-if="currentForm === FORMS.MESSAGE"
-      :closable="closable"
-      :message="message"
-      @cancel="handleAuthCancel"
-    />
     <auth-form
-      v-else-if="currentForm === FORMS.AUTH"
+      v-if="currentForm === FORMS.AUTH"
       :is-inited="isInited"
       :loading="loading"
       :error="error"
@@ -23,13 +12,24 @@
       @submit="handleAuthSubmit"
       @error="handleAuthError"
     />
+    <otp-form
+      v-else-if="currentForm === FORMS.OTP"
+      @submit="handleOtpSubmit"
+      @recover="handleOtpRecover"
+    />
+    <message-form
+      v-else-if="currentForm === FORMS.MESSAGE"
+      :closable="closable"
+      :message="message"
+      @cancel="handleAuthCancel"
+    />
   </div>
 </template>
 
 <script>
-import AuthForm from '@/components/forms/Auth';
-import OtpBlockForm from '@/components/formsComposite/CompositeAuth/OtpBlock';
-import MessageForm from '@/components/forms/Message';
+import AuthForm from './Auth';
+import OtpForm from './Otp';
+import MessageForm from './Message';
 import { IDENTITY_MODE } from '@/constants';
 import { accountsStore, coreStore } from '@/store';
 
@@ -158,7 +158,7 @@ export default {
 
   components: {
     AuthForm,
-    OtpBlockForm,
+    OtpForm,
     MessageForm,
   },
 };

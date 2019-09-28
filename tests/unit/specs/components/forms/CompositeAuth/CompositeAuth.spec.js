@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConnectError from '@endpass/class/ConnectError';
-import CompositeAuth from '@/components/formsComposite/CompositeAuth';
+import CompositeAuth from '@/components/forms/CompositeAuth';
 import { IDENTITY_MODE, METHODS } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
@@ -53,7 +53,7 @@ describe('CompositeAuth', () => {
         currentForm: 'OTP',
       });
 
-      expect(wrapper.find('otp-block-form-stub').exists()).toBe(true);
+      expect(wrapper.find('otp-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
 
@@ -132,7 +132,7 @@ describe('CompositeAuth', () => {
 
         await global.flushPromises();
 
-        expect(wrapper.find('otp-block-form-stub').exists()).toBe(true);
+        expect(wrapper.find('otp-form-stub').exists()).toBe(true);
 
         expect(wrapper.emitted().authorize).toBeFalsy();
       });
@@ -147,10 +147,10 @@ describe('CompositeAuth', () => {
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
         await global.flushPromises();
-        wrapper.find('otp-block-form-stub').vm.$emit('submit');
+        wrapper.find('otp-form-stub').vm.$emit('submit');
         await global.flushPromises();
 
-        expect(wrapper.find('otp-block-form-stub').exists()).toBe(true);
+        expect(wrapper.find('otp-form-stub').exists()).toBe(true);
 
         expect(identityService.waitLogin).toBeCalledTimes(1);
         expect(wrapper.emitted().authorize[0]).toEqual([
@@ -168,7 +168,7 @@ describe('CompositeAuth', () => {
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
         await global.flushPromises();
-        wrapper.find('otp-block-form-stub').vm.$emit('recover');
+        wrapper.find('otp-form-stub').vm.$emit('recover');
         await global.flushPromises();
 
         expect(wrapper.find('message-form-stub').exists()).toBe(true);
