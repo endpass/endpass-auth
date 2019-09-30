@@ -5,8 +5,9 @@
   >
     <v-title
       data-test="form-title"
-      :html="$t('components.emailCode.description', { email })"
+      :html="$t('components.emailCode.title')"
     />
+    <v-description :html="$t('components.emailCode.description', { email })" />
     <form-item>
       <v-input
         v-model="code"
@@ -55,6 +56,7 @@ import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'EmailCode',
@@ -117,6 +119,7 @@ export default {
 
   components: {
     VTitle,
+    VDescription,
     VLink,
     VButton,
     VInput,
