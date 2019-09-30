@@ -90,6 +90,10 @@ export default {
     isLogin() {
       return this.$options.authStore.isLogin;
     },
+
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
+    },
   },
 
   methods: {
