@@ -9,10 +9,12 @@
       </message>
     </form-field>
     <form-field v-if="requesterUrl">
-      <a
+      <v-link
         :href="requesterUrl"
         data-test="requester-url"
-      >{{ requesterUrl }}</a>
+      >
+        {{ requesterUrl }}
+      </v-link>
       {{ $t('components.sign.requestSign') }}
     </form-field>
     <form-field :label="title">
@@ -66,6 +68,7 @@ import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import { accountsStore } from '@/store';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'SignBaseForm',
@@ -175,6 +178,7 @@ export default {
   },
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,

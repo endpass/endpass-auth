@@ -149,7 +149,7 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.loading
-        ? this.$i18n.t('global.login')
+        ? this.$i18n.t('global.continue')
         : this.$i18n.t('global.loading');
     },
 

@@ -46,11 +46,13 @@
         :size="24"
         :is-white="true"
       />
-      <a
+      <v-link
         href="https://wallet.endpass.com"
         target="_blank"
         class="widget-header-link"
-      >wallet.endpass.com</a>
+      >
+        wallet.endpass.com
+      </v-link>
     </section>
   </header>
 </template>
@@ -62,6 +64,7 @@ import Spinner from '@/components/common/Spinner';
 import VSvgIcon from '@/components/common/VSvgIcon';
 import CurrencyToggler from './CurrencyToggler.vue';
 import { gasPriceStore } from '@/store';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'WidgetHeader',
@@ -177,6 +180,7 @@ export default {
   },
 
   components: {
+    VLink,
     Spinner,
     VSvgIcon,
     CurrencyToggler,

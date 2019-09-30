@@ -31,14 +31,15 @@
       </v-button>
     </form-row>
     <form-row>
-      <a
+      <v-link
+        skin="small-gray"
         :disabled="isLoading"
         href="#"
         data-test="password-recover"
         @click.prevent="onRecover"
       >
         {{ $i18n.t('components.regularPasswordForm.recover') }}
-      </a>
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -51,6 +52,7 @@ import FormRow from '@/components/common/FormRow';
 import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'PasswordForm',
@@ -94,6 +96,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,
@@ -103,11 +106,4 @@ export default {
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

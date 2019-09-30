@@ -8,14 +8,14 @@
       class="v-modal-card-title"
     >
       <span v-html="$t('components.passwordForm.applyConnectTo')" />
-      <a
+      <v-link
         :href="requesterUrl"
         data-test="requester-url"
         target="_blank"
         class="password-form-request-url"
       >
         {{ requesterUrl }}
-      </a>
+      </v-link>
     </h3>
     <form-item v-if="message">
       <message>
@@ -73,6 +73,7 @@ import formMixin from '@/mixins/form';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'PasswordForm',
@@ -172,6 +173,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,

@@ -20,15 +20,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-row>
-      <a
-        :disabled="isLoading"
-        href="#"
-        data-test="send-code"
-        @click.prevent="sendCode"
-      >
-        {{ $t('components.emailCode.sendTitle') }}
-      </a>
+    <form-item>
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -36,6 +28,21 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
+    </form-item>
+    <form-row
+      class="v-text-size-14"
+      centered
+    >
+      {{ $t('components.emailCode.didntGetTheCode') }}&nbsp;
+      <v-link
+        :underline="false"
+        :disabled="isLoading"
+        href="#"
+        data-test="send-code"
+        @click.prevent="sendCode"
+      >
+        {{ $t('components.emailCode.sendTitle') }}
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -48,6 +55,7 @@ import FormRow from '@/components/common/FormRow';
 import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'EmailCode',
@@ -109,6 +117,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,
@@ -118,11 +127,4 @@ export default {
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

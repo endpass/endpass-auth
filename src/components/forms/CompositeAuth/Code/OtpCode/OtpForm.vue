@@ -20,15 +20,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-row>
-      <a
-        :disabled="isLoading"
-        href="#"
-        data-test="recovery-link"
-        @click.prevent="emitRecoverEvent"
-      >
-        {{ $t('components.otp.noCode') }}
-      </a>
+    <form-item>
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -36,6 +28,20 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
+    </form-item>
+    <form-row
+      class="v-text-size-14"
+      centered
+    >
+      <v-link
+        :underline="false"
+        :disabled="isLoading"
+        href="#"
+        data-test="recovery-link"
+        @click.prevent="emitRecoverEvent"
+      >
+        {{ $t('components.otp.noCode') }}
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -48,6 +54,7 @@ import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'OtpForm',
@@ -92,6 +99,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,
@@ -101,11 +109,4 @@ export default {
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

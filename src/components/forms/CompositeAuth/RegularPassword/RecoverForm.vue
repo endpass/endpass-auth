@@ -182,11 +182,4 @@ export default {
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

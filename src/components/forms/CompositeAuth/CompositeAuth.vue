@@ -83,10 +83,6 @@ export default {
       return this.$options.coreStore.isIdentityMode;
     },
 
-    isRegularPasswordMode() {
-      return this.$options.coreStore.isRegularPasswordMode;
-    },
-
     isLogin() {
       return this.$options.authStore.isLogin;
     },
