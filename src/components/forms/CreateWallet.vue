@@ -5,10 +5,8 @@
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
       >
-        <message
-          class="v-modal-card-title"
-          v-html="$t('components.createWallet.choosePass')"
-        />
+        <v-title :html="$t('components.createWallet.choosePass')" />
+
         <form-item>
           <v-input
             v-model="password"
@@ -57,10 +55,7 @@
       </form>
     </div>
     <div v-else>
-      <message
-        class="v-modal-card-title"
-        v-html="$t('components.createWallet.recoveryTitle')"
-      />
+      <v-title :html="$t('components.createWallet.recoveryTitle')" />
       <form-item>
         <div class="box">
           <p
@@ -123,6 +118,7 @@ import FormItem from '@/components/common/FormItem';
 import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import { accountsStore } from '@/store';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'CreateWalletForm',
@@ -196,6 +192,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
     FormItem,
     Message,
     VInput,

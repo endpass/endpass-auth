@@ -3,10 +3,9 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.regularPasswordForm.title')"
+    <v-title
+      data-test="form-title"
+      :html="$t('components.regularPasswordForm.title')"
     />
     <form-item>
       <v-input
@@ -49,10 +48,10 @@ import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 import VLink from '@/components/common/VLink';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'PasswordForm',
@@ -96,10 +95,10 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
     VLink,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },

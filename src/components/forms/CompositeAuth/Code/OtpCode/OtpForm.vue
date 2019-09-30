@@ -3,11 +3,11 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.otp.enterCode')"
+    <v-title
+      data-test="form-title"
+      :html="$t('components.otp.enterCode')"
     />
+
     <form-item>
       <v-input
         v-model="code"
@@ -52,9 +52,9 @@ import VInput from '@endpass/ui/kit/VInput';
 import { coreStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import VLink from '@/components/common/VLink';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'OtpForm',
@@ -99,10 +99,10 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
     VLink,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },

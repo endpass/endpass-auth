@@ -4,9 +4,7 @@
     @submit.prevent="handleSubmit"
   >
     <form-item v-if="isServerMode && !isPublic">
-      <message class="v-modal-card-title">
-        {{ $t('components.serverModeSelect.identityServer') }}
-      </message>
+      <v-title :html="$t('components.serverModeSelect.identityServer')" />
       <server-mode-select
         v-model="serverMode"
         @confirm="handleSubmit"
@@ -15,10 +13,9 @@
       <v-divider />
     </form-item>
     <template v-if="isDefaultMode">
-      <message
-        class="v-modal-card-title"
-        data-test="form-message"
-        v-html="$t('components.auth.loginToContinue')"
+      <v-title
+        data-test="form-title"
+        :html="$t('components.auth.loginToContinue')"
       />
       <form-item v-if="error">
         <message
@@ -96,11 +93,12 @@ import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import ServerModeSelect from '@/components/common/ServerModeSelect';
-import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
-import GitAuthButton from '@/components/common/GitAuthButton.vue';
-import Message from '@/components/common/Message.vue';
+import GoogleAuthButton from '@/components/common/GoogleAuthButton';
+import GitAuthButton from '@/components/common/GitAuthButton';
+import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'AuthForm',
@@ -197,6 +195,7 @@ export default {
   },
   mixins: [formMixin],
   components: {
+    VTitle,
     VCheckbox,
     VButton,
     VInput,

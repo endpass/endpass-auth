@@ -3,10 +3,7 @@
     data-test="sign-form"
     @submit.prevent="emitSubmit"
   >
-    <h3
-      v-if="requesterUrl"
-      class="v-modal-card-title"
-    >
+    <v-title v-if="requesterUrl">
       <span v-html="$t('components.passwordForm.applyConnectTo')" />
       <v-link
         :href="requesterUrl"
@@ -16,7 +13,7 @@
       >
         {{ requesterUrl }}
       </v-link>
-    </h3>
+    </v-title>
     <form-item v-if="message">
       <message>
         {{ message }}
@@ -68,12 +65,13 @@
 <script>
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message.vue';
+import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
 import VLink from '@/components/common/VLink';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'PasswordForm',
@@ -173,6 +171,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
     VLink,
     VButton,
     VInput,
