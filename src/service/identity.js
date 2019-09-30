@@ -151,6 +151,19 @@ const sendEmailCode = async email => {
   return timeout;
 };
 
+const checkRegularPassword = async email => {
+  try {
+    await request.post(`${identityBaseUrl}/regular-password/check`, { email });
+    return true;
+  } catch (error) {
+    const isPasswordNotExist = get(error, ['response', 'status']) === 417;
+
+    if (isPasswordNotExist) return false;
+
+    throw error;
+  }
+};
+
 const disableOtp = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
@@ -180,6 +193,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   sendEmailCode,
+  checkRegularPassword,
   logout,
   waitLogin,
   getOtpSettings,

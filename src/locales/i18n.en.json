@@ -47,6 +47,19 @@
       "linkSentMessage": "An email with authorization link was sent on your address. Open it in the same browser to sign in. Also check spam folder and exclude Endpass from spam filters.",
       "authFailed": "Authentication failed. Please, try again."
     },
+    "regularPasswordForm": {
+      "title": "Log in to your Endpass account to access site actions",
+      "placeholder": "Enter your password...",
+      "recover": "Forgot your password?"
+    },
+    "regularPasswordRecover": {
+      "title": "Change password",
+      "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
+      "newPassword": "Enter new password...",
+      "repeatPassword": "Repeat new password...",
+      "placeholderCode": "Enter received code...",
+      "recover": "Forgot your password?"
+    },
     "emailCode": {
       "title": "Verify email",
       "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
