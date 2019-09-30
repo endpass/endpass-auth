@@ -144,11 +144,24 @@ const getRecoveryIdentifier = email =>
     });
 
 const sendEmailCode = async email => {
-  const { timeout } = await request.post(`${identityBaseUrl}/code-url`, {
+  const { timeout } = await request.post(`${identityBaseUrl}/auth/code`, {
     email,
   });
 
   return timeout;
+};
+
+const checkRegularPassword = async email => {
+  try {
+    await request.post(`${identityBaseUrl}/regular-password/check`, { email });
+    return true;
+  } catch (error) {
+    const isPasswordNotExist = get(error, ['response', 'status']) === 417;
+
+    if (isPasswordNotExist) return false;
+
+    throw error;
+  }
 };
 
 const disableOtp = (email, signature, redirectUrl) =>
@@ -180,6 +193,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   sendEmailCode,
+  checkRegularPassword,
   logout,
   waitLogin,
   getOtpSettings,

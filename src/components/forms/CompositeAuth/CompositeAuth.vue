@@ -12,6 +12,13 @@
       @submit="handleAuthSubmit"
       @error="handleAuthError"
     />
+    <regular-password-form
+      v-else-if="currentForm === FORMS.PASSWORD"
+      :email="email"
+      :error="error"
+      @submit="onPasswordSubmit"
+      @cancel="onAuthCancel"
+    />
     <code-form
       v-else-if="currentForm === FORMS.CODE"
       :email="email"
@@ -25,12 +32,14 @@
 
 <script>
 import AuthForm from './Auth';
+import RegularPasswordForm from './RegularPassword';
 import CodeForm from './Code';
 import { IDENTITY_MODE } from '@/constants';
 import { authStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
+  PASSWORD: 'PASSWORD',
   CODE: 'CODE',
 };
 
@@ -54,6 +63,7 @@ export default {
 
   data: () => ({
     error: null,
+    password: null,
     serverMode: null,
     email: null,
     currentForm: FORMS.AUTH,
@@ -80,6 +90,10 @@ export default {
     isLogin() {
       return this.$options.authStore.isLogin;
     },
+
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
+    },
   },
 
   methods: {
@@ -96,6 +110,11 @@ export default {
       } catch (err) {
         this.handleAuthError();
       }
+    },
+
+    onPasswordSubmit(password) {
+      this.password = password;
+      this.currentForm = FORMS.CODE;
     },
 
     async handleSocialSubmit() {
@@ -116,7 +135,15 @@ export default {
 
         await this.$options.authStore.loadAuthChallenge({ email });
 
-        this.currentForm = FORMS.CODE;
+        if (!this.isRegularPasswordMode) {
+          this.currentForm = FORMS.CODE;
+          return;
+        }
+
+        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
+          email,
+        );
+        this.currentForm = isPasswordExist ? FORMS.PASSWORD : FORMS.CODE;
       } catch (error) {
         this.handleAuthError();
       }
@@ -141,6 +168,7 @@ export default {
   components: {
     AuthForm,
     CodeForm,
+    RegularPasswordForm,
   },
 };
 </script>

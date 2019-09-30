@@ -162,6 +162,11 @@ class AuthModule extends VuexModule {
   }
 
   @Action
+  async checkRegularPassword(email) {
+    return identityService.checkRegularPassword(email);
+  }
+
+  @Action
   async validateCustomServer(serverUrl) {
     return modeService.validateIdentityServer(serverUrl);
   }
