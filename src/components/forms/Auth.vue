@@ -130,6 +130,11 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    isRegularPasswordMode: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data: () => ({
