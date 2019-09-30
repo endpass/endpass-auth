@@ -14,6 +14,7 @@ jest.mock('@/service/identity', () => {
     getOtpSettings: jest.fn(),
     defineAuthStatus: jest.fn(),
     getAuthStatus: jest.fn(),
+    getAuthChallenge: jest.fn(),
     auth: jest.fn(),
     authWithGoogle: jest.fn(),
     authWithGitHub: jest.fn(),
@@ -24,7 +25,7 @@ jest.mock('@/service/identity', () => {
     getRecoveryIdentifier: jest
       .fn()
       .mockResolvedValue(getRecoveryIdentifierResponse.message),
-    recover: jest.fn().mockResolvedValue(successResponse),
+    disableOtp: jest.fn().mockResolvedValue(successResponse),
     getAuthPermission: jest.fn(),
     setAuthPermission: jest.fn(),
     waitLogin: jest.fn(),

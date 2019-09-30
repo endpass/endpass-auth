@@ -87,7 +87,7 @@ describe('identity service', () => {
         return [200, getRecoveryIdentifierResponse];
       });
 
-      await identityService.recover(email, signature, redirectUrl);
+      await identityService.disableOtp(email, signature, redirectUrl);
     });
 
     it('should handle successfull POST /auth/recover request', async () => {
@@ -95,7 +95,7 @@ describe('identity service', () => {
 
       axiosMock.onPost(url).reply(200, successResponse);
 
-      const received = await identityService.recover(
+      const received = await identityService.disableOtp(
         email,
         signature,
         redirectUrl,
@@ -110,7 +110,7 @@ describe('identity service', () => {
       axiosMock.onGet(url).reply(200, errorResponse);
 
       await expect(
-        identityService.recover(email, signature, redirectUrl),
+        identityService.disableOtp(email, signature, redirectUrl),
       ).rejects.toThrow(expect.any(Error));
     });
 
@@ -120,7 +120,7 @@ describe('identity service', () => {
       axiosMock.onPost(url).reply(500);
 
       await expect(
-        identityService.recover(email, signature, redirectUrl),
+        identityService.disableOtp(email, signature, redirectUrl),
       ).rejects.toThrow(expect.any(Error));
     });
   });

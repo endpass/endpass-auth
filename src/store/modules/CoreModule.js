@@ -28,9 +28,9 @@ class CoreModule extends VuexModule {
 
   isDialog = isDialog;
 
-  constructor(props, { accountsStore, sharedStore }) {
+  constructor(props, { authStore, sharedStore }) {
     super(props);
-    this.accountsStore = accountsStore;
+    this.authStore = authStore;
     this.sharedStore = sharedStore;
   }
 
@@ -61,7 +61,7 @@ class CoreModule extends VuexModule {
   @Action
   async init() {
     try {
-      await this.accountsStore.defineAuthStatus();
+      await this.authStore.defineAuthStatus();
       await this.startBridge();
       // eslint-disable-next-line
     } catch (err) {
@@ -132,7 +132,7 @@ class CoreModule extends VuexModule {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
     }
 
-    this.accountsStore.logout();
+    this.authStore.logout();
     settingsService.clearLocalSettings();
   }
 

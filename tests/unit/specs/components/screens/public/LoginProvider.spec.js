@@ -20,16 +20,17 @@ describe('LoginProvider', () => {
 
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
-    const { accountsStore } = createStoreModules(store);
+    const { authStore, accountsStore } = createStoreModules(store);
 
     if (isAuthed === true) {
-      accountsStore.setAuthByCode(200);
+      authStore.setAuthByCode(200);
     }
     if (isAuthed === false) {
-      accountsStore.setAuthByCode(400);
+      authStore.setAuthByCode(400);
     }
 
     return shallowMount(LoginProvider, {
+      authStore,
       accountsStore,
       localVue,
       i18n,

@@ -21,7 +21,7 @@ import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -32,6 +32,7 @@ export default {
   name: 'PublicAuth',
 
   accountsStore,
+  authStore,
   coreStore,
 
   data: () => ({
@@ -71,7 +72,7 @@ export default {
     },
 
     handleAuthCancel() {
-      this.$options.accountsStore.cancelAuth();
+      this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
   },
@@ -83,7 +84,7 @@ export default {
     this.queryParamsMap = query;
 
     if (redirectUrl) {
-      this.$options.accountsStore.setAuthParams({
+      this.$options.authStore.setAuthParams({
         redirectUrl: decodeURIComponent(redirectUrl),
       });
     }

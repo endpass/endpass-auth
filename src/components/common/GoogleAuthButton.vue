@@ -20,7 +20,7 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VSvgIcon from '@/components/common/VSvgIcon';
-import { accountsStore } from '@/store';
+import { authStore } from '@/store';
 
 export default {
   data() {
@@ -29,7 +29,9 @@ export default {
       interval: null,
     };
   },
-  accountsStore,
+
+  authStore,
+
   methods: {
     async loginWithGoogle() {
       // eslint-disable-next-line no-undef
@@ -40,7 +42,7 @@ export default {
       await auth.signIn();
 
       try {
-        await this.$options.accountsStore.authWithGoogle({
+        await this.$options.authStore.authWithGoogle({
           email: auth.currentUser
             .get()
             .getBasicProfile()

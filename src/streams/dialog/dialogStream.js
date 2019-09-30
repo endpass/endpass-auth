@@ -1,4 +1,4 @@
-import { accountsStore, requestStore } from '@/store';
+import { authStore, accountsStore, requestStore } from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import {
   accountChannel,
@@ -36,7 +36,7 @@ function initDialogStream() {
     },
     [METHODS.AUTH]: {
       commit(payload) {
-        accountsStore.setAuthParams(payload);
+        authStore.setAuthParams(payload);
       },
       channel: authChannel,
       needAuth: true,
@@ -50,6 +50,7 @@ function initDialogStream() {
       async beforeShow() {
         await Promise.all([
           accountsStore.defineOnlyV3Accounts(),
+          authStore.defineAuthStatus(),
           accountsStore.defineSettings(),
         ]);
       },
@@ -70,7 +71,7 @@ function initDialogStream() {
     },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
-        accountsStore.logout();
+        authStore.logout();
         accountChannel.put(
           Answer.createOk({
             type: 'logout',

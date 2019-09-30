@@ -1,4 +1,4 @@
-import { accountsStore } from '@/store';
+import { authStore } from '@/store';
 import dialogOpen from '@/streams/Actions/dialogOpen';
 import { permissionChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
@@ -8,9 +8,9 @@ export default async function withPermission(options, action) {
     return;
   }
 
-  await accountsStore.defineAuthStatus();
+  await authStore.defineAuthStatus();
 
-  const { isPermission, isLogin } = accountsStore;
+  const { isPermission, isLogin } = authStore;
 
   if (isPermission || !isLogin) {
     permissionChannel.put(Answer.createOk());

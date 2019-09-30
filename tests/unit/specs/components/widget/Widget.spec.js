@@ -4,6 +4,7 @@ import { accountAddress, hdv3 } from '@unitFixtures/accounts';
 import setupI18n from '@/locales/i18nSetup';
 import Widget from '@/components/widget/Widget';
 import userService from '@/service/user';
+import identityService from '@/service/identity';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
@@ -19,6 +20,7 @@ describe('Widget', () => {
   let store;
   let widgetModule;
   let accountsStore;
+  let authStore;
 
   userService.getSettings.mockResolvedValue({
     lastActiveAccount: accountAddress,
@@ -55,13 +57,17 @@ describe('Widget', () => {
 
     store = createStore(storeData);
     const {
+      authStore: authStoreModule,
       accountsStore: accountsStoreModule,
       coreStore,
     } = createStoreModules(store);
+
+    authStore = authStoreModule;
     accountsStore = accountsStoreModule;
-    accountsStore.setAuthByCode(200);
+    authStore.setAuthByCode(200);
 
     wrapper = shallowMount(Widget, {
+      authStore,
       accountsStore,
       coreStore,
       localVue,
@@ -134,16 +140,18 @@ describe('Widget', () => {
     it('should correctly handle logout event', async () => {
       expect.assertions(2);
 
+      identityService.getAuthStatus.mockResolvedValueOnce(200);
+
       await global.flushPromises();
 
-      expect(accountsStore.isLogin).toBe(true);
+      expect(authStore.isLogin).toBe(true);
 
       bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
       wrapper.find('widget-accounts-stub').vm.$emit('logout');
 
       await global.flushPromises();
 
-      expect(accountsStore.isLogin).toBe(false);
+      expect(authStore.isLogin).toBe(false);
     });
 
     it('should render new account form on accounts newAccount action handle', async () => {

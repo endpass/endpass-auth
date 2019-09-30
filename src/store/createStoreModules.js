@@ -1,6 +1,7 @@
 import GasPriceModule from '@/store/modules/GasPriceModule';
 import SharedModule from '@/store/modules/SharedModule';
 import AccountsModule from '@/store/modules/AccountsModule';
+import AuthModule from '@/store/modules/AuthModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
 import moduleFactory from '@/store/moduleFactory';
@@ -16,8 +17,12 @@ export default store => {
     sharedStore,
   });
 
+  const authStore = createModule(AuthModule, 'auth', {
+    sharedStore,
+  });
+
   const coreStore = createModule(CoreModule, 'core', {
-    accountsStore,
+    authStore,
     sharedStore,
   });
 
@@ -30,6 +35,7 @@ export default store => {
     gasPriceStore,
     sharedStore,
     accountsStore,
+    authStore,
     coreStore,
     requestStore,
   };

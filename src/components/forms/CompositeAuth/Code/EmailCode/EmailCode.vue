@@ -1,12 +1,12 @@
 <template>
   <form
     class="form-otp"
-    @submit.prevent="emitSubmit"
+    @submit.prevent="onSubmit"
   >
     <message
       class="v-modal-card-title"
       data-test="form-message"
-      v-html="$t('components.otp.enterCode')"
+      v-html="$t('components.emailCode.description', { email })"
     />
     <form-item>
       <v-input
@@ -16,21 +16,21 @@
         data-vv-name="code"
         :error="errors.first('code') || error"
         name="code"
-        :placeholder="$t('components.otp.enterReceivedCode')"
+        :placeholder="$t('components.emailCode.placeholder')"
         data-test="code-input"
       />
     </form-item>
     <form-row>
       <a
-        :disabled="loading"
+        :disabled="isLoading"
         href="#"
-        data-test="recovery-link"
-        @click.prevent="emitRecoverEvent"
+        data-test="send-code"
+        @click.prevent="sendCode"
       >
-        {{ $t('components.otp.noCode') }}
+        {{ $t('components.emailCode.sendTitle') }}
       </a>
       <v-button
-        :disabled="!isCodeValid || loading"
+        :disabled="!isFormValid || isLoading"
         type="submit"
         data-test="submit-button"
       >
@@ -47,14 +47,18 @@ import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
+import { authStore, coreStore } from '@/store';
 
 export default {
-  name: 'OtpForm',
+  name: 'EmailCode',
+
+  authStore,
+  coreStore,
 
   props: {
-    loading: {
-      type: Boolean,
-      default: false,
+    email: {
+      type: String,
+      required: true,
     },
 
     error: {
@@ -68,32 +72,38 @@ export default {
   }),
 
   computed: {
+    isLoading() {
+      return this.$options.coreStore.loading;
+    },
+
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('global.confirm')
         : this.$i18n.t('global.loading');
-    },
-
-    codeErrorMessage() {
-      return this.isCodeValid ? null : 'Invalid code';
-    },
-
-    isCodeValid() {
-      return /^\d{6}$/.test(this.code);
     },
   },
 
   methods: {
-    emitSubmit() {
-      if (this.isCodeValid) {
-        this.$emit('submit', this.code);
+    onSubmit() {
+      this.$emit('submit', this.code);
+    },
+
+    async sendCode() {
+      try {
+        this.$validator.errors.removeById('sendCodeId');
+        await this.$options.authStore.sendCode({ email: this.email });
+      } catch (error) {
+        this.$validator.errors.add({
+          field: 'code',
+          msg: this.$i18n.t('components.emailCode.sendError'),
+          id: 'sendCodeId',
+        });
       }
     },
-    emitRecoverEvent() {
-      if (!this.loading) {
-        this.$emit('recover');
-      }
-    },
+  },
+
+  mounted() {
+    this.sendCode();
   },
 
   mixins: [formMixin],

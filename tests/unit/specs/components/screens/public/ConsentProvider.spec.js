@@ -32,9 +32,10 @@ describe('ConsentProvider', () => {
 
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
-    const { accountsStore, coreStore } = createStoreModules(store);
-    accountsStore.setAuthByCode(isAuthed === false ? 400 : 200);
+    const { authStore, accountsStore, coreStore } = createStoreModules(store);
+    authStore.setAuthByCode(isAuthed === false ? 400 : 200);
     return shallowMount(ConsentProvider, {
+      authStore,
       accountsStore,
       coreStore,
       localVue,

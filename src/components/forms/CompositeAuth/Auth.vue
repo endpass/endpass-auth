@@ -42,7 +42,7 @@
         />
       </form-item>
       <v-button
-        :disabled="!isFormValid"
+        :disabled="!isSubmitEnable"
         size="big"
         data-test="submit-button-auth"
       >
@@ -153,17 +153,6 @@ export default {
         : this.$i18n.t('global.loading');
     },
 
-    emailErrorMessage() {
-      return this.isEmailValid
-        ? null
-        : this.$i18n.t('components.auth.invalidEmail');
-    },
-
-    isEmailValid() {
-      // eslint-disable-next-line
-      return /^[a-zA-Z._\-\\+0-9]+@[a-z0-9]+\.[a-z]{2,}$/g.test(this.email);
-    },
-
     isDefaultMode() {
       return this.serverMode.type === IDENTITY_MODE.DEFAULT;
     },
@@ -176,16 +165,16 @@ export default {
       return this.serverMode.type === IDENTITY_MODE.CUSTOM;
     },
 
-    isFormValid() {
+    isSubmitEnable() {
       const {
         isDefaultMode,
         isLocalMode,
         isCustomMode,
-        isEmailValid,
+        isFormValid,
         isTermsAccepted,
         loading,
       } = this;
-      const isDefaultValid = isDefaultMode && isEmailValid && isTermsAccepted;
+      const isDefaultValid = isDefaultMode && isFormValid && isTermsAccepted;
 
       return (isDefaultValid || isCustomMode || isLocalMode) && !loading;
     },
@@ -193,8 +182,6 @@ export default {
 
   methods: {
     handleSubmit() {
-      if (!this.isFormValid) return;
-
       const { email, serverMode } = this;
 
       this.$emit('submit', { email, serverMode });

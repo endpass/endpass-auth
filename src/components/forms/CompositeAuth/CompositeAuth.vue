@@ -12,31 +12,26 @@
       @submit="handleAuthSubmit"
       @error="handleAuthError"
     />
-    <otp-form
-      v-else-if="currentForm === FORMS.OTP"
-      @submit="handleOtpSubmit"
-      @recover="handleOtpRecover"
-    />
-    <message-form
-      v-else-if="currentForm === FORMS.MESSAGE"
-      :closable="closable"
-      :message="message"
-      @cancel="handleAuthCancel"
+    <code-form
+      v-else-if="currentForm === FORMS.CODE"
+      :email="email"
+      :error="error"
+      :is-closable="closable"
+      @submit="onCodeSubmit"
+      @cancel="onAuthCancel"
     />
   </div>
 </template>
 
 <script>
 import AuthForm from './Auth';
-import OtpForm from './Otp';
-import MessageForm from './Message';
+import CodeForm from './Code';
 import { IDENTITY_MODE } from '@/constants';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
-  MESSAGE: 'MESSAGE',
-  OTP: 'OTP',
+  CODE: 'CODE',
 };
 
 export default {
@@ -54,14 +49,14 @@ export default {
     },
   },
 
-  accountsStore,
+  authStore,
   coreStore,
 
   data: () => ({
     error: null,
     serverMode: null,
+    email: null,
     currentForm: FORMS.AUTH,
-    message: '',
     FORMS,
   }),
 
@@ -69,42 +64,49 @@ export default {
     isInited() {
       return this.$options.coreStore.isInited;
     },
+
     loading() {
       return this.$options.coreStore.loading;
     },
-    otpEmail() {
-      return this.$options.accountsStore.otpEmail;
-    },
+
     isIdentityMode() {
       return this.$options.coreStore.isIdentityMode;
     },
+
     isRegularPasswordMode() {
       return this.$options.coreStore.isRegularPasswordMode;
     },
+
     isLogin() {
-      return this.$options.accountsStore.isLogin;
+      return this.$options.authStore.isLogin;
     },
   },
 
   methods: {
-    async handleOtpSubmit() {
-      await this.$options.accountsStore.waitLogin();
+    async onCodeSubmit(code) {
+      try {
+        await this.$options.authStore.auth({
+          email: this.email,
+          password: this.password,
+          code,
+        });
+        await this.$options.authStore.waitLogin();
 
-      this.handleSubmit();
-    },
-
-    async handleOtpRecover() {
-      await this.handleLinkSent();
+        this.handleSubmit();
+      } catch (err) {
+        this.handleAuthError();
+      }
     },
 
     async handleSocialSubmit() {
-      await this.$options.accountsStore.waitLogin();
+      await this.$options.authStore.waitLogin();
 
       this.handleSubmit();
     },
 
     async handleAuthSubmit({ email, serverMode }) {
       try {
+        this.email = email;
         this.serverMode = serverMode;
 
         if (serverMode.type !== IDENTITY_MODE.DEFAULT) {
@@ -112,36 +114,16 @@ export default {
           return;
         }
 
-        await this.$options.accountsStore.auth({ email, serverMode });
+        await this.$options.authStore.loadAuthChallenge({ email });
 
-        if (this.otpEmail) {
-          this.currentForm = FORMS.OTP;
-        } else {
-          await this.handleLinkSent();
-        }
-      } catch (err) {
-        console.error(err);
-        this.handleAuthError(err);
+        this.currentForm = FORMS.CODE;
+      } catch (error) {
+        this.handleAuthError();
       }
     },
 
-    async handleLinkSent() {
-      await this.$options.accountsStore.defineAuthStatus();
-      if (this.isLogin) {
-        this.message = this.$i18n.t(
-          'components.compositeAuth.successAuthMessage',
-        );
-      } else {
-        this.message = this.$i18n.t('components.compositeAuth.linkSentMessage');
-        this.currentForm = FORMS.MESSAGE;
-        await this.$options.accountsStore.waitLogin();
-      }
-
-      this.handleSubmit();
-    },
-
-    handleAuthCancel() {
-      this.$options.accountsStore.cancelAuth();
+    onAuthCancel() {
+      this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
 
@@ -158,8 +140,7 @@ export default {
 
   components: {
     AuthForm,
-    OtpForm,
-    MessageForm,
+    CodeForm,
   },
 };
 </script>
