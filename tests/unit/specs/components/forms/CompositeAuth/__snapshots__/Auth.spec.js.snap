@@ -3,7 +3,7 @@
 exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="auth-form" message="foo">
   <!---->
-  <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
+  <v-title-stub html="Log in&amp;nbsp;to&amp;nbsp;your Endpass account to&amp;nbsp;access site actions" data-test="form-title"></v-title-stub>
   <!---->
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
@@ -22,14 +22,15 @@ exports[`Auth render should change submit button text if loading and make it dis
   <form-row-stub centered="">
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
-      <a href="https://endpass.com/terms/" target="_blank">
+      <v-link-stub href="https://endpass.com/terms/" skin="default" target="_blank" underline="true">
         Terms of Service
-      </a>
+      </v-link-stub>
 
       and
-      <a href="https://endpass.com/privacy/" target="_blank">
+      <v-link-stub href="https://endpass.com/privacy/" skin="default" target="_blank" underline="true">
         Privacy Policy
-      </a></v-checkbox-stub>
+      </v-link-stub>
+    </v-checkbox-stub>
   </form-row-stub>
 </form>
 `;
@@ -37,13 +38,13 @@ exports[`Auth render should change submit button text if loading and make it dis
 exports[`Auth render should correctly render Auth component 1`] = `
 <form data-test="auth-form">
   <!---->
-  <message-stub data-test="form-message" class="v-modal-card-title">Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</message-stub>
+  <v-title-stub html="Log in&amp;nbsp;to&amp;nbsp;your Endpass account to&amp;nbsp;access site actions" data-test="form-title"></v-title-stub>
   <!---->
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
   </form-item-stub>
   <v-button-stub skin="primary" size="big" data-test="submit-button-auth" disabled="true">
-    Login
+    Continue
   </v-button-stub>
   <v-spacer-stub height="3" width="0"></v-spacer-stub>
   <v-divider-stub>or sign in with</v-divider-stub>
@@ -56,14 +57,15 @@ exports[`Auth render should correctly render Auth component 1`] = `
   <form-row-stub centered="">
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
-      <a href="https://endpass.com/terms/" target="_blank">
+      <v-link-stub href="https://endpass.com/terms/" skin="default" target="_blank" underline="true">
         Terms of Service
-      </a>
+      </v-link-stub>
 
       and
-      <a href="https://endpass.com/privacy/" target="_blank">
+      <v-link-stub href="https://endpass.com/privacy/" skin="default" target="_blank" underline="true">
         Privacy Policy
-      </a></v-checkbox-stub>
+      </v-link-stub>
+    </v-checkbox-stub>
   </form-row-stub>
 </form>
 `;

@@ -181,6 +181,9 @@ export default {
 
   methods: {
     handleSubmit() {
+      if (!this.isSubmitEnable) {
+        return;
+      }
       const { email, serverMode } = this;
 
       this.$emit('submit', { email, serverMode });
