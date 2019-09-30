@@ -9,7 +9,7 @@ exports[`Otp render should correctly render Otp component 1`] = `
   <form-row-stub><a href="#" data-test="recovery-link">
       Don't know code?
     </a>
-    <v-button-stub skin="primary" size="normal" disabled="true" type="submit" data-test="submit-button">
+    <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
       Confirm
     </v-button-stub>
   </form-row-stub>

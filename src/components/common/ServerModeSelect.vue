@@ -56,7 +56,7 @@ import { IDENTITY_MODE } from '@/constants';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import formMixin from '@/mixins/form';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, coreStore } from '@/store';
 
 const availableIdentityServerTypes = [
   {
@@ -83,6 +83,7 @@ const availableIdentityServerTypes = [
 
 export default {
   name: 'ServerModeSelect',
+
   data: () => ({
     availableIdentityServerTypes,
     currentIdentityServerType: availableIdentityServerTypes[0].val,
@@ -90,8 +91,10 @@ export default {
     isValidating: false,
     validationError: '',
   }),
-  accountsStore,
+
+  authStore,
   coreStore,
+
   computed: {
     isLoading() {
       return this.$options.coreStore.loading;
@@ -176,7 +179,7 @@ export default {
       this.isValidating = true;
 
       try {
-        await this.$options.accountsStore.validateCustomServer(serverUrl);
+        await this.$options.authStore.validateCustomServer(serverUrl);
       } catch (e) {
         this.validationError = e.message;
         throw e;

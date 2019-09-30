@@ -19,7 +19,7 @@ import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -30,6 +30,7 @@ export default {
   name: 'Auth',
 
   accountsStore,
+  authStore,
   coreStore,
 
   data: () => ({
@@ -57,7 +58,7 @@ export default {
         await this.$options.coreStore.logout();
       }
 
-      this.$options.accountsStore.cancelAuth();
+      this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
 
@@ -74,7 +75,7 @@ export default {
         await this.openCreateAccount();
       }
 
-      this.$options.accountsStore.confirmAuth(serverMode);
+      this.$options.authStore.confirmAuth(serverMode);
     },
   },
 

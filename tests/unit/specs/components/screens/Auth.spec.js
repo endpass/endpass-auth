@@ -20,6 +20,7 @@ const i18n = setupI18n(localVue);
 describe('Auth', () => {
   let wrapper;
   let accountsStore;
+  let authStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -27,11 +28,16 @@ describe('Auth', () => {
     const store = createStore();
     const {
       accountsStore: accountsStoreModule,
+      authStore: authStoreModule,
       coreStore,
     } = createStoreModules(store);
+
     accountsStore = accountsStoreModule;
+    authStore = authStoreModule;
+
     wrapper = shallowMount(Auth, {
       accountsStore,
+      authStore,
       coreStore,
       localVue,
       i18n,
@@ -97,11 +103,11 @@ describe('Auth', () => {
         expect.assertions(3);
 
         const dataPromise = authChannel.take();
-        accountsStore.setAuthByCode(200);
+        authStore.setAuthByCode(200);
         bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
         identityService.checkAccountExist.mockResolvedValueOnce(false);
 
-        expect(accountsStore.isLogin).toBe(true);
+        expect(authStore.isLogin).toBe(true);
 
         wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
@@ -118,7 +124,7 @@ describe('Auth', () => {
             'Authentication was canceled by user!',
           ),
         );
-        expect(accountsStore.isLogin).toBe(false);
+        expect(authStore.isLogin).toBe(false);
       });
     });
   });

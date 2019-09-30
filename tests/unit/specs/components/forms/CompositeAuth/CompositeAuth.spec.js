@@ -22,6 +22,7 @@ localVue.use(VueRouter);
 describe('CompositeAuth', () => {
   let wrapper;
   let accountsStore;
+  let authStore;
   const router = new VueRouter();
 
   beforeEach(() => {
@@ -29,11 +30,16 @@ describe('CompositeAuth', () => {
 
     const store = createStore();
     const {
+      authStore: authStoreModule,
       accountsStore: accountsStoreModule,
       coreStore,
     } = createStoreModules(store);
+
     accountsStore = accountsStoreModule;
+    authStore = authStoreModule;
+
     wrapper = shallowMount(CompositeAuth, {
+      authStore,
       accountsStore,
       coreStore,
       localVue,
@@ -45,24 +51,6 @@ describe('CompositeAuth', () => {
   describe('render', () => {
     it('should correctly render CompositeAuth component', () => {
       expect(wrapper.name()).toBe('CompositeAuth');
-      expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    it('should render opt form', () => {
-      wrapper.setData({
-        currentForm: 'OTP',
-      });
-
-      expect(wrapper.find('otp-form-stub').exists()).toBe(true);
-      expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    it('should render message form', () => {
-      wrapper.setData({
-        currentForm: 'MESSAGE',
-      });
-
-      expect(wrapper.find('message-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
 
@@ -97,42 +85,19 @@ describe('CompositeAuth', () => {
       ]);
     });
 
-    it('should show message after submit if not otp', async () => {
-      expect.assertions(5);
-
-      identityService.auth.mockResolvedValueOnce({
-        success: true,
-        challenge: { challengeType: 'other' },
-      });
-
-      expect(wrapper.find('message-form-stub').exists()).toBe(false);
-      expect(accountsStore.linkSent).toBe(false);
-
-      wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
-
-      await global.flushPromises();
-
-      expect(wrapper.find('message-form-stub').exists()).toBe(true);
-      expect(accountsStore.linkSent).toBe(true);
-      expect(wrapper.emitted().authorize[0]).toEqual([
-        { serverMode: authParams.serverMode },
-      ]);
-    });
-
     describe('otp behavior', () => {
       it('should show otp block after submit', async () => {
         expect.assertions(2);
 
-        identityService.auth.mockResolvedValueOnce({
+        identityService.getAuthChallenge.mockResolvedValueOnce({
           success: true,
           challenge: { challengeType: 'otp' },
         });
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
-
         await global.flushPromises();
 
-        expect(wrapper.find('otp-form-stub').exists()).toBe(true);
+        expect(wrapper.find('code-form-stub').exists()).toBe(true);
 
         expect(wrapper.emitted().authorize).toBeFalsy();
       });
@@ -140,38 +105,18 @@ describe('CompositeAuth', () => {
       it('should submit otp', async () => {
         expect.assertions(3);
 
-        identityService.auth.mockResolvedValueOnce({
+        identityService.getAuthChallenge.mockResolvedValueOnce({
           success: true,
           challenge: { challengeType: 'otp' },
         });
 
         wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
         await global.flushPromises();
-        wrapper.find('otp-form-stub').vm.$emit('submit');
+        wrapper.find('code-form-stub').vm.$emit('submit');
         await global.flushPromises();
 
-        expect(wrapper.find('otp-form-stub').exists()).toBe(true);
+        expect(wrapper.find('code-form-stub').exists()).toBe(true);
 
-        expect(identityService.waitLogin).toBeCalledTimes(1);
-        expect(wrapper.emitted().authorize[0]).toEqual([
-          { serverMode: authParams.serverMode },
-        ]);
-      });
-
-      it('should recover otp', async () => {
-        expect.assertions(3);
-
-        identityService.auth.mockResolvedValueOnce({
-          success: true,
-          challenge: { challengeType: 'otp' },
-        });
-
-        wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
-        await global.flushPromises();
-        wrapper.find('otp-form-stub').vm.$emit('recover');
-        await global.flushPromises();
-
-        expect(wrapper.find('message-form-stub').exists()).toBe(true);
         expect(identityService.waitLogin).toBeCalledTimes(1);
         expect(wrapper.emitted().authorize[0]).toEqual([
           { serverMode: authParams.serverMode },
@@ -182,13 +127,13 @@ describe('CompositeAuth', () => {
     it('should cancel auth', async () => {
       expect.assertions(2);
 
-      identityService.auth.mockResolvedValueOnce({
+      identityService.getAuthChallenge.mockResolvedValueOnce({
         success: true,
       });
       const dataPromise = authChannel.take();
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
       await global.flushPromises();
-      wrapper.find('message-form-stub').vm.$emit('cancel');
+      wrapper.find('code-form-stub').vm.$emit('cancel');
       const res = await dataPromise;
 
       expect(res).toEqual(

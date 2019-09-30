@@ -1,5 +1,4 @@
 import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
-import mapToQueryString from '@endpass/utils/mapToQueryString';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
@@ -10,7 +9,6 @@ import identityService from '@/service/identity';
 import signer from '@/class/singleton/signer';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
-import modeService from '@/service/mode';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
@@ -23,7 +21,6 @@ import {
 import Answer from '@/class/Answer';
 import {
   ENCRYPT_OPTIONS,
-  IDENTITY_MODE,
   METHODS,
   ORIGIN_HOST,
   WALLET_TYPES,
@@ -33,25 +30,13 @@ const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
 class AccountsModule extends VuexModule {
-  linkSent = false;
-
-  authParams = null;
-
-  otpEmail = null;
-
   accounts = [];
 
   settings = {};
 
   balance = null;
 
-  recoveryIdentifier = null;
-
   isAccountCreated = false;
-
-  isPermission = false;
-
-  isLogin = false;
 
   constructor(props, { sharedStore }) {
     super(props);
@@ -62,71 +47,16 @@ class AccountsModule extends VuexModule {
     return this.accounts.map(({ address }) => address);
   }
 
-  get isAuthorized() {
-    return this.isLogin && this.isPermission;
-  }
-
   @Action
-  async auth({ email, serverMode }) {
-    const { type, serverUrl } = serverMode;
-    const redirectUrl = get(this, 'authParams.redirectUrl', '');
-
-    const queryParamsToAppend = {};
-
-    if (type !== IDENTITY_MODE.DEFAULT) {
-      Object.assign(queryParamsToAppend, {
-        mode: type,
-      });
-    }
-
-    if (serverUrl) {
-      Object.assign(queryParamsToAppend, {
-        serverUrl,
-      });
-    }
-
-    const request = identityService.auth(
-      email,
-      mapToQueryString(redirectUrl, queryParamsToAppend),
-    );
-
-    await this.handleAuthRequest({
-      request,
-      email,
-      link: true,
-    });
-  }
-
-  @Action
-  async authWithGoogle({ email, idToken }) {
-    const request = identityService.authWithGoogle(idToken);
-
-    await this.handleAuthRequest({
-      request,
-      email,
-    });
-  }
-
-  @Action
-  async authWithGitHub(code) {
+  async checkOauthLoginRequirements(challengeId) {
     this.sharedStore.changeLoadingStatus(true);
 
     try {
-      const res = await identityService.authWithGitHub(code);
+      const res = await permissionsService.getLoginDetails(challengeId);
 
-      if (!res.success) {
-        throw new Error(res.message || i18n.t('store.auth.authFailed'));
-      }
-
-      settingsService.clearLocalSettings();
-
-      const type = get(res, 'challenge.challengeType');
-      if (type === 'otp') {
-        this.otpEmail = res.email;
-      }
+      return res;
     } catch (err) {
-      console.error(err);
-      throw new Error(err.message);
+      throw new Error(i18n.t('store.auth.failedToCheckStatus'));
     } finally {
       this.sharedStore.changeLoadingStatus(false);
     }
@@ -155,21 +85,6 @@ class AccountsModule extends VuexModule {
       throw new Error(i18n.t('store.auth.passwordIncorrect'));
     }
     return res;
-  }
-
-  @Action
-  async checkOauthLoginRequirements(challengeId) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      const res = await permissionsService.getLoginDetails(challengeId);
-
-      return res;
-    } catch (err) {
-      throw new Error(i18n.t('store.auth.failedToCheckStatus'));
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
   }
 
   @Action
@@ -254,51 +169,6 @@ class AccountsModule extends VuexModule {
       consentChallenge,
       scopesList,
     });
-  }
-
-  @Action
-  async handleAuthRequest({ email, request, link }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      const res = await request;
-
-      if (!res.success) throw new Error(i18n.t('store.auth.authFailed'));
-
-      settingsService.clearLocalSettings();
-
-      const type = get(res, 'challenge.challengeType');
-      this.otpEmail = type === 'otp' ? email : null;
-      this.linkSent = !!link;
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
-  }
-
-  @Action
-  async confirmAuthViaOtp({ email, code }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      await identityService.otpAuth(email, code);
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
-  }
-
-  @Action
-  confirmAuth(serverMode) {
-    authChannel.put(Answer.createOk(serverMode));
-  }
-
-  @Action
-  cancelAuth() {
-    authChannel.put(
-      Answer.createFail(
-        ERRORS.AUTH_CANCELED_BY_USER,
-        i18n.t('store.auth.authCanceled'),
-      ),
-    );
   }
 
   @Action
@@ -406,11 +276,8 @@ class AccountsModule extends VuexModule {
       this.accounts = accounts
         .filter(account => isV3(account) && account.info)
         .map(({ info }) => info);
-      await this.changeAuthStatusByCode(200);
     } catch (err) {
       this.accounts = [];
-
-      await this.changeAuthStatusByCode(401);
     }
   }
 
@@ -445,50 +312,6 @@ class AccountsModule extends VuexModule {
   }
 
   @Action
-  async getRecoveryIdentifier() {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      this.recoveryIdentifier = await identityService.getRecoveryIdentifier(
-        this.otpEmail,
-      );
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
-  }
-
-  @Action
-  async recover({ seedPhrase }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      const signature = await signer.recover({
-        seedPhrase,
-        recoveryIdentifier: this.recoveryIdentifier,
-      });
-
-      const redirectUrl = get(this, 'authParams.redirectUrl', '');
-
-      const { success } = await identityService.recover(
-        this.otpEmail,
-        signature,
-        redirectUrl,
-      );
-
-      this.linkSent = true;
-
-      return success;
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
-  }
-
-  @Action
-  async validateCustomServer(serverUrl) {
-    return modeService.validateIdentityServer(serverUrl);
-  }
-
-  @Action
   async signPermission({ password }) {
     const res = await identityService.getAuthPermission();
 
@@ -516,26 +339,6 @@ class AccountsModule extends VuexModule {
     permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
     authChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
     accountChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
-  }
-
-  @Action
-  async waitLogin() {
-    await identityService.waitLogin();
-    await this.defineAuthStatus();
-    // authChannel.put(Answer.createOk());
-  }
-
-  @Action
-  async defineAuthStatus() {
-    const status = await identityService.getAuthStatus();
-    const settings = settingsService.getLocalSettings();
-
-    if (status !== 200 && !isEmpty(settings)) {
-      settingsService.clearLocalSettings();
-    }
-
-    await this.changeAuthStatusByCode(status);
-    return status;
   }
 
   @Action
@@ -595,35 +398,9 @@ class AccountsModule extends VuexModule {
   }
 
   @Mutation
-  setAuthByCode(code) {
-    this.isLogin = code === 403 || code === 200;
-    this.isPermission = code === 200;
-  }
-
-  @Action
-  changeAuthStatusByCode(code) {
-    const { isAuthorized } = this;
-    this.setAuthByCode(code);
-    const isAuthorizedNew = this.isAuthorized;
-    if (isAuthorizedNew !== isAuthorized) {
-      bridgeMessenger.send(METHODS.AUTH_STATUS, isAuthorizedNew);
-    }
-  }
-
-  @Mutation
-  setAuthParams(params) {
-    this.authParams = params;
-  }
-
-  @Mutation
   logout() {
-    this.otpEmail = null;
-    this.authParams = null;
-    this.isPermission = false;
-    this.isLogin = false;
     this.accounts = [];
     this.settings = {};
-    this.recoveryIdentifier = null;
     this.isAccountCreated = false;
   }
 }

@@ -25,12 +25,13 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import LoginProviderPassword from './LoginProviderPassword';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import { accountsStore } from '@/store';
+import { authStore, accountsStore } from '@/store';
 
 export default {
   name: 'LoginProvider',
 
   accountsStore,
+  authStore,
 
   data: () => ({
     loginChallenge: null,
@@ -40,7 +41,7 @@ export default {
 
   computed: {
     isLogin() {
-      return this.$options.accountsStore.isLogin;
+      return this.$options.authStore.isLogin;
     },
     settings() {
       return this.$options.accountsStore.settings;

@@ -16,17 +16,22 @@ describe('PublicAuth', () => {
   let $router;
   let $route;
   let accountsStore;
+  let authStore;
 
   const createWrapper = options => {
     const store = createStore();
     const {
       accountsStore: accountsStoreModule,
+      authStore: authStoreModule,
       coreStore,
     } = createStoreModules(store);
+
     accountsStore = accountsStoreModule;
+    authStore = authStoreModule;
 
     return shallowMount(Auth, {
       accountsStore,
+      authStore,
       coreStore,
       localVue,
       mocks: {
@@ -90,7 +95,7 @@ describe('PublicAuth', () => {
         },
       });
 
-      expect(accountsStore.authParams).toEqual({
+      expect(authStore.authParams).toEqual({
         redirectUrl,
       });
     });
@@ -105,7 +110,7 @@ describe('PublicAuth', () => {
         },
       });
 
-      expect(accountsStore.authParams).toBe(null);
+      expect(authStore.authParams).toBe(null);
     });
   });
 });

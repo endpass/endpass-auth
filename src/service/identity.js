@@ -20,13 +20,9 @@ const checkAccountExist = async () => {
   return res;
 };
 
-const auth = (email, redirectUrl) => {
-  const requestUrl = redirectUrl
-    ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
-    : `${identityBaseUrl}/auth`;
-
+const getAuthChallenge = email => {
   return request
-    .post(requestUrl, {
+    .post(`${identityBaseUrl}/auth`, {
       email,
     })
     .then(res => {
@@ -44,12 +40,13 @@ const setAuthPermission = signature =>
     signature,
   });
 
-const otpAuth = (email, code) =>
+const auth = ({ email, code, password }) =>
   request
     .post(`${identityBaseUrl}/auth/token`, {
       challengeType: 'otp',
       email,
       code,
+      password,
     })
     .then(res => {
       if (!res.success) throw new Error(res.message);
@@ -146,7 +143,15 @@ const getRecoveryIdentifier = email =>
       return res.message;
     });
 
-const recover = (email, signature, redirectUrl) =>
+const sendEmailCode = async email => {
+  const { timeout } = await request.post(`${identityBaseUrl}/code-url`, {
+    email,
+  });
+
+  return timeout;
+};
+
+const disableOtp = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
       email,
@@ -170,14 +175,15 @@ export default {
   updateAccountSettings,
   getAuthPermission,
   setAuthPermission,
+  getAuthChallenge,
   auth,
   authWithGoogle,
   authWithGitHub,
-  otpAuth,
+  sendEmailCode,
   logout,
   waitLogin,
   getOtpSettings,
   getRecoveryIdentifier,
-  recover,
+  disableOtp,
   getSeedTemplateUrl,
 };

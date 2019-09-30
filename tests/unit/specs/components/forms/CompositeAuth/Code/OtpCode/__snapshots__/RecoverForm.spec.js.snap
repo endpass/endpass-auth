@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Recover render should correctly render component 1`] = `
-<form>
+<form data-test="recover-form">
   <message-stub data-test="form-message" class="v-modal-card-title">Enter recovery seed phrase of&nbsp;your wallet</message-stub>
   <form-item-stub>
     <v-input-stub label="Seed phrase" value="" name="seedPhrase" placeholder="Seed phrase" required="" data-test="seed-phrase"></v-input-stub>

@@ -16,16 +16,20 @@ const i18n = setupI18n(localVue);
 describe('User', () => {
   let wrapper;
   let accountsStore;
+  let authStore;
 
   beforeEach(async () => {
     bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
     const store = createStore();
     const {
+      authStore: authStoreModule,
       accountsStore: accountStoreModule,
       coreStore,
       sharedStore,
     } = createStoreModules(store);
+
+    authStore = authStoreModule;
     accountsStore = accountStoreModule;
 
     await accountsStore.defineSettings();
@@ -80,13 +84,15 @@ describe('User', () => {
     it('should logout if logout button was pressed in form', async () => {
       expect.assertions(2);
 
-      expect(accountsStore.isLogin).toBe(true);
+      authStore.setAuthByCode(200);
+
+      expect(authStore.isLogin).toBe(true);
 
       wrapper.find('account-form-stub').vm.$emit('logout');
 
       await global.flushPromises();
 
-      expect(accountsStore.isLogin).toBe(false);
+      expect(authStore.isLogin).toBe(false);
     });
 
     it('should close account if cancel button was pressed in form', async () => {

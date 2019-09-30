@@ -5,7 +5,10 @@
       :is-closable="isClosable"
       @close="emitClose"
     >
-      <template slot="title">
+      <template
+        slot="title"
+        name="title"
+      >
         {{ title }}
       </template>
       <spinner

@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="emitSubmit">
+  <form
+    data-test="recover-form"
+    @submit.prevent="onSubmit"
+  >
     <message
       class="v-modal-card-title"
       data-test="form-message"
@@ -19,7 +22,7 @@
     <form-row>
       <v-button
         type="submit"
-        :disabled="!isSeedPhraseValid || loading"
+        :disabled="!isSeedPhraseValid || isLoading"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
@@ -34,29 +37,26 @@ import VInput from '@endpass/ui/kit/VInput';
 import Message from '@/components/common/Message.vue';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
+import { authStore, coreStore } from '@/store';
 
 export default {
   name: 'RecoverForm',
 
-  props: {
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-
-    error: {
-      type: String,
-      default: null,
-    },
-  },
+  authStore,
+  coreStore,
 
   data: () => ({
+    error: null,
     seedPhrase: '',
   }),
 
   computed: {
+    isLoading() {
+      return this.$options.coreStore.loading;
+    },
+
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('global.confirm')
         : this.$i18n.t('global.loading');
     },
@@ -67,9 +67,17 @@ export default {
   },
 
   methods: {
-    emitSubmit() {
-      if (this.isSeedPhraseValid) {
-        this.$emit('submit', this.seedPhrase);
+    async onSubmit(seedPhrase) {
+      try {
+        await this.$options.authStore.disableOtp({ seedPhrase });
+        this.$emit('recover');
+      } catch (err) {
+        console.error(err);
+
+        const msg =
+          (err && err.message) ||
+          this.$i18n.t('components.otpBlock.recoverFailed');
+        this.error = msg;
       }
     },
   },

@@ -17,13 +17,19 @@ jest.useFakeTimers();
 describe('SignPasswordForm', () => {
   let wrapper;
   let accountsStore;
+  let authStore;
 
   const createWrapper = () => {
     const store = createStore();
-    const { accountsStore: accountStoreModule, coreStore } = createStoreModules(
-      store,
-    );
+    const {
+      authStore: authStoreModule,
+      accountsStore: accountStoreModule,
+      coreStore,
+    } = createStoreModules(store);
+
+    authStore = authStoreModule;
     accountsStore = accountStoreModule;
+
     return shallowMount(SignPasswordForm, {
       accountsStore,
       coreStore,
@@ -70,17 +76,18 @@ describe('SignPasswordForm', () => {
       expect.assertions(3);
 
       bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
-      accountsStore.setAuthByCode(200);
-
-      expect(accountsStore.isLogin).toBe(true);
 
       wrapper = createWrapper();
+
+      authStore.setAuthByCode(200);
+
+      expect(authStore.isLogin).toBe(true);
 
       wrapper.find('password-form-stub').vm.$emit('logout');
 
       await global.flushPromises();
 
-      expect(accountsStore.isLogin).toBe(false);
+      expect(authStore.isLogin).toBe(false);
       expect(wrapper.emitted().cancel).toBeTruthy();
     });
   });

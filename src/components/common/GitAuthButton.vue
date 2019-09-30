@@ -19,10 +19,13 @@
 import { loginWithGithub } from 'github-oauth-popup';
 import VButton from '@endpass/ui/kit/VButton';
 import VSvgIcon from '@/components/common/VSvgIcon.vue';
-import { accountsStore } from '@/store';
+import { authStore } from '@/store';
 
 export default {
-  accountsStore,
+  name: 'GitAuthButton',
+
+  authStore,
+
   methods: {
     async loginWithGithub() {
       try {
@@ -30,7 +33,7 @@ export default {
           client_id: ENV.VUE_APP_GIT_CLIENT_ID,
           scope: 'user:email',
         });
-        await this.$options.accountsStore.authWithGitHub(response.code);
+        await this.$options.authStore.authWithGitHub(response.code);
         this.$emit('submit');
       } catch (e) {
         this.handleAuthError(e);

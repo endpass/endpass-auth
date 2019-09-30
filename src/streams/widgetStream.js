@@ -1,4 +1,4 @@
-import store, { accountsStore } from '@/store';
+import store, { authStore, accountsStore } from '@/store';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
 import withPayloadHandler from './middleware/withPayloadHandler';
@@ -25,7 +25,7 @@ function initWidgetStream() {
     },
     [METHODS.LOGOUT_RESPONSE]: {
       payloadHandler() {
-        accountsStore.logout();
+        authStore.logout();
         store.dispatch('unmountWidget');
       },
     },
