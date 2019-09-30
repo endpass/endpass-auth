@@ -5,8 +5,9 @@
   >
     <v-title
       data-test="form-title"
-      :html="$t('components.otp.enterCode')"
+      :html="$t('components.otp.title')"
     />
+    <v-description :html="$t('components.otp.description')" />
 
     <form-item>
       <v-input
@@ -20,7 +21,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-item>
+    <form-item is-last>
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -55,6 +56,7 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'OtpForm',
@@ -100,6 +102,7 @@ export default {
 
   components: {
     VTitle,
+    VDescription,
     VLink,
     VButton,
     VInput,

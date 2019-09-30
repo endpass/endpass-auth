@@ -46,33 +46,40 @@
         data-test="password-input"
       />
     </form-item>
-    <form-row>
-      <v-button
-        :disabled="isLoading"
-        skin="ghost"
-        data-test="submit-button"
-        @click="closeForm"
-      >
-        {{ $t('global.cancel') }}
-      </v-button>
-      <v-button
-        :disabled="!isSubmitEnable || isLoading"
-        type="submit"
-        data-test="submit-button"
-      >
-        {{ primaryButtonLabel }}
-      </v-button>
-    </form-row>
-    <form-item>
+    <form-item is-last>
+      <form-controls>
+        <v-button
+          :disabled="isLoading"
+          skin="quaternary"
+          data-test="submit-button"
+          @click="closeForm"
+        >
+          {{ $t('global.cancel') }}
+        </v-button>
+        <v-button
+          :disabled="!isSubmitEnable || isLoading"
+          type="submit"
+          data-test="submit-button"
+        >
+          {{ primaryButtonLabel }}
+        </v-button>
+      </form-controls>
+    </form-item>
+    <form-row
+      class="v-text-size-14"
+      centered
+    >
+      {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
       <v-link
         :disabled="isLoading"
         href="#"
         data-test="send-code"
+        :underline="false"
         @click.prevent="sendCode"
       >
         {{ $t('components.emailCode.sendTitle') }}
       </v-link>
-    </form-item>
+    </form-row>
   </form>
 </template>
 
@@ -85,6 +92,7 @@ import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import VLink from '@/components/common/VLink';
+import FormControls from '@/components/common/FormControls';
 
 export default {
   name: 'PasswordForm',
@@ -173,6 +181,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    FormControls,
     VLink,
     VTitle,
     VButton,

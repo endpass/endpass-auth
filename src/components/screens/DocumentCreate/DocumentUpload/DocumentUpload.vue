@@ -22,7 +22,7 @@
     />
     <form-controls>
       <v-button
-        skin="ghost"
+        skin="quaternary"
         :disabled="isLoading"
         data-test="cancel-button"
         @click="onClose"

@@ -7,7 +7,7 @@
       data-test="form-title"
       :html="$t('components.recover.enterSeed')"
     />
-    <form-item>
+    <form-item is-last>
       <v-input
         v-model="seedPhrase"
         :error="error"

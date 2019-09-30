@@ -20,7 +20,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-item>
+    <form-item is-last>
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"

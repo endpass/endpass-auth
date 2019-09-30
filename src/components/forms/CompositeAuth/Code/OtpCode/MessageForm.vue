@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form-item>
+    <form-item is-last>
       <message data-test="form-message">
         {{ message }}
       </message>

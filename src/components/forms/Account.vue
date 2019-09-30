@@ -80,7 +80,7 @@
         :disabled="!closable || loading"
         type="button"
         data-test="cancel-button"
-        skin="ghost"
+        skin="quaternary"
         @click="emitCancel"
       >
         {{ $t('global.close') }}
