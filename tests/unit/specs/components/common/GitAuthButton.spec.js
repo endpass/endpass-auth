@@ -52,7 +52,7 @@ describe('GitAuthButton', () => {
     });
 
     it('should correctly submit', async () => {
-      expect.assertions(2);
+      expect.assertions(3);
 
       const code = 'kek';
       identityService.authWithGitHub.mockResolvedValueOnce({
@@ -64,6 +64,7 @@ describe('GitAuthButton', () => {
       wrapper.find('[data-test=submit-button-github]').trigger('click');
       await global.flushPromises();
 
+      expect(identityService.authWithGitHub).toHaveBeenCalledWith(code);
       expect(loginWithGithub).toHaveBeenCalledWith({
         client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',

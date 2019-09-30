@@ -17,6 +17,7 @@
       :loading="loading"
       :error="error"
       :is-server-mode="isIdentityMode"
+      :is-regular-password-mode="isRegularPasswordMode"
       :is-public="isPublic"
       @socialSubmit="handleSocialSubmit"
       @submit="handleAuthSubmit"
@@ -76,6 +77,9 @@ export default {
     },
     isIdentityMode() {
       return this.$options.coreStore.isIdentityMode;
+    },
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
     },
     isLogin() {
       return this.$options.accountsStore.isLogin;

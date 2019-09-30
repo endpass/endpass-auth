@@ -146,14 +146,23 @@ describe('ServerModeSelect', () => {
 
           it('should emit input with correct params', () => {
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
+
+            expect(modeService.validateIdentityServer).toBeCalledWith(
+              serverUrl,
+            );
             expect([...wrapper.emitted().input].pop()).toEqual([params]);
           });
 
           it('should emit confirm', async () => {
+            expect.assertions(2);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();
 
+            expect(modeService.validateIdentityServer).toBeCalledWith(
+              serverUrl,
+            );
             expect(wrapper.emitted().confirm).toHaveLength(1);
           });
         });
@@ -170,6 +179,8 @@ describe('ServerModeSelect', () => {
           });
 
           it('should not emit confirm', async () => {
+            expect.assertions(1);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();
@@ -178,6 +189,8 @@ describe('ServerModeSelect', () => {
           });
 
           it('should show error', async () => {
+            expect.assertions(2);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();
