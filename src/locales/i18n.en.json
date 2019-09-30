@@ -58,7 +58,9 @@
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "placeholderCode": "Enter received code...",
-      "recover": "Forgot your password?"
+      "labelCode": "Code from email",
+      "recover": "Forgot your password?",
+      "recoveryError": "Something went wrong with password recovery. Please, try again"
     },
     "emailCode": {
       "title": "Verify email",

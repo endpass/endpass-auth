@@ -151,6 +151,23 @@ const sendEmailCode = async email => {
   return timeout;
 };
 
+const resetRegularPassword = async ({
+  password: newPassword,
+  code: passwordResetToken,
+}) => {
+  const { success } = await request.post(
+    `${identityBaseUrl}/regular-password/reset/confirm`,
+    {
+      passwordResetToken,
+      newPassword,
+    },
+  );
+
+  if (!success) throw new Error('Success false');
+
+  return success;
+};
+
 const checkRegularPassword = async email => {
   try {
     await request.post(`${identityBaseUrl}/regular-password/check`, { email });
@@ -193,6 +210,7 @@ export default {
   authWithGoogle,
   authWithGitHub,
   sendEmailCode,
+  resetRegularPassword,
   checkRegularPassword,
   logout,
   waitLogin,

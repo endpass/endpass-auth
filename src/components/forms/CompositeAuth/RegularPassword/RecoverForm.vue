@@ -21,22 +21,59 @@
         data-test="password-input"
       />
     </form-item>
+    <form-item>
+      <v-input
+        v-model="repeatPassword"
+        v-validate="'required|min:8'"
+        data-vv-as="password"
+        data-vv-name="repeatPassword"
+        :error="errors.first('repeatPassword') || error"
+        name="repeatPassword"
+        type="password"
+        :placeholder="$t('components.regularPasswordRecover.repeatPassword')"
+        data-test="repeat-password-input"
+      />
+    </form-item>
+    <form-item>
+      <v-input
+        v-model="code"
+        v-validate="'required|digits:6'"
+        data-vv-as="code"
+        data-vv-name="code"
+        :error="errors.first('code') || error"
+        name="code"
+        :label="$t('components.regularPasswordRecover.labelCode')"
+        :placeholder="$t('components.regularPasswordRecover.placeholderCode')"
+        data-test="password-input"
+      />
+    </form-item>
     <form-row>
       <v-button
         :disabled="isLoading"
+        skin="ghost"
         data-test="submit-button"
         @click="closeForm"
       >
         {{ $t('global.cancel') }}
       </v-button>
       <v-button
-        :disabled="!isFormValid || isLoading"
+        :disabled="!isSubmitEnable || isLoading"
         type="submit"
         data-test="submit-button"
       >
         {{ primaryButtonLabel }}
       </v-button>
     </form-row>
+    <form-item>
+      <a
+        :disabled="isLoading"
+        href="#"
+        data-test="send-code"
+        @click.prevent="sendCode"
+      >
+        {{ $t('components.emailCode.sendTitle') }}
+      </a>
+    </form-item>
   </form>
 </template>
 
@@ -69,9 +106,19 @@ export default {
 
   data: () => ({
     password: '',
+    repeatPassword: '',
+    code: '',
   }),
 
   computed: {
+    isSubmitEnable() {
+      return this.isFormValid && this.isPasswordEqual;
+    },
+
+    isPasswordEqual() {
+      return this.password && this.password === this.repeatPassword;
+    },
+
     isLoading() {
       return this.$options.coreStore.loading;
     },
@@ -84,8 +131,21 @@ export default {
   },
 
   methods: {
-    onSubmit() {
-      this.$emit('submit', this.password);
+    async onSubmit() {
+      try {
+        this.$validator.errors.removeById('sendCodeId');
+        await this.$options.authStore.resetRegularPassword({
+          password: this.password,
+          code: this.code,
+        });
+        this.$emit('submit', this.password);
+      } catch (error) {
+        this.$validator.errors.add({
+          field: 'code',
+          msg: this.$i18n.t('components.regularPasswordRecover.recoveryError'),
+          id: 'sendCodeId',
+        });
+      }
     },
 
     closeForm() {
@@ -106,9 +166,9 @@ export default {
     },
   },
 
-  // mounted() {
-  //   this.sendCode();
-  // },
+  mounted() {
+    this.sendCode();
+  },
 
   mixins: [formMixin],
 
