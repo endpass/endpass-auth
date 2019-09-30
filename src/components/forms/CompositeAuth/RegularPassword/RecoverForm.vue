@@ -64,14 +64,14 @@
       </v-button>
     </form-row>
     <form-item>
-      <a
+      <v-link
         :disabled="isLoading"
         href="#"
         data-test="send-code"
         @click.prevent="sendCode"
       >
         {{ $t('components.emailCode.sendTitle') }}
-      </a>
+      </v-link>
     </form-item>
   </form>
 </template>
@@ -84,6 +84,7 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'PasswordForm',
@@ -172,6 +173,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VLink,
     VTitle,
     VButton,
     VInput,

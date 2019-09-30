@@ -20,7 +20,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-row>
+    <form-item>
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -28,13 +28,16 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-row>
-    <form-row>
+    </form-item>
+    <form-row
+      class="v-text-size-14"
+      centered
+    >
       <v-link
-        skin="small-gray"
         :disabled="isLoading"
         href="#"
         data-test="password-recover"
+        :underline="false"
         @click.prevent="onRecover"
       >
         {{ $i18n.t('components.regularPasswordForm.recover') }}
@@ -77,7 +80,7 @@ export default {
 
     primaryButtonLabel() {
       return !this.isLoading
-        ? this.$i18n.t('global.confirm')
+        ? this.$i18n.t('global.login')
         : this.$i18n.t('global.loading');
     },
   },

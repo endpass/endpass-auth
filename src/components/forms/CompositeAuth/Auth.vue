@@ -64,20 +64,20 @@
       <form-row centered>
         <v-checkbox v-model="isTermsAccepted">
           {{ $t('components.auth.iAccept') }}
-          <a
+          <v-link
             href="https://endpass.com/terms/"
             target="_blank"
           >
             {{ $t('components.auth.termsOfService') }}
-          </a>
+          </v-link>
 
           {{ $t('components.auth.and') }}
-          <a
+          <v-link
             href="https://endpass.com/privacy/"
             target="_blank"
           >
             {{ $t('components.auth.privacyPolicy') }}
-          </a>
+          </v-link>
         </v-checkbox>
       </form-row>
     </template>
@@ -99,6 +99,7 @@ import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
+import VLink from '@/components/common/VLink';
 
 export default {
   name: 'AuthForm',
@@ -195,6 +196,7 @@ export default {
   },
   mixins: [formMixin],
   components: {
+    VLink,
     VTitle,
     VCheckbox,
     VButton,
