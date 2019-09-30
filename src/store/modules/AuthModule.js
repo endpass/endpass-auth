@@ -119,6 +119,17 @@ class AuthModule extends VuexModule {
   }
 
   @Action
+  async resetRegularPassword({ code, password }) {
+    this.sharedStore.changeLoadingStatus(true);
+
+    try {
+      await identityService.resetRegularPassword({ code, password });
+    } finally {
+      this.sharedStore.changeLoadingStatus(false);
+    }
+  }
+
+  @Action
   confirmAuth(serverMode) {
     authChannel.put(Answer.createOk(serverMode));
   }

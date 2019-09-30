@@ -90,10 +90,6 @@ export default {
     isLogin() {
       return this.$options.authStore.isLogin;
     },
-
-    isRegularPasswordMode() {
-      return this.$options.coreStore.isRegularPasswordMode;
-    },
   },
 
   methods: {
@@ -143,6 +139,7 @@ export default {
         const isPasswordExist = await this.$options.authStore.checkRegularPassword(
           email,
         );
+
         this.currentForm = isPasswordExist ? FORMS.PASSWORD : FORMS.CODE;
       } catch (error) {
         this.handleAuthError();
