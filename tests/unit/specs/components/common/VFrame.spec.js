@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import VFrame from '@/components/common/VFrame.vue';
+import VFrame from '@/components/common/VFrame';
 
 describe('VFrame', () => {
   describe('render', () => {

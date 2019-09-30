@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import Spinner from '@/components/common/Spinner.vue';
+import Spinner from '@/components/common/Spinner';
 
 describe('Spinner', () => {
   describe('render', () => {

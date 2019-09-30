@@ -4,14 +4,16 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 import RateLimitScreen from '@/components/screens/RateLimit';
+import { coreStore } from '@/store';
 
 export default {
   name: 'LayoutScreen',
-
+  coreStore,
   computed: {
-    ...mapGetters(['isRateLimit']),
+    isRateLimit() {
+      return this.$options.coreStore.isRateLimit;
+    },
   },
 
   components: {

@@ -1,12 +1,7 @@
 import MockAdapter from 'axios-mock-adapter';
 import http from '@/class/singleton/request/http';
-import store from '@/store';
+import { coreStore } from '@/store';
 import router from '@/router';
-
-jest.mock('@/store', () => ({
-  dispatch: jest.fn(),
-  commit: jest.fn(),
-}));
 
 jest.useFakeTimers();
 
@@ -79,7 +74,7 @@ describe('http', () => {
 
       await http.get(url);
 
-      expect(store.dispatch).not.toBeCalled();
+      expect(coreStore.rateLimitTimeout).toBe(0);
     });
 
     it('should start rate limit', async () => {
@@ -95,7 +90,7 @@ describe('http', () => {
         await http.get(url);
       } catch (e) {}
 
-      expect(store.commit).toBeCalledWith('setRateLimitTimeout', 59);
+      expect(coreStore.rateLimitTimeout).toBe(59);
     });
   });
 });

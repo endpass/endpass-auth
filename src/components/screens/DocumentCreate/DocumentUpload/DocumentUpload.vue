@@ -56,11 +56,11 @@ export default {
     error: null,
     documentType: DOC_TYPES.PASSPORT,
     selectedFile: null,
-    isUploaded: false,
+    documentId: null,
     currentSide: DOCUMENT_SIDES.FRONT,
   }),
 
-  uploadController: createUploadController(),
+  uploadController: null,
 
   computed: {
     isFrontSide() {
@@ -107,7 +107,7 @@ export default {
     },
 
     onClose() {
-      this.$emit('close', this.isUploaded);
+      this.$emit('close', this.documentId);
     },
 
     nextSide() {
@@ -121,13 +121,13 @@ export default {
 
     async uploadFile() {
       try {
-        await this.$options.uploadController.uploadDocument({
+        const docId = await this.$options.uploadController.uploadDocument({
           file: this.selectedFile,
           type: this.documentType,
           docSide: this.currentSide,
         });
 
-        this.isUploaded = true;
+        this.documentId = docId;
         this.selectedFile = null;
 
         this.nextSide();
@@ -135,6 +135,10 @@ export default {
         this.error = e.message;
       }
     },
+  },
+
+  beforeCreate() {
+    this.$options.uploadController = createUploadController();
   },
 
   components: {

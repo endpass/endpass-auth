@@ -17,6 +17,7 @@
       :loading="loading"
       :error="error"
       :is-server-mode="isIdentityMode"
+      :is-regular-password-mode="isRegularPasswordMode"
       :is-public="isPublic"
       @socialSubmit="handleSocialSubmit"
       @submit="handleAuthSubmit"
@@ -26,11 +27,11 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
-import AuthForm from '@/components/forms/CompositeAuth/Auth';
-import OtpBlockForm from '@/components/forms/CompositeAuth/OtpBlock';
-import MessageForm from '@/components/forms/CompositeAuth/Message';
+import AuthForm from '@/components/forms/Auth';
+import OtpBlockForm from '@/components/formsComposite/CompositeAuth/OtpBlock';
+import MessageForm from '@/components/forms/Message';
 import { IDENTITY_MODE } from '@/constants';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -53,6 +54,9 @@ export default {
     },
   },
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     error: null,
     serverMode: null,
@@ -62,26 +66,29 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      otpEmail: state => state.accounts.otpEmail,
-      isIdentityMode: state => state.core.isIdentityMode,
-      isLogin: state => state.accounts.isLogin,
-    }),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
+    loading() {
+      return this.$options.coreStore.loading;
+    },
+    otpEmail() {
+      return this.$options.accountsStore.otpEmail;
+    },
+    isIdentityMode() {
+      return this.$options.coreStore.isIdentityMode;
+    },
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
+    },
+    isLogin() {
+      return this.$options.accountsStore.isLogin;
+    },
   },
 
   methods: {
-    ...mapActions([
-      'auth',
-      'cancelAuth',
-      'waitLogin',
-      'dialogClose',
-      'defineAuthStatus',
-    ]),
-
     async handleOtpSubmit() {
-      await this.waitLogin();
+      await this.$options.accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -91,7 +98,7 @@ export default {
     },
 
     async handleSocialSubmit() {
-      await this.waitLogin();
+      await this.$options.accountsStore.waitLogin();
 
       this.handleSubmit();
     },
@@ -105,7 +112,7 @@ export default {
           return;
         }
 
-        await this.auth({ email, serverMode });
+        await this.$options.accountsStore.auth({ email, serverMode });
 
         if (this.otpEmail) {
           this.currentForm = FORMS.OTP;
@@ -119,7 +126,7 @@ export default {
     },
 
     async handleLinkSent() {
-      await this.defineAuthStatus();
+      await this.$options.accountsStore.defineAuthStatus();
       if (this.isLogin) {
         this.message = this.$i18n.t(
           'components.compositeAuth.successAuthMessage',
@@ -127,15 +134,15 @@ export default {
       } else {
         this.message = this.$i18n.t('components.compositeAuth.linkSentMessage');
         this.currentForm = FORMS.MESSAGE;
-        await this.waitLogin();
+        await this.$options.accountsStore.waitLogin();
       }
 
       this.handleSubmit();
     },
 
     handleAuthCancel() {
-      this.cancelAuth();
-      this.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
 
     handleAuthError() {

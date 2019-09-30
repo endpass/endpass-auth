@@ -6,8 +6,10 @@ import {
   requestWithCuttedTransaction,
 } from '@unitFixtures/requests';
 import validation from '@/validation';
-import TransactionForm from '@/components/forms/Sign/TransactionForm.vue';
+import TransactionForm from '@/components/forms/Sign/TransactionForm';
 import setupI18n from '@/locales/i18nSetup';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -17,41 +19,25 @@ localVue.use(VeeValidate);
 localVue.use(validation);
 
 describe('Sign > TransactionForm', () => {
-  let store;
-  let storeData;
-  let accountsModule;
   let wrapperFactory;
   let wrapper;
 
   beforeEach(() => {
-    accountsModule = {
-      state: {
-        balance: '100000000',
-        settings: {
-          fiatCurrency: 'USD',
-        },
-      },
-      actions: {
-        subscribeOnBalanceUpdates: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
-    wrapperFactory = (props = {}) =>
-      shallowMount(TransactionForm, {
+    wrapperFactory = (props = {}) => {
+      const store = createStore();
+      const { accountsStore, gasPriceStore } = createStoreModules(store);
+      return shallowMount(TransactionForm, {
+        accountsStore,
+        gasPriceStore,
         localVue,
         i18n,
-        store,
         sync: false,
         propsData: props,
         provide: {
           theme: 'default',
         },
       });
+    };
     wrapper = wrapperFactory({
       request: requestWithTransaction,
     });

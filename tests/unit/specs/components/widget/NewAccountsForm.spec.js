@@ -3,7 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { address } from '@unitFixtures/accounts';
 import VeeValidate from 'vee-validate';
 import validation from '@/validation';
-import NewAccountForm from '@/components/widget/NewAccountForm.vue';
+import NewAccountForm from '@/components/widget/NewAccountForm';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -89,8 +89,7 @@ describe('NewAccountForm', () => {
         .find('[data-test=new-account-password-input]')
         .vm.$emit('input', password);
 
-      await wrapper.vm.$nextTick();
-      await wrapper.vm.$nextTick();
+      await global.flushPromises();
 
       wrapper.find('form').trigger('submit');
 
@@ -120,8 +119,7 @@ describe('NewAccountForm', () => {
         .find('[data-test=new-account-password-input]')
         .vm.$emit('input', password);
 
-      await wrapper.vm.$nextTick();
-      await wrapper.vm.$nextTick();
+      await global.flushPromises();
 
       wrapper.find('form').trigger('submit');
 

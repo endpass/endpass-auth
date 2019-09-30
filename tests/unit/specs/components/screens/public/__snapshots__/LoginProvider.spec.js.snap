@@ -2,6 +2,6 @@
 
 exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `
 <loading-screen-stub isloading="true">
-  <login-provider-password-stub loginchallenge="foo"></login-provider-password-stub>
+  <login-provider-password-stub></login-provider-password-stub>
 </loading-screen-stub>
 `;

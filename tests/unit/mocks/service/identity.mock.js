@@ -17,8 +17,10 @@ jest.mock('@/service/identity', () => {
     auth: jest.fn(),
     authWithGoogle: jest.fn(),
     authWithGitHub: jest.fn(),
+    getSeedTemplateUrl: jest.fn(),
     otpAuth: jest.fn(),
     logout: jest.fn(),
+    checkAccountExist: jest.fn(),
     getRecoveryIdentifier: jest
       .fn()
       .mockResolvedValue(getRecoveryIdentifierResponse.message),

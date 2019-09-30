@@ -1,6 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import { address } from '@unitFixtures/accounts';
-import VAddress from '@/components/common/VAddress.vue';
+import VAddress from '@/components/common/VAddress';
 
 describe('VAddress', () => {
   describe('render', () => {

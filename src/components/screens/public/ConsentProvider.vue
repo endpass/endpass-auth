@@ -20,14 +20,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'ConsentProvider',
+
+  accountsStore,
+  coreStore,
 
   data: () => ({
     consentChallenge: null,
@@ -42,10 +45,12 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      isLogin: state => state.accounts.isLogin,
-    }),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
+    isLogin() {
+      return this.$options.accountsStore.isLogin;
+    },
     isLoadingScreen() {
       return (
         this.isSkipped || (this.scopesList.length === 0 && !this.error.show)
@@ -54,8 +59,6 @@ export default {
   },
 
   methods: {
-    ...mapActions(['grantPermissionsWithOauth', 'getConsentDetails']),
-
     setError(hint, description = '') {
       this.error = {
         show: true,
@@ -68,7 +71,9 @@ export default {
       this.isLoading = true;
 
       try {
-        const { redirect } = await this.grantPermissionsWithOauth({
+        const {
+          redirect,
+        } = await this.$options.accountsStore.grantPermissionsWithOauth({
           consentChallenge: this.consentChallenge,
           scopesList,
         });
@@ -88,13 +93,14 @@ export default {
 
     async loadScopes() {
       this.isLoading = true;
-
       try {
         const {
           requested_scope: requestedScope,
           skip,
           redirect_url: redirectUrl,
-        } = await this.getConsentDetails(this.consentChallenge);
+        } = await this.$options.accountsStore.getConsentDetails(
+          this.consentChallenge,
+        );
 
         if (skip) {
           this.isSkipped = true;

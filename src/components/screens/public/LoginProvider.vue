@@ -21,14 +21,16 @@
 
 <script>
 import get from 'lodash/get';
-import { mapActions, mapState } from 'vuex';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import LoginProviderPassword from './LoginProviderPassword';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
+import { accountsStore } from '@/store';
 
 export default {
   name: 'LoginProvider',
+
+  accountsStore,
 
   data: () => ({
     loginChallenge: null,
@@ -37,21 +39,16 @@ export default {
   }),
 
   computed: {
-    ...mapState({
-      isLogin: state => state.accounts.isLogin,
-      settings: state => state.accounts.settings,
-    }),
+    isLogin() {
+      return this.$options.accountsStore.isLogin;
+    },
+    settings() {
+      return this.$options.accountsStore.settings;
+    },
 
     currentUserEmail() {
       return get(this.settings, 'email');
     },
-  },
-
-  methods: {
-    ...mapActions([
-      'checkOauthLoginRequirements',
-      'defineSettingsWithoutPermission',
-    ]),
   },
 
   async mounted() {
@@ -62,7 +59,6 @@ export default {
     const { login_challenge: loginChallenge } = query;
 
     this.loginChallenge = loginChallenge;
-
     if (!loginChallenge) {
       this.isLoading = false;
       return;
@@ -80,14 +76,16 @@ export default {
     }
 
     try {
-      const res = await this.checkOauthLoginRequirements(loginChallenge);
+      const res = await this.$options.accountsStore.checkOauthLoginRequirements(
+        loginChallenge,
+      );
 
       if (res.skip) {
         window.location.replace(res.redirect);
         return;
       }
 
-      await this.defineSettingsWithoutPermission();
+      await this.$options.accountsStore.defineSettingsWithoutPermission();
     } catch (e) {
       this.error = this.$i18n.t('components.loginProvider.notWorkingError');
     }

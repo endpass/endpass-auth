@@ -66,6 +66,8 @@ import { gasPriceStore } from '@/store';
 export default {
   name: 'WidgetHeader',
 
+  gasPriceStore,
+
   props: {
     balance: {
       type: String,
@@ -88,8 +90,6 @@ export default {
     isSubscribedOnPrices: false,
     isBalanceInFiat: false,
   }),
-
-  gasPriceStore,
 
   computed: {
     statusLabel() {

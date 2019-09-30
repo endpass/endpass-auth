@@ -1,54 +1,39 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Auth from '@/components/screens/Auth.vue';
+import ConnectError from '@endpass/class/ConnectError';
+import Auth from '@/components/screens/Auth';
 import setupI18n from '@/locales/i18nSetup';
+import identityService from '@/service/identity';
+import { authChannel } from '@/class/singleton/channels';
+import Answer from '@/class/Answer';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
+
+const { ERRORS } = ConnectError;
 
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
 describe('Auth', () => {
-  let store;
-  let storeData;
   let wrapper;
-  let coreModule;
-  let accountsModule;
+  let accountsStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        showCreateAccount: true,
-      },
-      getters: {
-        isDialog: jest.fn(() => true),
-      },
-      actions: {
-        dialogClose: jest.fn(),
-        logout: jest.fn(),
-      },
-    };
-    accountsModule = {
-      actions: {
-        cancelAuth: jest.fn(),
-        confirmAuth: jest.fn(),
-        checkAccountExists: jest.fn().mockResolvedValue(true),
-        openCreateAccountPage: jest.fn(),
-        waitAccountCreate: jest.fn(),
-      },
-    };
-    storeData = {
-      modules: {
-        core: coreModule,
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
+    const store = createStore();
+    const {
+      accountsStore: accountsStoreModule,
+      coreStore,
+    } = createStoreModules(store);
+    accountsStore = accountsStoreModule;
     wrapper = shallowMount(Auth, {
+      accountsStore,
+      coreStore,
       localVue,
-      store,
       i18n,
     });
   });
@@ -62,20 +47,22 @@ describe('Auth', () => {
     it('should render create account form if user authorized but does not have any account', async () => {
       expect.assertions(3);
 
-      accountsModule.actions.checkAccountExists.mockResolvedValue(false);
+      identityService.checkAccountExist.mockResolvedValueOnce(false);
+
+      expect(wrapper.find('create-wallet-form-stub').exists()).toBe(false);
 
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
       await global.flushPromises();
 
       expect(wrapper.find('create-wallet-form-stub').exists()).toBe(true);
-      expect(accountsModule.actions.waitAccountCreate).toBeCalled();
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render auth form if user authorized and have any account', async () => {
       expect.assertions(2);
 
+      identityService.checkAccountExist.mockResolvedValueOnce(true);
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
       await global.flushPromises();
@@ -89,6 +76,8 @@ describe('Auth', () => {
     it('should confirm auth on auth form authorize event handling', async () => {
       expect.assertions(1);
 
+      identityService.checkAccountExist.mockResolvedValueOnce(true);
+      const dataPromise = authChannel.take();
       const payload = {
         serverMode: {
           foo: 'bar',
@@ -98,27 +87,38 @@ describe('Auth', () => {
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize', payload);
 
       await global.flushPromises();
+      const res = await dataPromise;
 
-      expect(accountsModule.actions.confirmAuth).toBeCalledWith(
-        expect.any(Object),
-        payload.serverMode,
-        undefined,
-      );
+      expect(res).toEqual(Answer.createOk(payload.serverMode));
     });
 
     describe('create account form logic', () => {
       it('should logout when create account skip', async () => {
-        expect.assertions(1);
+        expect.assertions(3);
 
-        accountsModule.actions.checkAccountExists.mockResolvedValue(false);
+        const dataPromise = authChannel.take();
+        accountsStore.setAuthByCode(200);
+        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
+        identityService.checkAccountExist.mockResolvedValueOnce(false);
+
+        expect(accountsStore.isLogin).toBe(true);
 
         wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
-        await wrapper.vm.$nextTick();
+        await global.flushPromises();
 
         wrapper.find('v-modal-card-stub').vm.$emit('close');
 
-        expect(coreModule.actions.logout).toBeCalledTimes(1);
+        await global.flushPromises();
+        const res = await dataPromise;
+
+        expect(res).toEqual(
+          Answer.createFail(
+            ERRORS.AUTH_CANCELED_BY_USER,
+            'Authentication was canceled by user!',
+          ),
+        );
+        expect(accountsStore.isLogin).toBe(false);
       });
     });
   });

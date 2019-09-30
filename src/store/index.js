@@ -1,24 +1,19 @@
 // @ts-check
 import createStore from '@/store/createStore';
-import registerStores from '@/store/registerStores';
-import createStoreModule from '@/store/createStoreModule';
-import GasPriceModule from '@/store/modules/GasPriceModule';
+import createStoreModules from '@/store/createStoreModules';
+import widget from './modules/widget';
 
 const store = createStore();
 
-/**
- * Create vuex class module registered in the store
- * @template T
- * @param {
-    new (params: import('vuex-class-modules').RegisterOptions) => T
-  } Module Vuex class module
- * @param {string} name Module name
- */
-const createModule = (Module, name) => createStoreModule(store, Module, name);
-
 // old way
-registerStores(store);
+store.registerModule('widget', widget);
 
-export const gasPriceStore = createModule(GasPriceModule, 'gasPrice');
+export const {
+  gasPriceStore,
+  sharedStore,
+  accountsStore,
+  coreStore,
+  requestStore,
+} = createStoreModules(store);
 
 export default store;

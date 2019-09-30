@@ -2,13 +2,13 @@
 
 exports[`CompositeAuth render should correctly render CompositeAuth component 1`] = `
 <div>
-  <auth-form-stub isinited="true"></auth-form-stub>
+  <auth-form-stub></auth-form-stub>
 </div>
 `;
 
 exports[`CompositeAuth render should render auth form by default 1`] = `
 <div>
-  <auth-form-stub isinited="true"></auth-form-stub>
+  <auth-form-stub></auth-form-stub>
 </div>
 `;
 

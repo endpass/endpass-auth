@@ -15,11 +15,11 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/forms/CompositeAuth';
+import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -29,45 +29,43 @@ const FORMS = {
 export default {
   name: 'Auth',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
-    isCheckingAccount: false,
     FORMS,
     activeForm: FORMS.AUTH,
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      showCreateAccount: state => state.core.showCreateAccount,
-    }),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
 
-    ...mapGetters(['isDialog']),
+    showCreateAccount() {
+      return this.$options.coreStore.showCreateAccount;
+    },
+
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
   },
 
   methods: {
-    ...mapActions([
-      'confirmAuth',
-      'cancelAuth',
-      'dialogClose',
-      'checkAccountExists',
-      'waitAccountCreate',
-      'logout',
-    ]),
-
     async handleAuthCancel() {
       if (this.activeForm === FORMS.CREATE_WALLET) {
-        await this.logout();
+        await this.$options.coreStore.logout();
       }
 
-      this.cancelAuth();
-      this.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
 
     async openCreateAccount() {
-      const isExist = await this.checkAccountExists();
+      const isExist = await this.$options.accountsStore.checkAccountExists();
       if (!isExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await this.waitAccountCreate();
+        await this.$options.accountsStore.waitAccountCreate();
       }
     },
 
@@ -76,7 +74,7 @@ export default {
         await this.openCreateAccount();
       }
 
-      this.confirmAuth(serverMode);
+      this.$options.accountsStore.confirmAuth(serverMode);
     },
   },
 

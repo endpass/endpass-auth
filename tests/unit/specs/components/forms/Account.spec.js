@@ -1,5 +1,5 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
-import Account from '@/components/forms/Account.vue';
+import Account from '@/components/forms/Account';
 
 import setupI18n from '@/locales/i18nSetup';
 

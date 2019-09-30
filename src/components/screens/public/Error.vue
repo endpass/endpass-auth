@@ -17,11 +17,14 @@
 <script>
 /* eslint-disable camelcase */
 
-import { mapActions, mapGetters } from 'vuex';
 import VFrame from '@/components/common/VFrame';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'Error',
+
+  accountsStore,
+  coreStore,
 
   data() {
     return {
@@ -31,15 +34,15 @@ export default {
   },
 
   computed: {
-    ...mapGetters(['isDialog']),
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
   },
 
   methods: {
-    ...mapActions(['cancelAllChannels', 'dialogClose']),
-
     handleClose() {
-      this.cancelAllChannels();
-      this.dialogClose();
+      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.dialogClose();
     },
   },
 

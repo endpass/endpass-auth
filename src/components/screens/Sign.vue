@@ -28,27 +28,40 @@
 
 <script>
 import get from 'lodash/get';
-import { mapActions, mapGetters, mapState } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import SignMessageForm from '@/components/forms/Sign/MessageForm';
 import SignTransactionForm from '@/components/forms/Sign/TransactionForm';
+import { accountsStore, coreStore, requestStore } from '@/store';
 
 export default {
   name: 'Sign',
+
+  accountsStore,
+  coreStore,
+  requestStore,
 
   data: () => ({
     error: null,
   }),
 
   computed: {
-    ...mapState({
-      isInited: state => state.core.isInited,
-      loading: state => state.core.loading,
-      request: state => state.requests.request,
-      settings: state => state.accounts.settings,
-    }),
-    ...mapGetters(['isDialog']),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
+    loading() {
+      return this.$options.coreStore.loading;
+    },
+    request() {
+      return this.$options.requestStore.request;
+    },
+    settings() {
+      return this.$options.accountsStore.settings;
+    },
+
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
 
     isTransaction() {
       return get(this.request, 'request.method') === 'eth_sendTransaction';
@@ -56,11 +69,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(['processRequest', 'cancelRequest', 'dialogClose']),
-
     async handleSignSubmit(res) {
       try {
-        await this.processRequest(res);
+        await this.$options.requestStore.processRequest(res);
         this.error = null;
       } catch (err) {
         this.error = err.message;
@@ -68,13 +79,13 @@ export default {
     },
 
     handleSignCancel() {
-      this.cancelRequest();
-      this.dialogClose();
+      this.$options.requestStore.cancelRequest();
+      this.$options.coreStore.dialogClose();
     },
 
     handleWindowClose() {
-      this.cancelRequest();
-      this.dialogClose();
+      this.$options.requestStore.cancelRequest();
+      this.$options.coreStore.dialogClose();
     },
   },
 

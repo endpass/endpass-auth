@@ -16,12 +16,12 @@
 </template>
 
 <script>
-import { mapMutations, mapState, mapActions } from 'vuex';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/forms/CompositeAuth';
+import CompositeAuthForm from '@/components/formsComposite/CompositeAuth';
 import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -31,6 +31,9 @@ const FORMS = {
 export default {
   name: 'PublicAuth',
 
+  accountsStore,
+  coreStore,
+
   data: () => ({
     queryParamsMap: {},
     FORMS,
@@ -38,23 +41,16 @@ export default {
   }),
 
   methods: {
-    ...mapMutations(['setAuthParams']),
-    ...mapState({
-      isInited: state => state.core.isInited,
-    }),
-    ...mapActions([
-      'cancelAuth',
-      'dialogClose',
-      'checkAccountExists',
-      'waitAccountCreate',
-    ]),
+    isInited() {
+      return this.$options.coreStore.isInited;
+    },
 
     async handleAuthorize() {
-      const isAccountExist = await this.checkAccountExists();
+      const isAccountExist = await this.$options.accountsStore.checkAccountExists();
 
       if (!isAccountExist) {
         this.activeForm = FORMS.CREATE_WALLET;
-        await this.waitAccountCreate();
+        await this.$options.accountsStore.waitAccountCreate();
       }
 
       const { redirectUrl, withHost } = this.queryParamsMap;
@@ -75,8 +71,8 @@ export default {
     },
 
     handleAuthCancel() {
-      this.cancelAuth();
-      this.dialogClose();
+      this.$options.accountsStore.cancelAuth();
+      this.$options.coreStore.dialogClose();
     },
   },
 
@@ -87,7 +83,7 @@ export default {
     this.queryParamsMap = query;
 
     if (redirectUrl) {
-      this.setAuthParams({
+      this.$options.accountsStore.setAuthParams({
         redirectUrl: decodeURIComponent(redirectUrl),
       });
     }

@@ -1,9 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import ServerModeSelect from '@/components/common/ServerModeSelect.vue';
+import ServerModeSelect from '@/components/common/ServerModeSelect';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
+import modeService from '@/service/mode';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -12,37 +15,18 @@ localVue.use(VeeValidate);
 const i18n = setupI18n(localVue);
 
 describe('ServerModeSelect', () => {
-  let store;
-  let storeData;
   let wrapper;
-  let accountsModule;
-  let coreModule;
-  const validateCustomServer = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    coreModule = {
-      state: {
-        isInited: true,
-        loading: false,
-      },
-    };
-    accountsModule = {
-      actions: {
-        validateCustomServer,
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-        core: coreModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
+    const store = createStore();
+    const { accountsStore, coreStore } = createStoreModules(store);
+
     wrapper = shallowMount(ServerModeSelect, {
+      accountsStore,
+      coreStore,
       localVue,
-      store,
       i18n,
     });
   });
@@ -153,7 +137,7 @@ describe('ServerModeSelect', () => {
           };
 
           beforeEach(() => {
-            validateCustomServer.mockResolvedValueOnce(true);
+            modeService.validateIdentityServer.mockResolvedValueOnce(true);
 
             wrapper
               .find('[data-test=custom-server-input]')
@@ -162,14 +146,23 @@ describe('ServerModeSelect', () => {
 
           it('should emit input with correct params', () => {
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
+
+            expect(modeService.validateIdentityServer).toBeCalledWith(
+              serverUrl,
+            );
             expect([...wrapper.emitted().input].pop()).toEqual([params]);
           });
 
           it('should emit confirm', async () => {
+            expect.assertions(2);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();
 
+            expect(modeService.validateIdentityServer).toBeCalledWith(
+              serverUrl,
+            );
             expect(wrapper.emitted().confirm).toHaveLength(1);
           });
         });
@@ -178,7 +171,7 @@ describe('ServerModeSelect', () => {
           const error = new Error('error');
 
           beforeEach(() => {
-            validateCustomServer.mockRejectedValueOnce(error);
+            modeService.validateIdentityServer.mockRejectedValueOnce(error);
 
             wrapper
               .find('[data-test=custom-server-input]')
@@ -186,6 +179,8 @@ describe('ServerModeSelect', () => {
           });
 
           it('should not emit confirm', async () => {
+            expect.assertions(1);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();
@@ -194,6 +189,8 @@ describe('ServerModeSelect', () => {
           });
 
           it('should show error', async () => {
+            expect.assertions(2);
+
             wrapper.find('[data-test=submit-button]').vm.$emit('click');
 
             await global.flushPromises();

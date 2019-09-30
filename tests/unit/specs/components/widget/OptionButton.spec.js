@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import OptionButton from '@/components/widget/OptionButton.vue';
+import OptionButton from '@/components/widget/OptionButton';
 
 describe('OptionButton', () => {
   let wrapper;

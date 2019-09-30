@@ -3,8 +3,11 @@ import VeeValidate from 'vee-validate';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { requestWithMessage } from '@unitFixtures/requests';
 import validation from '@/validation';
-import BaseForm from '@/components/forms/Sign/BaseForm.vue';
+import BaseForm from '@/components/forms/Sign/BaseForm';
 import setupI18n from '@/locales/i18nSetup';
+import Wallet from '@/class/singleton/signer/Wallet';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -14,35 +17,26 @@ localVue.use(VeeValidate);
 localVue.use(validation);
 
 describe('Sign > BaseForm', () => {
-  let store;
-  let storeData;
-  let accountsModule;
   let wrapperFactory;
   let wrapper;
 
   beforeEach(() => {
-    accountsModule = {
-      actions: {
-        validatePassword: jest.fn().mockResolvedValue(true),
-      },
-    };
-    storeData = {
-      modules: {
-        accounts: accountsModule,
-      },
-    };
-    store = new Vuex.Store(storeData);
-    wrapperFactory = (props = {}) =>
-      shallowMount(BaseForm, {
+    wrapperFactory = (props = {}) => {
+      const store = createStore();
+      const { accountsStore } = createStoreModules(store);
+
+      return shallowMount(BaseForm, {
+        accountsStore,
         localVue,
         i18n,
-        store,
         sync: false,
         propsData: props,
         provide: {
           theme: 'default',
         },
       });
+    };
+
     wrapper = wrapperFactory({
       request: requestWithMessage,
       isFormValid: true,
@@ -94,7 +88,8 @@ describe('Sign > BaseForm', () => {
         password: '123',
       };
 
-      accountsModule.actions.validatePassword.mockRejectedValueOnce();
+      const spyon = jest.spyOn(Wallet.prototype, 'validatePassword');
+      spyon.mockResolvedValueOnce(false);
 
       wrapper = wrapperFactory({
         request: requestWithMessage,
@@ -118,7 +113,8 @@ describe('Sign > BaseForm', () => {
         password: '123',
       };
 
-      accountsModule.actions.validatePassword.mockRejectedValueOnce();
+      const spyon = jest.spyOn(Wallet.prototype, 'validatePassword');
+      spyon.mockResolvedValueOnce(false);
 
       wrapper = wrapperFactory({
         request: requestWithMessage,

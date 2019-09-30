@@ -18,9 +18,9 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
+import PasswordForm from '@/components/forms/PasswordForm';
 import CreateWalletForm from '@/components/forms/CreateWallet';
+import { accountsStore, coreStore } from '@/store';
 
 const FORMS = {
   SIGN: 'SIGN',
@@ -68,18 +68,21 @@ export default {
     activeForm: FORMS.SIGN,
   }),
 
+  accountsStore,
+  coreStore,
+
   computed: {
-    ...mapGetters(['isDialog']),
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
     isLoadProcess() {
       return this.isLoading || this.isCheckingAccount;
     },
   },
 
   methods: {
-    ...mapActions(['logout', 'checkAccountExists', 'waitAccountCreate']),
-
     handleLogout() {
-      this.logout();
+      this.$options.coreStore.logout();
       this.handleCancel();
     },
 
@@ -95,11 +98,11 @@ export default {
   async mounted() {
     this.isCheckingAccount = true;
 
-    const isExist = await this.checkAccountExists();
+    const isExist = await this.$options.accountsStore.checkAccountExists();
 
     if (!isExist) {
       this.activeForm = FORMS.CREATE_WALLET;
-      await this.waitAccountCreate();
+      await this.$options.accountsStore.waitAccountCreate();
       this.activeForm = FORMS.SIGN;
     }
 
