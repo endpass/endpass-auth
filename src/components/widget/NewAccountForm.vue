@@ -32,8 +32,8 @@
 <script>
 import { mapActions } from 'vuex';
 import formMixin from '@/mixins/form';
-import WidgetInput from './WidgetInput.vue';
-import OptionButton from './OptionButton.vue';
+import WidgetInput from './WidgetInput';
+import OptionButton from './OptionButton';
 
 export default {
   name: 'WidgetNewAccountForm',

@@ -3,11 +3,12 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <v-title
-      data-test="form-title"
-      :html="$t('components.otp.title')"
-    />
-    <v-description :html="$t('components.otp.description')" />
+    <v-title>
+      <span v-html="$t('components.otp.title')" />
+    </v-title>
+    <v-description>
+      <span v-html="$t('components.otp.description')" />
+    </v-description>
 
     <form-item>
       <v-input
@@ -21,7 +22,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-item is-last>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -31,11 +32,10 @@
       </v-button>
     </form-item>
     <form-row
-      class="v-text-size-14"
+      class="v-fs-14"
       centered
     >
       <v-link
-        :underline="false"
         :disabled="isLoading"
         href="#"
         data-test="recovery-link"
@@ -50,11 +50,11 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import { coreStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
-import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 

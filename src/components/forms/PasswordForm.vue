@@ -10,6 +10,7 @@
         data-test="requester-url"
         target="_blank"
         class="password-form-request-url"
+        underline
       >
         {{ requesterUrl }}
       </v-link>
@@ -65,12 +66,12 @@
 <script>
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
+import VLink from '@endpass/ui/kit/VLink';
 import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
-import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
 
 export default {

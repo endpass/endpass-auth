@@ -1,6 +1,6 @@
 {
   "name": "@endpass/auth",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "",
   "repository": {
     "type": "git",
@@ -63,7 +63,7 @@
   "dependencies": {
     "@endpass/class": "^0.18.5",
     "@endpass/faucet": "^0.2.1",
-    "@endpass/ui": "^0.15.50",
+    "@endpass/ui": "^0.15.51",
     "@endpass/utils": "^1.8.3",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",

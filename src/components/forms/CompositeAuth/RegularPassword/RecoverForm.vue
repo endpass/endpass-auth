@@ -3,10 +3,9 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <v-title
-      data-test="form-title"
-      :html="$t('components.regularPasswordRecover.title')"
-    />
+    <v-title>
+      <span v-html="$t('components.regularPasswordRecover.title')" />
+    </v-title>
     <form-item>
       <v-input
         v-model="password"
@@ -46,7 +45,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-item is-last>
+    <form-item class="v-mb-24">
       <form-controls>
         <v-button
           :disabled="isLoading"
@@ -66,7 +65,7 @@
       </form-controls>
     </form-item>
     <form-row
-      class="v-text-size-14"
+      class="v-fs-14"
       centered
     >
       {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
@@ -74,7 +73,6 @@
         :disabled="isLoading"
         href="#"
         data-test="send-code"
-        :underline="false"
         @click.prevent="sendCode"
       >
         {{ $t('components.emailCode.sendTitle') }}
@@ -86,12 +84,12 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
-import VLink from '@/components/common/VLink';
 import FormControls from '@/components/common/FormControls';
 
 export default {

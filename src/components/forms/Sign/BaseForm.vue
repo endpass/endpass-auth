@@ -12,6 +12,8 @@
       <v-link
         :href="requesterUrl"
         data-test="requester-url"
+        target="_blank"
+        underline
       >
         {{ requesterUrl }}
       </v-link>
@@ -62,13 +64,13 @@
 import get from 'lodash/get';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
+import VLink from '@endpass/ui/kit/VLink';
 import signer from '@/class/singleton/signer';
 import Message from '@/components/common/Message.vue';
 import VAddress from '@/components/common/VAddress.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import { accountsStore } from '@/store';
-import VLink from '@/components/common/VLink';
 
 export default {
   name: 'SignBaseForm',

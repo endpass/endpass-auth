@@ -3,10 +3,9 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <v-title
-      data-test="form-title"
-      :html="$t('components.regularPasswordForm.title')"
-    />
+    <v-title>
+      <span v-html="$t('components.regularPasswordForm.title')" />
+    </v-title>
     <form-item>
       <v-input
         v-model="password"
@@ -20,7 +19,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-item is-last>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -30,14 +29,13 @@
       </v-button>
     </form-item>
     <form-row
-      class="v-text-size-14"
+      class="v-fs-14"
       centered
     >
       <v-link
         :disabled="isLoading"
         href="#"
         data-test="password-recover"
-        :underline="false"
         @click.prevent="onRecover"
       >
         {{ $i18n.t('components.regularPasswordForm.recover') }}
@@ -49,11 +47,11 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
-import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
 
 export default {

@@ -1,24 +1,11 @@
 <template>
-  <div
-    class="v-description v-modal-card-description"
-    v-html="html"
-  />
+  <div class="v-lh-1-2 v-modal-card-description">
+    <slot />
+  </div>
 </template>
 
 <script>
 export default {
   name: 'VDescription',
-  props: {
-    html: {
-      type: String,
-      default: '',
-    },
-  },
 };
 </script>
-
-<style lang="postcss">
-.v-description {
-  line-height: 20px;
-}
-</style>

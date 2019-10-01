@@ -3,7 +3,7 @@
 exports[`Auth render should change submit button text if loading and make it disabled 1`] = `
 <form data-test="auth-form" message="foo">
   <!---->
-  <v-title-stub html="Log in&amp;nbsp;to&amp;nbsp;your Endpass account to&amp;nbsp;access site actions" data-test="form-title"></v-title-stub>
+  <v-title-stub><span>Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</span></v-title-stub>
   <!---->
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
@@ -22,12 +22,9 @@ exports[`Auth render should change submit button text if loading and make it dis
   <form-row-stub centered="">
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
-      <v-link-stub href="https://endpass.com/terms/" skin="default" target="_blank" underline="true">
-        Terms of Service
-      </v-link-stub>
-
-      and
-      <v-link-stub href="https://endpass.com/privacy/" skin="default" target="_blank" underline="true">
+      <v-link-stub href="https://endpass.com/terms/" target="_blank" underline="">Terms of Service</v-link-stub>
+      &nbsp;and
+      <v-link-stub href="https://endpass.com/privacy/" target="_blank" underline="">
         Privacy Policy
       </v-link-stub>
     </v-checkbox-stub>
@@ -38,7 +35,7 @@ exports[`Auth render should change submit button text if loading and make it dis
 exports[`Auth render should correctly render Auth component 1`] = `
 <form data-test="auth-form">
   <!---->
-  <v-title-stub html="Log in&amp;nbsp;to&amp;nbsp;your Endpass account to&amp;nbsp;access site actions" data-test="form-title"></v-title-stub>
+  <v-title-stub><span>Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</span></v-title-stub>
   <!---->
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
@@ -57,12 +54,9 @@ exports[`Auth render should correctly render Auth component 1`] = `
   <form-row-stub centered="">
     <v-checkbox-stub name="checkbox" value="true" truevalue="true">
       I accept the
-      <v-link-stub href="https://endpass.com/terms/" skin="default" target="_blank" underline="true">
-        Terms of Service
-      </v-link-stub>
-
-      and
-      <v-link-stub href="https://endpass.com/privacy/" skin="default" target="_blank" underline="true">
+      <v-link-stub href="https://endpass.com/terms/" target="_blank" underline="">Terms of Service</v-link-stub>
+      &nbsp;and
+      <v-link-stub href="https://endpass.com/privacy/" target="_blank" underline="">
         Privacy Policy
       </v-link-stub>
     </v-checkbox-stub>

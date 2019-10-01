@@ -3,11 +3,12 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <v-title
-      data-test="form-title"
-      :html="$t('components.emailCode.title')"
-    />
-    <v-description :html="$t('components.emailCode.description', { email })" />
+    <v-title>
+      <span v-html="$t('components.emailCode.title')" />
+    </v-title>
+    <v-description>
+      <span v-html="$t('components.emailCode.description', { email })" />
+    </v-description>
     <form-item>
       <v-input
         v-model="code"
@@ -20,7 +21,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-item is-last>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -30,12 +31,11 @@
       </v-button>
     </form-item>
     <form-row
-      class="v-text-size-14"
+      class="v-fs-14"
       centered
     >
       {{ $t('components.emailCode.didntGetTheCode') }}&nbsp;
       <v-link
-        :underline="false"
         :disabled="isLoading"
         href="#"
         data-test="send-code"
@@ -50,11 +50,11 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
-import VLink from '@/components/common/VLink';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 

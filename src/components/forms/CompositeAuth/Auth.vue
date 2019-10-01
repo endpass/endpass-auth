@@ -4,7 +4,9 @@
     @submit.prevent="handleSubmit"
   >
     <form-item v-if="isServerMode && !isPublic">
-      <v-title :html="$t('components.serverModeSelect.identityServer')" />
+      <v-title>
+        <span v-html="$t('components.serverModeSelect.identityServer')" />
+      </v-title>
       <server-mode-select
         v-model="serverMode"
         @confirm="handleSubmit"
@@ -13,10 +15,9 @@
       <v-divider />
     </form-item>
     <template v-if="isDefaultMode">
-      <v-title
-        data-test="form-title"
-        :html="$t('components.auth.loginToContinue')"
-      />
+      <v-title>
+        <span v-html="$t('components.auth.loginToContinue')" />
+      </v-title>
       <form-item v-if="error">
         <message
           :error="true"
@@ -67,14 +68,17 @@
           <v-link
             href="https://endpass.com/terms/"
             target="_blank"
+            underline
           >
-            {{ $t('components.auth.termsOfService') }}
+            {{
+              $t('components.auth.termsOfService')
+            }}
           </v-link>
-
-          {{ $t('components.auth.and') }}
+          &nbsp;{{ $t('components.auth.and') }}
           <v-link
             href="https://endpass.com/privacy/"
             target="_blank"
+            underline
           >
             {{ $t('components.auth.privacyPolicy') }}
           </v-link>
@@ -89,6 +93,7 @@ import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VDivider from '@endpass/ui/kit/VDivider';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
@@ -99,7 +104,6 @@ import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
-import VLink from '@/components/common/VLink';
 
 export default {
   name: 'AuthForm',

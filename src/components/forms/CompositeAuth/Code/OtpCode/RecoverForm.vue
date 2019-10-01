@@ -3,11 +3,10 @@
     data-test="recover-form"
     @submit.prevent="onSubmit"
   >
-    <v-title
-      data-test="form-title"
-      :html="$t('components.recover.enterSeed')"
-    />
-    <form-item is-last>
+    <v-title>
+      <span v-html="$t('components.recover.enterSeed')" />
+    </v-title>
+    <form-item class="v-mb-24">
       <v-input
         v-model="seedPhrase"
         :error="error"

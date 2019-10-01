@@ -1388,10 +1388,10 @@
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.15.50":
-  version "0.15.50"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.15.50.tgz#e2d200ccf5a9822c2e12b899a923518617e6eda0"
-  integrity sha512-R2AAaDrtQckQYBO5af7pjvgy/XdG1WW3Txtawl/WoRQfCdrzwQfxilx11usTyDWn/+DaKxUxDz8F2Wo6tt4J6A==
+"@endpass/ui@^0.15.51":
+  version "0.15.51"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.15.51.tgz#e4ac05206802897818af19da16a7bd620e78506f"
+  integrity sha512-7EfP1RWTSCAB+Rf4dkycIXsmQqt95GtLQ9mcSGa0DszmjYA1m2NnqkNWmhFXiNk/9rg7DKR4OY9aO/lTsCJagg==
   dependencies:
     "@endpass/utils" "^1.8.2"
     vue "^2.5.21"

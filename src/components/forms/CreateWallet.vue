@@ -5,7 +5,9 @@
         data-test="define-pwd-form"
         @submit.prevent="onCreateWallet"
       >
-        <v-title :html="$t('components.createWallet.choosePass')" />
+        <v-title>
+          <span v-html="$t('components.createWallet.choosePass')" />
+        </v-title>
 
         <form-item>
           <v-input
@@ -55,7 +57,9 @@
       </form>
     </div>
     <div v-else>
-      <v-title :html="$t('components.createWallet.recoveryTitle')" />
+      <v-title>
+        <span v-html="$t('components.createWallet.recoveryTitle')" />
+      </v-title>
       <form-item>
         <div class="box">
           <p
