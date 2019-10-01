@@ -40,10 +40,22 @@ const setAuthPermission = signature =>
     signature,
   });
 
-const auth = ({ email, code, password }) =>
+const signUp = ({ email, password }) =>
+  request
+    .post(`${identityBaseUrl}/auth/signup`, {
+      email,
+      password,
+    })
+    .then(res => {
+      if (!res.success) throw new Error(res.message);
+
+      return res;
+    });
+
+const auth = ({ email, code, password, challengeType = 'otp' }) =>
   request
     .post(`${identityBaseUrl}/auth/token`, {
-      challengeType: 'otp',
+      challengeType,
       email,
       code,
       password,
@@ -163,7 +175,7 @@ const resetRegularPassword = async ({
     },
   );
 
-  if (!success) throw new Error('Success false');
+  if (success) throw new Error('Success false');
 
   return success;
 };
@@ -206,6 +218,7 @@ export default {
   getAuthPermission,
   setAuthPermission,
   getAuthChallenge,
+  signUp,
   auth,
   authWithGoogle,
   authWithGitHub,

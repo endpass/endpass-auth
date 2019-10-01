@@ -1,7 +1,7 @@
 <template>
   <form
     data-test="auth-form"
-    @submit.prevent="onSubmit"
+    @submit.prevent="onSignIn"
   >
     <form-item v-if="isServerMode && !isPublic">
       <v-title>
@@ -48,18 +48,20 @@
       </v-button>
       <v-spacer :height="3" />
       <v-divider>{{ $t('components.auth.orSignInWith') }}</v-divider>
-      <form-row class="auth-form-social-buttons">
-        <google-auth-button
-          type="button"
-          @submit="onSocialSubmit"
-          @error="onOauthError"
-        />
-        <v-spacer :width="16" />
-        <git-auth-button
-          type="button"
-          @submit="onSocialSubmit"
-          @error="onOauthError"
-        />
+      <form-row>
+        <form-controls>
+          <google-auth-button
+            type="button"
+            @submit="onSocialSubmit"
+            @error="onOauthError"
+          />
+          <v-spacer :width="16" />
+          <git-auth-button
+            type="button"
+            @submit="onSocialSubmit"
+            @error="onOauthError"
+          />
+        </form-controls>
       </form-row>
       <v-divider />
       <form-row
@@ -94,19 +96,16 @@ import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
-import { coreStore } from '@/store';
+import { coreStore, authStore } from '@/store';
+import FormControls from '@/components/common/FormControls';
 
 export default {
   name: 'SignInForm',
 
   coreStore,
+  authStore,
 
   props: {
-    error: {
-      type: String,
-      default: null,
-    },
-
     isPublic: {
       type: Boolean,
       default: false,
@@ -114,7 +113,9 @@ export default {
   },
 
   data: () => ({
+    isLoading: false,
     email: '',
+    error: '',
     serverMode: {
       type: IDENTITY_MODE.DEFAULT,
       serverUrl: undefined,
@@ -122,12 +123,12 @@ export default {
   }),
 
   computed: {
-    isServerMode() {
-      return this.$options.coreStore.isServerMode;
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
     },
 
-    isLoading() {
-      return this.$options.coreStore.isLoading;
+    isServerMode() {
+      return this.$options.coreStore.isServerMode;
     },
 
     primaryButtonLabel() {
@@ -162,6 +163,12 @@ export default {
     },
   },
 
+  watch: {
+    email() {
+      this.error = null;
+    },
+  },
+
   methods: {
     onSwitch() {
       this.$emit('switch');
@@ -171,21 +178,67 @@ export default {
       if (!this.isSubmitEnable) {
         return;
       }
-      const { email, serverMode } = this;
-
-      this.$emit('submit', { email, serverMode });
+      this.handleSubmit();
     },
 
-    onSocialSubmit() {
-      this.$emit('socialSubmit');
+    handleSubmit(options) {
+      const { email, serverMode } = this;
+
+      this.$emit('submit', { email, serverMode, ...options });
+    },
+
+    async onSignIn() {
+      if (!this.isSubmitEnable) {
+        return;
+      }
+
+      try {
+        const { email, serverMode } = this;
+
+        if (serverMode.type !== IDENTITY_MODE.DEFAULT) {
+          this.handleSubmit();
+          return;
+        }
+
+        this.isLoading = true;
+        await this.$options.authStore.loadAuthChallenge({ email });
+
+        if (!this.isRegularPasswordMode) {
+          this.handleSubmit();
+          this.isLoading = false;
+          return;
+        }
+
+        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
+          email,
+        );
+
+        this.handleSubmit({ isPasswordExist });
+      } catch (error) {
+        this.error = error;
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async onSocialSubmit() {
+      try {
+        await this.$options.authStore.waitLogin();
+        this.$emit('social');
+      } catch (e) {
+        // TODO: add langs
+        this.error = e;
+      }
     },
 
     onOauthError(err) {
-      this.$emit('error', err);
+      // TODO: add langs
+      this.error = err;
     },
   },
   mixins: [formMixin],
   components: {
+    FormControls,
     VLink,
     VTitle,
     VButton,
@@ -201,15 +254,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-@media (max-width: 360px) {
-  .auth-form-social-buttons {
-    display: block;
-  }
-
-  .auth-form-social-buttons > button:not(:last-child) {
-    margin-bottom: 16px;
-  }
-}
-</style>

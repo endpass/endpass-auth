@@ -16,7 +16,6 @@ export default {
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-top: 24px;
 
   & > * {
     margin-right: 16px;

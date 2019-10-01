@@ -114,6 +114,7 @@ export default {
     password: '',
     repeatPassword: '',
     code: '',
+    isLoading: false,
   }),
 
   computed: {
@@ -123,10 +124,6 @@ export default {
 
     isPasswordEqual() {
       return this.password && this.password === this.repeatPassword;
-    },
-
-    isLoading() {
-      return this.$options.coreStore.isLoading;
     },
 
     primaryButtonLabel() {
@@ -139,6 +136,7 @@ export default {
   methods: {
     async onSubmit() {
       try {
+        this.isLoading = true;
         this.$validator.errors.removeById('sendCodeId');
         await this.$options.authStore.resetRegularPassword({
           password: this.password,
@@ -151,6 +149,8 @@ export default {
           msg: this.$i18n.t('components.regularPasswordRecover.recoveryError'),
           id: 'sendCodeId',
         });
+      } finally {
+        this.isLoading = false;
       }
     },
 
@@ -161,6 +161,7 @@ export default {
     async sendCode() {
       try {
         this.$validator.errors.removeById('sendCodeId');
+        this.isLoading = true;
         await this.$options.authStore.sendCode({ email: this.email });
       } catch (error) {
         this.$validator.errors.add({
@@ -168,6 +169,8 @@ export default {
           msg: this.$i18n.t('components.emailCode.sendError'),
           id: 'sendCodeId',
         });
+      } finally {
+        this.isLoading = false;
       }
     },
   },

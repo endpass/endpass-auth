@@ -1,7 +1,7 @@
 <template>
   <form
     data-test="auth-form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <v-title>
       <span v-html="$t('components.auth.signUpToContinue')" />
@@ -36,7 +36,7 @@
         :error="errors.first('password') || error"
         name="password"
         type="password"
-        :placeholder="$t('components.auth.newPassword')"
+        :placeholder="$t('components.auth.password')"
         data-test="password-input"
       />
     </form-item>
@@ -66,13 +66,13 @@
       <form-controls>
         <google-auth-button
           type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
+          @submit="onSocial"
+          @error="onOauthError"
         />
         <git-auth-button
           type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
+          @submit="onSocial"
+          @error="onOauthError"
         />
       </form-controls>
     </form-item>
@@ -127,68 +127,51 @@ import VSpacer from '@/components/common/VSpacer';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton';
 import GitAuthButton from '@/components/common/GitAuthButton';
 import Message from '@/components/common/Message';
-import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import FormControls from '@/components/common/FormControls';
-import { coreStore } from '@/store';
+import { authStore } from '@/store';
 
 export default {
   name: 'SignUpForm',
 
-  coreStore,
-
-  props: {
-    error: {
-      type: String,
-      default: null,
-    },
-  },
+  authStore,
 
   data: () => ({
+    error: '',
     email: '',
     password: '',
     confirmPassword: '',
-    serverMode: {
-      type: IDENTITY_MODE.DEFAULT,
-      serverUrl: undefined,
-    },
+    isLoading: false,
   }),
 
   computed: {
-    isLoading() {
-      return this.$options.coreStore.isLoading;
-    },
-
     primaryButtonLabel() {
       return !this.isLoading
         ? this.$i18n.t('components.auth.signUp')
         : this.$i18n.t('global.loading');
     },
 
-    isDefaultMode() {
-      return this.serverMode.type === IDENTITY_MODE.DEFAULT;
-    },
-
-    isLocalMode() {
-      return this.serverMode.type === IDENTITY_MODE.LOCAL;
-    },
-
-    isCustomMode() {
-      return this.serverMode.type === IDENTITY_MODE.CUSTOM;
+    isPasswordEqual() {
+      return this.confirmPassword === this.password;
     },
 
     isSubmitEnable() {
-      const {
-        isDefaultMode,
-        isLocalMode,
-        isCustomMode,
-        isFormValid,
-        isLoading,
-      } = this;
-      const isDefaultValid = isDefaultMode && isFormValid;
+      const { isFormValid, isLoading, isPasswordEqual } = this;
 
-      return (isDefaultValid || isCustomMode || isLocalMode) && !isLoading;
+      return isPasswordEqual && isFormValid && !isLoading;
+    },
+  },
+
+  watch: {
+    email() {
+      this.error = '';
+    },
+    password() {
+      this.error = '';
+    },
+    confirmPassword() {
+      this.error = '';
     },
   },
 
@@ -197,21 +180,33 @@ export default {
       this.$emit('switch');
     },
 
-    handleSubmit() {
+    async onSubmit() {
       if (!this.isSubmitEnable) {
         return;
       }
-      const { email, serverMode } = this;
+      this.isLoading = true;
+      this.error = null;
 
-      this.$emit('submit', { email, serverMode });
+      try {
+        const { email, password } = this;
+        await this.$options.authStore.signUp({ email, password });
+
+        this.$emit('submit', { email, password });
+      } catch (error) {
+        // TODO: add langs
+        this.error = error;
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    handleSocialSubmit() {
-      this.$emit('socialSubmit');
+    onSocial() {
+      // TODO: add social singup
+      // this.$emit('social');
     },
 
-    handleOauthError(err) {
-      this.$emit('error', err);
+    onOauthError(err) {
+      this.error = err;
     },
   },
   mixins: [formMixin],

@@ -46,7 +46,7 @@
       "privacyPolicy": "Privacy&nbsp;Policy",
       "dontHaveAccount": "Don't have an account?",
       "haveAccount": "Already have an account?",
-      "newPassword": "Enter password...",
+      "password": "Enter password...",
       "confirmPassword": "Confirm password...",
       "signUp": "Sign up",
       "signIn": "Sign in"

@@ -19,7 +19,7 @@
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import SignPassword from '@/components/formsComposite/SignPassword';
+import SignPassword from '@/components/forms/SignPassword';
 
 import { ORIGIN_HOST } from '@/constants';
 import { accountsStore, coreStore } from '@/store';

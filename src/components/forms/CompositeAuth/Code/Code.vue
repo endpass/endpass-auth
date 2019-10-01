@@ -1,8 +1,8 @@
 <template>
   <component
     :is="currentForm"
-    :error="error"
     :email="email"
+    :password="password"
     @submit="onCodeSubmit"
     @cancel="onCancel"
   />
@@ -22,9 +22,9 @@ export default {
       required: true,
     },
 
-    error: {
+    password: {
       type: String,
-      default: null,
+      required: true,
     },
   },
 
@@ -41,12 +41,12 @@ export default {
   },
 
   methods: {
-    onCodeSubmit(code) {
-      this.$emit('submit', code);
-    },
-
     onCancel() {
       this.$emit('cancel');
+    },
+
+    async onCodeSubmit(code) {
+      this.$emit('submit', code);
     },
   },
 

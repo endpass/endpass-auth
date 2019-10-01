@@ -2,7 +2,8 @@
   <div>
     <otp-form
       v-if="currentForm === FORM.OTP"
-      :error="error"
+      :email="email"
+      :password="password"
       @submit="onSubmit"
       @recover="onRecover"
     />
@@ -34,14 +35,19 @@ export default {
   name: 'OtpCode',
 
   props: {
+    email: {
+      type: String,
+      required: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
     isClosable: {
       type: Boolean,
       default: false,
-    },
-
-    error: {
-      type: String,
-      default: null,
     },
   },
 

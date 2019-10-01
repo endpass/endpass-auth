@@ -21,7 +21,7 @@
 <script>
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import SignPassword from '@/components/formsComposite/SignPassword';
+import SignPassword from '@/components/forms/SignPassword';
 import { accountsStore } from '@/store';
 
 export default {
