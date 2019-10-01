@@ -32,7 +32,7 @@ export default {
 
   computed: {
     currentForm() {
-      return OtpCode; // this.otpEmail ? OtpCode : EmailCode;
+      return this.otpEmail ? OtpCode : EmailCode;
     },
 
     otpEmail() {
