@@ -4,7 +4,7 @@ exports[`Sign > BaseForm render should render component and has correct name 1`]
 <div data-test="sign-form">
   <!---->
   <form-field-stub>
-    <v-link-stub href="http://localhost" data-test="requester-url" target="_blank" underline="">
+    <v-link-stub isunderline="true" href="http://localhost" data-test="requester-url" target="_blank">
       http://localhost
     </v-link-stub>
     requests sign action.

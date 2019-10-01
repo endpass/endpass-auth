@@ -11,7 +11,7 @@ exports[`Widget Header render should change status label is collapsed is falsy 1
   </section>
   <section class="widget-header-content">
     <spinner-stub size="24" iswhite="true"></spinner-stub>
-    <v-link-stub href="https://wallet.endpass.com" target="_blank" underline="" class="widget-header-link v-lh-1-5">
+    <v-link-stub isunderline="true" href="https://wallet.endpass.com" target="_blank" class="widget-header-link v-lh-1-5">
       wallet.endpass.com
     </v-link-stub>
   </section>
@@ -29,7 +29,7 @@ exports[`Widget Header render should correctly render 1`] = `
   </section>
   <section class="widget-header-content">
     <spinner-stub size="24" iswhite="true"></spinner-stub>
-    <v-link-stub href="https://wallet.endpass.com" target="_blank" underline="" class="widget-header-link v-lh-1-5">
+    <v-link-stub isunderline="true" href="https://wallet.endpass.com" target="_blank" class="widget-header-link v-lh-1-5">
       wallet.endpass.com
     </v-link-stub>
   </section>

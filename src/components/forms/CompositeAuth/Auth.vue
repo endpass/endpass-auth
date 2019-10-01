@@ -68,17 +68,15 @@
           <v-link
             href="https://endpass.com/terms/"
             target="_blank"
-            underline
+            is-underline
           >
-            {{
-              $t('components.auth.termsOfService')
-            }}
+            {{ $t('components.auth.termsOfService') }}
           </v-link>
           &nbsp;{{ $t('components.auth.and') }}
           <v-link
             href="https://endpass.com/privacy/"
             target="_blank"
-            underline
+            is-underline
           >
             {{ $t('components.auth.privacyPolicy') }}
           </v-link>

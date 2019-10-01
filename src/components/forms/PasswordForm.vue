@@ -10,7 +10,7 @@
         data-test="requester-url"
         target="_blank"
         class="password-form-request-url"
-        underline
+        is-underline
       >
         {{ requesterUrl }}
       </v-link>

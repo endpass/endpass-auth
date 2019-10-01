@@ -50,7 +50,7 @@
       <v-link
         href="https://wallet.endpass.com"
         target="_blank"
-        underline
+        is-underline
         class="widget-header-link v-lh-1-5"
       >
         wallet.endpass.com
@@ -216,8 +216,7 @@ export default {
 
 .widget-header-link {
   flex: 0 0 auto;
-  color: #fff;
-  text-decoration: underline;
+  color: var(--endpass-ui-color-white) !important;
   font-size: 8px;
   font-weight: normal;
   margin-left: auto;

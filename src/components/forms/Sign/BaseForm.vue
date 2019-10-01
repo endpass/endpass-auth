@@ -13,7 +13,7 @@
         :href="requesterUrl"
         data-test="requester-url"
         target="_blank"
-        underline
+        is-underline
       >
         {{ requesterUrl }}
       </v-link>
