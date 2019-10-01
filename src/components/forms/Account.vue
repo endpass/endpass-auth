@@ -35,7 +35,7 @@
     <form-field>
       <v-button
         type="button"
-        :disabled="loading"
+        :disabled="isLoading"
         skin="primary"
         data-test="submit-button"
         fluid
@@ -68,7 +68,7 @@
     </v-faucet-button>
     <form-controls>
       <v-button
-        :disabled="loading"
+        :disabled="isLoading"
         type="button"
         skin="error"
         data-test="logout-button"
@@ -77,7 +77,7 @@
         {{ $t('global.logout') }}
       </v-button>
       <v-button
-        :disabled="!isClosable || loading"
+        :disabled="!isClosable || isLoading"
         type="button"
         data-test="cancel-button"
         skin="quaternary"
@@ -107,7 +107,7 @@ export default {
       default: true,
     },
 
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -140,7 +140,7 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('components.account.updateAccount')
         : this.$i18n.t('global.loading');
     },
@@ -153,13 +153,13 @@ export default {
 
   methods: {
     emitSubmit() {
-      if (!this.loading) {
+      if (!this.isLoading) {
         this.$emit('submit');
       }
     },
 
     emitLogout() {
-      if (!this.loading) {
+      if (!this.isLoading) {
         this.$emit('logout');
       }
     },

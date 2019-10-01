@@ -41,7 +41,7 @@
           v-else
           :accounts="accounts"
           :current-account="currentAccount"
-          :is-loading="loading"
+          :is-loading="isLoading"
           @new-account="handleNewAccountStart"
           @account-change="handleAccountChange"
           @accounts-toggle="handleAccountsToggle"
@@ -91,8 +91,8 @@ export default {
     balance() {
       return this.$options.accountsStore.balance;
     },
-    loading() {
-      return this.$options.coreStore.loading;
+    isLoading() {
+      return this.$options.coreStore.isLoading;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 

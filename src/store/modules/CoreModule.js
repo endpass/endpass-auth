@@ -34,7 +34,7 @@ class CoreModule extends VuexModule {
     this.sharedStore = sharedStore;
   }
 
-  get loading() {
+  get isLoading() {
     // for old code support
     return this.sharedStore.isLoading;
   }

@@ -2,7 +2,7 @@
   <base-form
     :request="request"
     :error="error"
-    :loading="loading"
+    :is-loading="isLoading"
     :is-closable="isClosable"
     :is-form-valid="isFormValid"
     :title="$t('components.sign.requiresPaymentBy')"
@@ -130,7 +130,7 @@ export default {
   name: 'SignTransactionForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },

@@ -76,7 +76,7 @@ export default {
 
   computed: {
     isLoading() {
-      return this.$options.coreStore.loading;
+      return this.$options.coreStore.isLoading;
     },
 
     primaryButtonLabel() {

@@ -2,7 +2,7 @@
   <base-form
     :request="request"
     :error="error"
-    :loading="loading"
+    :is-loading="isLoading"
     :is-closable="isClosable"
     :is-form-valid="isFormValid"
     :title="$t('components.sign.requiresSignBy')"
@@ -30,7 +30,7 @@ export default {
   name: 'SignMessageForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },

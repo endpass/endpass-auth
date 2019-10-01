@@ -53,7 +53,7 @@ describe('Auth', () => {
       wrapper = createWrapper({
         propsData: {
           message: 'foo',
-          loading: true,
+          isLoading: true,
         },
       });
 
