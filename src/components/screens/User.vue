@@ -6,7 +6,7 @@
     >
       <account-form
         :loading="loading"
-        :closable="isDialog"
+        :is-closable="isDialog"
         :accounts="accountsOptions"
         :networks="networksOptions"
         :form-data="formData"

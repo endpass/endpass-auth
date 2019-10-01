@@ -12,7 +12,7 @@
     />
     <message-form
       v-else-if="currentForm === FORM.MESSAGE"
-      :closable="isClosable"
+      :is-closable="isClosable"
       :message="$i18n.t('components.compositeAuth.linkSentMessage')"
       @cancel="onAuthCancel"
     />

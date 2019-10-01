@@ -3,7 +3,7 @@
     :request="request"
     :error="error"
     :loading="loading"
-    :closable="closable"
+    :is-closable="isClosable"
     :is-form-valid="isFormValid"
     :title="$t('components.sign.requiresSignBy')"
     @cancel="emitCancel"
@@ -45,7 +45,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },

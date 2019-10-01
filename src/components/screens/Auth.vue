@@ -6,7 +6,7 @@
     >
       <composite-auth-form
         v-if="activeForm === FORMS.AUTH"
-        :closable="isDialog"
+        :is-closable="isDialog"
         @authorize="handleAuthorize"
       />
       <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />

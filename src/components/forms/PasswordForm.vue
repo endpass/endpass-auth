@@ -98,7 +98,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },

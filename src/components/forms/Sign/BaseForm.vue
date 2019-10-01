@@ -40,7 +40,7 @@
     <slot />
     <form-controls>
       <v-button
-        :disabled="!closable || loading"
+        :disabled="!isClosable || loading"
         skin="quaternary"
         type="button"
         data-test="cancel-button"
@@ -93,7 +93,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },

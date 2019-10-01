@@ -6,7 +6,7 @@
     >
       <composite-auth-form
         v-if="activeForm === FORMS.AUTH"
-        :closable="false"
+        :is-closable="false"
         :is-public="true"
         @authorize="handleAuthorize"
       />

@@ -77,7 +77,7 @@
         {{ $t('global.logout') }}
       </v-button>
       <v-button
-        :disabled="!closable || loading"
+        :disabled="!isClosable || loading"
         type="button"
         data-test="cancel-button"
         skin="quaternary"
@@ -102,7 +102,7 @@ export default {
   name: 'AccountForm',
 
   props: {
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
@@ -165,7 +165,7 @@ export default {
     },
 
     emitCancel() {
-      if (this.closable) {
+      if (this.isClosable) {
         this.$emit('cancel');
       }
     },

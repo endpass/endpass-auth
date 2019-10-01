@@ -6,7 +6,7 @@
       </message>
     </form-item>
     <v-button
-      :disabled="!closable"
+      :disabled="!isClosable"
       data-test="cancel-button"
       @click="emitCancel"
     >
@@ -29,7 +29,7 @@ export default {
       required: true,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: false,
     },

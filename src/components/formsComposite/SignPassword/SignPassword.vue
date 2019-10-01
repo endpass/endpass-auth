@@ -4,7 +4,7 @@
       v-if="activeForm === FORMS.SIGN"
       :is-loading="isLoadProcess"
       :error="error"
-      :closable="isDialog"
+      :is-closable="isDialog"
       :with-logout-btn="withLogoutBtn"
       :requester-url="requesterUrl"
       :message="message"

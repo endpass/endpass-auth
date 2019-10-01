@@ -1,12 +1,8 @@
 <template>
   <div>
-    <auth-form
+    <sign-in-form
       v-if="currentForm === FORMS.AUTH"
-      :is-inited="isInited"
-      :loading="loading"
       :error="error"
-      :is-server-mode="isIdentityMode"
-      :is-regular-password-mode="isRegularPasswordMode"
       :is-public="isPublic"
       @socialSubmit="handleSocialSubmit"
       @submit="handleAuthSubmit"
@@ -23,7 +19,7 @@
       v-else-if="currentForm === FORMS.CODE"
       :email="email"
       :error="error"
-      :is-closable="closable"
+      :is-closable="isClosable"
       @submit="onCodeSubmit"
       @cancel="onAuthCancel"
     />
@@ -31,7 +27,7 @@
 </template>
 
 <script>
-import AuthForm from './Auth';
+import SignInForm from './Auth';
 import RegularPasswordForm from './RegularPassword';
 import CodeForm from './Code';
 import { IDENTITY_MODE } from '@/constants';
@@ -47,7 +43,7 @@ export default {
   name: 'CompositeAuth',
 
   props: {
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
@@ -71,18 +67,6 @@ export default {
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
-
-    loading() {
-      return this.$options.coreStore.loading;
-    },
-
-    isIdentityMode() {
-      return this.$options.coreStore.isIdentityMode;
-    },
-
     isLogin() {
       return this.$options.authStore.isLogin;
     },
@@ -163,7 +147,7 @@ export default {
   },
 
   components: {
-    AuthForm,
+    SignInForm,
     CodeForm,
     RegularPasswordForm,
   },

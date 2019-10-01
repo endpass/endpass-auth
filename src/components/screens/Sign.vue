@@ -9,7 +9,7 @@
         :loading="loading"
         :request="request"
         :error="error"
-        :closable="isDialog"
+        :is-closable="isDialog"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
@@ -18,7 +18,7 @@
         :loading="loading"
         :request="request"
         :error="error"
-        :closable="isDialog"
+        :is-closable="isDialog"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
