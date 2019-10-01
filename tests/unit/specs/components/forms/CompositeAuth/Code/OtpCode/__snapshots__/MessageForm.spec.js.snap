@@ -2,7 +2,7 @@
 
 exports[`Message render should correctly render Message component 1`] = `
 <div>
-  <form-item-stub>
+  <form-item-stub class="v-mb-24">
     <message-stub data-test="form-message">
       foo
     </message-stub>

@@ -3,12 +3,10 @@
     data-test="recover-form"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.recover.enterSeed')"
-    />
-    <form-item>
+    <v-title>
+      <span v-html="$t('components.recover.enterSeed')" />
+    </v-title>
+    <form-item class="v-mb-24">
       <v-input
         v-model="seedPhrase"
         :error="error"
@@ -34,10 +32,10 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
-import Message from '@/components/common/Message.vue';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import { authStore, coreStore } from '@/store';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'RecoverForm',
@@ -83,9 +81,9 @@ export default {
   },
 
   components: {
+    VTitle,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },

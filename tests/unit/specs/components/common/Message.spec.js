@@ -11,7 +11,7 @@ describe('Message', () => {
 
     it('should correctly render Message component', () => {
       expect(wrapper.name()).toBe('Message');
-      expect(wrapper.classes()).toEqual(['message']);
+      expect(wrapper.classes()).toEqual(['v-lh-1-5', 'message']);
       expect(wrapper.html()).toMatchSnapshot();
     });
 

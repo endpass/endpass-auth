@@ -3,14 +3,17 @@
 exports[`Widget Header render should change status label is collapsed is falsy 1`] = `
 <header data-test="widget-header" role="button" tabindex="0" class="widget-header">
   <section class="widget-header-control">
-    <h3 class="widget-header-title">
+    <h3 class="widget-header-title v-lh-1-3">
       balance
-    </h3> <span data-test="widget-header-status" class="widget-header-status">
+    </h3> <span data-test="widget-header-status" class="widget-header-status v-lh-1">
       Show less
       <span class="widget-header-status-icon"><v-svg-icon-stub name="chevron-up" width="10px" fill="" height="5px"></v-svg-icon-stub></span></span>
   </section>
   <section class="widget-header-content">
-    <spinner-stub size="24" iswhite="true"></spinner-stub> <a href="https://wallet.endpass.com" target="_blank" class="widget-header-link">wallet.endpass.com</a>
+    <spinner-stub size="24" iswhite="true"></spinner-stub>
+    <v-link-stub isunderline="true" href="https://wallet.endpass.com" target="_blank" class="widget-header-link v-lh-1-5">
+      wallet.endpass.com
+    </v-link-stub>
   </section>
 </header>
 `;
@@ -18,14 +21,17 @@ exports[`Widget Header render should change status label is collapsed is falsy 1
 exports[`Widget Header render should correctly render 1`] = `
 <header data-test="widget-header" role="button" tabindex="0" class="widget-header">
   <section class="widget-header-control">
-    <h3 class="widget-header-title">
+    <h3 class="widget-header-title v-lh-1-3">
       balance
-    </h3> <span data-test="widget-header-status" class="widget-header-status">
+    </h3> <span data-test="widget-header-status" class="widget-header-status v-lh-1">
       Show more
       <span class="widget-header-status-icon"><v-svg-icon-stub name="chevron-down" width="10px" fill="" height="5px"></v-svg-icon-stub></span></span>
   </section>
   <section class="widget-header-content">
-    <spinner-stub size="24" iswhite="true"></spinner-stub> <a href="https://wallet.endpass.com" target="_blank" class="widget-header-link">wallet.endpass.com</a>
+    <spinner-stub size="24" iswhite="true"></spinner-stub>
+    <v-link-stub isunderline="true" href="https://wallet.endpass.com" target="_blank" class="widget-header-link v-lh-1-5">
+      wallet.endpass.com
+    </v-link-stub>
   </section>
 </header>
 `;

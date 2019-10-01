@@ -4,16 +4,15 @@ import Auth from '@/components/forms/CompositeAuth/Auth';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 
-describe.skip('Auth', () => {
+describe('Auth', () => {
   let wrapper;
 
   const localVue = createLocalVue();
   localVue.use(VeeValidate);
   const i18n = setupI18n(localVue);
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    wrapper = shallowMount(Auth, {
+  const createWrapper = (options = {}) => {
+    return shallowMount(Auth, {
       localVue,
       propsData: {
         isInited: true,
@@ -23,7 +22,13 @@ describe.skip('Auth', () => {
       },
       i18n,
       sync: false,
+      ...options,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    wrapper = createWrapper();
   });
 
   describe('render', () => {
@@ -34,32 +39,22 @@ describe.skip('Auth', () => {
     });
 
     it('should render error', () => {
-      wrapper = shallowMount(Auth, {
-        localVue,
+      wrapper = createWrapper({
         propsData: {
           message: 'foo',
           error: 'bar',
         },
-        provide: {
-          theme: 'default',
-        },
-        i18n,
       });
 
       expect(wrapper.findAll('[data-test=error-message]').exists()).toBe(true);
     });
 
     it('should change submit button text if loading and make it disabled', () => {
-      wrapper = shallowMount(Auth, {
-        localVue,
+      wrapper = createWrapper({
         propsData: {
           message: 'foo',
           loading: true,
         },
-        provide: {
-          theme: 'default',
-        },
-        i18n,
       });
 
       const submitButton = wrapper.find('[data-test=submit-button-auth]');
@@ -74,10 +69,14 @@ describe.skip('Auth', () => {
         expect(wrapper.find('server-mode-select-stub').exists()).toBe(false);
       });
 
-      it('should render server mode component', () => {
+      it('should render server mode component', async () => {
+        expect.assertions(1);
+
         wrapper.setProps({
           isServerMode: true,
         });
+
+        await wrapper.vm.$nextTick();
 
         expect(wrapper.find('server-mode-select-stub').exists()).toBe(true);
       });
@@ -92,7 +91,7 @@ describe.skip('Auth', () => {
     };
     const defaultEmitParams = { email, serverMode: defaultServerMode };
 
-    describe.skip('form', () => {
+    describe('form', () => {
       beforeEach(() => {
         wrapper = mount(Auth, {
           localVue,
@@ -104,6 +103,7 @@ describe.skip('Auth', () => {
             theme: 'default',
           },
           i18n,
+          sync: false,
         });
       });
 
@@ -132,12 +132,15 @@ describe.skip('Auth', () => {
             );
           });
 
-          it('should not allow submit form', () => {
+          it('should not allow submit form', async () => {
+            expect.assertions(1);
+
             wrapper.setData({
               email: 'foo@bar',
             });
-
             wrapper.find('form').trigger('submit');
+
+            await global.flushPromises();
 
             expect(wrapper.emitted().submit).toBe(undefined);
           });
@@ -150,7 +153,11 @@ describe.skip('Auth', () => {
             });
           });
 
-          it('should enable submit button', () => {
+          it('should enable submit button', async () => {
+            expect.assertions(1);
+
+            await global.flushPromises();
+
             expect(
               wrapper.find('[data-test=submit-button-auth]').attributes()
                 .disabled,
@@ -258,12 +265,16 @@ describe.skip('Auth', () => {
           expect(wrapper.find('[data-test=email-input]').exists()).toBe(false);
         });
 
-        it('should emit submit event when confirm', () => {
+        it('should emit submit event when confirm', async () => {
+          expect.assertions(1);
+
           wrapper.setData({
             email,
           });
+          await global.flushPromises();
 
           wrapper.find('server-mode-select-stub').vm.$emit('confirm');
+          await wrapper.vm.$nextTick();
 
           expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
         });

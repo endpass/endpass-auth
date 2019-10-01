@@ -20,7 +20,7 @@ exports[`Account render should correctly render Account component 1`] = `
     <v-button-stub skin="error" size="normal" type="button" data-test="logout-button">
       Logout
     </v-button-stub>
-    <v-button-stub skin="ghost" size="normal" type="button" data-test="cancel-button">
+    <v-button-stub skin="quaternary" size="normal" type="button" data-test="cancel-button">
       Close
     </v-button-stub>
   </form-controls-stub>

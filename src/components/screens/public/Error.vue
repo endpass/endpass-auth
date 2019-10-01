@@ -3,7 +3,7 @@
     :is-closable="isDialog"
     @close="handleClose"
   >
-    <div class="public-error">
+    <div class="public-error v-lh-1-5">
       <h1>
         {{ errorHint }}
       </h1>
@@ -59,10 +59,6 @@ export default {
 </script>
 
 <style lang="postcss">
-.public-error {
-  line-height: 1.5;
-}
-
 .public-error h1 {
   font-size: 26px;
   font-weight: bold;

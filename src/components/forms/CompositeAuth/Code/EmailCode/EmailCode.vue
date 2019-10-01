@@ -3,11 +3,12 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.emailCode.description', { email })"
-    />
+    <v-title>
+      <span v-html="$t('components.emailCode.title')" />
+    </v-title>
+    <v-description>
+      <span v-html="$t('components.emailCode.description', { email })" />
+    </v-description>
     <form-item>
       <v-input
         v-model="code"
@@ -20,15 +21,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-row>
-      <a
-        :disabled="isLoading"
-        href="#"
-        data-test="send-code"
-        @click.prevent="sendCode"
-      >
-        {{ $t('components.emailCode.sendTitle') }}
-      </a>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -36,6 +29,20 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
+    </form-item>
+    <form-row
+      class="v-fs-14"
+      centered
+    >
+      {{ $t('components.emailCode.didntGetTheCode') }}&nbsp;
+      <v-link
+        :disabled="isLoading"
+        href="#"
+        data-test="send-code"
+        @click.prevent="sendCode"
+      >
+        {{ $t('components.emailCode.sendTitle') }}
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -43,11 +50,13 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
+import VTitle from '@/components/common/VTitle';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'EmailCode',
@@ -109,20 +118,15 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
+    VDescription,
+    VLink,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

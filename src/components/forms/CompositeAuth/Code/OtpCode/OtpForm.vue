@@ -3,11 +3,13 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.otp.enterCode')"
-    />
+    <v-title>
+      <span v-html="$t('components.otp.title')" />
+    </v-title>
+    <v-description>
+      <span v-html="$t('components.otp.description')" />
+    </v-description>
+
     <form-item>
       <v-input
         v-model="code"
@@ -20,15 +22,7 @@
         data-test="code-input"
       />
     </form-item>
-    <form-row>
-      <a
-        :disabled="isLoading"
-        href="#"
-        data-test="recovery-link"
-        @click.prevent="emitRecoverEvent"
-      >
-        {{ $t('components.otp.noCode') }}
-      </a>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -36,6 +30,19 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
+    </form-item>
+    <form-row
+      class="v-fs-14"
+      centered
+    >
+      <v-link
+        :disabled="isLoading"
+        href="#"
+        data-test="recovery-link"
+        @click.prevent="emitRecoverEvent"
+      >
+        {{ $t('components.otp.noCode') }}
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -43,11 +50,13 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import { coreStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
+import VTitle from '@/components/common/VTitle';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'OtpForm',
@@ -92,20 +101,15 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
+    VDescription,
+    VLink,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

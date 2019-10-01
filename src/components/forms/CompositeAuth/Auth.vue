@@ -4,9 +4,9 @@
     @submit.prevent="handleSubmit"
   >
     <form-item v-if="isServerMode && !isPublic">
-      <message class="v-modal-card-title">
-        {{ $t('components.serverModeSelect.identityServer') }}
-      </message>
+      <v-title>
+        <span v-html="$t('components.serverModeSelect.identityServer')" />
+      </v-title>
       <server-mode-select
         v-model="serverMode"
         @confirm="handleSubmit"
@@ -15,11 +15,9 @@
       <v-divider />
     </form-item>
     <template v-if="isDefaultMode">
-      <message
-        class="v-modal-card-title"
-        data-test="form-message"
-        v-html="$t('components.auth.loginToContinue')"
-      />
+      <v-title>
+        <span v-html="$t('components.auth.loginToContinue')" />
+      </v-title>
       <form-item v-if="error">
         <message
           :error="true"
@@ -67,20 +65,21 @@
       <form-row centered>
         <v-checkbox v-model="isTermsAccepted">
           {{ $t('components.auth.iAccept') }}
-          <a
+          <v-link
             href="https://endpass.com/terms/"
             target="_blank"
+            is-underline
           >
             {{ $t('components.auth.termsOfService') }}
-          </a>
-
-          {{ $t('components.auth.and') }}
-          <a
+          </v-link>
+          &nbsp;{{ $t('components.auth.and') }}
+          <v-link
             href="https://endpass.com/privacy/"
             target="_blank"
+            is-underline
           >
             {{ $t('components.auth.privacyPolicy') }}
-          </a>
+          </v-link>
         </v-checkbox>
       </form-row>
     </template>
@@ -92,15 +91,17 @@ import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VDivider from '@endpass/ui/kit/VDivider';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import ServerModeSelect from '@/components/common/ServerModeSelect';
-import GoogleAuthButton from '@/components/common/GoogleAuthButton.vue';
-import GitAuthButton from '@/components/common/GitAuthButton.vue';
-import Message from '@/components/common/Message.vue';
+import GoogleAuthButton from '@/components/common/GoogleAuthButton';
+import GitAuthButton from '@/components/common/GitAuthButton';
+import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'AuthForm',
@@ -149,7 +150,7 @@ export default {
   computed: {
     primaryButtonLabel() {
       return !this.loading
-        ? this.$i18n.t('global.login')
+        ? this.$i18n.t('global.continue')
         : this.$i18n.t('global.loading');
     },
 
@@ -182,6 +183,9 @@ export default {
 
   methods: {
     handleSubmit() {
+      if (!this.isSubmitEnable) {
+        return;
+      }
       const { email, serverMode } = this;
 
       this.$emit('submit', { email, serverMode });
@@ -197,6 +201,8 @@ export default {
   },
   mixins: [formMixin],
   components: {
+    VLink,
+    VTitle,
     VCheckbox,
     VButton,
     VInput,

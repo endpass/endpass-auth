@@ -2,7 +2,7 @@
 
 exports[`Error Screen render should correctly render Error component 1`] = `
 <v-frame-stub title="Connect" isclosable="true">
-  <div class="public-error">
+  <div class="public-error v-lh-1-5">
     <h1>
 
     </h1>

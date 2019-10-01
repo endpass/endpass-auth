@@ -3,11 +3,9 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.regularPasswordForm.title')"
-    />
+    <v-title>
+      <span v-html="$t('components.regularPasswordForm.title')" />
+    </v-title>
     <form-item>
       <v-input
         v-model="password"
@@ -21,7 +19,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-row>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         type="submit"
@@ -29,16 +27,19 @@
       >
         {{ primaryButtonLabel }}
       </v-button>
-    </form-row>
-    <form-row>
-      <a
+    </form-item>
+    <form-row
+      class="v-fs-14"
+      centered
+    >
+      <v-link
         :disabled="isLoading"
         href="#"
         data-test="password-recover"
         @click.prevent="onRecover"
       >
         {{ $i18n.t('components.regularPasswordForm.recover') }}
-      </a>
+      </v-link>
     </form-row>
   </form>
 </template>
@@ -46,11 +47,12 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
+import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'PasswordForm',
@@ -76,7 +78,7 @@ export default {
 
     primaryButtonLabel() {
       return !this.isLoading
-        ? this.$i18n.t('global.confirm')
+        ? this.$i18n.t('global.login')
         : this.$i18n.t('global.loading');
     },
   },
@@ -94,20 +96,14 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VTitle,
+    VLink,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>

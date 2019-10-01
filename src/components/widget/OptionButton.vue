@@ -67,13 +67,12 @@ export default {
   align-items: center;
   width: 100%;
   height: 48px;
-  padding: 15px 12px 17px;
+  padding: 0 12px;
   margin: 0;
   border: none;
   border-bottom: 1px solid #f2f4f7;
   background: none;
   font-size: 14px;
-  line-height: 1.42;
   color: #13171a;
   cursor: pointer;
   transition: background-color 0.25s;

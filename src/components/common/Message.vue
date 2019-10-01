@@ -1,5 +1,6 @@
 <template>
   <p
+    class="v-lh-1-5"
     :class="{
       message: true,
       error: error,
@@ -37,7 +38,6 @@ export default {
 <style lang="postcss">
 .message {
   font-size: 1em;
-  line-height: 1.5;
 
   &.error {
     color: #f00;

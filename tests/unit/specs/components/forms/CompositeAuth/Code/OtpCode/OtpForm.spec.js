@@ -62,16 +62,20 @@ describe('Otp', () => {
     it('should not emit recover event', () => {
       coreStore.changeLoadingStatus(true);
 
-      wrapper.find('[data-test=recovery-link]').trigger('click');
+      wrapper.find('[data-test=recovery-link]').vm.$emit('click', {
+        preventDefault: () => {},
+      });
+
       expect(wrapper.emitted().recover).toBe(undefined);
     });
 
     it('should emit recover event', () => {
-      wrapper.setProps({
-        loading: false,
+      coreStore.changeLoadingStatus(false);
+
+      wrapper.find('[data-test=recovery-link]').vm.$emit('click', {
+        preventDefault: () => {},
       });
 
-      wrapper.find('[data-test=recovery-link]').trigger('click');
       expect(wrapper.emitted().recover).toEqual([[]]);
     });
   });

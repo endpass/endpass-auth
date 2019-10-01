@@ -33,7 +33,8 @@ export default {
   /**
    * Saves the encrypted keystore for an account
    * @param {[type]} address
-   * @param {Object} options.info
+   * @param {object} options
+   * @param {object} options.info
    * @param {...[type]} rest }
    */
   async setAccount(address, { info = {}, ...rest }) {

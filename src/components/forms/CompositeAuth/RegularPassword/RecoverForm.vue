@@ -3,11 +3,9 @@
     class="form-otp"
     @submit.prevent="onSubmit"
   >
-    <message
-      class="v-modal-card-title"
-      data-test="form-message"
-      v-html="$t('components.regularPasswordRecover.title')"
-    />
+    <v-title>
+      <span v-html="$t('components.regularPasswordRecover.title')" />
+    </v-title>
     <form-item>
       <v-input
         v-model="password"
@@ -47,44 +45,52 @@
         data-test="password-input"
       />
     </form-item>
-    <form-row>
-      <v-button
-        :disabled="isLoading"
-        skin="ghost"
-        data-test="submit-button"
-        @click="closeForm"
-      >
-        {{ $t('global.cancel') }}
-      </v-button>
-      <v-button
-        :disabled="!isSubmitEnable || isLoading"
-        type="submit"
-        data-test="submit-button"
-      >
-        {{ primaryButtonLabel }}
-      </v-button>
-    </form-row>
-    <form-item>
-      <a
+    <form-item class="v-mb-24">
+      <form-controls>
+        <v-button
+          :disabled="isLoading"
+          skin="quaternary"
+          data-test="submit-button"
+          @click="closeForm"
+        >
+          {{ $t('global.cancel') }}
+        </v-button>
+        <v-button
+          :disabled="!isSubmitEnable || isLoading"
+          type="submit"
+          data-test="submit-button"
+        >
+          {{ primaryButtonLabel }}
+        </v-button>
+      </form-controls>
+    </form-item>
+    <form-row
+      class="v-fs-14"
+      centered
+    >
+      {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
+      <v-link
         :disabled="isLoading"
         href="#"
         data-test="send-code"
         @click.prevent="sendCode"
       >
         {{ $t('components.emailCode.sendTitle') }}
-      </a>
-    </form-item>
+      </v-link>
+    </form-row>
   </form>
 </template>
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
+import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
-import Message from '@/components/common/Message.vue';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
+import VTitle from '@/components/common/VTitle';
+import FormControls from '@/components/common/FormControls';
 
 export default {
   name: 'PasswordForm',
@@ -173,20 +179,15 @@ export default {
   mixins: [formMixin],
 
   components: {
+    FormControls,
+    VLink,
+    VTitle,
     VButton,
     VInput,
-    Message,
     FormItem,
     FormRow,
   },
 };
 </script>
 
-<style lang="postcss">
-.form-otp {
-  a {
-    margin-right: 10px;
-    width: 100%;
-  }
-}
-</style>
+<style lang="postcss"></style>
