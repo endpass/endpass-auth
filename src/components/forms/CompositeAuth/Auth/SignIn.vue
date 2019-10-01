@@ -1,7 +1,7 @@
 <template>
   <form
     data-test="auth-form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <form-item v-if="isServerMode && !isPublic">
       <v-title>
@@ -9,7 +9,7 @@
       </v-title>
       <server-mode-select
         v-model="serverMode"
-        @confirm="handleSubmit"
+        @confirm="onSubmit"
       />
       <v-spacer :height="4" />
       <v-divider />
@@ -47,47 +47,39 @@
         {{ primaryButtonLabel }}
       </v-button>
       <v-spacer :height="3" />
-      <v-divider>or sign in with</v-divider>
+      <v-divider>{{ $t('components.auth.orSignInWith') }}</v-divider>
       <form-row class="auth-form-social-buttons">
         <google-auth-button
           type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
+          @submit="onSocialSubmit"
+          @error="onOauthError"
         />
         <v-spacer :width="16" />
         <git-auth-button
           type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
+          @submit="onSocialSubmit"
+          @error="onOauthError"
         />
       </form-row>
       <v-divider />
-      <form-row centered>
-        <v-checkbox v-model="isTermsAccepted">
-          {{ $t('components.auth.iAccept') }}
-          <v-link
-            href="https://endpass.com/terms/"
-            target="_blank"
-            is-underline
-          >
-            {{ $t('components.auth.termsOfService') }}
-          </v-link>
-          &nbsp;{{ $t('components.auth.and') }}
-          <v-link
-            href="https://endpass.com/privacy/"
-            target="_blank"
-            is-underline
-          >
-            {{ $t('components.auth.privacyPolicy') }}
-          </v-link>
-        </v-checkbox>
+      <form-row
+        centered
+        bold
+      >
+        {{ $t('components.auth.dontHaveAccount') }}&nbsp;
+        <v-link
+          href="#"
+          data-test="switch-to-sign-up"
+          @click.prevent="onSwitch"
+        >
+          {{ $t('components.auth.signUp') }}
+        </v-link>
       </form-row>
     </template>
   </form>
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VDivider from '@endpass/ui/kit/VDivider';
@@ -102,21 +94,14 @@ import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
+import { coreStore } from '@/store';
 
 export default {
-  name: 'AuthForm',
+  name: 'SignInForm',
+
+  coreStore,
 
   props: {
-    isInited: {
-      type: Boolean,
-      default: false,
-    },
-
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-
     error: {
       type: String,
       default: null,
@@ -126,20 +111,9 @@ export default {
       type: Boolean,
       default: false,
     },
-
-    isServerMode: {
-      type: Boolean,
-      default: false,
-    },
-
-    isRegularPasswordMode: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   data: () => ({
-    isTermsAccepted: true,
     email: '',
     serverMode: {
       type: IDENTITY_MODE.DEFAULT,
@@ -148,8 +122,16 @@ export default {
   }),
 
   computed: {
+    isServerMode() {
+      return this.$options.coreStore.isServerMode;
+    },
+
+    isLoading() {
+      return this.$options.coreStore.isLoading;
+    },
+
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('global.continue')
         : this.$i18n.t('global.loading');
     },
@@ -172,17 +154,20 @@ export default {
         isLocalMode,
         isCustomMode,
         isFormValid,
-        isTermsAccepted,
-        loading,
+        isLoading,
       } = this;
-      const isDefaultValid = isDefaultMode && isFormValid && isTermsAccepted;
+      const isDefaultValid = isDefaultMode && isFormValid;
 
-      return (isDefaultValid || isCustomMode || isLocalMode) && !loading;
+      return (isDefaultValid || isCustomMode || isLocalMode) && !isLoading;
     },
   },
 
   methods: {
-    handleSubmit() {
+    onSwitch() {
+      this.$emit('switch');
+    },
+
+    onSubmit() {
       if (!this.isSubmitEnable) {
         return;
       }
@@ -191,11 +176,11 @@ export default {
       this.$emit('submit', { email, serverMode });
     },
 
-    handleSocialSubmit() {
+    onSocialSubmit() {
       this.$emit('socialSubmit');
     },
 
-    handleOauthError(err) {
+    onOauthError(err) {
       this.$emit('error', err);
     },
   },
@@ -203,7 +188,6 @@ export default {
   components: {
     VLink,
     VTitle,
-    VCheckbox,
     VButton,
     VInput,
     VSpacer,

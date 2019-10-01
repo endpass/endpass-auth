@@ -21,5 +21,9 @@ export default {
 
 .form-row[centered] {
   justify-content: center;
+  text-align: center;
+}
+.form-row[bold] {
+  font-weight: bold;
 }
 </style>

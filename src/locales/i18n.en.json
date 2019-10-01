@@ -36,13 +36,20 @@
     "auth": {
       "invalidEmail": "invalidEmail",
       "loginToContinue": "Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
+      "signUpToContinue": "Sign up&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
       "enterEmail": "Enter your email...",
-      "iAccept": "I accept the",
-      "termsOfService": "Terms of Service",
+      "orSignInWith": "or sign in with",
+      "orRegisterWith": "or register with",
+      "iAccept": "By continuing, you agree to Endpass's",
+      "termsOfService": "Terms&nbsp;of&nbsp;Service",
       "and": "and",
-      "privacyPolicy": "Privacy Policy",
+      "privacyPolicy": "Privacy&nbsp;Policy",
       "dontHaveAccount": "Don't have an account?",
-      "signUp": "Sign up"
+      "haveAccount": "Already have an account?",
+      "newPassword": "Enter password...",
+      "confirmPassword": "Confirm password...",
+      "signUp": "Sign up",
+      "signIn": "Sign in"
     },
     "compositeAuth": {
       "successAuthMessage": "You are successfully authorized. Dialog will be closed in a few seconds.",

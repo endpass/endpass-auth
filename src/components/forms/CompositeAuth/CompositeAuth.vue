@@ -1,12 +1,22 @@
 <template>
   <div>
     <sign-in-form
-      v-if="currentForm === FORMS.AUTH"
+      v-if="currentForm === FORMS.SIGN_IN"
       :error="error"
       :is-public="isPublic"
-      @socialSubmit="handleSocialSubmit"
-      @submit="handleAuthSubmit"
+      @socialSubmit="onSocialSubmit"
+      @submit="onAuthSubmit"
       @error="handleAuthError"
+      @switch="onSwitchSign"
+    />
+    <sign-up-form
+      v-if="currentForm === FORMS.SIGN_UP"
+      :error="error"
+      :is-public="isPublic"
+      @socialSubmit="onSocialSubmit"
+      @submit="onAuthSubmit"
+      @error="handleAuthError"
+      @switch="onSwitchSign"
     />
     <regular-password-form
       v-else-if="currentForm === FORMS.PASSWORD"
@@ -27,14 +37,16 @@
 </template>
 
 <script>
-import SignInForm from './Auth';
+import SignUpForm from './Auth/SignUp';
+import SignInForm from './Auth/SignIn';
 import RegularPasswordForm from './RegularPassword';
 import CodeForm from './Code';
 import { IDENTITY_MODE } from '@/constants';
 import { authStore, coreStore } from '@/store';
 
 const FORMS = {
-  AUTH: 'AUTH',
+  SIGN_IN: 'SIGN_IN',
+  SIGN_UP: 'SIGN_UP',
   PASSWORD: 'PASSWORD',
   CODE: 'CODE',
 };
@@ -62,7 +74,7 @@ export default {
     password: null,
     serverMode: null,
     email: null,
-    currentForm: FORMS.AUTH,
+    currentForm: FORMS.SIGN_IN,
     FORMS,
   }),
 
@@ -77,6 +89,11 @@ export default {
   },
 
   methods: {
+    onSwitchSign() {
+      this.currentForm =
+        this.currentForm === FORMS.SIGN_UP ? FORMS.SIGN_IN : FORMS.SIGN_UP;
+    },
+
     async onCodeSubmit(code) {
       try {
         await this.$options.authStore.auth({
@@ -97,13 +114,13 @@ export default {
       this.currentForm = FORMS.CODE;
     },
 
-    async handleSocialSubmit() {
+    async onSocialSubmit() {
       await this.$options.authStore.waitLogin();
 
       this.handleSubmit();
     },
 
-    async handleAuthSubmit({ email, serverMode }) {
+    async onAuthSubmit({ email, serverMode }) {
       try {
         this.email = email;
         this.serverMode = serverMode;
@@ -148,6 +165,7 @@ export default {
 
   components: {
     SignInForm,
+    SignUpForm,
     CodeForm,
     RegularPasswordForm,
   },

@@ -27,4 +27,17 @@ export default {
     }
   }
 }
+@media (max-width: 360px) {
+  .form-controls {
+    display: block;
+
+    & > * {
+      margin-bottom: 16px !important;
+
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+  }
+}
 </style>
