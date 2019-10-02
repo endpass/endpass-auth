@@ -2,9 +2,7 @@
   <component
     :is="currentForm"
     :email="email"
-    :error="error"
-    @recover="toggleForm"
-    @recover-success="toggleForm"
+    @toggle="toggleForm"
     @submit="onSubmit"
     @cancel="onCancel"
   />
@@ -21,11 +19,6 @@ export default {
     email: {
       type: String,
       required: true,
-    },
-
-    error: {
-      type: String,
-      default: null,
     },
   },
 

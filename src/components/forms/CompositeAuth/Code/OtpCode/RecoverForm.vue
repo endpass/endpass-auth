@@ -63,6 +63,7 @@ export default {
 
   methods: {
     async onSubmit(seedPhrase) {
+      if (this.isLoading) return;
       try {
         this.isLoading = true;
         await this.$options.authStore.disableOtp({ seedPhrase });

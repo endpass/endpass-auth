@@ -12,7 +12,7 @@
         v-validate="'required|min:8'"
         data-vv-as="password"
         data-vv-name="password"
-        :error="errors.first('password') || error"
+        :error="errors.first('password')"
         name="password"
         type="password"
         :placeholder="$t('components.regularPasswordForm.placeholder')"
@@ -21,11 +21,11 @@
     </form-item>
     <form-item class="v-mb-24">
       <v-button
-        :disabled="!isFormValid || isLoading"
+        :disabled="!isFormValid"
         type="submit"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $i18n.t('global.login') }}
       </v-button>
     </form-item>
     <form-row
@@ -33,7 +33,6 @@
       centered
     >
       <v-link
-        :disabled="isLoading"
         href="#"
         data-test="password-recover"
         @click.prevent="onRecover"
@@ -51,37 +50,14 @@ import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
-import { authStore, coreStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 
 export default {
   name: 'PasswordForm',
 
-  authStore,
-  coreStore,
-
-  props: {
-    error: {
-      type: String,
-      default: null,
-    },
-  },
-
   data: () => ({
     password: '',
   }),
-
-  computed: {
-    isLoading() {
-      return this.$options.coreStore.isLoading;
-    },
-
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.login')
-        : this.$i18n.t('global.loading');
-    },
-  },
 
   methods: {
     onSubmit() {
@@ -89,7 +65,7 @@ export default {
     },
 
     onRecover() {
-      this.$emit('recover');
+      this.$emit('toggle');
     },
   },
 

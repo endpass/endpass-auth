@@ -91,6 +91,7 @@ export default {
 
   methods: {
     async onSubmit() {
+      if (this.isLoading) return;
       try {
         this.isLoading = true;
         this.error = null;
@@ -110,6 +111,7 @@ export default {
     },
 
     async sendCode() {
+      if (this.isLoading) return;
       try {
         this.isLoading = true;
         this.error = null;

@@ -204,8 +204,8 @@ export default {
       // this.$emit('social');
     },
 
-    onOauthError(err) {
-      this.error = err;
+    onOauthError() {
+      this.error = this.$i18n.t('components.compositeAuth.authFailed');
     },
   },
   mixins: [formMixin],

@@ -54,7 +54,6 @@ export default {
   coreStore,
 
   data: () => ({
-    error: null,
     password: null,
     serverMode: null,
     email: null,

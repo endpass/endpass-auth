@@ -54,10 +54,6 @@ export default {
     async onSubmit(options) {
       this.$emit('submit', options);
     },
-
-    handleAuthError() {
-      this.error = this.$i18n.t('components.compositeAuth.authFailed');
-    },
   },
 
   components: {

@@ -39,7 +39,7 @@
         :disabled="isLoading"
         href="#"
         data-test="recovery-link"
-        @click.prevent="emitRecoverEvent"
+        @click.prevent="onRecover"
       >
         {{ $t('components.otp.noCode') }}
       </v-link>
@@ -91,6 +91,7 @@ export default {
 
   methods: {
     async onSubmit() {
+      if (this.isLoading) return;
       try {
         const { code, email, password } = this;
         this.isLoading = true;
@@ -109,7 +110,7 @@ export default {
       }
     },
 
-    emitRecoverEvent() {
+    onRecover() {
       if (this.isLoading) return;
 
       this.$emit('recover');
