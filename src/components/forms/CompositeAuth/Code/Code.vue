@@ -3,7 +3,7 @@
     :is="currentForm"
     :email="email"
     :password="password"
-    @submit="onCodeSubmit"
+    @submit="onSubmit"
     @cancel="onCancel"
   />
 </template>
@@ -45,7 +45,7 @@ export default {
       this.$emit('cancel');
     },
 
-    async onCodeSubmit(code) {
+    onSubmit(code) {
       this.$emit('submit', code);
     },
   },

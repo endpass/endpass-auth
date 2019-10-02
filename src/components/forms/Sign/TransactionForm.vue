@@ -9,7 +9,10 @@
     @cancel="emitCancel"
     @submit="emitSubmit"
   >
-    <div data-test="sign-form-transaction-params">
+    <div
+      class="v-mb-24"
+      data-test="sign-form-transaction-params"
+    >
       <form-field :label="$t('components.sign.transactionTo')">
         <v-address :address="transaction.to" />
       </form-field>

@@ -44,28 +44,32 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-field>
-    <v-faucet-button
+    <form-item
       v-if="isRopsten"
-      :address="formData.activeAccount"
-      class-name="button primary fluid"
-      @before-request="emitDonateRequest"
-      @donate="emitDonateSuccess"
-      @donate-error="emitDonateError"
+      class="v-mb-24"
     >
-      <v-button
-        slot-scope="{ sendRequest, isLoading }"
-        type="button"
-        data-test="faucet-button"
-        :disabled="isLoading"
-        @click="sendRequest"
+      <v-faucet-button
+        :address="formData.activeAccount"
+        class-name="button primary fluid"
+        @before-request="emitDonateRequest"
+        @donate="emitDonateSuccess"
+        @donate-error="emitDonateError"
       >
-        {{
-          isLoading
-            ? $t('components.account.requestEthLoading')
-            : $t('components.account.requestEth')
-        }}
-      </v-button>
-    </v-faucet-button>
+        <v-button
+          slot-scope="{ sendRequest, isLoading }"
+          type="button"
+          data-test="faucet-button"
+          :disabled="isLoading"
+          @click="sendRequest"
+        >
+          {{
+            isLoading
+              ? $t('components.account.requestEthLoading')
+              : $t('components.account.requestEth')
+          }}
+        </v-button>
+      </v-faucet-button>
+    </form-item>
     <form-controls>
       <v-button
         :disabled="isLoading"
@@ -97,6 +101,7 @@ import VSelect from '@endpass/ui/kit/VSelect';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'AccountForm',
@@ -189,6 +194,7 @@ export default {
   },
 
   components: {
+    FormItem,
     VFaucetButton,
     VButton,
     VSelect,
