@@ -64,7 +64,7 @@
     },
     "regularPasswordRecover": {
       "title": "Change password",
-      "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
+      "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "placeholderCode": "Enter received code...",
@@ -75,7 +75,7 @@
     },
     "emailCode": {
       "title": "Verify email",
-      "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
+      "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "placeholder": "Enter received code...",
       "sendError": "Something went wrong with sending the code. Please, try again",
       "didntGetTheCode": "Didn't get the code?",

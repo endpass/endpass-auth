@@ -28,10 +28,7 @@
         {{ $i18n.t('global.login') }}
       </v-button>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       <v-link
         href="#"
         data-test="password-recover"
@@ -65,7 +62,7 @@ export default {
     },
 
     onRecover() {
-      this.$emit('toggle');
+      this.$emit('recover');
     },
   },
 

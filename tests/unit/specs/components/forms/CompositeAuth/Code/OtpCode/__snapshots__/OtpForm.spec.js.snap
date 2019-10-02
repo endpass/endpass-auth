@@ -12,7 +12,7 @@ exports[`OtpForm render should correctly render Otp component 1`] = `
       Confirm
     </v-button-stub>
   </form-item-stub>
-  <form-row-stub centered="" class="v-fs-14">
+  <form-row-stub class="v-fs-14 v-text-center">
     <v-link-stub href="#" data-test="recovery-link">
       Don't know code?
     </v-link-stub>

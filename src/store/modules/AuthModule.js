@@ -34,16 +34,6 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async signUp({ email, password }) {
-    const request = identityService.signUp({ email, password });
-
-    await this.handleAuthRequest({
-      request,
-      email,
-    });
-  }
-
-  @Action
   async loadAuthChallenge({ email }) {
     const request = identityService.getAuthChallenge(email);
 
@@ -107,9 +97,9 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async authByCode({ email, code, password }) {
-    await identityService.auth({ email, code, password });
-    await this.waitLogin();
+  async authByCode({ email, code, password, isSignUp }) {
+    await identityService.auth({ email, code, password, isSignUp });
+    await this.defineAuthStatus();
   }
 
   @Action

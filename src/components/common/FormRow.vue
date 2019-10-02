@@ -18,12 +18,4 @@ export default {
   display: flex;
   align-items: center;
 }
-
-.form-row[centered] {
-  justify-content: center;
-  text-align: center;
-}
-.form-row[bold] {
-  font-weight: bold;
-}
 </style>

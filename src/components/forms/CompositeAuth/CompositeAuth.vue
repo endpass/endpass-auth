@@ -16,6 +16,7 @@
       v-else-if="currentForm === FORMS.CODE"
       :email="email"
       :password="password"
+      :is-sign-up="isSignUp"
       :is-closable="isClosable"
       @submit="handleSubmit"
       @cancel="onCancel"
@@ -56,6 +57,7 @@ export default {
   data: () => ({
     password: null,
     serverMode: null,
+    isSignUp: false,
     email: null,
     currentForm: FORMS.AUTH,
     FORMS,
@@ -67,7 +69,16 @@ export default {
       this.currentForm = FORMS.CODE;
     },
 
-    onAuthSubmit({ serverMode, email, password, isPasswordExist } = {}) {
+    onAuthSubmit(options = {}) {
+      const {
+        serverMode,
+        email,
+        password,
+        isSignUp = false,
+        isPasswordExist,
+      } = options;
+
+      this.isSignUp = isSignUp;
       this.serverMode = serverMode;
       this.email = email;
       this.password = password;

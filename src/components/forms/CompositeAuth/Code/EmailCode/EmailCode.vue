@@ -30,10 +30,7 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       {{ $t('components.emailCode.didntGetTheCode') }}&nbsp;
       <v-link
         :disabled="isLoading"
@@ -73,6 +70,11 @@ export default {
       type: String,
       required: true,
     },
+
+    isSignUp: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data: () => ({
@@ -95,8 +97,9 @@ export default {
       try {
         this.isLoading = true;
         this.error = null;
-        const { code, email, password } = this;
+        const { code, email, password, isSignUp } = this;
         await this.$options.authStore.authByCode({
+          isSignUp,
           email,
           password,
           code,

@@ -40,31 +40,28 @@ const setAuthPermission = signature =>
     signature,
   });
 
-const signUp = ({ email, password }) =>
-  request
-    .post(`${identityBaseUrl}/auth/signup`, {
-      email,
-      password,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
+const auth = async ({
+  email,
+  code,
+  password,
+  isSignUp,
+  challengeType = 'otp',
+}) => {
+  const url = isSignUp
+    ? `${identityBaseUrl}/auth/signup`
+    : `${identityBaseUrl}/auth/token`;
 
-      return res;
-    });
+  const res = await request.post(url, {
+    challengeType,
+    email,
+    code,
+    password,
+  });
 
-const auth = ({ email, code, password, challengeType = 'otp' }) =>
-  request
-    .post(`${identityBaseUrl}/auth/token`, {
-      challengeType,
-      email,
-      code,
-      password,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
+  if (!res.success) throw new Error(res.message);
 
-      return res;
-    });
+  return res;
+};
 
 const authWithGoogle = idToken =>
   request
@@ -218,7 +215,6 @@ export default {
   getAuthPermission,
   setAuthPermission,
   getAuthChallenge,
-  signUp,
   auth,
   authWithGoogle,
   authWithGitHub,

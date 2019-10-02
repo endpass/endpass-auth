@@ -31,10 +31,7 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       <v-link
         :disabled="isLoading"
         href="#"
@@ -73,6 +70,11 @@ export default {
       type: String,
       required: true,
     },
+
+    isSignUp: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data: () => ({
@@ -93,10 +95,11 @@ export default {
     async onSubmit() {
       if (this.isLoading) return;
       try {
-        const { code, email, password } = this;
+        const { code, email, password, isSignUp } = this;
         this.isLoading = true;
         this.error = null;
         await this.$options.authStore.authByCode({
+          isSignUp,
           email,
           password,
           code,

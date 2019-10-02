@@ -64,10 +64,7 @@
         </v-button>
       </form-controls>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
       <v-link
         :disabled="isLoading"
@@ -150,7 +147,7 @@ export default {
     },
 
     closeForm() {
-      this.$emit('toggle');
+      this.$emit('close');
     },
 
     async sendCode() {

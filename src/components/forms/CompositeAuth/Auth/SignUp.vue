@@ -76,10 +76,7 @@
         />
       </form-controls>
     </form-item>
-    <form-row
-      class="v-fs-12 v-lh-1-4"
-      centered
-    >
+    <form-row class="v-fs-12 v-lh-1-4 v-text-center">
       <div>
         {{ $t('components.auth.iAccept') }}
         <v-link
@@ -100,10 +97,7 @@
       </div>
     </form-row>
     <v-divider />
-    <form-row
-      centered
-      bold
-    >
+    <form-row class="v-text-center v-fw-b">
       {{ $t('components.auth.haveAccount') }}&nbsp;
       <v-link
         href="#"
@@ -177,31 +171,20 @@ export default {
 
   methods: {
     onSwitch() {
-      this.$emit('switch');
+      this.$emit('sign-up');
     },
 
     async onSubmit() {
       if (!this.isSubmitEnable) {
         return;
       }
-      this.isLoading = true;
-      this.error = null;
-
-      try {
-        const { email, password } = this;
-        await this.$options.authStore.signUp({ email, password });
-
-        this.$emit('submit', { email, password });
-      } catch (error) {
-        this.error = this.$i18n.t('components.auth.signUpFailed');
-      } finally {
-        this.isLoading = false;
-      }
+      const { email, password } = this;
+      this.$emit('submit', { email, password, isSignUp: true });
     },
 
-    onSocial() {
-      // TODO: add social singup
-      // this.$emit('social');
+    async onSocial() {
+      await this.$options.authStore.waitLogin();
+      this.$emit('social');
     },
 
     onOauthError() {

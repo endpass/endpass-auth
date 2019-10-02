@@ -64,10 +64,7 @@
         </form-controls>
       </form-row>
       <v-divider />
-      <form-row
-        centered
-        bold
-      >
+      <form-row class="v-text-center v-fw-b">
         {{ $t('components.auth.dontHaveAccount') }}&nbsp;
         <v-link
           href="#"
@@ -171,7 +168,7 @@ export default {
 
   methods: {
     onSwitch() {
-      this.$emit('switch');
+      this.$emit('sign-in');
     },
 
     onSubmit() {

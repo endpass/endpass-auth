@@ -1,16 +1,11 @@
 <template>
-  <sign-in
-    v-if="currentForm === FORMS.SIGN_IN"
+  <component
+    :is="currentForm"
     :is-public="isPublic"
     @social="onSocial"
     @submit="onSubmit"
-    @switch="onSwitch"
-  />
-  <sign-up
-    v-else-if="currentForm === FORMS.SIGN_UP"
-    @social="onSocial"
-    @submit="onSubmit"
-    @switch="onSwitch"
+    @sign-in="onSwitch"
+    @sign-up="onSwitch"
   />
 </template>
 
@@ -18,11 +13,6 @@
 import SignIn from './SignIn';
 import SignUp from './SignUp';
 import { authStore } from '@/store';
-
-const FORMS = {
-  SIGN_IN: 'SIGN_IN',
-  SIGN_UP: 'SIGN_UP',
-};
 
 export default {
   name: 'Auth',
@@ -37,14 +27,12 @@ export default {
   },
 
   data: () => ({
-    currentForm: FORMS.SIGN_IN,
-    FORMS,
+    currentForm: SignIn,
   }),
 
   methods: {
     onSwitch() {
-      this.currentForm =
-        this.currentForm === FORMS.SIGN_UP ? FORMS.SIGN_IN : FORMS.SIGN_UP;
+      this.currentForm = this.currentForm === SignIn ? SignUp : SignIn;
     },
 
     async onSocial() {

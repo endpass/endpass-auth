@@ -2,7 +2,8 @@
   <component
     :is="currentForm"
     :email="email"
-    @toggle="toggleForm"
+    @close="toggleForm"
+    @recover="toggleForm"
     @submit="onSubmit"
     @cancel="onCancel"
   />

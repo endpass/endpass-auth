@@ -51,7 +51,7 @@ exports[`SignIn render should correctly render SignIn component 1`] = `
     </form-controls-stub>
   </form-row-stub>
   <v-divider-stub></v-divider-stub>
-  <form-row-stub centered="" bold="">
+  <form-row-stub class="v-text-center v-fw-b">
     Don't have an account?&nbsp;
     <v-link-stub href="#" data-test="switch-to-sign-up">
       Sign up
