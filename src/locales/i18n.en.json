@@ -64,7 +64,7 @@
     },
     "createPassword": {
       "title": "Create regular password",
-      "description": "You haven't any regular password for&nbsp;Endpass account",
+      "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only",
       "createError": "Something went wrong with create password. Please, try again",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password..."
