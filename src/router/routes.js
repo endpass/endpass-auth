@@ -132,7 +132,6 @@ const routes = [
     },
   },
   {
-    // TODO: change to lazy load instead of sub components
     path: '/sign',
     name: 'SignScreen',
     component: () =>

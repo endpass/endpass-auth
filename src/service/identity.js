@@ -175,7 +175,7 @@ const resetRegularPassword = async ({
     },
   );
 
-  if (success) throw new Error('Success false');
+  if (!success) throw new Error('Success false');
 
   return success;
 };

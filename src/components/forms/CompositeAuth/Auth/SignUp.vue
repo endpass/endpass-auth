@@ -193,8 +193,7 @@ export default {
 
         this.$emit('submit', { email, password });
       } catch (error) {
-        // TODO: add langs
-        this.error = error;
+        this.error = this.$i18n.t('components.auth.signUpFailed');
       } finally {
         this.isLoading = false;
       }

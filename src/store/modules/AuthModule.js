@@ -109,7 +109,7 @@ class AuthModule extends VuexModule {
   @Action
   async authByCode({ email, code, password }) {
     await identityService.auth({ email, code, password });
-    await this.$options.authStore.waitLogin();
+    await this.waitLogin();
   }
 
   @Action

@@ -103,8 +103,7 @@ export default {
 
         this.$emit('submit', code);
       } catch (err) {
-        // TODO: add handling
-        this.error = err;
+        this.error = this.$i18n.t('components.otpBlock.authFailed');
       } finally {
         this.isLoading = false;
       }

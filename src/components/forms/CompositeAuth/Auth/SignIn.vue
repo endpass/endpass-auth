@@ -222,18 +222,12 @@ export default {
     },
 
     async onSocialSubmit() {
-      try {
-        await this.$options.authStore.waitLogin();
-        this.$emit('social');
-      } catch (e) {
-        // TODO: add langs
-        this.error = e;
-      }
+      await this.$options.authStore.waitLogin();
+      this.$emit('social');
     },
 
-    onOauthError(err) {
-      // TODO: add langs
-      this.error = err;
+    onOauthError() {
+      this.error = this.$i18n.t('components.compositeAuth.authFailed');
     },
   },
   mixins: [formMixin],
