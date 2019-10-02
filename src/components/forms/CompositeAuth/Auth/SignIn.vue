@@ -120,10 +120,6 @@ export default {
   }),
 
   computed: {
-    isRegularPasswordMode() {
-      return this.$options.coreStore.isRegularPasswordMode;
-    },
-
     isServerMode() {
       return this.$options.coreStore.isServerMode;
     },
@@ -178,10 +174,10 @@ export default {
       this.handleSubmit();
     },
 
-    handleSubmit(options) {
+    handleSubmit() {
       const { email, serverMode } = this;
 
-      this.$emit('submit', { email, serverMode, ...options });
+      this.$emit('submit', { email, serverMode });
     },
 
     async onSignIn() {
@@ -200,17 +196,7 @@ export default {
         this.isLoading = true;
         await this.$options.authStore.loadAuthChallenge({ email });
 
-        if (!this.isRegularPasswordMode) {
-          this.handleSubmit();
-          this.isLoading = false;
-          return;
-        }
-
-        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
-          email,
-        );
-
-        this.handleSubmit({ isPasswordExist });
+        this.handleSubmit();
       } catch (error) {
         this.error = error;
       } finally {

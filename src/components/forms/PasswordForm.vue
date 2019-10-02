@@ -22,7 +22,6 @@
     </form-item>
     <form-item>
       <v-input
-        id="password"
         v-model="password"
         v-validate="'required|min:8'"
         data-vv-as="Password"
