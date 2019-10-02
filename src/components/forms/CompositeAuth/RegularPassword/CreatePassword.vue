@@ -37,21 +37,19 @@
     </form-item>
     <form-row>
       <form-controls>
-        <v-button
-          :disabled="!isSubmitEnable || isLoading"
+        <v-confirm-button
+          :title="$t('global.confirm')"
+          :disabled="!isSubmitEnable"
           type="submit"
           size="big"
           data-test="submit-button"
-        >
-          {{ primaryButtonLabel }}
-        </v-button>
+        />
       </form-controls>
     </form-row>
   </form>
 </template>
 
 <script>
-import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import FormItem from '@/components/common/FormItem';
 import formMixin from '@/mixins/form';
@@ -60,6 +58,7 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 import FormControls from '@/components/common/FormControls';
 import FormRow from '@/components/common/FormRow';
+import VConfirmButton from '@/components/common/VConfirmButton';
 
 export default {
   name: 'PasswordForm',
@@ -76,7 +75,6 @@ export default {
   data: () => ({
     password: '',
     repeatPassword: '',
-    isLoading: false,
   }),
 
   computed: {
@@ -87,45 +85,23 @@ export default {
     isPasswordEqual() {
       return this.password && this.password === this.repeatPassword;
     },
-
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.confirm')
-        : this.$i18n.t('global.loading');
-    },
   },
 
   methods: {
-    async onSubmit() {
-      if (this.isLoading) return;
-      try {
-        this.isLoading = true;
-        this.$validator.errors.removeById('passwordId');
-        await this.$options.authStore.sendCode({
-          email: this.email,
-        });
-        this.$emit('submit', this.password);
-      } catch (error) {
-        this.$validator.errors.add({
-          field: 'password',
-          msg: this.$i18n.t('components.createPassword.createError'),
-          id: 'passwordId',
-        });
-      } finally {
-        this.isLoading = false;
-      }
+    onSubmit() {
+      this.$emit('submit', this.password);
     },
   },
 
   mixins: [formMixin],
 
   components: {
+    VConfirmButton,
     FormRow,
     FormControls,
     VTitle,
     VDescription,
     VInput,
-    VButton,
     FormItem,
   },
 };

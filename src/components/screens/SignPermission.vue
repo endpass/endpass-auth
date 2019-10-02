@@ -37,9 +37,6 @@ export default {
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
     isDialog() {
       return this.$options.coreStore.isDialog;
     },

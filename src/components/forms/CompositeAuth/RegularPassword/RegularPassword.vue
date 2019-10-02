@@ -1,14 +1,14 @@
 <template>
+  <loading-screen v-if="isLoading" />
   <component
     :is="currentForm"
-    v-if="currentForm && !isLoading"
+    v-else-if="!isLoading"
     :email="email"
     @close="toggleForm"
     @recover="toggleForm"
     @submit="onSubmit"
     @cancel="onCancel"
   />
-  <loading-screen v-else-if="isLoading" />
 </template>
 
 <script>
