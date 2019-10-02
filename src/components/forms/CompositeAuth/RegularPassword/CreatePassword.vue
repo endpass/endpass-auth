@@ -3,9 +3,16 @@
     <v-title>
       <span v-html="$t('components.createPassword.title')" />
     </v-title>
+    <v-description>
+      <span v-html="$t('components.createPassword.description')" />
+    </v-description>
+
     <form-item>
-      <v-password
+      <v-input
         v-model="password"
+        v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="password"
         :error="errors.first('password')"
@@ -15,8 +22,11 @@
       />
     </form-item>
     <form-item class="v-mb-24">
-      <v-password
+      <v-input
         v-model="repeatPassword"
+        v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="repeatPassword"
         :error="errors.first('repeatPassword')"
@@ -42,11 +52,12 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
+import VInput from '@endpass/ui/kit/VInput';
 import FormItem from '@/components/common/FormItem';
 import formMixin from '@/mixins/form';
 import { authStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
-import VPassword from '@/components/common/VPassword';
+import VDescription from '@/components/common/VDescription';
 import FormControls from '@/components/common/FormControls';
 import FormRow from '@/components/common/FormRow';
 
@@ -112,7 +123,8 @@ export default {
     FormRow,
     FormControls,
     VTitle,
-    VPassword,
+    VDescription,
+    VInput,
     VButton,
     FormItem,
   },

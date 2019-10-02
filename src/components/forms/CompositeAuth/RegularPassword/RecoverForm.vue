@@ -4,8 +4,11 @@
       <span v-html="$t('components.regularPasswordRecover.title')" />
     </v-title>
     <form-item>
-      <v-password
+      <v-input
         v-model="password"
+        v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="password"
         :error="errors.first('password')"
@@ -15,8 +18,11 @@
       />
     </form-item>
     <form-item>
-      <v-password
+      <v-input
         v-model="repeatPassword"
+        v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="repeatPassword"
         :error="errors.first('repeatPassword')"
@@ -80,7 +86,6 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
-import VPassword from '@/components/common/VPassword';
 import FormControls from '@/components/common/FormControls';
 
 export default {
@@ -172,7 +177,6 @@ export default {
     FormControls,
     VLink,
     VTitle,
-    VPassword,
     VButton,
     VInput,
     FormItem,

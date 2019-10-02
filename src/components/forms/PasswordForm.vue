@@ -26,7 +26,7 @@
         v-validate="'required|min:8'"
         data-vv-as="Password"
         data-vv-name="password"
-        required="true"
+        required
         type="password"
         name="password"
         :error="errors.first('password') || errorTitle"

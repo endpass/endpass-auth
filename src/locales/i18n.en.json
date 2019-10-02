@@ -63,7 +63,8 @@
       "recover": "Forgot your password?"
     },
     "createPassword": {
-      "title": "Create password for your Endpass account",
+      "title": "Create regular password",
+      "description": "You haven't any regular password for&nbsp;Endpass account",
       "createError": "Something went wrong with create password. Please, try again",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password..."

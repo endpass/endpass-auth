@@ -34,6 +34,7 @@
         :data-vv-as="$t('components.sign.passwordField')"
         name="password"
         type="password"
+        required
         data-test="password-input"
       />
     </form-field>
