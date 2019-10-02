@@ -77,7 +77,7 @@ export default {
 
   data: () => ({
     code: '',
-    error: '',
+    error: null,
     isLoading: false,
   }),
 

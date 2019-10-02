@@ -11,7 +11,7 @@ localVue.use(Vuex);
 localVue.use(VueRouter);
 const i18n = setupI18n(localVue);
 
-describe('Otp', () => {
+describe('OtpCode', () => {
   let wrapper;
   const router = new VueRouter();
 

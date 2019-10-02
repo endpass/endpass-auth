@@ -1,21 +1,31 @@
 import { shallowMount, mount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import Auth from '@/components/forms/CompositeAuth/Auth/SignIn';
+import SignIn from '@/components/forms/CompositeAuth/Auth/SignIn';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
+import identityService from '@/service/identity';
 
-describe('Auth', () => {
+describe('SignIn', () => {
   let wrapper;
+  let coreStore;
 
   const localVue = createLocalVue();
   localVue.use(VeeValidate);
   const i18n = setupI18n(localVue);
 
   const createWrapper = (options = {}) => {
-    return shallowMount(Auth, {
+    const store = createStore();
+    const { coreStore: coreStoreModule } = createStoreModules(store);
+
+    coreStore = coreStoreModule;
+
+    return shallowMount(SignIn, {
       localVue,
+      coreStore,
       propsData: {
-        isInited: true,
+        isPublic: false,
       },
       provide: {
         theme: 'default',
@@ -32,13 +42,14 @@ describe('Auth', () => {
   });
 
   describe('render', () => {
-    it('should correctly render Auth component', () => {
-      expect(wrapper.name()).toBe('AuthForm');
+    it('should correctly render SignIn component', () => {
+      expect(wrapper.name()).toBe('SignInForm');
       expect(wrapper.find('[data-test=email-input]').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render error', () => {
+    it.skip('should render error', () => {
+      // TODO: add check for show error for identity request in other tests
       wrapper = createWrapper({
         propsData: {
           message: 'foo',
@@ -49,12 +60,10 @@ describe('Auth', () => {
       expect(wrapper.findAll('[data-test=error-message]').exists()).toBe(true);
     });
 
-    it('should change submit button text if loading and make it disabled', () => {
-      wrapper = createWrapper({
-        propsData: {
-          message: 'foo',
-          isLoading: true,
-        },
+    it.skip('should change submit button text if loading and make it disabled', () => {
+      wrapper = createWrapper();
+      wrapper.setData({
+        isLoading: true,
       });
 
       const submitButton = wrapper.find('[data-test=submit-button-auth]');
@@ -70,15 +79,32 @@ describe('Auth', () => {
       });
 
       it('should render server mode component', async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
-        wrapper.setProps({
-          isServerMode: true,
-        });
+        expect(wrapper.find('server-mode-select-stub').exists()).toBe(false);
+
+        coreStore.isServerMode = true;
 
         await wrapper.vm.$nextTick();
 
         expect(wrapper.find('server-mode-select-stub').exists()).toBe(true);
+      });
+
+      it.skip('should not call auth if mode is not default', async () => {
+        expect.assertions(2);
+
+        wrapper.find('form-stub').vm.$emit('submit', {
+          email: 'email',
+          serverMode: { type: IDENTITY_MODE.CUSTOM },
+        });
+
+        await global.flushPromises();
+
+        expect(identityService.auth).not.toBeCalled();
+
+        expect(wrapper.emitted().authorize[0]).toEqual([
+          { serverMode: { type: 'custom' } },
+        ]);
       });
     });
   });
@@ -93,12 +119,8 @@ describe('Auth', () => {
 
     describe('form', () => {
       beforeEach(() => {
-        wrapper = mount(Auth, {
+        wrapper = mount(SignIn, {
           localVue,
-          propsData: {
-            message: 'foo',
-            isInited: true,
-          },
           provide: {
             theme: 'default',
           },
@@ -164,60 +186,10 @@ describe('Auth', () => {
             ).not.toBe('disabled');
           });
 
-          it('should allow submit', () => {
+          it.skip('should allow submit', () => {
             wrapper.find('form').trigger('submit');
 
             expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
-          });
-        });
-      });
-
-      describe('terms', () => {
-        beforeEach(() => {
-          wrapper.setData({
-            email,
-          });
-        });
-
-        describe('isn`t accepted', () => {
-          beforeEach(() => {
-            wrapper.setData({
-              isTermsAccepted: false,
-            });
-          });
-
-          it('should not allow submit form', () => {
-            wrapper.find('form').trigger('submit');
-
-            expect(wrapper.emitted().submit).toBe(undefined);
-          });
-
-          it('should disable submit button', () => {
-            expect(
-              wrapper.find('[data-test=submit-button-auth]').attributes()
-                .disabled,
-            ).toBe('disabled');
-          });
-        });
-
-        describe('is accepted', () => {
-          beforeEach(() => {
-            wrapper.setData({
-              isTermsAccepted: true,
-            });
-          });
-
-          it('should allow submit form', () => {
-            wrapper.find('form').trigger('submit');
-
-            expect(wrapper.emitted().submit).toEqual([[defaultEmitParams]]);
-          });
-
-          it('should enable submit button', () => {
-            expect(
-              wrapper.find('[data-test=submit-button-auth]').attributes()
-                .disabled,
-            ).not.toBe('disabled');
           });
         });
       });
@@ -225,9 +197,7 @@ describe('Auth', () => {
 
     describe('server mode', () => {
       beforeEach(() => {
-        wrapper.setProps({
-          isServerMode: true,
-        });
+        coreStore.isServerMode = true;
       });
 
       describe('emit', () => {
