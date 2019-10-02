@@ -40,7 +40,7 @@
     <slot />
     <form-controls>
       <v-button
-        :disabled="!closable || loading"
+        :disabled="!isClosable || isLoading"
         skin="quaternary"
         type="button"
         data-test="cancel-button"
@@ -49,7 +49,7 @@
         {{ $t('global.close') }}
       </v-button>
       <v-button
-        :disabled="loading || !isFormValid"
+        :disabled="isLoading || !isFormValid"
         type="button"
         data-test="submit-button"
         @click="emitSubmit"
@@ -78,7 +78,7 @@ export default {
   inject: ['$validator'],
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -93,7 +93,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
@@ -129,7 +129,7 @@ export default {
     },
 
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('global.sign')
         : this.$i18n.t('global.loading');
     },

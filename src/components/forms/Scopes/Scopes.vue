@@ -5,7 +5,7 @@
         {{ $t('components.scopes.allowScopes') }}
       </message>
     </form-field>
-    <div class="form-field">
+    <div class="form-field v-mb-24">
       <scopes-checkbox-tree
         v-for="level in scopesTree"
         :key="level.key"

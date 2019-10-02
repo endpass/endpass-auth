@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Sign > TransactionForm render should render component and has correct name 1`] = `
-<base-form-stub request="[object Object]" closable="true" title="Requires payment by:">
-  <div data-test="sign-form-transaction-params">
+<base-form-stub request="[object Object]" isclosable="true" title="Requires payment by:">
+  <div data-test="sign-form-transaction-params" class="v-mb-24">
     <form-field-stub label="To">
       <v-address-stub address="0xaEF74e25181b0879d293396Dd9949Cf25b339407"></v-address-stub>
     </form-field-stub>

@@ -46,13 +46,10 @@ export default {
   data: () => ({
     error: null,
     seedPhrase: '',
+    isLoading: false,
   }),
 
   computed: {
-    isLoading() {
-      return this.$options.coreStore.loading;
-    },
-
     primaryButtonLabel() {
       return !this.isLoading
         ? this.$i18n.t('global.confirm')
@@ -66,7 +63,9 @@ export default {
 
   methods: {
     async onSubmit(seedPhrase) {
+      if (this.isLoading) return;
       try {
+        this.isLoading = true;
         await this.$options.authStore.disableOtp({ seedPhrase });
         this.$emit('recover');
       } catch (err) {
@@ -76,6 +75,8 @@ export default {
           (err && err.message) ||
           this.$i18n.t('components.otpBlock.recoverFailed');
         this.error = msg;
+      } finally {
+        this.isLoading = false;
       }
     },
   },

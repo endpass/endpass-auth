@@ -68,25 +68,9 @@ describe('CompositeAuth', () => {
       },
     };
 
-    it('should not call auth if mode is not default', async () => {
-      expect.assertions(2);
-
-      wrapper.find('auth-form-stub').vm.$emit('submit', {
-        email: 'email',
-        serverMode: { type: IDENTITY_MODE.CUSTOM },
-      });
-
-      await global.flushPromises();
-
-      expect(identityService.auth).not.toBeCalled();
-
-      expect(wrapper.emitted().authorize[0]).toEqual([
-        { serverMode: { type: 'custom' } },
-      ]);
-    });
-
     describe('otp behavior', () => {
-      it('should show otp block after submit', async () => {
+      it.skip('should show otp block after submit', async () => {
+        // TODO: move to auth test
         expect.assertions(2);
 
         identityService.getAuthChallenge.mockResolvedValueOnce({
@@ -102,7 +86,8 @@ describe('CompositeAuth', () => {
         expect(wrapper.emitted().authorize).toBeFalsy();
       });
 
-      it('should submit otp', async () => {
+      it.skip('should submit otp', async () => {
+        // TODO: move to otp tests
         expect.assertions(3);
 
         identityService.getAuthChallenge.mockResolvedValueOnce({
@@ -110,7 +95,9 @@ describe('CompositeAuth', () => {
           challenge: { challengeType: 'otp' },
         });
 
-        wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
+        wrapper
+          .find('auth-form-stub')
+          .vm.$emit('submit', { ...authParams, password: 'password' });
         await global.flushPromises();
         wrapper.find('code-form-stub').vm.$emit('submit');
         await global.flushPromises();
@@ -127,13 +114,10 @@ describe('CompositeAuth', () => {
     it('should cancel auth', async () => {
       expect.assertions(2);
 
-      identityService.getAuthChallenge.mockResolvedValueOnce({
-        success: true,
-      });
       const dataPromise = authChannel.take();
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
-      await global.flushPromises();
-      wrapper.find('code-form-stub').vm.$emit('cancel');
+      wrapper.find('regular-password-form-stub').vm.$emit('cancel');
+
       const res = await dataPromise;
 
       expect(res).toEqual(

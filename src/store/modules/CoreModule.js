@@ -18,7 +18,7 @@ import isDialog from '@/util/isDialog';
 class CoreModule extends VuexModule {
   isInited = false;
 
-  isIdentityMode = false;
+  isServerMode = false;
 
   isRegularPasswordMode = false;
 
@@ -34,7 +34,7 @@ class CoreModule extends VuexModule {
     this.sharedStore = sharedStore;
   }
 
-  get loading() {
+  get isLoading() {
     // for old code support
     return this.sharedStore.isLoading;
   }
@@ -101,7 +101,7 @@ class CoreModule extends VuexModule {
     }
 
     if (isIdentityMode !== undefined) {
-      this.isIdentityMode = isIdentityMode;
+      this.isServerMode = isIdentityMode;
     }
 
     if (showCreateAccount !== undefined) {

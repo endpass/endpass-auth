@@ -2,14 +2,17 @@
   <base-form
     :request="request"
     :error="error"
-    :loading="loading"
-    :closable="closable"
+    :is-loading="isLoading"
+    :is-closable="isClosable"
     :is-form-valid="isFormValid"
     :title="$t('components.sign.requiresPaymentBy')"
     @cancel="emitCancel"
     @submit="emitSubmit"
   >
-    <div data-test="sign-form-transaction-params">
+    <div
+      class="v-mb-24"
+      data-test="sign-form-transaction-params"
+    >
       <form-field :label="$t('components.sign.transactionTo')">
         <v-address :address="transaction.to" />
       </form-field>
@@ -130,7 +133,7 @@ export default {
   name: 'SignTransactionForm',
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -145,7 +148,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },

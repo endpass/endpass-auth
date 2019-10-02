@@ -1,7 +1,7 @@
 <template>
   <form
     data-test="auth-form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSignIn"
   >
     <form-item v-if="isServerMode && !isPublic">
       <v-title>
@@ -9,7 +9,7 @@
       </v-title>
       <server-mode-select
         v-model="serverMode"
-        @confirm="handleSubmit"
+        @confirm="onSubmit"
       />
       <v-spacer :height="4" />
       <v-divider />
@@ -47,47 +47,38 @@
         {{ primaryButtonLabel }}
       </v-button>
       <v-spacer :height="3" />
-      <v-divider>or sign in with</v-divider>
-      <form-row class="auth-form-social-buttons">
-        <google-auth-button
-          type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
-        />
-        <v-spacer :width="16" />
-        <git-auth-button
-          type="button"
-          @submit="handleSocialSubmit"
-          @error="handleOauthError"
-        />
+      <v-divider>{{ $t('components.auth.orSignInWith') }}</v-divider>
+      <form-row>
+        <form-controls>
+          <google-auth-button
+            type="button"
+            @submit="onSocialSubmit"
+            @error="onOauthError"
+          />
+          <v-spacer :width="16" />
+          <git-auth-button
+            type="button"
+            @submit="onSocialSubmit"
+            @error="onOauthError"
+          />
+        </form-controls>
       </form-row>
       <v-divider />
-      <form-row centered>
-        <v-checkbox v-model="isTermsAccepted">
-          {{ $t('components.auth.iAccept') }}
-          <v-link
-            href="https://endpass.com/terms/"
-            target="_blank"
-            is-underline
-          >
-            {{ $t('components.auth.termsOfService') }}
-          </v-link>
-          &nbsp;{{ $t('components.auth.and') }}
-          <v-link
-            href="https://endpass.com/privacy/"
-            target="_blank"
-            is-underline
-          >
-            {{ $t('components.auth.privacyPolicy') }}
-          </v-link>
-        </v-checkbox>
+      <form-row class="v-text-center v-fw-b">
+        {{ $t('components.auth.dontHaveAccount') }}&nbsp;
+        <v-link
+          href="#"
+          data-test="switch-to-sign-up"
+          @click.prevent="onSwitch"
+        >
+          {{ $t('components.auth.signUp') }}
+        </v-link>
       </form-row>
     </template>
   </form>
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VDivider from '@endpass/ui/kit/VDivider';
@@ -102,45 +93,26 @@ import Message from '@/components/common/Message';
 import { IDENTITY_MODE } from '@/constants';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
+import { coreStore, authStore } from '@/store';
+import FormControls from '@/components/common/FormControls';
 
 export default {
-  name: 'AuthForm',
+  name: 'SignInForm',
+
+  coreStore,
+  authStore,
 
   props: {
-    isInited: {
-      type: Boolean,
-      default: false,
-    },
-
-    loading: {
-      type: Boolean,
-      default: false,
-    },
-
-    error: {
-      type: String,
-      default: null,
-    },
-
     isPublic: {
-      type: Boolean,
-      default: false,
-    },
-
-    isServerMode: {
-      type: Boolean,
-      default: false,
-    },
-
-    isRegularPasswordMode: {
       type: Boolean,
       default: false,
     },
   },
 
   data: () => ({
-    isTermsAccepted: true,
+    isLoading: false,
     email: '',
+    error: '',
     serverMode: {
       type: IDENTITY_MODE.DEFAULT,
       serverUrl: undefined,
@@ -148,8 +120,16 @@ export default {
   }),
 
   computed: {
+    isRegularPasswordMode() {
+      return this.$options.coreStore.isRegularPasswordMode;
+    },
+
+    isServerMode() {
+      return this.$options.coreStore.isServerMode;
+    },
+
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('global.continue')
         : this.$i18n.t('global.loading');
     },
@@ -172,38 +152,86 @@ export default {
         isLocalMode,
         isCustomMode,
         isFormValid,
-        isTermsAccepted,
-        loading,
+        isLoading,
       } = this;
-      const isDefaultValid = isDefaultMode && isFormValid && isTermsAccepted;
+      const isDefaultValid = isDefaultMode && isFormValid;
 
-      return (isDefaultValid || isCustomMode || isLocalMode) && !loading;
+      return (isDefaultValid || isCustomMode || isLocalMode) && !isLoading;
+    },
+  },
+
+  watch: {
+    email() {
+      this.error = null;
     },
   },
 
   methods: {
-    handleSubmit() {
+    onSwitch() {
+      this.$emit('sign-in');
+    },
+
+    onSubmit() {
       if (!this.isSubmitEnable) {
         return;
       }
+      this.handleSubmit();
+    },
+
+    handleSubmit(options) {
       const { email, serverMode } = this;
 
-      this.$emit('submit', { email, serverMode });
+      this.$emit('submit', { email, serverMode, ...options });
     },
 
-    handleSocialSubmit() {
-      this.$emit('socialSubmit');
+    async onSignIn() {
+      if (!this.isSubmitEnable) {
+        return;
+      }
+
+      try {
+        const { email, serverMode } = this;
+
+        if (serverMode.type !== IDENTITY_MODE.DEFAULT) {
+          this.handleSubmit();
+          return;
+        }
+
+        this.isLoading = true;
+        await this.$options.authStore.loadAuthChallenge({ email });
+
+        if (!this.isRegularPasswordMode) {
+          this.handleSubmit();
+          this.isLoading = false;
+          return;
+        }
+
+        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
+          email,
+        );
+
+        this.handleSubmit({ isPasswordExist });
+      } catch (error) {
+        this.error = error;
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    handleOauthError(err) {
-      this.$emit('error', err);
+    async onSocialSubmit() {
+      await this.$options.authStore.waitLogin();
+      this.$emit('social');
+    },
+
+    onOauthError() {
+      this.error = this.$i18n.t('components.compositeAuth.authFailed');
     },
   },
   mixins: [formMixin],
   components: {
+    FormControls,
     VLink,
     VTitle,
-    VCheckbox,
     VButton,
     VInput,
     VSpacer,
@@ -217,15 +245,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-@media (max-width: 360px) {
-  .auth-form-social-buttons {
-    display: block;
-  }
-
-  .auth-form-social-buttons > button:not(:last-child) {
-    margin-bottom: 16px;
-  }
-}
-</style>

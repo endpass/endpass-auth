@@ -2,7 +2,7 @@
   <div>
     <otp-form
       v-if="currentForm === FORM.OTP"
-      :error="error"
+      v-bind="$attrs"
       @submit="onSubmit"
       @recover="onRecover"
     />
@@ -12,7 +12,7 @@
     />
     <message-form
       v-else-if="currentForm === FORM.MESSAGE"
-      :closable="isClosable"
+      :is-closable="isClosable"
       :message="$i18n.t('components.compositeAuth.linkSentMessage')"
       @cancel="onAuthCancel"
     />
@@ -37,11 +37,6 @@ export default {
     isClosable: {
       type: Boolean,
       default: false,
-    },
-
-    error: {
-      type: String,
-      default: null,
     },
   },
 

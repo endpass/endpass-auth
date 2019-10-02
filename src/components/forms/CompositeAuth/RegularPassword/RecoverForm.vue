@@ -12,7 +12,7 @@
         v-validate="'required|min:8'"
         data-vv-as="password"
         data-vv-name="password"
-        :error="errors.first('password') || error"
+        :error="errors.first('password')"
         name="password"
         type="password"
         :placeholder="$t('components.regularPasswordRecover.newPassword')"
@@ -25,7 +25,7 @@
         v-validate="'required|min:8'"
         data-vv-as="password"
         data-vv-name="repeatPassword"
-        :error="errors.first('repeatPassword') || error"
+        :error="errors.first('repeatPassword')"
         name="repeatPassword"
         type="password"
         :placeholder="$t('components.regularPasswordRecover.repeatPassword')"
@@ -38,7 +38,7 @@
         v-validate="'required|digits:6'"
         data-vv-as="code"
         data-vv-name="code"
-        :error="errors.first('code') || error"
+        :error="errors.first('code')"
         name="code"
         :label="$t('components.regularPasswordRecover.labelCode')"
         :placeholder="$t('components.regularPasswordRecover.placeholderCode')"
@@ -64,10 +64,7 @@
         </v-button>
       </form-controls>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
       <v-link
         :disabled="isLoading"
@@ -88,7 +85,7 @@ import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
-import { authStore, coreStore } from '@/store';
+import { authStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import FormControls from '@/components/common/FormControls';
 
@@ -96,17 +93,11 @@ export default {
   name: 'PasswordForm',
 
   authStore,
-  coreStore,
 
   props: {
     email: {
       type: String,
       required: true,
-    },
-
-    error: {
-      type: String,
-      default: null,
     },
   },
 
@@ -114,6 +105,7 @@ export default {
     password: '',
     repeatPassword: '',
     code: '',
+    isLoading: false,
   }),
 
   computed: {
@@ -125,10 +117,6 @@ export default {
       return this.password && this.password === this.repeatPassword;
     },
 
-    isLoading() {
-      return this.$options.coreStore.loading;
-    },
-
     primaryButtonLabel() {
       return !this.isLoading
         ? this.$i18n.t('global.confirm')
@@ -138,7 +126,9 @@ export default {
 
   methods: {
     async onSubmit() {
+      if (this.isLoading) return;
       try {
+        this.isLoading = true;
         this.$validator.errors.removeById('sendCodeId');
         await this.$options.authStore.resetRegularPassword({
           password: this.password,
@@ -151,16 +141,20 @@ export default {
           msg: this.$i18n.t('components.regularPasswordRecover.recoveryError'),
           id: 'sendCodeId',
         });
+      } finally {
+        this.isLoading = false;
       }
     },
 
     closeForm() {
-      this.$emit('recover-success');
+      this.$emit('close');
     },
 
     async sendCode() {
+      if (this.isLoading) return;
       try {
         this.$validator.errors.removeById('sendCodeId');
+        this.isLoading = true;
         await this.$options.authStore.sendCode({ email: this.email });
       } catch (error) {
         this.$validator.errors.add({
@@ -168,6 +162,8 @@ export default {
           msg: this.$i18n.t('components.emailCode.sendError'),
           id: 'sendCodeId',
         });
+      } finally {
+        this.isLoading = false;
       }
     },
   },

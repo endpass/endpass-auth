@@ -36,13 +36,21 @@
     "auth": {
       "invalidEmail": "invalidEmail",
       "loginToContinue": "Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
+      "signUpToContinue": "Sign up&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
       "enterEmail": "Enter your email...",
-      "iAccept": "I accept the",
-      "termsOfService": "Terms of Service",
+      "orSignInWith": "or sign in with",
+      "orRegisterWith": "or register with",
+      "iAccept": "By continuing, you agree to Endpass's",
+      "termsOfService": "Terms&nbsp;of&nbsp;Service",
       "and": "and",
-      "privacyPolicy": "Privacy Policy",
+      "privacyPolicy": "Privacy&nbsp;Policy",
       "dontHaveAccount": "Don't have an account?",
-      "signUp": "Sign up"
+      "haveAccount": "Already have an account?",
+      "password": "Enter password...",
+      "confirmPassword": "Confirm password...",
+      "signUp": "Sign up",
+      "signIn": "Sign in",
+      "signUpFailed": "Sign up failed. Please, try again."
     },
     "compositeAuth": {
       "successAuthMessage": "You are successfully authorized. Dialog will be closed in a few seconds.",
@@ -56,7 +64,7 @@
     },
     "regularPasswordRecover": {
       "title": "Change password",
-      "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
+      "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "placeholderCode": "Enter received code...",
@@ -67,7 +75,7 @@
     },
     "emailCode": {
       "title": "Verify email",
-      "description": "We just emailed a&nbsp;6-digit code to&nbsp;{email}. Enter the&nbsp;code below to&nbsp;confirm.",
+      "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "placeholder": "Enter received code...",
       "sendError": "Something went wrong with sending the code. Please, try again",
       "didntGetTheCode": "Didn't get the code?",

@@ -35,7 +35,7 @@
     <form-field>
       <v-button
         type="button"
-        :disabled="loading"
+        :disabled="isLoading"
         skin="primary"
         data-test="submit-button"
         fluid
@@ -44,31 +44,35 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-field>
-    <v-faucet-button
+    <form-item
       v-if="isRopsten"
-      :address="formData.activeAccount"
-      class-name="button primary fluid"
-      @before-request="emitDonateRequest"
-      @donate="emitDonateSuccess"
-      @donate-error="emitDonateError"
+      class="v-mb-24"
     >
-      <v-button
-        slot-scope="{ sendRequest, isLoading }"
-        type="button"
-        data-test="faucet-button"
-        :disabled="isLoading"
-        @click="sendRequest"
+      <v-faucet-button
+        :address="formData.activeAccount"
+        class-name="button primary fluid"
+        @before-request="emitDonateRequest"
+        @donate="emitDonateSuccess"
+        @donate-error="emitDonateError"
       >
-        {{
-          isLoading
-            ? $t('components.account.requestEthLoading')
-            : $t('components.account.requestEth')
-        }}
-      </v-button>
-    </v-faucet-button>
+        <v-button
+          slot-scope="{ sendRequest, isLoading }"
+          type="button"
+          data-test="faucet-button"
+          :disabled="isLoading"
+          @click="sendRequest"
+        >
+          {{
+            isLoading
+              ? $t('components.account.requestEthLoading')
+              : $t('components.account.requestEth')
+          }}
+        </v-button>
+      </v-faucet-button>
+    </form-item>
     <form-controls>
       <v-button
-        :disabled="loading"
+        :disabled="isLoading"
         type="button"
         skin="error"
         data-test="logout-button"
@@ -77,7 +81,7 @@
         {{ $t('global.logout') }}
       </v-button>
       <v-button
-        :disabled="!closable || loading"
+        :disabled="!isClosable || isLoading"
         type="button"
         data-test="cancel-button"
         skin="quaternary"
@@ -97,17 +101,18 @@ import VSelect from '@endpass/ui/kit/VSelect';
 import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
+import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'AccountForm',
 
   props: {
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
 
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -140,7 +145,7 @@ export default {
 
   computed: {
     primaryButtonLabel() {
-      return !this.loading
+      return !this.isLoading
         ? this.$i18n.t('components.account.updateAccount')
         : this.$i18n.t('global.loading');
     },
@@ -153,19 +158,19 @@ export default {
 
   methods: {
     emitSubmit() {
-      if (!this.loading) {
+      if (!this.isLoading) {
         this.$emit('submit');
       }
     },
 
     emitLogout() {
-      if (!this.loading) {
+      if (!this.isLoading) {
         this.$emit('logout');
       }
     },
 
     emitCancel() {
-      if (this.closable) {
+      if (this.isClosable) {
         this.$emit('cancel');
       }
     },
@@ -189,6 +194,7 @@ export default {
   },
 
   components: {
+    FormItem,
     VFaucetButton,
     VButton,
     VSelect,

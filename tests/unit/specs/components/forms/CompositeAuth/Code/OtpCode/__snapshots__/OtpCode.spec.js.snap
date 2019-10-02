@@ -1,18 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Otp render should correctly render Otp component 1`] = `
+exports[`OtpCode render should correctly render Otp component 1`] = `
 <div>
   <otp-form-stub></otp-form-stub>
 </div>
 `;
 
-exports[`Otp render should render opt form 1`] = `
+exports[`OtpCode render should render opt form 1`] = `
 <div>
   <otp-form-stub></otp-form-stub>
 </div>
 `;
 
-exports[`Otp render should render recover form 1`] = `
+exports[`OtpCode render should render recover form 1`] = `
 <div>
   <recover-form-stub></recover-form-stub>
 </div>

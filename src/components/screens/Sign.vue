@@ -6,19 +6,19 @@
     >
       <sign-transaction-form
         v-if="isTransaction"
-        :loading="loading"
+        :is-loading="isLoading"
         :request="request"
         :error="error"
-        :closable="isDialog"
+        :is-closable="isDialog"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
       <sign-message-form
         v-else
-        :loading="loading"
+        :is-loading="isLoading"
         :request="request"
         :error="error"
-        :closable="isDialog"
+        :is-closable="isDialog"
         @cancel="handleSignCancel"
         @submit="handleSignSubmit"
       />
@@ -49,8 +49,8 @@ export default {
     isInited() {
       return this.$options.coreStore.isInited;
     },
-    loading() {
-      return this.$options.coreStore.loading;
+    isLoading() {
+      return this.$options.coreStore.isLoading;
     },
     request() {
       return this.$options.requestStore.request;

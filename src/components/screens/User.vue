@@ -5,8 +5,8 @@
       @close="handleCancel"
     >
       <account-form
-        :loading="loading"
-        :closable="isDialog"
+        :is-loading="isLoading"
+        :is-closable="isDialog"
         :accounts="accountsOptions"
         :networks="networksOptions"
         :form-data="formData"
@@ -51,8 +51,8 @@ export default {
       return this.$options.coreStore.isInited;
     },
 
-    loading() {
-      return this.$options.coreStore.loading;
+    isLoading() {
+      return this.$options.coreStore.isLoading;
     },
 
     settings() {

@@ -31,15 +31,12 @@
         {{ primaryButtonLabel }}
       </v-button>
     </form-item>
-    <form-row
-      class="v-fs-14"
-      centered
-    >
+    <form-row class="v-fs-14 v-text-center">
       <v-link
         :disabled="isLoading"
         href="#"
         data-test="recovery-link"
-        @click.prevent="emitRecoverEvent"
+        @click.prevent="onRecover"
       >
         {{ $t('components.otp.noCode') }}
       </v-link>
@@ -51,7 +48,7 @@
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
-import { coreStore } from '@/store';
+import { authStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
@@ -61,24 +58,32 @@ import VDescription from '@/components/common/VDescription';
 export default {
   name: 'OtpForm',
 
-  coreStore,
+  authStore,
 
   props: {
-    error: {
+    email: {
       type: String,
-      default: null,
+      required: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    isSignUp: {
+      type: Boolean,
+      required: true,
     },
   },
 
   data: () => ({
     code: '',
+    error: null,
+    isLoading: false,
   }),
 
   computed: {
-    isLoading() {
-      return this.$options.coreStore.loading;
-    },
-
     primaryButtonLabel() {
       return !this.isLoading
         ? this.$i18n.t('global.confirm')
@@ -87,11 +92,28 @@ export default {
   },
 
   methods: {
-    onSubmit() {
-      this.$emit('submit', this.code);
+    async onSubmit() {
+      if (this.isLoading) return;
+      try {
+        const { code, email, password, isSignUp } = this;
+        this.isLoading = true;
+        this.error = null;
+        await this.$options.authStore.authByCode({
+          isSignUp,
+          email,
+          password,
+          code,
+        });
+
+        this.$emit('submit', code);
+      } catch (err) {
+        this.error = this.$i18n.t('components.otpBlock.authFailed');
+      } finally {
+        this.isLoading = false;
+      }
     },
 
-    emitRecoverEvent() {
+    onRecover() {
       if (this.isLoading) return;
 
       this.$emit('recover');

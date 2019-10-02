@@ -97,36 +97,19 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async auth({ email, code, password }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      await identityService.auth({ email, code, password });
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
+  async authByCode({ email, code, password, isSignUp }) {
+    await identityService.auth({ email, code, password, isSignUp });
+    await this.defineAuthStatus();
   }
 
   @Action
   async sendCode({ email }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      await identityService.sendEmailCode(email);
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
+    await identityService.sendEmailCode(email);
   }
 
   @Action
   async resetRegularPassword({ code, password }) {
-    this.sharedStore.changeLoadingStatus(true);
-
-    try {
-      await identityService.resetRegularPassword({ code, password });
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
+    await identityService.resetRegularPassword({ code, password });
   }
 
   @Action
@@ -146,30 +129,24 @@ class AuthModule extends VuexModule {
 
   @Action
   async disableOtp({ seedPhrase }) {
-    this.sharedStore.changeLoadingStatus(true);
+    const recoveryIdentifier = await identityService.getRecoveryIdentifier(
+      this.otpEmail,
+    );
 
-    try {
-      const recoveryIdentifier = await identityService.getRecoveryIdentifier(
-        this.otpEmail,
-      );
+    const signature = await signer.recover({
+      seedPhrase,
+      recoveryIdentifier,
+    });
 
-      const signature = await signer.recover({
-        seedPhrase,
-        recoveryIdentifier,
-      });
+    const redirectUrl = get(this, 'authParams.redirectUrl', '');
 
-      const redirectUrl = get(this, 'authParams.redirectUrl', '');
+    const { success } = await identityService.disableOtp(
+      this.otpEmail,
+      signature,
+      redirectUrl,
+    );
 
-      const { success } = await identityService.disableOtp(
-        this.otpEmail,
-        signature,
-        redirectUrl,
-      );
-
-      return success;
-    } finally {
-      this.sharedStore.changeLoadingStatus(false);
-    }
+    return success;
   }
 
   @Action

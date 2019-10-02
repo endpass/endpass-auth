@@ -40,19 +40,28 @@ const setAuthPermission = signature =>
     signature,
   });
 
-const auth = ({ email, code, password }) =>
-  request
-    .post(`${identityBaseUrl}/auth/token`, {
-      challengeType: 'otp',
-      email,
-      code,
-      password,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
+const auth = async ({
+  email,
+  code,
+  password,
+  isSignUp,
+  challengeType = 'otp',
+}) => {
+  const url = isSignUp
+    ? `${identityBaseUrl}/auth/signup`
+    : `${identityBaseUrl}/auth/token`;
 
-      return res;
-    });
+  const res = await request.post(url, {
+    challengeType,
+    email,
+    code,
+    password,
+  });
+
+  if (!res.success) throw new Error(res.message);
+
+  return res;
+};
 
 const authWithGoogle = idToken =>
   request

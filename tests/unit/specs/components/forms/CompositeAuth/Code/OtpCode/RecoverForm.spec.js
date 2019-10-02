@@ -51,21 +51,21 @@ describe.skip('Recover', () => {
       const submitButton = wrapper.find('[data-test=submit-button]');
 
       wrapper.setProps({
-        loading: true,
+        isLoading: true,
       });
 
       expect(submitButton.text()).toBe('Loading...');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
       });
 
       expect(submitButton.text()).toBe('Confirm');
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
-        loading: false,
+        isLoading: false,
       });
       wrapper.setData({ seedPhrase });
 

@@ -16,7 +16,6 @@ export default {
   width: 100%;
   align-items: center;
   justify-content: center;
-  margin-top: 24px;
 
   & > * {
     margin-right: 16px;
@@ -24,6 +23,19 @@ export default {
 
     &:last-child {
       margin-right: 0;
+    }
+  }
+}
+@media (max-width: 360px) {
+  .form-controls {
+    display: block;
+
+    & > * {
+      margin-bottom: 16px !important;
+
+      &:last-child {
+        margin-bottom: 0 !important;
+      }
     }
   }
 }
