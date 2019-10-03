@@ -62,6 +62,13 @@
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?"
     },
+    "createPassword": {
+      "title": "Create regular password",
+      "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only",
+      "createError": "Something went wrong with create password. Please, try again",
+      "newPassword": "Enter new password...",
+      "repeatPassword": "Repeat new password..."
+    },
     "regularPasswordRecover": {
       "title": "Change password",
       "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",

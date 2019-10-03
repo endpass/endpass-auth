@@ -1,8 +1,5 @@
 <template>
-  <form
-    class="form-otp"
-    @submit.prevent="onSubmit"
-  >
+  <form @submit.prevent="onSubmit">
     <v-title>
       <span v-html="$t('components.regularPasswordForm.title')" />
     </v-title>
@@ -15,6 +12,7 @@
         :error="errors.first('password')"
         name="password"
         type="password"
+        required
         :placeholder="$t('components.regularPasswordForm.placeholder')"
         data-test="password-input"
       />

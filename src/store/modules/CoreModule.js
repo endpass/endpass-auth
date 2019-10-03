@@ -20,8 +20,6 @@ class CoreModule extends VuexModule {
 
   isServerMode = false;
 
-  isRegularPasswordMode = false;
-
   showCreateAccount = true;
 
   rateLimitTimeout = 0;
@@ -93,12 +91,7 @@ class CoreModule extends VuexModule {
     const {
       isIdentityMode,
       showCreateAccount,
-      isRegularPasswordMode,
     } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
-
-    if (isRegularPasswordMode !== undefined) {
-      this.isRegularPasswordMode = isRegularPasswordMode;
-    }
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;

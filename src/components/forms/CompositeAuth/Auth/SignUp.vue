@@ -36,6 +36,7 @@
         :error="errors.first('password') || error"
         name="password"
         type="password"
+        required
         :placeholder="$t('components.auth.password')"
         data-test="password-input"
       />

@@ -1,8 +1,5 @@
 <template>
-  <form
-    class="form-otp"
-    @submit.prevent="onSubmit"
-  >
+  <form @submit.prevent="onSubmit">
     <v-title>
       <span v-html="$t('components.regularPasswordRecover.title')" />
     </v-title>
@@ -10,11 +7,12 @@
       <v-input
         v-model="password"
         v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="password"
         :error="errors.first('password')"
         name="password"
-        type="password"
         :placeholder="$t('components.regularPasswordRecover.newPassword')"
         data-test="password-input"
       />
@@ -23,11 +21,12 @@
       <v-input
         v-model="repeatPassword"
         v-validate="'required|min:8'"
+        type="password"
+        required
         data-vv-as="password"
         data-vv-name="repeatPassword"
         :error="errors.first('repeatPassword')"
         name="repeatPassword"
-        type="password"
         :placeholder="$t('components.regularPasswordRecover.repeatPassword')"
         data-test="repeat-password-input"
       />

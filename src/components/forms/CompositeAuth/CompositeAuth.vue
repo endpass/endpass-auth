@@ -7,7 +7,7 @@
       @social="onAuthSocialSubmit"
     />
     <regular-password-form
-      v-else-if="currentForm === FORMS.PASSWORD"
+      v-else-if="currentForm === FORMS.REGULAR_PASSWORD"
       :email="email"
       @submit="onPasswordSubmit"
       @cancel="onCancel"
@@ -32,7 +32,7 @@ import { authStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
-  PASSWORD: 'PASSWORD',
+  REGULAR_PASSWORD: 'REGULAR_PASSWORD',
   CODE: 'CODE',
 };
 
@@ -70,20 +70,13 @@ export default {
     },
 
     onAuthSubmit(options = {}) {
-      const {
-        serverMode,
-        email,
-        password,
-        isSignUp = false,
-        isPasswordExist,
-      } = options;
+      const { serverMode, email, password, isSignUp = false } = options;
 
       this.isSignUp = isSignUp;
       this.serverMode = serverMode;
       this.email = email;
       this.password = password;
-      this.currentForm =
-        isPasswordExist === false || !password ? FORMS.PASSWORD : FORMS.CODE;
+      this.currentForm = !password ? FORMS.REGULAR_PASSWORD : FORMS.CODE;
     },
 
     onCancel() {

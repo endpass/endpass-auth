@@ -22,12 +22,11 @@
     </form-item>
     <form-item>
       <v-input
-        id="password"
         v-model="password"
         v-validate="'required|min:8'"
         data-vv-as="Password"
         data-vv-name="password"
-        required="true"
+        required
         type="password"
         name="password"
         :error="errors.first('password') || errorTitle"

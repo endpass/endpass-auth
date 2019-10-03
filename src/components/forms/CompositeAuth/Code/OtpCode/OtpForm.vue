@@ -1,8 +1,5 @@
 <template>
-  <form
-    class="form-otp"
-    @submit.prevent="onSubmit"
-  >
+  <form @submit.prevent="onSubmit">
     <v-title>
       <span v-html="$t('components.otp.title')" />
     </v-title>
