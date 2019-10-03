@@ -104,7 +104,7 @@ describe('SignPassword', () => {
       });
       await global.flushPromises();
 
-      expect(submitButton.text()).toBe('Apply');
+      expect(submitButton.attributes().isloading).toBeFalsy();
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
 

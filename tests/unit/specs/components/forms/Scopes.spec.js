@@ -37,7 +37,7 @@ describe('Scopes', () => {
         isLoading: true,
       });
 
-      expect(submitButton.text()).toBe('Loading...');
+      expect(submitButton.attributes().isloading).toBeTruthy();
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
@@ -46,7 +46,7 @@ describe('Scopes', () => {
       });
       wrapper.vm.onChange({ foo: false, bar: false });
 
-      expect(submitButton.text()).toBe('Allow');
+      expect(submitButton.attributes().isloading).toBeFalsy();
       expect(submitButton.attributes().disabled).toBeTruthy();
 
       wrapper.setProps({
@@ -55,6 +55,7 @@ describe('Scopes', () => {
       });
       wrapper.vm.onChange({ foo: true, bar: false });
 
+      expect(submitButton.attributes().isloading).toBeFalsy();
       expect(submitButton.attributes().disabled).toBeFalsy();
     });
   });
