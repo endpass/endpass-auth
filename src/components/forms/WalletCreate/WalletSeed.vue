@@ -23,7 +23,7 @@
         </ul>
         <div
           v-if="seedTemplateUrl"
-          class="wallet-create-template-download v-mb-24"
+          class="wallet-create-template-download v-text-center v-mb-24"
         >
           <v-icon-control
             icon="pdf"
@@ -130,15 +130,11 @@ export default {
   margin: 4px;
 }
 
-.wallet-create-template-download {
-  text-align: center;
-}
-
 .wallet-create-template-download a {
   display: inline-flex !important;
 }
 
 .wallet-create-template-download svg {
-  color: #e5e9ef;
+  color: var(--endpass-ui-color-grey-2);
 }
 </style>
