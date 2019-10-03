@@ -46,7 +46,6 @@ exports[`SignIn render should correctly render SignIn component 1`] = `
   <form-row-stub>
     <form-controls-stub>
       <google-auth-button-stub type="button"></google-auth-button-stub>
-      <v-spacer-stub height="0" width="16"></v-spacer-stub>
       <git-auth-button-stub type="button"></git-auth-button-stub>
     </form-controls-stub>
   </form-row-stub>

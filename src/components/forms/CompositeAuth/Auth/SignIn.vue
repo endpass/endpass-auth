@@ -56,7 +56,6 @@
             @submit="onSocialSubmit"
             @error="onOauthError"
           />
-          <v-spacer :width="16" />
           <git-auth-button
             type="button"
             @submit="onSocialSubmit"

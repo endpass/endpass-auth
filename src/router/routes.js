@@ -158,7 +158,7 @@ const routes = [
     name: 'WalletCreate',
     component: () =>
       import(
-        /* webpackChunkName: "document-create" */ '@/components/screens/WalletCreate'
+        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletCreate'
       ),
     meta: {
       isDialog: true,

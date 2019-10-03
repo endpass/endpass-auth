@@ -61,7 +61,6 @@ import VTag from '@endpass/ui/kit/VTag';
 import VIconControl from '@endpass/ui/kit/VIconControl';
 import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import FormItem from '@/components/common/FormItem';
-import formMixin from '@/mixins/form';
 import { accountsStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
@@ -102,8 +101,6 @@ export default {
   async mounted() {
     this.seedTemplateUrl = await this.$options.accountsStore.getSeedTemplateUrl();
   },
-
-  mixins: [formMixin],
 
   components: {
     VTitle,
