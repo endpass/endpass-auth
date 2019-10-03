@@ -126,10 +126,11 @@
       "donationError": "Something went wrong. Try request dontaion later!"
     },
     "createWallet": {
-      "choosePass": "Please choose password",
+      "passwordCreate": "Create wallet password",
+      "passwordDescription": "Please define password for&nbsp;your wallet account. This&nbsp;password must <span class='v-fw-b'>NOT</span> be&nbsp;equal with&nbsp;the&nbsp;regular password",
       "enterPass": "Enter password...",
       "confirmPass": "Confirm password...",
-      "createWallet": "Create wallet",
+      "createWallet": "Create",
       "recoveryTitle": "Write down your Seed Phrase",
       "recoverySubtitle": "The&nbsp;words below are&nbsp;called your&nbsp;seed phrase. They&nbsp;enable you to&nbsp;access your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. It&nbsp;is&nbsp;very important that these words down in&nbsp;order shown.",
       "error": "Something broken, when trying to create new Wallet",
