@@ -32,13 +32,13 @@ const getAuthChallenge = email => {
     });
 };
 
-const getAuthPermission = () =>
-  request.get(`${identityBaseUrl}/auth/permission`);
-
-const setAuthPermission = signature =>
-  request.post(`${identityBaseUrl}/auth/permission`, {
-    signature,
+const setAuthPermission = async (password, originHost) => {
+  const res = await request.post(`${identityBaseUrl}/auth/permission`, {
+    password,
+    originHost,
   });
+  return res;
+};
 
 const auth = async ({
   email,
@@ -212,7 +212,6 @@ export default {
   saveAccountInfo,
   backupSeed,
   updateAccountSettings,
-  getAuthPermission,
   setAuthPermission,
   getAuthChallenge,
   auth,

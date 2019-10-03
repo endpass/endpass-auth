@@ -31,7 +31,7 @@
         name="password"
         :error="errors.first('password') || errorTitle"
         :label="passwordInputLabel"
-        :placeholder="$t('components.passwordForm.enterWalletPassword')"
+        :placeholder="$t('components.passwordForm.enterPassword')"
         data-test="password-input"
       />
     </form-item>
@@ -49,12 +49,11 @@
       </v-button>
       <v-button
         :disabled="isLoading || !isFormValid"
+        :is-loading="isLoading"
         size="big"
         data-test="submit-button"
       >
-        <v-loading-text :is-loading="isLoading">
-          {{ $t('global.apply') }}
-        </v-loading-text>
+        {{ $t('global.apply') }}
       </v-button>
     </form-controls>
   </form>
@@ -68,12 +67,11 @@ import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import FormItem from '@/components/common/FormItem';
 import VTitle from '@/components/common/VTitle';
-import VLoadingText from '@/components/common/VLoadingText';
 import { coreStore } from '@/store';
 import FormControls from '@/components/common/FormControls';
 
 export default {
-  name: 'PasswordForm',
+  name: 'SignPasswordForm',
 
   coreStore,
 
@@ -126,7 +124,7 @@ export default {
         });
       }
 
-      return this.$i18n.t('components.passwordForm.walletPassword');
+      return this.$i18n.t('components.passwordForm.regularPassword');
     },
   },
 
@@ -160,7 +158,6 @@ export default {
 
   components: {
     FormControls,
-    VLoadingText,
     VTitle,
     VLink,
     VButton,

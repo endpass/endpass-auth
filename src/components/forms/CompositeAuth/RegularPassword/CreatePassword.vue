@@ -37,13 +37,14 @@
     </form-item>
     <form-row>
       <form-controls>
-        <v-confirm-button
-          :title="$t('global.confirm')"
+        <v-button
           :disabled="!isSubmitEnable"
           type="submit"
           size="big"
           data-test="submit-button"
-        />
+        >
+          {{ $t('global.confirm') }}
+        </v-button>
       </form-controls>
     </form-row>
   </form>
@@ -51,6 +52,7 @@
 
 <script>
 import VInput from '@endpass/ui/kit/VInput';
+import VButton from '@endpass/ui/kit/VButton';
 import FormItem from '@/components/common/FormItem';
 import formMixin from '@/mixins/form';
 import { authStore } from '@/store';
@@ -58,7 +60,6 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 import FormControls from '@/components/common/FormControls';
 import FormRow from '@/components/common/FormRow';
-import VConfirmButton from '@/components/common/VConfirmButton';
 
 export default {
   name: 'PasswordForm',
@@ -96,7 +97,7 @@ export default {
   mixins: [formMixin],
 
   components: {
-    VConfirmButton,
+    VButton,
     FormRow,
     FormControls,
     VTitle,

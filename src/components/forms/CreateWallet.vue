@@ -47,13 +47,12 @@
           <v-spacer :height="10" />
           <v-button
             :disabled="!canSubmit"
+            :is-loading="isLoading"
             size="big"
             type="submit"
             data-test="submit-button-create-wallet"
           >
-            <v-loading-text :is-loading="isLoading">
-              {{ $t('components.createWallet.createWallet') }}
-            </v-loading-text>
+            {{ $t('components.createWallet.createWallet') }}
           </v-button>
         </div>
       </form>
@@ -125,7 +124,6 @@ import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import { accountsStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
-import VLoadingText from '@/components/common/VLoadingText';
 
 export default {
   name: 'CreateWalletForm',
@@ -194,7 +192,6 @@ export default {
   mixins: [formMixin],
 
   components: {
-    VLoadingText,
     VTitle,
     FormItem,
     Message,

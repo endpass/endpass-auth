@@ -118,9 +118,9 @@
     },
     "passwordForm": {
       "applyConnectTo": "Please apply connect&nbsp;to",
-      "walletPassword": "Your wallet account password:",
+      "regularPassword": "Your regular password:",
       "passwordForEmail": "Password for {email}:",
-      "enterWalletPassword": "Enter your password..."
+      "enterPassword": "Enter your password..."
     },
     "account": {
       "address": "Active account address",
