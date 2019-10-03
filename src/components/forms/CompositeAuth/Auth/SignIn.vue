@@ -41,10 +41,11 @@
       </form-item>
       <v-button
         :disabled="!isSubmitEnable"
+        :is-loading="isLoading"
         size="big"
         data-test="submit-button-auth"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.continue') }}
       </v-button>
       <v-spacer :height="3" />
       <v-divider>{{ $t('components.auth.orSignInWith') }}</v-divider>
@@ -122,12 +123,6 @@ export default {
   computed: {
     isServerMode() {
       return this.$options.coreStore.isServerMode;
-    },
-
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.continue')
-        : this.$i18n.t('global.loading');
     },
 
     isDefaultMode() {

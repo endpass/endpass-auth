@@ -56,10 +56,11 @@
     </form-item>
     <v-button
       :disabled="!isSubmitEnable"
+      :is-loading="isLoading"
       size="big"
       data-test="submit-button-auth"
     >
-      {{ primaryButtonLabel }}
+      {{ $t('components.auth.signUp') }}
     </v-button>
     <v-spacer :height="3" />
     <v-divider>{{ $t('components.auth.orRegisterWith') }}</v-divider>
@@ -141,12 +142,6 @@ export default {
   }),
 
   computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('components.auth.signUp')
-        : this.$i18n.t('global.loading');
-    },
-
     isPasswordEqual() {
       return this.confirmPassword === this.password;
     },

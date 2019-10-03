@@ -51,11 +51,12 @@
       </v-button>
       <v-button
         :disabled="isLoading || !isFormValid"
+        :is-loading="isLoading"
         type="button"
         data-test="submit-button"
         @click="emitSubmit"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.sign') }}
       </v-button>
     </form-controls>
   </div>
@@ -127,12 +128,6 @@ export default {
 
     requesterUrl() {
       return get(this.request, 'url');
-    },
-
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.sign')
-        : this.$i18n.t('global.loading');
     },
   },
 

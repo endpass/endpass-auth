@@ -21,10 +21,11 @@
     <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
+        :is-loading="isLoading"
         type="submit"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.confirm') }}
       </v-button>
     </form-item>
     <form-row class="v-fs-14 v-text-center">
@@ -79,14 +80,6 @@ export default {
     error: null,
     isLoading: false,
   }),
-
-  computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.confirm')
-        : this.$i18n.t('global.loading');
-    },
-  },
 
   methods: {
     async onSubmit() {

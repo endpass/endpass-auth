@@ -5,7 +5,6 @@
     "error": "Error",
     "cancel": "Cancel",
     "deny": "Deny",
-    "loading": "Loading...",
     "logout": "Logout",
     "login": "Login",
     "sign": "Sign",
@@ -49,8 +48,7 @@
       "password": "Enter password...",
       "confirmPassword": "Confirm password...",
       "signUp": "Sign up",
-      "signIn": "Sign in",
-      "signUpFailed": "Sign up failed. Please, try again."
+      "signIn": "Sign in"
     },
     "compositeAuth": {
       "successAuthMessage": "You are successfully authorized. Dialog will be closed in a few seconds.",
@@ -65,18 +63,15 @@
     "createPassword": {
       "title": "Create regular password",
       "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only",
-      "createError": "Something went wrong with create password. Please, try again",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password..."
     },
     "regularPasswordRecover": {
       "title": "Change password",
-      "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "placeholderCode": "Enter received code...",
       "labelCode": "Code from email",
-      "recover": "Forgot your password?",
       "didntGetCode": "Didn't get the code?",
       "recoveryError": "Something went wrong with password recovery. Please, try again"
     },
@@ -165,9 +160,6 @@
     "signPermission": {
       "authFailed": "Authentication failed. Please, try again."
     },
-    "password": {
-      "incorrectPassword": "Entered password is incorrect. Please, try again."
-    },
     "consentProvider": {
       "loadScopesError": "Something broken, when loading scopes",
       "urlError": "You should provide consent_challenge param in url, add it and try again!"
@@ -200,7 +192,6 @@
       "creatingAccount": "Creating account..."
     },
     "uploadDocument": {
-      "default": "Something broken, when file upload.",
       "uploadDocument": "Upload document",
       "documentType": "Document type",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
