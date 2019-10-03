@@ -374,8 +374,8 @@ class AccountsModule extends VuexModule {
   cancelCreateWallet() {
     walletChannel.put(
       Answer.createFail(
-        ERRORS.AUTH_CANCELED_BY_USER,
-        i18n.t('store.auth.authCanceled'),
+        ERRORS.CREATE_WALLET,
+        i18n.t('store.error.accounts.walletCreate'),
       ),
     );
   }

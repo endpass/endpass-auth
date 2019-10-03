@@ -137,9 +137,7 @@ describe('CreateWallet', () => {
     });
 
     it('should not submit if seed phrase is not checked', async () => {
-      expect.assertions(2);
-
-      expect(accountsStore.isAccountCreated).toBe(false);
+      expect.assertions(1);
 
       wrapper.setData({
         isShowSeed: true,
@@ -150,13 +148,11 @@ describe('CreateWallet', () => {
 
       await global.flushPromises();
 
-      expect(accountsStore.isAccountCreated).toBe(false);
+      expect(wrapper.emitted().submit).toBe(undefined);
     });
 
     it('should submit if seed phrase is checked', async () => {
-      expect.assertions(2);
-
-      expect(accountsStore.isAccountCreated).toBe(false);
+      expect.assertions(1);
 
       wrapper.setData({
         isShowSeed: true,
@@ -168,7 +164,7 @@ describe('CreateWallet', () => {
 
       await global.flushPromises();
 
-      expect(accountsStore.isAccountCreated).toBe(true);
+      expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });
 });

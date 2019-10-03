@@ -14,7 +14,7 @@ exports[`CreateWallet render should correctly render CreateWallet component 1`] 
       <!---->
       <div>
         <v-spacer-stub height="10" width="0"></v-spacer-stub>
-        <v-button-stub skin="primary" size="big" disabled="true" type="submit" data-test="submit-button-create-wallet">
+        <v-button-stub skin="primary" size="big" disabled="true" type="submit" data-test="submit-button-wallet-create">
           Create wallet
         </v-button-stub>
       </div>

@@ -1,9 +1,9 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConnectError from '@endpass/class/ConnectError';
-import Auth from '@/components/screens/Auth';
+import WalletCreate from '@/components/screens/WalletCreate';
 import setupI18n from '@/locales/i18nSetup';
-import { authChannel } from '@/class/singleton/channels';
+import { walletChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
@@ -17,10 +17,9 @@ const { ERRORS } = ConnectError;
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('Auth', () => {
+describe('WalletCreate', () => {
   let wrapper;
   let accountsStore;
-  let authStore;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -28,16 +27,13 @@ describe('Auth', () => {
     const store = createStore();
     const {
       accountsStore: accountsStoreModule,
-      authStore: authStoreModule,
       coreStore,
     } = createStoreModules(store);
 
     accountsStore = accountsStoreModule;
-    authStore = authStoreModule;
 
-    wrapper = shallowMount(Auth, {
+    wrapper = shallowMount(WalletCreate, {
       accountsStore,
-      authStore,
       coreStore,
       localVue,
       i18n,
@@ -45,46 +41,38 @@ describe('Auth', () => {
   });
 
   describe('render', () => {
-    it('should correctly render Auth screen component', () => {
-      expect(wrapper.find('composite-auth-form-stub').exists()).toBe(true);
+    it('should correctly render WalletCreate screen component', () => {
+      expect(wrapper.find('wallet-create-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
-    it('should confirm auth on auth form authorize event handling', async () => {
+    it('should confirm create wallet', async () => {
       expect.assertions(1);
 
-      const dataPromise = authChannel.take();
-      const payload = {
-        serverMode: {
-          foo: 'bar',
-        },
-      };
+      const dataPromise = walletChannel.take();
 
-      wrapper.find('composite-auth-form-stub').vm.$emit('authorize', payload);
+      wrapper.find('wallet-create-form-stub').vm.$emit('submit');
 
       await global.flushPromises();
       const res = await dataPromise;
 
-      expect(res).toEqual(Answer.createOk(payload.serverMode));
+      expect(res).toEqual(Answer.createOk());
     });
 
-    it('should cancel auth', async () => {
+    it('should cancel create wallet', async () => {
       expect.assertions(2);
 
-      const dataPromise = authChannel.take();
+      const dataPromise = walletChannel.take();
 
-      wrapper.find('composite-auth-form-stub').vm.$emit('cancel');
+      wrapper.find('v-modal-card-stub').vm.$emit('close');
 
       await global.flushPromises();
       const res = await dataPromise;
 
       expect(res).toEqual(
-        Answer.createFail(
-          ERRORS.AUTH_CANCELED_BY_USER,
-          'Authentication was canceled by user!',
-        ),
+        Answer.createFail(ERRORS.CREATE_WALLET, 'Create wallet failed!'),
       );
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });

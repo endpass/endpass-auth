@@ -219,6 +219,9 @@
       "gasTooLow": "Transaction gas to low. Try to increase gas price or gas limit"
     },
     "error": {
+      "accounts": {
+        "walletCreate": "Create wallet failed!"
+      },
       "uploadDocument": {
         "default": "Something broken, when file upload.",
         "exist": "File already exist, please upload other file",

@@ -7,19 +7,3 @@ exports[`Auth render should correctly render Auth screen component 1`] = `
   </v-modal-card-stub>
 </screen-stub>
 `;
-
-exports[`Auth render should render auth form if user authorized and have any account 1`] = `
-<screen-stub>
-  <v-modal-card-stub isclosable="true">
-    <composite-auth-form-stub isclosable="true"></composite-auth-form-stub>
-  </v-modal-card-stub>
-</screen-stub>
-`;
-
-exports[`Auth render should render create account form if user authorized but does not have any account 1`] = `
-<screen-stub>
-  <v-modal-card-stub isclosable="true">
-    <wallet-create-form-stub></wallet-create-form-stub>
-  </v-modal-card-stub>
-</screen-stub>
-`;

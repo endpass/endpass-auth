@@ -1,8 +1,8 @@
 <template>
-  <screen @close="onCreateCancel">
+  <screen @close="onCancel">
     <v-modal-card
       :is-closable="isDialog"
-      @close="onCreateCancel"
+      @close="onCancel"
     >
       <wallet-create-form @submit="onCreate" />
     </v-modal-card>
@@ -28,7 +28,7 @@ export default {
   },
 
   methods: {
-    async onCreateCancel() {
+    async onCancel() {
       this.$options.accountsStore.cancelCreateWallet();
       this.$options.coreStore.dialogClose();
     },

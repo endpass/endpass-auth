@@ -1,19 +1,14 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import ConnectError from '@endpass/class/ConnectError';
 import CompositeAuth from '@/components/forms/CompositeAuth';
-import { IDENTITY_MODE, METHODS } from '@/constants';
+import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
-import { authChannel } from '@/class/singleton/channels';
-import Answer from '@/class/Answer';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
-const { ERRORS } = ConnectError;
 
 const i18n = setupI18n(localVue);
 localVue.use(Vuex);
@@ -111,23 +106,11 @@ describe('CompositeAuth', () => {
       });
     });
 
-    it('should cancel auth', async () => {
-      expect.assertions(2);
-
-      const dataPromise = authChannel.take();
+    it('should cancel auth', () => {
       wrapper.find('auth-form-stub').vm.$emit('submit', authParams);
       wrapper.find('regular-password-form-stub').vm.$emit('cancel');
 
-      const res = await dataPromise;
-
-      expect(res).toEqual(
-        Answer.createFail(
-          ERRORS.AUTH_CANCELED_BY_USER,
-          'Authentication was canceled by user!',
-        ),
-      );
-
-      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+      expect(wrapper.emitted().cancel).toEqual([[]]);
     });
   });
 });
