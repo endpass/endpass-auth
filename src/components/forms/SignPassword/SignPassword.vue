@@ -1,31 +1,21 @@
 <template>
-  <div>
-    <password-form
-      v-if="activeForm === FORMS.SIGN"
-      :is-loading="isLoadProcess"
-      :error="error"
-      :is-closable="isDialog"
-      :with-logout-btn="withLogoutBtn"
-      :requester-url="requesterUrl"
-      :message="message"
-      :email="email"
-      @cancel="handleCancel"
-      @submit="handleSignSubmit"
-      @logout="handleLogout"
-    />
-    <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
-  </div>
+  <password-form
+    :is-loading="isLoading"
+    :error="error"
+    :is-closable="isDialog"
+    :with-logout-btn="withLogoutBtn"
+    :requester-url="requesterUrl"
+    :message="message"
+    :email="email"
+    @cancel="handleCancel"
+    @submit="handleSignSubmit"
+    @logout="handleLogout"
+  />
 </template>
 
 <script>
-import PasswordForm from '@/components/forms/PasswordForm';
-import CreateWalletForm from '@/components/forms/CreateWallet';
+import PasswordForm from '@/components/forms/SignPassword/PasswordForm';
 import { accountsStore, coreStore } from '@/store';
-
-const FORMS = {
-  SIGN: 'SIGN',
-  CREATE_WALLET: 'CREATE_WALLET',
-};
 
 export default {
   name: 'SignPasswordForm',
@@ -62,21 +52,12 @@ export default {
     },
   },
 
-  data: () => ({
-    isCheckingAccount: false,
-    FORMS,
-    activeForm: FORMS.SIGN,
-  }),
-
   accountsStore,
   coreStore,
 
   computed: {
     isDialog() {
       return this.$options.coreStore.isDialog;
-    },
-    isLoadProcess() {
-      return this.isLoading || this.isCheckingAccount;
     },
   },
 
@@ -95,23 +76,8 @@ export default {
     },
   },
 
-  async mounted() {
-    this.isCheckingAccount = true;
-
-    const isExist = await this.$options.accountsStore.checkAccountExists();
-
-    if (!isExist) {
-      this.activeForm = FORMS.CREATE_WALLET;
-      await this.$options.accountsStore.waitAccountCreate();
-      this.activeForm = FORMS.SIGN;
-    }
-
-    this.isCheckingAccount = false;
-  },
-
   components: {
     PasswordForm,
-    CreateWalletForm,
   },
 };
 </script>
