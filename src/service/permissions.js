@@ -2,10 +2,10 @@ import request from '@/class/singleton/request';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
-export const login = async ({ signature, challengeId }) =>
+export const login = async ({ password, challengeId }) =>
   request.post(`${identityBaseUrl}/oauth/login`, {
     challenge: challengeId,
-    signature,
+    password,
   });
 
 export const getLoginDetails = async challengeId =>

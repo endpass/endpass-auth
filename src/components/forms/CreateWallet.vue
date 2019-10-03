@@ -47,11 +47,12 @@
           <v-spacer :height="10" />
           <v-button
             :disabled="!canSubmit"
+            :is-loading="isLoading"
             size="big"
             type="submit"
             data-test="submit-button-create-wallet"
           >
-            {{ primaryButtonLabel }}
+            {{ $t('components.createWallet.createWallet') }}
           </v-button>
         </div>
       </form>
@@ -81,7 +82,7 @@
           </ul>
           <div
             v-if="seedTemplateUrl"
-            class="create-wallet-template-download"
+            class="create-wallet-template-download v-mb-24"
           >
             <v-icon-control
               icon="pdf"
@@ -92,7 +93,7 @@
             </v-icon-control>
           </div>
         </div>
-        <div class="create-wallet-seed-check">
+        <div class="v-mb-24">
           <v-checkbox v-model="isSeedConfirmed">
             {{ $t('components.createWallet.seedConfirmation') }}
           </v-checkbox>
@@ -149,12 +150,6 @@ export default {
       return this.password && this.password === this.passwordConfirm;
     },
 
-    primaryButtonLabel() {
-      return this.isLoading
-        ? this.$i18n.t('global.loading')
-        : this.$i18n.t('components.createWallet.createWallet');
-    },
-
     splittedSeedKey() {
       if (!this.seedKey) return [];
 
@@ -182,6 +177,7 @@ export default {
       }
       this.isLoading = false;
     },
+
     onContinue() {
       if (!this.isSeedConfirmed) return;
 
@@ -230,7 +226,6 @@ export default {
 
 .create-wallet-template-download {
   text-align: center;
-  margin-bottom: 24px;
 }
 
 .create-wallet-template-download a {
@@ -239,9 +234,5 @@ export default {
 
 .create-wallet-template-download svg {
   color: #e5e9ef;
-}
-
-.create-wallet-seed-check {
-  margin-bottom: 24px;
 }
 </style>

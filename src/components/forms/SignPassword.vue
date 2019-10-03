@@ -1,7 +1,7 @@
 <template>
   <form
     data-test="sign-form"
-    @submit.prevent="emitSubmit"
+    @submit.prevent="onSubmit"
   >
     <v-title v-if="requesterUrl">
       <span v-html="$t('components.passwordForm.applyConnectTo')" />
@@ -9,7 +9,7 @@
         :href="requesterUrl"
         data-test="requester-url"
         target="_blank"
-        class="password-form-request-url"
+        class="password-form-request-url v-fs-16"
         is-underline
       >
         {{ requesterUrl }}
@@ -31,11 +31,11 @@
         name="password"
         :error="errors.first('password') || errorTitle"
         :label="passwordInputLabel"
-        :placeholder="$t('components.passwordForm.enterWalletPassword')"
+        :placeholder="$t('components.passwordForm.enterPassword')"
         data-test="password-input"
       />
     </form-item>
-    <form-row>
+    <form-controls>
       <v-button
         v-if="withLogoutBtn"
         :disabled="isLoading"
@@ -43,22 +43,19 @@
         type="button"
         size="big"
         data-test="logout-button"
-        @click="emitLogout"
+        @click="onLogout"
       >
         {{ $t('global.logout') }}
       </v-button>
-      <v-spacer
-        v-if="withLogoutBtn"
-        :width="16"
-      />
       <v-button
         :disabled="isLoading || !isFormValid"
+        :is-loading="isLoading"
         size="big"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.apply') }}
       </v-button>
-    </form-row>
+    </form-controls>
   </form>
 </template>
 
@@ -68,13 +65,15 @@ import VButton from '@endpass/ui/kit/VButton';
 import VLink from '@endpass/ui/kit/VLink';
 import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
-import FormRow from '@/components/common/FormRow';
-import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
 import VTitle from '@/components/common/VTitle';
+import { coreStore } from '@/store';
+import FormControls from '@/components/common/FormControls';
 
 export default {
-  name: 'PasswordForm',
+  name: 'SignPasswordForm',
+
+  coreStore,
 
   props: {
     isLoading: {
@@ -97,11 +96,6 @@ export default {
       default: null,
     },
 
-    isClosable: {
-      type: Boolean,
-      default: true,
-    },
-
     withLogoutBtn: {
       type: Boolean,
       default: false,
@@ -122,11 +116,6 @@ export default {
     errorTitle() {
       return this.showError ? this.error : '';
     },
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.apply')
-        : this.$i18n.t('global.loading');
-    },
 
     passwordInputLabel() {
       if (this.email) {
@@ -135,7 +124,7 @@ export default {
         });
       }
 
-      return this.$i18n.t('components.passwordForm.walletPassword');
+      return this.$i18n.t('components.passwordForm.regularPassword');
     },
   },
 
@@ -153,39 +142,34 @@ export default {
   },
 
   methods: {
-    emitSubmit() {
-      if (!this.isFormValid) return;
+    onSubmit() {
+      if (!this.isFormValid || this.isLoading) return;
 
       this.$emit('submit', this.password);
     },
 
-    emitCancel() {
+    onLogout() {
+      this.$options.coreStore.logout();
       this.$emit('cancel');
-    },
-
-    emitLogout() {
-      this.$emit('logout');
     },
   },
 
   mixins: [formMixin],
 
   components: {
+    FormControls,
     VTitle,
     VLink,
     VButton,
     VInput,
     Message,
     FormItem,
-    VSpacer,
-    FormRow,
   },
 };
 </script>
 <style lang="postcss">
 .password-form-request-url {
   font-weight: normal;
-  font-size: 16px;
   display: block;
 }
 </style>

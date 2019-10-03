@@ -42,10 +42,6 @@ export default {
   }),
 
   methods: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
-
     async handleAuthorize() {
       const isAccountExist = await this.$options.accountsStore.checkAccountExists();
 

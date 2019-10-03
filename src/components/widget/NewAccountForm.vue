@@ -5,7 +5,7 @@
       v-validate="'required|min:8'"
       :error="errors.first('password')"
       :disabled="isLoading"
-      :placeholder="$t('components.passwordForm.enterWalletPassword')"
+      :placeholder="$t('components.passwordForm.enterPassword')"
       data-test="new-account-password-input"
       type="password"
       name="password"

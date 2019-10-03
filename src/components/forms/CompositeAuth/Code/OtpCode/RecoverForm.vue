@@ -21,9 +21,10 @@
       <v-button
         type="submit"
         :disabled="!isSeedPhraseValid || isLoading"
+        :is-loading="isLoading"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.confirm') }}
       </v-button>
     </form-row>
   </form>
@@ -50,12 +51,6 @@ export default {
   }),
 
   computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.confirm')
-        : this.$i18n.t('global.loading');
-    },
-
     isSeedPhraseValid() {
       return this.seedPhrase.length >= 12;
     },

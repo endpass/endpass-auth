@@ -36,12 +36,13 @@
       <v-button
         type="button"
         :disabled="isLoading"
+        :is-loading="isLoading"
         skin="primary"
         data-test="submit-button"
         fluid
         @click="emitSubmit"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('components.account.updateAccount') }}
       </v-button>
     </form-field>
     <form-item
@@ -144,12 +145,6 @@ export default {
   },
 
   computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('components.account.updateAccount')
-        : this.$i18n.t('global.loading');
-    },
-
     isRopsten() {
       /* eslint-disable-next-line */
       return this.formData.activeNet == Network.NET_ID.ROPSTEN;

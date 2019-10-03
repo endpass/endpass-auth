@@ -56,10 +56,11 @@
         </v-button>
         <v-button
           :disabled="!isSubmitEnable || isLoading"
+          :is-loading="isLoading"
           type="submit"
           data-test="submit-button"
         >
-          {{ primaryButtonLabel }}
+          {{ $t('global.confirm') }}
         </v-button>
       </form-controls>
     </form-item>
@@ -114,12 +115,6 @@ export default {
 
     isPasswordEqual() {
       return this.password && this.password === this.repeatPassword;
-    },
-
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.confirm')
-        : this.$i18n.t('global.loading');
     },
   },
 

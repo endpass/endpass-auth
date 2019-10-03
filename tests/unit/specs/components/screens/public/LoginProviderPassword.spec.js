@@ -77,7 +77,7 @@ describe('LoginProviderPassword', () => {
         const errorMessage = 'ivyweed perturbing Laparosticti';
         const error = new Error(errorMessage);
 
-        permissionsService.getLoginDetails.mockRejectedValueOnce(error);
+        permissionsService.login.mockRejectedValueOnce(error);
         wrapper.setProps({
           loginChallenge: challengeId,
         });

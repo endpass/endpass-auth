@@ -46,9 +46,6 @@ export default {
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
     isLoading() {
       return this.$options.coreStore.isLoading;
     },

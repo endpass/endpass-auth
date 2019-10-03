@@ -30,11 +30,12 @@
       </v-button>
       <v-button
         :disabled="!isFormValid || isLoading"
+        :is-loading="isLoading"
         :fluid="true"
         type="primary"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.allow') }}
       </v-button>
     </form-controls>
   </form>
@@ -70,12 +71,6 @@ export default {
   }),
 
   computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.allow')
-        : this.$i18n.t('global.loading');
-    },
-
     isPopup() {
       return !!window.opener;
     },

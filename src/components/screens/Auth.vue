@@ -39,10 +39,6 @@ export default {
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
-
     showCreateAccount() {
       return this.$options.coreStore.showCreateAccount;
     },

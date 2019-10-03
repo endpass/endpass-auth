@@ -67,19 +67,9 @@ class AccountsModule extends VuexModule {
     let res;
 
     try {
-      const { email, keystore } = await permissionsService.getLoginDetails(
-        challengeId,
-      );
-
-      const { signature } = await signer.signDataWithAccount({
-        account: keystore,
-        data: email,
-        password,
-      });
-
       res = await permissionsService.login({
         challengeId,
-        signature,
+        password,
       });
     } catch (err) {
       throw new Error(i18n.t('store.auth.passwordIncorrect'));
@@ -313,19 +303,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   async signPermission({ password }) {
-    const res = await identityService.getAuthPermission();
-
-    if (res.success === false) {
-      throw new Error(res.message);
-    }
-    const signature = await signer.getSignedRequest({
-      v3KeyStore: res.keystore,
-      password,
-      request: {
-        params: [ORIGIN_HOST],
-      },
-    });
-    await identityService.setAuthPermission(signature);
+    await identityService.setAuthPermission(password, ORIGIN_HOST);
     permissionChannel.put(Answer.createOk());
   }
 
