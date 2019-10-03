@@ -1,15 +1,10 @@
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
 import permissionsService from '@/service/permissions';
 import withPayloadHandler from '@/streams/middleware/withPayloadHandler';
 import answerToRequest from '@/streams/middleware/answerToRequest';
-import Queue from '@/streams/Queue';
+import subscribe from '@/streams/subscribe';
 
 function initDialogRequestStream() {
-  const queueInst = new Queue({
-    middleware: [withPayloadHandler, answerToRequest],
-  });
-
   const methodToOptions = {
     [METHODS.EXCHANGE_TOKEN_REQUEST]: {
       async payloadHandler(fields) {
@@ -19,11 +14,7 @@ function initDialogRequestStream() {
     },
   };
 
-  bridgeMessenger.subscribe(async (payload, req) => {
-    const options = methodToOptions[req.method] || {};
-
-    queueInst.handleRequest(options, payload, req);
-  });
+  subscribe(methodToOptions, [withPayloadHandler, answerToRequest]);
 }
 
 export default initDialogRequestStream;

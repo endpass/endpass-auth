@@ -55,13 +55,13 @@ describe('Auth', () => {
 
       identityService.checkAccountExist.mockResolvedValueOnce(false);
 
-      expect(wrapper.find('create-wallet-form-stub').exists()).toBe(false);
+      expect(wrapper.find('wallet-create-form-stub').exists()).toBe(false);
 
       wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
 
       await global.flushPromises();
 
-      expect(wrapper.find('create-wallet-form-stub').exists()).toBe(true);
+      expect(wrapper.find('wallet-create-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
 

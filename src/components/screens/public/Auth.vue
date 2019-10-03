@@ -2,15 +2,14 @@
   <screen class="auth-screen-centered">
     <v-modal-card
       :is-closable="false"
-      @close="handleAuthCancel"
+      @close="onCancel"
     >
       <composite-auth-form
-        v-if="activeForm === FORMS.AUTH"
         :is-closable="false"
         :is-public="true"
-        @authorize="handleAuthorize"
+        @cancel="onCancel"
+        @authorize="onAuth"
       />
-      <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
     </v-modal-card>
   </screen>
 </template>
@@ -19,37 +18,21 @@
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
-import CreateWalletForm from '@/components/forms/CreateWallet';
 import { parseUrl } from '@/util/dom';
-import { authStore, accountsStore, coreStore } from '@/store';
-
-const FORMS = {
-  AUTH: 'AUTH',
-  CREATE_WALLET: 'CREATE_WALLET',
-};
+import { authStore, coreStore } from '@/store';
 
 export default {
   name: 'PublicAuth',
 
-  accountsStore,
   authStore,
   coreStore,
 
   data: () => ({
     queryParamsMap: {},
-    FORMS,
-    activeForm: FORMS.AUTH,
   }),
 
   methods: {
-    async handleAuthorize() {
-      const isAccountExist = await this.$options.accountsStore.checkAccountExists();
-
-      if (!isAccountExist) {
-        this.activeForm = FORMS.CREATE_WALLET;
-        await this.$options.accountsStore.waitAccountCreate();
-      }
-
+    async onAuth() {
       const { redirectUrl, withHost } = this.queryParamsMap;
 
       if (!redirectUrl) return;
@@ -67,7 +50,7 @@ export default {
       this.$router.replace(newPath);
     },
 
-    handleAuthCancel() {
+    onCancel() {
       this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
@@ -90,7 +73,6 @@ export default {
     Screen,
     VModalCard,
     CompositeAuthForm,
-    CreateWalletForm,
   },
 };
 </script>

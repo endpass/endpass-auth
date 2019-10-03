@@ -1,15 +1,14 @@
 <template>
-  <screen @close="handleAuthCancel">
+  <screen @close="onCancel">
     <v-modal-card
       :is-closable="isDialog"
-      @close="handleAuthCancel"
+      @close="onCancel"
     >
       <composite-auth-form
-        v-if="activeForm === FORMS.AUTH"
         :is-closable="isDialog"
-        @authorize="handleAuthorize"
+        @cancel="onCancel"
+        @authorize="onAuth"
       />
-      <create-wallet-form v-else-if="activeForm === FORMS.CREATE_WALLET" />
     </v-modal-card>
   </screen>
 </template>
@@ -18,59 +17,27 @@
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import CompositeAuthForm from '@/components/forms/CompositeAuth';
-import CreateWalletForm from '@/components/forms/CreateWallet';
-import { authStore, accountsStore, coreStore } from '@/store';
-
-const FORMS = {
-  AUTH: 'AUTH',
-  CREATE_WALLET: 'CREATE_WALLET',
-};
+import { authStore, coreStore } from '@/store';
 
 export default {
   name: 'Auth',
 
-  accountsStore,
   authStore,
   coreStore,
 
-  data: () => ({
-    FORMS,
-    activeForm: FORMS.AUTH,
-  }),
-
   computed: {
-    showCreateAccount() {
-      return this.$options.coreStore.showCreateAccount;
-    },
-
     isDialog() {
       return this.$options.coreStore.isDialog;
     },
   },
 
   methods: {
-    async handleAuthCancel() {
-      if (this.activeForm === FORMS.CREATE_WALLET) {
-        await this.$options.coreStore.logout();
-      }
-
+    async onCancel() {
       this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
 
-    async openCreateAccount() {
-      const isExist = await this.$options.accountsStore.checkAccountExists();
-      if (!isExist) {
-        this.activeForm = FORMS.CREATE_WALLET;
-        await this.$options.accountsStore.waitAccountCreate();
-      }
-    },
-
-    async handleAuthorize({ serverMode } = {}) {
-      if (this.showCreateAccount) {
-        await this.openCreateAccount();
-      }
-
+    async onAuth({ serverMode } = {}) {
       this.$options.authStore.confirmAuth(serverMode);
     },
   },
@@ -79,7 +46,6 @@ export default {
     Screen,
     VModalCard,
     CompositeAuthForm,
-    CreateWalletForm,
   },
 };
 </script>

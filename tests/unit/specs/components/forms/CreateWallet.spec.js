@@ -5,7 +5,7 @@ import VeeValidate from 'vee-validate';
 import { hdv3, v3KeyStore } from '@unitFixtures/accounts';
 import walletGen from '@endpass/utils/walletGen';
 import validation from '@/validation';
-import CreateWallet from '@/components/forms/CreateWallet';
+import CreateWallet from '@/components/forms/WalletCreate';
 import setupI18n from '@/locales/i18nSetup';
 import userService from '@/service/user';
 import createStore from '@/store/createStore';
@@ -51,7 +51,7 @@ describe('CreateWallet', () => {
 
   describe('render', () => {
     it('should correctly render CreateWallet component', () => {
-      expect(wrapper.name()).toBe('CreateWalletForm');
+      expect(wrapper.name()).toBe('WalletCreateForm');
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -100,7 +100,7 @@ describe('CreateWallet', () => {
     it('should validate pwd value and switch to seed box', async () => {
       expect.assertions(2);
 
-      expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
+      expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         false,
       );
 
@@ -119,7 +119,7 @@ describe('CreateWallet', () => {
       expect.assertions(2);
 
       userService.setAccount.mockRejectedValueOnce('');
-      expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
+      expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         false,
       );
 
@@ -131,7 +131,7 @@ describe('CreateWallet', () => {
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.find('[data-test=create-wallet-error]').exists()).toBe(
+      expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         true,
       );
     });

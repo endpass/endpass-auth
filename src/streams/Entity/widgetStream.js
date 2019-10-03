@@ -1,17 +1,12 @@
 import store, { authStore, accountsStore } from '@/store';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
-import withPayloadHandler from './middleware/withPayloadHandler';
-import answerToRequest from './middleware/answerToRequest';
-import Queue from './Queue';
+import withPayloadHandler from '../middleware/withPayloadHandler';
+import answerToRequest from '../middleware/answerToRequest';
 import { initDialogResize } from '@/streams/Actions/dialogResize';
+import subscribe from '@/streams/subscribe';
 
 function initWidgetStream() {
   initDialogResize();
-  const queueInst = new Queue({
-    middleware: [withPayloadHandler, answerToRequest],
-  });
-
   const methodToOptions = {
     [METHODS.WIDGET_CHANGE_MOBILE_MODE]: {
       payloadHandler({ isMobile }) {
@@ -40,12 +35,7 @@ function initWidgetStream() {
     },
   };
 
-  bridgeMessenger.subscribe(async (payload, req) => {
-    const { method } = req;
-    const options = methodToOptions[method] || {};
-
-    queueInst.handleRequest(options, payload, req);
-  });
+  subscribe(methodToOptions, [withPayloadHandler, answerToRequest]);
 }
 
 export default initWidgetStream;

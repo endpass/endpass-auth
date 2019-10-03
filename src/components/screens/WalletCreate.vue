@@ -4,7 +4,7 @@
       :is-closable="isDialog"
       @close="onCreateCancel"
     >
-      <create-wallet-form />
+      <wallet-create-form @submit="onCreate" />
     </v-modal-card>
   </screen>
 </template>
@@ -12,14 +12,13 @@
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import CreateWalletForm from '@/components/forms/CreateWallet';
-import { authStore, accountsStore, coreStore } from '@/store';
+import WalletCreateForm from '@/components/forms/WalletCreate';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'CreateWallet',
 
   accountsStore,
-  authStore,
   coreStore,
 
   computed: {
@@ -30,22 +29,19 @@ export default {
 
   methods: {
     async onCreateCancel() {
-      this.$options.authStore.cancelAuth();
+      this.$options.accountsStore.cancelCreateWallet();
       this.$options.coreStore.dialogClose();
     },
 
-    // async openCreateAccount() {
-    //   const isExist = await this.$options.accountsStore.checkAccountExists();
-    //   if (!isExist) {
-    //     await this.$options.accountsStore.waitAccountCreate();
-    //   }
-    // },
+    onCreate() {
+      this.$options.accountsStore.createWalletFinish();
+    },
   },
 
   components: {
     Screen,
     VModalCard,
-    CreateWalletForm,
+    WalletCreateForm,
   },
 };
 </script>

@@ -1,7 +1,6 @@
 import { authStore } from '@/store';
 import dialogOpen from '@/streams/Actions/dialogOpen';
 import { authChannel } from '@/class/singleton/channels';
-import Answer from '@/class/Answer';
 
 export default async function withAuth(options, action) {
   if (!options.needAuth) {
@@ -11,7 +10,7 @@ export default async function withAuth(options, action) {
   await authStore.defineAuthStatus();
 
   if (authStore.isLogin) {
-    authChannel.put(Answer.createOk());
+    authStore.confirmAuth();
     return;
   }
 

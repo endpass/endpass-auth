@@ -39,7 +39,7 @@
         <message
           v-if="error"
           :error="true"
-          data-test="create-wallet-error"
+          data-test="wallet-create-error"
         >
           {{ error }}
         </message>
@@ -50,7 +50,7 @@
             :is-loading="isLoading"
             size="big"
             type="submit"
-            data-test="submit-button-create-wallet"
+            data-test="submit-button-wallet-create"
           >
             {{ $t('components.createWallet.createWallet') }}
           </v-button>
@@ -64,11 +64,11 @@
       <form-item>
         <div class="box">
           <p
-            class="create-wallet-subtitle v-body is-small"
+            class="wallet-create-subtitle v-body is-small"
             v-html="$t('components.createWallet.recoverySubtitle')"
           />
           <ul
-            class="create-wallet-seed"
+            class="wallet-create-seed"
             data-test="seed-phrase"
           >
             <li
@@ -82,7 +82,7 @@
           </ul>
           <div
             v-if="seedTemplateUrl"
-            class="create-wallet-template-download v-mb-24"
+            class="wallet-create-template-download v-mb-24"
           >
             <v-icon-control
               icon="pdf"
@@ -126,7 +126,7 @@ import { accountsStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 
 export default {
-  name: 'CreateWalletForm',
+  name: 'WalletCreateForm',
   accountsStore,
 
   data: () => ({
@@ -181,7 +181,7 @@ export default {
     onContinue() {
       if (!this.isSeedConfirmed) return;
 
-      this.$options.accountsStore.setWalletCreated();
+      this.$emit('submit');
     },
   },
 
@@ -205,13 +205,13 @@ export default {
 };
 </script>
 <style lang="postcss">
-.create-wallet-subtitle {
+.wallet-create-subtitle {
   color: var(--endpass-ui-color-grey-6);
   text-align: center;
   margin-bottom: 28px;
 }
 
-.create-wallet-seed {
+.wallet-create-seed {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -220,19 +220,19 @@ export default {
   margin: 0 -4px 16px;
 }
 
-.create-wallet-seed li {
+.wallet-create-seed li {
   margin: 4px;
 }
 
-.create-wallet-template-download {
+.wallet-create-template-download {
   text-align: center;
 }
 
-.create-wallet-template-download a {
+.wallet-create-template-download a {
   display: inline-flex !important;
 }
 
-.create-wallet-template-download svg {
+.wallet-create-template-download svg {
   color: #e5e9ef;
 }
 </style>
