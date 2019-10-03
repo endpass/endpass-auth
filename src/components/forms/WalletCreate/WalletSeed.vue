@@ -35,7 +35,10 @@
         </div>
       </div>
       <div class="v-mb-24">
-        <v-checkbox v-model="isSeedConfirmed">
+        <v-checkbox
+          v-model="isSeedConfirmed"
+          data-test="wallet-seed-confirm"
+        >
           {{ $t('components.createWallet.seedConfirmation') }}
         </v-checkbox>
       </div>
@@ -45,7 +48,7 @@
       type="button"
       size="big"
       data-test="continue-button"
-      @click="onContinue"
+      @click="onSubmit"
     >
       {{ $t('global.continue') }}
     </v-button>
@@ -89,10 +92,10 @@ export default {
   },
 
   methods: {
-    onContinue() {
+    onSubmit() {
       if (!this.isSeedConfirmed) return;
 
-      this.$emit('continue');
+      this.$emit('submit');
     },
   },
 

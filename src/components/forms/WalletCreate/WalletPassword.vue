@@ -106,7 +106,7 @@ export default {
         const seedKey = await this.$options.accountsStore.createInitialWallet({
           password: this.password,
         });
-        this.$emit('seed', seedKey);
+        this.$emit('create', seedKey);
       } catch (e) {
         console.error(e);
         this.error = this.$i18n.t('components.createWallet.error');

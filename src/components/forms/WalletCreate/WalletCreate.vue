@@ -3,21 +3,18 @@
     <component
       :is="currentComponent"
       :seed-key="seedKey"
-      @seed="onSeed"
-      @continue="onSubmit"
+      @create="onCreate"
+      @submit="onSubmit"
     />
   </div>
 </template>
 
 <script>
-import formMixin from '@/mixins/form';
-import { accountsStore } from '@/store';
 import WalletPassword from '@/components/forms/WalletCreate/WalletPassword';
 import WalletSeed from '@/components/forms/WalletCreate/WalletSeed';
 
 export default {
   name: 'WalletCreateForm',
-  accountsStore,
 
   data: () => ({
     seedKey: '',
@@ -25,7 +22,7 @@ export default {
   }),
 
   methods: {
-    onSeed(seedKey) {
+    onCreate(seedKey) {
       this.seedKey = seedKey;
       this.currentComponent = WalletSeed;
     },
@@ -34,8 +31,6 @@ export default {
       this.$emit('submit');
     },
   },
-
-  mixins: [formMixin],
 
   components: {
     WalletSeed,

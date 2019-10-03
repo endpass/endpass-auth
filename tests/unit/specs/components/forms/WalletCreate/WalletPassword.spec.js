@@ -5,7 +5,7 @@ import VeeValidate from 'vee-validate';
 import { hdv3, v3KeyStore } from '@unitFixtures/accounts';
 import walletGen from '@endpass/utils/walletGen';
 import validation from '@/validation';
-import CreateWallet from '@/components/forms/WalletCreate';
+import WalletPassword from '@/components/forms/WalletCreate/WalletPassword';
 import setupI18n from '@/locales/i18nSetup';
 import userService from '@/service/user';
 import createStore from '@/store/createStore';
@@ -20,14 +20,15 @@ const i18n = setupI18n(localVue);
 
 jest.useFakeTimers();
 
-describe('CreateWallet', () => {
+describe('WalletPassword', () => {
   let wrapper;
   let accountsStore;
+  const seedKey = 'seedKey';
 
   beforeEach(() => {
     jest.clearAllMocks();
     const wallet = {
-      seedKey: 'seedKey',
+      seedKey,
       encryptedSeed: 'encryptedSeed',
       v3KeystoreHdWallet: hdv3,
       v3KeystoreChildWallet: v3KeyStore,
@@ -38,7 +39,7 @@ describe('CreateWallet', () => {
     const store = createStore();
     const { accountsStore: accountsStoreModule } = createStoreModules(store);
     accountsStore = accountsStoreModule;
-    wrapper = shallowMount(CreateWallet, {
+    wrapper = shallowMount(WalletPassword, {
       accountsStore,
       localVue,
       i18n,
@@ -50,8 +51,8 @@ describe('CreateWallet', () => {
   });
 
   describe('render', () => {
-    it('should correctly render CreateWallet component', () => {
-      expect(wrapper.name()).toBe('WalletCreateForm');
+    it('should correctly render WalletPassword component', () => {
+      expect(wrapper.name()).toBe('WalletPassword');
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -62,13 +63,13 @@ describe('CreateWallet', () => {
   }
 
   describe('behavior', () => {
-    it('should not switch from password form', async () => {
+    it('should not switch if passwords do not match', async () => {
       expect.assertions(2);
 
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+      expect(wrapper.emitted().create).toBe(undefined);
 
       wrapper.setData({
         passwordConfirm: 'pwd',
@@ -78,13 +79,13 @@ describe('CreateWallet', () => {
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+      expect(wrapper.emitted().create).toBe(undefined);
     });
 
     it('should not switch to seed box, if pwd less 8', async () => {
       expect.assertions(2);
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+      expect(wrapper.emitted().create).toBe(undefined);
 
       wrapper.setData({
         passwordConfirm: 'pwd',
@@ -94,10 +95,10 @@ describe('CreateWallet', () => {
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(false);
+      expect(wrapper.emitted().create).toBe(undefined);
     });
 
-    it('should validate pwd value and switch to seed box', async () => {
+    it('should validate pwd value and send seed', async () => {
       expect.assertions(2);
 
       expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
@@ -112,7 +113,7 @@ describe('CreateWallet', () => {
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.find('[data-test=seed-phrase]').exists()).toBe(true);
+      expect(wrapper.emitted().create).toEqual([[seedKey]]);
     });
 
     it('should handle error, if create wallet broken', async () => {
@@ -134,37 +135,6 @@ describe('CreateWallet', () => {
       expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         true,
       );
-    });
-
-    it('should not submit if seed phrase is not checked', async () => {
-      expect.assertions(1);
-
-      wrapper.setData({
-        isShowSeed: true,
-        seedKey: 'foo bar baz',
-      });
-
-      wrapper.find('[data-test=continue-button]').vm.$emit('click');
-
-      await global.flushPromises();
-
-      expect(wrapper.emitted().submit).toBe(undefined);
-    });
-
-    it('should submit if seed phrase is checked', async () => {
-      expect.assertions(1);
-
-      wrapper.setData({
-        isShowSeed: true,
-        isSeedConfirmed: true,
-        seedKey: 'foo bar baz',
-      });
-
-      wrapper.find('[data-test=continue-button]').vm.$emit('click');
-
-      await global.flushPromises();
-
-      expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });
 });

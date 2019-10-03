@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CreateWallet render should correctly render CreateWallet component 1`] = `
+exports[`WalletCreate render should correctly render WalletCreate component 1`] = `
 <div>
   <walletpassword-stub seed-key=""></walletpassword-stub>
 </div>
