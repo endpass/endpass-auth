@@ -153,6 +153,18 @@ const routes = [
       isBackground: true,
     },
   },
+  {
+    path: '/wallet-create',
+    name: 'WalletCreate',
+    component: () =>
+      import(
+        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletCreate'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
   { path: '/fonts' },
   {
     path: '*',

@@ -1,22 +1,20 @@
 import { authStore, accountsStore, requestStore } from '@/store';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import {
   accountChannel,
   authChannel,
   signChannel,
   documentChannel,
+  walletChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
 import Answer from '@/class/Answer';
-import Queue from '@/streams/Queue';
-import middleware from '@/streams/middleware';
-import { initDialogResize } from '@/streams/Actions/dialogResize';
+import middleware from './dialogMiddleware';
+import { initDialogResize } from '@/streams/actions/dialogResize';
+import subscribe from '@/streams/subscribe';
 
 function initDialogStream() {
   initDialogResize();
-
-  const queueInst = new Queue({ middleware });
 
   const methodToOptions = {
     [METHODS.SIGN]: {
@@ -27,6 +25,14 @@ function initDialogStream() {
       channel: signChannel,
       needAuth: true,
       needPermission: true,
+      needWallet: true,
+    },
+    [METHODS.CREATE_WALLET]: {
+      routeName: 'wallet-create',
+      channel: walletChannel,
+      needAuth: true,
+      needPermission: true,
+      needWallet: true,
     },
     [METHODS.CREATE_DOCUMENT]: {
       routeName: 'document-create',
@@ -47,6 +53,7 @@ function initDialogStream() {
       channel: accountChannel,
       needAuth: true,
       needPermission: true,
+      needWallet: true,
       async beforeShow() {
         await Promise.all([
           accountsStore.defineOnlyV3Accounts(),
@@ -57,6 +64,7 @@ function initDialogStream() {
     },
     [METHODS.GET_SETTINGS]: {
       needPermission: true,
+      needWallet: true,
       async payloadHandler() {
         await accountsStore.defineSettings();
         const { settings } = accountsStore;
@@ -65,6 +73,7 @@ function initDialogStream() {
     },
     [METHODS.RECOVER]: {
       needPermission: true,
+      needWallet: true,
       payloadHandler(payload) {
         return requestStore.recoverMessage(payload);
       },
@@ -82,13 +91,7 @@ function initDialogStream() {
     },
   };
 
-  bridgeMessenger.subscribe(async (payload, req) => {
-    // routing by methods
-    const { method } = req;
-    const options = methodToOptions[method] || {};
-
-    queueInst.handleRequest(options, payload, req);
-  });
+  subscribe(methodToOptions, middleware);
 }
 
 export default initDialogStream;

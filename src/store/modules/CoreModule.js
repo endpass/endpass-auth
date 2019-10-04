@@ -11,7 +11,7 @@ import {
 } from '@/streams';
 
 // TODO: move it to the streams methods
-import dialogClose from '@/streams/Actions/dialogClose';
+import dialogClose from '@/streams/actions/dialogClose';
 import isDialog from '@/util/isDialog';
 
 @Module({ generateMutationSetters: true })

@@ -4,11 +4,7 @@
       :is-closable="isDialog"
       @close="onCancel"
     >
-      <composite-auth-form
-        :is-closable="isDialog"
-        @cancel="onCancel"
-        @authorize="onAuth"
-      />
+      <wallet-create-form @submit="onCreate" />
     </v-modal-card>
   </screen>
 </template>
@@ -16,14 +12,17 @@
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/forms/CompositeAuth';
-import { authStore, coreStore } from '@/store';
+import WalletCreateForm from '@/components/forms/WalletCreate';
+import { coreStore } from '@/store';
+
+import createWalletCreateController from './WalletCreateController';
 
 export default {
-  name: 'Auth',
+  name: 'CreateWallet',
 
-  authStore,
   coreStore,
+
+  walletCreateController: createWalletCreateController(),
 
   computed: {
     isDialog() {
@@ -32,20 +31,20 @@ export default {
   },
 
   methods: {
-    onCancel() {
-      this.$options.authStore.cancelAuth();
+    async onCancel() {
+      this.$options.walletCreateController.cancelCreateWallet();
       this.$options.coreStore.dialogClose();
     },
 
-    onAuth({ serverMode } = {}) {
-      this.$options.authStore.confirmAuth(serverMode);
+    onCreate() {
+      this.$options.walletCreateController.createWalletFinish();
     },
   },
 
   components: {
     Screen,
     VModalCard,
-    CompositeAuthForm,
+    WalletCreateForm,
   },
 };
 </script>

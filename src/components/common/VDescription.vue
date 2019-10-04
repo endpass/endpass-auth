@@ -1,5 +1,5 @@
 <template>
-  <div class="v-lh-1-2 v-modal-card-description">
+  <div class="v-lh-1-4 v-modal-card-description">
     <slot />
   </div>
 </template>

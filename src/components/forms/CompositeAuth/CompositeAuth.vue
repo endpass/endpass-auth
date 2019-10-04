@@ -28,7 +28,6 @@
 import AuthForm from './Auth';
 import RegularPasswordForm from './RegularPassword';
 import CodeForm from './Code';
-import { authStore, coreStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -50,9 +49,6 @@ export default {
       default: false,
     },
   },
-
-  authStore,
-  coreStore,
 
   data: () => ({
     password: null,
@@ -80,8 +76,7 @@ export default {
     },
 
     onCancel() {
-      this.$options.authStore.cancelAuth();
-      this.$options.coreStore.dialogClose();
+      this.$emit('cancel');
     },
 
     onAuthSocialSubmit() {
