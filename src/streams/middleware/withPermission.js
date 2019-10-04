@@ -1,5 +1,5 @@
 import { authStore } from '@/store';
-import dialogOpen from '@/streams/Actions/dialogOpen';
+import dialogOpen from '@/streams/actions/dialogOpen';
 import { permissionChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 

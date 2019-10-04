@@ -18,13 +18,13 @@ export default {
 
   data: () => ({
     seedKey: '',
-    currentComponent: WalletPassword,
+    currentComponent: 'wallet-password',
   }),
 
   methods: {
     onCreate(seedKey) {
       this.seedKey = seedKey;
-      this.currentComponent = WalletSeed;
+      this.currentComponent = 'wallet-seed';
     },
 
     onSubmit() {

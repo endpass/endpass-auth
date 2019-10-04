@@ -47,7 +47,7 @@
       <div>
         <v-spacer :height="10" />
         <v-button
-          :disabled="!canSubmit"
+          :disabled="!isSubmitAvailable"
           :is-loading="isLoading"
           size="big"
           type="submit"
@@ -67,14 +67,15 @@ import VSpacer from '@/components/common/VSpacer';
 import FormItem from '@/components/common/FormItem';
 import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
-import { accountsStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
+
+import createWalletController from './WalletController';
 
 export default {
   name: 'WalletPassword',
 
-  accountsStore,
+  walletController: null,
 
   data: () => ({
     error: '',
@@ -84,7 +85,7 @@ export default {
   }),
 
   computed: {
-    canSubmit() {
+    isSubmitAvailable() {
       return this.isPasswordEqual && !this.isLoading && this.isFormValid;
     },
 
@@ -95,7 +96,7 @@ export default {
 
   methods: {
     async onCreateWallet() {
-      if (!this.canSubmit) {
+      if (!this.isSubmitAvailable) {
         return;
       }
 
@@ -103,16 +104,24 @@ export default {
 
       try {
         this.error = '';
-        const seedKey = await this.$options.accountsStore.createInitialWallet({
-          password: this.password,
-        });
+        const seedKey = await this.$options.walletController.createInitialWallet(
+          {
+            password: this.password,
+          },
+        );
+
         this.$emit('create', seedKey);
       } catch (e) {
         console.error(e);
         this.error = this.$i18n.t('components.createWallet.error');
+      } finally {
+        this.isLoading = false;
       }
-      this.isLoading = false;
     },
+  },
+
+  beforeCreate() {
+    this.$options.walletController = createWalletController();
   },
 
   mixins: [formMixin],

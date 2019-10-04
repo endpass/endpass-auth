@@ -32,12 +32,12 @@ export default {
   },
 
   methods: {
-    async onCancel() {
+    onCancel() {
       this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
 
-    async onAuth({ serverMode } = {}) {
+    onAuth({ serverMode } = {}) {
       this.$options.authStore.confirmAuth(serverMode);
     },
   },

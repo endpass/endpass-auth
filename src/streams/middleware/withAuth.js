@@ -1,5 +1,5 @@
 import { authStore } from '@/store';
-import dialogOpen from '@/streams/Actions/dialogOpen';
+import dialogOpen from '@/streams/actions/dialogOpen';
 import { authChannel } from '@/class/singleton/channels';
 
 export default async function withAuth(options, action) {

@@ -1,4 +1,4 @@
-import dialogClose from '@/streams/Actions/dialogClose';
+import dialogClose from '@/streams/actions/dialogClose';
 import { METHODS } from '@/constants';
 
 export default function withDialogClose(options, action) {

@@ -1,5 +1,5 @@
 import { accountsStore } from '@/store';
-import dialogOpen from '@/streams/Actions/dialogOpen';
+import dialogOpen from '@/streams/actions/dialogOpen';
 import { walletChannel } from '@/class/singleton/channels';
 
 export default async function withWallet(options, action) {

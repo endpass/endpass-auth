@@ -13,13 +13,16 @@
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import WalletCreateForm from '@/components/forms/WalletCreate';
-import { accountsStore, coreStore } from '@/store';
+import { coreStore } from '@/store';
+
+import createWalletCreateController from './WalletCreateController';
 
 export default {
   name: 'CreateWallet',
 
-  accountsStore,
   coreStore,
+
+  walletCreateController: null,
 
   computed: {
     isDialog() {
@@ -29,13 +32,17 @@ export default {
 
   methods: {
     async onCancel() {
-      this.$options.accountsStore.cancelCreateWallet();
+      this.$options.walletCreateController.cancelCreateWallet();
       this.$options.coreStore.dialogClose();
     },
 
     onCreate() {
-      this.$options.accountsStore.createWalletFinish();
+      this.$options.walletCreateController.createWalletFinish();
     },
+  },
+
+  beforeCreate() {
+    this.$options.walletCreateController = createWalletCreateController();
   },
 
   components: {

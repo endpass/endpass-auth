@@ -10,7 +10,7 @@ import { METHODS } from '@/constants';
 import settingsService from '@/service/settings';
 import Answer from '@/class/Answer';
 import middleware from './dialogMiddleware';
-import { initDialogResize } from '@/streams/Actions/dialogResize';
+import { initDialogResize } from '@/streams/actions/dialogResize';
 import subscribe from '@/streams/subscribe';
 
 function initDialogStream() {

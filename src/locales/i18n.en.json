@@ -220,7 +220,7 @@
       "gasTooLow": "Transaction gas to low. Try to increase gas price or gas limit"
     },
     "error": {
-      "accounts": {
+      "wallet": {
         "walletCreate": "Create wallet failed!"
       },
       "uploadDocument": {
