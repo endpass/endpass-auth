@@ -22,7 +22,7 @@ export default {
 
   coreStore,
 
-  walletCreateController: null,
+  walletCreateController: createWalletCreateController(),
 
   computed: {
     isDialog() {
@@ -39,10 +39,6 @@ export default {
     onCreate() {
       this.$options.walletCreateController.createWalletFinish();
     },
-  },
-
-  beforeCreate() {
-    this.$options.walletCreateController = createWalletCreateController();
   },
 
   components: {
