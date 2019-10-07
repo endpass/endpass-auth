@@ -66,9 +66,11 @@
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "labelCode": "Code from email",
+      "didntGetCode": "Didn't get the code?",
       "placeholderCode": "Enter received code...",
       "sendError": "Something went wrong with sending the code. Please, try again",
-      "confirmError": "Something went wrong with password create. Please, try again"
+      "confirmError": "Something went wrong with password create. Please, try again",
+      "sendTitle": "Resend code"
     },
     "regularPasswordRecover": {
       "title": "Change password",
@@ -78,7 +80,8 @@
       "labelCode": "Code from email",
       "didntGetCode": "Didn't get the code?",
       "sendError": "Something went wrong with sending the code. Please, try again",
-      "recoveryError": "Something went wrong with password recovery. Please, try again"
+      "recoveryError": "Something went wrong with password recovery. Please, try again",
+      "sendTitle": "Resend code"
     },
     "emailCode": {
       "title": "Verify email",

@@ -72,7 +72,7 @@
         data-test="send-code"
         @click.prevent="sendCode"
       >
-        {{ $t('components.emailCode.sendTitle') }}
+        {{ $t('components.regularPasswordRecover.sendTitle') }}
       </v-link>
     </form-row>
   </form>
