@@ -7,9 +7,24 @@ export default async function withWallet(options, action) {
     return;
   }
 
-  const isExist = await accountsStore.checkAccountExists();
-  if (isExist) {
-    return;
+  try {
+    const isExist = await accountsStore.checkAccountExists();
+    if (isExist) {
+      return;
+    }
+  } catch (e) {
+    dialogOpen('wallet-exist-check');
+    const checkRes = await walletChannel.take();
+
+    if (checkRes.status === false) {
+      action.end();
+      action.req.answer(checkRes);
+      return;
+    }
+
+    if (checkRes.payload.isExist === true) {
+      return;
+    }
   }
 
   dialogOpen('wallet-create');

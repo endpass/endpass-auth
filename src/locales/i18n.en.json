@@ -145,6 +145,11 @@
       "downloadTemplate": "Download template",
       "seedConfirmation": "I have written down the words and stored them in a secure place"
     },
+    "walletExist": {
+      "error": "Something broken, when trying to check Wallet existence",
+      "tryToCheck": "Try again to check account exist",
+      "check": "check"
+    },
     "sign": {
       "requestSign": "requests sign action.",
       "requiresSignBy": "Requires request sign by:",

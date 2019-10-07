@@ -165,6 +165,18 @@ const routes = [
       isBackground: true,
     },
   },
+  {
+    path: '/wallet-exist-check',
+    name: 'WalletExistCheck',
+    component: () =>
+      import(
+        /* webpackChunkName: "wallet-exist-check" */ '@/components/screens/WalletExistCheck'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
   { path: '/fonts' },
   {
     path: '*',
