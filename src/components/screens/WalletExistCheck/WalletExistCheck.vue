@@ -6,15 +6,11 @@
     >
       <form-item>
         <message
-          v-if="!isLoading"
           :error="true"
           data-test="wallet-exist-error"
         >
           {{ $t('components.walletExist.error') }}
         </message>
-      </form-item>
-      <form-item>
-        {{ $t('components.walletExist.tryToCheck') }}
       </form-item>
       <form-item>
         <v-button

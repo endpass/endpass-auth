@@ -9,11 +9,8 @@ exports[`WalletExistCheck should match snapshot 1`] = `
       </message-stub>
     </form-item-stub>
     <form-item-stub>
-      Try again to check account exist
-    </form-item-stub>
-    <form-item-stub>
       <v-button-stub skin="quaternary" size="normal" data-test="submit-button">
-        check
+        check again
       </v-button-stub>
     </form-item-stub>
   </v-modal-card-stub>

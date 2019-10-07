@@ -147,8 +147,7 @@
     },
     "walletExist": {
       "error": "Something broken, when trying to check Wallet existence",
-      "tryToCheck": "Try again to check account exist",
-      "check": "check"
+      "check": "check again"
     },
     "sign": {
       "requestSign": "requests sign action.",
