@@ -7,9 +7,9 @@
       <form-item>
         <message
           :error="true"
-          data-test="wallet-exist-error"
+          data-test="wallet-create-error"
         >
-          {{ $t('components.walletExist.error') }}
+          {{ $t('components.walletCreateError.error') }}
         </message>
       </form-item>
       <form-item>
@@ -20,7 +20,7 @@
           data-test="submit-button"
           @click="checkExist"
         >
-          {{ $t('components.walletExist.check') }}
+          {{ $t('components.walletCreateError.check') }}
         </v-button>
       </form-item>
     </v-modal-card>
@@ -33,15 +33,15 @@ import VButton from '@endpass/ui/kit/VButton';
 import Screen from '@/components/common/Screen';
 import { coreStore } from '@/store';
 
-import createCheckController from './CheckController';
+import createWalletExistController from './WalletExistController';
 import Message from '@/components/common/Message';
 import FormItem from '@/components/common/FormItem';
 
 export default {
-  name: 'CreateWallet',
+  name: 'WalletCreateError',
 
   coreStore,
-  checkController: createCheckController(),
+  walletExistController: createWalletExistController(),
 
   data: () => ({
     isLoading: false,
@@ -58,7 +58,7 @@ export default {
       if (this.isLoading) return;
 
       this.isLoading = true;
-      await this.$options.checkController.cancelCheck();
+      await this.$options.walletExistController.cancelCheck();
       this.isLoading = false;
     },
 
@@ -67,9 +67,9 @@ export default {
 
       this.isLoading = true;
       try {
-        const isExist = await this.$options.checkController.checkAccountExist();
+        const isExist = await this.$options.walletExistController.checkAccountExist();
         this.$options.coreStore.dialogClose();
-        this.$options.checkController.setExist(isExist);
+        this.$options.walletExistController.setExist(isExist);
       } catch (e) {
       } finally {
         this.isLoading = false;

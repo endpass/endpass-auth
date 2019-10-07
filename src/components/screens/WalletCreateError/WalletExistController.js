@@ -5,7 +5,7 @@ import { walletChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 
 @Module({ generateMutationSetters: true })
-class CheckController extends VuexModule {
+class WalletExistController extends VuexModule {
   @Action
   async checkAccountExist() {
     const isExist = await accountsStore.checkAccountExists();
@@ -28,4 +28,4 @@ class CheckController extends VuexModule {
   }
 }
 
-export default () => createController(CheckController);
+export default () => createController(WalletExistController);

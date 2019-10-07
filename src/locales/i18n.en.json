@@ -145,7 +145,7 @@
       "downloadTemplate": "Download template",
       "seedConfirmation": "I have written down the words and stored them in a secure place"
     },
-    "walletExist": {
+    "walletCreateError": {
       "error": "Something broken, when trying to check Wallet existence",
       "check": "check again"
     },

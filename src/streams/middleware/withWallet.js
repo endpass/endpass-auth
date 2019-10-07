@@ -13,7 +13,7 @@ export default async function withWallet(options, action) {
       return;
     }
   } catch (e) {
-    dialogOpen('wallet-exist-check');
+    dialogOpen('wallet-create/error');
     const checkRes = await walletChannel.take();
 
     if (checkRes.status === false) {

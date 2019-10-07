@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WalletExistCheck should match snapshot 1`] = `
+exports[`WalletCreateError should match snapshot 1`] = `
 <screen-stub>
   <v-modal-card-stub isclosable="true">
     <form-item-stub>
-      <message-stub error="true" data-test="wallet-exist-error">
+      <message-stub error="true" data-test="wallet-create-error">
         Something broken, when trying to check Wallet existence
       </message-stub>
     </form-item-stub>

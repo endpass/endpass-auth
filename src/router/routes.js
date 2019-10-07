@@ -166,11 +166,11 @@ const routes = [
     },
   },
   {
-    path: '/wallet-exist-check',
-    name: 'WalletExistCheck',
+    path: '/wallet-create/error',
+    name: 'WalletCreateError',
     component: () =>
       import(
-        /* webpackChunkName: "wallet-exist-check" */ '@/components/screens/WalletExistCheck'
+        /* webpackChunkName: "wallet-create-error" */ '@/components/screens/WalletCreateError'
       ),
     meta: {
       isDialog: true,

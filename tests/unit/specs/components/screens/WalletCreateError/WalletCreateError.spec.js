@@ -1,7 +1,7 @@
 import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import WalletExistCheck from '@/components/screens/WalletExistCheck';
+import WalletCreateError from '@/components/screens/WalletCreateError';
 import identityService from '@/service/identity';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { METHODS } from '@/constants';
@@ -12,13 +12,13 @@ const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 localVue.use(UIComponents);
 
-describe('WalletExistCheck', () => {
+describe('WalletCreateError', () => {
   let wrapper;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    wrapper = shallowMount(WalletExistCheck, {
+    wrapper = shallowMount(WalletCreateError, {
       localVue,
       i18n,
       sync: false,

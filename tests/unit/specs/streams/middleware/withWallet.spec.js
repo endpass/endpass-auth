@@ -85,7 +85,7 @@ describe('withWallet', () => {
     expect(action.req.answer).toBeCalledWith(Answer.createFail());
     expect(router.replace).toBeCalledTimes(1);
     expect(router.replace).toBeCalledWith(
-      '/wallet-exist-check',
+      '/wallet-create/error',
       expect.any(Function),
       expect.any(Function),
     );
@@ -104,7 +104,7 @@ describe('withWallet', () => {
     expect(action.end).not.toBeCalled();
     expect(router.replace).toBeCalledTimes(1);
     expect(router.replace).toBeCalledWith(
-      '/wallet-exist-check',
+      '/wallet-create/error',
       expect.any(Function),
       expect.any(Function),
     );
