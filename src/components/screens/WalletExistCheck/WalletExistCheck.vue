@@ -22,7 +22,7 @@
           :is-loading="isLoading"
           skin="quaternary"
           data-test="submit-button"
-          @click="onReCheck"
+          @click="checkExist"
         >
           {{ $t('components.walletExist.check') }}
         </v-button>
@@ -64,10 +64,6 @@ export default {
       this.isLoading = true;
       await this.$options.checkController.cancelCheck();
       this.isLoading = false;
-    },
-
-    async onReCheck() {
-      await this.checkExist();
     },
 
     async checkExist() {
