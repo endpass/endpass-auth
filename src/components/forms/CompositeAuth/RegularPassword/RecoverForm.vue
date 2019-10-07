@@ -124,7 +124,7 @@ export default {
       try {
         this.isLoading = true;
         this.$validator.errors.removeById('sendCodeId');
-        await this.$options.authStore.resetRegularPassword({
+        await this.$options.authStore.confirmResetRegularPassword({
           password: this.password,
           code: this.code,
         });
@@ -153,7 +153,7 @@ export default {
       } catch (error) {
         this.$validator.errors.add({
           field: 'code',
-          msg: this.$i18n.t('components.emailCode.sendError'),
+          msg: this.$i18n.t('components.regularPasswordRecover.sendError'),
           id: 'sendCodeId',
         });
       } finally {

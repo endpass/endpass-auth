@@ -160,7 +160,18 @@ const sendEmailCode = async email => {
   return timeout;
 };
 
-const resetRegularPassword = async ({
+const resetRegularPassword = async ({ email }) => {
+  const { timeout } = await request.post(
+    `${identityBaseUrl}/regular-password/reset`,
+    {
+      email,
+    },
+  );
+
+  return timeout;
+};
+
+const confirmResetRegularPassword = async ({
   password: newPassword,
   code: passwordResetToken,
 }) => {
@@ -219,6 +230,7 @@ export default {
   authWithGitHub,
   sendEmailCode,
   resetRegularPassword,
+  confirmResetRegularPassword,
   checkRegularPassword,
   logout,
   waitLogin,

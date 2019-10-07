@@ -62,9 +62,13 @@
     },
     "createPassword": {
       "title": "Create regular password",
-      "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only",
+      "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only. We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter new password and the&nbsp;code below to&nbsp;confirm.",
       "newPassword": "Enter new password...",
-      "repeatPassword": "Repeat new password..."
+      "repeatPassword": "Repeat new password...",
+      "labelCode": "Code from email",
+      "placeholderCode": "Enter received code...",
+      "sendError": "Something went wrong with sending the code. Please, try again",
+      "confirmError": "Something went wrong with password create. Please, try again"
     },
     "regularPasswordRecover": {
       "title": "Change password",
@@ -73,6 +77,7 @@
       "placeholderCode": "Enter received code...",
       "labelCode": "Code from email",
       "didntGetCode": "Didn't get the code?",
+      "sendError": "Something went wrong with sending the code. Please, try again",
       "recoveryError": "Something went wrong with password recovery. Please, try again"
     },
     "emailCode": {

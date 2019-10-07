@@ -108,8 +108,13 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async resetRegularPassword({ code, password }) {
-    await identityService.resetRegularPassword({ code, password });
+  async resetRegularPassword({ email }) {
+    await identityService.resetRegularPassword({ email });
+  }
+
+  @Action
+  async confirmResetRegularPassword({ code, password }) {
+    await identityService.confirmResetRegularPassword({ code, password });
   }
 
   @Action

@@ -4,7 +4,7 @@
       <span v-html="$t('components.createPassword.title')" />
     </v-title>
     <v-description>
-      <span v-html="$t('components.createPassword.description')" />
+      <span v-html="$t('components.createPassword.description', { email })" />
     </v-description>
 
     <form-item>
@@ -21,7 +21,7 @@
         data-test="password-input"
       />
     </form-item>
-    <form-item class="v-mb-24">
+    <form-item>
       <v-input
         v-model="repeatPassword"
         v-validate="'required|min:8'"
@@ -33,6 +33,19 @@
         name="repeatPassword"
         :placeholder="$t('components.createPassword.repeatPassword')"
         data-test="repeat-password-input"
+      />
+    </form-item>
+    <form-item class="v-mb-24">
+      <v-input
+        v-model="code"
+        v-validate="'required|digits:6'"
+        data-vv-as="code"
+        data-vv-name="code"
+        :error="errors.first('code')"
+        name="code"
+        :label="$t('components.createPassword.labelCode')"
+        :placeholder="$t('components.createPassword.placeholderCode')"
+        data-test="password-input"
       />
     </form-item>
     <form-row>
@@ -74,8 +87,10 @@ export default {
   },
 
   data: () => ({
+    isLoading: false,
     password: '',
     repeatPassword: '',
+    code: '',
   }),
 
   computed: {
@@ -89,9 +104,43 @@ export default {
   },
 
   methods: {
-    onSubmit() {
-      this.$emit('submit', this.password);
+    async onSubmit() {
+      if (this.isLoading) return;
+
+      try {
+        this.isLoading = true;
+        this.$validator.errors.removeById('sendCodeId');
+        await this.$options.authStore.confirmResetRegularPassword({
+          password: this.password,
+          code: this.code,
+        });
+        this.$emit('submit', this.password);
+      } catch (error) {
+        this.$validator.errors.add({
+          field: 'code',
+          msg: this.$i18n.t('components.createPassword.confirmError'),
+          id: 'sendCodeId',
+        });
+      } finally {
+        this.isLoading = false;
+      }
     },
+  },
+
+  async mounted() {
+    try {
+      this.isLoading = true;
+      this.$validator.errors.removeById('sendCodeId');
+      await this.$options.authStore.resetRegularPassword({ email: this.email });
+    } catch (e) {
+      this.$validator.errors.add({
+        field: 'code',
+        msg: this.$i18n.t('components.createPassword.sendError'),
+        id: 'sendCodeId',
+      });
+    } finally {
+      this.isLoading = false;
+    }
   },
 
   mixins: [formMixin],
