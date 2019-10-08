@@ -4,17 +4,10 @@ import permissionsService from '@/service/permissions';
 
 @Module({ generateMutationSetters: true })
 class LoginController extends VuexModule {
-  challengeId = '';
-
-  constructor(props, { challengeId }) {
-    super(props);
-    this.challengeId = challengeId;
-  }
-
   @Action
-  async authWithCode({ code }) {
+  async authWithCode({ challengeId, code }) {
     const { redirect } = await permissionsService.login({
-      challengeId: this.challengeId,
+      challengeId,
       code,
     });
     window.location.href = redirect;

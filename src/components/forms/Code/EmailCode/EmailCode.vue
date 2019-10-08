@@ -74,8 +74,8 @@ export default {
       required: true,
     },
 
-    controller: {
-      type: Object,
+    submitHandler: {
+      type: Function,
       required: true,
     },
   },
@@ -93,7 +93,8 @@ export default {
         this.isLoading = true;
         this.error = null;
         const { code, email, password, isSignUp } = this;
-        await this.controller.authWithCode({
+
+        await this.submitHandler({
           isSignUp,
           email,
           password,

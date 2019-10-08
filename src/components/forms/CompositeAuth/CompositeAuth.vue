@@ -18,7 +18,7 @@
       :password="password"
       :is-sign-up="isSignUp"
       :is-closable="isClosable"
-      :controller="$options.authController"
+      :submit-handler="$options.authController.authWithCode"
       @submit="handleSubmit"
       @cancel="onCancel"
     />

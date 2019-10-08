@@ -13,7 +13,7 @@
       password=""
       :is-sign-up="false"
       :is-closable="false"
-      :controller="$options.loginController"
+      :submit-handler="authWithCode"
     />
   </v-frame>
 </template>
@@ -29,7 +29,7 @@ export default {
   name: 'LoginProvider',
   accountsStore,
 
-  loginController: {},
+  loginController: createLoginController(),
 
   props: {
     loginChallenge: {
@@ -54,8 +54,13 @@ export default {
     },
   },
 
-  beforeMount() {
-    this.$options.loginController = createLoginController(this.loginChallenge);
+  methods: {
+    async authWithCode({ code }) {
+      await this.$options.loginController.authWithCode({
+        challengeId: this.loginChallenge,
+        code,
+      });
+    },
   },
 
   components: {
