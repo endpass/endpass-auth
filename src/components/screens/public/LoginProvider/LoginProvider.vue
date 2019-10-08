@@ -1,22 +1,22 @@
 <template>
   <loading-screen :is-loading="isLoading">
     <v-frame
-      v-if="error"
       title=""
       :is-closable="false"
     >
       <message
+        v-if="error"
         :error="true"
         data-test="error-message"
       >
         {{ error }}
       </message>
+      <login-provider-code
+        v-else
+        :email="currentUserEmail"
+        :login-challenge="loginChallenge"
+      />
     </v-frame>
-    <login-provider-code
-      v-else
-      :email="currentUserEmail"
-      :login-challenge="loginChallenge"
-    />
   </loading-screen>
 </template>
 

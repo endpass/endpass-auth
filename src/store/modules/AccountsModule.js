@@ -47,6 +47,10 @@ class AccountsModule extends VuexModule {
     return this.accounts.map(({ address }) => address);
   }
 
+  get isOtpMode() {
+    return !!this.settings.otpEnabled;
+  }
+
   @Action
   async checkOauthLoginRequirements(challengeId) {
     this.sharedStore.changeLoadingStatus(true);

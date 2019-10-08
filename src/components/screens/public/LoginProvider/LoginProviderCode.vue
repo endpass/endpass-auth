@@ -1,29 +1,23 @@
 <template>
-  <v-frame
-    title=""
-    :is-closable="false"
+  <message
+    v-if="!hasLoginChallenge"
+    :error="true"
+    data-test="error-message"
   >
-    <message
-      v-if="!hasLoginChallenge"
-      :error="true"
-      data-test="error-message"
-    >
-      {{ $t('components.loginProviderPassword.loginChallenge') }}
-    </message>
-    <code-form
-      v-else
-      :email="email"
-      password=""
-      :is-sign-up="false"
-      :is-closable="false"
-      :is-otp="isOtp"
-      :submit-handler="authWithCode"
-    />
-  </v-frame>
+    {{ $t('components.loginProviderPassword.loginChallenge') }}
+  </message>
+  <code-form
+    v-else
+    :email="email"
+    password=""
+    :is-sign-up="false"
+    :is-closable="false"
+    :is-otp="isOtp"
+    :submit-handler="authWithCode"
+  />
 </template>
 
 <script>
-import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import { accountsStore } from '@/store';
 import CodeForm from '@/components/forms/Code';
@@ -57,7 +51,7 @@ export default {
     },
 
     isOtp() {
-      return !!this.$options.accountsStore.settings.otpEnabled;
+      return this.$options.accountsStore.isOtpMode;
     },
   },
 
@@ -73,7 +67,6 @@ export default {
   components: {
     CodeForm,
     Message,
-    VFrame,
   },
 };
 </script>

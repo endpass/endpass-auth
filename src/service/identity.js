@@ -39,14 +39,14 @@ const authWithCode = async ({
   code,
   password,
   isSignUp,
-  // challengeType = 'otp',
+  challengeType = 'otp',
 }) => {
   const url = isSignUp
     ? `${identityBaseUrl}/auth/signup`
     : `${identityBaseUrl}/auth/token`;
 
   const res = await request.post(url, {
-    //    challengeType,
+    challengeType,
     email,
     code,
     password,

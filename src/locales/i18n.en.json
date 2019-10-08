@@ -174,7 +174,7 @@
       "authFailed": "Authentication failed. Please, try again."
     },
     "consentProvider": {
-      "title": "Scopes",
+      "title": "Permissions",
       "loadScopesError": "Something broken, when loading scopes",
       "urlError": "You should provide consent_challenge param in url, add it and try again!"
     },
