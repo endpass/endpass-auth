@@ -22,7 +22,7 @@
 <script>
 import get from 'lodash/get';
 import LoadingScreen from '@/components/common/LoadingScreen';
-import LoginProviderPassword from './LoginProviderPassword';
+import LoginProviderPassword from './LoginProviderCode';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import { authStore, accountsStore } from '@/store';

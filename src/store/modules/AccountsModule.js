@@ -63,21 +63,6 @@ class AccountsModule extends VuexModule {
   }
 
   @Action
-  async authWithOauth({ challengeId, password }) {
-    let res;
-
-    try {
-      res = await permissionsService.login({
-        challengeId,
-        password,
-      });
-    } catch (err) {
-      throw new Error(i18n.t('store.auth.passwordIncorrect'));
-    }
-    return res;
-  }
-
-  @Action
   async createAccount({ password }) {
     const nextWallet = await userService.getNextWalletFromHD({
       addresses: this.addresses,

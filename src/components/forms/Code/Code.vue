@@ -9,46 +9,21 @@
 <script>
 import EmailCode from './EmailCode';
 import OtpCode from './OtpCode';
-import { authStore } from '@/store';
+import { authStore, accountsStore } from '@/store';
 
 export default {
-  name: 'Code',
+  name: 'CodeForm',
 
   authStore,
-
-  props: {
-    email: {
-      type: String,
-      required: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    isSignUp: {
-      type: Boolean,
-      required: true,
-    },
-
-    controller: {
-      type: Object,
-      required: true,
-    },
-
-    isClosable: {
-      type: Boolean,
-    },
-  },
+  accountsStore,
 
   computed: {
-    otpEmail() {
-      return this.$options.authStore.otpEmail;
+    isOtp() {
+      return this.$options.accountsStore.settings.otpEnabled;
     },
 
     currentForm() {
-      return this.otpEmail ? OtpCode : EmailCode;
+      return this.isOtp ? OtpCode : EmailCode;
     },
   },
 

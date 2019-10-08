@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
-import LoginProviderPassword from '@/components/screens/public/LoginProviderPassword';
+import LoginProviderPassword from '@/components/screens/public/LoginProvider/LoginProviderCode';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';

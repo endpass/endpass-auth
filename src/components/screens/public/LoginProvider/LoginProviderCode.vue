@@ -7,26 +7,29 @@
     >
       {{ $t('components.loginProviderPassword.loginChallenge') }}
     </message>
-    <template v-else>
-      <sign-password
-        :is-loading="isLoading"
-        :email="email"
-        :error="error"
-        @submit="handlePasswordSubmit"
-      />
-    </template>
+    <code-form
+      v-else
+      :email="email"
+      password=""
+      :is-sign-up="false"
+      :is-closable="false"
+      :controller="$options.loginController"
+    />
   </v-frame>
 </template>
 
 <script>
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import SignPassword from '@/components/forms/SignPassword';
 import { accountsStore } from '@/store';
+import CodeForm from '@/components/forms/Code';
+import createLoginController from './LoginController';
 
 export default {
   name: 'LoginProvider',
   accountsStore,
+
+  loginController: {},
 
   props: {
     loginChallenge: {
@@ -51,26 +54,12 @@ export default {
     },
   },
 
-  methods: {
-    async handlePasswordSubmit(password) {
-      try {
-        this.isLoading = true;
-        const { redirect } = await this.$options.accountsStore.authWithOauth({
-          challengeId: this.loginChallenge,
-          password,
-        });
-        window.location.href = redirect;
-        return; // must show loader until redirect not happen
-      } catch (err) {
-        this.error = err.message;
-      } finally {
-        this.isLoading = false;
-      }
-    },
+  beforeMount() {
+    this.$options.loginController = createLoginController(this.loginChallenge);
   },
 
   components: {
-    SignPassword,
+    CodeForm,
     Message,
     VFrame,
   },
