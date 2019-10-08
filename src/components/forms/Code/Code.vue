@@ -9,20 +9,20 @@
 <script>
 import EmailCode from './EmailCode';
 import OtpCode from './OtpCode';
-import { authStore } from '@/store';
 
 export default {
-  name: 'Code',
+  name: 'CodeForm',
 
-  authStore,
+  props: {
+    isOtp: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   computed: {
-    otpEmail() {
-      return this.$options.authStore.otpEmail;
-    },
-
     currentForm() {
-      return this.otpEmail ? OtpCode : EmailCode;
+      return this.isOtp ? OtpCode : EmailCode;
     },
   },
 

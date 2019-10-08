@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
-import RecoverForm from '@/components/forms/CompositeAuth/Code/OtpCode/RecoverForm';
+import RecoverForm from '@/components/forms/Code/OtpCode/RecoverForm';
 import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';

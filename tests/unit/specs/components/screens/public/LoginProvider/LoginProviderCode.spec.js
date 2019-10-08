@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
-import LoginProviderPassword from '@/components/screens/public/LoginProviderPassword';
+import LoginProviderCode from '@/components/screens/public/LoginProvider/LoginProviderCode';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';
@@ -12,17 +12,18 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('LoginProviderPassword', () => {
+describe('LoginProviderCode', () => {
   let wrapper;
 
-  const createWrapper = () => {
+  const createWrapper = options => {
     const store = createStore();
     const { accountsStore } = createStoreModules(store);
 
-    return shallowMount(LoginProviderPassword, {
+    return shallowMount(LoginProviderCode, {
       accountsStore,
       localVue,
       i18n,
+      ...options,
     });
   };
 
@@ -34,7 +35,7 @@ describe('LoginProviderPassword', () => {
   });
 
   describe('render', () => {
-    it('should correctly render LoginProviderPassword screen', () => {
+    it('should correctly render LoginProviderCode screen', () => {
       wrapper = createWrapper();
 
       expect(wrapper.html()).toMatchSnapshot();
@@ -50,42 +51,27 @@ describe('LoginProviderPassword', () => {
     });
 
     describe('password submit', () => {
-      const password = 'foo';
+      const code = 'foo';
       const challengeId = 'bar';
 
       it('should handle password submit and makes hydra login', async () => {
         expect.assertions(1);
 
+        wrapper = createWrapper({
+          propsData: {
+            loginChallenge: challengeId,
+          },
+        });
         permissionsService.getLoginDetails.mockResolvedValueOnce({});
         permissionsService.login.mockResolvedValueOnce({
           redirect: 'new/path',
         });
 
-        wrapper.setProps({
-          loginChallenge: challengeId,
-        });
-        wrapper.find('sign-password-stub').vm.$emit('submit', password);
+        wrapper.vm.authWithCode(code);
 
         await global.flushPromises();
 
         expect(window.location.href).toBe('new/path');
-      });
-
-      it('should render error if submit failed', async () => {
-        expect.assertions(1);
-
-        const errorMessage = 'ivyweed perturbing Laparosticti';
-        const error = new Error(errorMessage);
-
-        permissionsService.login.mockRejectedValueOnce(error);
-        wrapper.setProps({
-          loginChallenge: challengeId,
-        });
-        wrapper.find('sign-password-stub').vm.$emit('submit', password);
-
-        await global.flushPromises();
-
-        expect(wrapper.vm.error).toBe('Password is incorrect');
       });
     });
   });

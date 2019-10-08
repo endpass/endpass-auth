@@ -34,7 +34,7 @@ const setAuthPermission = async (password, originHost) => {
   return res;
 };
 
-const auth = async ({
+const authWithCode = async ({
   email,
   code,
   password,
@@ -219,7 +219,7 @@ export default {
   updateAccountSettings,
   setAuthPermission,
   getAuthChallenge,
-  auth,
+  authWithCode,
   authWithGoogle,
   authWithGitHub,
   sendEmailCode,

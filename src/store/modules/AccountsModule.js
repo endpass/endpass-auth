@@ -47,6 +47,10 @@ class AccountsModule extends VuexModule {
     return this.accounts.map(({ address }) => address);
   }
 
+  get isOtpMode() {
+    return !!this.settings.otpEnabled;
+  }
+
   @Action
   async checkOauthLoginRequirements(challengeId) {
     this.sharedStore.changeLoadingStatus(true);
@@ -60,21 +64,6 @@ class AccountsModule extends VuexModule {
     } finally {
       this.sharedStore.changeLoadingStatus(false);
     }
-  }
-
-  @Action
-  async authWithOauth({ challengeId, password }) {
-    let res;
-
-    try {
-      res = await permissionsService.login({
-        challengeId,
-        password,
-      });
-    } catch (err) {
-      throw new Error(i18n.t('store.auth.passwordIncorrect'));
-    }
-    return res;
   }
 
   @Action

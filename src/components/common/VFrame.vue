@@ -6,6 +6,7 @@
       @close="emitClose"
     >
       <template
+        v-if="title"
         slot="title"
         name="title"
       >

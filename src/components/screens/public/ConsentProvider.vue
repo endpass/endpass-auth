@@ -2,6 +2,7 @@
   <loading-screen v-if="isLoadingScreen" />
   <v-frame
     v-else
+    :title="$t('components.consentProvider.title')"
     :is-closable="false"
   >
     <v-error

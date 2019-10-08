@@ -1,28 +1,29 @@
 <template>
   <loading-screen :is-loading="isLoading">
     <v-frame
-      v-if="error"
+      title=""
       :is-closable="false"
     >
       <message
+        v-if="error"
         :error="true"
         data-test="error-message"
       >
         {{ error }}
       </message>
+      <login-provider-code
+        v-else
+        :email="currentUserEmail"
+        :login-challenge="loginChallenge"
+      />
     </v-frame>
-    <login-provider-password
-      v-else
-      :email="currentUserEmail"
-      :login-challenge="loginChallenge"
-    />
   </loading-screen>
 </template>
 
 <script>
 import get from 'lodash/get';
 import LoadingScreen from '@/components/common/LoadingScreen';
-import LoginProviderPassword from './LoginProviderPassword';
+import LoginProviderCode from './LoginProviderCode';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import { authStore, accountsStore } from '@/store';
@@ -95,7 +96,7 @@ export default {
 
   components: {
     LoadingScreen,
-    LoginProviderPassword,
+    LoginProviderCode,
     VFrame,
     Message,
   },

@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import Otp from '@/components/forms/CompositeAuth/Code/OtpCode/OtpCode';
+import Otp from '@/components/forms/Code/OtpCode/OtpCode';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 

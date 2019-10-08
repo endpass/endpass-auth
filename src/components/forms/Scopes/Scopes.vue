@@ -1,9 +1,9 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <form-field>
-      <message>
+      <v-description>
         {{ $t('components.scopes.allowScopes') }}
-      </message>
+      </v-description>
     </form-field>
     <div class="form-field v-mb-24">
       <scopes-checkbox-tree
@@ -43,11 +43,11 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import ScopesCheckboxTree from '@/components/common/ScopesCheckboxTree';
 import scopeTitlesMap from './scopeTitlesMap';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'ScopesForm',
@@ -151,9 +151,9 @@ export default {
   components: {
     ScopesCheckboxTree,
     VButton,
-    Message,
     FormField,
     FormControls,
+    VDescription,
   },
 };
 </script>
