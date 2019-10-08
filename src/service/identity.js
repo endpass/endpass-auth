@@ -8,15 +8,9 @@ const createTimeout = handler => setTimeout(handler, 1500);
 
 const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
-const getAccountsSkipPermission = () =>
-  requestSkipPermission.get(`${identityBaseUrl}/accounts`);
-
 const checkAccountExist = async () => {
-  let res = false;
-  try {
-    const list = await getAccountsSkipPermission();
-    res = list.length !== 0;
-  } catch (e) {}
+  const list = await requestSkipPermission.get(`${identityBaseUrl}/accounts`);
+  const res = list.length !== 0;
   return res;
 };
 
