@@ -88,6 +88,7 @@ export default {
         const { code, email, password, isSignUp } = this;
         this.isLoading = true;
         this.error = null;
+
         await this.$options.authStore.authByCode({
           isSignUp,
           email,

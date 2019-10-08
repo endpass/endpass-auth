@@ -45,7 +45,7 @@
 import VButton from '@endpass/ui/kit/VButton';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import createUploadController from './DocumentUploadController';
-import DocumentUploadForm from '@/components/common/DocumentUploadForm/DocumentUploadForm';
+import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUploadForm';
 import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
 import FormControls from '@/components/common/FormControls';
 
