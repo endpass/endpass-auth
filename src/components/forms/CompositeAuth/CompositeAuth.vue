@@ -18,6 +18,7 @@
       :password="password"
       :is-sign-up="isSignUp"
       :is-closable="isClosable"
+      :is-otp="isOtp"
       :submit-handler="$options.authController.authWithCode"
       @submit="handleSubmit"
       @cancel="onCancel"
@@ -30,6 +31,7 @@ import AuthForm from './Auth';
 import RegularPasswordForm from './RegularPassword';
 import CodeForm from '@/components/forms/Code';
 import createAuthController from './AuthController';
+import { authStore } from '@/store';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -53,6 +55,7 @@ export default {
   },
 
   authController: createAuthController(),
+  authStore,
 
   data: () => ({
     password: null,
@@ -62,6 +65,12 @@ export default {
     currentForm: FORMS.AUTH,
     FORMS,
   }),
+
+  computed: {
+    isOtp() {
+      return !!this.$options.authStore.otpEmail;
+    },
+  },
 
   methods: {
     onPasswordSubmit(password) {

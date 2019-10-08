@@ -16,6 +16,7 @@
       password=""
       :is-sign-up="false"
       :is-closable="false"
+      :is-otp="isOtp"
       :submit-handler="authWithCode"
     />
   </v-frame>
@@ -53,6 +54,10 @@ export default {
   computed: {
     hasLoginChallenge() {
       return !!this.loginChallenge;
+    },
+
+    isOtp() {
+      return !!this.$options.accountsStore.settings.otpEnabled;
     },
   },
 
