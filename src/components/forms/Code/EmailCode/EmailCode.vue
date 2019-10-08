@@ -1,12 +1,11 @@
 <template>
   <form @submit.prevent="onSubmit">
     <v-title>
-      <span v-html="$t('components.otp.title')" />
+      <span v-html="$t('components.emailCode.title')" />
     </v-title>
     <v-description>
-      <span v-html="$t('components.otp.description')" />
+      <span v-html="$t('components.emailCode.description', { email })" />
     </v-description>
-
     <form-item>
       <v-input
         v-model="code"
@@ -15,7 +14,7 @@
         data-vv-name="code"
         :error="errors.first('code') || error"
         name="code"
-        :placeholder="$t('components.otp.enterReceivedCode')"
+        :placeholder="$t('components.emailCode.placeholder')"
         data-test="code-input"
       />
     </form-item>
@@ -30,13 +29,14 @@
       </v-button>
     </form-item>
     <form-row class="v-fs-14 v-text-center">
+      {{ $t('components.emailCode.didntGetTheCode') }}&nbsp;
       <v-link
         :disabled="isLoading"
         href="#"
-        data-test="recovery-link"
-        @click.prevent="onRecover"
+        data-test="send-code"
+        @click.prevent="sendCode"
       >
-        {{ $t('components.otp.noCode') }}
+        {{ $t('components.emailCode.sendTitle') }}
       </v-link>
     </form-row>
   </form>
@@ -46,15 +46,15 @@
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
-import { authStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
+import { authStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
 export default {
-  name: 'OtpForm',
+  name: 'EmailCode',
 
   authStore,
 
@@ -73,6 +73,11 @@ export default {
       type: Boolean,
       required: true,
     },
+
+    controller: {
+      type: Object,
+      required: true,
+    },
   },
 
   data: () => ({
@@ -85,11 +90,10 @@ export default {
     async onSubmit() {
       if (this.isLoading) return;
       try {
-        const { code, email, password, isSignUp } = this;
         this.isLoading = true;
         this.error = null;
-
-        await this.$options.authStore.authByCode({
+        const { code, email, password, isSignUp } = this;
+        await this.controller.authWithCode({
           isSignUp,
           email,
           password,
@@ -104,11 +108,27 @@ export default {
       }
     },
 
-    onRecover() {
+    async sendCode() {
       if (this.isLoading) return;
-
-      this.$emit('recover');
+      try {
+        this.isLoading = true;
+        this.error = null;
+        this.$validator.errors.removeById('sendCodeId');
+        await this.$options.authStore.sendCode({ email: this.email });
+      } catch (error) {
+        this.$validator.errors.add({
+          field: 'code',
+          msg: this.$i18n.t('components.emailCode.sendError'),
+          id: 'sendCodeId',
+        });
+      } finally {
+        this.isLoading = false;
+      }
     },
+  },
+
+  mounted() {
+    this.sendCode();
   },
 
   mixins: [formMixin],

@@ -97,12 +97,6 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async authByCode({ email, code, password, isSignUp }) {
-    await identityService.auth({ email, code, password, isSignUp });
-    await this.defineAuthStatus();
-  }
-
-  @Action
   async sendCode({ email }) {
     await identityService.sendEmailCode(email);
   }

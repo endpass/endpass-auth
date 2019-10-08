@@ -18,6 +18,7 @@
       :password="password"
       :is-sign-up="isSignUp"
       :is-closable="isClosable"
+      :controller="$options.authController"
       @submit="handleSubmit"
       @cancel="onCancel"
     />
@@ -27,7 +28,8 @@
 <script>
 import AuthForm from './Auth';
 import RegularPasswordForm from './RegularPassword';
-import CodeForm from './Code';
+import CodeForm from '@/components/forms/Code';
+import createAuthController from './AuthController';
 
 const FORMS = {
   AUTH: 'AUTH',
@@ -49,6 +51,8 @@ export default {
       default: false,
     },
   },
+
+  authController: createAuthController(),
 
   data: () => ({
     password: null,

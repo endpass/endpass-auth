@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import VeeValidate from 'vee-validate';
-import OtpForm from '@/components/forms/CompositeAuth/Code/OtpCode/OtpForm';
+import OtpForm from '@/components/forms/Code/OtpCode/OtpForm';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';

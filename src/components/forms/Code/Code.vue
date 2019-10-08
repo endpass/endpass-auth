@@ -16,6 +16,32 @@ export default {
 
   authStore,
 
+  props: {
+    email: {
+      type: String,
+      required: true,
+    },
+
+    password: {
+      type: String,
+      required: true,
+    },
+
+    isSignUp: {
+      type: Boolean,
+      required: true,
+    },
+
+    controller: {
+      type: Object,
+      required: true,
+    },
+
+    isClosable: {
+      type: Boolean,
+    },
+  },
+
   computed: {
     otpEmail() {
       return this.$options.authStore.otpEmail;

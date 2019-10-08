@@ -34,19 +34,19 @@ const setAuthPermission = async (password, originHost) => {
   return res;
 };
 
-const auth = async ({
+const authWithCode = async ({
   email,
   code,
   password,
   isSignUp,
-  challengeType = 'otp',
+  // challengeType = 'otp',
 }) => {
   const url = isSignUp
     ? `${identityBaseUrl}/auth/signup`
     : `${identityBaseUrl}/auth/token`;
 
   const res = await request.post(url, {
-    challengeType,
+    //    challengeType,
     email,
     code,
     password,
@@ -219,7 +219,7 @@ export default {
   updateAccountSettings,
   setAuthPermission,
   getAuthChallenge,
-  auth,
+  authWithCode,
   authWithGoogle,
   authWithGitHub,
   sendEmailCode,
