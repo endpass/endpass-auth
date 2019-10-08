@@ -2,6 +2,7 @@
   <loading-screen :is-loading="isLoading">
     <v-frame
       v-if="error"
+      title=""
       :is-closable="false"
     >
       <message
@@ -11,7 +12,7 @@
         {{ error }}
       </message>
     </v-frame>
-    <login-provider-password
+    <login-provider-code
       v-else
       :email="currentUserEmail"
       :login-challenge="loginChallenge"
@@ -22,7 +23,7 @@
 <script>
 import get from 'lodash/get';
 import LoadingScreen from '@/components/common/LoadingScreen';
-import LoginProviderPassword from './LoginProviderCode';
+import LoginProviderCode from './LoginProviderCode';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
 import { authStore, accountsStore } from '@/store';
@@ -95,7 +96,7 @@ export default {
 
   components: {
     LoadingScreen,
-    LoginProviderPassword,
+    LoginProviderCode,
     VFrame,
     Message,
   },
