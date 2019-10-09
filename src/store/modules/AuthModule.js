@@ -199,12 +199,11 @@ class AuthModule extends VuexModule {
     this.authParams = params;
   }
 
-  @Mutation
+  @Action
   logout() {
+    this.changeAuthStatusByCode(400);
     this.otpEmail = null;
     this.authParams = null;
-    this.isPermission = false;
-    this.isLogin = false;
   }
 }
 
