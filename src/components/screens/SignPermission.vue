@@ -81,7 +81,19 @@ export default {
       const isPasswordExist = await this.$options.authStore.checkRegularPassword();
 
       if (!isPasswordExist) {
-        this.handleLogout();
+        try {
+          await this.$options.coreStore.logout({ isCloseDialog: false });
+        } catch (e) {
+          console.error(e);
+        }
+
+        this.$router.replace({
+          name: 'PublicAuthScreen',
+          query: {
+            redirectUrl: encodeURI(window.location.href),
+            place: 'login',
+          },
+        });
       }
     } finally {
       this.isChecking = false;

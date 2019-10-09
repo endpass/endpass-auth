@@ -106,7 +106,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async logout() {
+  async logout({ isCloseDialog = true } = {}) {
     this.sharedStore.changeLoadingStatus(true);
 
     const { error, code, source } = await bridgeMessenger.sendAndWaitResponse(
@@ -119,8 +119,8 @@ class CoreModule extends VuexModule {
       throw ConnectError.create(code, error);
     }
 
-    if (!source || source === DIRECTION.AUTH) {
-      bridgeMessenger.send(METHODS.DIALOG_CLOSE);
+    if (isCloseDialog && (!source || source === DIRECTION.AUTH)) {
+      this.dialogClose();
     } else if (source === DIRECTION.WIDGET) {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
     }
