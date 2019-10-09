@@ -7,7 +7,6 @@ import {
   walletChannel,
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
-import settingsService from '@/service/settings';
 import Answer from '@/class/Answer';
 import middleware from './dialogMiddleware';
 import { initDialogResize } from '@/streams/actions/dialogResize';
@@ -86,7 +85,6 @@ function initDialogStream() {
             type: 'logout',
           }),
         );
-        settingsService.clearLocalSettings();
       },
     },
   };

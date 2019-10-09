@@ -204,6 +204,7 @@ class AuthModule extends VuexModule {
     this.changeAuthStatusByCode(400);
     this.otpEmail = null;
     this.authParams = null;
+    settingsService.clearLocalSettings();
   }
 }
 
