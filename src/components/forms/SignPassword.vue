@@ -67,23 +67,15 @@ import Message from '@/components/common/Message';
 import formMixin from '@/mixins/form';
 import FormItem from '@/components/common/FormItem';
 import VTitle from '@/components/common/VTitle';
-import { coreStore } from '@/store';
 import FormControls from '@/components/common/FormControls';
 
 export default {
   name: 'SignPasswordForm',
 
-  coreStore,
-
   props: {
     isLoading: {
       type: Boolean,
       default: false,
-    },
-
-    email: {
-      type: String,
-      default: null,
     },
 
     message: {
@@ -118,12 +110,6 @@ export default {
     },
 
     passwordInputLabel() {
-      if (this.email) {
-        return this.$i18n.t('components.passwordForm.passwordForEmail', {
-          email: this.email,
-        });
-      }
-
       return this.$i18n.t('components.passwordForm.regularPassword');
     },
   },
@@ -149,8 +135,7 @@ export default {
     },
 
     onLogout() {
-      this.$options.coreStore.logout();
-      this.$emit('cancel');
+      this.$emit('logout');
     },
   },
 

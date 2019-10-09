@@ -33,7 +33,6 @@
       "example": "Example"
     },
     "auth": {
-      "invalidEmail": "invalidEmail",
       "loginToContinue": "Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
       "signUpToContinue": "Sign up&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
       "enterEmail": "Enter your email...",
@@ -122,7 +121,6 @@
     "passwordForm": {
       "applyConnectTo": "Please apply connect&nbsp;to",
       "regularPassword": "Your regular password:",
-      "passwordForEmail": "Password for {email}:",
       "enterPassword": "Enter your password..."
     },
     "account": {

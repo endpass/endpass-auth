@@ -3,9 +3,6 @@ import VeeValidate from 'vee-validate';
 import SignPassword from '@/components/forms/SignPassword';
 import setupI18n from '@/locales/i18nSetup';
 import validation from '@/validation';
-import createStore from '@/store/createStore';
-import createStoreModules from '@/store/createStoreModules';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
@@ -16,18 +13,11 @@ localVue.use(validation);
 
 describe('SignPassword', () => {
   let wrapper;
-  let authStore;
   const createWrapper = options => {
-    const store = createStore();
-    const { authStore: authStoreModule, coreStore } = createStoreModules(store);
-
-    authStore = authStoreModule;
-
     return shallowMount(SignPassword, {
       provide: {
         theme: 'default',
       },
-      coreStore,
       localVue,
       i18n,
       sync: false,
@@ -107,20 +97,6 @@ describe('SignPassword', () => {
       expect(submitButton.attributes().isloading).toBeFalsy();
       expect(submitButton.attributes().disabled).toBeUndefined();
     });
-
-    it('should render email in password input label', async () => {
-      expect.assertions(1);
-
-      const email = 'foo@bar.baz';
-
-      wrapper.setProps({
-        isLoading: false,
-        email,
-      });
-      await wrapper.vm.$nextTick();
-
-      expect(wrapper.find('v-input-stub').attributes().label).toContain(email);
-    });
   });
 
   describe('behavior', () => {
@@ -152,25 +128,20 @@ describe('SignPassword', () => {
       expect(wrapper.emitted().submit).toEqual([[password]]);
     });
 
-    it('should logout on click logout button', async () => {
-      expect.assertions(3);
+    it('should emit logout', async () => {
+      expect.assertions(1);
 
       wrapper = createWrapper({
         propsData: {
           withLogoutBtn: true,
         },
       });
-      authStore.setAuthByCode(200);
-      bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
-
-      expect(authStore.isLogin).toBe(true);
 
       wrapper.find('[data-test=logout-button]').vm.$emit('click');
 
       await global.flushPromises();
 
-      expect(wrapper.emitted().cancel).toBeTruthy();
-      expect(authStore.isLogin).toBe(false);
+      expect(wrapper.emitted().logout).toBeTruthy();
     });
   });
 });
