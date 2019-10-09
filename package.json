@@ -37,13 +37,11 @@
   },
   "lint-staged": {
     "*.{js,json}": [
-      "vue-i18n-translate-checker",
       "eslint --fix",
       "prettier --write",
       "git add"
     ],
     "*.vue": [
-      "vue-i18n-translate-checker",
       "prettier --write",
       "eslint --fix",
       "git add"
@@ -56,7 +54,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged",
+      "pre-commit": "yarn vue-i18n-translate-checker && lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },

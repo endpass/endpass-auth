@@ -6,6 +6,7 @@ import identityService from '@/service/identity';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import { ORIGIN_HOST } from '@/constants';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const localVue = createLocalVue();
 
@@ -15,10 +16,19 @@ const i18n = setupI18n(localVue);
 describe('SignPermission', () => {
   describe('render', () => {
     let wrapper;
+    let authStore;
 
     beforeEach(() => {
       const store = createStore();
-      const { accountsStore, coreStore } = createStoreModules(store);
+      const {
+        accountsStore,
+        coreStore,
+        authStore: authStoreModule,
+      } = createStoreModules(store);
+
+      authStore = authStoreModule;
+
+      identityService.checkRegularPassword.mockResolvedValueOnce(true);
 
       wrapper = shallowMount(SignPermission, {
         accountsStore,
@@ -29,8 +39,14 @@ describe('SignPermission', () => {
     });
 
     describe('render', () => {
-      it('should correctly render SignPermission component', () => {
+      it('should correctly render SignPermission component', async () => {
+        expect.assertions(3);
+
         expect(wrapper.name()).toBe('SignPermission');
+        expect(wrapper.html()).toMatchSnapshot();
+
+        await global.flushPromises();
+
         expect(wrapper.html()).toMatchSnapshot();
       });
     });
@@ -40,15 +56,30 @@ describe('SignPermission', () => {
         expect.assertions(1);
 
         const pwd = 'foopwd123';
-
+        await global.flushPromises();
+        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
         wrapper.find('sign-password-stub').vm.$emit('submit', pwd);
-
         await global.flushPromises();
 
         expect(identityService.setAuthPermission).toBeCalledWith(
           pwd,
           ORIGIN_HOST,
         );
+      });
+
+      it('should logout', async () => {
+        expect.assertions(2);
+
+        await global.flushPromises();
+        authStore.setAuthByCode(200);
+        bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
+
+        expect(authStore.isLogin).toBe(true);
+
+        wrapper.find('sign-password-stub').vm.$emit('logout');
+        await global.flushPromises();
+
+        expect(authStore.isLogin).toBe(false);
       });
     });
   });
