@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConnectError from '@endpass/class/ConnectError';
-import WalletCreate from '@/components/screens/WalletCreate';
+import WalletGenerate from '@/components/screens/WalletGenerate';
 import setupI18n from '@/locales/i18nSetup';
 import { walletChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
@@ -17,7 +17,7 @@ const { ERRORS } = ConnectError;
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('WalletCreate', () => {
+describe('WalletGenerate', () => {
   let wrapper;
 
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('WalletCreate', () => {
     const store = createStore();
     const { walletStore, coreStore } = createStoreModules(store);
 
-    wrapper = shallowMount(WalletCreate, {
+    wrapper = shallowMount(WalletGenerate, {
       walletStore,
       coreStore,
       localVue,
@@ -35,7 +35,7 @@ describe('WalletCreate', () => {
   });
 
   describe('render', () => {
-    it('should correctly render WalletCreate screen component', () => {
+    it('should correctly render WalletGenerate screen component', () => {
       expect(wrapper.find('wallet-create-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
