@@ -2,6 +2,8 @@
 
 exports[`WalletCreate render should correctly render WalletCreate component 1`] = `
 <div>
-  <wallet-password-stub seed-key=""></wallet-password-stub>
+  <wallet-password-stub createhandler="function() {
+        return fn.apply(this, arguments);
+      }" seed-key=""></wallet-password-stub>
 </div>
 `;

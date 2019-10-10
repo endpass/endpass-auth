@@ -7,9 +7,6 @@ import walletGen from '@endpass/utils/walletGen';
 import validation from '@/validation';
 import WalletPassword from '@/components/forms/WalletCreate/WalletPassword';
 import setupI18n from '@/locales/i18nSetup';
-import userService from '@/service/user';
-import createStore from '@/store/createStore';
-import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -22,8 +19,8 @@ jest.useFakeTimers();
 
 describe('WalletPassword', () => {
   let wrapper;
-  let accountsStore;
   const seedKey = 'seedKey';
+  const createHandler = jest.fn();
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -36,14 +33,13 @@ describe('WalletPassword', () => {
 
     walletGen.createComplex.mockResolvedValueOnce(wallet);
 
-    const store = createStore();
-    const { accountsStore: accountsStoreModule } = createStoreModules(store);
-    accountsStore = accountsStoreModule;
     wrapper = shallowMount(WalletPassword, {
-      accountsStore,
       localVue,
       i18n,
       mixins: [VueTimers],
+      propsData: {
+        createHandler,
+      },
       provide: {
         theme: 'default',
       },
@@ -101,6 +97,10 @@ describe('WalletPassword', () => {
     it('should validate pwd value and send seed', async () => {
       expect.assertions(2);
 
+      const handlerData = { seedKey };
+
+      createHandler.mockResolvedValueOnce(handlerData);
+
       expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         false,
       );
@@ -113,13 +113,13 @@ describe('WalletPassword', () => {
       await doSubmit();
       await global.flushPromises();
 
-      expect(wrapper.emitted().create).toEqual([[seedKey]]);
+      expect(wrapper.emitted().create).toEqual([[handlerData]]);
     });
 
     it('should handle error, if create wallet broken', async () => {
       expect.assertions(2);
 
-      userService.setAccount.mockRejectedValueOnce('');
+      createHandler.mockRejectedValueOnce('');
       expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         false,
       );
