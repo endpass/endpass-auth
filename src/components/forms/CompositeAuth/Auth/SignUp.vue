@@ -51,7 +51,7 @@
         name="confirmPassword"
         type="password"
         :placeholder="$t('components.auth.confirmPassword')"
-        data-test="repeat-password-input"
+        data-test="confirm-password-input"
       />
     </form-item>
     <v-button

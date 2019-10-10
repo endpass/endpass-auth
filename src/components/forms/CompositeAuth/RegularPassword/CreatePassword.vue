@@ -45,7 +45,7 @@
         name="code"
         :label="$t('components.createPassword.labelCode')"
         :placeholder="$t('components.createPassword.placeholderCode')"
-        data-test="password-input"
+        data-test="code-input"
       />
     </form-item>
     <form-row class="v-mb-24">

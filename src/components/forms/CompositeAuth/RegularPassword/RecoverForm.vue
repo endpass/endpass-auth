@@ -41,7 +41,7 @@
         name="code"
         :label="$t('components.regularPasswordRecover.labelCode')"
         :placeholder="$t('components.regularPasswordRecover.placeholderCode')"
-        data-test="password-input"
+        data-test="code-input"
       />
     </form-item>
     <form-item class="v-mb-24">
