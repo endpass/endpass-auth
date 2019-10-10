@@ -33,7 +33,6 @@ export default {
   methods: {
     async createHandler({ password }) {
       const data = await this.$options.walletStore.generateWallet({ password });
-      await this.$options.walletStore.saveWallet(data);
       return data;
     },
 
@@ -42,8 +41,8 @@ export default {
       this.$options.coreStore.dialogClose();
     },
 
-    onCreate() {
-      this.$options.walletStore.createWalletFinish();
+    onCreate(payload) {
+      this.$options.walletStore.createWalletFinish(payload);
     },
   },
 

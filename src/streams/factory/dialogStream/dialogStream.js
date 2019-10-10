@@ -26,11 +26,9 @@ function initDialogStream() {
       needPermission: true,
       needWallet: true,
     },
-    [METHODS.CREATE_WALLET]: {
+    [METHODS.GENERATE_WALLET]: {
+      routeName: 'wallet-generate',
       channel: walletChannel,
-      needAuth: true,
-      needPermission: true,
-      needWallet: true,
     },
     [METHODS.CREATE_DOCUMENT]: {
       routeName: 'document-create',
