@@ -175,6 +175,7 @@ export default {
         return;
       }
       const { email, password } = this;
+      await this.$options.authStore.loadAuthChallenge({ email });
       this.$emit('submit', { email, password, isSignUp: true });
     },
 
