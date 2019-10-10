@@ -57,12 +57,14 @@ export default {
   },
 
   methods: {
-    async onSubmit(seedPhrase) {
+    async onSubmit() {
       if (this.isLoading) return;
       try {
         this.isLoading = true;
-        await this.$options.authStore.disableOtp({ seedPhrase });
-        this.$emit('recover');
+        await this.$options.authStore.disableOtp({
+          seedPhrase: this.seedPhrase,
+        });
+        this.$emit('submit');
       } catch (err) {
         console.error(err);
 
