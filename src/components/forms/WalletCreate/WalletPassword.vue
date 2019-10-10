@@ -70,12 +70,15 @@ import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
-import createWalletController from './WalletController';
-
 export default {
   name: 'WalletPassword',
 
-  walletController: null,
+  props: {
+    createHandler: {
+      type: Function,
+      required: true,
+    },
+  },
 
   data: () => ({
     error: '',
@@ -104,13 +107,11 @@ export default {
 
       try {
         this.error = '';
-        const seedKey = await this.$options.walletController.createInitialWallet(
-          {
-            password: this.password,
-          },
-        );
+        const data = await this.createHandler({
+          password: this.password,
+        });
 
-        this.$emit('create', seedKey);
+        this.$emit('create', data);
       } catch (e) {
         console.error(e);
         this.error = this.$i18n.t('components.createWallet.error');
@@ -118,10 +119,6 @@ export default {
         this.isLoading = false;
       }
     },
-  },
-
-  beforeCreate() {
-    this.$options.walletController = createWalletController();
   },
 
   mixins: [formMixin],

@@ -3,6 +3,7 @@
     <component
       :is="currentComponent"
       :seed-key="seedKey"
+      :create-handler="createHandler"
       @create="onCreate"
       @submit="onSubmit"
     />
@@ -16,19 +17,29 @@ import WalletSeed from '@/components/forms/WalletCreate/WalletSeed';
 export default {
   name: 'WalletCreateForm',
 
+  props: {
+    createHandler: {
+      type: Function,
+      required: true,
+    },
+  },
+
   data: () => ({
-    seedKey: '',
     currentComponent: 'wallet-password',
+    seedKey: '',
+    walletData: {},
   }),
 
   methods: {
-    onCreate(seedKey) {
+    onCreate(walletData) {
+      const { seedKey } = walletData;
+      this.walletData = walletData;
       this.seedKey = seedKey;
       this.currentComponent = 'wallet-seed';
     },
 
     onSubmit() {
-      this.$emit('submit');
+      this.$emit('submit', this.walletData);
     },
   },
 
