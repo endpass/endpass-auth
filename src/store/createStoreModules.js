@@ -5,7 +5,6 @@ import AuthModule from '@/store/modules/AuthModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
 import moduleFactory from '@/store/moduleFactory';
-import WalletModule from '@/store/modules/WalletModule';
 
 export default store => {
   const createModule = moduleFactory(store);
@@ -27,8 +26,6 @@ export default store => {
     sharedStore,
   });
 
-  const walletStore = createModule(WalletModule, 'wallet', { accountsStore });
-
   const requestStore = createModule(RequestsModule, 'requests', {
     accountsStore,
     sharedStore,
@@ -41,6 +38,5 @@ export default store => {
     authStore,
     coreStore,
     requestStore,
-    walletStore,
   };
 };

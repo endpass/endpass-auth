@@ -1,3 +1,4 @@
+// @ts-check
 import { VuexModule, Action, Module } from 'vuex-class-modules';
 import ConnectError from '@endpass/class/ConnectError';
 import { walletChannel } from '@/class/singleton/channels';
@@ -7,16 +8,34 @@ import userService from '@/service/user';
 import identityService from '@/service/identity';
 import { accountsStore as accountsStoreModule } from '@/store';
 import { ENCRYPT_OPTIONS, WALLET_TYPES } from '@/constants';
+import createController from '@/controllers/createController';
 
 const { ERRORS } = ConnectError;
 
+/**
+ * @typedef { import("@/store/modules/AccountsModule").default } AccountsModule
+ */
+
 @Module({ generateMutationSetters: true })
-class WalletModule extends VuexModule {
+class WalletController extends VuexModule {
+  /**
+   *
+   * @param {import('vuex-class-modules').RegisterOptions} props
+   * @param {object} params
+   * @param {{accountsStore?: AccountsModule}} params.accountsStore
+   */
   constructor(props, { accountsStore = accountsStoreModule }) {
     super(props);
+
     this.accountsStore = accountsStore;
   }
 
+  /**
+   *
+   * @param {object} params
+   * @param {string} params.password
+   * @return {Promise<{v3KeystoreHdWallet: v3Keystore, encryptedSeed: string, v3KeystoreChildWallet: v3Keystore, seedKey: string, info: keystoreInfo}>}
+   */
   @Action
   async generateWallet({ password }) {
     const { default: walletGen } = await import(
@@ -42,6 +61,15 @@ class WalletModule extends VuexModule {
     };
   }
 
+  /**
+   *
+   * @param {object} params
+   * @param {v3Keystore} params.v3KeystoreHdWallet
+   * @param {keystoreInfo} params.info
+   * @param {string} params.encryptedSeed
+   * @param {v3Keystore} params.v3KeystoreChildWallet
+   * @return {Promise<void>}
+   */
   @Action
   async saveWallet({
     v3KeystoreHdWallet,
@@ -49,17 +77,12 @@ class WalletModule extends VuexModule {
     encryptedSeed,
     v3KeystoreChildWallet,
   }) {
-    await userService.setAccount(v3KeystoreHdWallet.address, {
-      ...v3KeystoreHdWallet,
-      info,
-    });
+    await userService.setAccount(v3KeystoreHdWallet, info);
     await identityService.backupSeed(encryptedSeed);
-    await userService.setAccount(
-      v3KeystoreChildWallet.address,
-      v3KeystoreChildWallet,
-    );
+    await userService.setAccount(v3KeystoreChildWallet);
     await identityService.updateAccountSettings(v3KeystoreChildWallet.address);
 
+    // @ts-ignore
     await this.accountsStore.defineOnlyV3Accounts();
   }
 
@@ -73,10 +96,15 @@ class WalletModule extends VuexModule {
     );
   }
 
+  /**
+   *
+   * @param {object?} payload
+   */
   @Action
   createWalletFinish(payload) {
     walletChannel.put(Answer.createOk(payload));
   }
 }
 
-export default WalletModule;
+// @ts-ignore
+export default params => createController(WalletController, params);

@@ -54,7 +54,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "yarn vue-i18n-translate-checker && lint-staged",
+      "pre-commit": "yarn vue-i18n-translate-checker && yarn check-types && lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
