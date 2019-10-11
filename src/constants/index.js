@@ -1,3 +1,4 @@
+// @ts-check
 import { parseUrl } from '@/util/dom';
 
 export const METHODS = {

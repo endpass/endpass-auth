@@ -24,10 +24,9 @@ describe('WalletGenerate', () => {
     jest.clearAllMocks();
 
     const store = createStore();
-    const { walletStore, coreStore } = createStoreModules(store);
+    const { coreStore } = createStoreModules(store);
 
     wrapper = shallowMount(WalletGenerate, {
-      walletStore,
       coreStore,
       localVue,
       i18n,

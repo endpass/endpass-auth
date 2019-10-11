@@ -16,13 +16,14 @@
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import WalletCreateForm from '@/components/forms/WalletCreate/WalletCreate';
-import { coreStore, walletStore } from '@/store';
+import { coreStore } from '@/store';
+import createWalletController from '@/controllers/WalletController';
 
 export default {
   name: 'GenerateWallet',
 
   coreStore,
-  walletStore,
+  walletController: createWalletController(),
 
   computed: {
     isDialog() {
@@ -32,17 +33,19 @@ export default {
 
   methods: {
     async createHandler({ password }) {
-      const data = await this.$options.walletStore.generateWallet({ password });
+      const data = await this.$options.walletController.generateWallet({
+        password,
+      });
       return data;
     },
 
     async onCancel() {
-      this.$options.walletStore.cancelCreateWallet();
+      this.$options.walletController.cancelCreateWallet();
       this.$options.coreStore.dialogClose();
     },
 
     onCreate(payload) {
-      this.$options.walletStore.createWalletFinish(payload);
+      this.$options.walletController.createWalletFinish(payload);
     },
   },
 
