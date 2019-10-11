@@ -14,7 +14,7 @@
 <script>
 import PasswordForm from './PasswordForm';
 import RecoverForm from './RecoverForm';
-import CreatePassword from './CreatePassword';
+import CreateRegularPassword from '@/components/forms/CreateRegularPassword';
 import { authStore } from '@/store';
 import LoadingScreen from '@/components/common/LoadingScreen';
 
@@ -57,13 +57,14 @@ export default {
         this.email,
       );
 
-      this.currentForm = isPasswordExist ? PasswordForm : CreatePassword;
+      this.currentForm = isPasswordExist ? PasswordForm : CreateRegularPassword;
     } finally {
       this.isLoading = false;
     }
   },
 
   components: {
+    CreateRegularPassword,
     LoadingScreen,
     PasswordForm,
     RecoverForm,

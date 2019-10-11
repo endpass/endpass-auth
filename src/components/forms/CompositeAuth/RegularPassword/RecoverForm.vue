@@ -65,15 +65,10 @@
       </form-controls>
     </form-item>
     <form-row class="v-fs-14 v-text-center">
-      {{ $t('components.regularPasswordRecover.didntGetCode') }}&nbsp;
-      <v-link
-        :disabled="isLoading"
-        href="#"
-        data-test="send-code"
-        @click.prevent="sendCode"
-      >
-        {{ $t('components.regularPasswordRecover.sendTitle') }}
-      </v-link>
+      <send-code
+        :is-loading="isLoading"
+        @send="sendCode"
+      />
     </form-row>
   </form>
 </template>
@@ -81,13 +76,13 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
-import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import { authStore } from '@/store';
 import VTitle from '@/components/common/VTitle';
 import FormControls from '@/components/common/FormControls';
+import SendCode from '@/components/common/SendCode';
 
 export default {
   name: 'PasswordForm',
@@ -169,8 +164,8 @@ export default {
   mixins: [formMixin],
 
   components: {
+    SendCode,
     FormControls,
-    VLink,
     VTitle,
     VButton,
     VInput,
