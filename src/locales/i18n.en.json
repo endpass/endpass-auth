@@ -32,6 +32,10 @@
       "customIdentityServer": "Custom Identity Server",
       "example": "Example"
     },
+    "sendCode": {
+      "didntGetCode": "Didn't get the code?",
+      "sendTitle": "Resend code"
+    },
     "auth": {
       "loginToContinue": "Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
       "signUpToContinue": "Sign up&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions",
@@ -61,15 +65,14 @@
     },
     "createPassword": {
       "title": "Create regular password",
-      "description": "You haven't any regular password for&nbsp;Endpass account. This password for login only. We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter new password and the&nbsp;code below to&nbsp;confirm.",
+      "description": "You haven't any regular password for&nbsp;Endpass account. Soo, please define password and the&nbsp;6-digit code below to&nbsp;confirm, which we&nbsp;just emailed.",
       "newPassword": "Enter new password...",
       "repeatPassword": "Repeat new password...",
       "labelCode": "Code from email",
-      "didntGetCode": "Didn't get the code?",
+      "labelCodeEmail": "Code from: {email}",
       "placeholderCode": "Enter received code...",
       "sendError": "Something went wrong with sending the code. Please, try again",
-      "confirmError": "Something went wrong with password create. Please, try again",
-      "sendTitle": "Resend code"
+      "confirmError": "Something went wrong with password create. Please, try again"
     },
     "regularPasswordRecover": {
       "title": "Change password",
@@ -77,18 +80,14 @@
       "repeatPassword": "Repeat new password...",
       "placeholderCode": "Enter received code...",
       "labelCode": "Code from email",
-      "didntGetCode": "Didn't get the code?",
       "sendError": "Something went wrong with sending the code. Please, try again",
-      "recoveryError": "Something went wrong with password recovery. Please, try again",
-      "sendTitle": "Resend code"
+      "recoveryError": "Something went wrong with password recovery. Please, try again"
     },
     "emailCode": {
       "title": "Verify email",
       "description": "We just emailed a&nbsp;6-digit code to&nbsp;<span class='v-fw-b'>{email}</span>. Enter the&nbsp;code below to&nbsp;confirm.",
       "placeholder": "Enter received code...",
-      "sendError": "Something went wrong with sending the code. Please, try again",
-      "didntGetTheCode": "Didn't get the code?",
-      "sendTitle": "Resend code"
+      "sendError": "Something went wrong with sending the code. Please, try again"
     },
     "otp": {
       "title": "Verify OTP code",

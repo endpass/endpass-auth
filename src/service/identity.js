@@ -154,6 +154,11 @@ const sendEmailCode = async email => {
   return timeout;
 };
 
+/**
+ *
+ * @param {string?} email
+ * @return {Promise<void>}
+ */
 const resetRegularPassword = async ({ email }) => {
   const { timeout } = await request.post(
     `${identityBaseUrl}/regular-password/reset`,
@@ -182,6 +187,11 @@ const confirmResetRegularPassword = async ({
   return success;
 };
 
+/**
+ *
+ * @param {string?} email
+ * @return {Promise<boolean>}
+ */
 const checkRegularPassword = async email => {
   try {
     await request.post(`${identityBaseUrl}/regular-password/check`, { email });

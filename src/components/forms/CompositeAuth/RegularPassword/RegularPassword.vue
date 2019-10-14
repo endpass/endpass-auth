@@ -1,20 +1,20 @@
 <template>
-  <loading-screen v-if="isLoading" />
-  <component
-    :is="currentForm"
-    v-else-if="!isLoading"
-    :email="email"
-    @close="toggleForm"
-    @recover="toggleForm"
-    @submit="onSubmit"
-    @cancel="onCancel"
-  />
+  <loading-screen :is-loading="isLoading">
+    <component
+      :is="currentForm"
+      :email="email"
+      @close="toggleForm"
+      @recover="toggleForm"
+      @submit="onSubmit"
+      @cancel="onCancel"
+    />
+  </loading-screen>
 </template>
 
 <script>
 import PasswordForm from './PasswordForm';
 import RecoverForm from './RecoverForm';
-import CreatePassword from './CreatePassword';
+import CreateRegularPassword from '@/components/forms/CreateRegularPassword';
 import { authStore } from '@/store';
 import LoadingScreen from '@/components/common/LoadingScreen';
 
@@ -57,13 +57,14 @@ export default {
         this.email,
       );
 
-      this.currentForm = isPasswordExist ? PasswordForm : CreatePassword;
+      this.currentForm = isPasswordExist ? PasswordForm : CreateRegularPassword;
     } finally {
       this.isLoading = false;
     }
   },
 
   components: {
+    CreateRegularPassword,
     LoadingScreen,
     PasswordForm,
     RecoverForm,

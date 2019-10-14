@@ -4,7 +4,7 @@
       <span v-html="$t('components.createPassword.title')" />
     </v-title>
     <v-description>
-      <span v-html="$t('components.createPassword.description', { email })" />
+      <span v-html="$t('components.createPassword.description')" />
     </v-description>
 
     <form-item>
@@ -43,7 +43,7 @@
         data-vv-name="code"
         :error="errors.first('code')"
         name="code"
-        :label="$t('components.createPassword.labelCode')"
+        :label="labelCode"
         :placeholder="$t('components.createPassword.placeholderCode')"
         data-test="code-input"
       />
@@ -61,15 +61,10 @@
       </form-controls>
     </form-row>
     <form-row class="v-fs-14 v-text-center">
-      {{ $t('components.createPassword.didntGetCode') }}&nbsp;
-      <v-link
-        :disabled="isLoading"
-        href="#"
-        data-test="send-code"
-        @click.prevent="sendCode"
-      >
-        {{ $t('components.createPassword.sendTitle') }}
-      </v-link>
+      <send-code
+        :is-loading="isLoading"
+        @click="sendCode"
+      />
     </form-row>
   </form>
 </template>
@@ -77,7 +72,6 @@
 <script>
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
-import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import formMixin from '@/mixins/form';
 import { authStore } from '@/store';
@@ -85,16 +79,17 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 import FormControls from '@/components/common/FormControls';
 import FormRow from '@/components/common/FormRow';
+import SendCode from '@/components/common/SendCode';
 
 export default {
-  name: 'PasswordForm',
+  name: 'CreateRegularPasswordForm',
 
   authStore,
 
   props: {
     email: {
       type: String,
-      required: true,
+      default: null,
     },
   },
 
@@ -112,6 +107,14 @@ export default {
 
     isPasswordEqual() {
       return this.password && this.password === this.repeatPassword;
+    },
+
+    labelCode() {
+      return this.email
+        ? this.$i18n.t('components.createPassword.labelCodeEmail', {
+            email: this.email,
+          })
+        : this.$i18n.t('components.createPassword.labelCode');
     },
   },
 
@@ -164,11 +167,11 @@ export default {
   mixins: [formMixin],
 
   components: {
+    SendCode,
     VButton,
     FormRow,
     FormControls,
     VTitle,
-    VLink,
     VDescription,
     VInput,
     FormItem,

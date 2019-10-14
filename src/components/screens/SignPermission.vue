@@ -4,17 +4,22 @@
       :is-closable="isDialog"
       @close="handleCancel"
     >
-      <loading-screen v-if="isChecking" />
-      <sign-password
-        v-else
-        :with-logout-btn="true"
-        :requester-url="ORIGIN_HOST"
-        :is-loading="isLoading"
-        :error="error"
-        @submit="handleSignSubmit"
-        @cancel="handleCancel"
-        @logout="handleLogout"
-      />
+      <loading-screen :is-loading="isChecking">
+        <sign-password
+          v-if="isPasswordExist"
+          :with-logout-btn="true"
+          :requester-url="ORIGIN_HOST"
+          :is-loading="isLoading"
+          :error="error"
+          @submit="onSignPassword"
+          @cancel="handleCancel"
+          @logout="onLogout"
+        />
+        <create-regular-password
+          v-else
+          @submit="onSignPassword"
+        />
+      </loading-screen>
     </v-modal-card>
   </screen>
 </template>
@@ -23,10 +28,11 @@
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
 import SignPassword from '@/components/forms/SignPassword';
+import LoadingScreen from '@/components/common/LoadingScreen';
+import CreateRegularPassword from '@/components/forms/CreateRegularPassword';
 
 import { ORIGIN_HOST } from '@/constants';
 import { authStore, accountsStore, coreStore } from '@/store';
-import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
   name: 'SignPermission',
@@ -39,6 +45,7 @@ export default {
     error: null,
     isLoading: false,
     isChecking: true,
+    isPasswordExist: true,
     ORIGIN_HOST,
   }),
 
@@ -49,7 +56,7 @@ export default {
   },
 
   methods: {
-    async handleSignSubmit(password) {
+    async onSignPassword(password) {
       this.isLoading = true;
       this.error = null;
 
@@ -69,7 +76,7 @@ export default {
       this.$options.coreStore.dialogClose();
     },
 
-    handleLogout() {
+    onLogout() {
       this.$options.coreStore.logout();
       this.handleCancel();
     },
@@ -78,29 +85,16 @@ export default {
   async mounted() {
     this.isChecking = true;
     try {
-      const isPasswordExist = await this.$options.authStore.checkRegularPassword();
-
-      if (!isPasswordExist) {
-        try {
-          await this.$options.coreStore.logout({ isCloseDialog: false });
-        } catch (e) {
-          console.error(e);
-        }
-
-        this.$router.replace({
-          name: 'PublicAuthScreen',
-          query: {
-            redirectUrl: encodeURI(window.location.href),
-            place: 'login',
-          },
-        });
-      }
+      this.isPasswordExist = await this.$options.authStore.checkRegularPassword();
+    } catch (e) {
+      this.error = this.$i18n.t('components.signPermission.authFailed');
     } finally {
       this.isChecking = false;
     }
   },
 
   components: {
+    CreateRegularPassword,
     LoadingScreen,
     SignPassword,
     Screen,

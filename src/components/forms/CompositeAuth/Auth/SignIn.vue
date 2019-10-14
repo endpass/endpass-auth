@@ -199,8 +199,10 @@ export default {
     },
 
     async onSocialSubmit() {
+      this.isLoading = true;
       await this.$options.authStore.waitLogin();
       this.$emit('social');
+      this.isLoading = false;
     },
 
     onOauthError() {
