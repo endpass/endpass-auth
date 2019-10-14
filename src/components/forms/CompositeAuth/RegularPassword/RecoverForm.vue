@@ -67,7 +67,7 @@
     <form-row class="v-fs-14 v-text-center">
       <send-code
         :is-loading="isLoading"
-        @send="sendCode"
+        @click="sendCode"
       />
     </form-row>
   </form>

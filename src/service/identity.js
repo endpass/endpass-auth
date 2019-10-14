@@ -157,7 +157,7 @@ const sendEmailCode = async email => {
 /**
  *
  * @param {string?} email
- * @return {Promise<*>}
+ * @return {Promise<void>}
  */
 const resetRegularPassword = async ({ email }) => {
   const { timeout } = await request.post(

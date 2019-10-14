@@ -4,21 +4,22 @@
       :is-closable="isDialog"
       @close="handleCancel"
     >
-      <loading-screen v-if="isChecking" />
-      <sign-password
-        v-else-if="isPasswordExist"
-        :with-logout-btn="true"
-        :requester-url="ORIGIN_HOST"
-        :is-loading="isLoading"
-        :error="error"
-        @submit="handleSignPassword"
-        @cancel="handleCancel"
-        @logout="onLogout"
-      />
-      <create-regular-password
-        v-else-if="!isPasswordExist"
-        @submit="handleSignPassword"
-      />
+      <loading-screen :is-loading="isChecking">
+        <sign-password
+          v-if="isPasswordExist"
+          :with-logout-btn="true"
+          :requester-url="ORIGIN_HOST"
+          :is-loading="isLoading"
+          :error="error"
+          @submit="onSignPassword"
+          @cancel="handleCancel"
+          @logout="onLogout"
+        />
+        <create-regular-password
+          v-else
+          @submit="onSignPassword"
+        />
+      </loading-screen>
     </v-modal-card>
   </screen>
 </template>
@@ -55,7 +56,7 @@ export default {
   },
 
   methods: {
-    async handleSignPassword(password) {
+    async onSignPassword(password) {
       this.isLoading = true;
       this.error = null;
 

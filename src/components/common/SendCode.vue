@@ -5,7 +5,7 @@
       :disabled="isLoading"
       href="#"
       data-test="send-code"
-      @click.prevent="sendCode"
+      @click.prevent="onClick"
     >
       {{ $t('components.sendCode.sendTitle') }}
     </v-link>
@@ -26,8 +26,8 @@ export default {
   },
 
   methods: {
-    sendCode() {
-      this.$emit('send');
+    onClick() {
+      this.$emit('click');
     },
   },
 
