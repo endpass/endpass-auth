@@ -20,8 +20,6 @@ class CoreModule extends VuexModule {
 
   isServerMode = false;
 
-  showCreateAccount = true;
-
   rateLimitTimeout = 0;
 
   isDialog = isDialog;
@@ -60,8 +58,6 @@ class CoreModule extends VuexModule {
   async init() {
     try {
       await this.authStore.defineAuthStatus();
-      await this.startBridge();
-      // eslint-disable-next-line
     } catch (err) {
       console.error(err);
     }
@@ -86,19 +82,12 @@ class CoreModule extends VuexModule {
 
   @Action
   async startBridge() {
-    if (!this.isDialog) return;
-
-    const {
-      isIdentityMode,
-      showCreateAccount,
-    } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
+    const { isIdentityMode } = await bridgeMessenger.sendAndWaitResponse(
+      METHODS.INITIATE,
+    );
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;
-    }
-
-    if (showCreateAccount !== undefined) {
-      this.showCreateAccount = showCreateAccount;
     }
 
     initCoreStream();

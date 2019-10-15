@@ -33,6 +33,10 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(async to => {
   const { isDialog, isWidget } = to.meta;
 
+  if (isDialog || isWidget) {
+    await coreStore.startBridge();
+  }
+
   if (isDialog) {
     await coreStore.initDialog();
   }
