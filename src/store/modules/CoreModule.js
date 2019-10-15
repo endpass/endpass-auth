@@ -9,6 +9,7 @@ import {
   initCoreStream,
   initDialogRequestStream,
 } from '@/streams';
+import { initDialogResize } from '@/streams/actions/dialogResize';
 
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/actions/dialogClose';
@@ -81,6 +82,11 @@ class CoreModule extends VuexModule {
   }
 
   @Action
+  initResize() {
+    initDialogResize();
+  }
+
+  @Action
   async startBridge() {
     const { isIdentityMode } = await bridgeMessenger.sendAndWaitResponse(
       METHODS.INITIATE,
@@ -91,6 +97,7 @@ class CoreModule extends VuexModule {
     }
 
     initCoreStream();
+
     bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
   }
 
