@@ -69,7 +69,7 @@ export default {
   computed: {
     isOtp() {
       // TODO: move checking logic to accountStore
-      return !!this.$options.authStore.otpEmail;
+      return this.$options.authStore.isOtp;
     },
   },
 

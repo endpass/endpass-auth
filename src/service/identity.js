@@ -205,6 +205,47 @@ const checkRegularPassword = async email => {
   }
 };
 
+/**
+ * Send sms with code for disabling otp
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+const sendOtpRecoverSms = async email => {
+  try {
+    const res = await request.get(
+      `${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`,
+    );
+
+    if (!res.success) throw new Error(res.message);
+
+    return res;
+  } catch (error) {
+    const { response = {} } = error;
+    const { status } = response;
+    error.code = status;
+
+    throw error;
+  }
+};
+
+/**
+ * Disable otp setting
+ * @param {object} param
+ * @param {string} param.email
+ * @param {string} param.code
+ * @returns {Promise<void>}
+ */
+const disableOtpViaSms = async ({ email, code }) => {
+  const res = await request.post(`${identityBaseUrl}/auth/recover`, {
+    email,
+    code,
+  });
+
+  if (!res.success) throw new Error(res.message);
+
+  return res;
+};
+
 const disableOtp = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
@@ -241,5 +282,7 @@ export default {
   getOtpSettings,
   getRecoveryIdentifier,
   disableOtp,
+  sendOtpRecoverSms,
+  disableOtpViaSms,
   getSeedTemplateUrl,
 };

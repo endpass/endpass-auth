@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { email, regularPassword as password } from '@unitFixtures/auth';
 import Otp from '@/components/forms/Code/OtpCode/OtpCode';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
@@ -10,7 +11,6 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 localVue.use(VueRouter);
 const i18n = setupI18n(localVue);
-
 describe('OtpCode', () => {
   let wrapper;
   const router = new VueRouter();
@@ -20,6 +20,12 @@ describe('OtpCode', () => {
 
     wrapper = shallowMount(Otp, {
       localVue,
+      propsData: {
+        email,
+        password,
+        isSignUp: false,
+        submitHandler: () => {},
+      },
       i18n,
       router,
     });
@@ -31,7 +37,7 @@ describe('OtpCode', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render opt form', () => {
+    it('should render otp form', () => {
       expect(wrapper.find('otp-form-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -65,18 +71,6 @@ describe('OtpCode', () => {
           await global.flushPromises();
 
           expect(wrapper.find('recover-form-stub').exists()).toBe(true);
-        });
-
-        it('should recover otp', async () => {
-          expect.assertions(1);
-
-          wrapper.find('otp-form-stub').vm.$emit('recover');
-          await wrapper.vm.$nextTick();
-
-          wrapper.find('recover-form-stub').vm.$emit('submit');
-          await wrapper.vm.$nextTick();
-
-          expect(wrapper.find('message-form-stub').exists()).toBe(true);
         });
       });
     });

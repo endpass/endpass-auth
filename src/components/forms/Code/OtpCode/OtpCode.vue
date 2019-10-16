@@ -8,26 +8,19 @@
     />
     <recover-form
       v-else-if="currentForm === FORM.RECOVER"
-      @submit="onRecoverSubmit"
-    />
-    <message-form
-      v-else-if="currentForm === FORM.MESSAGE"
-      :is-closable="isClosable"
-      :message="$i18n.t('components.compositeAuth.linkSentMessage')"
-      @cancel="onAuthCancel"
+      v-bind="$attrs"
+      @cancel="onRecoverCancel"
     />
   </div>
 </template>
 
 <script>
 import OtpForm from './OtpForm';
-import RecoverForm from './RecoverForm';
-import MessageForm from './MessageForm';
+import RecoverForm from './RecoverSmsForm';
 
 const FORM = {
   OTP: 'OTP',
   RECOVER: 'RECOVER',
-  MESSAGE: 'MESSAGE',
 };
 
 export default {
@@ -54,8 +47,8 @@ export default {
       this.currentForm = FORM.RECOVER;
     },
 
-    onRecoverSubmit() {
-      this.currentForm = FORM.MESSAGE;
+    onRecoverCancel() {
+      this.currentForm = FORM.OTP;
     },
 
     onAuthCancel() {
@@ -66,7 +59,6 @@ export default {
   components: {
     OtpForm,
     RecoverForm,
-    MessageForm,
   },
 };
 </script>

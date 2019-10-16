@@ -96,12 +96,14 @@
       "noCode": "Don't know code?"
     },
     "otpBlock": {
-      "authFailed": "Authentication failed. Please, try again",
-      "recoverFailed": "Recover failed. Please, try again"
+      "authFailed": "Authentication failed. Please, try again"
     },
-    "recover": {
-      "enterSeed": "Enter recovery seed phrase of&nbsp;your wallet",
-      "seedPhrase": "Seed phrase"
+    "recoverOtpSms": {
+      "title": "Disable OTP setting via SMS",
+      "titlePhoneNotExist": "You haven't registered phone number",
+      "sendSmsError": "Something went wrong with sending SMS. Please try again",
+      "recoverError": "Something went wrong. Please try again",
+      "sendTitle": "Resend code"
     },
     "scopes": {
       "allowScopes": "Application requests following scopes. Press \"Allow\" button to grant these permissions.",

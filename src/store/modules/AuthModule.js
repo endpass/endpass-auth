@@ -3,14 +3,13 @@ import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import ConnectError from '@endpass/class/ConnectError';
 import identityService from '@/service/identity';
-import signer from '@/class/singleton/signer';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { METHODS } from '@/constants';
+import { METHODS, CHALLENGE_TYPES } from '@/constants';
 
 const { ERRORS } = ConnectError;
 
@@ -18,7 +17,8 @@ const { ERRORS } = ConnectError;
 class AuthModule extends VuexModule {
   authParams = null;
 
-  otpEmail = null;
+  /** @type {CHALLENGE_TYPES[keyof CHALLENGE_TYPES]?} */
+  challengeType = null;
 
   isLogin = false;
 
@@ -27,6 +27,10 @@ class AuthModule extends VuexModule {
   constructor(props, { sharedStore }) {
     super(props);
     this.sharedStore = sharedStore;
+  }
+
+  get isOtp() {
+    return this.challengeType === CHALLENGE_TYPES.OTP;
   }
 
   get isAuthorized() {
@@ -39,17 +43,15 @@ class AuthModule extends VuexModule {
 
     await this.handleAuthRequest({
       request,
-      email,
     });
   }
 
   @Action
-  async authWithGoogle({ email, idToken }) {
+  async authWithGoogle({ idToken }) {
     const request = identityService.authWithGoogle(idToken);
 
     await this.handleAuthRequest({
       request,
-      email,
     });
   }
 
@@ -66,10 +68,7 @@ class AuthModule extends VuexModule {
 
       settingsService.clearLocalSettings();
 
-      const type = get(res, 'challenge.challengeType');
-      if (type === 'otp') {
-        this.otpEmail = res.email;
-      }
+      this.challengeType = get(res, 'challenge.challengeType');
     } catch (err) {
       console.error(err);
       throw new Error(err.message);
@@ -79,7 +78,7 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async handleAuthRequest({ email, request }) {
+  async handleAuthRequest({ request }) {
     this.sharedStore.changeLoadingStatus(true);
 
     try {
@@ -89,8 +88,7 @@ class AuthModule extends VuexModule {
 
       settingsService.clearLocalSettings();
 
-      const type = get(res, 'challenge.challengeType');
-      this.otpEmail = type === 'otp' ? email : null;
+      this.challengeType = get(res, 'challenge.challengeType');
     } finally {
       this.sharedStore.changeLoadingStatus(false);
     }
@@ -126,26 +124,12 @@ class AuthModule extends VuexModule {
     );
   }
 
+  /**
+   * Disable otp mode
+   */
   @Action
-  async disableOtp({ seedPhrase }) {
-    const recoveryIdentifier = await identityService.getRecoveryIdentifier(
-      this.otpEmail,
-    );
-
-    const signature = await signer.recover({
-      seedPhrase,
-      recoveryIdentifier,
-    });
-
-    const redirectUrl = get(this, 'authParams.redirectUrl', '');
-
-    const { success } = await identityService.disableOtp(
-      this.otpEmail,
-      signature,
-      redirectUrl,
-    );
-
-    return success;
+  async disableOtpInStore() {
+    this.challengeType = CHALLENGE_TYPES.PASSWORD;
   }
 
   @Action
@@ -202,8 +186,8 @@ class AuthModule extends VuexModule {
   @Action
   logout() {
     this.changeAuthStatusByCode(400);
-    this.otpEmail = null;
-    this.authParams = null;
+    this.challengeType = null;
+    this.setAuthParams(null);
     settingsService.clearLocalSettings();
   }
 }

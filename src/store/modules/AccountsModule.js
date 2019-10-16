@@ -51,6 +51,17 @@ class AccountsModule extends VuexModule {
     return !!this.settings.otpEnabled;
   }
 
+  /**
+   * Disable otp mode
+   */
+  @Action
+  async disableOtpInStore() {
+    this.settings = {
+      ...this.settings,
+      otpEnabled: false,
+    };
+  }
+
   @Action
   async checkOauthLoginRequirements(challengeId) {
     this.sharedStore.changeLoadingStatus(true);

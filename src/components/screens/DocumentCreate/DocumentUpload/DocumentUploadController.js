@@ -15,6 +15,7 @@ const { $t, createGetters } = TranslateObjectFactory;
  *   front: { status: string },
  *   back: { status: string },
  * }} DocumentUploadStatus
+ * @typedef {typeof DOCUMENT_SIDES[keyof typeof DOCUMENT_SIDES]} DocSide
  */
 
 /**
@@ -178,7 +179,7 @@ class DocumentUploadController extends VuexModule {
   /**
    *
    * @param {object} props
-   * @param {string} props.docSide
+   * @param {DocSide} props.docSide
    * @param {File} props.file
    * @param {string} props.docId
    * @return {Promise<void>}
@@ -198,7 +199,7 @@ class DocumentUploadController extends VuexModule {
   /**
    * @param {object} props
    * @param {string} props.docId
-   * @param {string} props.docSide
+   * @param {DocSide} props.docSide
    * @return {Promise<void>}
    */
   @Action
@@ -227,7 +228,7 @@ class DocumentUploadController extends VuexModule {
   /**
    * @param {object} fields UserDocument object for upload
    * @param {string} fields.type UserDocument type
-   * @param {string} fields.docSide UserDocument side
+   * @param {DocSide} fields.docSide UserDocument side
    * @param {File} fields.file UserDocument file
    */
   @Action
