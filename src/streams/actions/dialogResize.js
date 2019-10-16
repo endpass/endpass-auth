@@ -10,7 +10,7 @@ const dialogResize = () => {
   if (newHeight !== lastHeight) {
     lastHeight = newHeight;
     bridgeMessenger.send(METHODS.DIALOG_RESIZE, {
-      offsetHeight: document.body.offsetHeight,
+      offsetHeight: newHeight,
     });
   }
 };

@@ -65,7 +65,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initDialog() {
+  async initDialog() {
     if (this.isInited) return;
 
     initDialogStream();
@@ -74,7 +74,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initWidget() {
+  async initWidget() {
     if (this.isInited) return;
 
     initWidgetStream();
@@ -82,7 +82,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initResize() {
+  async initResize() {
     initDialogResize();
   }
 

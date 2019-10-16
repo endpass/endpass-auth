@@ -45,7 +45,7 @@ router.afterEach(async to => {
     await coreStore.initWidget();
   }
 
-  coreStore.initResize();
+  await coreStore.initResize();
 
   if (!isDialog && !isWidget) {
     coreStore.changeInitStatus(true);
