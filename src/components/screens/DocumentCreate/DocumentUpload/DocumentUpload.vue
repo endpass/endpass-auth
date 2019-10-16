@@ -8,10 +8,10 @@
       {{ $t('components.uploadDocument.uploadDocument') }}
     </template>
     <document-upload-form
-      :error="error || errors.first('file')"
       v-model="selectedFile"
-      :is-doc-type-selectable="isFrontSide"
       v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
+      :error="error || errors.first('file')"
+      :is-doc-type-selectable="isFrontSide"
       :is-loading="isLoading"
       :document-type="documentType"
       :message-add="messageAdd"

@@ -9,12 +9,9 @@ import {
 import { METHODS } from '@/constants';
 import Answer from '@/class/Answer';
 import middleware from './dialogMiddleware';
-import { initDialogResize } from '@/streams/actions/dialogResize';
 import subscribe from '@/streams/subscribe';
 
 function initDialogStream() {
-  initDialogResize();
-
   const methodToOptions = {
     [METHODS.SIGN]: {
       commit(payload) {

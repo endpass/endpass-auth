@@ -2,11 +2,9 @@ import store, { authStore, accountsStore } from '@/store';
 import { METHODS } from '@/constants';
 import withPayloadHandler from '../middleware/withPayloadHandler';
 import answerToRequest from '../middleware/answerToRequest';
-import { initDialogResize } from '@/streams/actions/dialogResize';
 import subscribe from '@/streams/subscribe';
 
 function initWidgetStream() {
-  initDialogResize();
   const methodToOptions = {
     [METHODS.WIDGET_CHANGE_MOBILE_MODE]: {
       payloadHandler({ isMobile }) {

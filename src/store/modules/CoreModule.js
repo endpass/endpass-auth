@@ -13,14 +13,13 @@ import {
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/actions/dialogClose';
 import isDialog from '@/util/isDialog';
+import { initDialogResize } from '@/streams/actions/dialogResize';
 
 @Module({ generateMutationSetters: true })
 class CoreModule extends VuexModule {
   isInited = false;
 
   isServerMode = false;
-
-  showCreateAccount = true;
 
   rateLimitTimeout = 0;
 
@@ -68,7 +67,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initDialog() {
+  async initDialog() {
     if (this.isInited) return;
 
     initDialogStream();
@@ -77,7 +76,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initWidget() {
+  async initWidget() {
     if (this.isInited) return;
 
     initWidgetStream();
@@ -85,20 +84,20 @@ class CoreModule extends VuexModule {
   }
 
   @Action
+  async initResize() {
+    initDialogResize();
+  }
+
+  @Action
   async startBridge() {
     if (!this.isDialog) return;
 
-    const {
-      isIdentityMode,
-      showCreateAccount,
-    } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
+    const { isIdentityMode } = await bridgeMessenger.sendAndWaitResponse(
+      METHODS.INITIATE,
+    );
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;
-    }
-
-    if (showCreateAccount !== undefined) {
-      this.showCreateAccount = showCreateAccount;
     }
 
     initCoreStream();
