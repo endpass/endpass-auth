@@ -82,13 +82,26 @@ export const ENCRYPT_OPTIONS = {
 
 /**
  * @type {{
- *   BACK: string,
- *   FRONT: string
+ *   FRONT: 'front'
+ *   BACK: 'back',
  * }}
  */
 export const DOCUMENT_SIDES = {
   FRONT: 'front',
   BACK: 'back',
+};
+
+/**
+ * @type {{
+ *   EMAIL: 'emailLink',
+ *   OTP: 'otp',
+ *   PASSWORD: 'password',
+ * }}
+ */
+export const CHALLENGE_TYPES = {
+  EMAIL: 'emailLink',
+  OTP: 'otp',
+  PASSWORD: 'password',
 };
 
 /**

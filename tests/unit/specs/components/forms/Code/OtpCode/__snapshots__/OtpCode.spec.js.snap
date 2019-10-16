@@ -1,19 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`OtpCode render should correctly render Otp component 1`] = `
-<div>
-  <otp-form-stub></otp-form-stub>
+<div email="user@email.com" password="11111111" submithandler="() => {}">
+  <otp-form-stub email="user@email.com" password="11111111" submithandler="() => {}"></otp-form-stub>
 </div>
 `;
 
-exports[`OtpCode render should render opt form 1`] = `
-<div>
-  <otp-form-stub></otp-form-stub>
+exports[`OtpCode render should render otp form 1`] = `
+<div email="user@email.com" password="11111111" submithandler="() => {}">
+  <otp-form-stub email="user@email.com" password="11111111" submithandler="() => {}"></otp-form-stub>
 </div>
 `;
 
 exports[`OtpCode render should render recover form 1`] = `
-<div>
-  <recover-form-stub></recover-form-stub>
+<div email="user@email.com" password="11111111" submithandler="() => {}">
+  <recover-form-stub email="user@email.com" password="11111111" submithandler="() => {}"></recover-form-stub>
 </div>
 `;
