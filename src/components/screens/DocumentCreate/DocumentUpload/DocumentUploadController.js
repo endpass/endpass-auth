@@ -260,7 +260,8 @@ class DocumentUploadController extends VuexModule {
         docId,
       });
     } catch (e) {
-      e.message = codeErrors[e.code] || codeErrors.default;
+      const respCode = e.response && e.response.status;
+      e.message = codeErrors[respCode] || codeErrors.default;
       throw e;
     } finally {
       this.dropProgress();

@@ -39,7 +39,7 @@ describe('DocumentUploadController', () => {
   it('should reject check document', async () => {
     expect.assertions(1);
     const err = new Error();
-    err.code = 422;
+    err.response = { status: 422 };
     documentsService.checkFile.mockRejectedValueOnce(err);
 
     try {
