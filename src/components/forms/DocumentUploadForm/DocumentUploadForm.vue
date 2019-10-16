@@ -11,12 +11,13 @@
     </form-item>
     <form-item>
       <document-upload-area
-        :file="file"
         :label="$t('components.uploadDocument.selectFile')"
         :error="error"
         :message-add="messageAdd"
         :message-ready="messageReady"
         :is-loading="isLoading"
+        :accept="accept"
+        :file="file"
         @change="onChangeFile"
       >
         <document-upload-progress
@@ -41,7 +42,16 @@ import FormItem from '@/components/common/FormItem';
 
 export default {
   name: 'DocumentUploadForm',
+
   props: {
+    file: {
+      type: File,
+      default: null,
+    },
+    accept: {
+      type: String,
+      default: '',
+    },
     error: {
       type: String,
       default: null,
@@ -74,10 +84,6 @@ export default {
       type: String,
       default: '',
     },
-    file: {
-      type: File,
-      default: null,
-    },
   },
   documentTypes: [
     {
@@ -89,6 +95,7 @@ export default {
       val: DOC_TYPES.DRIVER_LICENSE,
     },
   ],
+
   methods: {
     onChangeDocumentType(documentType) {
       this.$emit('change-document-type', documentType);
@@ -103,6 +110,10 @@ export default {
     DocumentUploadProgress,
     VSelect,
     DocumentUploadArea,
+  },
+  model: {
+    prop: 'file',
+    event: 'change-file',
   },
 };
 </script>

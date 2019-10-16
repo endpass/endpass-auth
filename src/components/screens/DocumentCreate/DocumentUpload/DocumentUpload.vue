@@ -8,15 +8,19 @@
       {{ $t('components.uploadDocument.uploadDocument') }}
     </template>
     <document-upload-form
-      :file="selectedFile"
-      :error="error"
+      :error="error || errors.first('file')"
+      v-model="selectedFile"
       :is-doc-type-selectable="isFrontSide"
+      v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
       :is-loading="isLoading"
       :document-type="documentType"
       :message-add="messageAdd"
       :message-ready="messageReady"
       :progress-value="progressValue"
       :progress-label="progressLabel"
+      :accept="$options.ACCEPT"
+      data-vv-as="File"
+      data-vv-name="file"
       @change-document-type="onChangeDocType"
       @change-file="onChangeFile"
     />
@@ -31,7 +35,7 @@
       </v-button>
       <v-button
         :is-loading="isLoading"
-        :disabled="isLoading"
+        :disabled="isLoading || !isReadySubmit"
         data-test="submit-button"
         @click="uploadFile"
       >
@@ -49,8 +53,17 @@ import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUp
 import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
 import FormControls from '@/components/common/FormControls';
 
+const ACCEPT =
+  '.png,.jpeg,.jpg,.pdf,.tif,.doc,.docx,image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+const VALIDATE_ACCEPT = ACCEPT.split(',')
+  .map(item => (item[0] === '.' ? item.substring(1) : item))
+  .join(',');
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
+
 export default {
   name: 'DocumentUpload',
+
+  inject: ['$validator'],
 
   data: () => ({
     error: null,
@@ -61,6 +74,8 @@ export default {
   }),
 
   uploadController: null,
+  ACCEPT,
+  VALIDATE_ACCEPT,
 
   computed: {
     isFrontSide() {
@@ -93,6 +108,9 @@ export default {
       const { uploadController } = this.$options;
       return uploadController.isUploading || uploadController.isProcessing;
     },
+    isReadySubmit() {
+      return !!this.selectedFile && !this.error && this.errors.count() === 0;
+    },
   },
 
   methods: {
@@ -103,7 +121,9 @@ export default {
 
     onChangeFile(file) {
       this.error = null;
-      this.selectedFile = file;
+      if (file && file.size > MAX_FILE_SIZE) {
+        this.error = this.$t('components.uploadDocument.errorSizeLimit');
+      }
     },
 
     onClose() {
