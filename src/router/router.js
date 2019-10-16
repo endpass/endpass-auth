@@ -33,6 +33,8 @@ router.beforeEach(async (to, from, next) => {
 router.afterEach(async to => {
   const { isDialog, isWidget } = to.meta;
 
+  await coreStore.initResize();
+
   if (isDialog) {
     await coreStore.initDialog();
   }
