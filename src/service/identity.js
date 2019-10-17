@@ -8,25 +8,15 @@ const createTimeout = handler => setTimeout(handler, 1500);
 
 const getOtpSettings = () => request.get(`${identityBaseUrl}/settings/otp`);
 
-const getAccountsSkipPermission = () =>
-  requestSkipPermission.get(`${identityBaseUrl}/accounts`);
-
 const checkAccountExist = async () => {
-  let res = false;
-  try {
-    const list = await getAccountsSkipPermission();
-    res = list.length !== 0;
-  } catch (e) {}
+  const list = await requestSkipPermission.get(`${identityBaseUrl}/accounts`);
+  const res = list.length !== 0;
   return res;
 };
 
-const auth = (email, redirectUrl) => {
-  const requestUrl = redirectUrl
-    ? `${identityBaseUrl}/auth?redirect_uri=${encodeURIComponent(redirectUrl)}`
-    : `${identityBaseUrl}/auth`;
-
+const getAuthChallenge = email => {
   return request
-    .post(requestUrl, {
+    .post(`${identityBaseUrl}/auth`, {
       email,
     })
     .then(res => {
@@ -36,26 +26,36 @@ const auth = (email, redirectUrl) => {
     });
 };
 
-const getAuthPermission = () =>
-  request.get(`${identityBaseUrl}/auth/permission`);
+const setAuthPermission = async (password, originHost) => {
+  const res = await request.post(`${identityBaseUrl}/auth/permission`, {
+    password,
+    originHost,
+  });
+  return res;
+};
 
-const setAuthPermission = signature =>
-  request.post(`${identityBaseUrl}/auth/permission`, {
-    signature,
+const authWithCode = async ({
+  email,
+  code,
+  password,
+  isSignUp,
+  challengeType = 'otp',
+}) => {
+  const url = isSignUp
+    ? `${identityBaseUrl}/auth/signup`
+    : `${identityBaseUrl}/auth/token`;
+
+  const res = await request.post(url, {
+    challengeType,
+    email,
+    code,
+    password,
   });
 
-const otpAuth = (email, code) =>
-  request
-    .post(`${identityBaseUrl}/auth/token`, {
-      challengeType: 'otp',
-      email,
-      code,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
+  if (!res.success) throw new Error(res.message);
 
-      return res;
-    });
+  return res;
+};
 
 const authWithGoogle = idToken =>
   request
@@ -146,7 +146,107 @@ const getRecoveryIdentifier = email =>
       return res.message;
     });
 
-const recover = (email, signature, redirectUrl) =>
+const sendEmailCode = async email => {
+  const { timeout } = await request.post(`${identityBaseUrl}/auth/code`, {
+    email,
+  });
+
+  return timeout;
+};
+
+/**
+ *
+ * @param {string?} email
+ * @return {Promise<void>}
+ */
+const resetRegularPassword = async ({ email }) => {
+  const { timeout } = await request.post(
+    `${identityBaseUrl}/regular-password/reset`,
+    {
+      email,
+    },
+  );
+
+  return timeout;
+};
+
+const confirmResetRegularPassword = async ({
+  password: newPassword,
+  code: passwordResetToken,
+}) => {
+  const { success } = await request.post(
+    `${identityBaseUrl}/regular-password/reset/confirm`,
+    {
+      passwordResetToken,
+      newPassword,
+    },
+  );
+
+  if (!success) throw new Error('Success false');
+
+  return success;
+};
+
+/**
+ *
+ * @param {string?} email
+ * @return {Promise<boolean>}
+ */
+const checkRegularPassword = async email => {
+  try {
+    await request.post(`${identityBaseUrl}/regular-password/check`, { email });
+    return true;
+  } catch (error) {
+    const isPasswordNotExist = get(error, ['response', 'status']) === 417;
+
+    if (isPasswordNotExist) return false;
+
+    throw error;
+  }
+};
+
+/**
+ * Send sms with code for disabling otp
+ * @param {string} email
+ * @returns {Promise<void>}
+ */
+const sendOtpRecoverSms = async email => {
+  try {
+    const res = await request.get(
+      `${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`,
+    );
+
+    if (!res.success) throw new Error(res.message);
+
+    return res;
+  } catch (error) {
+    const { response = {} } = error;
+    const { status } = response;
+    error.code = status;
+
+    throw error;
+  }
+};
+
+/**
+ * Disable otp setting
+ * @param {object} param
+ * @param {string} param.email
+ * @param {string} param.code
+ * @returns {Promise<void>}
+ */
+const disableOtpViaSms = async ({ email, code }) => {
+  const res = await request.post(`${identityBaseUrl}/auth/recover`, {
+    email,
+    code,
+  });
+
+  if (!res.success) throw new Error(res.message);
+
+  return res;
+};
+
+const disableOtp = (email, signature, redirectUrl) =>
   request
     .post(`${identityBaseUrl}/auth/recover`, {
       email,
@@ -168,16 +268,21 @@ export default {
   saveAccountInfo,
   backupSeed,
   updateAccountSettings,
-  getAuthPermission,
   setAuthPermission,
-  auth,
+  getAuthChallenge,
+  authWithCode,
   authWithGoogle,
   authWithGitHub,
-  otpAuth,
+  sendEmailCode,
+  resetRegularPassword,
+  confirmResetRegularPassword,
+  checkRegularPassword,
   logout,
   waitLogin,
   getOtpSettings,
   getRecoveryIdentifier,
-  recover,
+  disableOtp,
+  sendOtpRecoverSms,
+  disableOtpViaSms,
   getSeedTemplateUrl,
 };

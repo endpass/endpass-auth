@@ -11,30 +11,27 @@ import {
 } from '@/streams';
 
 // TODO: move it to the streams methods
-import dialogClose from '@/streams/Actions/dialogClose';
+import dialogClose from '@/streams/actions/dialogClose';
 import isDialog from '@/util/isDialog';
+import { initDialogResize } from '@/streams/actions/dialogResize';
 
 @Module({ generateMutationSetters: true })
 class CoreModule extends VuexModule {
   isInited = false;
 
-  isIdentityMode = false;
-
-  isRegularPasswordMode = false;
-
-  showCreateAccount = true;
+  isServerMode = false;
 
   rateLimitTimeout = 0;
 
   isDialog = isDialog;
 
-  constructor(props, { accountsStore, sharedStore }) {
+  constructor(props, { authStore, sharedStore }) {
     super(props);
-    this.accountsStore = accountsStore;
+    this.authStore = authStore;
     this.sharedStore = sharedStore;
   }
 
-  get loading() {
+  get isLoading() {
     // for old code support
     return this.sharedStore.isLoading;
   }
@@ -61,7 +58,7 @@ class CoreModule extends VuexModule {
   @Action
   async init() {
     try {
-      await this.accountsStore.defineAuthStatus();
+      await this.authStore.defineAuthStatus();
       await this.startBridge();
       // eslint-disable-next-line
     } catch (err) {
@@ -70,7 +67,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initDialog() {
+  async initDialog() {
     if (this.isInited) return;
 
     initDialogStream();
@@ -79,7 +76,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  initWidget() {
+  async initWidget() {
     if (this.isInited) return;
 
     initWidgetStream();
@@ -87,25 +84,20 @@ class CoreModule extends VuexModule {
   }
 
   @Action
+  async initResize() {
+    initDialogResize();
+  }
+
+  @Action
   async startBridge() {
     if (!this.isDialog) return;
 
-    const {
-      isIdentityMode,
-      showCreateAccount,
-      isRegularPasswordMode,
-    } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
-
-    if (isRegularPasswordMode !== undefined) {
-      this.isRegularPasswordMode = isRegularPasswordMode;
-    }
+    const { isIdentityMode } = await bridgeMessenger.sendAndWaitResponse(
+      METHODS.INITIATE,
+    );
 
     if (isIdentityMode !== undefined) {
-      this.isIdentityMode = isIdentityMode;
-    }
-
-    if (showCreateAccount !== undefined) {
-      this.showCreateAccount = showCreateAccount;
+      this.isServerMode = isIdentityMode;
     }
 
     initCoreStream();
@@ -113,7 +105,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async logout() {
+  async logout({ isCloseDialog = true } = {}) {
     this.sharedStore.changeLoadingStatus(true);
 
     const { error, code, source } = await bridgeMessenger.sendAndWaitResponse(
@@ -126,13 +118,13 @@ class CoreModule extends VuexModule {
       throw ConnectError.create(code, error);
     }
 
-    if (!source || source === DIRECTION.AUTH) {
-      bridgeMessenger.send(METHODS.DIALOG_CLOSE);
+    if (isCloseDialog && (!source || source === DIRECTION.AUTH)) {
+      this.dialogClose();
     } else if (source === DIRECTION.WIDGET) {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
     }
 
-    this.accountsStore.logout();
+    this.authStore.logout();
     settingsService.clearLocalSettings();
   }
 

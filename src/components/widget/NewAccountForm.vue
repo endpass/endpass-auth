@@ -5,7 +5,7 @@
       v-validate="'required|min:8'"
       :error="errors.first('password')"
       :disabled="isLoading"
-      :placeholder="$t('components.passwordForm.enterWalletPassword')"
+      :placeholder="$t('components.passwordForm.enterPassword')"
       data-test="new-account-password-input"
       type="password"
       name="password"
@@ -32,8 +32,8 @@
 <script>
 import { mapActions } from 'vuex';
 import formMixin from '@/mixins/form';
-import WidgetInput from './WidgetInput.vue';
-import OptionButton from './OptionButton.vue';
+import WidgetInput from './WidgetInput';
+import OptionButton from './OptionButton';
 
 export default {
   name: 'WidgetNewAccountForm',

@@ -7,11 +7,11 @@
     @click="handleTogglerClick"
   >
     <section class="widget-header-control">
-      <h3 class="widget-header-title">
+      <h3 class="widget-header-title v-lh-1-3">
         {{ $t('components.widgetHeader.balance') }}
       </h3>
       <span
-        class="widget-header-status"
+        class="widget-header-status v-lh-1"
         data-test="widget-header-status"
       >
         {{ statusLabel }}
@@ -27,6 +27,7 @@
     <section class="widget-header-content">
       <template v-if="!isLoading">
         <p
+          class="v-lh-1"
           :class="{
             'widget-header-balance': true,
             'is-cutted': isCuttedBalance,
@@ -46,17 +47,21 @@
         :size="24"
         :is-white="true"
       />
-      <a
+      <v-link
         href="https://wallet.endpass.com"
         target="_blank"
-        class="widget-header-link"
-      >wallet.endpass.com</a>
+        is-underline
+        class="widget-header-link v-lh-1-5"
+      >
+        wallet.endpass.com
+      </v-link>
     </section>
   </header>
 </template>
 
 <script>
 import BigNumber from 'bignumber.js';
+import VLink from '@endpass/ui/kit/VLink';
 import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
 import VSvgIcon from '@/components/common/VSvgIcon';
@@ -177,6 +182,7 @@ export default {
   },
 
   components: {
+    VLink,
     Spinner,
     VSvgIcon,
     CurrencyToggler,
@@ -210,11 +216,9 @@ export default {
 
 .widget-header-link {
   flex: 0 0 auto;
-  color: #fff;
-  text-decoration: undeline;
+  color: var(--endpass-ui-color-white) !important;
   font-size: 8px;
   font-weight: normal;
-  line-height: 1.5;
   margin-left: auto;
 }
 
@@ -223,7 +227,6 @@ export default {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: bold;
-  line-height: 1.35;
   letter-spacing: 1px;
 }
 
@@ -234,7 +237,6 @@ export default {
   background: none;
   color: #fff;
   font-size: 12px;
-  line-height: 1;
   cursor: pointer;
 }
 
@@ -249,7 +251,6 @@ export default {
   vertical-align: middle;
   font-size: 24px;
   font-weight: bold;
-  line-height: 1;
   margin-right: 8px;
   letter-spacing: -0.3px;
 }

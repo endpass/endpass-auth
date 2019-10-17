@@ -1,3 +1,4 @@
+// @ts-check
 import { parseUrl } from '@/util/dom';
 
 export const METHODS = {
@@ -12,6 +13,7 @@ export const METHODS = {
   READY_STATE_BRIDGE: 'READY_STATE_BRIDGE',
   EXCHANGE_TOKEN_REQUEST: 'EXCHANGE_TOKEN_REQUEST',
   CREATE_DOCUMENT: 'CREATE_DOCUMENT',
+  GENERATE_WALLET: 'GENERATE_WALLET',
 
   // Dialog-level messages
   DIALOG_RESIZE: 'DIALOG_RESIZE',
@@ -80,13 +82,26 @@ export const ENCRYPT_OPTIONS = {
 
 /**
  * @type {{
- *   BACK: string,
- *   FRONT: string
+ *   FRONT: 'front'
+ *   BACK: 'back',
  * }}
  */
 export const DOCUMENT_SIDES = {
   FRONT: 'front',
   BACK: 'back',
+};
+
+/**
+ * @type {{
+ *   EMAIL: 'emailLink',
+ *   OTP: 'otp',
+ *   PASSWORD: 'password',
+ * }}
+ */
+export const CHALLENGE_TYPES = {
+  EMAIL: 'emailLink',
+  OTP: 'otp',
+  PASSWORD: 'password',
 };
 
 /**

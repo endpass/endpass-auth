@@ -22,14 +22,12 @@ import FormItem from '@/components/common/FormItem';
 import StepContainer from '@/components/middleware/StepContainer';
 import store from '@/store';
 
-console.log('store', store);
-
-const { coreStore, accountsStore } = store;
+const { coreStore, authStore } = store;
 
 export default {
   name: 'MessageForm',
 
-  accountsStore,
+  authStore,
   coreStore,
 
   data() {
@@ -51,7 +49,7 @@ export default {
   },
 
   beforeMount() {
-    if (this.$options.accountsStore.isLogin) {
+    if (this.$options.authStore.isLogin) {
       this.message = this.$i18n.t(
         'components.compositeAuth.successAuthMessage',
       );

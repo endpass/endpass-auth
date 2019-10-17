@@ -2,7 +2,6 @@
 /**
  *
  * @param {import('vuex').Store<{}>} store Vuex store instance
- * @return {function}
  */
 export default store =>
   /**

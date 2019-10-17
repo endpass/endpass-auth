@@ -11,15 +11,3 @@ exports[`CompositeAuth render should render auth form by default 1`] = `
   <auth-form-stub></auth-form-stub>
 </div>
 `;
-
-exports[`CompositeAuth render should render message form 1`] = `
-<div>
-  <message-form-stub message="" closable="true"></message-form-stub>
-</div>
-`;
-
-exports[`CompositeAuth render should render opt form 1`] = `
-<div>
-  <otp-block-form-stub></otp-block-form-stub>
-</div>
-`;

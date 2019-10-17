@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WalletSeed render should correctly render WalletSeed component 1`] = `
+<div>
+  <v-title-stub><span>Write down your Seed Phrase</span></v-title-stub>
+  <v-description-stub><span>The&nbsp;words below are&nbsp;called your&nbsp;seed phrase. They&nbsp;enable you to&nbsp;access your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. It&nbsp;is&nbsp;very important that these words down in&nbsp;order shown.</span></v-description-stub>
+  <form-item-stub>
+    <div>
+      <ul data-test="seed-phrase" class="wallet-create-seed">
+        <li>
+          <v-tag-stub skin="light-gray">
+            foo
+          </v-tag-stub>
+        </li>
+        <li>
+          <v-tag-stub skin="light-gray">
+            baz
+          </v-tag-stub>
+        </li>
+        <li>
+          <v-tag-stub skin="light-gray">
+            bar
+          </v-tag-stub>
+        </li>
+      </ul>
+      <!---->
+    </div>
+    <div class="v-mb-24">
+      <v-checkbox-stub name="checkbox" truevalue="true" data-test="wallet-seed-confirm">
+        I have written down the words and stored them in a secure place
+      </v-checkbox-stub>
+    </div>
+  </form-item-stub>
+  <v-button-stub skin="primary" size="big" disabled="true" type="button" data-test="continue-button">
+    Continue
+  </v-button-stub>
+</div>
+`;

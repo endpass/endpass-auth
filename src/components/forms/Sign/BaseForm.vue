@@ -9,10 +9,14 @@
       </message>
     </form-field>
     <form-field v-if="requesterUrl">
-      <a
+      <v-link
         :href="requesterUrl"
         data-test="requester-url"
-      >{{ requesterUrl }}</a>
+        target="_blank"
+        is-underline
+      >
+        {{ requesterUrl }}
+      </v-link>
       {{ $t('components.sign.requestSign') }}
     </form-field>
     <form-field :label="title">
@@ -30,13 +34,14 @@
         :data-vv-as="$t('components.sign.passwordField')"
         name="password"
         type="password"
+        required
         data-test="password-input"
       />
     </form-field>
     <slot />
     <form-controls>
       <v-button
-        :disabled="!closable || loading"
+        :disabled="!isClosable || isLoading"
         skin="quaternary"
         type="button"
         data-test="cancel-button"
@@ -45,12 +50,13 @@
         {{ $t('global.close') }}
       </v-button>
       <v-button
-        :disabled="loading || !isFormValid"
+        :disabled="isLoading || !isFormValid"
+        :is-loading="isLoading"
         type="button"
         data-test="submit-button"
         @click="emitSubmit"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.sign') }}
       </v-button>
     </form-controls>
   </div>
@@ -60,6 +66,7 @@
 import get from 'lodash/get';
 import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
+import VLink from '@endpass/ui/kit/VLink';
 import signer from '@/class/singleton/signer';
 import Message from '@/components/common/Message.vue';
 import VAddress from '@/components/common/VAddress.vue';
@@ -73,7 +80,7 @@ export default {
   inject: ['$validator'],
 
   props: {
-    loading: {
+    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -88,7 +95,7 @@ export default {
       default: null,
     },
 
-    closable: {
+    isClosable: {
       type: Boolean,
       default: true,
     },
@@ -121,12 +128,6 @@ export default {
 
     requesterUrl() {
       return get(this.request, 'url');
-    },
-
-    primaryButtonLabel() {
-      return !this.loading
-        ? this.$i18n.t('global.sign')
-        : this.$i18n.t('global.loading');
     },
   },
 
@@ -175,6 +176,7 @@ export default {
   },
 
   components: {
+    VLink,
     VButton,
     VInput,
     Message,

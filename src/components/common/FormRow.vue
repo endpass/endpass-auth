@@ -18,8 +18,4 @@ export default {
   display: flex;
   align-items: center;
 }
-
-.form-row[centered] {
-  justify-content: center;
-}
 </style>

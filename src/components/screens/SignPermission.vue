@@ -4,14 +4,22 @@
       :is-closable="isDialog"
       @close="handleCancel"
     >
-      <sign-password
-        :with-logout-btn="true"
-        :requester-url="ORIGIN_HOST"
-        :is-loading="isLoading"
-        :error="error"
-        @submit="handleSignSubmit"
-        @cancel="handleCancel"
-      />
+      <loading-screen :is-loading="isChecking">
+        <sign-password
+          v-if="isPasswordExist"
+          :with-logout-btn="true"
+          :requester-url="ORIGIN_HOST"
+          :is-loading="isLoading"
+          :error="error"
+          @submit="onSignPassword"
+          @cancel="handleCancel"
+          @logout="onLogout"
+        />
+        <create-regular-password
+          v-else
+          @submit="onSignPassword"
+        />
+      </loading-screen>
     </v-modal-card>
   </screen>
 </template>
@@ -19,34 +27,36 @@
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import Screen from '@/components/common/Screen';
-import SignPassword from '@/components/formsComposite/SignPassword';
+import SignPassword from '@/components/forms/SignPassword';
+import LoadingScreen from '@/components/common/LoadingScreen';
+import CreateRegularPassword from '@/components/forms/CreateRegularPassword';
 
 import { ORIGIN_HOST } from '@/constants';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'SignPermission',
 
   accountsStore,
   coreStore,
+  authStore,
 
   data: () => ({
     error: null,
     isLoading: false,
+    isChecking: true,
+    isPasswordExist: true,
     ORIGIN_HOST,
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
     isDialog() {
       return this.$options.coreStore.isDialog;
     },
   },
 
   methods: {
-    async handleSignSubmit(password) {
+    async onSignPassword(password) {
       this.isLoading = true;
       this.error = null;
 
@@ -65,9 +75,27 @@ export default {
       this.$options.accountsStore.cancelSignPermission();
       this.$options.coreStore.dialogClose();
     },
+
+    onLogout() {
+      this.$options.coreStore.logout();
+      this.handleCancel();
+    },
+  },
+
+  async mounted() {
+    this.isChecking = true;
+    try {
+      this.isPasswordExist = await this.$options.authStore.checkRegularPassword();
+    } catch (e) {
+      this.error = this.$i18n.t('components.signPermission.authFailed');
+    } finally {
+      this.isChecking = false;
+    }
   },
 
   components: {
+    CreateRegularPassword,
+    LoadingScreen,
     SignPassword,
     Screen,
     VModalCard,

@@ -32,11 +32,11 @@ export default {
 
   /**
    * Saves the encrypted keystore for an account
-   * @param {[type]} address
-   * @param {Object} options.info
-   * @param {...[type]} rest }
+   * @param {v3Keystore} v3Keystore
+   * @param {keystoreInfo | {}} info
    */
-  async setAccount(address, { info = {}, ...rest }) {
+  async setAccount(v3Keystore, info = {}) {
+    const { address } = v3Keystore;
     const infoForSave = {
       address,
       type: WALLET_TYPES.STANDARD,
@@ -46,7 +46,7 @@ export default {
 
     await requestSkipPermission.post(
       `${identityBaseUrl}/account/${address}`,
-      rest,
+      v3Keystore,
     );
     await this.setAccountInfo(address, infoForSave);
   },

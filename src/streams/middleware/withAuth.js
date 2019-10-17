@@ -1,17 +1,16 @@
-import { accountsStore } from '@/store';
-import dialogOpen from '@/streams/Actions/dialogOpen';
+import { authStore } from '@/store';
+import dialogOpen from '@/streams/actions/dialogOpen';
 import { authChannel } from '@/class/singleton/channels';
-import Answer from '@/class/Answer';
 
 export default async function withAuth(options, action) {
   if (!options.needAuth) {
     return;
   }
 
-  await accountsStore.defineAuthStatus();
+  await authStore.defineAuthStatus();
 
-  if (accountsStore.isLogin) {
-    authChannel.put(Answer.createOk());
+  if (authStore.isLogin) {
+    authStore.confirmAuth();
     return;
   }
 

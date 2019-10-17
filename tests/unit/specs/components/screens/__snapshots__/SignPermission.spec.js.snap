@@ -3,7 +3,19 @@
 exports[`SignPermission render render should correctly render SignPermission component 1`] = `
 <screen-stub>
   <v-modal-card-stub isclosable="true">
-    <sign-password-stub withlogoutbtn="true" requesterurl="http://localhost" message=""></sign-password-stub>
+    <loading-screen-stub isloading="true">
+      <sign-password-stub message="" withlogoutbtn="true" requesterurl="http://localhost"></sign-password-stub>
+    </loading-screen-stub>
+  </v-modal-card-stub>
+</screen-stub>
+`;
+
+exports[`SignPermission render render should correctly render SignPermission component 2`] = `
+<screen-stub>
+  <v-modal-card-stub isclosable="true">
+    <loading-screen-stub>
+      <sign-password-stub message="" withlogoutbtn="true" requesterurl="http://localhost"></sign-password-stub>
+    </loading-screen-stub>
   </v-modal-card-stub>
 </screen-stub>
 `;

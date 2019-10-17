@@ -50,7 +50,7 @@
 <script>
 import { getShortStringWithEllipsis } from '@endpass/utils/strings';
 import Identicon from '@/components/common/Identicon';
-import OptionButton from './OptionButton.vue';
+import OptionButton from './OptionButton';
 
 export default {
   name: 'WidgetAccounts',

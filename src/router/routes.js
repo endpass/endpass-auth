@@ -132,7 +132,6 @@ const routes = [
     },
   },
   {
-    // TODO: change to lazy load instead of sub components
     path: '/sign',
     name: 'SignScreen',
     component: () =>
@@ -148,6 +147,42 @@ const routes = [
     component: () =>
       import(
         /* webpackChunkName: "document-create" */ '@/components/screens/DocumentCreate'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
+  {
+    path: '/wallet-generate',
+    name: 'WalletGenerate',
+    component: () =>
+      import(
+        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletGenerate'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
+  {
+    path: '/wallet-create',
+    name: 'WalletCreate',
+    component: () =>
+      import(
+        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletCreate'
+      ),
+    meta: {
+      isDialog: true,
+      isBackground: true,
+    },
+  },
+  {
+    path: '/wallet-create/error',
+    name: 'WalletCreateError',
+    component: () =>
+      import(
+        /* webpackChunkName: "wallet-create-error" */ '@/components/screens/WalletCreateError'
       ),
     meta: {
       isDialog: true,

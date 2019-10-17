@@ -1,11 +1,11 @@
 <template>
   <form @submit.prevent="handleSubmit">
     <form-field>
-      <message>
+      <v-description>
         {{ $t('components.scopes.allowScopes') }}
-      </message>
+      </v-description>
     </form-field>
-    <div class="form-field">
+    <div class="form-field v-mb-24">
       <scopes-checkbox-tree
         v-for="level in scopesTree"
         :key="level.key"
@@ -30,11 +30,12 @@
       </v-button>
       <v-button
         :disabled="!isFormValid || isLoading"
+        :is-loading="isLoading"
         :fluid="true"
         type="primary"
         data-test="submit-button"
       >
-        {{ primaryButtonLabel }}
+        {{ $t('global.allow') }}
       </v-button>
     </form-controls>
   </form>
@@ -42,11 +43,11 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import ScopesCheckboxTree from '@/components/common/ScopesCheckboxTree';
 import scopeTitlesMap from './scopeTitlesMap';
+import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'ScopesForm',
@@ -70,12 +71,6 @@ export default {
   }),
 
   computed: {
-    primaryButtonLabel() {
-      return !this.isLoading
-        ? this.$i18n.t('global.allow')
-        : this.$i18n.t('global.loading');
-    },
-
     isPopup() {
       return !!window.opener;
     },
@@ -156,9 +151,9 @@ export default {
   components: {
     ScopesCheckboxTree,
     VButton,
-    Message,
     FormField,
     FormControls,
+    VDescription,
   },
 };
 </script>

@@ -5,7 +5,11 @@
       :is-closable="isClosable"
       @close="emitClose"
     >
-      <template slot="title">
+      <template
+        v-if="title"
+        slot="title"
+        name="title"
+      >
         {{ title }}
       </template>
       <spinner

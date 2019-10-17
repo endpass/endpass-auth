@@ -1,5 +1,5 @@
 <template>
-  <div class="form-item">
+  <div class="v-mb-16">
     <slot />
   </div>
 </template>
@@ -9,9 +9,3 @@ export default {
   name: 'FormItem',
 };
 </script>
-
-<style lang="postcss">
-.form-item {
-  margin-bottom: 16px;
-}
-</style>

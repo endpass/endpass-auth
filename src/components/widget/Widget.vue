@@ -41,7 +41,7 @@
           v-else
           :accounts="accounts"
           :current-account="currentAccount"
-          :is-loading="loading"
+          :is-loading="isLoading"
           @new-account="handleNewAccountStart"
           @account-change="handleAccountChange"
           @accounts-toggle="handleAccountsToggle"
@@ -60,12 +60,14 @@ import WidgetContent from './Content.vue';
 import WidgetAccounts from './Accounts.vue';
 import WidgetNewAccountForm from './NewAccountForm.vue';
 import TriggerButton from './TriggerButton.vue';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'Widget',
+
   accountsStore,
   coreStore,
+  authStore,
 
   data: () => ({
     widgetSettings: null,
@@ -89,8 +91,8 @@ export default {
     balance() {
       return this.$options.accountsStore.balance;
     },
-    loading() {
-      return this.$options.coreStore.loading;
+    isLoading() {
+      return this.$options.coreStore.isLoading;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
@@ -194,6 +196,7 @@ export default {
     await this.$options.accountsStore.defineSettings();
     await this.initWidget();
     await this.$options.accountsStore.defineOnlyV3Accounts();
+    await this.$options.authStore.defineAuthStatus();
     this.$options.accountsStore.subscribeOnBalanceUpdates();
   },
 

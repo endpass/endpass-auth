@@ -2,6 +2,7 @@
   <loading-screen v-if="isLoadingScreen" />
   <v-frame
     v-else
+    :title="$t('components.consentProvider.title')"
     :is-closable="false"
   >
     <v-error
@@ -24,13 +25,14 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
-import { accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'ConsentProvider',
 
   accountsStore,
   coreStore,
+  authStore,
 
   data: () => ({
     consentChallenge: null,
@@ -45,11 +47,8 @@ export default {
   }),
 
   computed: {
-    isInited() {
-      return this.$options.coreStore.isInited;
-    },
     isLogin() {
-      return this.$options.accountsStore.isLogin;
+      return this.$options.authStore.isLogin;
     },
     isLoadingScreen() {
       return (

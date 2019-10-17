@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WalletGenerate render should correctly render WalletGenerate screen component 1`] = `
+<screen-stub>
+  <v-modal-card-stub isclosable="true">
+    <wallet-create-form-stub createhandler="function () { [native code] }"></wallet-create-form-stub>
+  </v-modal-card-stub>
+</screen-stub>
+`;
