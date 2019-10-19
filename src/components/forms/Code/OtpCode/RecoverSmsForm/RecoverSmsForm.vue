@@ -6,7 +6,7 @@
       @submit.prevent="onSubmit"
     >
       <v-title>
-        <span v-html="$t('components.recoverOtpSms.title')" />
+        {{ $t('components.recoverOtpSms.title') }}
       </v-title>
 
       <form-item>
@@ -58,7 +58,7 @@
       @submit.prevent="onCancel"
     >
       <v-title>
-        <span v-html="$t('components.recoverOtpSms.titlePhoneNotExist')" />
+        {{ $t('components.recoverOtpSms.titlePhoneNotExist') }}
       </v-title>
 
       <form-item class="v-mb-24">

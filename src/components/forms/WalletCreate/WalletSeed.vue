@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-title>
-      <span v-html="$t('components.createWallet.recoveryTitle')" />
+      {{ $t('components.createWallet.recoveryTitle') }}
     </v-title>
     <v-description>
-      <span v-html="$t('components.createWallet.recoverySubtitle')" />
+      {{ $t('components.createWallet.recoverySubtitle') }}
     </v-description>
     <form-item>
       <div>

@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="onSubmit">
     <v-title>
-      <span v-html="$t('components.regularPasswordForm.title')" />
+      {{ $t('components.regularPasswordForm.title') }}
     </v-title>
     <form-item>
       <v-input
