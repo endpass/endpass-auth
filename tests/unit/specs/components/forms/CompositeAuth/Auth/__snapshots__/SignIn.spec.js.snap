@@ -33,7 +33,7 @@ exports[`SignIn render should change submit button text if loading and make it d
 exports[`SignIn render should correctly render SignIn component 1`] = `
 <form data-test="auth-form">
   <!---->
-  <v-title-stub><span>Log in&nbsp;to&nbsp;your Endpass account to&nbsp;access site actions</span></v-title-stub>
+  <v-title-stub><span>Log in to your Endpass account to access site actions</span></v-title-stub>
   <!---->
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>

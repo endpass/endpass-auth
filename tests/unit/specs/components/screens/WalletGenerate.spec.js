@@ -66,7 +66,10 @@ describe('WalletGenerate', () => {
       const res = await dataPromise;
 
       expect(res).toEqual(
-        Answer.createFail(ERRORS.CREATE_WALLET, 'Create wallet failed!'),
+        Answer.createFail(
+          ERRORS.CREATE_WALLET,
+          i18n.t('store.error.wallet.walletCreate'),
+        ),
       );
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });

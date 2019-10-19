@@ -1,6 +1,7 @@
 import DocumentUploadController from '@/components/screens/DocumentCreate/DocumentUpload/DocumentUploadController';
 import documentsService from '@/service/documents';
 import { DOCUMENT_SIDES } from '@/constants';
+import i18n from '@/locales/i18n';
 
 describe('DocumentUploadController', () => {
   let controller;
@@ -32,7 +33,9 @@ describe('DocumentUploadController', () => {
     try {
       await controller.uploadDocument({ file, type, docSide });
     } catch (e) {
-      expect(e).toEqual(new Error('Something broken, when file upload.'));
+      expect(e).toEqual(
+        new Error(i18n.t('store.error.uploadDocument.default')),
+      );
     }
   });
 
@@ -46,7 +49,7 @@ describe('DocumentUploadController', () => {
       await controller.uploadDocument({ file, type, docSide });
     } catch (e) {
       expect(e).toEqual(
-        new Error('Uploaded file is broken or has unknown format.'),
+        new Error(i18n.t('store.error.uploadDocument.invalidFile')),
       );
     }
   });

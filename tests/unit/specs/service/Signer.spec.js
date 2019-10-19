@@ -1,5 +1,6 @@
 import Signer from '@/class/singleton/signer';
 import Wallet from '@/class/singleton/signer/Wallet';
+import i18n from '@/locales/i18n';
 
 describe('Signer', () => {
   const password = 'secret';
@@ -54,7 +55,7 @@ describe('Signer', () => {
           request,
         });
       } catch (e) {
-        const err = new Error('Sign typed data not supported yet!');
+        const err = new Error(i18n.t('services.signer.typedData'));
         expect(e).toEqual(err);
       }
     });
