@@ -5,7 +5,7 @@
       @submit.prevent="onCreateWallet"
     >
       <v-title>
-        <span v-html="$t('components.createWallet.passwordCreate')" />
+        {{ $t('components.createWallet.passwordCreate') }}
       </v-title>
       <v-description>
         <span v-html="$t('components.createWallet.passwordDescription')" />

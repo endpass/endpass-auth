@@ -4,7 +4,7 @@
     @submit.prevent="onSubmit"
   >
     <v-title v-if="requesterUrl">
-      <span v-html="$t('components.passwordForm.applyConnectTo')" />
+      {{ $t('components.passwordForm.applyConnectTo') }}
       <v-link
         :href="requesterUrl"
         data-test="requester-url"

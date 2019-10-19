@@ -5,7 +5,7 @@
   >
     <form-item v-if="isServerMode && !isPublic">
       <v-title>
-        <span v-html="$t('components.serverModeSelect.identityServer')" />
+        {{ $t('components.serverModeSelect.identityServer') }}
       </v-title>
       <server-mode-select
         v-model="serverMode"
@@ -16,7 +16,7 @@
     </form-item>
     <template v-if="isDefaultMode">
       <v-title>
-        <span v-html="$t('components.auth.loginToContinue')" />
+        {{ $t('components.auth.loginToContinue') }}
       </v-title>
       <form-item v-if="error">
         <message

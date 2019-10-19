@@ -1,10 +1,10 @@
 <template>
   <form @submit.prevent="onSubmit">
     <v-title>
-      <span v-html="$t('components.createPassword.title')" />
+      {{ $t('components.createPassword.title') }}
     </v-title>
     <v-description>
-      <span v-html="$t('components.createPassword.description')" />
+      {{ $t('components.createPassword.description') }}
     </v-description>
 
     <form-item>
