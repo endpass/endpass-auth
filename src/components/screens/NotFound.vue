@@ -9,11 +9,12 @@
 <script>
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
-import { coreStore } from '@/store';
+import { accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'NotFound',
   coreStore,
+  accountsStore,
   data() {
     return {
       version: pkg.version,
@@ -23,7 +24,12 @@ export default {
   methods: {
     handleClose() {
       this.$options.coreStore.dialogClose();
+      this.$options.accountsStore.cancelAllChannels();
     },
+  },
+
+  mounted() {
+    this.$options.coreStore.dialogSendOpen();
   },
 
   components: {
