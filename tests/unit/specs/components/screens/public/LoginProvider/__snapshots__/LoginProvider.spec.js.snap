@@ -2,7 +2,7 @@
 
 exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `
 <loading-screen-stub isloading="true">
-  <v-frame-stub title="">
+  <v-frame-stub title="" isclosable="true">
     <login-provider-code-stub></login-provider-code-stub>
   </v-frame-stub>
 </loading-screen-stub>
