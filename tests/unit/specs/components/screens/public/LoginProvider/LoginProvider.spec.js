@@ -7,6 +7,8 @@ import permissionsService from '@/service/permissions';
 import userService from '@/service/user';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import { METHODS } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -160,6 +162,14 @@ describe('LoginProvider', () => {
       await global.flushPromises();
 
       expect(userService.getSettingsSkipPermission).toBeCalled();
+    });
+
+    it('should cancel and close login', () => {
+      wrapper = createWrapper();
+
+      wrapper.find('v-frame-stub').vm.$emit('close');
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });
   });
 });

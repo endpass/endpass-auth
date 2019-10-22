@@ -1,7 +1,7 @@
 <template>
   <v-frame
     :is-closable="isDialog"
-    @close="handleClose"
+    @close="onClose"
   >
     <div class="public-error v-lh-1-5">
       <h1>
@@ -40,7 +40,7 @@ export default {
   },
 
   methods: {
-    handleClose() {
+    onClose() {
       this.$options.accountsStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
