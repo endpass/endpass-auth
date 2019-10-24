@@ -70,10 +70,7 @@ export const WIDGET_RESIZE_DURATION = 300;
 export const LOCALES = ['en'];
 
 /**
- * @type {{
- *   kdf: string,
- *   n: number
- * }}
+ * @type {KDFEncryptOptions}
  */
 export const ENCRYPT_OPTIONS = {
   kdf: ENV.VUE_APP_KDF_PARAMS_KDF,
