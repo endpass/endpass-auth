@@ -46,9 +46,7 @@ class WalletController extends VuexModule {
       v3KeystoreChildWallet,
       encryptedSeed,
       seedKey,
-    } = await walletGen.createComplex(
-      password, /** @type {KDFEncryptOptions} */ (ENCRYPT_OPTIONS)
-    );
+    } = await walletGen.createComplex(password, ENCRYPT_OPTIONS);
     const info = {
       address: v3KeystoreHdWallet.address,
       type: WALLET_TYPES.HD_MAIN,
