@@ -34,7 +34,7 @@ exports[`SignIn render should correctly render SignIn component 1`] = `
 <form data-test="auth-form">
   <!---->
   <v-title-stub>
-    Log in to your Endpass account to access site actions
+    Log in to&nbsp;your Endpass account to&nbsp;access site actions
   </v-title-stub>
   <!---->
   <form-item-stub>
