@@ -6,7 +6,7 @@ declare namespace ENV {
   const VUE_APP_IS_PRODUCTION: boolean;
   const VUE_APP_GOOGLE_CLIENT_ID: string;
   const VUE_APP_GIT_CLIENT_ID: string;
-  const VUE_APP_KDF_PARAMS_KDF: string;
+  const VUE_APP_KDF_PARAMS_KDF: "scrypt";
   const VUE_APP_IS_E2E_CONNECT: boolean;
   const VUE_APP_KDF_PARAMS_N: number;
   const VUE_APP_SHOW_VERSION_INFO: boolean;
