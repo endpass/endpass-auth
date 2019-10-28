@@ -34,7 +34,7 @@ class WalletController extends VuexModule {
    *
    * @param {object} params
    * @param {string} params.password
-   * @return {Promise<{v3KeystoreHdWallet: v3Keystore, encryptedSeed: string, v3KeystoreChildWallet: v3Keystore, seedKey: string, info: keystoreInfo}>}
+   * @return {Promise<{v3KeystoreHdWallet: V3Keystore, encryptedSeed: string, v3KeystoreChildWallet: V3Keystore, seedKey: string, info: keystoreInfo}>}
    */
   @Action
   async generateWallet({ password }) {
@@ -64,10 +64,10 @@ class WalletController extends VuexModule {
   /**
    *
    * @param {object} params
-   * @param {v3Keystore} params.v3KeystoreHdWallet
+   * @param {V3Keystore} params.v3KeystoreHdWallet
    * @param {keystoreInfo} params.info
    * @param {string} params.encryptedSeed
-   * @param {v3Keystore} params.v3KeystoreChildWallet
+   * @param {V3Keystore} params.v3KeystoreChildWallet
    * @return {Promise<void>}
    */
   @Action
