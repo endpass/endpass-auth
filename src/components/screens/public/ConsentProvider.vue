@@ -3,7 +3,8 @@
   <v-frame
     v-else
     :title="$t('components.consentProvider.title')"
-    :is-closable="false"
+    :is-closable="$options.coreStore.isDialog"
+    @close="onClose"
   >
     <v-error
       v-if="error.show"
@@ -15,7 +16,7 @@
       :is-loading="isLoading"
       :scopes-list="scopesList"
       @submit="handleScopesSubmit"
-      @cancel="handleAuthCancel"
+      @cancel="onClose"
     />
   </v-frame>
 </template>
@@ -83,11 +84,13 @@ export default {
       }
     },
 
-    handleAuthCancel() {
+    onClose() {
       if (window.opener) {
         window.self.opener = window.self;
         window.self.close();
       }
+      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.dialogClose();
     },
 
     async loadScopes() {

@@ -2,7 +2,8 @@
   <loading-screen :is-loading="isLoading">
     <v-frame
       title=""
-      :is-closable="false"
+      :is-closable="$options.coreStore.isDialog"
+      @close="onClose"
     >
       <message
         v-if="error"
@@ -26,13 +27,14 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import LoginProviderCode from './LoginProviderCode';
 import VFrame from '@/components/common/VFrame';
 import Message from '@/components/common/Message';
-import { authStore, accountsStore } from '@/store';
+import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {
   name: 'LoginProvider',
 
   accountsStore,
   authStore,
+  coreStore,
 
   data: () => ({
     loginChallenge: null,
@@ -50,6 +52,13 @@ export default {
 
     currentUserEmail() {
       return get(this.settings, 'email');
+    },
+  },
+
+  methods: {
+    onClose() {
+      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.dialogClose();
     },
   },
 

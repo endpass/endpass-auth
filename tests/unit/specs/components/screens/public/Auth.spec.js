@@ -5,6 +5,8 @@ import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
 import createStoreModules from '@/store/createStoreModules';
 import createStore from '@/store/createStore';
+import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import { METHODS } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -111,6 +113,14 @@ describe('PublicAuth', () => {
       });
 
       expect(authStore.authParams).toBe(null);
+    });
+
+    it('should cancel and close auth', () => {
+      wrapper = createWrapper();
+
+      wrapper.find('v-modal-card-stub').vm.$emit('close');
+
+      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });
   });
 });

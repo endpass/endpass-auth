@@ -4,7 +4,7 @@
     @submit.prevent="onSubmit"
   >
     <v-title>
-      <span v-html="$t('components.auth.signUpToContinue')" />
+      {{ $t('components.auth.signUpToContinue') }}
     </v-title>
     <form-item v-if="error">
       <message
@@ -86,7 +86,7 @@
           target="_blank"
           is-underline
         >
-          <span v-html="$t('components.auth.termsOfService')" />
+          {{ $t('components.auth.termsOfService') }}
         </v-link>
         {{ $t('components.auth.and') }}
         <v-link
@@ -94,7 +94,7 @@
           target="_blank"
           is-underline
         >
-          <span v-html="$t('components.auth.privacyPolicy')" />
+          {{ $t('components.auth.privacyPolicy') }}
         </v-link>
       </div>
     </form-row>

@@ -83,7 +83,7 @@ describe('Auth', () => {
       expect(res).toEqual(
         Answer.createFail(
           ERRORS.AUTH_CANCELED_BY_USER,
-          'Authentication was canceled by user!',
+          i18n.t('store.auth.authCanceled'),
         ),
       );
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);

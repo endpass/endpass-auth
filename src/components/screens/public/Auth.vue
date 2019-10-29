@@ -1,11 +1,11 @@
 <template>
   <screen class="auth-screen-centered">
     <v-modal-card
-      :is-closable="false"
+      :is-closable="$options.coreStore.isDialog"
       @close="onCancel"
     >
       <composite-auth-form
-        :is-closable="false"
+        :is-closable="$options.coreStore.isDialog"
         :is-public="true"
         @cancel="onCancel"
         @authorize="onAuth"

@@ -2,8 +2,12 @@
 
 exports[`WalletSeed render should correctly render WalletSeed component 1`] = `
 <div>
-  <v-title-stub><span>Write down your Seed Phrase</span></v-title-stub>
-  <v-description-stub><span>The&nbsp;words below are&nbsp;called your&nbsp;seed phrase. They&nbsp;enable you to&nbsp;access your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. It&nbsp;is&nbsp;very important that these words down in&nbsp;order shown.</span></v-description-stub>
+  <v-title-stub>
+    Write your Seed Phrase below
+  </v-title-stub>
+  <v-description-stub>
+    The&nbsp;words below are&nbsp;called your Seed Phrase. It enables you accessing your&nbsp;Endpass and&nbsp;restore your&nbsp;wallet. Notice that&nbsp;the&nbsp;order of&nbsp;the&nbsp;words is&nbsp;significant, and it is&nbsp;recognized while&nbsp;checking.
+  </v-description-stub>
   <form-item-stub>
     <div>
       <ul data-test="seed-phrase" class="wallet-create-seed">
@@ -27,7 +31,7 @@ exports[`WalletSeed render should correctly render WalletSeed component 1`] = `
     </div>
     <div class="v-mb-24">
       <v-checkbox-stub name="checkbox" truevalue="true" data-test="wallet-seed-confirm">
-        I have written down the words and stored them in a secure place
+        Yes, I've written&nbsp;down the&nbsp;words and&nbsp;stored them in&nbsp;a&nbsp;secure place.
       </v-checkbox-stub>
     </div>
   </form-item-stub>

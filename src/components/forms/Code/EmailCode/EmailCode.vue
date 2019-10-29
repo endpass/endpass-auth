@@ -1,7 +1,7 @@
 <template>
   <form @submit.prevent="onSubmit">
     <v-title>
-      <span v-html="$t('components.emailCode.title')" />
+      {{ $t('components.emailCode.title') }}
     </v-title>
     <v-description>
       <span v-html="$t('components.emailCode.description', { email })" />

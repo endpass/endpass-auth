@@ -2,6 +2,6 @@
 
 exports[`LoginProviderCode render should correctly render LoginProviderCode screen 1`] = `
 <message-stub error="true" data-test="error-message">
-  You should provide login_challenge param in url, add it and try again!
+  Please, add the&nbsp;'login_challenge' param in&nbsp;URL, and try again!
 </message-stub>
 `;
