@@ -5,6 +5,7 @@
     "error": "Error",
     "cancel": "Cancel",
     "deny": "Deny",
+    "done": "Done",
     "logout": "Logout",
     "login": "Login",
     "sign": "Sign",
@@ -238,7 +239,8 @@
       "uploadDocument": {
         "default": "Something went wrong while\u00A0file uploading.",
         "exist": "File already exists, please upload another file.",
-        "sizeLimit": "Maximum file size exceeded",
+        "confirm": "Something went wrong while\u00A0document recognition. Please try again.",
+        "sizeLimit": "Maximum file size exceeded.",
         "invalidFile": "The\u00A0uploaded file is\u00A0broken or has an\u00A0unknown format."
       }
     }

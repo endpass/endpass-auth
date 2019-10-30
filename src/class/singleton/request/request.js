@@ -1,7 +1,7 @@
 // @ts-check
+import Request from '@endpass/class/Request';
 import http from './http';
 import { ORIGIN_HOST } from '@/constants';
-import Request from '@/class/Request';
 import defaultConfig from '@/class/singleton/request/defaultConfig';
 
 const config = {

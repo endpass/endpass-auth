@@ -10,14 +10,21 @@
       <div v-if="isLoading">
         <slot name="upload-progress" />
       </div>
-      <document-upload-field
-        v-else-if="file"
-        :message="fileReady"
-        :error="error"
-        :file-name="file.name"
-        class="document-upload-field-file"
-        @remove="onRemoveFile"
-      />
+      <div v-else-if="file || error">
+        <document-upload-field
+          v-if="file"
+          :message="fileReady"
+          :error="error"
+          :file-name="file.name"
+          class="document-upload-field-file"
+          @remove="onRemoveFile"
+        />
+        <v-description
+          v-if="error"
+          disabled
+          :description="error"
+        />
+      </div>
       <document-upload-message
         v-else
         :message="messageAdd"
@@ -29,6 +36,7 @@
 
 <script>
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
+import VDescription from '@endpass/ui/kit/VDescription';
 import DocumentUploadMessage from './DocumentUploadMessage';
 import DocumentUploadField from './DocumentUploadFileStatus';
 
@@ -80,6 +88,7 @@ export default {
     },
   },
   components: {
+    VDescription,
     VFileDropArea,
     DocumentUploadField,
     DocumentUploadMessage,

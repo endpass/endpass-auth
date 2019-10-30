@@ -3,7 +3,11 @@ import omitBy from 'lodash.omitby';
 import isNil from 'lodash.isnil';
 import request from '@/class/singleton/request';
 
-const baseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
+const docBaseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
+
+/**
+ * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
+ * */
 
 export default {
   /**
@@ -11,7 +15,7 @@ export default {
    * @returns {Promise}
    */
   async checkFile(file) {
-    return request.upload(`${baseURL}/file/check`, { file });
+    return request.upload(`${docBaseURL}/file/check`, { file });
   },
 
   /**
@@ -21,7 +25,7 @@ export default {
    */
   async createDocument({ type, description }) {
     const { message: docId } = await request.post(
-      baseURL,
+      docBaseURL,
       omitBy({ type, description }, isNil),
     );
 
@@ -33,25 +37,33 @@ export default {
   },
 
   /**
-   * @param {object} data
-   * @param {File} data.file
-   * @param {string} data.docId
-   * @param {{onUploadProgress: function}} config
+   * @param {string} docId
    * @return {Promise<void>}
    */
-  async uploadFrontFile({ file, docId }, config) {
-    return request.upload(`${baseURL}/${docId}/front`, { file }, config);
+  async confirmDocument(docId) {
+    return request.post(`${docBaseURL}/${docId}/confirm2`);
   },
 
   /**
    * @param {object} data
    * @param {File} data.file
    * @param {string} data.docId
-   * @param {{onUploadProgress: function}} config
+   * @param {AxiosRequestConfig} config
+   * @return {Promise<void>}
+   */
+  async uploadFrontFile({ file, docId }, config) {
+    return request.upload(`${docBaseURL}/${docId}/front`, { file }, config);
+  },
+
+  /**
+   * @param {object} data
+   * @param {File} data.file
+   * @param {string} data.docId
+   * @param {AxiosRequestConfig} config
    * @return {Promise<void>}
    */
   async uploadBackFile({ file, docId }, config) {
-    return request.upload(`${baseURL}/${docId}/back`, { file }, config);
+    return request.upload(`${docBaseURL}/${docId}/back`, { file }, config);
   },
 
   /**
@@ -60,6 +72,6 @@ export default {
    * @return {Promise<import('axios').AxiosResponse>}
    */
   getDocumentsUploadStatusById(id) {
-    return request.get(`${baseURL}/${id}/status/upload`);
+    return request.get(`${docBaseURL}/${id}/status/upload`);
   },
 };

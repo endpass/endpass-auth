@@ -1,8 +1,8 @@
 <template>
   <div class="document-upload-progress">
     <v-progress-circle
-      :progress="progress"
-      :is-label-visible="true"
+      :progress="progressValue"
+      :is-label-visible="isShowProgressLabel"
     />
     <span class="document-upload-progress-message">
       {{ label }}
@@ -12,6 +12,8 @@
 
 <script>
 import VProgressCircle from '@endpass/ui/kit/VProgressCircle';
+
+const MIN_PROGRESS_VALUE = 2;
 
 export default {
   name: 'DocumentUploadProgress',
@@ -25,6 +27,19 @@ export default {
       default: '',
     },
   },
+
+  computed: {
+    isShowProgressLabel() {
+      return !!this.progress;
+    },
+
+    progressValue() {
+      return this.progress < MIN_PROGRESS_VALUE
+        ? MIN_PROGRESS_VALUE
+        : this.progress;
+    },
+  },
+
   components: { VProgressCircle },
 };
 </script>

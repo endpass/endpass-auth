@@ -1,8 +1,7 @@
 <template>
   <v-modal-card
     data-test="document-create-modal"
-    :is-closable="!isLoading"
-    @close="onClose"
+    :is-closable="false"
   >
     <template slot="title">
       {{ $t('components.uploadDocument.uploadDocument') }}
@@ -26,18 +25,39 @@
     />
     <form-controls>
       <v-button
+        v-if="isFrontSide || isRecognitionError"
         skin="quaternary"
         :disabled="isLoading"
         data-test="cancel-button"
-        @click="onClose"
+        @click="handleClose"
       >
         {{ $t('global.cancel') }}
       </v-button>
       <v-button
+        v-else
+        skin="quaternary"
+        :disabled="isLoading"
+        data-test="done-button"
+        @click="onDoneClick"
+      >
+        {{ $t('global.done') }}
+      </v-button>
+
+      <v-button
+        v-if="isRecognitionError"
         :is-loading="isLoading"
-        :disabled="isLoading || !isReadySubmit"
+        :disabled="isLoading"
+        data-test="repeat-recognize-button"
+        @click="handleConfirm"
+      >
+        {{ $t('global.confirm') }}
+      </v-button>
+      <v-button
+        v-else
+        :is-loading="isLoading"
+        :disabled="!isReadySubmit"
         data-test="submit-button"
-        @click="uploadFile"
+        @click="onUploadFile"
       >
         {{ $t('global.confirm') }}
       </v-button>
@@ -71,6 +91,7 @@ export default {
     selectedFile: null,
     documentId: null,
     currentSide: DOCUMENT_SIDES.FRONT,
+    isRecognitionError: false,
   }),
 
   uploadController: null,
@@ -99,17 +120,26 @@ export default {
       if (uploadController.isUploading) {
         return this.$t('components.uploadDocument.uploading');
       }
-      if (uploadController.isProcessing) {
+      if (uploadController.isRecognize) {
         return this.$t('components.uploadDocument.recognition');
       }
       return '';
     },
     isLoading() {
       const { uploadController } = this.$options;
-      return uploadController.isUploading || uploadController.isProcessing;
+      return (
+        uploadController.isUploading ||
+        uploadController.isRecognize ||
+        uploadController.isConfirmation
+      );
     },
     isReadySubmit() {
-      return !!this.selectedFile && !this.error && this.errors.count() === 0;
+      return (
+        !this.isLoading &&
+        !!this.selectedFile &&
+        !this.error &&
+        this.errors.count() === 0
+      );
     },
   },
 
@@ -126,20 +156,34 @@ export default {
       }
     },
 
-    onClose() {
-      this.$emit('close', this.documentId);
+    async onDoneClick() {
+      await this.handleConfirm();
     },
 
-    nextSide() {
-      if (this.currentSide === DOCUMENT_SIDES.FRONT) {
+    handleClose() {
+      this.$emit('close');
+    },
+
+    async handleConfirm() {
+      try {
+        await this.$options.uploadController.confirmDocument(this.documentId);
+        this.$emit('confirm', this.documentId);
+      } catch (e) {
+        this.isRecognitionError = true;
+        this.error = e.message;
+      }
+    },
+
+    async nextStep() {
+      if (this.isFrontSide) {
         this.currentSide = DOCUMENT_SIDES.BACK;
         return;
       }
 
-      this.onClose();
+      await this.handleConfirm();
     },
 
-    async uploadFile() {
+    async onUploadFile() {
       try {
         const docId = await this.$options.uploadController.uploadDocument({
           file: this.selectedFile,
@@ -150,7 +194,7 @@ export default {
         this.documentId = docId;
         this.selectedFile = null;
 
-        this.nextSide();
+        await this.nextStep();
       } catch (e) {
         this.error = e.message;
       }

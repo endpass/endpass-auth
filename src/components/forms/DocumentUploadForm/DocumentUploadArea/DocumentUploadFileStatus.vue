@@ -2,9 +2,12 @@
   <div class="document-upload-field">
     <document-upload-message
       :message="message"
-      :class="{ 'document-upload-message-is-error': error }"
+      :is-error="!!error"
     />
-    <div class="document-upload-file">
+    <div
+      v-if="fileName"
+      class="document-upload-file"
+    >
       {{ fileName }}
       <v-svg-icon
         name="close"
@@ -13,16 +16,10 @@
         @click.native.prevent="$emit('remove', $event)"
       />
     </div>
-    <v-description
-      v-if="error"
-      disabled
-      :description="error"
-    />
   </div>
 </template>
 
 <script>
-import VDescription from '@endpass/ui/kit/VDescription';
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
 import DocumentUploadMessage from './DocumentUploadMessage';
 
@@ -43,7 +40,6 @@ export default {
     },
   },
   components: {
-    VDescription,
     VSvgIcon,
     DocumentUploadMessage,
   },
@@ -54,9 +50,5 @@ export default {
 .document-upload-file {
   margin: 6px 0;
   font-weight: bold;
-}
-
-.document-upload-message-is-error {
-  color: var(--endpass-ui-color-error);
 }
 </style>

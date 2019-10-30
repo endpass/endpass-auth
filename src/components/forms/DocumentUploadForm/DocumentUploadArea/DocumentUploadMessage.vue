@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div
+    class="document-upload-message"
+    :class="{ 'is-error': isError }"
+  >
     <div class="document-upload-message-text">
       {{ message }}
     </div>
@@ -25,6 +28,10 @@ export default {
       type: String,
       default: '',
     },
+    isError: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: { VDescription },
 };
@@ -36,6 +43,12 @@ export default {
   text-transform: uppercase;
   font-size: 14px;
   font-weight: bold;
+}
+
+.document-upload-message {
   color: var(--endpass-ui-color-primary-7);
+}
+.document-upload-message.is-error {
+  color: var(--endpass-ui-color-error);
 }
 </style>
