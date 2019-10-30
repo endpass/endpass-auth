@@ -41,7 +41,7 @@ export default {
    * @return {Promise<void>}
    */
   async confirmDocument(docId) {
-    return request.post(`${docBaseURL}/${docId}/confirm2`);
+    return request.post(`${docBaseURL}/${docId}/confirm`);
   },
 
   /**
