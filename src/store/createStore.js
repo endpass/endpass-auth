@@ -13,4 +13,4 @@ export default options => {
     strict: !ENV.VUE_APP_IS_PRODUCTION,
     ...options,
   });
-}
+};

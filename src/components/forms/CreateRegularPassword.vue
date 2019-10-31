@@ -112,8 +112,8 @@ export default {
     labelCode() {
       return this.email
         ? this.$i18n.t('components.createPassword.labelCodeEmail', {
-            email: this.email,
-          })
+          email: this.email,
+        })
         : this.$i18n.t('components.createPassword.labelCode');
     },
   },

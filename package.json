@@ -92,7 +92,7 @@
     "@babel/preset-typescript": "^7.6.0",
     "@commitlint/cli": "^8.2.0",
     "@commitlint/config-conventional": "^8.2.0",
-    "@endpass/eslint-plugin-endpass": "^0.2.7",
+    "@endpass/eslint-plugin-endpass": "^0.2.9",
     "@endpass/vue-i18n-translate-checker": "^0.0.6",
     "@semantic-release/changelog": "^3.0.5",
     "@semantic-release/git": "^7.0.17",
