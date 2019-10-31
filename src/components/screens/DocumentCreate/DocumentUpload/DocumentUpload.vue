@@ -6,79 +6,68 @@
     <template slot="title">
       {{ $t('components.uploadDocument.uploadDocument') }}
     </template>
-    <document-upload-form
-      v-model="selectedFile"
-      v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
-      :error="error || errors.first('file')"
-      :is-doc-type-selectable="isFrontSide"
+    <form-item>
+      <v-select
+        :value="documentType"
+        :options="$options.documentTypes"
+        :label="$t('components.uploadDocument.documentType')"
+        :disabled="!isFrontSide"
+        @input="onChangeDocType"
+      />
+    </form-item>
+    <form-item>
+      <v-file-drop-area
+        v-if="true"
+        v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
+        required
+        :accept="$options.ACCEPT"
+        :label="$t('components.uploadDocument.selectFile')"
+        :disabled="isLoading"
+        data-vv-as="File"
+        data-vv-name="file"
+        @change="onFileChange"
+      >
+        <document-upload-form
+          :error="error || errors.first('file')"
+          :is-front-side="isFrontSide"
+          :is-loading="isLoading"
+          :is-recognize="uploadController.isRecognize"
+          :is-uploading="uploadController.isUploading"
+          :progress-value="uploadController.progress"
+          :file="selectedFile"
+          @file-remove="onFileRemove"
+        />
+      </v-file-drop-area>
+      <document-upload-description />
+    </form-item>
+    <doc-upload-buttons
       :is-loading="isLoading"
-      :document-type="documentType"
-      :message-add="messageAdd"
-      :message-ready="messageReady"
-      :progress-value="progressValue"
-      :progress-label="progressLabel"
-      :accept="$options.ACCEPT"
-      data-vv-as="File"
-      data-vv-name="file"
-      @change-document-type="onChangeDocType"
-      @change-file="onChangeFile"
+      :is-front-side="isFrontSide"
+      :is-recognition-error="isRecognitionError"
+      :is-upload-ready="isUploadReady"
+      @cancel="onClose"
+      @done="handleConfirm"
+      @upload="onUploadFile"
     />
-    <form-controls>
-      <v-button
-        v-if="isFrontSide || isRecognitionError"
-        skin="quaternary"
-        :disabled="isLoading"
-        data-test="cancel-button"
-        @click="handleClose"
-      >
-        {{ $t('global.cancel') }}
-      </v-button>
-      <v-button
-        v-else
-        skin="quaternary"
-        :disabled="isLoading"
-        data-test="done-button"
-        @click="onDoneClick"
-      >
-        {{ $t('global.done') }}
-      </v-button>
-
-      <v-button
-        v-if="isRecognitionError"
-        :is-loading="isLoading"
-        :disabled="isLoading"
-        data-test="repeat-recognize-button"
-        @click="handleConfirm"
-      >
-        {{ $t('global.confirm') }}
-      </v-button>
-      <v-button
-        v-else
-        :is-loading="isLoading"
-        :disabled="!isReadySubmit"
-        data-test="submit-button"
-        @click="onUploadFile"
-      >
-        {{ $t('global.confirm') }}
-      </v-button>
-    </form-controls>
   </v-modal-card>
 </template>
 
 <script>
-import VButton from '@endpass/ui/kit/VButton';
+import VSelect from '@endpass/ui/kit/VSelect';
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import createUploadController from './DocumentUploadController';
 import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUploadForm';
+import FormItem from '@/components/common/FormItem';
 import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
-import FormControls from '@/components/common/FormControls';
-
-const ACCEPT =
-  '.png,.jpeg,.jpg,.pdf,.tif,.doc,.docx,image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-const VALIDATE_ACCEPT = ACCEPT.split(',')
-  .map(item => (item[0] === '.' ? item.substring(1) : item))
-  .join(',');
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
+import { CONSTANT_TRANSLATES } from '@/constants/translates';
+import {
+  ACCEPT,
+  VALIDATE_ACCEPT,
+  MAX_FILE_SIZE,
+} from './DocumentUploadConstants';
+import DocUploadButtons from '@/components/screens/DocumentCreate/DocumentUpload/DocUploadButtons';
+import DocumentUploadDescription from '@/components/screens/DocumentCreate/DocumentUpload/DocumentUploadDescription';
 
 export default {
   name: 'DocumentUpload',
@@ -86,6 +75,7 @@ export default {
   inject: ['$validator'],
 
   data: () => ({
+    uploadController: createUploadController(),
     error: null,
     documentType: DOC_TYPES.PASSPORT,
     selectedFile: null,
@@ -94,29 +84,27 @@ export default {
     isRecognitionError: false,
   }),
 
-  uploadController: null,
   ACCEPT,
   VALIDATE_ACCEPT,
 
+  documentTypes: [
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.PASSPORT],
+      val: DOC_TYPES.PASSPORT,
+    },
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.DRIVER_LICENSE],
+      val: DOC_TYPES.DRIVER_LICENSE,
+    },
+  ],
+
   computed: {
     isFrontSide() {
-      return this.currentSide === DOCUMENT_SIDES.FRONT;
-    },
-    messageAdd() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.addFile')
-        : this.$t('components.uploadDocument.addBackSide');
-    },
-    messageReady() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.readyForUpload')
-        : this.$t('components.uploadDocument.readyForUploadBack');
-    },
-    progressValue() {
-      return this.$options.uploadController.progress;
+      const ret = this.currentSide === DOCUMENT_SIDES.FRONT;
+      return ret;
     },
     progressLabel() {
-      const { uploadController } = this.$options;
+      const { uploadController } = this;
       if (uploadController.isUploading) {
         return this.$t('components.uploadDocument.uploading');
       }
@@ -126,14 +114,14 @@ export default {
       return '';
     },
     isLoading() {
-      const { uploadController } = this.$options;
+      const { uploadController } = this;
       return (
         uploadController.isUploading ||
         uploadController.isRecognize ||
         uploadController.isConfirmation
       );
     },
-    isReadySubmit() {
+    isUploadReady() {
       return (
         !this.isLoading &&
         !!this.selectedFile &&
@@ -149,24 +137,27 @@ export default {
       this.documentType = documentType;
     },
 
-    onChangeFile(file) {
+    onFileRemove() {
       this.error = null;
+      this.selectedFile = null;
+    },
+
+    onFileChange(files) {
+      const [file] = files;
+      this.error = null;
+      this.selectedFile = file;
       if (file && file.size > MAX_FILE_SIZE) {
         this.error = this.$t('components.uploadDocument.errorSizeLimit');
       }
     },
 
-    async onDoneClick() {
-      await this.handleConfirm();
-    },
-
-    handleClose() {
-      this.$emit('close');
+    onClose() {
+      this.$emit('cancel');
     },
 
     async handleConfirm() {
       try {
-        await this.$options.uploadController.confirmDocument(this.documentId);
+        await this.uploadController.confirmDocument(this.documentId);
         this.$emit('confirm', this.documentId);
       } catch (e) {
         this.isRecognitionError = true;
@@ -185,13 +176,12 @@ export default {
 
     async onUploadFile() {
       try {
-        const docId = await this.$options.uploadController.uploadDocument({
+        this.documentId = await this.uploadController.uploadDocument({
           file: this.selectedFile,
           type: this.documentType,
           docSide: this.currentSide,
         });
 
-        this.documentId = docId;
         this.selectedFile = null;
 
         await this.nextStep();
@@ -202,14 +192,17 @@ export default {
   },
 
   beforeCreate() {
-    this.$options.uploadController = createUploadController();
+    this.uploadController = createUploadController();
   },
 
   components: {
-    FormControls,
+    DocumentUploadDescription,
+    VSelect,
+    DocUploadButtons,
+    FormItem,
     DocumentUploadForm,
-    VButton,
     VModalCard,
+    VFileDropArea,
   },
 };
 </script>

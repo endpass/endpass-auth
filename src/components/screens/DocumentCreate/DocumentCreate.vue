@@ -1,8 +1,8 @@
 <template>
-  <screen @close="onClose">
+  <screen @close="onCancel">
     <document-upload
       @confirm="onConfirm"
-      @close="onClose"
+      @cancel="onCancel"
     />
   </screen>
 </template>
@@ -16,7 +16,7 @@ export default {
   name: 'DocumentCreate',
 
   methods: {
-    onClose() {
+    onCancel() {
       this.$options.documentCreateController.finishCreate();
     },
     onConfirm(documentId) {
