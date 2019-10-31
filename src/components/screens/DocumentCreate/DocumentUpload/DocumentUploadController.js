@@ -282,17 +282,15 @@ class DocumentUploadController extends VuexModule {
    */
   @Action
   async confirmDocument(docId) {
-    let res;
     try {
       this.isConfirmation = true;
-      res = await documentsService.confirmDocument(docId);
+      await documentsService.confirmDocument(docId);
     } catch (e) {
       e.message = i18n.t('store.error.uploadDocument.confirm');
       throw e;
     } finally {
       this.isConfirmation = false;
     }
-    return res;
   }
 }
 
