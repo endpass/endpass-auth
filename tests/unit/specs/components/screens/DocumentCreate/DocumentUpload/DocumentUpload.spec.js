@@ -4,6 +4,7 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 import DocumentUpload from '@/components/screens/DocumentCreate/DocumentUpload';
+import documentsService from '@/service/documents';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -32,10 +33,37 @@ describe('DocumentUpload', () => {
 
   it('should create new instance of uploadController for new component', () => {
     const wrapperSecond = createWrapper();
-    const { uploadController: checkController } = wrapperSecond.vm.$options;
+    const { uploadController: checkController } = wrapperSecond.vm;
 
     expect(checkController).not.toBe(null);
     expect(checkController).not.toBe(undefined);
-    expect(checkController).not.toBe(wrapper.vm.$options.uploadController);
+    expect(checkController).not.toBe(wrapper.vm.uploadController);
+  });
+
+  it('should show error, if confirm is not passed', async () => {
+    expect.assertions(1);
+
+    documentsService.confirmDocument.mockRejectedValueOnce(new Error());
+
+    const file = new File(['foo'], 'foo.jpg', {
+      type: 'image/jpeg',
+    });
+    wrapper.setData({
+      selectedFile: file,
+    });
+
+    await global.flushPromises();
+
+    wrapper.find('footer-buttons-stub').vm.$emit('upload');
+
+    await global.flushPromises();
+
+    wrapper.find('footer-buttons-stub').vm.$emit('done');
+
+    await global.flushPromises();
+
+    expect(wrapper.find('document-upload-form-stub').attributes().error).toBe(
+      i18n.t('store.error.uploadDocument.confirm'),
+    );
   });
 });

@@ -2,7 +2,7 @@ import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
-import ConnectError from '@endpass/class/ConnectError';
+import ConnectError from '@endpass/connect/ConnectError';
 import Network from '@endpass/class/Network';
 import identityService from '@/service/identity';
 import signer from '@/class/singleton/signer';

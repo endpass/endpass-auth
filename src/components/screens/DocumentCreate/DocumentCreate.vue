@@ -1,6 +1,9 @@
 <template>
-  <screen @close="onClose">
-    <document-upload @close="onClose" />
+  <screen @close="onCancel">
+    <document-upload
+      @confirm="onConfirm"
+      @cancel="onCancel"
+    />
   </screen>
 </template>
 
@@ -13,7 +16,10 @@ export default {
   name: 'DocumentCreate',
 
   methods: {
-    onClose(documentId) {
+    onCancel() {
+      this.$options.documentCreateController.finishCreate();
+    },
+    onConfirm(documentId) {
       this.$options.documentCreateController.finishCreate(documentId);
     },
   },

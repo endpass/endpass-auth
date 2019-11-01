@@ -56,10 +56,10 @@
 import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
 import WidgetHeader from './Header';
-import WidgetContent from './Content.vue';
-import WidgetAccounts from './Accounts.vue';
-import WidgetNewAccountForm from './NewAccountForm.vue';
-import TriggerButton from './TriggerButton.vue';
+import WidgetContent from './Content';
+import WidgetAccounts from './Accounts';
+import WidgetNewAccountForm from './NewAccountForm';
+import TriggerButton from './TriggerButton';
 import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {

@@ -3,6 +3,7 @@ import { VuexModule, Action, Module, Mutation } from 'vuex-class-modules';
 import get from 'lodash/get';
 import generators from '@endpass/utils/generators';
 import createController from '@/controllers/createController';
+import i18n from '@/locales/i18n';
 
 import documentsService from '@/service/documents';
 import TranslateObjectFactory from '@/class/TranslateObjectFactory';
@@ -16,12 +17,13 @@ const { $t, createGetters } = TranslateObjectFactory;
  *   back: { status: string },
  * }} DocumentUploadStatus
  * @typedef {typeof DOCUMENT_SIDES[keyof typeof DOCUMENT_SIDES]} DocSide
+ * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
  */
 
 /**
  * @type {{ [key: string]: string }} fields UserDocument object for upload
  */
-const codeErrors = createGetters({
+const uploadCodeErrors = createGetters({
   default: $t('store.error.uploadDocument.default'),
   409: $t('store.error.uploadDocument.exist'),
   406: $t('store.error.uploadDocument.sizeLimit'),
@@ -45,7 +47,6 @@ const CHECK_RECOGNIZE_TIMEOUT = 1000;
 @Module({ generateMutationSetters: true })
 class DocumentUploadController extends VuexModule {
   /**
-   *
    * @type {boolean}
    */
   isTimersPlay = false;
@@ -57,16 +58,19 @@ class DocumentUploadController extends VuexModule {
   };
 
   /**
-   *
    * @type {boolean}
    */
   isUploading = false;
 
   /**
-   *
    * @type {boolean}
    */
-  isProcessing = false;
+  isRecognize = false;
+
+  /**
+   * @type {boolean}
+   */
+  isConfirmation = false;
 
   /**
    * @type {string}
@@ -86,8 +90,12 @@ class DocumentUploadController extends VuexModule {
     );
   }
 
+  get isProcessing() {
+    return this.isUploading || this.isRecognize || this.isConfirmation;
+  }
+
   /**
-   * @return {{onUploadProgress: function}}
+   * @return {AxiosRequestConfig}
    */
   getUploadRequestConfig() {
     return {
@@ -143,13 +151,13 @@ class DocumentUploadController extends VuexModule {
     )) {
       const val = this.progressValues[type];
       const nextValue = val + perSecond;
+      if (nextValue >= 100 || !this.isTimersPlay) {
+        break;
+      }
       this.updateProgress({
         type,
         nextValue,
       });
-      if (nextValue >= 100 || !this.isTimersPlay) {
-        break;
-      }
     }
   }
 
@@ -233,7 +241,7 @@ class DocumentUploadController extends VuexModule {
    */
   @Action
   async uploadDocument({ file, type, docSide }) {
-    if (this.isUploading || this.isProcessing) {
+    if (this.isUploading || this.isRecognize) {
       throw new Error('Previous file uploading is not finished');
     }
 
@@ -253,7 +261,7 @@ class DocumentUploadController extends VuexModule {
       });
 
       this.isUploading = false;
-      this.isProcessing = true;
+      this.isRecognize = true;
 
       await this.stepRecognize({
         docSide,
@@ -261,15 +269,32 @@ class DocumentUploadController extends VuexModule {
       });
     } catch (e) {
       const respCode = e.response && e.response.status;
-      e.message = codeErrors[respCode] || codeErrors.default;
+      e.message = uploadCodeErrors[respCode] || uploadCodeErrors.default;
       throw e;
     } finally {
       this.dropProgress();
       this.isUploading = false;
-      this.isProcessing = false;
+      this.isRecognize = false;
       this.isTimersPlay = false;
     }
     return docId;
+  }
+
+  /**
+   * @param {string} docId
+   * @return {Promise<void>}
+   */
+  @Action
+  async confirmDocument(docId) {
+    try {
+      this.isConfirmation = true;
+      await documentsService.confirmDocument(docId);
+    } catch (e) {
+      e.message = i18n.t('store.error.uploadDocument.confirm');
+      throw e;
+    } finally {
+      this.isConfirmation = false;
+    }
   }
 }
 

@@ -1,64 +1,74 @@
 <template>
   <v-modal-card
     data-test="document-create-modal"
-    :is-closable="!isLoading"
-    @close="onClose"
+    :is-closable="false"
   >
     <template slot="title">
       {{ $t('components.uploadDocument.uploadDocument') }}
     </template>
-    <document-upload-form
-      v-model="selectedFile"
-      v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
-      :error="error || errors.first('file')"
-      :is-doc-type-selectable="isFrontSide"
-      :is-loading="isLoading"
-      :document-type="documentType"
-      :message-add="messageAdd"
-      :message-ready="messageReady"
-      :progress-value="progressValue"
-      :progress-label="progressLabel"
-      :accept="$options.ACCEPT"
-      data-vv-as="File"
-      data-vv-name="file"
-      @change-document-type="onChangeDocType"
-      @change-file="onChangeFile"
-    />
-    <form-controls>
-      <v-button
-        skin="quaternary"
+    <form-item>
+      <v-select
+        :value="documentType"
+        :options="$options.documentTypes"
+        :label="$t('components.uploadDocument.documentType')"
+        :disabled="!isFrontSide"
+        @input="onChangeDocType"
+      />
+    </form-item>
+    <form-item>
+      <v-file-drop-area
+        v-if="true"
+        v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
+        required
+        :accept="$options.ACCEPT"
+        :label="$t('components.uploadDocument.selectFile')"
         :disabled="isLoading"
-        data-test="cancel-button"
-        @click="onClose"
+        data-vv-as="File"
+        data-vv-name="file"
+        @change="onFileChange"
       >
-        {{ $t('global.cancel') }}
-      </v-button>
-      <v-button
-        :is-loading="isLoading"
-        :disabled="isLoading || !isReadySubmit"
-        data-test="submit-button"
-        @click="uploadFile"
-      >
-        {{ $t('global.confirm') }}
-      </v-button>
-    </form-controls>
+        <document-upload-form
+          :error="error || errors.first('file')"
+          :is-front-side="isFrontSide"
+          :is-loading="isLoading"
+          :is-recognize="uploadController.isRecognize"
+          :is-uploading="uploadController.isUploading"
+          :progress-value="uploadController.progress"
+          :file="selectedFile"
+          @file-remove="onFileRemove"
+        />
+      </v-file-drop-area>
+      <document-upload-description />
+    </form-item>
+    <footer-buttons
+      :is-loading="isLoading"
+      :is-front-side="isFrontSide"
+      :is-recognition-error="isRecognitionError"
+      :is-upload-ready="isUploadReady"
+      @cancel="onClose"
+      @done="handleConfirm"
+      @upload="onUploadFile"
+      @repeat="handleConfirm"
+    />
   </v-modal-card>
 </template>
 
 <script>
-import VButton from '@endpass/ui/kit/VButton';
+import VSelect from '@endpass/ui/kit/VSelect';
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import createUploadController from './DocumentUploadController';
+import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUploadForm';
+import FormItem from '@/components/common/FormItem';
 import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
-import FormControls from '@/components/common/FormControls';
-
-const ACCEPT =
-  '.png,.jpeg,.jpg,.pdf,.tif,.doc,.docx,image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-const VALIDATE_ACCEPT = ACCEPT.split(',')
-  .map(item => (item[0] === '.' ? item.substring(1) : item))
-  .join(',');
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
+import { CONSTANT_TRANSLATES } from '@/constants/translates';
+import {
+  ACCEPT,
+  VALIDATE_ACCEPT,
+  MAX_FILE_SIZE,
+} from './DocumentUploadConstants';
+import createUploadController from './DocumentUploadController';
+import FooterButtons from './FooterButtons';
+import DocumentUploadDescription from './DocumentUploadDescription';
 
 export default {
   name: 'DocumentUpload',
@@ -66,91 +76,107 @@ export default {
   inject: ['$validator'],
 
   data: () => ({
+    uploadController: createUploadController(),
     error: null,
     documentType: DOC_TYPES.PASSPORT,
     selectedFile: null,
     documentId: null,
     currentSide: DOCUMENT_SIDES.FRONT,
+    isRecognitionError: false,
   }),
 
-  uploadController: null,
   ACCEPT,
   VALIDATE_ACCEPT,
+
+  documentTypes: [
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.PASSPORT],
+      val: DOC_TYPES.PASSPORT,
+    },
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.DRIVER_LICENSE],
+      val: DOC_TYPES.DRIVER_LICENSE,
+    },
+  ],
 
   computed: {
     isFrontSide() {
       return this.currentSide === DOCUMENT_SIDES.FRONT;
     },
-    messageAdd() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.addFile')
-        : this.$t('components.uploadDocument.addBackSide');
-    },
-    messageReady() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.readyForUpload')
-        : this.$t('components.uploadDocument.readyForUploadBack');
-    },
-    progressValue() {
-      return this.$options.uploadController.progress;
-    },
-    progressLabel() {
-      const { uploadController } = this.$options;
-      if (uploadController.isUploading) {
-        return this.$t('components.uploadDocument.uploading');
-      }
-      if (uploadController.isProcessing) {
-        return this.$t('components.uploadDocument.recognition');
-      }
-      return '';
-    },
+
     isLoading() {
-      const { uploadController } = this.$options;
-      return uploadController.isUploading || uploadController.isProcessing;
+      return this.uploadController.isProcessing;
     },
-    isReadySubmit() {
-      return !!this.selectedFile && !this.error && this.errors.count() === 0;
+
+    isUploadReady() {
+      return (
+        !this.isLoading &&
+        !!this.selectedFile &&
+        !this.error &&
+        this.errors.count() === 0
+      );
     },
   },
 
   methods: {
-    onChangeDocType(documentType) {
+    dropError() {
       this.error = null;
+      this.$validator.errors.remove('file');
+    },
+
+    onChangeDocType(documentType) {
+      this.dropError();
       this.documentType = documentType;
     },
 
-    onChangeFile(file) {
-      this.error = null;
+    onFileRemove() {
+      this.dropError();
+      this.selectedFile = null;
+    },
+
+    onFileChange(files) {
+      const [file] = files;
+      this.dropError();
+      this.selectedFile = file;
       if (file && file.size > MAX_FILE_SIZE) {
         this.error = this.$t('components.uploadDocument.errorSizeLimit');
       }
     },
 
     onClose() {
-      this.$emit('close', this.documentId);
+      this.$emit('cancel');
     },
 
-    nextSide() {
-      if (this.currentSide === DOCUMENT_SIDES.FRONT) {
+    async handleConfirm() {
+      try {
+        await this.uploadController.confirmDocument(this.documentId);
+        this.$emit('confirm', this.documentId);
+      } catch (e) {
+        this.isRecognitionError = true;
+        this.error = e.message;
+      }
+    },
+
+    async nextStep() {
+      if (this.isFrontSide) {
         this.currentSide = DOCUMENT_SIDES.BACK;
         return;
       }
 
-      this.onClose();
+      await this.handleConfirm();
     },
 
-    async uploadFile() {
+    async onUploadFile() {
       try {
-        const docId = await this.$options.uploadController.uploadDocument({
+        this.documentId = await this.uploadController.uploadDocument({
           file: this.selectedFile,
           type: this.documentType,
           docSide: this.currentSide,
         });
 
-        this.documentId = docId;
         this.selectedFile = null;
 
-        this.nextSide();
+        await this.nextStep();
       } catch (e) {
         this.error = e.message;
       }
@@ -158,14 +184,17 @@ export default {
   },
 
   beforeCreate() {
-    this.$options.uploadController = createUploadController();
+    this.uploadController = createUploadController();
   },
 
   components: {
-    FormControls,
+    DocumentUploadDescription,
+    VSelect,
+    FooterButtons,
+    FormItem,
     DocumentUploadForm,
-    VButton,
     VModalCard,
+    VFileDropArea,
   },
 };
 </script>
