@@ -11,6 +11,6 @@ exports[`DocumentUpload should match snapshot 1`] = `
     </v-file-drop-area-stub>
     <document-upload-description-stub></document-upload-description-stub>
   </form-item-stub>
-  <doc-upload-buttons-stub isfrontside="true"></doc-upload-buttons-stub>
+  <document-upload-buttons-stub isfrontside="true"></document-upload-buttons-stub>
 </v-modal-card-stub>
 `;
