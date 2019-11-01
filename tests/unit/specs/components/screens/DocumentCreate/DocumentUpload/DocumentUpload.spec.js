@@ -54,16 +54,16 @@ describe('DocumentUpload', () => {
 
     await global.flushPromises();
 
-    wrapper.find('document-upload-buttons-stub').vm.$emit('upload');
+    wrapper.find('footer-buttons-stub').vm.$emit('upload');
 
     await global.flushPromises();
 
-    wrapper.find('document-upload-buttons-stub').vm.$emit('done');
+    wrapper.find('footer-buttons-stub').vm.$emit('done');
 
     await global.flushPromises();
 
     expect(wrapper.find('document-upload-form-stub').attributes().error).toBe(
-      'Something went wrong while document recognition. Please try again.',
+      i18n.t('store.error.uploadDocument.confirm'),
     );
   });
 });

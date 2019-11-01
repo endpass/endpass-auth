@@ -7,10 +7,10 @@ exports[`DocumentUpload should match snapshot 1`] = `
   </form-item-stub>
   <form-item-stub>
     <v-file-drop-area-stub label="Select File" required="" accept=".png,.jpeg,.jpg,.pdf,.tif,.doc,.docx,image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" data-vv-as="File" data-vv-name="file">
-      <document-upload-form-stub isfrontside="true" progressvalue="0"></document-upload-form-stub>
+      <document-upload-form-stub is-front-side="true" progress-value="0"></document-upload-form-stub>
     </v-file-drop-area-stub>
     <document-upload-description-stub></document-upload-description-stub>
   </form-item-stub>
-  <document-upload-buttons-stub isfrontside="true"></document-upload-buttons-stub>
+  <footer-buttons-stub is-front-side="true"></footer-buttons-stub>
 </v-modal-card-stub>
 `;

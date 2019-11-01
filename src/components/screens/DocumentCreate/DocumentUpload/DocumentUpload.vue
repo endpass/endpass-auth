@@ -40,7 +40,7 @@
       </v-file-drop-area>
       <document-upload-description />
     </form-item>
-    <document-upload-buttons
+    <footer-buttons
       :is-loading="isLoading"
       :is-front-side="isFrontSide"
       :is-recognition-error="isRecognitionError"
@@ -48,6 +48,7 @@
       @cancel="onClose"
       @done="handleConfirm"
       @upload="onUploadFile"
+      @repeat="handleConfirm"
     />
   </v-modal-card>
 </template>
@@ -66,7 +67,7 @@ import {
   MAX_FILE_SIZE,
 } from './DocumentUploadConstants';
 import createUploadController from './DocumentUploadController';
-import DocumentUploadButtons from './DocumentUploadButtons';
+import FooterButtons from './FooterButtons';
 import DocumentUploadDescription from './DocumentUploadDescription';
 
 export default {
@@ -102,14 +103,11 @@ export default {
     isFrontSide() {
       return this.currentSide === DOCUMENT_SIDES.FRONT;
     },
+
     isLoading() {
-      const { uploadController } = this;
-      return (
-        uploadController.isUploading ||
-        uploadController.isRecognize ||
-        uploadController.isConfirmation
-      );
+      return this.uploadController.isProcessing;
     },
+
     isUploadReady() {
       return (
         !this.isLoading &&
@@ -125,6 +123,7 @@ export default {
       this.error = null;
       this.$validator.errors.remove('file');
     },
+
     onChangeDocType(documentType) {
       this.dropError();
       this.documentType = documentType;
@@ -191,7 +190,7 @@ export default {
   components: {
     DocumentUploadDescription,
     VSelect,
-    DocumentUploadButtons,
+    FooterButtons,
     FormItem,
     DocumentUploadForm,
     VModalCard,

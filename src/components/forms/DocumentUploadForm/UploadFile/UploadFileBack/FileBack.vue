@@ -1,6 +1,6 @@
 <template>
   <div>
-    <upload-title :title="$t('components.uploadDocument.addFrontFile')" />
+    <upload-title :title="$t('components.uploadDocument.addBackFile')" />
     <v-description
       disabled
       :description="$t('components.uploadDocument.orDrop')"
@@ -10,10 +10,10 @@
 
 <script>
 import VDescription from '@endpass/ui/kit/VDescription';
-import UploadTitle from './shared/UploadTitle';
+import UploadTitle from '@/components/forms/DocumentUploadForm/shared/UploadTitle';
 
 export default {
-  name: 'FileFront',
+  name: 'FileBack',
 
   components: {
     UploadTitle,

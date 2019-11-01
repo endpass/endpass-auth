@@ -1,14 +1,25 @@
 <template>
-  <component
-    :is="currentForm"
-    v-bind="$props"
-    v-on="$listeners"
-  />
+  <div>
+    <upload-title
+      :title="$t('global.error')"
+      :is-error="!!error"
+    />
+    <file-selected
+      v-if="file"
+      :file="file"
+      v-on="$listeners"
+    />
+    <v-description
+      disabled
+      :description="error"
+    />
+  </div>
 </template>
 
 <script>
-import ErrorFile from './ErrorFile';
-import ErrorRecognize from './ErrorRecognize';
+import VDescription from '@endpass/ui/kit/VDescription';
+import UploadTitle from './shared/UploadTitle';
+import FileSelected from './shared/FileSelected';
 
 export default {
   name: 'UploadError',
@@ -24,14 +35,10 @@ export default {
     },
   },
 
-  computed: {
-    currentForm() {
-      if (!this.file) {
-        return ErrorRecognize;
-      }
-
-      return ErrorFile;
-    },
+  components: {
+    FileSelected,
+    UploadTitle,
+    VDescription,
   },
 };
 </script>

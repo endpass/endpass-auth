@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import UploadTitle from './shared/UploadTitle';
-import FileSelected from './shared/FileSelected';
+import UploadTitle from '@/components/forms/DocumentUploadForm/shared/UploadTitle';
+import FileSelected from '@/components/forms/DocumentUploadForm/shared/FileSelected';
 
 export default {
   name: 'FileFrontSelected',

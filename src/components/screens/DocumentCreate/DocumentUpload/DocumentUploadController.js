@@ -90,6 +90,10 @@ class DocumentUploadController extends VuexModule {
     );
   }
 
+  get isProcessing() {
+    return this.isUploading || this.isRecognize || this.isConfirmation;
+  }
+
   /**
    * @return {AxiosRequestConfig}
    */
