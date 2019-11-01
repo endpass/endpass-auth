@@ -33,15 +33,15 @@ describe('DocumentUpload', () => {
 
   it('should create new instance of uploadController for new component', () => {
     const wrapperSecond = createWrapper();
-    const { uploadController: checkController } = wrapperSecond.vm.$options;
+    const { uploadController: checkController } = wrapperSecond.vm;
 
     expect(checkController).not.toBe(null);
     expect(checkController).not.toBe(undefined);
-    expect(checkController).not.toBe(wrapper.vm.$options.uploadController);
+    expect(checkController).not.toBe(wrapper.vm.uploadController);
   });
 
   it('should show error, if confirm is not passed', async () => {
-    expect.assertions(3);
+    expect.assertions(1);
 
     documentsService.confirmDocument.mockRejectedValueOnce(new Error());
 
@@ -54,20 +54,13 @@ describe('DocumentUpload', () => {
 
     await global.flushPromises();
 
-    wrapper.find('[data-test=submit-button]').vm.$emit('click');
+    wrapper.find('document-upload-buttons-stub').vm.$emit('upload');
 
     await global.flushPromises();
 
-    wrapper.find('[data-test=done-button]').vm.$emit('click');
+    wrapper.find('document-upload-buttons-stub').vm.$emit('done');
 
     await global.flushPromises();
-
-    expect(
-      wrapper.find('[data-test=repeat-recognize-button]').attributes().disabled,
-    ).toBeFalsy();
-    expect(
-      wrapper.find('[data-test=cancel-button]').attributes().disabled,
-    ).toBeFalsy();
 
     expect(wrapper.find('document-upload-form-stub').attributes().error).toBe(
       'Something went wrong while document recognition. Please try again.',

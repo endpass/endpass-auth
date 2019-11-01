@@ -7,13 +7,9 @@
 </template>
 
 <script>
-import FileFront from './FileFront';
-import FileFrontSelected from './FileFrontSelected';
-import ErrorFile from './ErrorFile';
-import ErrorRecognize from './ErrorRecognize';
-import FileBackSelected from './FileBackSelected';
-import FileBack from './FileBack';
 import UploadProgress from './UploadProgress';
+import UploadError from './UploadError';
+import UploadFile from './UploadFile';
 
 export default {
   name: 'DocumentUploadForm',
@@ -51,35 +47,14 @@ export default {
 
   computed: {
     currentForm() {
-      if (this.isLoading) {
-        return UploadProgress;
+      switch (true) {
+        case this.isLoading:
+          return UploadProgress;
+        case !!this.error:
+          return UploadError;
+        default:
+          return UploadFile;
       }
-
-      if (!this.file && this.error) {
-        return ErrorRecognize;
-      }
-
-      if (this.error && this.file) {
-        return ErrorFile;
-      }
-
-      if (this.file && this.isFrontSide) {
-        return FileFrontSelected;
-      }
-
-      if (this.file && !this.isFrontSide) {
-        return FileBackSelected;
-      }
-
-      if (!this.file && this.isFrontSide) {
-        return FileFront;
-      }
-
-      if (!this.file && !this.isFrontSide) {
-        return FileBack;
-      }
-
-      return FileFront;
     },
   },
 };

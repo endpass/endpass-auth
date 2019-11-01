@@ -40,7 +40,7 @@
       </v-file-drop-area>
       <document-upload-description />
     </form-item>
-    <doc-upload-buttons
+    <document-upload-buttons
       :is-loading="isLoading"
       :is-front-side="isFrontSide"
       :is-recognition-error="isRecognitionError"
@@ -56,7 +56,6 @@
 import VSelect from '@endpass/ui/kit/VSelect';
 import VModalCard from '@endpass/ui/kit/VModalCard';
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
-import createUploadController from './DocumentUploadController';
 import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUploadForm';
 import FormItem from '@/components/common/FormItem';
 import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
@@ -66,8 +65,9 @@ import {
   VALIDATE_ACCEPT,
   MAX_FILE_SIZE,
 } from './DocumentUploadConstants';
-import DocUploadButtons from '@/components/screens/DocumentCreate/DocumentUpload/DocUploadButtons';
-import DocumentUploadDescription from '@/components/screens/DocumentCreate/DocumentUpload/DocumentUploadDescription';
+import createUploadController from './DocumentUploadController';
+import DocumentUploadButtons from './DocumentUploadButtons';
+import DocumentUploadDescription from './DocumentUploadDescription';
 
 export default {
   name: 'DocumentUpload',
@@ -100,18 +100,7 @@ export default {
 
   computed: {
     isFrontSide() {
-      const ret = this.currentSide === DOCUMENT_SIDES.FRONT;
-      return ret;
-    },
-    progressLabel() {
-      const { uploadController } = this;
-      if (uploadController.isUploading) {
-        return this.$t('components.uploadDocument.uploading');
-      }
-      if (uploadController.isRecognize) {
-        return this.$t('components.uploadDocument.recognition');
-      }
-      return '';
+      return this.currentSide === DOCUMENT_SIDES.FRONT;
     },
     isLoading() {
       const { uploadController } = this;
@@ -132,19 +121,23 @@ export default {
   },
 
   methods: {
-    onChangeDocType(documentType) {
+    dropError() {
       this.error = null;
+      this.$validator.errors.remove('file');
+    },
+    onChangeDocType(documentType) {
+      this.dropError();
       this.documentType = documentType;
     },
 
     onFileRemove() {
-      this.error = null;
+      this.dropError();
       this.selectedFile = null;
     },
 
     onFileChange(files) {
       const [file] = files;
-      this.error = null;
+      this.dropError();
       this.selectedFile = file;
       if (file && file.size > MAX_FILE_SIZE) {
         this.error = this.$t('components.uploadDocument.errorSizeLimit');
@@ -198,7 +191,7 @@ export default {
   components: {
     DocumentUploadDescription,
     VSelect,
-    DocUploadButtons,
+    DocumentUploadButtons,
     FormItem,
     DocumentUploadForm,
     VModalCard,

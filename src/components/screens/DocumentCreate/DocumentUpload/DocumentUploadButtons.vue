@@ -45,7 +45,7 @@ import VButton from '@endpass/ui/kit/VButton';
 import FormControls from '@/components/common/FormControls';
 
 export default {
-  name: 'DocUploadButtons',
+  name: 'DocumentUploadButtons',
 
   props: {
     isFrontSide: {
