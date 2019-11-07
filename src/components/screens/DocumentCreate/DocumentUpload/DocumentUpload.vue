@@ -46,7 +46,7 @@
       :is-recognition-error="isRecognitionError"
       :is-upload-ready="isUploadReady"
       @cancel="onClose"
-      @done="handleConfirm"
+      @done="onDone"
       @upload="onUploadFile"
       @repeat="handleConfirm"
     />
@@ -147,6 +147,11 @@ export default {
       this.$emit('cancel');
     },
 
+    async onDone() {
+      this.uploadController.dropProgress();
+      await this.handleConfirm();
+    },
+
     async handleConfirm() {
       try {
         await this.uploadController.confirmDocument(this.documentId);
@@ -172,6 +177,7 @@ export default {
           file: this.selectedFile,
           type: this.documentType,
           docSide: this.currentSide,
+          isUploadOnly: this.isFrontSide,
         });
 
         this.selectedFile = null;
