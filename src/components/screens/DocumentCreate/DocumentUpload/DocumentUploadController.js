@@ -11,6 +11,8 @@ import { UPLOAD_STATUSES, DOCUMENT_SIDES } from '@/constants';
 
 const { $t, createGetters } = TranslateObjectFactory;
 
+const INCREMENT_EDGE = 0.4;
+
 /**
  * @typedef {{
  *   front: { status: string },
@@ -70,7 +72,7 @@ class DocumentUploadController extends VuexModule {
   /**
    * @type {boolean}
    */
-  isConfirmation = false;
+  isUploadOnly = false;
 
   /**
    * @type {string}
@@ -83,6 +85,14 @@ class DocumentUploadController extends VuexModule {
    */
   get progress() {
     const { progressValues } = this;
+
+    if (this.isUploadOnly) {
+      return Math.floor(
+        progressValues[PROGRESS_TYPES.CHECK] * 0.3 +
+          progressValues[PROGRESS_TYPES.UPLOAD] * 0.7,
+      );
+    }
+
     return Math.floor(
       progressValues[PROGRESS_TYPES.CHECK] * 0.1 +
         progressValues[PROGRESS_TYPES.UPLOAD] * 0.4 +
@@ -91,7 +101,7 @@ class DocumentUploadController extends VuexModule {
   }
 
   get isProcessing() {
-    return this.isUploading || this.isRecognize || this.isConfirmation;
+    return this.isUploading || this.isRecognize;
   }
 
   /**
@@ -137,6 +147,16 @@ class DocumentUploadController extends VuexModule {
     this.progressValues[PROGRESS_TYPES.UPLOAD] = 0;
   }
 
+  @Mutation
+  stopProgress() {
+    this.isTimersPlay = false;
+  }
+
+  @Mutation
+  startProgress() {
+    this.isTimersPlay = true;
+  }
+
   /**
    * @param {object} props
    * @param {string} props.type
@@ -150,7 +170,10 @@ class DocumentUploadController extends VuexModule {
       DEFAULT_TIMER_PROGRESS,
     )) {
       const val = this.progressValues[type];
-      const nextValue = val + perSecond;
+      let nextValue = val + perSecond;
+      if (nextValue > 90) {
+        nextValue = val + INCREMENT_EDGE;
+      }
       if (nextValue >= 100 || !this.isTimersPlay) {
         break;
       }
@@ -207,11 +230,10 @@ class DocumentUploadController extends VuexModule {
   /**
    * @param {object} props
    * @param {string} props.docId
-   * @param {DocSide} props.docSide
    * @return {Promise<void>}
    */
   @Action
-  async stepRecognize({ docId, docSide }) {
+  async stepRecognize({ docId }) {
     this.startTimerProgress({
       type: PROGRESS_TYPES.RECOGNIZE,
       time: 15000,
@@ -222,10 +244,15 @@ class DocumentUploadController extends VuexModule {
       CHECK_RECOGNIZE_TIMEOUT,
     )) {
       const data = await documentsService.getDocumentsUploadStatusById(docId);
-      const isProcessing =
-        get(data, `${docSide}.status`) === UPLOAD_STATUSES.PROCESSING;
+      const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
+      const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
 
-      if (!isProcessing) {
+      const isFrontDone = frontSideStatus !== UPLOAD_STATUSES.PROCESSING;
+      const isBackDone =
+        backSideStatus === UPLOAD_STATUSES.NO_CONTENT ||
+        backSideStatus !== UPLOAD_STATUSES.PROCESSING;
+
+      if (isFrontDone && isBackDone) {
         break;
       }
     }
@@ -238,15 +265,19 @@ class DocumentUploadController extends VuexModule {
    * @param {string} fields.type UserDocument type
    * @param {DocSide} fields.docSide UserDocument side
    * @param {File} fields.file UserDocument file
+   * @param {boolean} fields.isUploadOnly flag for correct progress value
    */
   @Action
-  async uploadDocument({ file, type, docSide }) {
+  async uploadDocument({ file, type, docSide, isUploadOnly }) {
     if (this.isUploading || this.isRecognize) {
       throw new Error('Previous file uploading is not finished');
     }
 
+    this.isUploadOnly = isUploadOnly;
     this.isUploading = true;
-    this.isTimersPlay = true;
+    this.dropProgress();
+    this.startProgress();
+
     let docId;
     try {
       docId = await this.stepPrepareDocument({
@@ -261,21 +292,13 @@ class DocumentUploadController extends VuexModule {
       });
 
       this.isUploading = false;
-      this.isRecognize = true;
-
-      await this.stepRecognize({
-        docSide,
-        docId,
-      });
     } catch (e) {
       const respCode = e.response && e.response.status;
       e.message = uploadCodeErrors[respCode] || uploadCodeErrors.default;
       throw e;
     } finally {
-      this.dropProgress();
       this.isUploading = false;
-      this.isRecognize = false;
-      this.isTimersPlay = false;
+      this.stopProgress();
     }
     return docId;
   }
@@ -287,13 +310,19 @@ class DocumentUploadController extends VuexModule {
   @Action
   async confirmDocument(docId) {
     try {
-      this.isConfirmation = true;
+      this.isRecognize = true;
+      this.stopProgress();
+      this.startProgress();
+
       await documentsService.confirmDocument(docId);
+
+      await this.stepRecognize({ docId });
     } catch (e) {
       e.message = i18n.t('store.error.uploadDocument.confirm');
       throw e;
     } finally {
-      this.isConfirmation = false;
+      this.stopProgress();
+      this.isRecognize = false;
     }
   }
 }
