@@ -10,7 +10,6 @@ const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
 class DocumentCreateController extends VuexModule {
-  // TODO: add cancelCreate
   @Action
   cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
