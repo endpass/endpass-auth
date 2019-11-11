@@ -103,10 +103,10 @@ export const CHALLENGE_TYPES = {
 
 /**
  * @type {{
- *   ERRORED: string,
- *   PROCESSING: string,
- *   NO_CONTENT: string,
- *   UPLOADED: string
+ *  NO_CONTENT: 'NoContent',
+ *  UPLOADED: 'Uploaded',
+ *  PROCESSING: 'Processing',
+ *  ERRORED: 'Errored',
  * }}
  */
 export const UPLOAD_STATUSES = {

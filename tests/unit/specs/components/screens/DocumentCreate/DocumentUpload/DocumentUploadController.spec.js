@@ -1,4 +1,4 @@
-import DocumentUploadController from '@/components/screens/DocumentCreate/DocumentUpload/DocumentUploadController';
+import DocumentUploadController from '@/components/screens/DocumentCreate/DocumentUpload/Sides/UploadController';
 import documentsService from '@/service/documents';
 import { DOCUMENT_SIDES } from '@/constants';
 import i18n from '@/locales/i18n';

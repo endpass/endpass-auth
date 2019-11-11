@@ -13,7 +13,7 @@
 import VButton from '@endpass/ui/kit/VButton';
 
 export default {
-  name: 'RightButton',
+  name: 'ButtonUpload',
 
   props: {
     isLoading: {

@@ -1,15 +1,20 @@
 // @ts-check
 import omitBy from 'lodash.omitby';
 import isNil from 'lodash.isnil';
+import get from 'lodash/get';
+import generators from '@endpass/utils/generators';
 import request from '@/class/singleton/request';
+import { DOCUMENT_SIDES, UPLOAD_STATUSES } from '@/constants';
 
 const docBaseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
+
+const CHECK_RECOGNIZE_TIMEOUT = 1000;
 
 /**
  * @typedef {import('axios').AxiosRequestConfig} AxiosRequestConfig
  * */
 
-export default {
+const documentsService = {
   /**
    * @param {File} file UserDocument file
    * @returns {Promise}
@@ -68,10 +73,47 @@ export default {
 
   /**
    *
+   * @template {typeof UPLOAD_STATUSES} T
    * @param {string} id
-   * @return {Promise<import('axios').AxiosResponse>}
+   * @return {Promise<T[keyof T]>}
    */
-  getDocumentsUploadStatusById(id) {
-    return request.get(`${docBaseURL}/${id}/status/upload`);
+  async getDocumentsUploadStatusById(id) {
+    const data = await request.get(`${docBaseURL}/${id}/status/upload`);
+    const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
+    const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
+
+    if (backSideStatus === UPLOAD_STATUSES.NO_CONTENT) {
+      return frontSideStatus;
+    }
+
+    if (frontSideStatus === UPLOAD_STATUSES.UPLOADED) {
+      return backSideStatus;
+    }
+
+    return frontSideStatus;
+  },
+
+  /**
+   *
+   * @param {string} docId
+   * @return {Promise<void>}
+   */
+  async waitDocumentRecognition(docId) {
+    // eslint-disable-next-line no-unused-vars
+    for await (const index of generators.repeatWithInterval(
+      CHECK_RECOGNIZE_TIMEOUT,
+    )) {
+      const status = await documentsService.getDocumentsUploadStatusById(docId);
+
+      if (status === UPLOAD_STATUSES.ERRORED) {
+        throw new Error('Recognize error');
+      }
+
+      if (status !== UPLOAD_STATUSES.PROCESSING) {
+        break;
+      }
+    }
   },
 };
+
+export default documentsService;
