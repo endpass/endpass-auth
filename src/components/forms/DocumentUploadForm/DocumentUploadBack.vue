@@ -9,10 +9,10 @@
 <script>
 import UploadProgress from './UploadProgress';
 import UploadError from './UploadError';
-import UploadFile from './UploadFile';
+import UploadFileBack from './UploadFile/UploadFileBack';
 
 export default {
-  name: 'DocumentUploadForm',
+  name: 'DocumentUploadBack',
 
   computed: {
     currentForm() {
@@ -22,7 +22,7 @@ export default {
         case !!this.$attrs.error:
           return UploadError;
         default:
-          return UploadFile;
+          return UploadFileBack;
       }
     },
   },

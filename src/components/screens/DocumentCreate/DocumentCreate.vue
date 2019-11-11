@@ -17,7 +17,7 @@ export default {
 
   methods: {
     onCancel() {
-      this.$options.documentCreateController.finishCreate();
+      this.$options.documentCreateController.cancelCreate();
     },
     onConfirm(documentId) {
       this.$options.documentCreateController.finishCreate(documentId);

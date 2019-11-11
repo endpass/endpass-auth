@@ -1,14 +1,14 @@
 <template>
   <div class="document-upload-progress">
     <v-progress-circle
-      :progress="progressValue"
+      :progress="Math.floor(progressValue)"
       :is-label-visible="true"
     />
     <span
-      v-if="label"
+      v-if="progressLabel"
       class="document-upload-progress-message"
     >
-      {{ label }}
+      {{ progressLabel }}
     </span>
   </div>
 </template>
@@ -23,26 +23,9 @@ export default {
       type: Number,
       default: 0,
     },
-    isRecognize: {
-      type: Boolean,
-      default: false,
-    },
-    isUploading: {
-      type: Boolean,
-      default: false,
-    },
-  },
-
-  computed: {
-    label() {
-      if (this.isUploading) {
-        return this.$t('components.uploadDocument.uploading');
-      }
-      if (this.isRecognize) {
-        return this.$t('components.uploadDocument.recognition');
-      }
-
-      return '';
+    progressLabel: {
+      type: String,
+      default: '',
     },
   },
 
