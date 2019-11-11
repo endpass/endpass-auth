@@ -22,6 +22,9 @@ class DocumentCreateController extends VuexModule {
    */
   @Action
   finishCreate(documentId) {
+    if (!documentId) {
+      throw new Error('Not defined Document Id');
+    }
     const result = Answer.createOk({ id: documentId });
     documentChannel.put(result);
   }

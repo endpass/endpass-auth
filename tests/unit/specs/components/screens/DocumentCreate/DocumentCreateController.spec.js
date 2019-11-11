@@ -33,7 +33,7 @@ describe('DocumentCreateController', () => {
     const handler = jest.fn();
     documentChannel.take().then(handler);
 
-    await controller.finishCreate();
+    await controller.cancelCreate();
 
     expect(handler).toBeCalledWith({
       status: false,
