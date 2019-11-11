@@ -27,7 +27,6 @@ export default class ProgressTimer {
    */
   async initRepeat(totalTime) {
     const perSecondIncrement = MAX_PROGRESS / (totalTime / 1000);
-
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       DEFAULT_TIMER_PROGRESS,
@@ -52,7 +51,6 @@ export default class ProgressTimer {
     this.setRange(0, MAX_PROGRESS);
     this.progress = 0;
     this.isIncrement = true;
-    this.onCallbacks();
     this.initRepeat(totalTime);
   }
 
@@ -93,15 +91,8 @@ export default class ProgressTimer {
    */
   fillAndStopProgress() {
     this.progress = MAX_PROGRESS;
+    this.onCallbacks();
     this.isIncrement = false;
-  }
-
-  /**
-   * @deprecated
-   * set initial value of progress
-   */
-  dropProgress() {
-    this.progress = 0;
   }
 
   /**

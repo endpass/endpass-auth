@@ -2,7 +2,6 @@
   <div>
     <form-item>
       <v-file-drop-area
-        v-if="true"
         v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
         required
         :accept="$options.ACCEPT"
