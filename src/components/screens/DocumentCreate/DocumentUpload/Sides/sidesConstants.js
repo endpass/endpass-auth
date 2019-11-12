@@ -7,7 +7,7 @@ export const ACCEPT =
 export const VALIDATE_ACCEPT = ACCEPT.split(',')
   .map(item => (item[0] === '.' ? item.substring(1) : item))
   .join(',');
-export const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
+export const MAX_FILE_SIZE = 10 * 1024; // 10Mb
 
 /**
  * @type {{ [key: string]: string }} fields UserDocument object for upload
