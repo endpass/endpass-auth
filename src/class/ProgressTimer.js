@@ -1,78 +1,107 @@
 // @ts-check
-import generators from '@endpass/utils/generators';
 
-const DEFAULT_TOTAL_TIME = 20 * 1000; // 20 sec
+const DEFAULT_TOTAL_TIME = 20 * 1000;
 const DEFAULT_TIMER_PROGRESS = 1000;
 const MAX_PROGRESS = 100;
 
 const INCREMENT_EDGE = 0.4;
 const EDGE_LIMIT = MAX_PROGRESS * 0.8;
 
+/**
+ * @typedef { (progress: number) => any } Callback
+ */
+
 export default class ProgressTimer {
-  constructor() {
-    this.progress = 0;
-    this.isIncrement = false;
+  /**
+   * @param {number=} [totalTime]
+   */
+  constructor(totalTime = DEFAULT_TOTAL_TIME) {
+    this.totalTime = totalTime;
+
     /**
-     * @type {Function[]}
+     * @private
+     * @type {number}
+     */
+    this.progress = 0;
+    this.perStepIncrement = 0;
+
+    this.intervalId = undefined;
+
+    /**
+     * @type {Callback[]}
      */
     this.callbacks = [];
+
     this.min = 0;
-    this.max = 100;
+    this.max = MAX_PROGRESS;
   }
 
   /**
    * @private
-   * @param {number} totalTime milliseconds for the whole timer
-   * @return {Promise<void>}
    */
-  async initRepeat(totalTime) {
-    const perSecondIncrement = MAX_PROGRESS / (totalTime / 1000);
-    // eslint-disable-next-line no-unused-vars
-    for await (const index of generators.repeatWithInterval(
-      DEFAULT_TIMER_PROGRESS,
-    )) {
-      const val = this.progress;
-      const nextValue =
-        val < EDGE_LIMIT ? val + perSecondIncrement : val + INCREMENT_EDGE;
+  onInterval = () => {
+    const val = this.progress;
+    const nextValue =
+      val < EDGE_LIMIT ? val + this.perStepIncrement : val + INCREMENT_EDGE;
 
-      if (nextValue >= MAX_PROGRESS || !this.isIncrement) {
-        this.setProgress(MAX_PROGRESS);
-        break;
-      }
-      this.setProgress(nextValue);
+    if (nextValue >= MAX_PROGRESS) {
+      this.fillAndStopProgress();
+      return;
     }
+    this.setProgress(nextValue);
+  };
+
+  /**
+   *
+   * @param {number=} [min] minimum range value
+   * @param {number=} [max] maximum range value
+   * @param {number=} [totalTime] milliseconds for the whole timer
+   * start timer progress
+   */
+  startProgress(min = 0, max = MAX_PROGRESS, totalTime = this.totalTime) {
+    window.clearInterval(this.intervalId);
+    this.progress = 0;
+    this.perStepIncrement = MAX_PROGRESS / (totalTime / 1000);
+    this.setRange(0, max);
+    this.continueProgress(min, max);
   }
 
   /**
-   * @param {number} totalTime milliseconds for the whole timer
-   * start timer progress
+   * @param {number=} [min] minimum range value
+   * @param {number=} [max] maximum range value
    */
-  startProgress(totalTime = DEFAULT_TOTAL_TIME) {
-    this.setRange(0, MAX_PROGRESS);
-    this.progress = 0;
-    this.isIncrement = true;
-    this.initRepeat(totalTime);
+  continueProgress(min = 0, max = MAX_PROGRESS) {
+    if (min < this.min) {
+      throw new Error(`Progress range min value can't be less than it was`);
+    }
+    this.setRange(min, max);
+    this.setProgress(0);
+    window.clearInterval(this.intervalId);
+    this.intervalId = window.setInterval(
+      this.onInterval,
+      DEFAULT_TIMER_PROGRESS,
+    );
   }
 
   /**
    * @param {number} value
    */
   setProgress(value) {
-    const scaledValued = (value * (this.max - this.min)) / MAX_PROGRESS;
-    const nextValue = this.min + scaledValued;
-
-    const currValue = this.progress;
-    if (nextValue < currValue) {
-      return;
-    }
-    this.progress = nextValue >= MAX_PROGRESS ? MAX_PROGRESS : nextValue;
-    this.onCallbacks();
+    this.progress = value >= MAX_PROGRESS ? MAX_PROGRESS : value;
+    this.notifyObservers();
   }
 
-  onCallbacks() {
-    this.callbacks.forEach(cb => {
-      cb(this.progress);
-    });
+  get progressRange() {
+    const scaledValued = (this.progress * (this.max - this.min)) / MAX_PROGRESS;
+    const nextValue = this.min + scaledValued;
+    return nextValue >= this.max ? this.max : nextValue;
+  }
+
+  /**
+   * @private
+   */
+  notifyObservers() {
+    this.callbacks.forEach(cb => cb(this.progressRange));
   }
 
   /**
@@ -82,34 +111,35 @@ export default class ProgressTimer {
    */
   setRange(min, max) {
     this.min = min;
+    if (min >= max) {
+      throw new Error(`Max value can't be equal or more than min value`);
+    }
+    if (max > MAX_PROGRESS) {
+      throw new Error(`Max value can't be more than ${MAX_PROGRESS}`);
+    }
     this.max = max;
-    this.setProgress(min);
   }
 
   /**
    * stop timer progress
    */
   fillAndStopProgress() {
+    window.clearInterval(this.intervalId);
     this.progress = MAX_PROGRESS;
-    this.onCallbacks();
-    this.isIncrement = false;
+    this.notifyObservers();
   }
 
   /**
-   * @param {Function} cb
+   * @param {Callback} cb
    */
   on(cb) {
     this.callbacks.push(cb);
   }
 
   /**
-   * @param {Function=} [cb]
+   * @param {Callback} [cb]
    */
   off(cb) {
-    if (!cb) {
-      this.callbacks = [];
-      return;
-    }
     this.callbacks = this.callbacks.filter(storedCb => storedCb !== cb);
   }
 }

@@ -5,36 +5,33 @@ describe('ProgressTimer', () => {
   let timer;
 
   beforeEach(() => {
+    jest.useFakeTimers();
     timer = new ProgressTimer();
     jest.clearAllMocks();
   });
 
-  it('should change progress for one step', async () => {
-    expect.assertions(3);
+  it('should change progress for one step', () => {
+    timer.startProgress(0, 100, totalMs);
 
-    timer.startProgress(totalMs);
+    expect(timer.progressRange).toBe(0);
 
-    expect(timer.progress).toBe(0);
+    jest.runOnlyPendingTimers();
 
-    await global.flushPromises();
-
-    expect(timer.progress).toBe(10);
+    expect(timer.progressRange).toBe(10);
 
     timer.fillAndStopProgress();
 
-    expect(timer.progress).toBe(100);
+    expect(timer.progressRange).toBe(100);
   });
 
-  it('should subscribe progress', async () => {
-    expect.assertions(3);
-
+  it('should subscribe progress', () => {
     const handler = jest.fn();
     timer.on(handler);
     timer.startProgress();
 
     expect(handler).toBeCalledWith(0);
 
-    await global.flushPromises();
+    jest.runOnlyPendingTimers();
 
     expect(handler).toBeCalledWith(5);
 
@@ -43,9 +40,7 @@ describe('ProgressTimer', () => {
     expect(handler).toBeCalledWith(100);
   });
 
-  it('should unsubscribe', async () => {
-    expect.assertions(2);
-
+  it('should unsubscribe', () => {
     const handler = jest.fn();
     timer.on(handler);
     timer.startProgress();
@@ -54,19 +49,24 @@ describe('ProgressTimer', () => {
 
     timer.off(handler);
 
-    await global.flushPromises();
+    jest.runOnlyPendingTimers();
 
     expect(handler).toBeCalledTimes(1);
   });
 
-  it('should set range', async () => {
-    expect.assertions(1);
+  it('should set range', () => {
+    timer.startProgress(0, 50, totalMs);
 
-    timer.startProgress(totalMs);
-    timer.setRange(0, 50);
+    jest.runOnlyPendingTimers();
 
-    await global.flushPromises();
+    expect(timer.progressRange).toBe(5);
 
-    expect(timer.progress).toBe(5);
+    timer.continueProgress(50, 100);
+
+    expect(timer.progressRange).toBe(50);
+
+    jest.runOnlyPendingTimers();
+
+    expect(timer.progressRange).toBe(55);
   });
 });

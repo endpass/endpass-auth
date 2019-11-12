@@ -14,8 +14,8 @@
         <document-upload-front
           :error="error || errors.first('file')"
           :is-loading="isLoading"
-          :progress-value="frontSideController.progress"
-          :progress-label="frontSideController.progressLabel"
+          :progress-value="$options.frontSideController.progress"
+          :progress-label="$options.frontSideController.progressLabel"
           :file="selectedFile"
           @file-remove="onFileRemove"
         />
@@ -35,13 +35,15 @@
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import FormItem from '@/components/common/FormItem';
-import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../SidesConstants';
+import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../sidesConstants';
 import createFrontSideController from './FrontSideController';
 import DocumentUploadDescription from '../DocumentUploadDescription';
 import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
 
 export default {
   name: 'DocumentUpload',
+
+  frontSideController: createFrontSideController(),
 
   inject: ['$validator'],
 
@@ -57,7 +59,6 @@ export default {
   },
 
   data: () => ({
-    frontSideController: createFrontSideController(),
     error: null,
     selectedFile: null,
     isLoading: false,
@@ -110,10 +111,12 @@ export default {
     async onUploadClick() {
       try {
         this.isLoading = true;
-        const documentId = await this.frontSideController.createDocument({
-          file: this.selectedFile,
-          type: this.documentType,
-        });
+        const documentId = await this.$options.frontSideController.createDocument(
+          {
+            file: this.selectedFile,
+            type: this.documentType,
+          },
+        );
         this.$emit('update:documentId', documentId);
         this.$emit('toggle');
       } catch (e) {
