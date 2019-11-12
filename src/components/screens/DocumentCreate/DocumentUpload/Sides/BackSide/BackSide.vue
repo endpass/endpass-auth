@@ -1,27 +1,19 @@
 <template>
   <div>
-    <form-item>
-      <v-file-drop-area
-        v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
-        required
-        :accept="$options.ACCEPT"
-        :label="$t('components.uploadDocument.selectFile')"
-        :disabled="isLoading"
-        data-vv-as="File"
-        data-vv-name="file"
-        @change="onFileChange"
-      >
-        <document-upload-back
-          :error="error || errors.first('file')"
-          :is-loading="isLoading"
-          :progress-value="$options.backSideController.progress"
-          :progress-label="$options.backSideController.progressLabel"
-          :file="selectedFile"
-          @file-remove="onFileRemove"
-        />
-      </v-file-drop-area>
-      <document-upload-description />
-    </form-item>
+    <drop-area
+      :is-loading="isLoading"
+      :error.sync="error"
+      @change="onFileChange"
+    >
+      <document-upload-back
+        :error="error"
+        :is-loading="isLoading"
+        :progress-value="$options.backSideController.progress"
+        :progress-label="$options.backSideController.progressLabel"
+        :file="selectedFile"
+        @file-remove="onFileRemove"
+      />
+    </drop-area>
     <component
       :is="currentButtons"
       :is-loading="isLoading"
@@ -37,12 +29,12 @@
 <script>
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
-import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../sidesConstants';
 import createBackSideController from './BackSideController';
 import DocumentUploadDescription from '../DocumentUploadDescription';
 import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
 import FooterDoneButtons from '../FooterButtons/FooterDoneButtons';
+import DropArea from '@/components/screens/DocumentCreate/DocumentUpload/Sides/DropArea';
 
 export default {
   name: 'DocumentUpload',
@@ -65,17 +57,9 @@ export default {
     isLoading: false,
   }),
 
-  ACCEPT,
-  VALIDATE_ACCEPT,
-
   computed: {
     isUploadReady() {
-      return (
-        !this.isLoading &&
-        !!this.selectedFile &&
-        !this.error &&
-        this.errors.count() === 0
-      );
+      return !this.isLoading && !!this.selectedFile && !this.error;
     },
 
     currentButtons() {
@@ -87,23 +71,14 @@ export default {
   },
 
   methods: {
-    dropError() {
-      this.error = null;
-      this.$validator.errors.remove('file');
-    },
-
     onFileRemove() {
-      this.dropError();
+      this.error = '';
       this.selectedFile = null;
     },
 
     onFileChange(files) {
       const [file] = files;
-      this.dropError();
       this.selectedFile = file;
-      if (file && file.size > MAX_FILE_SIZE) {
-        this.error = this.$t('components.uploadDocument.errorSizeLimit');
-      }
     },
 
     onClose() {
@@ -141,6 +116,7 @@ export default {
   },
 
   components: {
+    DropArea,
     DocumentUploadBack,
     DocumentUploadDescription,
     FormItem,

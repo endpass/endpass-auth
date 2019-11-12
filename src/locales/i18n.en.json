@@ -216,7 +216,6 @@
       "selectFile": "Select File",
       "frontIsSelected": "Front File selected",
       "backIsSelected": "Back File selected",
-      "errorSizeLimit": "Size of\u00A0the\u00A0file is\u00A0more\u00A0than\u00A010Mb, please select another file.",
       "uploading": "Uploading",
       "recognition": "Recognition"
     }
