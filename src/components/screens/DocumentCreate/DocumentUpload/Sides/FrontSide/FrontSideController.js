@@ -4,7 +4,7 @@ import createController from '@/controllers/createController';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
-import { UPLOAD_CODE_ERRORS } from '../SidesConstants';
+import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
 import i18n from '@/locales/i18n';
 
@@ -63,9 +63,7 @@ class FrontSideController extends VuexModule {
         /**
          * @param {number} value
          */
-        value => {
-          this.setProgress(value);
-        },
+        value => this.setProgress(value),
       );
       this.setTimer(timer);
     }
@@ -78,7 +76,7 @@ class FrontSideController extends VuexModule {
    */
   @Mutation
   setProgress(value) {
-    this.progress = value;
+    this.progress = Math.floor(value);
   }
 
   /**
@@ -112,17 +110,15 @@ class FrontSideController extends VuexModule {
   async createDocument({ file, type }) {
     const timer = this.getTimer();
     try {
-      timer.startProgress();
-
       this.progressLabel = i18n.t('components.uploadDocument.uploading');
 
-      timer.setRange(0, 20);
+      timer.startProgress(0, 20);
       await documentsService.checkFile(file);
       if (!this.docId) {
         this.docId = await documentsService.createDocument({ type });
       }
 
-      timer.setRange(20, 100);
+      timer.continueProgress(20, 100);
       await documentsService.uploadFrontFile(
         {
           file,

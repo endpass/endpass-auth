@@ -14,8 +14,8 @@
         <document-upload-back
           :error="error || errors.first('file')"
           :is-loading="isLoading"
-          :progress-value="backSideController.progress"
-          :progress-label="backSideController.progressLabel"
+          :progress-value="$options.backSideController.progress"
+          :progress-label="$options.backSideController.progressLabel"
           :file="selectedFile"
           @file-remove="onFileRemove"
         />
@@ -37,7 +37,7 @@
 <script>
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
-import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../SidesConstants';
+import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../sidesConstants';
 import createBackSideController from './BackSideController';
 import DocumentUploadDescription from '../DocumentUploadDescription';
 import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
@@ -49,6 +49,8 @@ export default {
 
   inject: ['$validator'],
 
+  backSideController: createBackSideController(),
+
   props: {
     documentId: {
       type: String,
@@ -57,7 +59,6 @@ export default {
   },
 
   data: () => ({
-    backSideController: createBackSideController(),
     error: null,
     selectedFile: null,
     isRecognitionError: false,
@@ -113,7 +114,7 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        await this.backSideController.recognize(this.documentId);
+        await this.$options.backSideController.recognize(this.documentId);
         this.$emit('confirm', this.documentId);
       } catch (e) {
         this.isRecognitionError = true;
@@ -126,7 +127,7 @@ export default {
     async onUploadFile() {
       try {
         this.isLoading = true;
-        await this.backSideController.upload({
+        await this.$options.backSideController.upload({
           file: this.selectedFile,
           docId: this.documentId,
         });

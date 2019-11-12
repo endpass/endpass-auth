@@ -5,7 +5,7 @@ import i18n from '@/locales/i18n';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
-import { UPLOAD_CODE_ERRORS } from '../SidesConstants';
+import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
 
 @Module({ generateMutationSetters: true })
@@ -58,9 +58,7 @@ class BackSideController extends VuexModule {
         /**
          * @param {number} value
          */
-        value => {
-          this.setProgress(value);
-        },
+        value => this.setProgress(value),
       );
       this.setTimer(timer);
     }
@@ -73,7 +71,7 @@ class BackSideController extends VuexModule {
    */
   @Mutation
   setProgress(value) {
-    this.progress = value;
+    this.progress = Math.floor(value);
   }
 
   /**
@@ -118,10 +116,9 @@ class BackSideController extends VuexModule {
   async upload({ file, docId }) {
     const timer = this.getTimer();
     try {
-      timer.startProgress();
-
       this.progressLabel = i18n.t('components.uploadDocument.uploading');
-      timer.setRange(0, 50);
+
+      timer.startProgress(0, 50);
       await documentsService.uploadBackFile(
         {
           file,
@@ -131,7 +128,7 @@ class BackSideController extends VuexModule {
       );
 
       this.progressLabel = i18n.t('components.uploadDocument.recognition');
-      timer.setRange(50, 100);
+      timer.continueProgress(50, 100);
       await this.confirmAndWait(docId);
     } catch (e) {
       throw this.createError(e);

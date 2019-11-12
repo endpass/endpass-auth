@@ -1,7 +1,7 @@
 <template>
   <div class="document-upload-progress">
     <v-progress-circle
-      :progress="Math.floor(progressValue)"
+      :progress="progressValue"
       :is-label-visible="true"
     />
     <span
