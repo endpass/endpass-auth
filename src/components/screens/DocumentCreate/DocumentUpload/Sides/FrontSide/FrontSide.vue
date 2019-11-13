@@ -99,6 +99,10 @@ export default {
     },
   },
 
+  mounted() {
+    this.$options.frontSideController.init();
+  },
+
   components: {
     DropArea,
     FooterFrontButtons,

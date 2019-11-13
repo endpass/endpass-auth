@@ -133,6 +133,11 @@ class FrontSideController extends VuexModule {
     }
     return this.docId;
   }
+
+  @Action
+  init() {
+    this.docId = '';
+  }
 }
 
 export default () => createController(FrontSideController);
