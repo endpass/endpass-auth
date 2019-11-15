@@ -1,170 +1,64 @@
 <template>
   <v-modal-card
     data-test="document-create-modal"
-    :is-closable="!isLoading"
-    @close="onClose"
+    :is-closable="false"
   >
     <template slot="title">
       {{ $t('components.uploadDocument.uploadDocument') }}
     </template>
-    <document-upload-form
-      v-model="selectedFile"
-      v-validate="`ext:${$options.VALIDATE_ACCEPT}`"
-      :error="error || errors.first('file')"
-      :is-doc-type-selectable="isFrontSide"
-      :is-loading="isLoading"
+    <form-item>
+      <v-select
+        :value.sync="documentType"
+        :options="$options.documentTypes"
+        :label="$t('components.uploadDocument.documentType')"
+        :disabled="!isDocTypeMutable"
+      />
+    </form-item>
+    <sides
       :document-type="documentType"
-      :message-add="messageAdd"
-      :message-ready="messageReady"
-      :progress-value="progressValue"
-      :progress-label="progressLabel"
-      :accept="$options.ACCEPT"
-      data-vv-as="File"
-      data-vv-name="file"
-      @change-document-type="onChangeDocType"
-      @change-file="onChangeFile"
+      v-on="$listeners"
+      @toggle="onToggle"
     />
-    <form-controls>
-      <v-button
-        skin="quaternary"
-        :disabled="isLoading"
-        data-test="cancel-button"
-        @click="onClose"
-      >
-        {{ $t('global.cancel') }}
-      </v-button>
-      <v-button
-        :is-loading="isLoading"
-        :disabled="isLoading || !isReadySubmit"
-        data-test="submit-button"
-        @click="uploadFile"
-      >
-        {{ $t('global.confirm') }}
-      </v-button>
-    </form-controls>
   </v-modal-card>
 </template>
 
 <script>
-import VButton from '@endpass/ui/kit/VButton';
+import VSelect from '@endpass/ui/kit/VSelect';
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import createUploadController from './DocumentUploadController';
-import DocumentUploadForm from '@/components/forms/DocumentUploadForm/DocumentUploadForm';
-import { DOC_TYPES, DOCUMENT_SIDES } from '@/constants';
-import FormControls from '@/components/common/FormControls';
-
-const ACCEPT =
-  '.png,.jpeg,.jpg,.pdf,.tif,.doc,.docx,image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
-const VALIDATE_ACCEPT = ACCEPT.split(',')
-  .map(item => (item[0] === '.' ? item.substring(1) : item))
-  .join(',');
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10Mb
+import FormItem from '@/components/common/FormItem';
+import { DOC_TYPES } from '@/constants';
+import { CONSTANT_TRANSLATES } from '@/constants/translates';
+import Sides from './Sides/Sides';
 
 export default {
   name: 'DocumentUpload',
 
-  inject: ['$validator'],
-
   data: () => ({
-    error: null,
     documentType: DOC_TYPES.PASSPORT,
-    selectedFile: null,
-    documentId: null,
-    currentSide: DOCUMENT_SIDES.FRONT,
+    isDocTypeMutable: true,
   }),
 
-  uploadController: null,
-  ACCEPT,
-  VALIDATE_ACCEPT,
-
-  computed: {
-    isFrontSide() {
-      return this.currentSide === DOCUMENT_SIDES.FRONT;
+  documentTypes: [
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.PASSPORT],
+      val: DOC_TYPES.PASSPORT,
     },
-    messageAdd() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.addFile')
-        : this.$t('components.uploadDocument.addBackSide');
+    {
+      text: CONSTANT_TRANSLATES[DOC_TYPES.DRIVER_LICENSE],
+      val: DOC_TYPES.DRIVER_LICENSE,
     },
-    messageReady() {
-      return this.isFrontSide
-        ? this.$t('components.uploadDocument.readyForUpload')
-        : this.$t('components.uploadDocument.readyForUploadBack');
-    },
-    progressValue() {
-      return this.$options.uploadController.progress;
-    },
-    progressLabel() {
-      const { uploadController } = this.$options;
-      if (uploadController.isUploading) {
-        return this.$t('components.uploadDocument.uploading');
-      }
-      if (uploadController.isProcessing) {
-        return this.$t('components.uploadDocument.recognition');
-      }
-      return '';
-    },
-    isLoading() {
-      const { uploadController } = this.$options;
-      return uploadController.isUploading || uploadController.isProcessing;
-    },
-    isReadySubmit() {
-      return !!this.selectedFile && !this.error && this.errors.count() === 0;
-    },
-  },
+  ],
 
   methods: {
-    onChangeDocType(documentType) {
-      this.error = null;
-      this.documentType = documentType;
+    onToggle() {
+      this.isDocTypeMutable = false;
     },
-
-    onChangeFile(file) {
-      this.error = null;
-      if (file && file.size > MAX_FILE_SIZE) {
-        this.error = this.$t('components.uploadDocument.errorSizeLimit');
-      }
-    },
-
-    onClose() {
-      this.$emit('close', this.documentId);
-    },
-
-    nextSide() {
-      if (this.currentSide === DOCUMENT_SIDES.FRONT) {
-        this.currentSide = DOCUMENT_SIDES.BACK;
-        return;
-      }
-
-      this.onClose();
-    },
-
-    async uploadFile() {
-      try {
-        const docId = await this.$options.uploadController.uploadDocument({
-          file: this.selectedFile,
-          type: this.documentType,
-          docSide: this.currentSide,
-        });
-
-        this.documentId = docId;
-        this.selectedFile = null;
-
-        this.nextSide();
-      } catch (e) {
-        this.error = e.message;
-      }
-    },
-  },
-
-  beforeCreate() {
-    this.$options.uploadController = createUploadController();
   },
 
   components: {
-    FormControls,
-    DocumentUploadForm,
-    VButton,
+    Sides,
+    VSelect,
+    FormItem,
     VModalCard,
   },
 };

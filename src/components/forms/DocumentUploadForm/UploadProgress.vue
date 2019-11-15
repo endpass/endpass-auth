@@ -1,11 +1,14 @@
 <template>
   <div class="document-upload-progress">
     <v-progress-circle
-      :progress="progress"
+      :progress="progressValue"
       :is-label-visible="true"
     />
-    <span class="document-upload-progress-message">
-      {{ label }}
+    <span
+      v-if="progressLabel"
+      class="document-upload-progress-message"
+    >
+      {{ progressLabel }}
     </span>
   </div>
 </template>
@@ -14,17 +17,18 @@
 import VProgressCircle from '@endpass/ui/kit/VProgressCircle';
 
 export default {
-  name: 'DocumentUploadProgress',
+  name: 'UploadProgress',
   props: {
-    progress: {
+    progressValue: {
       type: Number,
       default: 0,
     },
-    label: {
+    progressLabel: {
       type: String,
       default: '',
     },
   },
+
   components: { VProgressCircle },
 };
 </script>

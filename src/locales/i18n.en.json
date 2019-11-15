@@ -5,6 +5,7 @@
     "error": "Error",
     "cancel": "Cancel",
     "deny": "Deny",
+    "done": "Done",
     "logout": "Logout",
     "login": "Login",
     "sign": "Sign",
@@ -208,14 +209,13 @@
       "uploadDocument": "Upload document",
       "documentType": "Document type",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "addFile": "Add front File",
-      "addBackSide": "Add back side",
+      "addFrontFile": "Add front File",
+      "addBackFile": "Add back side",
       "orDrop": "or drop file here",
       "fileSize": "10Mb max file size.",
       "selectFile": "Select File",
-      "readyForUpload": "Front File selected",
-      "readyForUploadBack": "Back File selected",
-      "errorSizeLimit": "Size of\u00A0the\u00A0file is\u00A0more\u00A0than\u00A010Mb, please select another file.",
+      "frontIsSelected": "Front File selected",
+      "backIsSelected": "Back File selected",
       "uploading": "Uploading",
       "recognition": "Recognition"
     }
@@ -238,7 +238,8 @@
       "uploadDocument": {
         "default": "Something went wrong while\u00A0file uploading.",
         "exist": "File already exists, please upload another file.",
-        "sizeLimit": "Maximum file size exceeded",
+        "confirm": "Something went wrong while\u00A0document recognition. Please try again.",
+        "sizeLimit": "Maximum file size exceeded.",
         "invalidFile": "The\u00A0uploaded file is\u00A0broken or has an\u00A0unknown format."
       }
     }

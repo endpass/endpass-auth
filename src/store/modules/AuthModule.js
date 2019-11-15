@@ -1,7 +1,7 @@
 import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
-import ConnectError from '@endpass/class/ConnectError';
+import ConnectError from '@endpass/connect/ConnectError';
 import identityService from '@/service/identity';
 import settingsService from '@/service/settings';
 import modeService from '@/service/mode';

@@ -3,6 +3,8 @@ jest.mock('@/service/documents', () => {
 
   return {
     checkFile: jest.fn().mockResolvedValue(),
+    confirmDocument: jest.fn().mockResolvedValue(),
+    waitDocumentRecognition: jest.fn(),
     uploadFrontFile: jest.fn().mockResolvedValue({
       message: 'document uploaded',
       success: true,

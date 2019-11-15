@@ -1,4 +1,4 @@
-import ConnectError from '@endpass/class/ConnectError';
+import ConnectError from '@endpass/connect/ConnectError';
 import DocumentCreateController from '@/components/screens/DocumentCreate/DocumentCreateController';
 import { documentChannel } from '@/class/singleton/channels';
 
@@ -33,7 +33,7 @@ describe('DocumentCreateController', () => {
     const handler = jest.fn();
     documentChannel.take().then(handler);
 
-    await controller.finishCreate();
+    await controller.cancelCreate();
 
     expect(handler).toBeCalledWith({
       status: false,

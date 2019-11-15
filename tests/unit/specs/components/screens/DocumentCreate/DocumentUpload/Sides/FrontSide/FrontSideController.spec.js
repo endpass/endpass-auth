@@ -1,19 +1,17 @@
-import DocumentUploadController from '@/components/screens/DocumentCreate/DocumentUpload/DocumentUploadController';
+import FrontSideController from '@/components/screens/DocumentCreate/DocumentUpload/Sides/FrontSide/FrontSideController';
 import documentsService from '@/service/documents';
-import { DOCUMENT_SIDES } from '@/constants';
 import i18n from '@/locales/i18n';
 
-describe('DocumentUploadController', () => {
+describe('FrontSideController', () => {
   let controller;
   const docId = 'docId';
   const file = '';
   const type = '';
-  const docSide = DOCUMENT_SIDES.FRONT;
 
   beforeEach(() => {
     jest.useFakeTimers();
     jest.clearAllMocks();
-    controller = DocumentUploadController();
+    controller = FrontSideController();
   });
 
   it('should upload document step by step', async () => {
@@ -21,7 +19,7 @@ describe('DocumentUploadController', () => {
 
     documentsService.createDocument.mockResolvedValueOnce(docId);
 
-    const res = await controller.uploadDocument({ file, type, docSide });
+    const res = await controller.createDocument({ file, type });
     expect(res).toBe(docId);
   });
 
@@ -31,7 +29,7 @@ describe('DocumentUploadController', () => {
     documentsService.createDocument.mockRejectedValueOnce(new Error());
 
     try {
-      await controller.uploadDocument({ file, type, docSide });
+      await controller.createDocument({ file, type });
     } catch (e) {
       expect(e).toEqual(
         new Error(i18n.t('store.error.uploadDocument.default')),
@@ -46,7 +44,7 @@ describe('DocumentUploadController', () => {
     documentsService.checkFile.mockRejectedValueOnce(err);
 
     try {
-      await controller.uploadDocument({ file, type, docSide });
+      await controller.createDocument({ file, type });
     } catch (e) {
       expect(e).toEqual(
         new Error(i18n.t('store.error.uploadDocument.invalidFile')),

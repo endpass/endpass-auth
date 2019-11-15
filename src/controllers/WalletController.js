@@ -1,6 +1,6 @@
 // @ts-check
 import { VuexModule, Action, Module } from 'vuex-class-modules';
-import ConnectError from '@endpass/class/ConnectError';
+import ConnectError from '@endpass/connect/ConnectError';
 import { walletChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import i18n from '@/locales/i18n';
