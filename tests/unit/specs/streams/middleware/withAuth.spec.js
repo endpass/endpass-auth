@@ -2,7 +2,7 @@ import withAuth from '@/streams/middleware/withAuth';
 import { authChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import Answer from '@/class/Answer';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 
 jest.mock('@/class/singleton/channels', () => ({
   authChannel: {
@@ -31,7 +31,7 @@ describe('withAuth', () => {
   it('should redirect to auth', async () => {
     expect.assertions(2);
 
-    identityService.getAuthStatus.mockResolvedValueOnce(400);
+    authService.getAuthStatus.mockResolvedValueOnce(400);
     authChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withAuth(options, action);
@@ -47,7 +47,7 @@ describe('withAuth', () => {
   it('should redirect to auth and end stream', async () => {
     expect.assertions(3);
 
-    identityService.getAuthStatus.mockResolvedValueOnce(400);
+    authService.getAuthStatus.mockResolvedValueOnce(400);
 
     authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
@@ -65,7 +65,7 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    identityService.getAuthStatus.mockResolvedValueOnce(200);
+    authService.getAuthStatus.mockResolvedValueOnce(200);
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

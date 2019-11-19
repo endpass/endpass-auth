@@ -10,6 +10,7 @@ import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
 import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
+import authService from '@/service/auth';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
 import {
@@ -261,7 +262,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   async signPermission({ password }) {
-    await identityService.setAuthPermission(password, ORIGIN_HOST);
+    await authService.setAuthPermission(password, ORIGIN_HOST);
     permissionChannel.put(Answer.createOk());
   }
 
@@ -335,7 +336,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   getSeedTemplateUrl() {
-    return identityService.getSeedTemplateUrl();
+    return authService.getSeedTemplateUrl();
   }
 
   @Mutation

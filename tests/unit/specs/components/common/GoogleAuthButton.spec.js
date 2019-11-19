@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton';
 import setupI18n from '@/locales/i18nSetup';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
@@ -98,7 +98,7 @@ describe('GoogleAuthButton', () => {
 
     it('should correctly submit', async () => {
       expect.assertions(3);
-      identityService.authWithGoogle.mockResolvedValueOnce({
+      authService.authWithGoogle.mockResolvedValueOnce({
         success: true,
       });
 
@@ -110,7 +110,7 @@ describe('GoogleAuthButton', () => {
         scope: 'profile',
       });
 
-      expect(identityService.authWithGoogle).toHaveBeenCalledWith('id_token');
+      expect(authService.authWithGoogle).toHaveBeenCalledWith('id_token');
       expect(wrapper.emitted().submit).toEqual([[]]);
     });
   });

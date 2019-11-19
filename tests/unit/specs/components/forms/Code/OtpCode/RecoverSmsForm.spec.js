@@ -3,7 +3,7 @@ import Vuex from 'vuex';
 import VeeValidate from 'vee-validate';
 import { code, email, regularPassword as password } from '@unitFixtures/auth';
 import RecoverSmsForm from '@/components/forms/Code/OtpCode/RecoverSmsForm';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
@@ -68,9 +68,7 @@ describe('RecoverSmsForm', () => {
         const errorPhoneNotExist = new Error(error.message);
         errorPhoneNotExist.code = 400;
 
-        identityService.sendOtpRecoverSms.mockRejectedValueOnce(
-          errorPhoneNotExist,
-        );
+        authService.sendOtpRecoverSms.mockRejectedValueOnce(errorPhoneNotExist);
 
         wrapper = createWrapper();
         await global.flushPromises();
@@ -98,8 +96,8 @@ describe('RecoverSmsForm', () => {
       it('should send recover sms on mount', async () => {
         expect.assertions(2);
 
-        expect(identityService.sendOtpRecoverSms).toBeCalledTimes(1);
-        expect(identityService.sendOtpRecoverSms).toBeCalledWith(email);
+        expect(authService.sendOtpRecoverSms).toBeCalledTimes(1);
+        expect(authService.sendOtpRecoverSms).toBeCalledWith(email);
       });
 
       it('should send recover sms', async () => {
@@ -110,16 +108,14 @@ describe('RecoverSmsForm', () => {
         });
         await global.flushPromises();
 
-        expect(identityService.sendOtpRecoverSms).toBeCalledTimes(2);
-        expect(identityService.sendOtpRecoverSms).toHaveBeenLastCalledWith(
-          email,
-        );
+        expect(authService.sendOtpRecoverSms).toBeCalledTimes(2);
+        expect(authService.sendOtpRecoverSms).toHaveBeenLastCalledWith(email);
       });
 
       it('should show error', async () => {
         expect.assertions(1);
 
-        identityService.sendOtpRecoverSms.mockRejectedValueOnce(error);
+        authService.sendOtpRecoverSms.mockRejectedValueOnce(error);
 
         wrapper = createWrapper();
         await global.flushPromises();
@@ -147,15 +143,15 @@ describe('RecoverSmsForm', () => {
         wrapper.find('[data-test=recover-otp]').trigger('submit');
         await global.flushPromises();
 
-        expect(identityService.disableOtpViaSms).not.toBeCalledWith();
+        expect(authService.disableOtpViaSms).not.toBeCalledWith();
         expect(wrapper.emitted().recover).toBeUndefined();
       });
 
       it('should disable otp', async () => {
         expect.assertions(2);
 
-        expect(identityService.disableOtpViaSms).toBeCalledTimes(1);
-        expect(identityService.disableOtpViaSms).toBeCalledWith({
+        expect(authService.disableOtpViaSms).toBeCalledTimes(1);
+        expect(authService.disableOtpViaSms).toBeCalledWith({
           code,
           email,
         });
@@ -173,7 +169,7 @@ describe('RecoverSmsForm', () => {
 
       describe('handle error', () => {
         beforeEach(async () => {
-          identityService.disableOtpViaSms.mockRejectedValueOnce(error);
+          authService.disableOtpViaSms.mockRejectedValueOnce(error);
 
           wrapper = createWrapper();
           await global.flushPromises();
