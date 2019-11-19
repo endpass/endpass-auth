@@ -4,7 +4,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password } from '@unitFixtures/auth';
 import Otp from '@/components/forms/Code/OtpCode/OtpCode';
 import setupI18n from '@/locales/i18nSetup';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 
 const localVue = createLocalVue();
 
@@ -62,9 +62,7 @@ describe('OtpCode', () => {
 
           const identifier = 'identifier';
 
-          identityService.getRecoveryIdentifier.mockResolvedValueOnce(
-            identifier,
-          );
+          authService.getRecoveryIdentifier.mockResolvedValueOnce(identifier);
 
           wrapper.find('otp-form-stub').vm.$emit('recover');
 

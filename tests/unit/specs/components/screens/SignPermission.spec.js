@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import SignPermission from '@/components/screens/SignPermission';
 import setupI18n from '@/locales/i18nSetup';
 import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import { ORIGIN_HOST } from '@/constants';
@@ -61,10 +62,7 @@ describe('SignPermission', () => {
         wrapper.find('sign-password-stub').vm.$emit('submit', pwd);
         await global.flushPromises();
 
-        expect(identityService.setAuthPermission).toBeCalledWith(
-          pwd,
-          ORIGIN_HOST,
-        );
+        expect(authService.setAuthPermission).toBeCalledWith(pwd, ORIGIN_HOST);
       });
 
       it('should logout', async () => {

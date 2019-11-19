@@ -1,7 +1,7 @@
 import { VuexModule, Action, Module } from 'vuex-class-modules';
 import createController from '@/controllers/createController';
 import { authStore as authStoreModule } from '@/store';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 
 @Module({ generateMutationSetters: true })
 class AuthController extends VuexModule {
@@ -20,7 +20,7 @@ class AuthController extends VuexModule {
    */
   @Action
   async authWithCode({ isSignUp, email, password, code }) {
-    await identityService.authWithCode({ email, code, password, isSignUp });
+    await authService.authWithCode({ email, code, password, isSignUp });
     await this.authStore.defineAuthStatus();
   }
 }

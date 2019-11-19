@@ -4,7 +4,7 @@ import { accountAddress, hdv3 } from '@unitFixtures/accounts';
 import setupI18n from '@/locales/i18nSetup';
 import Widget from '@/components/widget/Widget';
 import userService from '@/service/user';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
@@ -140,7 +140,7 @@ describe('Widget', () => {
     it('should correctly handle logout event', async () => {
       expect.assertions(2);
 
-      identityService.getAuthStatus.mockResolvedValueOnce(200);
+      authService.getAuthStatus.mockResolvedValueOnce(200);
 
       await global.flushPromises();
 

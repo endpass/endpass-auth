@@ -4,6 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import ConnectError from '@endpass/connect/ConnectError';
 import identityService from '@/service/identity';
 import settingsService from '@/service/settings';
+import authService from '@/service/auth';
 import modeService from '@/service/mode';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
@@ -39,7 +40,7 @@ class AuthModule extends VuexModule {
 
   @Action
   async loadAuthChallenge({ email }) {
-    const request = identityService.getAuthChallenge(email);
+    const request = authService.getAuthChallenge(email);
 
     await this.handleAuthRequest({
       request,
@@ -48,7 +49,7 @@ class AuthModule extends VuexModule {
 
   @Action
   async authWithGoogle({ idToken }) {
-    const request = identityService.authWithGoogle(idToken);
+    const request = authService.authWithGoogle(idToken);
 
     await this.handleAuthRequest({
       request,
@@ -60,7 +61,7 @@ class AuthModule extends VuexModule {
     this.sharedStore.changeLoadingStatus(true);
 
     try {
-      const res = await identityService.authWithGitHub(code);
+      const res = await authService.authWithGitHub(code);
 
       if (!res.success) {
         throw new Error(res.message || i18n.t('store.auth.authFailed'));
@@ -96,7 +97,7 @@ class AuthModule extends VuexModule {
 
   @Action
   async sendCode({ email }) {
-    await identityService.sendEmailCode(email);
+    await authService.sendEmailCode(email);
   }
 
   @Action
@@ -144,14 +145,14 @@ class AuthModule extends VuexModule {
 
   @Action
   async waitLogin() {
-    await identityService.waitLogin();
+    await authService.waitLogin();
     await this.defineAuthStatus();
     // authChannel.put(Answer.createOk());
   }
 
   @Action
   async defineAuthStatus() {
-    const status = await identityService.getAuthStatus();
+    const status = await authService.getAuthStatus();
     const settings = settingsService.getLocalSettings();
 
     if (status !== 200 && !isEmpty(settings)) {

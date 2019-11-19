@@ -4,7 +4,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import CompositeAuth from '@/components/forms/CompositeAuth';
 import { IDENTITY_MODE } from '@/constants';
 import setupI18n from '@/locales/i18nSetup';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
@@ -68,7 +68,7 @@ describe('CompositeAuth', () => {
         // TODO: move to auth test
         expect.assertions(2);
 
-        identityService.getAuthChallenge.mockResolvedValueOnce({
+        authService.getAuthChallenge.mockResolvedValueOnce({
           success: true,
           challenge: { challengeType: 'otp' },
         });
@@ -85,7 +85,7 @@ describe('CompositeAuth', () => {
         // TODO: move to otp tests
         expect.assertions(3);
 
-        identityService.getAuthChallenge.mockResolvedValueOnce({
+        authService.getAuthChallenge.mockResolvedValueOnce({
           success: true,
           challenge: { challengeType: 'otp' },
         });
@@ -99,7 +99,7 @@ describe('CompositeAuth', () => {
 
         expect(wrapper.find('code-form-stub').exists()).toBe(true);
 
-        expect(identityService.waitLogin).toBeCalledTimes(1);
+        expect(authService.waitLogin).toBeCalledTimes(1);
         expect(wrapper.emitted().authorize[0]).toEqual([
           { serverMode: authParams.serverMode },
         ]);
