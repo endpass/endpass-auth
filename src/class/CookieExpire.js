@@ -6,7 +6,7 @@ const EXPIRE_CHECK_TIMEOUT = 2000;
 
 const EVENT_COOKIE_EXPIRED = 'cookie-expire';
 
-export default class AuthCookieExpire {
+export default class CookieExpire {
   constructor() {
     this.intervalId = undefined;
     this.emitter = new EventEmitter();
@@ -38,7 +38,7 @@ export default class AuthCookieExpire {
       const storedExpire = storedValue ? Number(storedValue[2]) || 0 : null;
 
       const now = new Date().getTime();
-      if (!storedExpire || now > storedExpire * 1000) {
+      if (!storedExpire || now > storedExpire) {
         this.stopChecking();
         this.emitter.emit(EVENT_COOKIE_EXPIRED);
       }
