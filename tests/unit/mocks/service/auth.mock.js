@@ -13,7 +13,7 @@ jest.mock('@/service/auth', () => {
     authWithGoogle: jest.fn(),
     authWithGitHub: jest.fn(),
     logout: jest.fn(),
-    getAuthStatus: jest.fn(),
+    getAuthStatus: jest.fn().mockResolvedValue({ status: 200 }),
     waitLogin: jest.fn(),
     getRecoveryIdentifier: jest
       .fn()

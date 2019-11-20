@@ -18,12 +18,11 @@
 /* eslint-disable camelcase */
 
 import VFrame from '@/components/common/VFrame';
-import { accountsStore, coreStore } from '@/store';
+import { coreStore } from '@/store';
 
 export default {
   name: 'Error',
 
-  accountsStore,
   coreStore,
 
   data() {
@@ -41,7 +40,7 @@ export default {
 
   methods: {
     onClose() {
-      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
   },

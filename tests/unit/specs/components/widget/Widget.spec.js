@@ -140,7 +140,7 @@ describe('Widget', () => {
     it('should correctly handle logout event', async () => {
       expect.assertions(2);
 
-      authService.getAuthStatus.mockResolvedValueOnce(200);
+      authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
 
       await global.flushPromises();
 

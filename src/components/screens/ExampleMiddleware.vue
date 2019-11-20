@@ -10,7 +10,7 @@
 
 <script>
 import Screen from '@/components/common/Screen';
-import { coreStore, accountsStore } from '@/store';
+import { coreStore } from '@/store';
 import MiddlewareForm from '@/components/middleware/MiddlewareForm';
 
 import MessageForm from '@/components/middleware/steps/Message';
@@ -19,7 +19,6 @@ export default {
   name: 'ExampleMiddleware',
 
   coreStore,
-  accountsStore,
 
   data: () => ({
     steps: [MessageForm],
@@ -28,7 +27,7 @@ export default {
   methods: {
     onCancel() {
       // cancel logic, drop channel for example
-      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
     onEnd() {

@@ -57,7 +57,7 @@ export default {
 
   methods: {
     onClose() {
-      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
   },

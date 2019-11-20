@@ -8,10 +8,9 @@
     </v-description>
 
     <form-item>
-      <v-code-input
+      <v-input
         v-model="code"
         v-validate="'required|digits:6'"
-        class="v-text-center"
         data-vv-as="code"
         data-vv-name="code"
         :error="errors.first('code') || error"
@@ -45,7 +44,7 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import VCodeInput from '@endpass/ui/kit/VCodeInput';
+import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
 import { authStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
@@ -124,7 +123,7 @@ export default {
     VDescription,
     VLink,
     VButton,
-    VCodeInput,
+    VInput,
     FormItem,
     FormRow,
   },

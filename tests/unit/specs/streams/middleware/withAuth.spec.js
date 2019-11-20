@@ -31,7 +31,7 @@ describe('withAuth', () => {
   it('should redirect to auth', async () => {
     expect.assertions(2);
 
-    authService.getAuthStatus.mockResolvedValueOnce(400);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 400 });
     authChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withAuth(options, action);
@@ -47,7 +47,7 @@ describe('withAuth', () => {
   it('should redirect to auth and end stream', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce(400);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 400 });
 
     authChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
@@ -65,7 +65,7 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce(200);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

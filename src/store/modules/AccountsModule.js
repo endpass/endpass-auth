@@ -13,14 +13,7 @@ import userService from '@/service/user';
 import authService from '@/service/auth';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
-import {
-  accountChannel,
-  authChannel,
-  documentChannel,
-  permissionChannel,
-  signChannel,
-  walletChannel,
-} from '@/class/singleton/channels';
+import { accountChannel, permissionChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import {
   ENCRYPT_OPTIONS,
@@ -269,18 +262,6 @@ class AccountsModule extends VuexModule {
   @Action
   cancelSignPermission() {
     permissionChannel.put(Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER));
-  }
-
-  @Action
-  cancelAllChannels() {
-    const fail = () => Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER);
-
-    permissionChannel.put(fail());
-    authChannel.put(fail());
-    accountChannel.put(fail());
-    signChannel.put(fail());
-    documentChannel.put(fail());
-    walletChannel.put(fail());
   }
 
   @Action
