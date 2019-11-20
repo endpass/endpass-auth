@@ -40,7 +40,7 @@ class CoreModule extends VuexModule {
     super(props);
     this.authStore = authStore;
     this.sharedStore = sharedStore;
-    this.authStore.cookieExpire.value.onExpire(() => {
+    this.authStore.cookieExpireChecker.value.onExpire(() => {
       this.cancelAllChannels();
     });
   }
@@ -87,7 +87,7 @@ class CoreModule extends VuexModule {
     initDialogStream();
     initDialogRequestStream();
 
-    this.authStore.cookieExpire.value.onExpire(() => {
+    this.authStore.cookieExpireChecker.value.onExpire(() => {
       this.dialogClose();
       this.finishLogout();
     });
@@ -101,7 +101,7 @@ class CoreModule extends VuexModule {
 
     initWidgetStream();
 
-    this.authStore.cookieExpire.value.onExpire(() => {
+    this.authStore.cookieExpireChecker.value.onExpire(() => {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
       this.finishLogout();
     });
@@ -117,13 +117,14 @@ class CoreModule extends VuexModule {
   @Action
   cancelAllChannels() {
     const fail = () => Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER);
-
-    permissionChannel.put(fail());
-    authChannel.put(fail());
-    accountChannel.put(fail());
-    signChannel.put(fail());
-    documentChannel.put(fail());
-    walletChannel.put(fail());
+    [
+      permissionChannel,
+      authChannel,
+      accountChannel,
+      signChannel,
+      documentChannel,
+      walletChannel,
+    ].forEach(channel => channel.put(fail()));
   }
 
   @Action

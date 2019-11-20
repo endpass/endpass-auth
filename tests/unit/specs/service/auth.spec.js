@@ -71,8 +71,7 @@ describe('auth service', () => {
 
   describe('recover', () => {
     const email = 'email+test@email.com';
-    const signature = 'signature';
-    const redirectUrl = 'https://localhost:8080';
+    const code = '123123';
     const url = `${identityBaseUrl}/auth/recover`;
 
     it('should make correct request', async () => {
@@ -80,14 +79,12 @@ describe('auth service', () => {
 
       axiosMock.onPost(url).reply(config => {
         expect(config.url).toBe(url);
-        expect(config.data).toBe(
-          JSON.stringify({ email, signature, redirectUrl }),
-        );
+        expect(config.data).toBe(JSON.stringify({ email, code }));
 
         return [200, getRecoveryIdentifierResponse];
       });
 
-      await authService.disableOtp(email, signature, redirectUrl);
+      await authService.disableOtpViaSms({ email, code });
     });
 
     it('should handle successfull POST /auth/recover request', async () => {
@@ -95,11 +92,10 @@ describe('auth service', () => {
 
       axiosMock.onPost(url).reply(200, successResponse);
 
-      const received = await authService.disableOtp(
+      const received = await authService.disableOtpViaSms({
         email,
-        signature,
-        redirectUrl,
-      );
+        code,
+      });
 
       expect(received).toEqual(successResponse);
     });
@@ -110,7 +106,7 @@ describe('auth service', () => {
       axiosMock.onGet(url).reply(200, errorResponse);
 
       await expect(
-        authService.disableOtp(email, signature, redirectUrl),
+        authService.disableOtpViaSms({ email, code }),
       ).rejects.toThrow(expect.any(Error));
     });
 
@@ -120,7 +116,7 @@ describe('auth service', () => {
       axiosMock.onPost(url).reply(500);
 
       await expect(
-        authService.disableOtp(email, signature, redirectUrl),
+        authService.disableOtpViaSms({ email, code }),
       ).rejects.toThrow(expect.any(Error));
     });
   });

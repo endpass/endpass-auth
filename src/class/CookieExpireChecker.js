@@ -1,19 +1,19 @@
 // @ts-check
 import EventEmitter from '@endpass/class/EventEmitter';
 
-const EXPIRE_COOKIE_TIME_KEY = 'endpass--expired-time';
+const EXPIRE_COOKIE_TIME_KEY = 'endpass-expired-time';
 const EXPIRE_CHECK_TIMEOUT = 2000;
 
 const EVENT_COOKIE_EXPIRED = 'cookie-expire';
 
-export default class CookieExpire {
+export default class CookieExpireChecker {
   constructor() {
     this.intervalId = undefined;
     this.emitter = new EventEmitter();
   }
 
   /**
-   * @param {CallableFunction} cb
+   * @param {Function} cb
    */
   onExpire(cb) {
     this.emitter.on(EVENT_COOKIE_EXPIRED, cb);
@@ -22,7 +22,7 @@ export default class CookieExpire {
   /**
    * @param {number} expireAt
    */
-  updateExpireAt(expireAt = 0) {
+  setExpireAt(expireAt) {
     const value = expireAt * 1000;
     document.cookie = `${EXPIRE_COOKIE_TIME_KEY}=${value}`;
   }
@@ -35,10 +35,10 @@ export default class CookieExpire {
       const storedValue = document.cookie.match(
         `(^|;) ?${EXPIRE_COOKIE_TIME_KEY}=([^;]*)(;|$)`,
       );
-      const storedExpire = storedValue ? Number(storedValue[2]) || 0 : null;
+      const storedExpireAt = storedValue ? Number(storedValue[2]) || 0 : null;
 
       const now = new Date().getTime();
-      if (!storedExpire || now > storedExpire) {
+      if (!storedExpireAt || now > storedExpireAt) {
         this.stopChecking();
         this.emitter.emit(EVENT_COOKIE_EXPIRED);
       }

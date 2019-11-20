@@ -11,7 +11,7 @@ import i18n from '@/locales/i18n';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import { METHODS, CHALLENGE_TYPES } from '@/constants';
-import CookieExpire from '@/class/CookieExpire';
+import CookieExpireChecker from '@/class/CookieExpireChecker';
 import NonReactive from '@/class/NonReactive';
 
 const { ERRORS } = ConnectError;
@@ -20,7 +20,7 @@ const { ERRORS } = ConnectError;
 class AuthModule extends VuexModule {
   authParams = null;
 
-  cookieExpire = new NonReactive(new CookieExpire());
+  cookieExpireChecker = new NonReactive(new CookieExpireChecker());
 
   /** @type {CHALLENGE_TYPES[keyof CHALLENGE_TYPES]?} */
   challengeType = null;
@@ -167,8 +167,8 @@ class AuthModule extends VuexModule {
     await this.changeAuthStatusByCode(status);
 
     if (this.isAuthorized && expiresAt) {
-      this.cookieExpire.value.updateExpireAt(expiresAt);
-      this.cookieExpire.value.startChecking();
+      this.cookieExpireChecker.value.setExpireAt(expiresAt);
+      this.cookieExpireChecker.value.startChecking();
     }
 
     return status;
@@ -197,8 +197,8 @@ class AuthModule extends VuexModule {
 
   @Action
   logout() {
-    this.cookieExpire.value.updateExpireAt(0);
-    this.cookieExpire.value.stopChecking();
+    this.cookieExpireChecker.value.setExpireAt(0);
+    this.cookieExpireChecker.value.stopChecking();
     this.changeAuthStatusByCode(400);
     this.challengeType = null;
     this.setAuthParams(null);
