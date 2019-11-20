@@ -121,11 +121,15 @@ export const UPLOAD_STATUSES = {
  * @type {{
     PASSPORT: 'Passport',
     DRIVER_LICENSE: 'DriverLicense',
+    PROOF_OF_ADDRESS: 'ProofOfAddress',
+    ID_CARD: 'IdCard',
   }}
  */
 export const DOC_TYPES = {
   PASSPORT: 'Passport',
   DRIVER_LICENSE: 'DriverLicense',
+  PROOF_OF_ADDRESS: 'ProofOfAddress',
+  ID_CARD: 'IdCard',
 };
 
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute

@@ -18,7 +18,9 @@
   "constants": {
     "documentType": {
       "passport": "Passport",
-      "driverLicense": "Driver Licence"
+      "driverLicense": "Driver Licence",
+      "proofOfAddress": "Proof of Address",
+      "idCard": "Id Card"
     }
   },
   "components": {

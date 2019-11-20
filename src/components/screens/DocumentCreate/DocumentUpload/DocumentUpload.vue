@@ -8,7 +8,7 @@
     </template>
     <form-item>
       <v-select
-        :value.sync="documentType"
+        v-model="documentType"
         :options="$options.documentTypes"
         :label="$t('components.uploadDocument.documentType')"
         :disabled="!isDocTypeMutable"
@@ -35,6 +35,11 @@ import { sharedStore } from '@/store';
 
 const DEFAULT_DOC_TYPE = DOC_TYPES.PASSPORT;
 
+const createDocTypeOption = val => ({
+  text: CONSTANT_TRANSLATES[val],
+  val,
+});
+
 export default {
   name: 'DocumentUpload',
 
@@ -46,14 +51,10 @@ export default {
   }),
 
   documentTypes: [
-    {
-      text: CONSTANT_TRANSLATES[DOC_TYPES.PASSPORT],
-      val: DOC_TYPES.PASSPORT,
-    },
-    {
-      text: CONSTANT_TRANSLATES[DOC_TYPES.DRIVER_LICENSE],
-      val: DOC_TYPES.DRIVER_LICENSE,
-    },
+    createDocTypeOption(DOC_TYPES.PASSPORT),
+    createDocTypeOption(DOC_TYPES.DRIVER_LICENSE),
+    createDocTypeOption(DOC_TYPES.PROOF_OF_ADDRESS),
+    createDocTypeOption(DOC_TYPES.ID_CARD),
   ],
 
   methods: {
