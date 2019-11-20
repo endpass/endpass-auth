@@ -1,8 +1,8 @@
-import CookieExpire from '@/class/CookieExpire';
+import CookieExpireChecker from '@/class/CookieExpireChecker';
 
 jest.useFakeTimers();
 
-describe('CookieExpire class', () => {
+describe('CookieExpireChecker class', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -16,13 +16,13 @@ describe('CookieExpire class', () => {
 
   it('should emit event with expired time', () => {
     const handler = jest.fn();
-    const cookieExpire = new CookieExpire();
-    cookieExpire.onExpire(handler);
+    const cookieExpireChecker = new CookieExpireChecker();
+    cookieExpireChecker.onExpire(handler);
 
     expect(handler).not.toBeCalled();
 
-    cookieExpire.updateExpireAt(expiredTime());
-    cookieExpire.startChecking();
+    cookieExpireChecker.setExpireAt(expiredTime());
+    cookieExpireChecker.startChecking();
 
     jest.runOnlyPendingTimers();
 
@@ -31,17 +31,17 @@ describe('CookieExpire class', () => {
 
   it('should emit event after set expired time', () => {
     const handler = jest.fn();
-    const cookieExpire = new CookieExpire();
-    cookieExpire.onExpire(handler);
+    const cookieExpireChecker = new CookieExpireChecker();
+    cookieExpireChecker.onExpire(handler);
 
-    cookieExpire.updateExpireAt(passTime());
-    cookieExpire.startChecking();
+    cookieExpireChecker.setExpireAt(passTime());
+    cookieExpireChecker.startChecking();
 
     expect(handler).not.toBeCalled();
 
     jest.runOnlyPendingTimers();
 
-    cookieExpire.updateExpireAt(expiredTime());
+    cookieExpireChecker.setExpireAt(expiredTime());
 
     jest.advanceTimersByTime(1000000);
 
@@ -50,16 +50,16 @@ describe('CookieExpire class', () => {
 
   it('should stop checking', () => {
     const handler = jest.fn();
-    const cookieExpire = new CookieExpire();
-    cookieExpire.onExpire(handler);
+    const cookieExpireChecker = new CookieExpireChecker();
+    cookieExpireChecker.onExpire(handler);
 
-    cookieExpire.updateExpireAt(passTime());
-    cookieExpire.startChecking();
+    cookieExpireChecker.setExpireAt(passTime());
+    cookieExpireChecker.startChecking();
 
     jest.runOnlyPendingTimers();
 
-    cookieExpire.stopChecking();
-    cookieExpire.updateExpireAt(expiredTime());
+    cookieExpireChecker.stopChecking();
+    cookieExpireChecker.setExpireAt(expiredTime());
 
     jest.runOnlyPendingTimers();
 

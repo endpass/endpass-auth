@@ -1,10 +1,21 @@
+// @ts-check
 import get from 'lodash/get';
 import request from '@/class/singleton/request';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
-const createTimeout = handler => setTimeout(handler, 1500);
+const TIMEOUT_DEFAULT = 1500;
 
+/**
+ * @param {Function} handler
+ * @return {number}
+ */
+const createTimeout = handler => setTimeout(handler, TIMEOUT_DEFAULT);
+
+/**
+ * @param {string} email
+ * @return {Promise<any>}
+ */
 const getAuthChallenge = email => {
   return request
     .post(`${identityBaseUrl}/auth`, {
@@ -17,6 +28,11 @@ const getAuthChallenge = email => {
     });
 };
 
+/**
+ * @param {string} password
+ * @param {string} originHost
+ * @return {Promise<any>}
+ */
 const setAuthPermission = async (password, originHost) => {
   const res = await request.post(`${identityBaseUrl}/auth/permission`, {
     password,
@@ -25,6 +41,15 @@ const setAuthPermission = async (password, originHost) => {
   return res;
 };
 
+/**
+ * @param {object} params
+ * @param {string} params.email
+ * @param {string} params.code
+ * @param {string} params.password
+ * @param {boolean} params.isSignUp
+ * @param {string} params.challengeType
+ * @return {Promise<any>}
+ */
 const authWithCode = async ({
   email,
   code,
@@ -48,6 +73,10 @@ const authWithCode = async ({
   return res;
 };
 
+/**
+ * @param {string} idToken
+ * @return {Promise<any>}
+ */
 const authWithGoogle = idToken =>
   request
     .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
@@ -59,6 +88,10 @@ const authWithGoogle = idToken =>
       throw err.response.data;
     });
 
+/**
+ * @param {string} code
+ * @return {Promise<any>}
+ */
 const authWithGitHub = code =>
   request
     .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
@@ -72,20 +105,28 @@ const authWithGitHub = code =>
 
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
+/**
+ * @return {Promise<{expiresAt: number, status: number}>}
+ */
 const getAuthStatus = async () => {
-  const res = {
-    status: 200,
-    expiresAt: 0,
-  };
   try {
     const { expiresAt } = await request.get(`${identityBaseUrl}/auth/check`);
-    res.expiresAt = expiresAt;
+    return {
+      status: 200,
+      expiresAt,
+    };
   } catch (e) {
-    res.status = get(e, ['response', 'status']);
+    const status = get(e, ['response', 'status']);
+    return {
+      status,
+      expiresAt: 0,
+    };
   }
-  return res;
 };
 
+/**
+ * @return {Promise<number>}
+ */
 const waitLogin = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
@@ -106,6 +147,10 @@ const waitLogin = () =>
     return handler();
   });
 
+/**
+ * @param {string} email
+ * @return {Promise<string>}
+ */
 const getRecoveryIdentifier = email =>
   request
     .get(`${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`)
@@ -115,6 +160,10 @@ const getRecoveryIdentifier = email =>
       return res.message;
     });
 
+/**
+ * @param {string} email
+ * @return {Promise<number>}
+ */
 const sendEmailCode = async email => {
   const { timeout } = await request.post(`${identityBaseUrl}/auth/code`, {
     email,
@@ -126,7 +175,7 @@ const sendEmailCode = async email => {
 /**
  * Send sms with code for disabling otp
  * @param {string} email
- * @returns {Promise<void>}
+ * @returns {Promise<any>}
  */
 const sendOtpRecoverSms = async email => {
   try {
@@ -151,7 +200,7 @@ const sendOtpRecoverSms = async email => {
  * @param {object} param
  * @param {string} param.email
  * @param {string} param.code
- * @returns {Promise<void>}
+ * @returns {Promise<any>}
  */
 const disableOtpViaSms = async ({ email, code }) => {
   const res = await request.post(`${identityBaseUrl}/auth/recover`, {
@@ -164,19 +213,9 @@ const disableOtpViaSms = async ({ email, code }) => {
   return res;
 };
 
-const disableOtp = (email, signature, redirectUrl) =>
-  request
-    .post(`${identityBaseUrl}/auth/recover`, {
-      email,
-      signature,
-      redirectUrl,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
-
-      return res;
-    });
-
+/**
+ * @return {string}
+ */
 const getSeedTemplateUrl = () => `${identityBaseUrl}/auth/recover/template`;
 
 export default {
@@ -190,7 +229,6 @@ export default {
   logout,
   waitLogin,
   getRecoveryIdentifier,
-  disableOtp,
   sendOtpRecoverSms,
   disableOtpViaSms,
   getSeedTemplateUrl,
