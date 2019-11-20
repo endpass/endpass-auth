@@ -14,6 +14,17 @@ import {
 import dialogClose from '@/streams/actions/dialogClose';
 import isDialog from '@/util/isDialog';
 import { initDialogResize } from '@/streams/actions/dialogResize';
+import Answer from '@/class/Answer';
+import {
+  accountChannel,
+  authChannel,
+  documentChannel,
+  permissionChannel,
+  signChannel,
+  walletChannel,
+} from '@/class/singleton/channels';
+
+const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
 class CoreModule extends VuexModule {
@@ -29,6 +40,9 @@ class CoreModule extends VuexModule {
     super(props);
     this.authStore = authStore;
     this.sharedStore = sharedStore;
+    this.authStore.cookieExpire.value.onExpire(() => {
+      this.cancelAllChannels();
+    });
   }
 
   get isLoading() {
@@ -72,6 +86,12 @@ class CoreModule extends VuexModule {
 
     initDialogStream();
     initDialogRequestStream();
+
+    this.authStore.cookieExpire.value.onExpire(() => {
+      this.dialogClose();
+      this.finishLogout();
+    });
+
     this.isInited = true;
   }
 
@@ -80,12 +100,30 @@ class CoreModule extends VuexModule {
     if (this.isInited) return;
 
     initWidgetStream();
+
+    this.authStore.cookieExpire.value.onExpire(() => {
+      bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
+      this.finishLogout();
+    });
+
     this.isInited = true;
   }
 
   @Action
   async initResize() {
     initDialogResize();
+  }
+
+  @Action
+  cancelAllChannels() {
+    const fail = () => Answer.createFail(ERRORS.AUTH_CANCELED_BY_USER);
+
+    permissionChannel.put(fail());
+    authChannel.put(fail());
+    accountChannel.put(fail());
+    signChannel.put(fail());
+    documentChannel.put(fail());
+    walletChannel.put(fail());
   }
 
   @Action
@@ -124,6 +162,11 @@ class CoreModule extends VuexModule {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
     }
 
+    this.finishLogout();
+  }
+
+  @Action
+  finishLogout() {
     this.authStore.logout();
     settingsService.clearLocalSettings();
   }

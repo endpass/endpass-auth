@@ -73,11 +73,15 @@ const authWithGitHub = code =>
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 const getAuthStatus = async () => {
-  let res = 200;
+  const res = {
+    status: 200,
+    expiresAt: 0,
+  };
   try {
-    await request.get(`${identityBaseUrl}/auth/check`);
+    const { expiresAt } = await request.get(`${identityBaseUrl}/auth/check`);
+    res.expiresAt = expiresAt;
   } catch (e) {
-    res = get(e, ['response', 'status']);
+    res.status = get(e, ['response', 'status']);
   }
   return res;
 };
@@ -87,7 +91,7 @@ const waitLogin = () =>
     /* eslint-disable-next-line */
     const handler = async function() {
       try {
-        const status = await getAuthStatus();
+        const { status } = await getAuthStatus();
 
         if (status === 200 || status === 403) {
           return resolve(status);

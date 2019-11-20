@@ -30,7 +30,7 @@ describe('withPermission', () => {
 
   it('should redirect to permission', async () => {
     expect.assertions(2);
-    authService.getAuthStatus.mockResolvedValueOnce(403);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 403 });
     permissionChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withPermission(options, action);
@@ -46,7 +46,7 @@ describe('withPermission', () => {
   it('should redirect to permission and end stream', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce(403);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 403 });
     permissionChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withPermission(options, action);
@@ -63,7 +63,7 @@ describe('withPermission', () => {
   it('should not redirect to permission', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce(200);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);
@@ -76,7 +76,7 @@ describe('withPermission', () => {
   it('should not redirect to permission with isLogin', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce(400);
+    authService.getAuthStatus.mockResolvedValueOnce({ status: 400 });
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);
