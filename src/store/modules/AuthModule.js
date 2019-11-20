@@ -11,7 +11,7 @@ import i18n from '@/locales/i18n';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import { METHODS, CHALLENGE_TYPES } from '@/constants';
-import AuthCookieExpire from '@/class/AuthCookieExpire';
+import CookieExpire from '@/class/CookieExpire';
 import NonReactive from '@/class/NonReactive';
 
 const { ERRORS } = ConnectError;
@@ -20,7 +20,7 @@ const { ERRORS } = ConnectError;
 class AuthModule extends VuexModule {
   authParams = null;
 
-  cookieExpire = new NonReactive(new AuthCookieExpire());
+  cookieExpire = new NonReactive(new CookieExpire());
 
   /** @type {CHALLENGE_TYPES[keyof CHALLENGE_TYPES]?} */
   challengeType = null;
