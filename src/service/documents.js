@@ -93,9 +93,7 @@ const documentsService = {
    * @return {Promise<T[keyof T]>}
    */
   async getDocumentsUploadStatusById(id) {
-    const data = await withSuccess(
-      request.get(`${docBaseURL}/${id}/status/upload`),
-    );
+    const data = await request.get(`${docBaseURL}/${id}/status/upload`);
     const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
     const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
 
