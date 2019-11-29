@@ -44,7 +44,7 @@ describe('Documents service', () => {
         .onGet(requestUrlForDocCheck)
         .reply(200, docStatusUploadNoContent);
 
-      const res = await documentsService.getDocumentsUploadStatusById(docId);
+      const res = await documentsService.getDocumentUploadStatusById(docId);
       expect(res).toBe(UPLOAD_STATUSES.UPLOADED);
     });
 
@@ -55,7 +55,7 @@ describe('Documents service', () => {
         .onGet(requestUrlForDocCheck)
         .reply(200, docStatusUploadProcessing);
 
-      const res = await documentsService.getDocumentsUploadStatusById(docId);
+      const res = await documentsService.getDocumentUploadStatusById(docId);
       expect(res).toBe(UPLOAD_STATUSES.PROCESSING);
     });
 
@@ -66,7 +66,7 @@ describe('Documents service', () => {
         .onGet(requestUrlForDocCheck)
         .reply(200, docStatusErrorProcessing);
 
-      const res = await documentsService.getDocumentsUploadStatusById(docId);
+      const res = await documentsService.getDocumentUploadStatusById(docId);
       expect(res).toBe(UPLOAD_STATUSES.ERRORED);
     });
   });

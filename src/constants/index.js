@@ -117,6 +117,26 @@ export const UPLOAD_STATUSES = {
 };
 
 /**
+ * Document statuses
+ * @type {{
+    NEW: 'New',
+    PENDING: 'Pending',
+    PENDING_ADDITIONAL: 'PendingAdditional',
+    NOT_READABLE: 'NotReadable',
+    NOT_VERIFIED: 'NotVerified',
+    VERIFIED: 'Verified',
+  }}
+ */
+export const DOC_STATUSES = {
+  NEW: 'New',
+  PENDING: 'Pending',
+  PENDING_ADDITIONAL: 'PendingAdditional',
+  NOT_READABLE: 'NotReadable',
+  NOT_VERIFIED: 'NotVerified',
+  VERIFIED: 'Verified',
+};
+
+/**
  * Document types
  * @type {{
     PASSPORT: 'Passport',
