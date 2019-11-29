@@ -4,7 +4,7 @@ import isNil from 'lodash.isnil';
 import get from 'lodash/get';
 import generators from '@endpass/utils/generators';
 import request from '@/class/singleton/request';
-import { DOCUMENT_SIDES, UPLOAD_STATUSES } from '@/constants';
+import { DOC_STATUSES, DOCUMENT_SIDES, UPLOAD_STATUSES } from '@/constants';
 
 const docBaseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
 
@@ -87,12 +87,35 @@ const documentsService = {
   },
 
   /**
+   * @param {string} id
+   * @return {Promise<void>}
+   */
+  async waitDocumentReady(id) {
+    const waitingStatuses = [DOC_STATUSES.NEW, DOC_STATUSES.PENDING];
+    // eslint-disable-next-line no-unused-vars
+    for await (const index of generators.repeatWithInterval(
+      CHECK_RECOGNIZE_TIMEOUT,
+    )) {
+      const document = await request.get(`${docBaseURL}/${id}`);
+      if (!document) {
+        throw new Error('Recognize error');
+      }
+
+      const { status } = document;
+
+      if (!waitingStatuses.includes(status)) {
+        break;
+      }
+    }
+  },
+
+  /**
    *
    * @template {typeof UPLOAD_STATUSES} T
    * @param {string} id
    * @return {Promise<T[keyof T]>}
    */
-  async getDocumentsUploadStatusById(id) {
+  async getDocumentUploadStatusById(id) {
     const data = await request.get(`${docBaseURL}/${id}/status/upload`);
     const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
     const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
@@ -118,7 +141,7 @@ const documentsService = {
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
     )) {
-      const status = await documentsService.getDocumentsUploadStatusById(docId);
+      const status = await documentsService.getDocumentUploadStatusById(docId);
 
       if (status === UPLOAD_STATUSES.ERRORED) {
         throw new Error('Recognize error');
