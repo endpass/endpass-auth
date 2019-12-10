@@ -1,4 +1,4 @@
-import { authStore, accountsStore, requestStore } from '@/store';
+import { authStore, accountsStore, requestStore, sharedStore } from '@/store';
 import {
   accountChannel,
   authChannel,
@@ -28,6 +28,9 @@ function initDialogStream() {
       channel: walletChannel,
     },
     [METHODS.CREATE_DOCUMENT]: {
+      commit(payload) {
+        sharedStore.setDocumentUploadOptions(payload);
+      },
       routeName: 'document-create',
       channel: documentChannel,
       needAuth: true,

@@ -1,10 +1,12 @@
 jest.mock('@/service/documents', () => {
+  // eslint-disable-next-line global-require
   const { docStatusesMap } = require('@unitFixtures/documents');
 
   return {
     checkFile: jest.fn().mockResolvedValue(),
     confirmDocument: jest.fn().mockResolvedValue(),
     waitDocumentRecognition: jest.fn(),
+    waitDocumentReady: jest.fn(),
     uploadFrontFile: jest.fn().mockResolvedValue({
       message: 'document uploaded',
       success: true,
@@ -14,6 +16,6 @@ jest.mock('@/service/documents', () => {
       success: true,
     }),
     createDocument: jest.fn(),
-    getDocumentsUploadStatusById: jest.fn().mockResolvedValue(docStatusesMap),
+    getDocumentUploadStatusById: jest.fn().mockResolvedValue(docStatusesMap),
   };
 });

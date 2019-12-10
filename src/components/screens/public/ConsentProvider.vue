@@ -89,7 +89,7 @@ export default {
         window.self.opener = window.self;
         window.self.close();
       }
-      this.$options.accountsStore.cancelAllChannels();
+      this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
 

@@ -117,15 +117,39 @@ export const UPLOAD_STATUSES = {
 };
 
 /**
+ * Document statuses
+ * @type {{
+    NEW: 'New',
+    PENDING: 'Pending',
+    PENDING_ADDITIONAL: 'PendingAdditional',
+    NOT_READABLE: 'NotReadable',
+    NOT_VERIFIED: 'NotVerified',
+    VERIFIED: 'Verified',
+  }}
+ */
+export const DOC_STATUSES = {
+  NEW: 'New',
+  PENDING: 'Pending',
+  PENDING_ADDITIONAL: 'PendingAdditional',
+  NOT_READABLE: 'NotReadable',
+  NOT_VERIFIED: 'NotVerified',
+  VERIFIED: 'Verified',
+};
+
+/**
  * Document types
  * @type {{
     PASSPORT: 'Passport',
     DRIVER_LICENSE: 'DriverLicense',
+    PROOF_OF_ADDRESS: 'ProofOfAddress',
+    ID_CARD: 'IdCard',
   }}
  */
 export const DOC_TYPES = {
   PASSPORT: 'Passport',
   DRIVER_LICENSE: 'DriverLicense',
+  PROOF_OF_ADDRESS: 'ProofOfAddress',
+  ID_CARD: 'IdCard',
 };
 
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute

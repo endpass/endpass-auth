@@ -104,7 +104,8 @@ class BackSideController extends VuexModule {
   @Action
   async confirmAndWait(docId) {
     await documentsService.confirmDocument(docId);
-    await documentsService.waitDocumentRecognition(docId);
+    await documentsService.waitDocumentReady(docId);
+    // await documentsService.waitDocumentRecognition(docId);
   }
 
   /**

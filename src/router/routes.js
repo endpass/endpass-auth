@@ -121,17 +121,6 @@ const routes = [
     },
   },
   {
-    path: '/middleware',
-    name: 'ExampleMiddleware',
-    component: () =>
-      import(
-        /* webpackChunkName: "example-middleware" */ '@/components/screens/ExampleMiddleware'
-      ),
-    meta: {
-      isBackground: true,
-    },
-  },
-  {
     path: '/sign',
     name: 'SignScreen',
     component: () =>

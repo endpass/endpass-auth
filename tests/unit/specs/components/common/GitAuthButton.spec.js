@@ -3,7 +3,7 @@ import { loginWithGithub } from 'github-oauth-popup';
 import Vuex from 'vuex';
 import GitAuthButton from '@/components/common/GitAuthButton';
 import setupI18n from '@/locales/i18nSetup';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
@@ -55,7 +55,7 @@ describe('GitAuthButton', () => {
       expect.assertions(3);
 
       const code = 'kek';
-      identityService.authWithGitHub.mockResolvedValueOnce({
+      authService.authWithGitHub.mockResolvedValueOnce({
         success: true,
       });
       loginWithGithub.mockResolvedValue({
@@ -64,7 +64,7 @@ describe('GitAuthButton', () => {
       wrapper.find('[data-test=submit-button-github]').trigger('click');
       await global.flushPromises();
 
-      expect(identityService.authWithGitHub).toHaveBeenCalledWith(code);
+      expect(authService.authWithGitHub).toHaveBeenCalledWith(code);
       expect(loginWithGithub).toHaveBeenCalledWith({
         client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',

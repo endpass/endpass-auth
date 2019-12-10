@@ -18,7 +18,9 @@
   "constants": {
     "documentType": {
       "passport": "Passport",
-      "driverLicense": "Driver Licence"
+      "driverLicense": "Driver Licence",
+      "proofOfAddress": "Proof of Address",
+      "idCard": "Id Card"
     }
   },
   "components": {
@@ -55,8 +57,6 @@
       "signIn": "Sign in"
     },
     "compositeAuth": {
-      "successAuthMessage": "You are successfully authorized. This\u00A0dialog will close in a\u00A0few seconds.",
-      "linkSentMessage": "We've sent your authorization link to\u00A0your email address. Please, open it in\u00A0the\u00A0same browser to\u00A0sign\u00A0in. If you don't see the\u00A0email, check the\u00A0spam folder and\u00A0exclude Endpass from\u00A0spam filters.",
       "authFailed": "Authentication failed. Please, try again."
     },
     "regularPasswordForm": {

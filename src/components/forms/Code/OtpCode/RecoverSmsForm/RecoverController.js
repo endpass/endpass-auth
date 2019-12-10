@@ -1,7 +1,7 @@
 // @ts-check
 import { VuexModule, Action, Module } from 'vuex-class-modules';
 import createController from '@/controllers/createController';
-import identityService from '@/service/identity';
+import authService from '@/service/auth';
 import {
   authStore as authStoreModule,
   accountsStore as accountsStoreModule,
@@ -37,7 +37,7 @@ class RecoverController extends VuexModule {
    */
   @Action
   async sendSms({ email }) {
-    await identityService.sendOtpRecoverSms(email);
+    await authService.sendOtpRecoverSms(email);
   }
 
   /**
@@ -49,7 +49,7 @@ class RecoverController extends VuexModule {
    */
   @Action
   async disableOtp({ email, code }) {
-    await identityService.disableOtpViaSms({ email, code });
+    await authService.disableOtpViaSms({ email, code });
     await Promise.all([
       this.accountsStore.disableOtpInStore(),
       this.authStore.disableOtpInStore(),
