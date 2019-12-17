@@ -16,7 +16,6 @@
       :is-loading="isLoading"
       :scopes-list="scopesList"
       @submit="handleScopesSubmit"
-      @cancel="onClose"
     />
   </v-frame>
 </template>

@@ -46,6 +46,11 @@ const ScopesCheckboxTree = {
       default: () => ({}),
     },
 
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+
     isChild: {
       type: Boolean,
       default: false,
@@ -58,6 +63,8 @@ const ScopesCheckboxTree = {
 
   methods: {
     onChange(scope, value) {
+      if (this.disabled) return;
+
       const newValuesMap = { ...this.valuesMap };
 
       Object.keys(newValuesMap).forEach(key => {
@@ -81,6 +88,8 @@ const ScopesCheckboxTree = {
     },
 
     onChangeLevel(valuesMap) {
+      if (this.disabled) return;
+
       this.$emit('change', valuesMap);
     },
   },

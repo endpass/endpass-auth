@@ -12,22 +12,12 @@
         :level="level"
         :children="level.children"
         :values-map="valuesScopesMap"
+        :disabled="true"
         data-test="scopes-tree"
         @change="onChange"
       />
     </div>
     <form-controls>
-      <v-button
-        v-if="isPopup"
-        type="button"
-        :disabled="isLoading"
-        :fluid="true"
-        skin="quaternary"
-        data-test="cancel-button"
-        @click="handleCancel"
-      >
-        {{ $t('global.deny') }}
-      </v-button>
       <v-button
         :disabled="!isFormValid || isLoading"
         :is-loading="isLoading"
@@ -136,9 +126,7 @@ export default {
 
       this.$emit('submit', res);
     },
-    handleCancel() {
-      this.$emit('cancel');
-    },
+
     getCheckedScopes() {
       const res = this.scopesList.filter(
         key => this.valuesScopesMap[key] === true,
