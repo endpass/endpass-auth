@@ -188,9 +188,9 @@ class AuthModule extends VuexModule {
     if (isAuthorizedNew !== isAuthorized) {
       bridgeMessenger.send(METHODS.AUTH_STATUS, isAuthorizedNew);
       // TODO: switch after connect will be updated in all repos
-      // bridgeMessenger.send(METHODS.AUTH_STATUS, {
-      //   status: isAuthorizedNew
-      // });
+      bridgeMessenger.send(METHODS.AUTH_STATUS, {
+        status: isAuthorizedNew,
+      });
     }
   }
 

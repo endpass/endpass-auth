@@ -3,7 +3,6 @@ const path = require('path');
 const webpack = require('webpack');
 const buildUtils = require('@endpass/utils/build');
 const objectUtils = require('@endpass/utils/objects');
-const pkg = require('./package');
 
 const { SOURCE_MAP, NODE_ENV } = process.env;
 
@@ -15,7 +14,7 @@ console.log('ENV', ENV);
 module.exports = {
   productionSourceMap: false,
 
-  publicPath: `/version/${pkg.version}/`,
+  publicPath: '/',
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
