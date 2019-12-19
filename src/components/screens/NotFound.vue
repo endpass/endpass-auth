@@ -1,8 +1,8 @@
 <template>
-  <v-frame @close="handleClose">
-    <p>{{ $t('components.notFound') }}</p>
+  <v-frame @close="onClose">
+    <message>{{ $t('components.notFound') }}</message>
     <br>
-    <small>{{ $t('global.version') }} {{ version }}</small>
+    <v-description>{{ $t('global.version') }} {{ version }}</v-description>
   </v-frame>
 </template>
 
@@ -10,6 +10,8 @@
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
 import { accountsStore, coreStore } from '@/store';
+import VDescription from '@/components/common/VDescription';
+import Message from '@/components/common/Message';
 
 export default {
   name: 'NotFound',
@@ -22,7 +24,7 @@ export default {
   },
 
   methods: {
-    handleClose() {
+    onClose() {
       this.$options.coreStore.dialogClose();
       this.$options.accountsStore.cancelAllChannels();
     },
@@ -33,7 +35,9 @@ export default {
   },
 
   components: {
+    Message,
     VFrame,
+    VDescription,
   },
 };
 </script>

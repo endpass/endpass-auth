@@ -1,6 +1,6 @@
 <template>
   <v-frame @close="handleClose">
-    <p>{{ $t('global.version') }}{{ version }}</p>
+    <v-description>{{ $t('global.version') }}{{ version }}</v-description>
   </v-frame>
 </template>
 
@@ -8,6 +8,7 @@
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
 import { coreStore } from '@/store';
+import VDescription from '@/components/common/VDescription';
 
 if (ENV.VUE_APP_SHOW_VERSION_INFO) {
   // eslint-disable-next-line no-console
@@ -33,6 +34,7 @@ export default {
 
   components: {
     VFrame,
+    VDescription,
   },
 };
 </script>
