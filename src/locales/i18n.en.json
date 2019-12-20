@@ -1,6 +1,7 @@
 {
   "global": {
     "confirm": "Confirm",
+    "repeat": "Repeat",
     "close": "Close",
     "error": "Error",
     "cancel": "Cancel",

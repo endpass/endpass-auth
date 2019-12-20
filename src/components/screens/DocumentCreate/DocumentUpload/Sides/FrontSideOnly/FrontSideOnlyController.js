@@ -1,15 +1,20 @@
 // @ts-check
 import { VuexModule, Action, Module, Mutation } from 'vuex-class-modules';
 import createController from '@/controllers/createController';
-import i18n from '@/locales/i18n';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
 import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
+import i18n from '@/locales/i18n';
 
 @Module({ generateMutationSetters: true })
-class BackSideController extends VuexModule {
+class FrontSideOnlyController extends VuexModule {
+  /**
+   * @type {string}
+   */
+  docId = '';
+
   /**
    * @type {number}
    */
@@ -108,45 +113,6 @@ class BackSideController extends VuexModule {
   }
 
   /**
-   * @param {object} fields UserDocument object for upload
-   * @param {string} fields.docId UserDocument type
-   * @param {File} fields.file UserDocument file
-   */
-  @Action
-  async startUpload({ file, docId }) {
-    const timer = this.getTimer();
-    try {
-      this.progressLabel = i18n.t('components.uploadDocument.uploading');
-
-      timer.startProgress(0, 50);
-      await documentsService.uploadBackFile(
-        {
-          file,
-          docId,
-        },
-        this.getUploadRequestConfig(),
-      );
-    } catch (e) {
-      throw this.createError(e);
-    } finally {
-      timer.fillAndStopProgress();
-    }
-  }
-
-  /**
-   *
-   * @param {string} docId
-   * @return {Promise<void>}
-   */
-  @Action
-  async continueUpload(docId) {
-    const timer = this.getTimer();
-    this.progressLabel = i18n.t('components.uploadDocument.recognition');
-    timer.startProgress(50, 100);
-    await this.confirmAndWait(docId);
-  }
-
-  /**
    * @param {string} docId
    * @return {Promise<void>}
    */
@@ -165,6 +131,57 @@ class BackSideController extends VuexModule {
       timer.fillAndStopProgress();
     }
   }
+
+  /**
+   * @param {object} fields UserDocument object for upload
+   * @param {string} fields.type UserDocument type
+   * @param {File} fields.file UserDocument file
+   */
+  @Action
+  async startCreateDocument({ file, type }) {
+    const timer = this.getTimer();
+    try {
+      this.progressLabel = i18n.t('components.uploadDocument.uploading');
+
+      timer.startProgress(0, 20);
+      await documentsService.checkFile(file);
+      if (!this.docId) {
+        this.docId = await documentsService.createDocument({ type });
+      }
+
+      timer.continueProgress(20, 50);
+      await documentsService.uploadFrontFile(
+        {
+          file,
+          docId: this.docId,
+        },
+        this.getUploadRequestConfig(),
+      );
+    } catch (e) {
+      throw this.createError(e);
+    } finally {
+      timer.fillAndStopProgress();
+    }
+    return this.docId;
+  }
+
+  /**
+   *
+   * @param {string} docId
+   * @return {Promise<void>}
+   */
+  @Action
+  async continueCreateDocument(docId) {
+    const timer = this.getTimer();
+    this.progressLabel = i18n.t('components.uploadDocument.recognition');
+    timer.startProgress(50, 100);
+    await this.confirmAndWait(docId);
+  }
+
+  @Action
+  init() {
+    this.docId = '';
+  }
 }
 
-export default () => createController(BackSideController);
+export default () => createController(FrontSideOnlyController);

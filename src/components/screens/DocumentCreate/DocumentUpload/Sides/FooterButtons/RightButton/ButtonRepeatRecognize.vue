@@ -5,7 +5,7 @@
     data-test="repeat-recognize-button"
     @click="onRepeat"
   >
-    {{ $t('global.confirm') }}
+    {{ $t('global.repeat') }}
   </v-button>
 </template>
 

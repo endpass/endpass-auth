@@ -5,6 +5,6 @@ exports[`DocumentUpload should match snapshot 1`] = `
   <form-item-stub>
     <v-select-stub label="Document type" value="Passport" options="[object Object],[object Object],[object Object],[object Object]" skin="primary" data-test="document-type"></v-select-stub>
   </form-item-stub>
-  <sides-stub document-type="Passport"></sides-stub>
+  <sides-stub documenttype="Passport"></sides-stub>
 </v-modal-card-stub>
 `;

@@ -72,6 +72,7 @@ export default class ProgressTimer {
    */
   continueProgress(min = 0, max = MAX_PROGRESS) {
     if (min < this.min) {
+      console.error(`Progress range min value can't be less than it was`);
       throw new Error(`Progress range min value can't be less than it was`);
     }
     this.setRange(min, max);
@@ -94,7 +95,7 @@ export default class ProgressTimer {
   get progressRange() {
     const scaledValued = (this.progress * (this.max - this.min)) / MAX_PROGRESS;
     const nextValue = this.min + scaledValued;
-    return nextValue >= this.max ? this.max : nextValue;
+    return nextValue >= this.max ? this.max - 1 : nextValue;
   }
 
   /**

@@ -21,7 +21,7 @@ describe('ProgressTimer', () => {
 
     timer.fillAndStopProgress();
 
-    expect(timer.progressRange).toBe(100);
+    expect(timer.progressRange).toBe(99);
   });
 
   it('should subscribe progress', () => {
@@ -37,7 +37,7 @@ describe('ProgressTimer', () => {
 
     timer.fillAndStopProgress();
 
-    expect(handler).toBeCalledWith(100);
+    expect(handler).toBeCalledWith(99);
   });
 
   it('should unsubscribe', () => {
