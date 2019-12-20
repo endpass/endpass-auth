@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="version" content="<%= ENV.VUE_APP_VERSION %>">
+  <title>Endpass Prepares</title>
+</head>
+<body>
+<noscript>
+  <strong
+  >We're sorry but Endpass Auth prepares doesn't work properly without
+    JavaScript enabled. Please enable it to continue.</strong
+  >
+</noscript>
+<script>
+  (() => {
+    const getRedirect = () => {
+      return window.location.search.replace('?/redirect=', '');
+    };
+
+    const getCurrentVersion = () => {
+      const metaVersion = document.querySelector('meta[name="version"]');
+      return metaVersion.getAttribute('content') || '';
+    };
+
+    const getBaseUrlByVersion = (currentVersion, openVersion) => {
+      const isNeedReplaceOrigin = window.location.href.indexOf('://auth') !== -1;
+      const origin = window.location.origin;
+
+      if (!isNeedReplaceOrigin) {
+        return origin;
+      }
+
+      const isSameVersion = currentVersion.indexOf(openVersion) === 0;
+      if (isSameVersion) {
+        return origin;
+      }
+
+      const routeVersion = openVersion.split('.').join('-');
+      const originWithVersion = origin.replace('://auth', '://auth' + routeVersion);
+      return originWithVersion;
+    };
+
+    const makeRedirect = (openVersion) => {
+      const version = getCurrentVersion();
+      const newUrl = getBaseUrlByVersion(version, openVersion) + getRedirect();
+      window.location.href = newUrl;
+    };
+
+    let timerId;
+
+    window.addEventListener('message', ({ data = {}}) => {
+      if (data.messageType !== 'endpass-cw-msgr' || data.method !== 'GET_VERSION') {
+        return;
+      }
+      clearTimeout(timerId);
+      const expectVersion = data.payload;
+
+      makeRedirect(expectVersion);
+    }, false);
+
+    window.parent.postMessage({
+      messageType: 'endpass-cw-msgr',
+      method: 'GET_VERSION',
+      to: 'endpass-cw-msgr-connect',
+      from: 'endpass-cw-msgr-auth',
+      payload: {},
+    }, '*');
+
+    timerId = setTimeout(() => {
+      console.warn('Your version of connect is no longer maintain, please update to the latest');
+      const currentVersion = getCurrentVersion();
+      makeRedirect(currentVersion);
+    }, 3000);
+
+  })();
+
+</script>
+</body>
+</html>

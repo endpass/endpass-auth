@@ -10,11 +10,10 @@ const { SOURCE_MAP, NODE_ENV } = process.env;
 
 const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
 
-console.log('auth version: ', pkg.version);
+ENV.VUE_APP_VERSION = pkg.version;
+
 console.log('NODE_ENV', NODE_ENV);
 console.log('ENV', ENV);
-
-ENV.VUE_APP_VERSION = pkg.version;
 
 const commitHash = buildUtils.getCommitHash();
 
@@ -32,10 +31,10 @@ module.exports = {
         build: commitHash,
       },
     },
-    version: {
-      entry: 'src/version.js',
-      template: 'public/version.html',
-      filename: 'version.html',
+    prepare: {
+      entry: 'src/prepare.js',
+      template: 'public/prepare.html',
+      filename: 'prepare.html',
       inject: false,
     },
   },
@@ -110,6 +109,7 @@ module.exports = {
 
     config.plugins.delete('prefetch');
     config.plugins.delete('prefetch-index');
+
     config.plugins.delete('prefetch-version');
     config.plugins.delete('preload-version');
   },
