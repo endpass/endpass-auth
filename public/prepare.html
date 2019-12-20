@@ -17,7 +17,7 @@
 <script>
   (() => {
     const getRedirect = () => {
-      return window.location.search.replace('?/redirect=', '');
+      return window.location.search.replace('?redirect=', '');
     };
 
     const getCurrentVersion = () => {
@@ -50,22 +50,32 @@
     };
 
     let timerId;
+    const to = 'endpass-cw-msgr-connect';
+    const from = 'endpass-cw-msgr-auth';
 
     window.addEventListener('message', ({ data = {}}) => {
       if (data.messageType !== 'endpass-cw-msgr' || data.method !== 'GET_VERSION') {
         return;
       }
-      clearTimeout(timerId);
-      const expectVersion = data.payload;
 
+      if (data.to !== from || data.from !== to) {
+        return;
+      }
+
+      const expectVersion = data.payload;
+      if (typeof expectVersion !== "string") {
+        return;
+      }
+
+      clearTimeout(timerId);
       makeRedirect(expectVersion);
     }, false);
 
     window.parent.postMessage({
       messageType: 'endpass-cw-msgr',
       method: 'GET_VERSION',
-      to: 'endpass-cw-msgr-connect',
-      from: 'endpass-cw-msgr-auth',
+      to: to,
+      from: from,
       payload: {},
     }, '*');
 
