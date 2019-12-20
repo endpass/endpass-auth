@@ -14,6 +14,7 @@ import {
 import dialogClose from '@/streams/actions/dialogClose';
 import isDialog from '@/util/isDialog';
 import { initDialogResize } from '@/streams/actions/dialogResize';
+import { sendOpen } from '@/streams/actions/dialogOpen';
 import Answer from '@/class/Answer';
 import {
   accountChannel,
@@ -193,6 +194,11 @@ class CoreModule extends VuexModule {
   @Action
   dialogClose() {
     dialogClose();
+  }
+
+  @Action
+  async dialogSendOpen() {
+    sendOpen();
   }
 }
 

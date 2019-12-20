@@ -183,7 +183,7 @@
     "loginProviderPassword": {
       "loginChallenge": "Please, add the\u00A0'login_challenge' param in\u00A0URL, and try again!"
     },
-    "notFound": "Sorry, the place is\u00A0not\u00A0found.",
+    "notFound": "Oops, the\u00A0page what\u00A0are\u00A0you\u00A0looking for is\u00A0not\u00A0found.",
     "rateLimit": {
       "title": "The\u00A0rate limit exceeded!",
       "toMuch": "Too many requests from your\u00A0IP\u00A0address, please wait some time and try again."

@@ -1,19 +1,43 @@
+/* eslint-disable no-console */
 const path = require('path');
 const webpack = require('webpack');
 const buildUtils = require('@endpass/utils/build');
 const objectUtils = require('@endpass/utils/objects');
 
+const pkg = require('./package.json');
+
 const { SOURCE_MAP, NODE_ENV } = process.env;
 
 const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
 
+ENV.VUE_APP_VERSION = pkg.version;
+
 console.log('NODE_ENV', NODE_ENV);
 console.log('ENV', ENV);
+
+const commitHash = buildUtils.getCommitHash();
 
 module.exports = {
   productionSourceMap: false,
 
   publicPath: '/',
+
+  pages: {
+    index: {
+      entry: 'src/main.js',
+      template: 'public/index.html',
+      filename: 'index.html',
+      meta: {
+        build: commitHash,
+      },
+    },
+    prepare: {
+      entry: 'src/prepare.js',
+      template: 'public/prepare.html',
+      filename: 'prepare.html',
+      inject: false,
+    },
+  },
 
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
@@ -82,16 +106,12 @@ module.exports = {
       .rule('svg-sprite')
       .use('svgo-loader')
       .loader('svgo-loader');
-    config.plugin('html').tap(args => {
-      const options = Object.assign(args[0], {
-        meta: {
-          build: buildUtils.getCommitHash(),
-        },
-      });
-      return [options];
-    });
 
     config.plugins.delete('prefetch');
+    config.plugins.delete('prefetch-index');
+
+    config.plugins.delete('prefetch-version');
+    config.plugins.delete('preload-version');
   },
   devServer: {
     proxy: {
