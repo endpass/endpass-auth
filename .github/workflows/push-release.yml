@@ -1,0 +1,61 @@
+name: auth release
+on: 
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**.md'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - name: Checkout repo
+      uses: actions/checkout@v1
+  
+    - name: Setup node version
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+
+    - name: Set auth version env
+      run: echo ::set-env name=AUTH_VERSION::$(jq .version package.json | tr -d \" | cut -d . -f 1-2 | tr . -)
+
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+
+    - name: Build
+      run: yarn build:staging
+
+    - name: Deploy to S3 bucket
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --delete
+      env:
+        AWS_S3_BUCKET: auth-staging.endpass.com
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        SOURCE_DIR: 'dist/app'
+
+    - name: Deploy to versioned S3 bucket
+      uses: jakejarvis/s3-sync-action@master
+      with:
+        args: --delete
+      env:
+        AWS_S3_BUCKET: auth${{ env.AUTH_VERSION }}-staging.endpass.com
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        SOURCE_DIR: 'dist/app'
+
+    - name: Slack Notification
+      uses: homoluctus/slatify@master
+      if: always()
+      with:
+        type: ${{ job.status }}
+        job_name: 'auth build and deploy'
+        username: 'GitHub Actions'
+        icon_emoji: ':github:'
+        url: ${{ secrets.SLACK_WEBHOOK }}
