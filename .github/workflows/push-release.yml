@@ -2,7 +2,7 @@ name: auth release
 on: 
   push:
     branches:
-      - master
+      - release
     paths-ignore:
       - '**.md'
 
