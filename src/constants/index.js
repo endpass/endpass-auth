@@ -119,18 +119,18 @@ export const UPLOAD_STATUSES = {
 /**
  * Document statuses
  * @type {{
-    NEW: 'New',
-    PENDING: 'Pending',
-    PENDING_ADDITIONAL: 'PendingAdditional',
+    DRAFT: 'Draft',
+    RECOGNITION: 'Recognition',
+    PENDING_REVIEW: 'PendingReview',
     NOT_READABLE: 'NotReadable',
     NOT_VERIFIED: 'NotVerified',
     VERIFIED: 'Verified',
   }}
  */
 export const DOC_STATUSES = {
-  NEW: 'New',
-  PENDING: 'Pending',
-  PENDING_ADDITIONAL: 'PendingAdditional',
+  DRAFT: 'Draft',
+  RECOGNITION: 'Recognition',
+  PENDING_REVIEW: 'PendingReview',
   NOT_READABLE: 'NotReadable',
   NOT_VERIFIED: 'NotVerified',
   VERIFIED: 'Verified',
