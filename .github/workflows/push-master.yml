@@ -23,6 +23,9 @@ jobs:
 
     - name: Set auth version env
       run: echo ::set-env name=AUTH_VERSION::$(jq .version package.json | tr -d \" | cut -d . -f 1-2 | tr . -)
+      
+    - name: Show auth version env
+      run: echo ${{ env.AUTH_VERSION }}
 
     - name: Install packages
       run: yarn install --frozen-lockfile
