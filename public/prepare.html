@@ -17,7 +17,14 @@
 <script>
   (() => {
     const getRedirect = () => {
-      return window.location.search.replace('?redirect=', '');
+      const search = window.location.search.replace('?', '');
+      const props = search.split("&").reduce(function(result, param) {
+        const p = param.split("=");
+        result[decodeURIComponent(p[0])] = decodeURIComponent(p[1]);
+        return result;
+      }, {});
+      const toRedirect = props.redirect;
+      return toRedirect + '?' + search;
     };
 
     const getCurrentVersion = () => {
