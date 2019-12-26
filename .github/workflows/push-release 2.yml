@@ -1,8 +1,8 @@
-name: auth master
+name: auth release
 on: 
   push:
     branches:
-      - master
+      - release
     paths-ignore:
       - '**.md'
 
@@ -23,22 +23,22 @@ jobs:
 
     - name: Set auth version env
       run: echo ::set-env name=AUTH_VERSION::$(jq .version package.json | tr -d \" | cut -d . -f 1-2 | tr . -)
-      
+
     - name: Show auth version env
       run: echo ${{ env.AUTH_VERSION }}
-
+      
     - name: Install packages
       run: yarn install --frozen-lockfile
 
     - name: Build
-      run: yarn build:dev
-    
+      run: yarn build:staging
+
     - name: Deploy to S3 bucket
       uses: jakejarvis/s3-sync-action@master
       with:
         args: --delete
       env:
-        AWS_S3_BUCKET: auth-dev.endpass.com
+        AWS_S3_BUCKET: auth-staging.endpass.com
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         SOURCE_DIR: 'dist/app'
@@ -48,7 +48,7 @@ jobs:
       with:
         args: --delete
       env:
-        AWS_S3_BUCKET: auth${{ env.AUTH_VERSION }}-dev.endpass.com
+        AWS_S3_BUCKET: auth${{ env.AUTH_VERSION }}-staging.endpass.com
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         SOURCE_DIR: 'dist/app'
@@ -56,7 +56,6 @@ jobs:
     - name: Slack Notification
       uses: homoluctus/slatify@master
       if: always()
-      continue-on-error: true
       with:
         type: ${{ job.status }}
         job_name: 'auth build and deploy'

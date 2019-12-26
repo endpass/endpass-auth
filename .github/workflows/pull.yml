@@ -30,6 +30,7 @@ jobs:
     - name: Slack Notification
       uses: homoluctus/slatify@master
       if: always()
+      continue-on-error: true
       with:
         type: ${{ job.status }}
         job_name: 'auth unit tests'
