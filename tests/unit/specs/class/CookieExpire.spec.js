@@ -31,6 +31,15 @@ describe('CookieExpireChecker class', () => {
     expect(handler).toBeCalledTimes(1);
   });
 
+  it('should not emit event if time not expired', () => {
+    cookieExpireChecker.setExpireAt(passTime());
+    cookieExpireChecker.startChecking();
+
+    jest.runOnlyPendingTimers();
+
+    expect(handler).not.toBeCalled();
+  });
+
   it('should emit event after set expired time', () => {
     cookieExpireChecker.setExpireAt(passTime());
     cookieExpireChecker.startChecking();
