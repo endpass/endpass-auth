@@ -1,29 +1,35 @@
 <template>
   <component
     :is="currentSide"
-    :document-id.sync="documentId"
+    :document-type="documentType"
     v-bind="$attrs"
     v-on="$listeners"
-    @toggle="onToggle"
   />
 </template>
 
 <script>
-import BackSide from './BackSide';
-import FrontSide from './FrontSide';
+import BackAndFront from './BackAndFront';
+import FrontSideOnly from './FrontSideOnly';
+import { DOC_TYPES } from '@/constants';
+
+const frontSideOnly = [DOC_TYPES.PASSPORT, DOC_TYPES.PROOF_OF_ADDRESS];
 
 export default {
   name: 'Sides',
 
-  data: () => ({
-    currentSide: FrontSide,
-    documentId: '',
-  }),
+  props: {
+    documentType: {
+      type: String,
+      default: '',
+    },
+  },
 
-  methods: {
-    onToggle() {
-      this.currentSide = BackSide;
-      this.$emit('toggle');
+  computed: {
+    currentSide() {
+      if (frontSideOnly.includes(this.documentType)) {
+        return FrontSideOnly;
+      }
+      return BackAndFront;
     },
   },
 };

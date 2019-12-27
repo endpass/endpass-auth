@@ -182,12 +182,12 @@ class AuthModule extends VuexModule {
 
   @Action
   changeAuthStatusByCode(code) {
-    const { isAuthorized } = this;
     this.setAuthByCode(code);
     const isAuthorizedNew = this.isAuthorized;
-    if (isAuthorizedNew !== isAuthorized) {
-      bridgeMessenger.send(METHODS.AUTH_STATUS, isAuthorizedNew);
-    }
+    bridgeMessenger.send(METHODS.AUTH_STATUS, {
+      status: isAuthorizedNew,
+      code,
+    });
   }
 
   @Mutation

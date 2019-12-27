@@ -6,8 +6,6 @@ import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
-import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { METHODS } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -140,18 +138,6 @@ describe('ConsentProvider', () => {
       await global.flushPromises();
 
       expect(window.location.href).toBe(redirectUrl);
-    });
-
-    it('should cancel auth and close window on scope cancel', () => {
-      wrapper = createWrapper();
-
-      wrapper.setData({
-        scopesList: ['foo', 'bar', 'baz'],
-        isLoading: false,
-      });
-      wrapper.find('scopes-form-stub').vm.$emit('cancel');
-
-      expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });
   });
 });

@@ -24,7 +24,16 @@ export default class CookieExpireChecker {
    */
   setExpireAt(expireAt) {
     const value = expireAt * 1000;
-    document.cookie = `${EXPIRE_COOKIE_TIME_KEY}=${value}`;
+
+    const domain = window.location.hostname
+      .split('.')
+      .slice(-2)
+      .join('.');
+    const domainStr = domain === 'localhost' ? '' : `domain=${domain};`;
+
+    const expires = new Date(value).toUTCString();
+
+    document.cookie = `${EXPIRE_COOKIE_TIME_KEY}=${value};${domainStr}path=/;expires=${expires}`;
   }
 
   startChecking() {
@@ -37,8 +46,7 @@ export default class CookieExpireChecker {
       );
       const storedExpireAt = storedValue ? Number(storedValue[2]) || 0 : null;
 
-      const now = new Date().getTime();
-      if (!storedExpireAt || now > storedExpireAt) {
+      if (!storedExpireAt) {
         this.stopChecking();
         this.emitter.emit(EVENT_COOKIE_EXPIRED);
       }

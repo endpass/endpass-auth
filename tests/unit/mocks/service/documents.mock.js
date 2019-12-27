@@ -15,7 +15,7 @@ jest.mock('@/service/documents', () => {
       message: 'document uploaded',
       success: true,
     }),
-    createDocument: jest.fn(),
+    createDocument: jest.fn().mockResolvedValue('docId'),
     getDocumentUploadStatusById: jest.fn().mockResolvedValue(docStatusesMap),
   };
 });
