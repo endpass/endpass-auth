@@ -120,4 +120,36 @@ describe('auth service', () => {
       ).rejects.toThrow(expect.any(Error));
     });
   });
+
+  describe('getAuthStatus', () => {
+    const url = `${identityBaseUrl}/auth/check`;
+
+    it('should return 200 OK', async () => {
+      expect.assertions(1);
+      const expiresAt = 123;
+      const hash = 'hash';
+
+      axiosMock.onGet(url).reply(200, { expiresAt, hash });
+      const res = await authService.getAuthStatus();
+
+      expect(res).toEqual({
+        status: 200,
+        hash,
+        expiresAt,
+      });
+    });
+
+    it('should return not failed result ', async () => {
+      expect.assertions(1);
+
+      axiosMock.onGet(url).reply(444);
+      const res = await authService.getAuthStatus();
+
+      expect(res).toEqual({
+        status: 444,
+        hash: '',
+        expiresAt: 0,
+      });
+    });
+  });
 });

@@ -91,7 +91,7 @@ const documentsService = {
    * @return {Promise<void>}
    */
   async waitDocumentReady(id) {
-    const waitingStatuses = [DOC_STATUSES.NEW, DOC_STATUSES.PENDING];
+    const waitingStatuses = [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION];
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
