@@ -145,7 +145,6 @@ describe('auth service', () => {
 
       axiosMock.onGet(url).reply(444);
       const res = await authService.getAuthStatus();
-      await global.flushPromises();
 
       expect(res).toEqual({
         status: 444,
