@@ -131,7 +131,6 @@ describe('auth service', () => {
 
       axiosMock.onGet(url).reply(200, { expiresAt, hash });
       const res = await authService.getAuthStatus();
-      await global.flushPromises();
 
       expect(res).toEqual({
         status: 200,
