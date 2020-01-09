@@ -156,7 +156,7 @@ class AuthModule extends VuexModule {
 
   @Action
   async defineAuthStatus() {
-    const { status, expiresAt } = await authService.getAuthStatus();
+    const { status, hash, expiresAt } = await authService.getAuthStatus();
 
     const settings = settingsService.getLocalSettings();
 
@@ -164,7 +164,7 @@ class AuthModule extends VuexModule {
       settingsService.clearLocalSettings();
     }
 
-    await this.changeAuthStatusByCode(status);
+    await this.changeAuthStatusByCode({ code: status, hash });
 
     if (this.isAuthorized && expiresAt) {
       this.cookieExpireChecker.value.setExpireAt(expiresAt);
@@ -181,12 +181,13 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  changeAuthStatusByCode(code) {
+  changeAuthStatusByCode({ code, hash }) {
     this.setAuthByCode(code);
     const isAuthorizedNew = this.isAuthorized;
     bridgeMessenger.send(METHODS.AUTH_STATUS, {
       status: isAuthorizedNew,
       code,
+      hash,
     });
   }
 
@@ -199,7 +200,7 @@ class AuthModule extends VuexModule {
   logout() {
     this.cookieExpireChecker.value.setExpireAt(0);
     this.cookieExpireChecker.value.stopChecking();
-    this.changeAuthStatusByCode(400);
+    this.changeAuthStatusByCode({ code: 400, hash: '' });
     this.challengeType = null;
     this.setAuthParams(null);
     settingsService.clearLocalSettings();

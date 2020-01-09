@@ -106,19 +106,23 @@ const authWithGitHub = code =>
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 /**
- * @return {Promise<{expiresAt: number, status: number}>}
+ * @return {Promise<{expiresAt: number, status: number, hash: string}>}
  */
 const getAuthStatus = async () => {
   try {
-    const { expiresAt } = await request.get(`${identityBaseUrl}/auth/check`);
+    const { expiresAt, hash } = await request.get(
+      `${identityBaseUrl}/auth/check`,
+    );
     return {
       status: 200,
+      hash,
       expiresAt,
     };
   } catch (e) {
     const status = get(e, ['response', 'status']);
     return {
       status,
+      hash: '',
       expiresAt: 0,
     };
   }
