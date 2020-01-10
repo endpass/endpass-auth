@@ -1,16 +1,17 @@
-import { parseUrl } from '@/util/dom';
+// @ts-check
 
-const DEFAULT_ORIGIN = parseUrl(document.referrer).origin;
+import { parseUrl } from '@/util/dom';
 
 export default class Host {
   constructor() {
-    this.value = DEFAULT_ORIGIN;
+    /** @type {string} */
+    this.value = '';
   }
 
   set origin(value) {
     if (Object.isFrozen(this)) return;
 
-    const defineValue = value || DEFAULT_ORIGIN;
+    const defineValue = value || document.referrer;
     this.value = parseUrl(defineValue).origin;
 
     Object.freeze(this);
