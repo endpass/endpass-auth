@@ -1,5 +1,4 @@
 // @ts-check
-import { parseUrl } from '@/util/dom';
 
 export const METHODS = {
   SIGN: 'SIGN',
@@ -62,8 +61,6 @@ export const WALLET_TYPES = Object.freeze({
   STANDARD: 'StandardAccount',
   HD_MAIN: 'HDMainAccount',
 });
-
-export const ORIGIN_HOST = parseUrl(document.referrer).origin;
 
 export const WIDGET_RESIZE_DURATION = 300;
 

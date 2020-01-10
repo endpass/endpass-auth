@@ -15,12 +15,8 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
 import { accountChannel, permissionChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import {
-  ENCRYPT_OPTIONS,
-  METHODS,
-  ORIGIN_HOST,
-  WALLET_TYPES,
-} from '@/constants';
+import { ENCRYPT_OPTIONS, METHODS, WALLET_TYPES } from '@/constants';
+import host from '@/class/singleton/host';
 
 const { ERRORS } = ConnectError;
 
@@ -255,7 +251,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   async signPermission({ password }) {
-    await authService.setAuthPermission(password, ORIGIN_HOST);
+    await authService.setAuthPermission(password, host.origin);
     permissionChannel.put(Answer.createOk());
   }
 

@@ -24,6 +24,7 @@ import {
   signChannel,
   walletChannel,
 } from '@/class/singleton/channels';
+import host from '@/class/singleton/host';
 
 const { ERRORS } = ConnectError;
 
@@ -132,9 +133,12 @@ class CoreModule extends VuexModule {
   async startBridge() {
     if (!this.isDialog) return;
 
-    const { isIdentityMode } = await bridgeMessenger.sendAndWaitResponse(
-      METHODS.INITIATE,
-    );
+    const {
+      isIdentityMode,
+      originLocation,
+    } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
+
+    host.origin = originLocation;
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;
