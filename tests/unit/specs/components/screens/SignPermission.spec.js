@@ -7,7 +7,7 @@ import authService from '@/service/auth';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import Host from '@/class/singleton/Host';
+import host from '@/class/singleton/host';
 
 const localVue = createLocalVue();
 
@@ -62,7 +62,7 @@ describe('SignPermission', () => {
         wrapper.find('sign-password-stub').vm.$emit('submit', pwd);
         await global.flushPromises();
 
-        expect(authService.setAuthPermission).toBeCalledWith(pwd, Host.origin);
+        expect(authService.setAuthPermission).toBeCalledWith(pwd, host.origin);
       });
 
       it('should logout', async () => {

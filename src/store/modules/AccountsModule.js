@@ -16,7 +16,7 @@ import i18n from '@/locales/i18n';
 import { accountChannel, permissionChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import { ENCRYPT_OPTIONS, METHODS, WALLET_TYPES } from '@/constants';
-import Host from '@/class/singleton/Host';
+import host from '@/class/singleton/host';
 
 const { ERRORS } = ConnectError;
 
@@ -251,7 +251,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   async signPermission({ password }) {
-    await authService.setAuthPermission(password, Host.origin);
+    await authService.setAuthPermission(password, host.origin);
     permissionChannel.put(Answer.createOk());
   }
 

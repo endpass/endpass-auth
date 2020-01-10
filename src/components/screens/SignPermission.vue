@@ -8,7 +8,7 @@
         <sign-password
           v-if="isPasswordExist"
           :with-logout-btn="true"
-          :requester-url="Host.origin"
+          :requester-url="host.origin"
           :is-loading="isLoading"
           :error="error"
           @submit="onSignPassword"
@@ -31,7 +31,7 @@ import SignPassword from '@/components/forms/SignPassword';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import CreateRegularPassword from '@/components/forms/CreateRegularPassword';
 
-import Host from '@/class/singleton/Host';
+import host from '@/class/singleton/host';
 import { authStore, accountsStore, coreStore } from '@/store';
 
 export default {
@@ -46,7 +46,7 @@ export default {
     isLoading: false,
     isChecking: true,
     isPasswordExist: true,
-    Host,
+    host,
   }),
 
   computed: {

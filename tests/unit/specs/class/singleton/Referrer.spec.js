@@ -1,5 +1,5 @@
 import { parseUrl } from '@/util/dom';
-import { Host } from '@/class/singleton/Host';
+import Host from '@/class/Host';
 
 const DEFAULT_ORIGIN = parseUrl(document.referrer).origin;
 

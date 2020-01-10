@@ -2,7 +2,7 @@ import { parseUrl } from '@/util/dom';
 
 const DEFAULT_ORIGIN = parseUrl(document.referrer).origin;
 
-class Host {
+export default class Host {
   constructor() {
     this.value = DEFAULT_ORIGIN;
   }
@@ -20,7 +20,3 @@ class Host {
     return this.value;
   }
 }
-
-export { Host };
-
-export default new Host();
