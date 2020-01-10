@@ -11,8 +11,8 @@ describe('Host', () => {
     host = new Host();
   });
 
-  it('should use default host', () => {
-    expect(host.origin).toBe(DEFAULT_ORIGIN);
+  it('should use empty host', () => {
+    expect(host.origin).toBe('');
   });
 
   it('should use default host is set undefined', () => {
