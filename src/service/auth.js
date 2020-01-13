@@ -79,7 +79,9 @@ const authWithCode = async ({
  */
 const authWithGoogle = idToken =>
   request
-    .get(`${identityBaseUrl}/auth/google?token=${encodeURIComponent(idToken)}`)
+    .post(`${identityBaseUrl}/auth/google`, {
+      token: idToken,
+    })
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
@@ -94,7 +96,9 @@ const authWithGoogle = idToken =>
  */
 const authWithGitHub = code =>
   request
-    .get(`${identityBaseUrl}/auth/github?code=${encodeURIComponent(code)}`)
+    .post(`${identityBaseUrl}/auth/github`, {
+      code,
+    })
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;

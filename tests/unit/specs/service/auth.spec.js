@@ -152,4 +152,70 @@ describe('auth service', () => {
       });
     });
   });
+
+  describe('authWithGoogle', () => {
+    const url = `${identityBaseUrl}/auth/google`;
+    const token = '123';
+
+    it('should return 200 OK', async () => {
+      expect.assertions(1);
+
+      axiosMock.onPost(url).reply(200, {
+        success: true,
+      });
+      const res = await authService.authWithGoogle(token);
+
+      expect(res).toEqual({
+        success: true,
+      });
+    });
+
+    it('should throw error on invalid request', async () => {
+      expect.assertions(1);
+      const message = 'Incorrect request';
+
+      axiosMock.onPost(url).reply(500, {
+        message,
+      });
+
+      try {
+        await authService.authWithGoogle(token);
+      } catch (e) {
+        expect(e.message).toBe(message);
+      }
+    });
+  });
+
+  describe('authWithGithub', () => {
+    const url = `${identityBaseUrl}/auth/github`;
+    const code = '123';
+
+    it('should return 200 OK', async () => {
+      expect.assertions(1);
+
+      axiosMock.onPost(url).reply(200, {
+        success: true,
+      });
+      const res = await authService.authWithGitHub(code);
+
+      expect(res).toEqual({
+        success: true,
+      });
+    });
+
+    it('should throw error on invalid request', async () => {
+      expect.assertions(1);
+      const message = 'Incorrect request';
+
+      axiosMock.onPost(url).reply(500, {
+        message,
+      });
+
+      try {
+        await authService.authWithGitHub(code);
+      } catch (e) {
+        expect(e.message).toBe(message);
+      }
+    });
+  });
 });
