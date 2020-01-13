@@ -36,6 +36,8 @@ class CoreModule extends VuexModule {
 
   rateLimitTimeout = 0;
 
+  isIdentityMode = '';
+
   isDialog = isDialog;
 
   constructor(props, { authStore, sharedStore }) {
@@ -74,6 +76,7 @@ class CoreModule extends VuexModule {
   @Action
   async init() {
     try {
+      await this.setupCore();
       await this.authStore.defineAuthStatus();
       await this.startBridge();
       // eslint-disable-next-line
@@ -130,15 +133,21 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async startBridge() {
-    if (!this.isDialog) return;
-
+  async setupCore() {
     const {
       isIdentityMode,
       originLocation,
     } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
 
     host.origin = originLocation;
+    this.isIdentityMode = isIdentityMode;
+  }
+
+  @Action
+  async startBridge() {
+    if (!this.isDialog) return;
+
+    const { isIdentityMode } = this;
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;
