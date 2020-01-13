@@ -10,7 +10,7 @@ exports[`App-root App render should render with loading 1`] = `
 
 exports[`App-root App render should render without loading markup 1`] = `
 <theme-provider-stub theme="default">
-  <loading-screen-stub isloading="true">
+  <loading-screen-stub>
     <layout-screen-stub></layout-screen-stub>
   </loading-screen-stub>
 </theme-provider-stub>

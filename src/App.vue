@@ -15,9 +15,11 @@ import { coreStore } from '@/store';
 export default {
   name: 'App',
 
+  coreStore,
+
   computed: {
     isLoading() {
-      return coreStore.isIniting;
+      return this.$options.coreStore.isIniting;
     },
   },
 
