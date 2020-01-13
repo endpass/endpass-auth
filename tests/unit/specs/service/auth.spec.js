@@ -152,4 +152,40 @@ describe('auth service', () => {
       });
     });
   });
+
+  describe('authWithGoogle', () => {
+    const url = `${identityBaseUrl}/auth/google`;
+
+    it('should return 200 OK', async () => {
+      expect.assertions(1);
+      const token = '123';
+
+      axiosMock.onPost(url).reply(200, {
+        success: true,
+      });
+      const res = await authService.authWithGoogle(token);
+
+      expect(res).toEqual({
+        success: true,
+      });
+    });
+  });
+
+  describe('authWithGithub', () => {
+    const url = `${identityBaseUrl}/auth/github`;
+
+    it('should return 200 OK', async () => {
+      expect.assertions(1);
+      const code = '123';
+
+      axiosMock.onPost(url).reply(200, {
+        success: true,
+      });
+      const res = await authService.authWithGitHub(code);
+
+      expect(res).toEqual({
+        success: true,
+      });
+    });
+  });
 });
