@@ -3,6 +3,8 @@ import VueRouter from 'vue-router';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import App from '@/App';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import createStore from '@/store/createStore';
+import createStoreModules from '@/store/createStoreModules';
 
 const localVue = createLocalVue();
 
@@ -11,10 +13,16 @@ localVue.use(VueRouter);
 
 describe('App-root', () => {
   let wrapper;
+  let coreStore;
 
   beforeEach(() => {
+    const store = createStore();
+    const { coreStore: coreStoreModule } = createStoreModules(store);
+    coreStore = coreStoreModule;
+
     wrapper = shallowMount(App, {
       localVue,
+      coreStore,
     });
     bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
   });
@@ -27,7 +35,7 @@ describe('App-root', () => {
     it('should render without loading markup', async () => {
       expect.assertions(1);
 
-      await global.flushPromises();
+      await coreStore.initStreams({});
 
       expect(wrapper.html()).toMatchSnapshot();
     });

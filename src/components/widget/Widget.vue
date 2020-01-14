@@ -194,7 +194,9 @@ export default {
 
   async mounted() {
     await this.$options.accountsStore.defineSettings();
+
     await this.initWidget();
+
     await this.$options.accountsStore.defineOnlyV3Accounts();
     await this.$options.authStore.defineAuthStatus();
     this.$options.accountsStore.subscribeOnBalanceUpdates();

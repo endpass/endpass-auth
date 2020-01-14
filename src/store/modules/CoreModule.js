@@ -12,7 +12,7 @@ import {
 
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/actions/dialogClose';
-import isDialog from '@/util/isDialog';
+import isDialogUtil from '@/util/isDialog';
 import { initDialogResize } from '@/streams/actions/dialogResize';
 import { sendOpen } from '@/streams/actions/dialogOpen';
 import Answer from '@/class/Answer';
@@ -30,13 +30,17 @@ const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
 class CoreModule extends VuexModule {
-  isInited = false;
+  isInitStarted = false;
+
+  isIniting = true;
 
   isServerMode = false;
 
   rateLimitTimeout = 0;
 
-  isDialog = isDialog;
+  isIdentityMode = '';
+
+  isDialog = isDialogUtil;
 
   constructor(props, { authStore, sharedStore }) {
     super(props);
@@ -66,9 +70,34 @@ class CoreModule extends VuexModule {
     this.rateLimitTimeout = val;
   }
 
-  @Mutation
-  changeInitStatus(val) {
-    this.isInited = val;
+  @Action
+  async initStreams({ isDialog, isWidget }) {
+    this.isInitStarted = true;
+    this.isIniting = true;
+
+    try {
+      if (isDialog || isWidget) {
+        await this.setupCore();
+      }
+
+      await this.setupResize();
+
+      if (isDialog) {
+        await this.setupDialog();
+      }
+
+      if (isWidget) {
+        await this.setupWidget();
+      }
+
+      await this.authStore.defineAuthStatus();
+      await this.startBridge();
+    } catch (e) {
+      console.error(e);
+      throw e;
+    } finally {
+      this.isIniting = false;
+    }
   }
 
   @Action
@@ -83,9 +112,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initDialog() {
-    if (this.isInited) return;
-
+  async setupDialog() {
     initDialogStream();
     initDialogRequestStream();
 
@@ -93,26 +120,20 @@ class CoreModule extends VuexModule {
       this.dialogClose();
       this.finishLogout();
     });
-
-    this.isInited = true;
   }
 
   @Action
-  async initWidget() {
-    if (this.isInited) return;
-
+  async setupWidget() {
     initWidgetStream();
 
     this.authStore.cookieExpireChecker.value.onExpire(() => {
       bridgeMessenger.send(METHODS.WIDGET_UNMOUNT);
       this.finishLogout();
     });
-
-    this.isInited = true;
   }
 
   @Action
-  async initResize() {
+  async setupResize() {
     initDialogResize();
   }
 
@@ -130,15 +151,21 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async startBridge() {
-    if (!this.isDialog) return;
-
+  async setupCore() {
     const {
       isIdentityMode,
       originLocation,
     } = await bridgeMessenger.sendAndWaitResponse(METHODS.INITIATE);
 
     host.origin = originLocation;
+    this.isIdentityMode = isIdentityMode;
+  }
+
+  @Action
+  async startBridge() {
+    if (!this.isDialog) return;
+
+    const { isIdentityMode } = this;
 
     if (isIdentityMode !== undefined) {
       this.isServerMode = isIdentityMode;

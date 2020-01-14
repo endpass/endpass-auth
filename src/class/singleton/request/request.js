@@ -1,16 +1,18 @@
 // @ts-check
 import Request from '@endpass/class/Request';
 import http from './http';
-import host from '@/class/singleton/host';
 import defaultConfig from '@/class/singleton/request/defaultConfig';
+import host from '@/class/singleton/host';
 
-const config = {
-  ...defaultConfig,
-  headers: {
-    get 'x-connect-lib-host'() {
-      return host.origin;
+const request = new Request({ http, config: defaultConfig });
+
+host.subscribe(() => {
+  request.config = {
+    ...defaultConfig,
+    headers: {
+      'x-connect-lib-host': host.origin,
     },
-  },
-};
+  };
+});
 
-export default new Request({ http, config });
+export default request;

@@ -14,17 +14,15 @@ import { coreStore } from '@/store';
 
 export default {
   name: 'App',
-  data() {
-    return {
-      isLoading: true,
-    };
+
+  coreStore,
+
+  computed: {
+    isLoading() {
+      return this.$options.coreStore.isIniting;
+    },
   },
 
-  async created() {
-    this.isLoading = true;
-    await coreStore.init();
-    this.isLoading = false;
-  },
   components: {
     ThemeProvider,
     LayoutScreen,

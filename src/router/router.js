@@ -18,6 +18,14 @@ router.beforeEach(async (to, from, next) => {
     document.body.classList.add('transparent');
   }
 
+  if (!coreStore.isInitStarted) {
+    try {
+      await coreStore.initStreams({ isDialog, isWidget });
+    } catch (e) {
+      return next('Error');
+    }
+  }
+
   // Github authentification handling and widget redirect preventing
   if (to.query.code || isWidget) {
     return next();
@@ -28,24 +36,6 @@ router.beforeEach(async (to, from, next) => {
   }
 
   return next();
-});
-
-router.afterEach(async to => {
-  const { isDialog, isWidget } = to.meta;
-
-  await coreStore.initResize();
-
-  if (isDialog) {
-    await coreStore.initDialog();
-  }
-
-  if (isWidget) {
-    await coreStore.initWidget();
-  }
-
-  if (!isDialog && !isWidget) {
-    coreStore.changeInitStatus(true);
-  }
 });
 
 export default router;
