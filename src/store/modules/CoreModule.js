@@ -76,15 +76,18 @@ class CoreModule extends VuexModule {
     this.isIniting = true;
 
     try {
-      await this.setupCore();
-      await this.initResize();
+      if (isDialog || isWidget) {
+        await this.setupCore();
+      }
+
+      await this.setupResize();
 
       if (isDialog) {
-        await this.initDialog();
+        await this.setupDialog();
       }
 
       if (isWidget) {
-        await this.initWidget();
+        await this.setupWidget();
       }
 
       await this.authStore.defineAuthStatus();
@@ -109,7 +112,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initDialog() {
+  async setupDialog() {
     initDialogStream();
     initDialogRequestStream();
 
@@ -120,7 +123,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initWidget() {
+  async setupWidget() {
     initWidgetStream();
 
     this.authStore.cookieExpireChecker.value.onExpire(() => {
@@ -130,7 +133,7 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initResize() {
+  async setupResize() {
     initDialogResize();
   }
 
