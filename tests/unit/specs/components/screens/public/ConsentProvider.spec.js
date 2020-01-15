@@ -6,6 +6,7 @@ import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -33,7 +34,9 @@ describe('ConsentProvider', () => {
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
     const { authStore, accountsStore, coreStore } = createStoreModules(store);
-    authStore.setAuthByCode(isAuthed === false ? 400 : 200);
+    authStore.setAuthByCode(
+      isAuthed === false ? AUTH_STATUS_CODE.LOGOUT : AUTH_STATUS_CODE.LOGGED_IN,
+    );
     return shallowMount(ConsentProvider, {
       authStore,
       accountsStore,

@@ -8,7 +8,7 @@ import userService from '@/service/user';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
-import { METHODS } from '@/constants';
+import { AUTH_STATUS_CODE, METHODS } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -25,10 +25,10 @@ describe('LoginProvider', () => {
     const { authStore, accountsStore } = createStoreModules(store);
 
     if (isAuthed === true) {
-      authStore.setAuthByCode(200);
+      authStore.setAuthByCode(AUTH_STATUS_CODE.LOGGED_IN);
     }
     if (isAuthed === false) {
-      authStore.setAuthByCode(400);
+      authStore.setAuthByCode(AUTH_STATUS_CODE.LOGOUT);
     }
 
     return shallowMount(LoginProvider, {

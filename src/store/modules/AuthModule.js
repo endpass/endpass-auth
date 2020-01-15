@@ -10,7 +10,7 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { METHODS, CHALLENGE_TYPES } from '@/constants';
+import { METHODS, CHALLENGE_TYPES, AUTH_STATUS_CODE } from '@/constants';
 import CookieExpireChecker from '@/class/CookieExpireChecker';
 import NonReactive from '@/class/NonReactive';
 
@@ -160,7 +160,7 @@ class AuthModule extends VuexModule {
 
     const settings = settingsService.getLocalSettings();
 
-    if (status !== 200 && !isEmpty(settings)) {
+    if (status !== AUTH_STATUS_CODE.LOGGED_IN && !isEmpty(settings)) {
       settingsService.clearLocalSettings();
     }
 
@@ -176,8 +176,10 @@ class AuthModule extends VuexModule {
 
   @Mutation
   setAuthByCode(code) {
-    this.isLogin = code === 403 || code === 200;
-    this.isPermission = code === 200;
+    this.isLogin =
+      code === AUTH_STATUS_CODE.NEED_PERMISSION ||
+      code === AUTH_STATUS_CODE.LOGGED_IN;
+    this.isPermission = code === AUTH_STATUS_CODE.LOGGED_IN;
   }
 
   @Action
@@ -200,7 +202,7 @@ class AuthModule extends VuexModule {
   logout() {
     this.cookieExpireChecker.value.setExpireAt(0);
     this.cookieExpireChecker.value.stopChecking();
-    this.changeAuthStatusByCode({ code: 400, hash: '' });
+    this.changeAuthStatusByCode({ code: AUTH_STATUS_CODE.LOGOUT, hash: '' });
     this.challengeType = null;
     this.setAuthParams(null);
     settingsService.clearLocalSettings();

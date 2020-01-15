@@ -1,6 +1,7 @@
 // @ts-check
 import get from 'lodash/get';
 import request from '@/class/singleton/request';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
@@ -118,16 +119,18 @@ const getAuthStatus = async () => {
       `${identityBaseUrl}/auth/check`,
     );
     return {
-      status: 200,
+      status: AUTH_STATUS_CODE.LOGGED_IN,
       hash,
       expiresAt,
     };
   } catch (e) {
     const status = get(e, ['response', 'status']);
+    const hash = get(e, ['response', 'data', 'hash'], '');
+    const expiresAt = get(e, ['response', 'data', 'expiresAt'], 0);
     return {
       status,
-      hash: '',
-      expiresAt: 0,
+      hash,
+      expiresAt,
     };
   }
 };
@@ -142,7 +145,10 @@ const waitLogin = () =>
       try {
         const { status } = await getAuthStatus();
 
-        if (status === 200 || status === 403) {
+        if (
+          status === AUTH_STATUS_CODE.LOGGED_IN ||
+          status === AUTH_STATUS_CODE.NEED_PERMISSION
+        ) {
           return resolve(status);
         }
 

@@ -7,13 +7,17 @@ jest.mock('@/service/auth', () => {
     // eslint-disable-next-line global-require
   } = require('@unitFixtures/services/identity');
 
+  const { AUTH_STATUS_CODE } = require('@/constants');
+
   return {
     getAuthChallenge: jest.fn(),
     setAuthPermission: jest.fn(),
     authWithGoogle: jest.fn(),
     authWithGitHub: jest.fn(),
     logout: jest.fn(),
-    getAuthStatus: jest.fn().mockResolvedValue({ status: 200 }),
+    getAuthStatus: jest
+      .fn()
+      .mockResolvedValue({ status: AUTH_STATUS_CODE.LOGGED_IN }),
     waitLogin: jest.fn(),
     getRecoveryIdentifier: jest
       .fn()

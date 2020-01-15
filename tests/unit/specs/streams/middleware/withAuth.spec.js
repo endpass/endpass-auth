@@ -3,6 +3,7 @@ import { authChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import Answer from '@/class/Answer';
 import authService from '@/service/auth';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 jest.mock('@/class/singleton/channels', () => ({
   authChannel: {
@@ -65,7 +66,9 @@ describe('withAuth', () => {
   it('should not redirect to auth', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
+    authService.getAuthStatus.mockResolvedValueOnce({
+      status: AUTH_STATUS_CODE.LOGGED_IN,
+    });
     authChannel.take = jest.fn().mockResolvedValue();
 
     await withAuth(options);

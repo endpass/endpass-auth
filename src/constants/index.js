@@ -149,4 +149,20 @@ export const DOC_TYPES = {
   ID_CARD: 'IdCard',
 };
 
+/**
+ *
+ * @type {{
+    LOGGED_IN: 200,
+    LOGOUT: 400,
+    NOT_LOGGED: 401,
+    NEED_PERMISSION: 403,
+  }}
+ */
+export const AUTH_STATUS_CODE = {
+  LOGGED_IN: 200,
+  LOGOUT: 400,
+  NOT_LOGGED: 401,
+  NEED_PERMISSION: 403,
+};
+
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute

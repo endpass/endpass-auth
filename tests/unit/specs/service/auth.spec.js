@@ -5,6 +5,7 @@ import {
   getRecoveryIdentifierResponse,
 } from '@unitFixtures/services/identity';
 import http from '@/class/singleton/request/http';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const authService = require.requireActual('@/service/auth').default;
 
@@ -32,7 +33,7 @@ describe('auth service', () => {
       axiosMock.onGet(url).reply(config => {
         expect(config.url).toBe(url);
 
-        return [200, getRecoveryIdentifierResponse];
+        return [AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse];
       });
 
       await authService.getRecoveryIdentifier(email);
@@ -41,7 +42,9 @@ describe('auth service', () => {
     it('should handle successfull GET /auth/recover request', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(200, getRecoveryIdentifierResponse);
+      axiosMock
+        .onGet(url)
+        .reply(AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse);
 
       const received = await authService.getRecoveryIdentifier(email);
 
@@ -51,7 +54,7 @@ describe('auth service', () => {
     it('should handle successfull GET /auth/recover request with error message', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(200, errorResponse);
+      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.LOGGED_IN, errorResponse);
 
       await expect(authService.getRecoveryIdentifier(email)).rejects.toThrow(
         expect.any(Error),
@@ -81,7 +84,7 @@ describe('auth service', () => {
         expect(config.url).toBe(url);
         expect(config.data).toBe(JSON.stringify({ email, code }));
 
-        return [200, getRecoveryIdentifierResponse];
+        return [AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse];
       });
 
       await authService.disableOtpViaSms({ email, code });
@@ -90,7 +93,7 @@ describe('auth service', () => {
     it('should handle successfull POST /auth/recover request', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(200, successResponse);
+      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, successResponse);
 
       const received = await authService.disableOtpViaSms({
         email,
@@ -103,7 +106,7 @@ describe('auth service', () => {
     it('should handle successfull POST /auth/recover request with error message', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(200, errorResponse);
+      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.LOGGED_IN, errorResponse);
 
       await expect(
         authService.disableOtpViaSms({ email, code }),
@@ -129,11 +132,13 @@ describe('auth service', () => {
       const expiresAt = 123;
       const hash = 'hash';
 
-      axiosMock.onGet(url).reply(200, { expiresAt, hash });
+      axiosMock
+        .onGet(url)
+        .reply(AUTH_STATUS_CODE.LOGGED_IN, { expiresAt, hash });
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
-        status: 200,
+        status: AUTH_STATUS_CODE.LOGGED_IN,
         hash,
         expiresAt,
       });
@@ -142,11 +147,30 @@ describe('auth service', () => {
     it('should return not failed result ', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(444);
+      const hash = 'hash';
+      const expiresAt = 123;
+
+      axiosMock.onGet(url).reply(444, {
+        hash,
+        expiresAt,
+      });
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
         status: 444,
+        hash,
+        expiresAt,
+      });
+    });
+
+    it('should return failed result ', async () => {
+      expect.assertions(1);
+
+      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.NOT_LOGGED);
+      const res = await authService.getAuthStatus();
+
+      expect(res).toEqual({
+        status: AUTH_STATUS_CODE.NOT_LOGGED,
         hash: '',
         expiresAt: 0,
       });
@@ -160,7 +184,7 @@ describe('auth service', () => {
     it('should return 200 OK', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(200, {
+      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, {
         success: true,
       });
       const res = await authService.authWithGoogle(token);
@@ -193,7 +217,7 @@ describe('auth service', () => {
     it('should return 200 OK', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(200, {
+      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, {
         success: true,
       });
       const res = await authService.authWithGitHub(code);
