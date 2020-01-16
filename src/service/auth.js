@@ -1,10 +1,20 @@
 // @ts-check
 import get from 'lodash/get';
 import request from '@/class/singleton/request';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const TIMEOUT_DEFAULT = 1500;
+
+/**
+ * @type {object}
+ */
+const CODE_TO_STATUS = {
+  200: AUTH_STATUS_CODE.LOGGED_IN,
+  401: AUTH_STATUS_CODE.NOT_LOGGED,
+  403: AUTH_STATUS_CODE.NEED_PERMISSION,
+};
 
 /**
  * @param {Function} handler
@@ -110,7 +120,7 @@ const authWithGitHub = code =>
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 /**
- * @return {Promise<{expiresAt: number, status: number, hash: string}>}
+ * @return {Promise<{expiresAt: number, status: string, hash: string}>}
  */
 const getAuthStatus = async () => {
   try {
@@ -118,16 +128,20 @@ const getAuthStatus = async () => {
       `${identityBaseUrl}/auth/check`,
     );
     return {
-      status: 200,
+      status: AUTH_STATUS_CODE.LOGGED_IN,
       hash,
       expiresAt,
     };
   } catch (e) {
-    const status = get(e, ['response', 'status']);
+    const statusCode = get(e, ['response', 'status']);
+    const status = CODE_TO_STATUS[statusCode] || AUTH_STATUS_CODE.NOT_LOGGED;
+
+    const hash = get(e, ['response', 'data', 'hash'], '');
+    const expiresAt = get(e, ['response', 'data', 'expiresAt'], 0);
     return {
       status,
-      hash: '',
-      expiresAt: 0,
+      hash,
+      expiresAt,
     };
   }
 };
@@ -142,8 +156,11 @@ const waitLogin = () =>
       try {
         const { status } = await getAuthStatus();
 
-        if (status === 200 || status === 403) {
-          return resolve(status);
+        if (
+          status === AUTH_STATUS_CODE.LOGGED_IN ||
+          status === AUTH_STATUS_CODE.NEED_PERMISSION
+        ) {
+          return resolve();
         }
 
         createTimeout(handler);

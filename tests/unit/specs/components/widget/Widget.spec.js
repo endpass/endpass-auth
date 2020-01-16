@@ -8,6 +8,7 @@ import authService from '@/service/auth';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -64,7 +65,7 @@ describe('Widget', () => {
 
     authStore = authStoreModule;
     accountsStore = accountsStoreModule;
-    authStore.setAuthByCode(200);
+    authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
 
     wrapper = shallowMount(Widget, {
       authStore,
@@ -140,7 +141,9 @@ describe('Widget', () => {
     it('should correctly handle logout event', async () => {
       expect.assertions(2);
 
-      authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
+      authService.getAuthStatus.mockResolvedValueOnce({
+        status: AUTH_STATUS_CODE.LOGGED_IN,
+      });
 
       await global.flushPromises();
 

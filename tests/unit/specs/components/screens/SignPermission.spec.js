@@ -8,6 +8,7 @@ import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import host from '@/class/singleton/host';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -69,7 +70,7 @@ describe('SignPermission', () => {
         expect.assertions(2);
 
         await global.flushPromises();
-        authStore.setAuthByCode(200);
+        authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
         bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
         expect(authStore.isLogin).toBe(true);

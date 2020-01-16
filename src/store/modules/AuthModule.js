@@ -10,11 +10,19 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
 import { authChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
-import { METHODS, CHALLENGE_TYPES } from '@/constants';
+import { METHODS, CHALLENGE_TYPES, AUTH_STATUS_CODE } from '@/constants';
 import CookieExpireChecker from '@/class/CookieExpireChecker';
 import NonReactive from '@/class/NonReactive';
 
 const { ERRORS } = ConnectError;
+
+const STATUS_TO_CODE = {
+  DEFAULT: 401,
+  [AUTH_STATUS_CODE.LOGGED_IN]: 200,
+  [AUTH_STATUS_CODE.NOT_LOGGED]: 401,
+  [AUTH_STATUS_CODE.NEED_PERMISSION]: 403,
+  [AUTH_STATUS_CODE.LOGOUT]: 400,
+};
 
 @Module({ generateMutationSetters: true })
 class AuthModule extends VuexModule {
@@ -151,7 +159,6 @@ class AuthModule extends VuexModule {
   async waitLogin() {
     await authService.waitLogin();
     await this.defineAuthStatus();
-    // authChannel.put(Answer.createOk());
   }
 
   @Action
@@ -160,30 +167,33 @@ class AuthModule extends VuexModule {
 
     const settings = settingsService.getLocalSettings();
 
-    if (status !== 200 && !isEmpty(settings)) {
+    if (status !== AUTH_STATUS_CODE.LOGGED_IN && !isEmpty(settings)) {
       settingsService.clearLocalSettings();
     }
 
-    await this.changeAuthStatusByCode({ code: status, hash });
+    await this.changeAuthByStatus({ status, hash });
 
     if (this.isAuthorized && expiresAt) {
       this.cookieExpireChecker.value.setExpireAt(expiresAt);
       this.cookieExpireChecker.value.startChecking();
     }
-
-    return status;
   }
 
   @Mutation
-  setAuthByCode(code) {
-    this.isLogin = code === 403 || code === 200;
-    this.isPermission = code === 200;
+  updateAuthStateByStatus(status) {
+    this.isLogin =
+      status === AUTH_STATUS_CODE.NEED_PERMISSION ||
+      status === AUTH_STATUS_CODE.LOGGED_IN;
+    this.isPermission = status === AUTH_STATUS_CODE.LOGGED_IN;
   }
 
   @Action
-  changeAuthStatusByCode({ code, hash }) {
-    this.setAuthByCode(code);
+  changeAuthByStatus({ status, hash }) {
+    this.updateAuthStateByStatus(status);
     const isAuthorizedNew = this.isAuthorized;
+
+    const code = STATUS_TO_CODE[status] || STATUS_TO_CODE.DEFAULT;
+
     bridgeMessenger.send(METHODS.AUTH_STATUS, {
       status: isAuthorizedNew,
       code,
@@ -200,7 +210,7 @@ class AuthModule extends VuexModule {
   logout() {
     this.cookieExpireChecker.value.setExpireAt(0);
     this.cookieExpireChecker.value.stopChecking();
-    this.changeAuthStatusByCode({ code: 400, hash: '' });
+    this.changeAuthByStatus({ status: AUTH_STATUS_CODE.LOGOUT, hash: '' });
     this.challengeType = null;
     this.setAuthParams(null);
     settingsService.clearLocalSettings();
