@@ -34,9 +34,9 @@ describe('ConsentProvider', () => {
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
     const { authStore, accountsStore, coreStore } = createStoreModules(store);
-    authStore.updateAuthStateByStatus(
-      isAuthed === false ? AUTH_STATUS_CODE.LOGOUT : AUTH_STATUS_CODE.LOGGED_IN,
-    );
+    const status =
+      isAuthed === false ? AUTH_STATUS_CODE.LOGOUT : AUTH_STATUS_CODE.LOGGED_IN;
+    authStore.updateAuthStateByStatus(status);
     return shallowMount(ConsentProvider, {
       authStore,
       accountsStore,

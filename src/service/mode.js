@@ -1,7 +1,6 @@
 import isEmpty from 'lodash/isEmpty';
 import http from '@/class/singleton/request/http';
 import i18n from '@/locales/i18n';
-import { AUTH_STATUS_CODE } from '@/constants';
 
 export const validateIdentityServer = async serverUrl => {
   const accountsError =
@@ -25,7 +24,7 @@ export const validateIdentityServer = async serverUrl => {
     const respCode = e.response && e.response.status;
 
     switch (respCode) {
-      case AUTH_STATUS_CODE.NOT_LOGGED:
+      case 401:
         throw new Error(i18n.t('services.mode.notLogged'));
 
       default:

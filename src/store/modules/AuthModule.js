@@ -17,6 +17,7 @@ import NonReactive from '@/class/NonReactive';
 const { ERRORS } = ConnectError;
 
 const STATUS_TO_CODE = {
+  DEFAULT: 401,
   [AUTH_STATUS_CODE.LOGGED_IN]: 200,
   [AUTH_STATUS_CODE.NOT_LOGGED]: 401,
   [AUTH_STATUS_CODE.NEED_PERMISSION]: 403,
@@ -191,7 +192,7 @@ class AuthModule extends VuexModule {
     this.updateAuthStateByStatus(status);
     const isAuthorizedNew = this.isAuthorized;
 
-    const code = STATUS_TO_CODE[status] || 401;
+    const code = STATUS_TO_CODE[status] || STATUS_TO_CODE.DEFAULT;
 
     bridgeMessenger.send(METHODS.AUTH_STATUS, {
       status: isAuthorizedNew,
