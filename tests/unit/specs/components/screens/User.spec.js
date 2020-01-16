@@ -85,7 +85,7 @@ describe('User', () => {
     it('should logout if logout button was pressed in form', async () => {
       expect.assertions(2);
 
-      authStore.setAuthByCode(AUTH_STATUS_CODE.LOGGED_IN);
+      authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
 
       expect(authStore.isLogin).toBe(true);
 

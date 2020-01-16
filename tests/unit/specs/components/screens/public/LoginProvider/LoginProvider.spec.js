@@ -25,10 +25,10 @@ describe('LoginProvider', () => {
     const { authStore, accountsStore } = createStoreModules(store);
 
     if (isAuthed === true) {
-      authStore.setAuthByCode(AUTH_STATUS_CODE.LOGGED_IN);
+      authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
     }
     if (isAuthed === false) {
-      authStore.setAuthByCode(AUTH_STATUS_CODE.LOGOUT);
+      authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGOUT);
     }
 
     return shallowMount(LoginProvider, {

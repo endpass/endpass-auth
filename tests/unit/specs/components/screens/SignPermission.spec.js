@@ -70,7 +70,7 @@ describe('SignPermission', () => {
         expect.assertions(2);
 
         await global.flushPromises();
-        authStore.setAuthByCode(AUTH_STATUS_CODE.LOGGED_IN);
+        authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
         bridgeMessenger.sendAndWaitResponse.mockResolvedValueOnce({});
 
         expect(authStore.isLogin).toBe(true);

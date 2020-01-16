@@ -8,6 +8,15 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 const TIMEOUT_DEFAULT = 1500;
 
 /**
+ * @type {object}
+ */
+const CODE_TO_STATUS = {
+  200: AUTH_STATUS_CODE.LOGGED_IN,
+  401: AUTH_STATUS_CODE.NOT_LOGGED,
+  403: AUTH_STATUS_CODE.NEED_PERMISSION,
+};
+
+/**
  * @param {Function} handler
  * @return {number}
  */
@@ -111,7 +120,7 @@ const authWithGitHub = code =>
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 /**
- * @return {Promise<{expiresAt: number, status: number, hash: string}>}
+ * @return {Promise<{expiresAt: number, status: string, hash: string}>}
  */
 const getAuthStatus = async () => {
   try {
@@ -124,7 +133,9 @@ const getAuthStatus = async () => {
       expiresAt,
     };
   } catch (e) {
-    const status = get(e, ['response', 'status']);
+    const statusCode = get(e, ['response', 'status']);
+    const status = CODE_TO_STATUS[statusCode] || AUTH_STATUS_CODE.NOT_LOGGED;
+
     const hash = get(e, ['response', 'data', 'hash'], '');
     const expiresAt = get(e, ['response', 'data', 'expiresAt'], 0);
     return {
@@ -149,7 +160,7 @@ const waitLogin = () =>
           status === AUTH_STATUS_CODE.LOGGED_IN ||
           status === AUTH_STATUS_CODE.NEED_PERMISSION
         ) {
-          return resolve(status);
+          return resolve();
         }
 
         createTimeout(handler);

@@ -16,6 +16,13 @@ import NonReactive from '@/class/NonReactive';
 
 const { ERRORS } = ConnectError;
 
+const STATUS_TO_CODE = {
+  [AUTH_STATUS_CODE.LOGGED_IN]: 200,
+  [AUTH_STATUS_CODE.NOT_LOGGED]: 401,
+  [AUTH_STATUS_CODE.NEED_PERMISSION]: 403,
+  [AUTH_STATUS_CODE.LOGOUT]: 400,
+};
+
 @Module({ generateMutationSetters: true })
 class AuthModule extends VuexModule {
   authParams = null;
@@ -151,7 +158,6 @@ class AuthModule extends VuexModule {
   async waitLogin() {
     await authService.waitLogin();
     await this.defineAuthStatus();
-    // authChannel.put(Answer.createOk());
   }
 
   @Action
@@ -164,28 +170,29 @@ class AuthModule extends VuexModule {
       settingsService.clearLocalSettings();
     }
 
-    await this.changeAuthStatusByCode({ code: status, hash });
+    await this.changeAuthByStatus({ status, hash });
 
     if (this.isAuthorized && expiresAt) {
       this.cookieExpireChecker.value.setExpireAt(expiresAt);
       this.cookieExpireChecker.value.startChecking();
     }
-
-    return status;
   }
 
   @Mutation
-  setAuthByCode(code) {
+  updateAuthStateByStatus(status) {
     this.isLogin =
-      code === AUTH_STATUS_CODE.NEED_PERMISSION ||
-      code === AUTH_STATUS_CODE.LOGGED_IN;
-    this.isPermission = code === AUTH_STATUS_CODE.LOGGED_IN;
+      status === AUTH_STATUS_CODE.NEED_PERMISSION ||
+      status === AUTH_STATUS_CODE.LOGGED_IN;
+    this.isPermission = status === AUTH_STATUS_CODE.LOGGED_IN;
   }
 
   @Action
-  changeAuthStatusByCode({ code, hash }) {
-    this.setAuthByCode(code);
+  changeAuthByStatus({ status, hash }) {
+    this.updateAuthStateByStatus(status);
     const isAuthorizedNew = this.isAuthorized;
+
+    const code = STATUS_TO_CODE[status] || 401;
+
     bridgeMessenger.send(METHODS.AUTH_STATUS, {
       status: isAuthorizedNew,
       code,
@@ -202,7 +209,7 @@ class AuthModule extends VuexModule {
   logout() {
     this.cookieExpireChecker.value.setExpireAt(0);
     this.cookieExpireChecker.value.stopChecking();
-    this.changeAuthStatusByCode({ code: AUTH_STATUS_CODE.LOGOUT, hash: '' });
+    this.changeAuthByStatus({ status: AUTH_STATUS_CODE.LOGOUT, hash: '' });
     this.challengeType = null;
     this.setAuthParams(null);
     settingsService.clearLocalSettings();

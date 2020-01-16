@@ -33,7 +33,7 @@ describe('auth service', () => {
       axiosMock.onGet(url).reply(config => {
         expect(config.url).toBe(url);
 
-        return [AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse];
+        return [200, getRecoveryIdentifierResponse];
       });
 
       await authService.getRecoveryIdentifier(email);
@@ -42,9 +42,7 @@ describe('auth service', () => {
     it('should handle successfull GET /auth/recover request', async () => {
       expect.assertions(1);
 
-      axiosMock
-        .onGet(url)
-        .reply(AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse);
+      axiosMock.onGet(url).reply(200, getRecoveryIdentifierResponse);
 
       const received = await authService.getRecoveryIdentifier(email);
 
@@ -54,7 +52,7 @@ describe('auth service', () => {
     it('should handle successfull GET /auth/recover request with error message', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.LOGGED_IN, errorResponse);
+      axiosMock.onGet(url).reply(200, errorResponse);
 
       await expect(authService.getRecoveryIdentifier(email)).rejects.toThrow(
         expect.any(Error),
@@ -84,7 +82,7 @@ describe('auth service', () => {
         expect(config.url).toBe(url);
         expect(config.data).toBe(JSON.stringify({ email, code }));
 
-        return [AUTH_STATUS_CODE.LOGGED_IN, getRecoveryIdentifierResponse];
+        return [200, getRecoveryIdentifierResponse];
       });
 
       await authService.disableOtpViaSms({ email, code });
@@ -93,7 +91,7 @@ describe('auth service', () => {
     it('should handle successfull POST /auth/recover request', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, successResponse);
+      axiosMock.onPost(url).reply(200, successResponse);
 
       const received = await authService.disableOtpViaSms({
         email,
@@ -106,7 +104,7 @@ describe('auth service', () => {
     it('should handle successfull POST /auth/recover request with error message', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.LOGGED_IN, errorResponse);
+      axiosMock.onGet(url).reply(200, errorResponse);
 
       await expect(
         authService.disableOtpViaSms({ email, code }),
@@ -132,9 +130,7 @@ describe('auth service', () => {
       const expiresAt = 123;
       const hash = 'hash';
 
-      axiosMock
-        .onGet(url)
-        .reply(AUTH_STATUS_CODE.LOGGED_IN, { expiresAt, hash });
+      axiosMock.onGet(url).reply(200, { expiresAt, hash });
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
@@ -157,7 +153,7 @@ describe('auth service', () => {
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
-        status: 444,
+        status: AUTH_STATUS_CODE.NOT_LOGGED,
         hash,
         expiresAt,
       });
@@ -166,7 +162,7 @@ describe('auth service', () => {
     it('should return failed result ', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(AUTH_STATUS_CODE.NOT_LOGGED);
+      axiosMock.onGet(url).reply(401);
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
@@ -184,7 +180,7 @@ describe('auth service', () => {
     it('should return 200 OK', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, {
+      axiosMock.onPost(url).reply(200, {
         success: true,
       });
       const res = await authService.authWithGoogle(token);
@@ -217,7 +213,7 @@ describe('auth service', () => {
     it('should return 200 OK', async () => {
       expect.assertions(1);
 
-      axiosMock.onPost(url).reply(AUTH_STATUS_CODE.LOGGED_IN, {
+      axiosMock.onPost(url).reply(200, {
         success: true,
       });
       const res = await authService.authWithGitHub(code);

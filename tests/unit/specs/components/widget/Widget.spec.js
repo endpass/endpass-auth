@@ -65,7 +65,7 @@ describe('Widget', () => {
 
     authStore = authStoreModule;
     accountsStore = accountsStoreModule;
-    authStore.setAuthByCode(AUTH_STATUS_CODE.LOGGED_IN);
+    authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
 
     wrapper = shallowMount(Widget, {
       authStore,
