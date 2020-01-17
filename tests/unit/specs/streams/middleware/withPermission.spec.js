@@ -3,6 +3,7 @@ import { permissionChannel } from '@/class/singleton/channels';
 import router from '@/router';
 import Answer from '@/class/Answer';
 import authService from '@/service/auth';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 jest.mock('@/class/singleton/channels', () => ({
   permissionChannel: {
@@ -30,7 +31,9 @@ describe('withPermission', () => {
 
   it('should redirect to permission', async () => {
     expect.assertions(2);
-    authService.getAuthStatus.mockResolvedValueOnce({ status: 403 });
+    authService.getAuthStatus.mockResolvedValueOnce({
+      status: AUTH_STATUS_CODE.NEED_PERMISSION,
+    });
     permissionChannel.take = jest.fn().mockResolvedValue({ status: true });
 
     await withPermission(options, action);
@@ -46,7 +49,9 @@ describe('withPermission', () => {
   it('should redirect to permission and end stream', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce({ status: 403 });
+    authService.getAuthStatus.mockResolvedValueOnce({
+      status: AUTH_STATUS_CODE.NEED_PERMISSION,
+    });
     permissionChannel.take = jest.fn().mockResolvedValue(Answer.createFail());
 
     await withPermission(options, action);
@@ -63,7 +68,9 @@ describe('withPermission', () => {
   it('should not redirect to permission', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce({ status: 200 });
+    authService.getAuthStatus.mockResolvedValueOnce({
+      status: AUTH_STATUS_CODE.LOGGED_IN,
+    });
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);
@@ -76,7 +83,9 @@ describe('withPermission', () => {
   it('should not redirect to permission with isLogin', async () => {
     expect.assertions(3);
 
-    authService.getAuthStatus.mockResolvedValueOnce({ status: 400 });
+    authService.getAuthStatus.mockResolvedValueOnce({
+      status: AUTH_STATUS_CODE.LOGOUT,
+    });
     permissionChannel.take = jest.fn().mockResolvedValue();
 
     await withPermission(options);

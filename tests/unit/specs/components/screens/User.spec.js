@@ -7,6 +7,7 @@ import Answer from '@/class/Answer';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const localVue = createLocalVue();
 
@@ -84,7 +85,7 @@ describe('User', () => {
     it('should logout if logout button was pressed in form', async () => {
       expect.assertions(2);
 
-      authStore.setAuthByCode(200);
+      authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
 
       expect(authStore.isLogin).toBe(true);
 

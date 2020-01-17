@@ -5,6 +5,7 @@ import {
   getRecoveryIdentifierResponse,
 } from '@unitFixtures/services/identity';
 import http from '@/class/singleton/request/http';
+import { AUTH_STATUS_CODE } from '@/constants';
 
 const authService = require.requireActual('@/service/auth').default;
 
@@ -133,7 +134,7 @@ describe('auth service', () => {
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
-        status: 200,
+        status: AUTH_STATUS_CODE.LOGGED_IN,
         hash,
         expiresAt,
       });
@@ -142,11 +143,30 @@ describe('auth service', () => {
     it('should return not failed result ', async () => {
       expect.assertions(1);
 
-      axiosMock.onGet(url).reply(444);
+      const hash = 'hash';
+      const expiresAt = 123;
+
+      axiosMock.onGet(url).reply(444, {
+        hash,
+        expiresAt,
+      });
       const res = await authService.getAuthStatus();
 
       expect(res).toEqual({
-        status: 444,
+        status: AUTH_STATUS_CODE.NOT_LOGGED,
+        hash,
+        expiresAt,
+      });
+    });
+
+    it('should return failed result ', async () => {
+      expect.assertions(1);
+
+      axiosMock.onGet(url).reply(401);
+      const res = await authService.getAuthStatus();
+
+      expect(res).toEqual({
+        status: AUTH_STATUS_CODE.NOT_LOGGED,
         hash: '',
         expiresAt: 0,
       });
