@@ -1,5 +1,6 @@
 <template>
   <div>
+    <upload-title :title="title" />
     <div class="document-upload-file">
       {{ fileName }}
       <v-svg-icon
@@ -14,11 +15,17 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
+import UploadTitle from '@/components/forms/DocumentUploadForm/shared/UploadTitle';
 
 export default {
   name: 'FileSelected',
 
   props: {
+    title: {
+      type: String,
+      default: '',
+    },
+
     file: {
       type: File,
       default: null,
@@ -32,6 +39,7 @@ export default {
   },
 
   components: {
+    UploadTitle,
     VSvgIcon,
   },
 };

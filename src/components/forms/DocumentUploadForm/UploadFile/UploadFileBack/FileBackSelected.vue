@@ -1,15 +1,12 @@
 <template>
-  <div>
-    <upload-title :title="$t('components.uploadDocument.backIsSelected')" />
-    <file-selected
-      :file="file"
-      v-on="$listeners"
-    />
-  </div>
+  <file-selected
+    :title="$t('components.uploadDocument.backIsSelected')"
+    :file="file"
+    v-on="$listeners"
+  />
 </template>
 
 <script>
-import UploadTitle from '@/components/forms/DocumentUploadForm/shared/UploadTitle';
 import FileSelected from '@/components/forms/DocumentUploadForm/shared/FileSelected';
 
 export default {
@@ -24,7 +21,6 @@ export default {
 
   components: {
     FileSelected,
-    UploadTitle,
   },
 };
 </script>
