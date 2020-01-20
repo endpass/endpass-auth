@@ -8,7 +8,7 @@
       >
       <div
         class="document-upload-preview-remove"
-        @click.native.prevent="$emit('file-remove', $event)"
+        @click.prevent="$emit('file-remove', $event)"
       >
         <v-svg-icon
           name="close"

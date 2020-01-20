@@ -7,7 +7,7 @@
         name="close"
         height="8px"
         width="8px"
-        @click.native.prevent="$emit('file-remove', $event)"
+        @click.prevent="$emit('file-remove', $event)"
       />
     </div>
   </div>
