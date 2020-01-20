@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentUploadForm > UploadError render should correctly render Upload Error component 1`] = `
+<div>
+  <upload-title-stub title="Error" iserror="true"></upload-title-stub>
+  <file-name-stub filename="filename"></file-name-stub>
+  <v-description-stub description="some error" disabled=""></v-description-stub>
+</div>
+`;

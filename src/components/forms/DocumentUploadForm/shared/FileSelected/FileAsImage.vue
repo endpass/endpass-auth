@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <div class="document-upload-preview">
-      <img
-        v-show="!isLoading"
-        class="document-upload-preview-img"
-        :src="previewData"
-      >
-      <div
-        class="document-upload-preview-remove"
-        @click.prevent="$emit('file-remove', $event)"
-      >
-        <v-svg-icon
-          name="close"
-          height="10px"
-          width="10px"
-        />
-      </div>
+  <div class="document-upload-preview">
+    <img
+      :src="imageContent"
+      class="document-upload-preview-img"
+      alt="fileName"
+    >
+    <div
+      class="document-upload-preview-remove"
+      @click.prevent="$emit('file-remove', $event)"
+    >
+      <v-svg-icon
+        name="close"
+        height="10px"
+        width="10px"
+      />
     </div>
   </div>
 </template>
@@ -24,53 +22,17 @@
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
 
 export default {
-  name: 'FilePreview',
+  name: 'FileAsImage',
 
   props: {
-    file: {
-      type: File,
-      default: null,
+    imageContent: {
+      type: String,
+      default: '',
     },
-  },
 
-  data() {
-    return {
-      isLoading: true,
-      isError: false,
-      previewData: null,
-      fileId: '',
-    };
-  },
-
-  watch: {
-    file: {
-      handler(file) {
-        this.isLoading = true;
-        this.isError = false;
-
-        this.fileId = `${file.name}-${file.size}`;
-
-        const { fileId } = this;
-        const reader = new FileReader();
-        reader.onerror = () => {
-          if (this.fileId !== fileId) {
-            return;
-          }
-          this.isLoading = false;
-          this.isError = true;
-        };
-
-        reader.onload = e => {
-          if (this.fileId !== fileId) {
-            return;
-          }
-          this.previewData = e.target.result;
-          this.isLoading = false;
-        };
-
-        reader.readAsDataURL(file);
-      },
-      immediate: true,
+    fileName: {
+      type: String,
+      default: '',
     },
   },
 
