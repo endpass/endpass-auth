@@ -70,7 +70,7 @@ describe('DocumentUploadForm > shared > FileSelected', () => {
     it('should render title component by default', () => {
       expect(wrapper.find('fileastitle-stub').exists()).toBe(true);
 
-      expect(wrapper.find('spinner-stub').exists()).toBe(false);
+      expect(wrapper.find('v-progress-circle-stub').exists()).toBe(false);
       expect(wrapper.find('fileasimage-stub').exists()).toBe(false);
     });
 
@@ -79,7 +79,7 @@ describe('DocumentUploadForm > shared > FileSelected', () => {
         file: imageFile,
       });
 
-      expect(wrapper.find('spinner-stub').exists()).toBe(true);
+      expect(wrapper.find('v-progress-circle-stub').exists()).toBe(true);
 
       expect(wrapper.find('fileasimage-stub').exists()).toBe(false);
       expect(wrapper.find('fileastitle-stub').exists()).toBe(false);
@@ -94,7 +94,7 @@ describe('DocumentUploadForm > shared > FileSelected', () => {
 
       expect(wrapper.find('fileasimage-stub').exists()).toBe(true);
 
-      expect(wrapper.find('spinner-stub').exists()).toBe(false);
+      expect(wrapper.find('v-progress-circle-stub').exists()).toBe(false);
       expect(wrapper.find('fileastitle-stub').exists()).toBe(false);
     });
 
@@ -107,7 +107,7 @@ describe('DocumentUploadForm > shared > FileSelected', () => {
 
       expect(wrapper.find('fileastitle-stub').exists()).toBe(true);
 
-      expect(wrapper.find('spinner-stub').exists()).toBe(false);
+      expect(wrapper.find('v-progress-circle-stub').exists()).toBe(false);
       expect(wrapper.find('fileasimage-stub').exists()).toBe(false);
     });
   });
