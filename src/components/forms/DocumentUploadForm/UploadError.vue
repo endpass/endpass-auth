@@ -6,7 +6,7 @@
     />
     <file-name
       v-if="file"
-      :file-name="file.name"
+      :name="file.name"
       v-on="$listeners"
     />
     <v-description

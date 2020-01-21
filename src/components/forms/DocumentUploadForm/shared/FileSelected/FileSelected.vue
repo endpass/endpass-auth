@@ -2,11 +2,11 @@
   <div>
     <spinner v-if="isLoading" />
     <component
-      :is="current"
+      :is="currentComponent"
       v-else
       :title="$t('components.uploadDocument.frontIsSelected')"
       :image-content="imageContent"
-      :file-name="fileName"
+      :name="fileName"
       @file-remove="$listeners['file-remove']"
     />
   </div>
@@ -42,7 +42,7 @@ export default {
       return this.file && this.file.name;
     },
 
-    current() {
+    currentComponent() {
       if (this.isLoading) {
         return null;
       }
@@ -80,22 +80,13 @@ export default {
       this.isLoading = true;
       this.isFileAsTitle = false;
 
-      this.fileId = `${file.name}-${file.size}`;
-
-      const { fileId } = this;
       const reader = new FileReader();
       reader.addEventListener('error', () => {
-        if (this.fileId !== fileId) {
-          return;
-        }
         this.isLoading = false;
         this.isFileAsTitle = true;
       });
 
       reader.addEventListener('load', e => {
-        if (this.fileId !== fileId) {
-          return;
-        }
         this.imageContent = e.target.result;
         this.isLoading = false;
       });

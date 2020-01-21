@@ -1,13 +1,13 @@
 <template>
-  <div class="document-upload-preview">
+  <div class="document-upload-file-image">
     <img
       :src="imageContent"
-      class="document-upload-preview-img"
+      class="document-upload-file-image-img"
       alt="fileName"
     >
     <div
-      class="document-upload-preview-remove"
-      @click.prevent="$emit('file-remove', $event)"
+      class="document-upload-file-image-remove"
+      @click.prevent="onRemove"
     >
       <v-svg-icon
         name="close"
@@ -36,6 +36,12 @@ export default {
     },
   },
 
+  methods: {
+    onRemove(ev) {
+      this.$emit('file-remove', ev);
+    },
+  },
+
   components: {
     VSvgIcon,
   },
@@ -43,14 +49,15 @@ export default {
 </script>
 
 <style scoped lang="postcss">
-.document-upload-preview {
+.document-upload-file-image {
   position: relative;
   max-width: 181px;
 }
-.document-upload-preview-img {
+.document-upload-file-image-img {
   max-height: 128px;
+  max-width: 100%;
 }
-.document-upload-preview-remove {
+.document-upload-file-image-remove {
   position: absolute;
   top: -6px;
   right: -6px;
@@ -61,6 +68,6 @@ export default {
   align-items: center;
   border-radius: 50%;
   color: var(--endpass-ui-color-white);
-  background: var(--endpass-ui-color-error);
+  background-color: var(--endpass-ui-color-error);
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <upload-title :title="title" />
-    <file-name :file-name="fileName" />
+    <file-name :name="fileName" />
   </div>
 </template>
 

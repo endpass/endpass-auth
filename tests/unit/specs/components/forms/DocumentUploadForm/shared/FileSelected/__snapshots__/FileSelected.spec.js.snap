@@ -2,6 +2,6 @@
 
 exports[`DocumentUploadForm > shared > FileSelected render should correctly render Upload Error component 1`] = `
 <div>
-  <fileastitle-stub title="Front File selected" filename="filename"></fileastitle-stub>
+  <fileastitle-stub title="Front File selected" filename="" name="filename"></fileastitle-stub>
 </div>
 `;
