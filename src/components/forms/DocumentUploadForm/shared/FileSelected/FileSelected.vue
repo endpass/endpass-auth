@@ -1,6 +1,9 @@
 <template>
   <div>
-    <spinner v-if="isLoading" />
+    <v-progress-circle
+      v-if="isLoading"
+      :progress="25"
+    />
     <component
       :is="currentComponent"
       v-else
@@ -13,8 +16,8 @@
 </template>
 
 <script>
+import VProgressCircle from '@endpass/ui/kit/VProgressCircle';
 import UploadTitle from '@/components/forms/DocumentUploadForm/shared/UploadTitle';
-import Spinner from '@/components/common/Spinner';
 import FileAsTitle from './FileAsTitle';
 import FileAsImage from './FileAsImage';
 
@@ -96,10 +99,10 @@ export default {
   },
 
   components: {
-    Spinner,
     FileAsImage,
     FileAsTitle,
     UploadTitle,
+    VProgressCircle,
   },
 };
 </script>
