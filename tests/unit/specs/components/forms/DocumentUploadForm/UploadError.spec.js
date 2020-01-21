@@ -13,7 +13,7 @@ describe('DocumentUploadForm > UploadError', () => {
   const file = new File([''], fileName);
   const error = 'File Error example';
 
-  const createWrapper = () => {
+  const createWrapper = options => {
     return shallowMount(UploadError, {
       localVue,
       i18n,
@@ -22,6 +22,7 @@ describe('DocumentUploadForm > UploadError', () => {
         file,
         error,
       },
+      ...options,
     });
   };
 
@@ -44,6 +45,24 @@ describe('DocumentUploadForm > UploadError', () => {
       expect(wrapper.find('v-description-stub').attributes().description).toBe(
         error,
       );
+    });
+
+    it('should pass is-error as true when have error', () => {
+      expect(wrapper.find('upload-title-stub').attributes().iserror).toBe(
+        'true',
+      );
+    });
+
+    it('should drop is-error when no error', () => {
+      wrapper = createWrapper({
+        propsData: {
+          file,
+        },
+      });
+
+      expect(
+        wrapper.find('upload-title-stub').attributes().iserror,
+      ).toBeUndefined();
     });
   });
 });
