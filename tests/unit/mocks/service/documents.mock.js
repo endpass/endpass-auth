@@ -1,5 +1,4 @@
 jest.mock('@/service/documents', () => {
-  // eslint-disable-next-line global-require
   const { docStatusesMap } = require('@unitFixtures/documents');
 
   return {

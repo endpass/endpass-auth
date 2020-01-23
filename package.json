@@ -38,13 +38,11 @@
   "lint-staged": {
     "*.{js,json}": [
       "eslint --fix",
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ],
     "*.vue": [
       "prettier --write",
-      "eslint --fix",
-      "git add"
+      "eslint --fix"
     ]
   },
   "config": {
@@ -59,7 +57,7 @@
     }
   },
   "dependencies": {
-    "@endpass/class": "^0.19.5",
+    "@endpass/class": "^0.19.6",
     "@endpass/connect": "^0.30.1-beta",
     "@endpass/faucet": "^0.2.1",
     "@endpass/ui": "^0.15.72",
@@ -90,12 +88,12 @@
     "@babel/parser": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
     "@babel/preset-typescript": "^7.8.3",
-    "@commitlint/cli": "^8.3.4",
+    "@commitlint/cli": "^8.3.5",
     "@commitlint/config-conventional": "^8.3.4",
     "@endpass/eslint-plugin-endpass": "^0.2.10",
     "@endpass/vue-i18n-translate-checker": "^0.0.6",
     "@semantic-release/changelog": "^3.0.6",
-    "@semantic-release/git": "^7.0.18",
+    "@semantic-release/git": "^8.0.0",
     "@types/lodash.isnil": "^4.0.6",
     "@types/lodash.omitby": "^4.6.6",
     "@vue/cli-plugin-babel": "^3.11.0",
@@ -108,10 +106,10 @@
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.0.2",
     "eslint": "^6.8.0",
-    "gh-pages": "^2.1.1",
-    "husky": "^3.1.0",
+    "gh-pages": "^2.2.0",
+    "husky": "^4.2.0",
     "jest-localstorage-mock": "^2.4.0",
-    "lint-staged": "^9.5.0",
+    "lint-staged": "^10.0.2",
     "postcss-nested": "^4.1.2",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",

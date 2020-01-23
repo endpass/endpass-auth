@@ -9,8 +9,15 @@ import { UPLOAD_STATUSES } from '@/constants';
 
 const documentsService = require.requireActual('@/service/documents').default;
 
+jest.useFakeTimers();
+
 describe('Documents service', () => {
   const axiosMock = new MockAdapter(http);
+
+  beforeEach(() => {
+    jest.restoreAllMocks();
+    jest.clearAllMocks();
+  });
 
   describe('checkFile', () => {
     const requestUrlForDocCheck = `${ENV.VUE_APP_IDENTITY_API_URL}/documents/file/check`;
@@ -68,6 +75,64 @@ describe('Documents service', () => {
 
       const res = await documentsService.getDocumentUploadStatusById(docId);
       expect(res).toBe(UPLOAD_STATUSES.ERRORED);
+    });
+  });
+
+  describe('wait document recognize', () => {
+    const docId = 'docId';
+    const mockStatusOnce = status => {
+      const spy = jest.spyOn(documentsService, 'getDocumentUploadStatusById');
+      spy.mockResolvedValue(status);
+    };
+
+    it('should throw error, if something goes wrong', async () => {
+      expect.assertions(1);
+
+      const message = 'Recognize error';
+      mockStatusOnce(UPLOAD_STATUSES.ERRORED);
+
+      try {
+        await documentsService.waitDocumentRecognition(docId);
+      } catch (e) {
+        expect(e.message).toBe(message);
+      }
+    });
+
+    it('should not to be as resolved', async () => {
+      expect.assertions(1);
+
+      let isDone = false;
+
+      mockStatusOnce(UPLOAD_STATUSES.PROCESSING);
+
+      documentsService.waitDocumentRecognition(docId).then(() => {
+        isDone = true;
+      });
+
+      await global.flushPromises();
+
+      expect(isDone).toBe(false);
+    });
+
+    it('should resolve recognize after upload done', async () => {
+      expect.assertions(2);
+
+      mockStatusOnce(UPLOAD_STATUSES.PROCESSING);
+      let isDone = false;
+
+      documentsService.waitDocumentRecognition(docId).then(() => {
+        isDone = true;
+      });
+
+      await global.flushPromises();
+
+      expect(isDone).toBe(false);
+
+      mockStatusOnce(UPLOAD_STATUSES.UPLOADED);
+      jest.runOnlyPendingTimers();
+      await global.flushPromises();
+
+      expect(isDone).toBe(true);
     });
   });
 

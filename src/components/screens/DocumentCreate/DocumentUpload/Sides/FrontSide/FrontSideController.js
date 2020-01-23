@@ -118,7 +118,7 @@ class FrontSideController extends VuexModule {
         this.docId = await documentsService.createDocument({ type });
       }
 
-      timer.continueProgress(20, 100);
+      timer.continueProgress(20, 80);
       await documentsService.uploadFrontFile(
         {
           file,
@@ -126,6 +126,9 @@ class FrontSideController extends VuexModule {
         },
         this.getUploadRequestConfig(),
       );
+
+      timer.continueProgress(80, 100);
+      await documentsService.waitDocumentRecognition(this.docId);
     } catch (e) {
       throw this.createError(e);
     } finally {
