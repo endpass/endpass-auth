@@ -4,9 +4,9 @@
       :title="$t('global.error')"
       :is-error="!!error"
     />
-    <file-selected
+    <file-name
       v-if="file"
-      :file="file"
+      :name="file.name"
       v-on="$listeners"
     />
     <v-description
@@ -19,7 +19,7 @@
 <script>
 import VDescription from '@endpass/ui/kit/VDescription';
 import UploadTitle from './shared/UploadTitle';
-import FileSelected from './shared/FileSelected';
+import FileName from './shared/FileName';
 
 export default {
   name: 'UploadError',
@@ -36,7 +36,7 @@ export default {
   },
 
   components: {
-    FileSelected,
+    FileName,
     UploadTitle,
     VDescription,
   },

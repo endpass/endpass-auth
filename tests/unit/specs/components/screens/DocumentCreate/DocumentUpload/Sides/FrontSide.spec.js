@@ -16,7 +16,7 @@ describe('UploadDocument > FrontSide', () => {
   let wrapper;
 
   const docId = 'docId';
-  const file = 'file';
+  const file = new File([''], 'filename');
 
   beforeEach(() => {
     jest.useFakeTimers();

@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocumentUploadForm > shared > FileSelected render should correctly render Upload Error component 1`] = `
+<div>
+  <fileastitle-stub title="Front File selected" filename="" name="filename"></fileastitle-stub>
+</div>
+`;
