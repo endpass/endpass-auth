@@ -218,6 +218,9 @@
       "backIsSelected": "Back File selected",
       "uploading": "Uploading",
       "recognition": "Recognition"
+    },
+    "rememberCheckbox": {
+      "text": "Remember me on this device"
     }
   },
   "store": {

@@ -25,15 +25,13 @@ describe('OtpForm', () => {
     preventDefault: () => {},
   });
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
+  const createWrapper = options => {
     const store = createStore();
     const { coreStore: coreStoreModule } = createStoreModules(store);
 
     coreStore = coreStoreModule;
 
-    wrapper = shallowMount(OtpForm, {
+    return shallowMount(OtpForm, {
       coreStore,
       localVue,
       propsData: {
@@ -47,7 +45,13 @@ describe('OtpForm', () => {
       },
       i18n,
       sync: false,
+      ...options,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    wrapper = createWrapper();
   });
 
   describe('render', () => {
