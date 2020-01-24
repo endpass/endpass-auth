@@ -128,7 +128,7 @@ class FrontSideController extends VuexModule {
       );
 
       timer.continueProgress(80, 100);
-      await documentsService.waitDocumentRecognition(this.docId);
+      await documentsService.waitDocumentUpload(this.docId);
     } catch (e) {
       throw this.createError(e);
     } finally {

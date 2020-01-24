@@ -159,7 +159,7 @@ class FrontSideOnlyController extends VuexModule {
       );
 
       timer.continueProgress(40, 50);
-      await documentsService.waitDocumentRecognition(this.docId);
+      await documentsService.waitDocumentUpload(this.docId);
     } catch (e) {
       throw this.createError(e);
     } finally {

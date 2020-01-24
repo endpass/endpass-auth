@@ -92,7 +92,7 @@ describe('Documents service', () => {
       mockStatusOnce(UPLOAD_STATUSES.ERRORED);
 
       try {
-        await documentsService.waitDocumentRecognition(docId);
+        await documentsService.waitDocumentUpload(docId);
       } catch (e) {
         expect(e.message).toBe(message);
       }
@@ -105,7 +105,7 @@ describe('Documents service', () => {
 
       mockStatusOnce(UPLOAD_STATUSES.PROCESSING);
 
-      documentsService.waitDocumentRecognition(docId).then(() => {
+      documentsService.waitDocumentUpload(docId).then(() => {
         isDone = true;
       });
 
@@ -120,7 +120,7 @@ describe('Documents service', () => {
       mockStatusOnce(UPLOAD_STATUSES.PROCESSING);
       let isDone = false;
 
-      documentsService.waitDocumentRecognition(docId).then(() => {
+      documentsService.waitDocumentUpload(docId).then(() => {
         isDone = true;
       });
 

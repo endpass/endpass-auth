@@ -128,7 +128,7 @@ class BackSideController extends VuexModule {
       );
 
       timer.continueProgress(40, 50);
-      await documentsService.waitDocumentRecognition(docId);
+      await documentsService.waitDocumentUpload(docId);
     } catch (e) {
       throw this.createError(e);
     } finally {
