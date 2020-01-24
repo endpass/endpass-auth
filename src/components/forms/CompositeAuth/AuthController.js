@@ -11,16 +11,22 @@ class AuthController extends VuexModule {
   }
 
   /**
-   *
    * @param {boolean} isSignUp
    * @param {string} email
    * @param {string} password
    * @param {string} code
+   * @param {boolean} isRemember
    * @return {Promise<void>}
    */
   @Action
-  async authWithCode({ isSignUp, email, password, code }) {
-    await authService.authWithCode({ email, code, password, isSignUp });
+  async authWithCode({ isSignUp, email, password, code, isRemember }) {
+    await authService.authWithCode({
+      email,
+      code,
+      password,
+      isSignUp,
+      isRemember,
+    });
     await this.authStore.defineAuthStatus();
   }
 }

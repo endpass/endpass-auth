@@ -12,7 +12,9 @@ const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
 
 ENV.VUE_APP_VERSION = pkg.version;
 
+// eslint-disable-next-line no-console
 console.log('NODE_ENV', NODE_ENV);
+// eslint-disable-next-line no-console
 console.log('ENV', ENV);
 
 const commitHash = buildUtils.getCommitHash();
@@ -112,6 +114,8 @@ module.exports = {
 
     config.plugins.delete('prefetch-version');
     config.plugins.delete('preload-version');
+    // For yarn link
+    config.resolve.symlinks(false);
   },
   devServer: {
     proxy: {
