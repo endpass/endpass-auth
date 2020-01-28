@@ -5,6 +5,7 @@
     </v-title>
     <form-item>
       <v-input
+        ref="password"
         v-model="password"
         v-validate="'required|min:8'"
         type="password"
@@ -20,7 +21,7 @@
     <form-item>
       <v-input
         v-model="repeatPassword"
-        v-validate="'required|min:8'"
+        v-validate="'required|confirmed:password'"
         type="password"
         required
         data-vv-as="password"
@@ -105,11 +106,7 @@ export default {
 
   computed: {
     isSubmitEnable() {
-      return this.isFormValid && this.isPasswordEqual;
-    },
-
-    isPasswordEqual() {
-      return this.password && this.password === this.repeatPassword;
+      return this.isFormValid;
     },
   },
 

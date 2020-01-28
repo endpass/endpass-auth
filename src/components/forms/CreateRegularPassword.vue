@@ -9,6 +9,7 @@
 
     <form-item>
       <v-input
+        ref="password"
         v-model="password"
         v-validate="'required|min:8'"
         type="password"
@@ -24,7 +25,7 @@
     <form-item>
       <v-input
         v-model="repeatPassword"
-        v-validate="'required|min:8'"
+        v-validate="'required|confirmed:password'"
         type="password"
         required
         data-vv-as="password"

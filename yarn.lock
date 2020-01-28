@@ -1745,12 +1745,12 @@
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.15.72":
-  version "0.15.72"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.15.72.tgz#b12b2cb961463f452b0658c1f6d772b7395eed21"
-  integrity sha512-bZTssPlhdNhUFd6MIGe4CYRx+em5xoQdSMIwt4AzJpAbB11GSXyFxxh7tjZH3h2iJ5SwTj0f0w48MlHU2Go42w==
+"@endpass/ui@^0.17.2":
+  version "0.17.2"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.17.2.tgz#b6f9fca6731e120b3da800bd68cf69678a21f155"
+  integrity sha512-m44zKByvCS1GmyvgBAnqe4avoqQWHje8EUAPB8ARt80YIhGj3lyxytOf7ZUUCwmGYGhQcUbwQqDh65AG2IMLvw==
   dependencies:
-    dayjs "^1.8.16"
+    dayjs "^1.8.18"
     lodash.chunk "^4.2.0"
     vue "^2.5.21"
 
@@ -5175,6 +5175,11 @@ dayjs@^1.8.16:
   version "1.8.16"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.16.tgz#2a3771de537255191b947957af2fd90012e71e64"
   integrity sha512-XPmqzWz/EJiaRHjBqSJ2s6hE/BUoCIHKgdS2QPtTQtKcS9E4/Qn0WomoH1lXanWCzri+g7zPcuNV4aTZ8PMORQ==
+
+dayjs@^1.8.18:
+  version "1.8.19"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.19.tgz#5117dc390d8f8e586d53891dbff3fa308f51abfe"
+  integrity sha512-7kqOoj3oQSmqbvtvGFLU5iYqies+SqUiEGNT0UtUPPxcPYgY1BrkXR0Cq2R9HYSimBXN+xHkEN4Hi399W+Ovlg==
 
 de-indent@^1.0.2:
   version "1.0.2"

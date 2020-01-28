@@ -20,7 +20,13 @@ jest.useFakeTimers();
 describe('WalletPassword', () => {
   let wrapper;
   const seedKey = 'seedKey';
-  const createHandler = jest.fn();
+  let createHandler = jest.fn();
+
+  const doSubmit = async () => {
+    await global.flushPromises();
+    wrapper.find('[data-test=define-pwd-form]').trigger('submit');
+    await global.flushPromises();
+  };
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -32,10 +38,12 @@ describe('WalletPassword', () => {
     };
 
     walletGen.createComplex.mockResolvedValueOnce(wallet);
+    createHandler = jest.fn();
 
     wrapper = shallowMount(WalletPassword, {
       localVue,
       i18n,
+      sync: false,
       mixins: [VueTimers],
       propsData: {
         createHandler,
@@ -53,43 +61,33 @@ describe('WalletPassword', () => {
     });
   });
 
-  async function doSubmit() {
-    await wrapper.vm.$nextTick();
-    wrapper.find('[data-test=define-pwd-form]').trigger('submit');
-  }
-
   describe('behavior', () => {
-    it('should not switch if passwords do not match', async () => {
-      expect.assertions(2);
+    it('should not emit create event if no data', async () => {
+      expect.assertions(1);
 
       await doSubmit();
-      await global.flushPromises();
 
       expect(wrapper.emitted().create).toBe(undefined);
+    });
 
-      wrapper.setData({
-        passwordConfirm: 'pwd',
-        password: 'pw',
-      });
+    it('should not switch if passwords does not match', async () => {
+      expect.assertions(1);
+
+      wrapper.find('[data-test=password-main]').vm.$emit('input', 'first');
+      wrapper.find('[data-test=password-confirm]').vm.$emit('input', 'second');
 
       await doSubmit();
-      await global.flushPromises();
 
       expect(wrapper.emitted().create).toBe(undefined);
     });
 
     it('should not switch to seed box, if pwd less 8', async () => {
-      expect.assertions(2);
+      expect.assertions(1);
 
-      expect(wrapper.emitted().create).toBe(undefined);
-
-      wrapper.setData({
-        passwordConfirm: 'pwd',
-        password: 'pwd',
-      });
+      wrapper.find('[data-test=password-main]').vm.$emit('input', '123');
+      wrapper.find('[data-test=password-confirm]').vm.$emit('input', '123');
 
       await doSubmit();
-      await global.flushPromises();
 
       expect(wrapper.emitted().create).toBe(undefined);
     });
@@ -105,13 +103,12 @@ describe('WalletPassword', () => {
         false,
       );
 
-      wrapper.setData({
-        passwordConfirm: '12345678',
-        password: '12345678',
-      });
+      wrapper.find('[data-test=password-main]').vm.$emit('input', '12345678');
+      wrapper
+        .find('[data-test=password-confirm]')
+        .vm.$emit('input', '12345678');
 
       await doSubmit();
-      await global.flushPromises();
 
       expect(wrapper.emitted().create).toEqual([[handlerData]]);
     });
@@ -124,13 +121,12 @@ describe('WalletPassword', () => {
         false,
       );
 
-      wrapper.setData({
-        passwordConfirm: 'pwd123123123',
-        password: 'pwd123123123',
-      });
+      wrapper.find('[data-test=password-main]').vm.$emit('input', '12345678');
+      wrapper
+        .find('[data-test=password-confirm]')
+        .vm.$emit('input', '12345678');
 
       await doSubmit();
-      await global.flushPromises();
 
       expect(wrapper.find('[data-test=wallet-create-error]').exists()).toBe(
         true,
