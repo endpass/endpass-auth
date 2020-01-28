@@ -21,7 +21,7 @@ const routes = [
     },
   },
   {
-    path: '/public/login',
+    path: '/public/login1',
     name: 'LoginProvider',
     component: () =>
       import(
