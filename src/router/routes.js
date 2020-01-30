@@ -5,7 +5,7 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "widget" */ '@/components/widget/Widget'),
     meta: {
-      isWidget: true,
+      isWidgetStream: true,
     },
   },
   {
@@ -65,7 +65,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -90,7 +90,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -103,7 +103,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -116,7 +116,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -126,7 +126,7 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "screen-sign" */ '@/components/screens/Sign'),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -138,7 +138,7 @@ const routes = [
         /* webpackChunkName: "document-create" */ '@/components/screens/DocumentCreate'
       ),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -150,7 +150,7 @@ const routes = [
         /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletGenerate'
       ),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -162,7 +162,7 @@ const routes = [
         /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletCreate'
       ),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -174,7 +174,7 @@ const routes = [
         /* webpackChunkName: "wallet-create-error" */ '@/components/screens/WalletCreateError'
       ),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
