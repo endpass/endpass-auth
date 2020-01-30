@@ -11,8 +11,7 @@ const router = new Router({
 });
 
 router.beforeEach(async (to, from, next) => {
-  const { isDialog, isWidget, isBackground } = to.meta;
-  const needDialogRedirect = isDialog && !coreStore.isDialog;
+  const { isDialogStream, isWidgetStream, isBackground } = to.meta;
 
   if (!isBackground) {
     document.body.classList.add('transparent');
@@ -20,22 +19,23 @@ router.beforeEach(async (to, from, next) => {
 
   if (!coreStore.isInitStarted) {
     try {
-      await coreStore.initStreams({ isDialog, isWidget });
+      await coreStore.initStreams({ isDialogStream, isWidgetStream });
     } catch (e) {
       return next('Error');
     }
   }
 
-  // Github authentification handling and widget redirect preventing
-  if (to.query.code || isWidget) {
-    return next();
-  }
+  switch (true) {
+    // Github authentification handling and widget redirect preventing
+    case to.query.code || isWidgetStream:
+      return next();
 
-  if (needDialogRedirect && to.name !== 'Bridge') {
-    return next('bridge');
-  }
+    case isDialogStream && !coreStore.isDialog && to.name !== 'Bridge':
+      return next('bridge');
 
-  return next();
+    default:
+      return next();
+  }
 });
 
 export default router;

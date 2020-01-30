@@ -71,22 +71,22 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initStreams({ isDialog, isWidget }) {
+  async initStreams({ isDialogStream, isWidgetStream }) {
     this.isInitStarted = true;
     this.isIniting = true;
 
     try {
-      if (isDialog || isWidget) {
+      if (isDialogStream || isWidgetStream) {
         await this.setupCore();
       }
 
       await this.setupResize();
 
-      if (isDialog) {
+      if (isDialogStream) {
         await this.setupDialog();
       }
 
-      if (isWidget) {
+      if (isWidgetStream) {
         await this.setupWidget();
       }
 
@@ -97,17 +97,6 @@ class CoreModule extends VuexModule {
       throw e;
     } finally {
       this.isIniting = false;
-    }
-  }
-
-  @Action
-  async init() {
-    try {
-      await this.authStore.defineAuthStatus();
-      await this.startBridge();
-      // eslint-disable-next-line
-    } catch (err) {
-      console.error(err);
     }
   }
 
