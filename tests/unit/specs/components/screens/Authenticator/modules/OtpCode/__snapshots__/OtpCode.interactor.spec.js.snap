@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OtpCodeInteractor render should correctly render component 1`] = `<otp-code-stub></otp-code-stub>`;
+
+exports[`OtpCodeInteractor render should render form 1`] = `<otp-code-stub></otp-code-stub>`;
