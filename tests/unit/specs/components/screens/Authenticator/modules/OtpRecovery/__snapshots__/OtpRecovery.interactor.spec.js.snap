@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OtpRecoveryInteractor render should correctly render component 1`] = `<otp-recovery-stub error="" isphoneexist="true"></otp-recovery-stub>`;
+
+exports[`OtpRecoveryInteractor render should render form 1`] = `<otp-recovery-stub error="" isphoneexist="true"></otp-recovery-stub>`;
