@@ -10,7 +10,7 @@ jest.mock('@/service/auth', () => {
   const { AUTH_STATUS_CODE } = require('@/constants');
 
   return {
-    getAuthChallenge: jest.fn(),
+    getAuthChallenge: jest.fn().mockResolvedValue(successResponse),
     setAuthPermission: jest.fn(),
     authWithCode: jest.fn(),
     authWithGoogle: jest.fn(),
