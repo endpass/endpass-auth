@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUpInteractor render should correctly render component 1`] = `<sign-up-stub error="" email="user@email.com"></sign-up-stub>`;
+
+exports[`SignUpInteractor render should render form 1`] = `<sign-up-stub error="" email="user@email.com"></sign-up-stub>`;

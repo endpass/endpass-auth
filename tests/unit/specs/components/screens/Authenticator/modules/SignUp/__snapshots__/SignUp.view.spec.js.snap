@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SignUpView render should correctly render component 1`] = `
+<form data-test="auth-form">
+  <v-title-stub>
+    Sign up to&nbsp;your Endpass account to&nbsp;access site actions
+  </v-title-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="password" data-vv-name="password" name="password" type="password" required="" placeholder="Enter password..." data-test="password-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
+    <v-input-stub value="" data-vv-as="password" data-vv-name="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password..." data-test="confirm-password-input"></v-input-stub>
+  </form-item-stub>
+  <v-button-stub skin="primary" size="big" data-test="submit-button-auth" disabled="true">
+    Sign up
+  </v-button-stub>
+  <v-spacer-stub height="3" width="0"></v-spacer-stub>
+  <v-divider-stub>or register with</v-divider-stub>
+  <form-item-stub>
+    <form-controls-stub>
+      <google-auth-button-stub type="button"></google-auth-button-stub>
+      <git-auth-button-stub type="button"></git-auth-button-stub>
+    </form-controls-stub>
+  </form-item-stub>
+  <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
+    <div>
+      By continuing, you agree to&nbsp;Endpass's
+      <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
+        Terms&nbsp;of&nbsp;Service
+      </v-link-stub>
+      and
+      <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
+        Privacy&nbsp;Policy
+      </v-link-stub>
+    </div>
+  </form-row-stub>
+  <v-divider-stub></v-divider-stub>
+  <form-row-stub class="v-text-center v-fw-b">
+    Already have an account?&nbsp;
+    <v-link-stub role="button" data-test="switch-to-sign-in">
+      Sign in
+    </v-link-stub>
+  </form-row-stub>
+</form>
+`;
+
+exports[`SignUpView render should render pasword form 1`] = `
+<form data-test="auth-form">
+  <v-title-stub>
+    Sign up to&nbsp;your Endpass account to&nbsp;access site actions
+  </v-title-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="password" data-vv-name="password" name="password" type="password" required="" placeholder="Enter password..." data-test="password-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
+    <v-input-stub value="" data-vv-as="password" data-vv-name="confirmPassword" name="confirmPassword" type="password" placeholder="Confirm password..." data-test="confirm-password-input"></v-input-stub>
+  </form-item-stub>
+  <v-button-stub skin="primary" size="big" data-test="submit-button-auth" disabled="true">
+    Sign up
+  </v-button-stub>
+  <v-spacer-stub height="3" width="0"></v-spacer-stub>
+  <v-divider-stub>or register with</v-divider-stub>
+  <form-item-stub>
+    <form-controls-stub>
+      <google-auth-button-stub type="button"></google-auth-button-stub>
+      <git-auth-button-stub type="button"></git-auth-button-stub>
+    </form-controls-stub>
+  </form-item-stub>
+  <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
+    <div>
+      By continuing, you agree to&nbsp;Endpass's
+      <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
+        Terms&nbsp;of&nbsp;Service
+      </v-link-stub>
+      and
+      <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
+        Privacy&nbsp;Policy
+      </v-link-stub>
+    </div>
+  </form-row-stub>
+  <v-divider-stub></v-divider-stub>
+  <form-row-stub class="v-text-center v-fw-b">
+    Already have an account?&nbsp;
+    <v-link-stub role="button" data-test="switch-to-sign-in">
+      Sign in
+    </v-link-stub>
+  </form-row-stub>
+</form>
+`;
