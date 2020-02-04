@@ -1,25 +1,11 @@
 <template>
-  <screen class="auth-screen-centered">
-    <v-modal-card
-      :is-closable="$options.coreStore.isDialog"
-      @close="onCancel"
-    >
-      <composite-auth-form
-        :is-closable="$options.coreStore.isDialog"
-        :is-public="true"
-        @cancel="onCancel"
-        @authorize="onAuth"
-      />
-    </v-modal-card>
-  </screen>
+  <loading-screen :is-loading="true" />
 </template>
 
 <script>
-import VModalCard from '@endpass/ui/kit/VModalCard';
-import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import { parseUrl } from '@/util/dom';
 import { authStore, coreStore } from '@/store';
+import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
   name: 'PublicAuth',
@@ -32,7 +18,7 @@ export default {
   }),
 
   methods: {
-    async onAuth() {
+    async handleAuth() {
       const { redirectUrl, withHost } = this.queryParamsMap;
 
       if (!redirectUrl) return;
@@ -47,10 +33,10 @@ export default {
       const { origin } = parseUrl(fullPath);
       const newPath = fullPath.replace(origin, '');
 
-      this.$router.replace(newPath);
+      this.$router.replace(newPath).catch(() => {});
     },
 
-    onCancel() {
+    cancelAuth() {
       this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
@@ -58,6 +44,8 @@ export default {
 
   mounted() {
     const { query } = this.$route;
+    const { params } = this.$route;
+
     const { redirectUrl } = query;
 
     this.queryParamsMap = query;
@@ -67,19 +55,24 @@ export default {
         redirectUrl: decodeURIComponent(redirectUrl),
       });
     }
+
+    switch (true) {
+      case params.isAuthCancel:
+        this.cancelAuth();
+        break;
+
+      case params.isAuthSuccess: {
+        this.handleAuth();
+        break;
+      }
+
+      default:
+        this.$router.replace({ name: 'SignIn' }).catch(() => {});
+    }
   },
 
   components: {
-    Screen,
-    VModalCard,
-    CompositeAuthForm,
+    LoadingScreen,
   },
 };
 </script>
-
-<style>
-.auth-screen-centered {
-  display: flex;
-  justify-content: center;
-}
-</style>

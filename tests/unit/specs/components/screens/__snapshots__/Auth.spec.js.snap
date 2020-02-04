@@ -1,9 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Auth render should correctly render Auth screen component 1`] = `
-<screen-stub>
-  <v-modal-card-stub isclosable="true">
-    <composite-auth-form-stub isclosable="true"></composite-auth-form-stub>
-  </v-modal-card-stub>
-</screen-stub>
-`;
+exports[`Auth render should correctly render Auth screen component 1`] = `<loading-screen-stub isloading="true"></loading-screen-stub>`;

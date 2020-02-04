@@ -2,7 +2,6 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Auth from '@/components/screens/public/Auth';
 import setupI18n from '@/locales/i18nSetup';
-import identityService from '@/service/identity';
 import createStoreModules from '@/store/createStoreModules';
 import createStore from '@/store/createStore';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
@@ -20,7 +19,7 @@ describe('PublicAuth', () => {
   let accountsStore;
   let authStore;
 
-  const createWrapper = options => {
+  const wrapperFactory = options => {
     const store = createStore();
     const {
       accountsStore: accountsStoreModule,
@@ -49,49 +48,55 @@ describe('PublicAuth', () => {
     jest.clearAllMocks();
 
     $router = {
-      replace: jest.fn(),
+      replace: jest.fn().mockResolvedValue(),
     };
     $route = {
       query: {
         redirectUrl: 'http://foo.bar',
       },
+      params: {},
     };
+
+    wrapper = wrapperFactory();
   });
 
   describe('render', () => {
     it('should correctly render Auth public screen component', () => {
-      wrapper = createWrapper();
+      expect(wrapper.find('loading-screen-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
-    it('should redirect to LoginProvider on auth form authorize event handling', async () => {
+    it('should redirect to LoginProvider on auth form authorize event handling', () => {
       expect.assertions(1);
 
-      wrapper = createWrapper();
-      wrapper.setData({
-        queryParamsMap: {
-          redirectUrl: 'http://localhost/public/foo/bar',
+      wrapper = wrapperFactory({
+        mocks: {
+          $route: {
+            query: {
+              redirectUrl: 'http://localhost/public/foo/bar',
+            },
+            params: {
+              isAuthSuccess: true,
+            },
+          },
+          $router,
         },
       });
-
-      identityService.checkAccountExist.mockResolvedValueOnce(true);
-
-      wrapper.find('composite-auth-form-stub').vm.$emit('authorize');
-      await global.flushPromises();
 
       expect(wrapper.vm.$router.replace).toBeCalledWith('/public/foo/bar');
     });
 
     it('should set auth params if redirectUrl exists', () => {
       const redirectUrl = 'http://my.redirect.url';
-      wrapper = createWrapper({
+      wrapper = wrapperFactory({
         mocks: {
           $route: {
             query: {
               redirectUrl,
             },
+            params: {},
           },
           $router,
         },
@@ -103,10 +108,11 @@ describe('PublicAuth', () => {
     });
 
     it('should not set auth params if redirectUrl not exists', () => {
-      wrapper = createWrapper({
+      wrapper = wrapperFactory({
         mocks: {
           $route: {
             query: {},
+            params: {},
           },
           $router,
         },
@@ -116,9 +122,17 @@ describe('PublicAuth', () => {
     });
 
     it('should cancel and close auth', () => {
-      wrapper = createWrapper();
-
-      wrapper.find('v-modal-card-stub').vm.$emit('close');
+      wrapper = wrapperFactory({
+        mocks: {
+          $route: {
+            query: {},
+            params: {
+              isAuthCancel: true,
+            },
+          },
+          $router,
+        },
+      });
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
     });

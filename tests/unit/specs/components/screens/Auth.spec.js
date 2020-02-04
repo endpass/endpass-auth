@@ -21,10 +21,10 @@ describe('Auth', () => {
   let wrapper;
   let accountsStore;
   let authStore;
+  let $router;
+  let $route;
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-
+  const createWrapper = options => {
     const store = createStore();
     const {
       accountsStore: accountsStoreModule,
@@ -35,18 +35,39 @@ describe('Auth', () => {
     accountsStore = accountsStoreModule;
     authStore = authStoreModule;
 
-    wrapper = shallowMount(Auth, {
+    $router = {
+      replace: jest.fn().mockResolvedValue(),
+    };
+    $route = {
+      query: {
+        redirectUrl: 'http://foo.bar',
+      },
+      params: {},
+    };
+
+    return shallowMount(Auth, {
       accountsStore,
       authStore,
       coreStore,
       localVue,
       i18n,
+      mocks: {
+        $route,
+        $router,
+      },
+      ...options,
     });
+  };
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    wrapper = createWrapper();
   });
 
   describe('render', () => {
     it('should correctly render Auth screen component', () => {
-      expect(wrapper.find('composite-auth-form-stub').exists()).toBe(true);
+      expect(wrapper.find('loading-screen-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -56,18 +77,29 @@ describe('Auth', () => {
       expect.assertions(1);
 
       const dataPromise = authChannel.take();
-      const payload = {
-        serverMode: {
-          foo: 'bar',
-        },
+      const serverMode = {
+        foo: 'bar',
       };
 
-      wrapper.find('composite-auth-form-stub').vm.$emit('authorize', payload);
+      wrapper = createWrapper({
+        mocks: {
+          $route: {
+            query: {
+              redirectUrl: 'http://localhost/public/foo/bar',
+            },
+            params: {
+              isAuthSuccess: true,
+              serverMode,
+            },
+          },
+          $router,
+        },
+      });
 
       await global.flushPromises();
       const res = await dataPromise;
 
-      expect(res).toEqual(Answer.createOk(payload.serverMode));
+      expect(res).toEqual(Answer.createOk(serverMode));
     });
 
     it('should cancel auth', async () => {
@@ -75,7 +107,19 @@ describe('Auth', () => {
 
       const dataPromise = authChannel.take();
 
-      wrapper.find('composite-auth-form-stub').vm.$emit('cancel');
+      wrapper = createWrapper({
+        mocks: {
+          $route: {
+            query: {
+              redirectUrl: 'http://localhost/public/foo/bar',
+            },
+            params: {
+              isAuthCancel: true,
+            },
+          },
+          $router,
+        },
+      });
 
       await global.flushPromises();
       const res = await dataPromise;
