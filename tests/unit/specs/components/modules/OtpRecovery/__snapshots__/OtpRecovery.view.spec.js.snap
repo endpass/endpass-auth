@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`OtpRecoveryView render should correctly render component 1`] = `
+<loading-screen-stub email="user@email.com">
+  <form data-test="recover-otp">
+    <v-title-stub>
+      Disable OTP setting via SMS
+    </v-title-stub>
+    <form-item-stub>
+      <v-input-stub value="" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+    </form-item-stub>
+    <form-item-stub class="v-mb-24">
+      <form-controls-stub>
+        <v-button-stub skin="quaternary" size="normal" data-test="cancel-button" type="button">
+          Cancel
+        </v-button-stub>
+        <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
+          Confirm
+        </v-button-stub>
+      </form-controls-stub>
+    </form-item-stub>
+    <form-row-stub class="v-fs-14 v-text-center">
+      <v-link-stub role="button" data-test="recovery-link">
+        Resend code
+      </v-link-stub>
+    </form-row-stub>
+  </form>
+</loading-screen-stub>
+`;
+
+exports[`OtpRecoveryView render should render form 1`] = `
+<loading-screen-stub email="user@email.com">
+  <form data-test="recover-otp">
+    <v-title-stub>
+      Disable OTP setting via SMS
+    </v-title-stub>
+    <form-item-stub>
+      <v-input-stub value="" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+    </form-item-stub>
+    <form-item-stub class="v-mb-24">
+      <form-controls-stub>
+        <v-button-stub skin="quaternary" size="normal" data-test="cancel-button" type="button">
+          Cancel
+        </v-button-stub>
+        <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
+          Confirm
+        </v-button-stub>
+      </form-controls-stub>
+    </form-item-stub>
+    <form-row-stub class="v-fs-14 v-text-center">
+      <v-link-stub role="button" data-test="recovery-link">
+        Resend code
+      </v-link-stub>
+    </form-row-stub>
+  </form>
+</loading-screen-stub>
+`;
