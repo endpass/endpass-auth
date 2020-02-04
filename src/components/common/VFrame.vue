@@ -3,7 +3,9 @@
     <v-modal-card
       class="frame-modal-card"
       :is-closable="isClosable"
-      @close="emitClose"
+      :is-returnable="isReturnable"
+      @return="onReturn"
+      @close="onClose"
     >
       <template
         v-if="title"
@@ -33,10 +35,17 @@ export default {
       type: String,
       default: 'Connect',
     },
+
     isClosable: {
       type: Boolean,
       default: true,
     },
+
+    isReturnable: {
+      type: Boolean,
+      default: false,
+    },
+
     isLoading: {
       type: Boolean,
       default: false,
@@ -44,8 +53,12 @@ export default {
   },
 
   methods: {
-    emitClose() {
+    onClose() {
       this.$emit('close');
+    },
+
+    onReturn() {
+      this.$emit('return');
     },
   },
 

@@ -38,7 +38,7 @@ class CoreModule extends VuexModule {
 
   rateLimitTimeout = 0;
 
-  isIdentityMode = '';
+  isIdentityMode = false;
 
   isDialog = isDialogUtil;
 
