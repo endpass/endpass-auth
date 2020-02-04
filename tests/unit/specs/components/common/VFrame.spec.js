@@ -9,26 +9,36 @@ describe('VFrame', () => {
       wrapper = shallowMount(VFrame);
     });
 
-    it('should correctly render VFrame component without loading screen by default', () => {
-      expect(wrapper.name()).toBe('VFrame');
-      expect(wrapper.html()).toMatchSnapshot();
-    });
-
-    it('should render loading screen if loading passed as true', () => {
-      wrapper = shallowMount(VFrame, {
-        propsData: {
-          isLoading: true,
-        },
+    describe('render', () => {
+      it('should correctly render VFrame component without loading screen by default', () => {
+        expect(wrapper.name()).toBe('VFrame');
+        expect(wrapper.html()).toMatchSnapshot();
       });
-
-      expect(wrapper.find('spinner-stub').exists()).toBe(true);
     });
 
-    describe('close feature', () => {
+    describe('props', () => {
+      it('should render loading screen if loading passed as true', () => {
+        wrapper = shallowMount(VFrame, {
+          propsData: {
+            isLoading: true,
+          },
+        });
+
+        expect(wrapper.find('spinner-stub').exists()).toBe(true);
+      });
+    });
+
+    describe('behavior', () => {
       it('should emit close on click close button by default', () => {
         wrapper.find('v-modal-card-stub').vm.$emit('close');
 
         expect(wrapper.emitted().close).toBeTruthy();
+      });
+
+      it('should emit return on click return button by default', () => {
+        wrapper.find('v-modal-card-stub').vm.$emit('return');
+
+        expect(wrapper.emitted().return).toBeTruthy();
       });
     });
   });
