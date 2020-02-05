@@ -83,6 +83,16 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    isBalanceLoading: {
+      type: Boolean,
+      default: true,
+    },
+
+    ethBalance: {
+      type: String,
+      default: '0',
+    },
   },
 
   data: () => ({
@@ -105,7 +115,7 @@ export default {
 
     actualBalance() {
       // TODO: move this logic to store
-      const balanceInEth = this.$options.accountsStore.ethBalance;
+      const balanceInEth = this.ethBalance;
 
       if (BigNumber(balanceInEth).isZero()) {
         return '0';
@@ -138,7 +148,7 @@ export default {
     },
 
     isLoading() {
-      if (this.$options.accountsStore.isBalanceLoading) {
+      if (this.isBalanceLoading) {
         return true;
       }
 

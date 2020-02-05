@@ -27,6 +27,8 @@
       <widget-header
         :fiat-currency="fiatCurrency"
         :is-collapsed="isCollapsed"
+        :is-balance-loading="isBalanceLoading"
+        :eth-balance="ethBalance"
         @toggle="handleWidgetToggle"
       />
       <widget-content :is-collapsed="isCollapsed">
@@ -89,6 +91,12 @@ export default {
     },
     isLoading() {
       return this.$options.coreStore.isLoading;
+    },
+    isBalanceLoading() {
+      return this.$options.accountsStore.isBalanceLoading;
+    },
+    ethBalance() {
+      return this.$options.accountsStore.ethBalance;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 

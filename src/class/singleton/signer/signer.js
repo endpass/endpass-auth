@@ -64,8 +64,7 @@ export default {
   },
 
   setWeb3Network(netId) {
-    const nets = Network.NETWORK_URL[netId];
-    const netUrl = nets[0];
+    const [netUrl] = Network.NETWORK_URL[netId];
     web3.setNetwork(netUrl);
   },
 };
