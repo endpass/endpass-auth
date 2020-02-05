@@ -105,10 +105,6 @@ export default {
 
     actualBalance() {
       // TODO: move this logic to store
-      if (this.$options.accountsStore.isBalanceLoading) {
-        return '0';
-      }
-
       const balanceInEth = this.$options.accountsStore.ethBalance;
 
       if (BigNumber(balanceInEth).isZero()) {
