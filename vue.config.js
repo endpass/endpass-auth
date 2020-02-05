@@ -21,6 +21,7 @@ const commitHash = buildUtils.getCommitHash();
 
 module.exports = {
   productionSourceMap: false,
+  lintOnSave: false,
 
   publicPath: '/',
 
@@ -44,7 +45,7 @@ module.exports = {
   configureWebpack: {
     devtool: SOURCE_MAP && 'cheap-module-eval-source-map',
     resolve: {
-      symlinks: false,
+      // symlinks: false,
     },
 
     plugins: [
@@ -118,6 +119,12 @@ module.exports = {
     config.resolve.symlinks(false);
   },
   devServer: {
+    // hack for websocket drop dev build,
+    // https://github.com/webpack/webpack-dev-server/issues/2199#issuecomment-528669873
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3434,
+
     proxy: {
       '^/identity/api/v1.1': {
         target: 'https://identity-dev.endpass.com',

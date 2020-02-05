@@ -1,6 +1,6 @@
 export default async function() {
   // eslint-disable-next-line global-require
-  const { web3, setWeb3Network } = require('@/class/singleton/signer/web3');
+  const { web3, setWeb3Network } = require('@/class/singleton/web3');
 
   /* eslint-disable-next-line */
   console.warn('AUTH is working on E2E MODE');

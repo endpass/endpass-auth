@@ -29,8 +29,4 @@ export default {
     const Singer = await getSigner();
     return Singer.setWeb3Network(network);
   },
-  async getWeb3Instance() {
-    const Singer = await getSigner();
-    return Singer.getWeb3Instance();
-  },
 };

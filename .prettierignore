@@ -1,3 +1,6 @@
 ./node_modules/**/*
 ./dist/**/*
 ./inspect.js
+
+node_modules
+dist

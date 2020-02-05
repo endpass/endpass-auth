@@ -19,25 +19,25 @@ localVue.use(VeeValidate);
 localVue.use(validation);
 
 describe('Sign > TransactionForm', () => {
-  let wrapperFactory;
   let wrapper;
 
+  const wrapperFactory = (props = {}) => {
+    const store = createStore();
+    const { accountsStore, gasPriceStore } = createStoreModules(store);
+    return shallowMount(TransactionForm, {
+      accountsStore,
+      gasPriceStore,
+      localVue,
+      i18n,
+      sync: false,
+      propsData: props,
+      provide: {
+        theme: 'default',
+      },
+    });
+  };
+
   beforeEach(() => {
-    wrapperFactory = (props = {}) => {
-      const store = createStore();
-      const { accountsStore, gasPriceStore } = createStoreModules(store);
-      return shallowMount(TransactionForm, {
-        accountsStore,
-        gasPriceStore,
-        localVue,
-        i18n,
-        sync: false,
-        propsData: props,
-        provide: {
-          theme: 'default',
-        },
-      });
-    };
     wrapper = wrapperFactory({
       request: requestWithTransaction,
     });

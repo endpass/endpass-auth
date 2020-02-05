@@ -25,7 +25,6 @@
       }"
     >
       <widget-header
-        :balance="balance"
         :fiat-currency="fiatCurrency"
         :is-collapsed="isCollapsed"
         @toggle="handleWidgetToggle"
@@ -88,9 +87,6 @@ export default {
     settings() {
       return this.$options.accountsStore.settings;
     },
-    balance() {
-      return this.$options.accountsStore.balance;
-    },
     isLoading() {
       return this.$options.coreStore.isLoading;
     },
@@ -98,10 +94,6 @@ export default {
 
     fiatCurrency() {
       return get(this.settings, 'fiatCurrency', 'USD');
-    },
-
-    currentNet() {
-      return get(this.settings, 'net', 1);
     },
 
     currentAccount() {
@@ -199,7 +191,7 @@ export default {
 
     await this.$options.accountsStore.defineOnlyV3Accounts();
     await this.$options.authStore.defineAuthStatus();
-    this.$options.accountsStore.subscribeOnBalanceUpdates();
+    await this.$options.accountsStore.enableAutoUpdateBalance();
   },
 
   components: {

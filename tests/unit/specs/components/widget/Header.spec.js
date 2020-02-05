@@ -5,27 +5,46 @@ import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
+import web3 from '@/class/singleton/web3';
+
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 
 localVue.use(Vuex);
 
 describe('Widget Header', () => {
-  let wrapperFactory;
   let wrapper;
+  let accountsStore;
+  jest.useFakeTimers();
+
+  const wrapperFactory = (options = {}) => {
+    const store = createStore();
+    const {
+      accountsStore: accountsStoreModule,
+      gasPriceStore,
+    } = createStoreModules(store);
+
+    accountsStore = accountsStoreModule;
+    return shallowMount(Header, {
+      gasPriceStore,
+      accountsStore,
+      localVue,
+      i18n,
+      ...options,
+    });
+  };
+
+  const mockIterateBalanceOnce = data => {
+    const asyncIteratorMock = {};
+    asyncIteratorMock[Symbol.asyncIterator] = async function*() {
+      yield data;
+    };
+    web3.iterateBalance.mockImplementationOnce(() => {
+      return asyncIteratorMock;
+    });
+  };
 
   beforeEach(() => {
-    wrapperFactory = (options = {}) => {
-      const store = createStore();
-      const { gasPriceStore } = createStoreModules(store);
-      return shallowMount(Header, {
-        gasPriceStore,
-        localVue,
-        i18n,
-        ...options,
-      });
-    };
-
     wrapper = wrapperFactory();
   });
 
@@ -54,23 +73,23 @@ describe('Widget Header', () => {
       expect(wrapper.find('spinner-stub').exists()).toBe(true);
     });
 
-    it('should not render spinner if balance is passed and should render balance', () => {
-      wrapper = wrapperFactory({
-        propsData: {
-          balance: '1000',
-        },
-      });
+    it('should not render spinner if balance is passed and should render balance', async () => {
+      expect.assertions(2);
+
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
       expect(wrapper.find('spinner-stub').exists()).toBe(false);
     });
 
-    it('should not render spinner if balance equals to stringified 0', () => {
-      wrapper = wrapperFactory({
-        propsData: {
-          balance: '0',
-        },
-      });
+    it('should not render spinner if balance equals to 0 as String ', async () => {
+      expect.assertions(2);
+
+      mockIterateBalanceOnce({ result: '0' });
+      wrapper = wrapperFactory();
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
       expect(wrapper.find('spinner-stub').exists()).toBe(false);
@@ -89,26 +108,29 @@ describe('Widget Header', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render balance in ether', () => {
-      wrapper = wrapperFactory({
-        propsData: {
-          balance: '1000000000000000000',
-        },
-      });
+    it('should render balance in ether', async () => {
+      expect.assertions(1);
+
+      mockIterateBalanceOnce({ result: '1000000000000000000' });
+      wrapper = wrapperFactory();
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
     });
 
-    it('should render balance in fiat', () => {
-      wrapper = wrapperFactory({
-        propsData: {
-          balance: '1000000000000000000',
-        },
-      });
+    it('should render balance in fiat', async () => {
+      expect.assertions(1);
+
+      mockIterateBalanceOnce({ result: '1000000000000000000' });
+      wrapper = wrapperFactory();
       wrapper.setData({
         ethPriceInFiat: '100',
         isBalanceInFiat: true,
       });
+
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('100.00');
     });
@@ -128,9 +150,10 @@ describe('Widget Header', () => {
     it('should emit toggle event on header click if loading is falsy', async () => {
       expect.assertions(1);
 
-      wrapper.setProps({
-        balance: '10000000000',
-      });
+      mockIterateBalanceOnce({ result: '10000000000' });
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
+
       wrapper.find('[data-test=widget-header]').trigger('click');
 
       await wrapper.vm.$nextTick();
@@ -138,16 +161,21 @@ describe('Widget Header', () => {
       expect(wrapper.emitted().toggle).toBeTruthy();
     });
 
-    it('should change balance render mode in currency toggler changes', () => {
+    it('should change balance render mode in currency toggle changes', async () => {
+      expect.assertions(2);
+
+      mockIterateBalanceOnce({ result: '1000000000000000000' });
       wrapper = wrapperFactory({
         propsData: {
-          balance: '1000000000000000000',
           fiatCurrency: 'USD',
         },
       });
       wrapper.setData({
         ethPriceInFiat: '100',
       });
+
+      accountsStore.enableAutoUpdateBalance();
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
 

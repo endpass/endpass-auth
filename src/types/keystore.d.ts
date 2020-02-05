@@ -1,5 +1,5 @@
 type keystoreInfo = {
-  address: string,
-  type: string,
-  hidden: boolean,
-}
+  address: string;
+  type: string;
+  hidden: boolean;
+};

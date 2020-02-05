@@ -5,22 +5,6 @@ const cryptoDataBaseUrl = ENV.VUE_APP_CRYPTODATA_API_URL;
 
 export default {
   /**
-   * @param {object} props
-   * @param {string} props.network
-   * @param {string} props.address
-   * @return {Promise<{balance: string}>}
-   */
-  async getAccountBalance({ network, address }) {
-    const { balance } = await request.get(
-      `${cryptoDataBaseUrl}/${network}/balance/${address}`,
-    );
-
-    return {
-      balance,
-    };
-  },
-
-  /**
    *
    * @param {string} network
    * @return {Promise<GasPrices>}
