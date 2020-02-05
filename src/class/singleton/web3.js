@@ -10,15 +10,6 @@ const web3 = new Web3Api({
 });
 
 export const setWeb3Network = (netId = Network.NET_ID.MAIN) => {
-  // :TODO change isMock checking
-  if (
-    web3.currentProvider &&
-    web3.currentProvider.connection &&
-    web3.currentProvider.connection.isMock
-  ) {
-    return;
-  }
-
   const nextNetUrl = NETWORK_URLS[netId][0];
   web3.setNetwork(nextNetUrl);
 };
