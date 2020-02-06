@@ -84,10 +84,6 @@ export default {
     },
 
     onClose() {
-      if (window.opener) {
-        window.self.opener = window.self;
-        window.self.close();
-      }
       this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
@@ -108,7 +104,16 @@ export default {
           window.location.href = redirectUrl;
         }
 
-        this.scopesList = requestedScope;
+        if (!requestedScope) {
+          this.setError(
+            this.$i18n.t('components.consentProvider.scopesRequired'),
+          );
+          return;
+        }
+
+        if (requestedScope) {
+          this.scopesList = requestedScope;
+        }
       } catch (err) {
         this.setError(
           this.$i18n.t('components.consentProvider.loadScopesError'),

@@ -12,7 +12,7 @@ import {
 
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/actions/dialogClose';
-import isDialogUtil from '@/util/isDialog';
+import isDialog from '@/util/isDialog';
 import { initDialogResize } from '@/streams/actions/dialogResize';
 import { sendOpen } from '@/streams/actions/dialogOpen';
 import Answer from '@/class/Answer';
@@ -40,7 +40,7 @@ class CoreModule extends VuexModule {
 
   isIdentityMode = false;
 
-  isDialog = isDialogUtil;
+  isDialog = isDialog;
 
   constructor(props, { authStore, sharedStore }) {
     super(props);
@@ -76,6 +76,8 @@ class CoreModule extends VuexModule {
     this.isIniting = true;
 
     try {
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_OPEN);
+
       if (isDialogStream || isWidgetStream) {
         await this.setupCore();
       }
@@ -92,7 +94,12 @@ class CoreModule extends VuexModule {
 
       await this.authStore.defineAuthStatus();
       await this.startBridge();
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_READY);
+
+      // deprecated
+      bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
     } catch (e) {
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_ERROR);
       console.error(e);
       throw e;
     } finally {
@@ -161,7 +168,6 @@ class CoreModule extends VuexModule {
     }
 
     initCoreStream();
-    bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
   }
 
   @Action
@@ -214,6 +220,10 @@ class CoreModule extends VuexModule {
   @Action
   dialogClose() {
     dialogClose();
+    if (!this.isDialog && window.opener) {
+      window.self.opener = window.self;
+      window.self.close();
+    }
   }
 
   @Action

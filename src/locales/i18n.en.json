@@ -176,6 +176,7 @@
     "consentProvider": {
       "title": "Permissions",
       "loadScopesError": "Something went wrong while\u00A0loading scopes.",
+      "scopesRequired": "Scopes are required for make a request",
       "urlError": "Please, add the\u00A0'consent_challenge' param in\u00A0URL, and try again!"
     },
     "loginProvider": {
