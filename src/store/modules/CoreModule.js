@@ -220,10 +220,6 @@ class CoreModule extends VuexModule {
   @Action
   dialogClose() {
     dialogClose();
-    if (!this.isDialog && window.opener) {
-      window.self.opener = window.self;
-      window.self.close();
-    }
   }
 
   @Action
