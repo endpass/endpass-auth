@@ -129,7 +129,7 @@ export default class Wallet {
       password,
     );
 
-    const hash = await web3.call('eth_sendRawTransaction', signedTx);
+    const hash = await web3.sendRawTransaction(signedTx);
 
     // :TODO for a good way, you need process different cases
     // and better choice is just checking in wallet repo
@@ -144,7 +144,7 @@ export default class Wallet {
    * @return {String} Next none
    */
   async getNextNonce() {
-    const nonce = await web3.call('eth_getTransactionCount', this.address);
+    const nonce = await web3.getTransactionCount(this.address);
     return hexToNumber(nonce).toString();
   }
 }

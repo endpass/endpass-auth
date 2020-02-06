@@ -23,7 +23,7 @@ class RequestsModule extends VuexModule {
 
   @Action
   async getNextNonce(address) {
-    const nonce = await web3.call('eth_getTransactionCount', address);
+    const nonce = await web3.getTransactionCount(address);
     return hexToNumber(nonce).toString();
   }
 
