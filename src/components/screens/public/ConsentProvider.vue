@@ -111,9 +111,7 @@ export default {
           return;
         }
 
-        if (requestedScope) {
-          this.scopesList = requestedScope;
-        }
+        this.scopesList = requestedScope;
       } catch (err) {
         this.setError(
           this.$i18n.t('components.consentProvider.loadScopesError'),
