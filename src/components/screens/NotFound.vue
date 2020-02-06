@@ -9,14 +9,15 @@
 <script>
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
-import { accountsStore, coreStore } from '@/store';
+import { accountsStore } from '@/store';
 import VDescription from '@/components/common/VDescription';
 import Message from '@/components/common/Message';
 
 export default {
   name: 'NotFound',
-  coreStore,
+
   accountsStore,
+
   data() {
     return {
       version: pkg.version,
@@ -25,8 +26,8 @@ export default {
 
   methods: {
     onClose() {
+      this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
-      this.$options.accountsStore.cancelAllChannels();
     },
   },
 
