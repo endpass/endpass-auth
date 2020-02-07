@@ -4,7 +4,7 @@ import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
 import ConnectError from '@endpass/connect/error';
 import Network from '@endpass/class/Network';
-import { fromWei, toChecksumAddress } from 'web3-utils';
+import { toChecksumAddress } from 'web3-utils';
 import identityService from '@/service/identity';
 import signer from '@/class/singleton/signer';
 import permissionsService from '@/service/permissions';
@@ -28,15 +28,10 @@ class AccountsModule extends VuexModule {
 
   settings = {};
 
-  balance = null;
-
-  isBalanceLoading = true;
-
-  isBalanceAutoUpdate = false;
-
-  constructor(props, { sharedStore }) {
+  constructor(props, { sharedStore, balanceStore }) {
     super(props);
     this.sharedStore = sharedStore;
+    this.balanceStore = balanceStore;
   }
 
   get addresses() {
@@ -48,10 +43,11 @@ class AccountsModule extends VuexModule {
   }
 
   get ethBalance() {
-    if (!this.isBalanceLoading && this.balance) {
-      return fromWei(this.balance);
-    }
-    return '0';
+    return this.balanceStore.ethBalance;
+  }
+
+  get isBalanceLoading() {
+    return this.balanceStore.isLoading;
   }
 
   /**
@@ -62,30 +58,16 @@ class AccountsModule extends VuexModule {
     const oldSettings = this.settings;
     this.settings = newSettings;
 
-    const isNetworkChanged = oldSettings.net !== newSettings.net;
+    const isNetworkChanged =
+      newSettings.net && oldSettings.net !== newSettings.net;
     if (isNetworkChanged) {
       await signer.setWeb3Network(newSettings.net);
     }
 
-    this.resubscribeBalance({ isNetworkChanged, newSettings, oldSettings });
-  }
-
-  @Action
-  async resubscribeBalance({ isNetworkChanged, newSettings, oldSettings }) {
-    if (!this.isBalanceAutoUpdate) {
-      return;
-    }
-
-    const isLastAccountChanged =
-      newSettings.lastActiveAccount &&
-      oldSettings.lastActiveAccount &&
-      oldSettings.lastActiveAccount !== newSettings.lastActiveAccount;
-
-    const isBalanceUpdateStopped = !this.isBalanceLoading && !this.balance;
-
-    if (isLastAccountChanged || (isNetworkChanged && isBalanceUpdateStopped)) {
-      this.subscribeOnBalanceUpdates();
-    }
+    await this.balanceStore.handleChangeAddress({
+      netId: newSettings.net,
+      address: newSettings.lastActiveAccount,
+    });
   }
 
   /**
@@ -304,8 +286,8 @@ class AccountsModule extends VuexModule {
 
   @Action
   async getAccountBalance() {
-    const address = get(this.settings, 'lastActiveAccount');
     const web3 = await signer.getWeb3Instance();
+    const address = get(this.settings, 'lastActiveAccount');
     const data = await web3.getBalance(address);
 
     return data;
@@ -313,33 +295,12 @@ class AccountsModule extends VuexModule {
 
   @Action
   async enableAutoUpdateBalance() {
-    this.isBalanceAutoUpdate = true;
-    this.subscribeOnBalanceUpdates();
-  }
-
-  @Action
-  async subscribeOnBalanceUpdates() {
-    const web3 = await signer.getWeb3Instance();
     const address = get(this.settings, 'lastActiveAccount');
-
-    this.isBalanceLoading = true;
-    this.balance = null;
-
-    for await (const { result, error, isNetworkChanged } of web3.iterateBalance(
+    const netId = get(this.settings, 'net');
+    await this.balanceStore.subscribeOnBalanceUpdates({
+      netId,
       address,
-    )) {
-      this.isBalanceLoading = false;
-      this.balance = result;
-
-      if (isNetworkChanged) {
-        this.subscribeOnBalanceUpdates();
-        break;
-      }
-
-      if (address !== get(this.settings, 'lastActiveAccount') || error) {
-        break;
-      }
-    }
+    });
   }
 
   @Action
