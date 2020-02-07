@@ -1,6 +1,6 @@
 // @ts-check
 import { VuexModule, Action, Module } from 'vuex-class-modules';
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import createController from '@/controllers/createController';
 import { documentChannel } from '@/class/singleton/channels';
 

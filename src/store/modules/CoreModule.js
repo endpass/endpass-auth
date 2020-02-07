@@ -1,5 +1,5 @@
 import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import settingsService from '@/service/settings';
