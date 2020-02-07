@@ -92,7 +92,7 @@ describe('Widget', () => {
       expect.assertions(5);
 
       expect(accountsStore.accounts).toEqual([]);
-      expect(accountsStore.balance).toBe(null);
+      expect(accountsStore.ethBalance).toBe('0');
 
       await global.flushPromises();
       jest.runOnlyPendingTimers();
@@ -101,7 +101,7 @@ describe('Widget', () => {
       // expect(widgetModule.actions.initWidget).toBeCalled();
       expect(userService.getV3Accounts).toBeCalled();
       expect(accountsStore.accounts).toEqual([hdv3.info]);
-      expect(accountsStore.balance).toBe('100000000000000');
+      expect(accountsStore.ethBalance).toBe('0.0001');
     });
 
     it('should correctly open widget', () => {
@@ -163,6 +163,24 @@ describe('Widget', () => {
       await global.flushPromises();
 
       expect(wrapper.find('widget-new-account-form-stub').exists()).toBe(true);
+    });
+  });
+
+  describe('balance update', () => {
+    it('should load balance', () => {
+      expect(
+        wrapper.find('widget-header-stub').attributes().isbalanceloading,
+      ).toBe('true');
+    });
+
+    it('should show loaded balance', async () => {
+      expect.assertions(1);
+
+      await global.flushPromises();
+
+      expect(wrapper.find('widget-header-stub').attributes().ethbalance).toBe(
+        '0.0001',
+      );
     });
   });
 });

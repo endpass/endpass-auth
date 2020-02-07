@@ -5,8 +5,6 @@ import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
-import web3 from '@/class/singleton/signer/web3';
-
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 
@@ -34,16 +32,6 @@ describe('Widget Header', () => {
     });
   };
 
-  const mockIterateBalanceOnce = data => {
-    const asyncIteratorMock = {};
-    asyncIteratorMock[Symbol.asyncIterator] = async function*() {
-      yield data;
-    };
-    web3.iterateBalance.mockImplementationOnce(() => {
-      return asyncIteratorMock;
-    });
-  };
-
   beforeEach(() => {
     wrapper = wrapperFactory();
   });
@@ -56,14 +44,11 @@ describe('Widget Header', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render spinner if balance is not passed', () => {
-      expect(wrapper.find('spinner-stub').exists()).toBe(true);
-    });
-
     it('should render spinner if current mode is fiat and eth price is not defined', () => {
       wrapper = wrapperFactory({
         propsData: {
           balance: '1000',
+          isBalanceLoading: false,
         },
       });
       wrapper.setData({
@@ -76,7 +61,12 @@ describe('Widget Header', () => {
     it('should not render spinner if balance is passed and should render balance', async () => {
       expect.assertions(2);
 
-      accountsStore.enableAutoUpdateBalance();
+      wrapper = wrapperFactory({
+        propsData: {
+          ethBalance: '1000',
+          isBalanceLoading: false,
+        },
+      });
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
@@ -86,9 +76,12 @@ describe('Widget Header', () => {
     it('should not render spinner if balance equals to 0 as String ', async () => {
       expect.assertions(2);
 
-      mockIterateBalanceOnce({ result: '0' });
-      wrapper = wrapperFactory();
-      accountsStore.enableAutoUpdateBalance();
+      wrapper = wrapperFactory({
+        propsData: {
+          ethBalance: '1000',
+          isBalanceLoading: false,
+        },
+      });
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
@@ -111,9 +104,12 @@ describe('Widget Header', () => {
     it('should render balance in ether', async () => {
       expect.assertions(1);
 
-      mockIterateBalanceOnce({ result: '1000000000000000000' });
-      wrapper = wrapperFactory();
-      accountsStore.enableAutoUpdateBalance();
+      wrapper = wrapperFactory({
+        propsData: {
+          isBalanceLoading: false,
+          ethBalance: '1',
+        },
+      });
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
@@ -122,14 +118,17 @@ describe('Widget Header', () => {
     it('should render balance in fiat', async () => {
       expect.assertions(1);
 
-      mockIterateBalanceOnce({ result: '1000000000000000000' });
-      wrapper = wrapperFactory();
+      wrapper = wrapperFactory({
+        propsData: {
+          isBalanceLoading: false,
+          ethBalance: '1',
+        },
+      });
       wrapper.setData({
         ethPriceInFiat: '100',
         isBalanceInFiat: true,
       });
 
-      accountsStore.enableAutoUpdateBalance();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('100.00');
@@ -150,8 +149,13 @@ describe('Widget Header', () => {
     it('should emit toggle event on header click if loading is falsy', async () => {
       expect.assertions(1);
 
-      mockIterateBalanceOnce({ result: '10000000000' });
-      accountsStore.enableAutoUpdateBalance();
+      wrapper = wrapperFactory({
+        propsData: {
+          isBalanceLoading: false,
+          ethBalance: '10000000000',
+        },
+      });
+
       await global.flushPromises();
 
       wrapper.find('[data-test=widget-header]').trigger('click');
@@ -164,9 +168,10 @@ describe('Widget Header', () => {
     it('should change balance render mode in currency toggle changes', async () => {
       expect.assertions(2);
 
-      mockIterateBalanceOnce({ result: '1000000000000000000' });
       wrapper = wrapperFactory({
         propsData: {
+          isBalanceLoading: false,
+          ethBalance: '1',
           fiatCurrency: 'USD',
         },
       });
@@ -174,7 +179,6 @@ describe('Widget Header', () => {
         ethPriceInFiat: '100',
       });
 
-      accountsStore.enableAutoUpdateBalance();
       await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
