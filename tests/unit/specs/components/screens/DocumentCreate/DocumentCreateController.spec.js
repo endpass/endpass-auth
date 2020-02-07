@@ -1,4 +1,4 @@
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import DocumentCreateController from '@/components/screens/DocumentCreate/DocumentCreateController';
 import { documentChannel } from '@/class/singleton/channels';
 
