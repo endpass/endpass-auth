@@ -20,8 +20,6 @@ import Answer from '@/class/Answer';
 import { ENCRYPT_OPTIONS, METHODS, WALLET_TYPES } from '@/constants';
 import host from '@/class/singleton/host';
 
-import web3, { setWeb3Network } from '@/class/singleton/web3';
-
 const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
@@ -66,7 +64,7 @@ class AccountsModule extends VuexModule {
 
     const isNetworkChanged = oldSettings.net !== newSettings.net;
     if (isNetworkChanged) {
-      setWeb3Network(newSettings.net);
+      await signer.setWeb3Network(newSettings.net);
     }
 
     this.resubscribeBalance({ isNetworkChanged, newSettings, oldSettings });
@@ -307,6 +305,7 @@ class AccountsModule extends VuexModule {
   @Action
   async getAccountBalance() {
     const address = get(this.settings, 'lastActiveAccount');
+    const web3 = await signer.getWeb3Instance();
     const data = await web3.getBalance(address);
 
     return data;
@@ -320,6 +319,7 @@ class AccountsModule extends VuexModule {
 
   @Action
   async subscribeOnBalanceUpdates() {
+    const web3 = await signer.getWeb3Instance();
     const address = get(this.settings, 'lastActiveAccount');
 
     this.isBalanceLoading = true;

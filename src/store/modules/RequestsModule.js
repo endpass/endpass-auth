@@ -4,7 +4,6 @@ import i18n from '@/locales/i18n';
 import { signChannel } from '@/class/singleton/channels';
 import Answer from '@/class/Answer';
 import signer from '@/class/singleton/signer';
-import web3 from '@/class/singleton/web3';
 
 @Module({ generateMutationSetters: true })
 class RequestsModule extends VuexModule {
@@ -23,6 +22,7 @@ class RequestsModule extends VuexModule {
 
   @Action
   async getNextNonce(address) {
+    const web3 = await signer.getWeb3Instance();
     const nonce = await web3.getTransactionCount(address);
     return hexToNumber(nonce).toString();
   }

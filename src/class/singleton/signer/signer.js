@@ -1,9 +1,8 @@
 import { bytesToHex } from 'web3-utils';
-import Network from '@endpass/class/Network';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Signer from '@endpass/class/Signer';
 import Wallet from '@/class/singleton/signer/Wallet';
-import web3, { setWeb3Network } from '@/class/singleton/web3';
+import web3, { setWeb3Network } from './web3';
 import i18n from '@/locales/i18n';
 
 export default {
@@ -64,7 +63,10 @@ export default {
   },
 
   setWeb3Network(netId) {
-    const [netUrl] = Network.NETWORK_URL[netId];
-    web3.setNetwork(netUrl);
+    setWeb3Network(netId);
+  },
+
+  getWeb3Instance() {
+    return web3;
   },
 };

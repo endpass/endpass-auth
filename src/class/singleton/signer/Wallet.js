@@ -6,7 +6,7 @@ import Signer from '@endpass/class/Signer';
 import { isAddress, bytesToHex, numberToHex, hexToNumber } from 'web3-utils';
 import i18n from '@/locales/i18n';
 
-import web3 from '@/class/singleton/web3';
+import web3 from './web3';
 
 /**
  * A Wallet represents a single Ethereum account that can send transactions

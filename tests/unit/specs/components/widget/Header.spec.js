@@ -5,7 +5,7 @@ import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 
-import web3 from '@/class/singleton/web3';
+import web3 from '@/class/singleton/signer/web3';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
