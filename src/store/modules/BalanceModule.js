@@ -65,7 +65,6 @@ class BalanceModule extends VuexModule {
       return;
     }
 
-    this.terminateIterator();
     this.subscribeOnBalanceUpdates({ address, netId });
   }
 }
