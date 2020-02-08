@@ -332,6 +332,7 @@ class AccountsModule extends VuexModule {
   logout() {
     this.accounts = [];
     this.changeSettings({});
+    this.balanceStore.terminateIterator();
   }
 }
 
