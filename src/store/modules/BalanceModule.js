@@ -16,6 +16,9 @@ class BalanceModule extends VuexModule {
 
   balanceIterator = null;
 
+  /**
+   * @return {string}
+   */
   get ethBalance() {
     if (!this.isBalanceLoading && this.balance) {
       return fromWei(this.balance);
@@ -31,6 +34,7 @@ class BalanceModule extends VuexModule {
    * @return {Promise<void>}
    */
   checkNeededSubscribe({ address, netId }) {
+    debugger;
     if (!this.isSubscribe || !address || !netId) {
       return false;
     }
@@ -42,12 +46,32 @@ class BalanceModule extends VuexModule {
     return true;
   }
 
+  /**
+   * @private
+   */
   unsubscribeBalanceUpdates() {
     if (!this.balanceIterator) {
       return;
     }
     this.balanceIterator.return();
     this.balanceIterator = null;
+  }
+
+  /**
+   * @param {object} params
+   * @param {string} params.netId
+   * @param {string} params.address
+   */
+  @Action
+  async enableSubscriptionBalanceUpdates({ netId, address }) {
+    this.isSubscribe = true;
+    await this.subscribeOnBalanceUpdates({ netId, address });
+  }
+
+  @Action
+  async disableBalanceUpdates() {
+    this.isSubscribe = false;
+    this.unsubscribeBalanceUpdates();
   }
 
   /**
@@ -65,7 +89,6 @@ class BalanceModule extends VuexModule {
     const web3 = await signer.getWeb3Instance();
     this.unsubscribeBalanceUpdates();
 
-    this.isSubscribe = true;
     this.address = address;
     this.netId = netId;
 

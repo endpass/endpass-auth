@@ -21,6 +21,7 @@ describe('Widget', () => {
   let store;
   let widgetModule;
   let accountsStore;
+  let balanceStore;
   let authStore;
 
   userService.getSettings.mockResolvedValue({
@@ -60,15 +61,18 @@ describe('Widget', () => {
     const {
       authStore: authStoreModule,
       accountsStore: accountsStoreModule,
+      balanceStore: balanceStoreModule,
       coreStore,
     } = createStoreModules(store);
 
     authStore = authStoreModule;
     accountsStore = accountsStoreModule;
+    balanceStore = balanceStoreModule;
     authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGGED_IN);
 
     wrapper = shallowMount(Widget, {
       authStore,
+      balanceStore,
       accountsStore,
       coreStore,
       localVue,
@@ -92,7 +96,7 @@ describe('Widget', () => {
       expect.assertions(5);
 
       expect(accountsStore.accounts).toEqual([]);
-      expect(accountsStore.ethBalance).toBe('0');
+      expect(balanceStore.ethBalance).toBe('0');
 
       await global.flushPromises();
       jest.runOnlyPendingTimers();
@@ -101,7 +105,7 @@ describe('Widget', () => {
       // expect(widgetModule.actions.initWidget).toBeCalled();
       expect(userService.getV3Accounts).toBeCalled();
       expect(accountsStore.accounts).toEqual([hdv3.info]);
-      expect(accountsStore.ethBalance).toBe('0.0001');
+      expect(balanceStore.ethBalance).toBe('0.0001');
     });
 
     it('should correctly open widget', () => {

@@ -202,14 +202,14 @@ export default {
     await this.$options.authStore.defineAuthStatus();
 
     const { lastActiveAccount, net } = this.$options.accountsStore.settings;
-    await this.balanceStore.subscribeOnBalanceUpdates({
+    await this.$options.balanceStore.enableSubscriptionBalanceUpdates({
       netId: net,
       address: lastActiveAccount,
     });
   },
 
   beforeDestroy() {
-    this.balanceStore.unsubscribeBalanceUpdates();
+    this.$options.balanceStore.disableBalanceUpdates();
   },
 
   components: {
