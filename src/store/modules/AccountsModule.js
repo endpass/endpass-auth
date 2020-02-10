@@ -42,19 +42,11 @@ class AccountsModule extends VuexModule {
     return !!this.settings.otpEnabled;
   }
 
-  get ethBalance() {
-    return this.balanceStore.ethBalance;
-  }
-
-  get isBalanceLoading() {
-    return this.balanceStore.isLoading;
-  }
-
   /**
    * @param {object} newSettings
    */
   @Action
-  async changeSettings(newSettings) {
+  async changeSettings(newSettings = {}) {
     const oldSettings = this.settings;
     this.settings = newSettings;
 
@@ -64,7 +56,7 @@ class AccountsModule extends VuexModule {
       await signer.setWeb3Network(newSettings.net);
     }
 
-    await this.balanceStore.handleChangeAddress({
+    await this.balanceStore.subscribeOnBalanceUpdates({
       netId: newSettings.net,
       address: newSettings.lastActiveAccount,
     });
@@ -209,7 +201,7 @@ class AccountsModule extends VuexModule {
 
     try {
       await this.setSettings(payload);
-      await this.defineSettings();
+      await this.defineSettings(payload);
 
       const { settings } = this;
       const settingsToSend = {
@@ -294,16 +286,6 @@ class AccountsModule extends VuexModule {
   }
 
   @Action
-  async enableAutoUpdateBalance() {
-    const address = get(this.settings, 'lastActiveAccount');
-    const netId = get(this.settings, 'net');
-    await this.balanceStore.subscribeOnBalanceUpdates({
-      netId,
-      address,
-    });
-  }
-
-  @Action
   async validatePassword({ address, password }) {
     this.sharedStore.changeLoadingStatus(true);
 
@@ -332,7 +314,6 @@ class AccountsModule extends VuexModule {
   logout() {
     this.accounts = [];
     this.changeSettings({});
-    this.balanceStore.terminateIterator();
   }
 }
 

@@ -61,7 +61,7 @@ import WidgetContent from './Content';
 import WidgetAccounts from './Accounts';
 import WidgetNewAccountForm from './NewAccountForm';
 import TriggerButton from './TriggerButton';
-import { authStore, accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore, balanceStore } from '@/store';
 
 export default {
   name: 'Widget',
@@ -69,6 +69,7 @@ export default {
   accountsStore,
   coreStore,
   authStore,
+  balanceStore,
 
   data: () => ({
     widgetSettings: null,
@@ -93,10 +94,10 @@ export default {
       return this.$options.coreStore.isLoading;
     },
     isBalanceLoading() {
-      return this.$options.accountsStore.isBalanceLoading;
+      return this.$options.balanceStore.isLoading;
     },
     ethBalance() {
-      return this.$options.accountsStore.ethBalance;
+      return this.$options.balanceStore.ethBalance;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
@@ -199,7 +200,16 @@ export default {
 
     await this.$options.accountsStore.defineOnlyV3Accounts();
     await this.$options.authStore.defineAuthStatus();
-    await this.$options.accountsStore.enableAutoUpdateBalance();
+
+    const { lastActiveAccount, net } = this.$options.accountsStore.settings;
+    await this.balanceStore.subscribeOnBalanceUpdates({
+      netId: net,
+      address: lastActiveAccount,
+    });
+  },
+
+  beforeDestroy() {
+    this.balanceStore.unsubscribeBalanceUpdates();
   },
 
   components: {

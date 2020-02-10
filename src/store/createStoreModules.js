@@ -39,6 +39,7 @@ export default store => {
     gasPriceStore,
     sharedStore,
     accountsStore,
+    balanceStore,
     authStore,
     coreStore,
     requestStore,

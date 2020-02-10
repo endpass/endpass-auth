@@ -14,7 +14,7 @@ class BalanceModule extends VuexModule {
 
   netId = null;
 
-  iterator = null;
+  balanceIterator = null;
 
   get ethBalance() {
     if (!this.isBalanceLoading && this.balance) {
@@ -23,29 +23,58 @@ class BalanceModule extends VuexModule {
     return '0';
   }
 
-  terminateIterator() {
-    if (!this.iterator) {
-      return;
+  /**
+   * @private
+   * @param {object} params
+   * @param {string} params.netId
+   * @param {string} params.address
+   * @return {Promise<void>}
+   */
+  checkNeededSubscribe({ address, netId }) {
+    if (!this.isSubscribe || !address || !netId) {
+      return false;
     }
-    this.iterator.return();
-    this.iterator = null;
+
+    if (this.address === address && this.netId === netId) {
+      return false;
+    }
+
+    return true;
   }
 
+  unsubscribeBalanceUpdates() {
+    if (!this.balanceIterator) {
+      return;
+    }
+    this.balanceIterator.return();
+    this.balanceIterator = null;
+  }
+
+  /**
+   * @param {object} params
+   * @param {string} params.netId
+   * @param {string} params.address
+   * @return {Promise<void>}
+   */
   @Action
   async subscribeOnBalanceUpdates({ netId, address }) {
+    if (!this.checkNeededSubscribe({ netId, address })) {
+      return;
+    }
+
     const web3 = await signer.getWeb3Instance();
+    this.unsubscribeBalanceUpdates();
 
     this.isSubscribe = true;
     this.address = address;
     this.netId = netId;
 
-    this.terminateIterator();
-
-    this.iterator = web3.iterateBalance(this.address);
+    this.balanceIterator = web3.iterateBalance(this.address);
 
     this.isLoading = true;
     this.balance = null;
-    for await (const { result, isNetworkChanged, error } of this.iterator) {
+    for await (const { result, isNetworkChanged, error } of this
+      .balanceIterator) {
       this.isLoading = false;
       if (isNetworkChanged || error) {
         break;
@@ -53,19 +82,6 @@ class BalanceModule extends VuexModule {
 
       this.balance = result;
     }
-  }
-
-  @Action
-  async handleChangeAddress({ address, netId }) {
-    if (!this.isSubscribe || !address || !netId) {
-      return;
-    }
-
-    if (this.address === address && this.netId === netId) {
-      return;
-    }
-
-    this.subscribeOnBalanceUpdates({ address, netId });
   }
 }
 
