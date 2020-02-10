@@ -34,7 +34,6 @@ class BalanceModule extends VuexModule {
    * @return {Promise<void>}
    */
   checkNeededSubscribe({ address, netId }) {
-    debugger;
     if (!this.isSubscribe || !address || !netId) {
       return false;
     }
