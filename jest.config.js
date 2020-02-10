@@ -9,7 +9,7 @@ module.exports = {
     '^.+\\.js$': 'babel-jest',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(vue-timers|@endpass/class|@endpass/connect|vuex-class-modules))',
+    'node_modules/(?!(vue-timers|@endpass/web3|@endpass/class|@endpass/connect|vuex-class-modules))',
   ],
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',

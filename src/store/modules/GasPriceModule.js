@@ -23,7 +23,7 @@ class GasPriceModule extends VuexModule {
    */
   async getGasLimitByAddress(address) {
     const web3 = await signer.getWeb3Instance();
-    const code = await web3.eth.getCode(address);
+    const code = await web3.getCode(address);
 
     if (code === '0x') {
       return '21000';

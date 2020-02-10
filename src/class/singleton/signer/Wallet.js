@@ -3,10 +3,10 @@ import Tx from 'ethereumjs-tx';
 import keystoreKeyGen from '@endpass/utils/keystoreKeyGen';
 import isV3 from '@endpass/utils/isV3';
 import Signer from '@endpass/class/Signer';
+import { isAddress, bytesToHex, numberToHex, hexToNumber } from 'web3-utils';
 import i18n from '@/locales/i18n';
-import { web3 } from '@/class/singleton/signer/web3';
 
-const { isAddress, bytesToHex, numberToHex } = web3.utils;
+import web3 from './web3';
 
 /**
  * A Wallet represents a single Ethereum account that can send transactions
@@ -100,12 +100,13 @@ export default class Wallet {
 
   /* eslint-disable-next-line */
   async recover(message, signature) {
-    return web3.eth.accounts.recover(message, signature);
+    return Signer.recover(message, signature);
   }
 
   /**
    * Return signed transaction hash
    * @param {Transaction} transaction Transaction instance
+   * @param {string} password Account password
    * @return {String<SignedTrxHash>} Resolve signed transaction hash
    */
   async signTransaction(transaction, password) {
@@ -128,19 +129,14 @@ export default class Wallet {
       password,
     );
 
-    return new Promise((resolve, reject) => {
-      const sendEvent = web3.eth.sendSignedTransaction(signedTx);
+    const hash = await web3.sendRawTransaction(signedTx);
 
-      sendEvent.once('transactionHash', trxHash => {
-        resolve(trxHash);
-      });
-      sendEvent.on('error', error => {
-        reject(error);
-      });
-      sendEvent.catch(error => {
-        reject(error);
-      });
-    });
+    // :TODO for a good way, you need process different cases
+    // and better choice is just checking in wallet repo
+    // store/transaction/actions.js in sendSignedTransaction method
+    // await web3.checkTransactionConfirmed(hash);
+
+    return hash;
   }
 
   /**
@@ -148,8 +144,7 @@ export default class Wallet {
    * @return {String} Next none
    */
   async getNextNonce() {
-    const nonce = await web3.eth.getTransactionCount(this.address);
-
-    return nonce.toString();
+    const nonce = await web3.getTransactionCount(this.address);
+    return hexToNumber(nonce).toString();
   }
 }

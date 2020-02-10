@@ -15,6 +15,7 @@ export const {
   coreStore,
   requestStore,
   authStore,
+  balanceStore,
 } = createStoreModules(store);
 
 export default store;

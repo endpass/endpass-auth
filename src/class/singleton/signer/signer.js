@@ -1,12 +1,9 @@
-import Web3 from 'web3';
-import Network from '@endpass/class/Network';
+import { bytesToHex } from 'web3-utils';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Signer from '@endpass/class/Signer';
 import Wallet from '@/class/singleton/signer/Wallet';
-import { setWeb3Network, web3 } from '@/class/singleton/signer/web3';
+import web3, { setWeb3Network } from './web3';
 import i18n from '@/locales/i18n';
-
-const { bytesToHex } = web3.utils;
 
 export default {
   async validatePassword({ v3KeyStore, password }) {
@@ -27,11 +24,9 @@ export default {
     const hdWallet = keystoreHDWallet.createHDWalletBySeed(seedPhrase);
     const wallet = hdWallet.deriveChild(0).getWallet();
     const privateKey = bytesToHex(wallet.getPrivateKey());
-    const web3Recover = new Web3(
-      Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0],
-    );
     const correctPrivateKey = Signer.privateKeyToStr(privateKey);
-    const { signature } = await web3Recover.eth.accounts.sign(
+
+    const { signature } = await Signer.sign(
       recoveryIdentifier,
       correctPrivateKey,
     );
@@ -67,7 +62,10 @@ export default {
     }
   },
 
-  setWeb3Network,
+  setWeb3Network(netId) {
+    setWeb3Network(netId);
+  },
+
   getWeb3Instance() {
     return web3;
   },
