@@ -65,7 +65,7 @@ const setAuthPermission = async (password, originHost) => {
  * @param {string} params.code
  * @param {string} params.password
  * @param {boolean} params.isSignUp
- * @param {string} params.challengeType
+ * @param {boolean} params.isRemember
  * @return {Promise<any>}
  */
 const authWithCode = async ({
@@ -73,7 +73,7 @@ const authWithCode = async ({
   code,
   password,
   isSignUp,
-  challengeType = 'otp',
+  isRemember,
 }) => {
   const url = isSignUp
     ? `${identityBaseUrl}/auth/signup`
@@ -81,10 +81,10 @@ const authWithCode = async ({
 
   return withSuccess(
     request.post(url, {
-      challengeType,
       email,
       code,
       password,
+      remember: isRemember,
     }),
   );
 };

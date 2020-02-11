@@ -95,14 +95,14 @@ export const DOCUMENT_SIDES = {
 /**
  * @type {{
  *   EMAIL: 'emailLink',
- *   OTP: 'otp',
+ *   APP: 'otp',
  *   PASSWORD: 'password',
  *   SMS: 'sms',
  * }}
  */
 export const CHALLENGE_TYPES = {
   EMAIL: 'emailLink',
-  OTP: 'otp', // application code
+  APP: 'otp', // application code
   PASSWORD: 'password',
   SMS: 'sms',
 };

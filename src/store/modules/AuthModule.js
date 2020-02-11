@@ -43,7 +43,7 @@ class AuthModule extends VuexModule {
   }
 
   get isOtp() {
-    return this.challengeType === CHALLENGE_TYPES.OTP;
+    return this.challengeType === CHALLENGE_TYPES.APP;
   }
 
   get isAuthorized() {
