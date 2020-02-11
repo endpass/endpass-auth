@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import EmailCode from '@/components/modules/EmailCode';
+import EmailCode from '@/components/modules/code/EmailCode';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
 

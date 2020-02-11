@@ -67,7 +67,7 @@ export default {
 
         case to === 'regular-password':
         case to === 'sign-in':
-        case to === 'otp-code':
+        case to === 'app-code':
           this.onReturn();
           break;
 
@@ -104,7 +104,7 @@ export default {
 
         case name === 'RegularPasswordCreation' && this.isOtp:
         case name === 'RegularPasswordRecovery' && this.isOtp:
-          this.$router.replace({ name: 'OtpCode' }).catch(() => {});
+          this.$router.replace({ name: 'AppCode' }).catch(() => {});
           break;
 
         case name === 'RegularPasswordCreation' && !this.isOtp:
@@ -115,7 +115,7 @@ export default {
 
         case name === 'SignUp' && this.isOtp:
         case name === 'RegularPassword' && this.isOtp:
-          this.$router.push({ name: 'OtpCode' }).catch(() => {});
+          this.$router.push({ name: 'AppCode' }).catch(() => {});
           break;
 
         case name === 'SignUp' && !this.isOtp:
@@ -123,7 +123,7 @@ export default {
           this.$router.push({ name: 'EmailCode' }).catch(() => {});
           break;
 
-        case name === 'OtpCode':
+        case name === 'AppCode':
         case name === 'EmailCode':
           this.handleAuth();
           break;
@@ -137,7 +137,10 @@ export default {
       if (!payload) return;
 
       Object.keys(payload).forEach(propName => {
-        this.$emit(`update:${propName}`, payload[propName]);
+        // TODO: await https://github.com/babel/babel-eslint/issues/530
+        // eslint-disable-next-line
+        const emitMsg = 'update:' + propName;
+        this.$emit(emitMsg, payload[propName]);
       });
     },
 

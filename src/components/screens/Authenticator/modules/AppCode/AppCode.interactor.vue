@@ -1,5 +1,5 @@
 <template>
-  <otp-code
+  <app-code
     v-bind="$attrs"
     :is-loading="isLoading"
     :error="error"
@@ -9,12 +9,12 @@
 </template>
 
 <script>
-import OtpCode from '@/components/modules/OtpCode';
+import AppCode from '@/components/modules/code/AppCode';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
 
 export default {
-  name: 'OtpCodeInteractor',
+  name: 'AppCodeInteractor',
 
   authStore,
   authController: createAuthController(),
@@ -76,7 +76,7 @@ export default {
   },
 
   components: {
-    OtpCode,
+    AppCode,
   },
 };
 </script>

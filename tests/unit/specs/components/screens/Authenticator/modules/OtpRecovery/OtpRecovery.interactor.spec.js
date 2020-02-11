@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import OtpRecoveryInteractor from '@/components/screens/Authenticator/modules/OtpRecovery/OtpRecovery.interactor';
-import OtpRecoveryView from '@/components/modules/OtpRecovery';
+import OtpRecoveryView from '@/components/modules/code/RecoveryCode';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 

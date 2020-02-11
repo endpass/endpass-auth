@@ -75,11 +75,11 @@ export default [
       },
 
       {
-        path: 'otp-code',
-        name: 'OtpCode',
+        path: 'app-code',
+        name: 'AppCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-otp-code" */ '@/components/screens/Authenticator/modules/OtpCode'
+            /* webpackChunkName: "component-app-code" */ '@/components/screens/Authenticator/modules/AppCode'
           ),
 
         meta: {

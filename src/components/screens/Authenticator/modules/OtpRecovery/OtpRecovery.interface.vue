@@ -18,7 +18,7 @@ export default {
     },
 
     onCancel() {
-      this.$emit('switch', { to: 'otp-code' });
+      this.$emit('switch', { to: 'app-code' });
     },
   },
 

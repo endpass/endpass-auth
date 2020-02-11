@@ -97,12 +97,14 @@ export const DOCUMENT_SIDES = {
  *   EMAIL: 'emailLink',
  *   OTP: 'otp',
  *   PASSWORD: 'password',
+ *   SMS: 'sms',
  * }}
  */
 export const CHALLENGE_TYPES = {
   EMAIL: 'emailLink',
-  OTP: 'otp',
+  OTP: 'otp', // application code
   PASSWORD: 'password',
+  SMS: 'sms',
 };
 
 /**

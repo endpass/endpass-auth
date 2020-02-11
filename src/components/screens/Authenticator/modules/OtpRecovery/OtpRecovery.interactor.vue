@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import OtpRecovery from '@/components/modules/OtpRecovery';
+import OtpRecovery from '@/components/modules/code/RecoveryCode';
 import { authStore } from '@/store';
 import createRecoverController from './RecoverController';
 

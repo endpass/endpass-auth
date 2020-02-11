@@ -1,6 +1,6 @@
 <template>
   <form
-    data-test="otp-code-form"
+    data-test="app-code-form"
     @submit.prevent="onSubmit"
   >
     <v-title>
@@ -56,7 +56,7 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
 export default {
-  name: 'OtpCodeView',
+  name: 'AppCodeView',
 
   props: {
     isLoading: {

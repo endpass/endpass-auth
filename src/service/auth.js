@@ -17,6 +17,18 @@ const CODE_TO_STATUS = {
 };
 
 /**
+ * @param {Promise} promise
+ * @return {Promise<any>}
+ */
+const withSuccess = promise => {
+  return promise.then(res => {
+    if (res && !res.success) throw new Error(res.message);
+
+    return res;
+  });
+};
+
+/**
  * @param {Function} handler
  * @return {number}
  */
@@ -27,15 +39,11 @@ const createTimeout = handler => setTimeout(handler, TIMEOUT_DEFAULT);
  * @return {Promise<any>}
  */
 const getAuthChallenge = email => {
-  return request
-    .post(`${identityBaseUrl}/auth`, {
+  return withSuccess(
+    request.post(`${identityBaseUrl}/auth`, {
       email,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
-
-      return res;
-    });
+    }),
+  );
 };
 
 /**
@@ -71,16 +79,14 @@ const authWithCode = async ({
     ? `${identityBaseUrl}/auth/signup`
     : `${identityBaseUrl}/auth/token`;
 
-  const res = await request.post(url, {
-    challengeType,
-    email,
-    code,
-    password,
-  });
-
-  if (!res.success) throw new Error(res.message);
-
-  return res;
+  return withSuccess(
+    request.post(url, {
+      challengeType,
+      email,
+      code,
+      password,
+    }),
+  );
 };
 
 /**
@@ -204,13 +210,11 @@ const sendEmailCode = async email => {
  */
 const sendOtpRecoverSms = async email => {
   try {
-    const res = await request.get(
-      `${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`,
+    return withSuccess(
+      request.get(
+        `${identityBaseUrl}/auth/recover?email=${encodeURIComponent(email)}`,
+      ),
     );
-
-    if (!res.success) throw new Error(res.message);
-
-    return res;
   } catch (error) {
     const { response = {} } = error;
     const { status } = response;
@@ -228,14 +232,12 @@ const sendOtpRecoverSms = async email => {
  * @returns {Promise<any>}
  */
 const disableOtpViaSms = async ({ email, code }) => {
-  const res = await request.post(`${identityBaseUrl}/auth/recover`, {
-    email,
-    code,
-  });
-
-  if (!res.success) throw new Error(res.message);
-
-  return res;
+  return withSuccess(
+    request.post(`${identityBaseUrl}/auth/recover`, {
+      email,
+      code,
+    }),
+  );
 };
 
 /**

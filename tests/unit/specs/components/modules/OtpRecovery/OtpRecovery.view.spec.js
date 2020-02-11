@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import OtpRecoveryView from '@/components/modules/OtpRecovery/OtpRecovery.view';
+import OtpRecoveryView from '@/components/modules/code/RecoveryCode/OtpRecovery.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

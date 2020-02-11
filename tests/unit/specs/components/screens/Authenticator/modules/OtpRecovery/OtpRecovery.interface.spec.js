@@ -50,7 +50,7 @@ describe('OtpRecoveryInterface', () => {
       wrapper.find(OtpRecoveryInteractor).vm.$emit('cancel');
 
       expect(wrapper.emitted().switch.length).toBe(1);
-      expect(wrapper.emitted().switch[0]).toEqual([{ to: 'otp-code' }]);
+      expect(wrapper.emitted().switch[0]).toEqual([{ to: 'app-code' }]);
     });
   });
 });

@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`OtpCodeView render should correctly render component 1`] = `
-<form data-test="otp-code-form" email="user@email.com">
+exports[`AppCodeView render should correctly render component 1`] = `
+<form data-test="app-code-form" email="user@email.com">
   <v-title-stub>
     Verify OTP code
   </v-title-stub>
@@ -24,8 +24,8 @@ exports[`OtpCodeView render should correctly render component 1`] = `
 </form>
 `;
 
-exports[`OtpCodeView render should render form 1`] = `
-<form data-test="otp-code-form" email="user@email.com">
+exports[`AppCodeView render should render form 1`] = `
+<form data-test="app-code-form" email="user@email.com">
   <v-title-stub>
     Verify OTP code
   </v-title-stub>

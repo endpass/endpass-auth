@@ -1,5 +1,5 @@
 <template>
-  <otp-code
+  <app-code
     v-bind="$attrs"
     @auth="onAuth"
     @recover="onRecover"
@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import OtpCode from './OtpCode.interactor';
+import AppCode from './AppCode.interactor';
 
 export default {
-  name: 'OtpCodeInterface',
+  name: 'AppCodeInterface',
 
   methods: {
     onAuth() {
@@ -23,7 +23,7 @@ export default {
   },
 
   components: {
-    OtpCode,
+    AppCode,
   },
 };
 </script>

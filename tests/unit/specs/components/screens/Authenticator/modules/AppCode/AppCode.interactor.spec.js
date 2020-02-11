@@ -1,8 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password, code } from '@unitFixtures/auth';
-import OtpCodeInteractor from '@/components/screens/Authenticator/modules/OtpCode/OtpCode.interactor';
-import OtpCodeView from '@/components/modules/OtpCode';
+import AppCodeInteractor from '@/components/screens/Authenticator/modules/AppCode/AppCode.interactor';
+import AppCodeView from '@/components/modules/code/AppCode';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 
@@ -10,10 +10,10 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('OtpCodeInteractor', () => {
+describe('AppCodeInteractor', () => {
   let wrapper;
   const createWrapper = (options, props) =>
-    shallowMount(OtpCodeInteractor, {
+    shallowMount(AppCodeInteractor, {
       localVue,
       propsData: {
         email,
@@ -34,12 +34,12 @@ describe('OtpCodeInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('OtpCodeInteractor');
+      expect(wrapper.name()).toBe('AppCodeInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render form', () => {
-      expect(wrapper.find('otp-code-stub').exists()).toBe(true);
+      expect(wrapper.find('app-code-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -58,7 +58,7 @@ describe('OtpCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+        wrapper.find(AppCodeView).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -74,7 +74,7 @@ describe('OtpCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+        wrapper.find(AppCodeView).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -89,7 +89,7 @@ describe('OtpCodeInteractor', () => {
         expect(authService.authWithCode).not.toBeCalled();
 
         wrapper
-          .find(OtpCodeView)
+          .find(AppCodeView)
           .vm.$emit('submit', { code, isRemember: true });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
@@ -104,8 +104,8 @@ describe('OtpCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(OtpCodeView).vm.$emit('submit', { code });
-        wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+        wrapper.find(AppCodeView).vm.$emit('submit', { code });
+        wrapper.find(AppCodeView).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
       });
@@ -113,14 +113,14 @@ describe('OtpCodeInteractor', () => {
       describe('loading status', () => {
         it('should be false before submit', () => {
           expect(
-            wrapper.find('otp-code-stub').attributes().isloading,
+            wrapper.find('app-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
 
         it('should be true after submit', () => {
-          wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+          wrapper.find(AppCodeView).vm.$emit('submit', { code });
 
-          expect(wrapper.find('otp-code-stub').attributes().isloading).toBe(
+          expect(wrapper.find('app-code-stub').attributes().isloading).toBe(
             'true',
           );
         });
@@ -128,11 +128,11 @@ describe('OtpCodeInteractor', () => {
         it('should be false after handling submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+          wrapper.find(AppCodeView).vm.$emit('submit', { code });
           await global.flushPromises();
 
           expect(
-            wrapper.find('otp-code-stub').attributes().isloading,
+            wrapper.find('app-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
       });
@@ -145,12 +145,12 @@ describe('OtpCodeInteractor', () => {
         it('should pass error', async () => {
           expect.assertions(2);
 
-          expect(wrapper.find('otp-code-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find('app-code-stub').attributes().error).toBeFalsy();
 
-          wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+          wrapper.find(AppCodeView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(wrapper.find('otp-code-stub').attributes().error).toBe(
+          expect(wrapper.find('app-code-stub').attributes().error).toBe(
             i18n.t('components.otpBlock.authFailed'),
           );
         });
@@ -158,12 +158,12 @@ describe('OtpCodeInteractor', () => {
         it('should remove error if exists before submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+          wrapper.find(AppCodeView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          wrapper.find(OtpCodeView).vm.$emit('submit', { code });
+          wrapper.find(AppCodeView).vm.$emit('submit', { code });
 
-          expect(wrapper.find('otp-code-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find('app-code-stub').attributes().error).toBeFalsy();
         });
       });
     });
@@ -172,15 +172,15 @@ describe('OtpCodeInteractor', () => {
       it('should emit recover event', () => {
         expect(wrapper.emitted().recover).toBeUndefined();
 
-        wrapper.find(OtpCodeView).vm.$emit('recover');
+        wrapper.find(AppCodeView).vm.$emit('recover');
 
         expect(wrapper.emitted().recover.length).toBe(1);
         expect(wrapper.emitted().recover[0]).toEqual([]);
       });
 
       it('should not emit recover event while loading', () => {
-        wrapper.find(OtpCodeView).vm.$emit('submit', { code });
-        wrapper.find(OtpCodeView).vm.$emit('recover');
+        wrapper.find(AppCodeView).vm.$emit('submit', { code });
+        wrapper.find(AppCodeView).vm.$emit('recover');
 
         expect(wrapper.emitted().recover).toBeUndefined();
       });

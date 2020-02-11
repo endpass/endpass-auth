@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import OtpCodeView from '@/components/modules/OtpCode/OtpCode.view';
+import AppCodeView from '@/components/modules/code/AppCode/AppCode.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -9,10 +9,10 @@ const i18n = setupI18n(localVue);
 
 localVue.use(VeeValidate);
 
-describe('OtpCodeView', () => {
+describe('AppCodeView', () => {
   let wrapper;
   const createWrapper = (options, props) =>
-    shallowMount(OtpCodeView, {
+    shallowMount(AppCodeView, {
       provide: {
         theme: 'default',
       },
@@ -34,12 +34,12 @@ describe('OtpCodeView', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('OtpCodeView');
+      expect(wrapper.name()).toBe('AppCodeView');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render form', () => {
-      expect(wrapper.find('[data-test=otp-code-form]').exists()).toBe(true);
+      expect(wrapper.find('[data-test=app-code-form]').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -111,7 +111,7 @@ describe('OtpCodeView', () => {
         wrapper.find('[data-test=submit-button]').attributes().disabled,
       ).toBeUndefined();
 
-      wrapper.find('[data-test=otp-code-form]').trigger('submit');
+      wrapper.find('[data-test=app-code-form]').trigger('submit');
 
       expect(wrapper.emitted().submit.length).toBe(1);
       expect(wrapper.emitted().submit[0]).toEqual([{ code }]);
