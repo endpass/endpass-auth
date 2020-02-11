@@ -52,17 +52,15 @@ export default {
     onSwitch({ to }) {
       switch (true) {
         case to === 'sign-up':
-          this.$router.push({ name: 'SignUp' }).catch(() => {});
+          this.openRoute('SignUp');
           break;
 
         case to === 'regular-password-recovery':
-          this.$router
-            .push({ name: 'RegularPasswordRecovery' })
-            .catch(() => {});
+          this.openRoute('RegularPasswordRecovery');
           break;
 
         case to === 'otp-recovery':
-          this.$router.push({ name: 'OtpRecovery' }).catch(() => {});
+          this.openRoute('OtpRecovery');
           break;
 
         case to === 'regular-password':
@@ -89,40 +87,35 @@ export default {
 
       switch (true) {
         case name === 'SignIn' && this.isPasswordExist:
-          this.$router
-            .push({
-              name: 'RegularPassword',
-            })
-            .catch(() => {});
+          this.openRoute('RegularPassword');
           break;
 
         case name === 'SignIn' && !this.isPasswordExist:
-          this.$router
-            .push({ name: 'RegularPasswordCreation' })
-            .catch(() => {});
+          this.openRoute('RegularPasswordCreation');
           break;
 
         case name === 'RegularPasswordCreation' && this.isOtp:
         case name === 'RegularPasswordRecovery' && this.isOtp:
-          this.$router.replace({ name: 'AppCode' }).catch(() => {});
+          this.replaceRoute('AppCode');
           break;
 
         case name === 'RegularPasswordCreation' && !this.isOtp:
         case name === 'RegularPasswordRecovery' && !this.isOtp:
         case name === 'OtpRecovery':
-          this.$router.replace({ name: 'EmailCode' }).catch(() => {});
+          this.replaceRoute('EmailCode');
           break;
 
         case name === 'SignUp' && this.isOtp:
         case name === 'RegularPassword' && this.isOtp:
-          this.$router.push({ name: 'AppCode' }).catch(() => {});
+          this.openRoute('AppCode');
           break;
 
         case name === 'SignUp' && !this.isOtp:
         case name === 'RegularPassword' && !this.isOtp:
-          this.$router.push({ name: 'EmailCode' }).catch(() => {});
+          this.openRoute('EmailCode');
           break;
 
+        case name === 'SmsCode':
         case name === 'AppCode':
         case name === 'EmailCode':
           this.handleAuth();
@@ -137,11 +130,19 @@ export default {
       if (!payload) return;
 
       Object.keys(payload).forEach(propName => {
-        // TODO: await https://github.com/babel/babel-eslint/issues/530
+        // TODO: await https://github.com/babel/babel-eslint/issues/815
         // eslint-disable-next-line
         const emitMsg = 'update:' + propName;
         this.$emit(emitMsg, payload[propName]);
       });
+    },
+
+    openRoute(name) {
+      this.$router.push({ name }).catch(() => {});
+    },
+
+    replaceRoute(name) {
+      this.$router.replace({ name }).catch(() => {});
     },
 
     handleAuth() {

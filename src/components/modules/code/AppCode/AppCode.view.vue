@@ -4,10 +4,10 @@
     @submit.prevent="onSubmit"
   >
     <v-title>
-      {{ $t('components.otp.title') }}
+      {{ $t('components.appCode.title') }}
     </v-title>
     <v-description>
-      {{ $t('components.otp.description') }}
+      {{ $t('components.appCode.description') }}
     </v-description>
 
     <form-item>
@@ -18,7 +18,7 @@
         data-vv-name="code"
         :error="errors.first('code')"
         name="code"
-        :placeholder="$t('components.otp.enterReceivedCode')"
+        :placeholder="$t('components.appCode.enterReceivedCode')"
         data-test="code-input"
       />
     </form-item>
@@ -39,7 +39,7 @@
         data-test="recovery-link"
         @click.prevent="onRecover"
       >
-        {{ $t('components.otp.noCode') }}
+        {{ $t('components.appCode.noCode') }}
       </v-link>
     </form-row>
   </form>

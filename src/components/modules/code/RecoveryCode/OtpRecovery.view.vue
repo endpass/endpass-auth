@@ -17,7 +17,7 @@
           data-vv-name="code"
           :error="errors.first('code')"
           name="code"
-          :placeholder="$t('components.otp.enterReceivedCode')"
+          :placeholder="$t('components.appCode.enterReceivedCode')"
           data-test="code-input"
         />
       </form-item>

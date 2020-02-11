@@ -1,10 +1,13 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form
+    data-test="sms-code-form"
+    @submit.prevent="onSubmit"
+  >
     <v-title>
-      {{ $t('components.appCode.title') }}
+      {{ $t('components.smsCode.title') }}
     </v-title>
     <v-description>
-      {{ $t('components.appCode.description') }}
+      {{ $t('components.smsCode.description') }}
     </v-description>
 
     <form-item>
@@ -13,9 +16,9 @@
         v-validate="'required|digits:6'"
         data-vv-as="code"
         data-vv-name="code"
-        :error="errors.first('code') || error"
+        :error="errors.first('code')"
         name="code"
-        :placeholder="$t('components.appCode.enterReceivedCode')"
+        :placeholder="$t('components.smsCode.enterReceivedCode')"
         data-test="code-input"
       />
     </form-item>
@@ -32,11 +35,11 @@
     <form-row class="v-fs-14 v-text-center">
       <v-link
         :disabled="isLoading"
-        href="#"
+        role="button"
         data-test="recovery-link"
         @click.prevent="onRecover"
       >
-        {{ $t('components.appCode.noCode') }}
+        {{ $t('components.smsCode.noCode') }}
       </v-link>
     </form-row>
   </form>
@@ -46,7 +49,6 @@
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
-import { authStore } from '@/store';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
@@ -54,64 +56,47 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
 export default {
-  name: 'OtpForm',
-
-  authStore,
+  name: 'AppCodeView',
 
   props: {
-    email: {
-      type: String,
-      required: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    isSignUp: {
+    isLoading: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
-    submitHandler: {
-      type: Function,
-      required: true,
+    error: {
+      type: String,
+      default: '',
     },
   },
 
   data: () => ({
     code: '',
-    error: null,
-    isLoading: false,
   }),
 
-  methods: {
-    async onSubmit() {
-      if (this.isLoading) return;
-      try {
-        const { code, email, password, isSignUp } = this;
-        this.isLoading = true;
-        this.error = null;
+  watch: {
+    error: {
+      handler(msg) {
+        this.$validator.errors.removeById('sendCodeId');
 
-        await this.submitHandler({
-          isSignUp,
-          email,
-          password,
-          code,
+        if (!msg) return;
+
+        this.$validator.errors.add({
+          id: 'sendCodeId',
+          field: 'code',
+          msg,
         });
+      },
+      immediate: true,
+    },
+  },
 
-        this.$emit('submit', code);
-      } catch (err) {
-        this.error = this.$i18n.t('components.otpBlock.authFailed');
-      } finally {
-        this.isLoading = false;
-      }
+  methods: {
+    onSubmit() {
+      this.$emit('submit', { code: this.code });
     },
 
     onRecover() {
-      if (this.isLoading) return;
-
       this.$emit('recover');
     },
   },
@@ -129,5 +114,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss"></style>
