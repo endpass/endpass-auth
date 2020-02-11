@@ -12,6 +12,7 @@
 import AppCode from '@/components/modules/code/AppCode';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'AppCodeInteractor',
@@ -58,6 +59,7 @@ export default {
           password,
           code,
           isRemember,
+          challengeType: CHALLENGE_TYPES.APP,
         });
 
         this.$emit('auth');

@@ -13,6 +13,7 @@
 import EmailCode from '@/components/modules/code/EmailCode';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'EmailCodeInteractor',
@@ -58,6 +59,7 @@ export default {
           password,
           code,
           isRemember,
+          challengeType: CHALLENGE_TYPES.PASSWORD,
         });
 
         this.$emit('auth');

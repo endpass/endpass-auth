@@ -17,7 +17,12 @@ import i18n from '@/locales/i18n';
 import { accountChannel, permissionChannel } from '@/class/singleton/channels';
 
 import Answer from '@/class/Answer';
-import { ENCRYPT_OPTIONS, METHODS, WALLET_TYPES } from '@/constants';
+import {
+  CHALLENGE_TYPES,
+  ENCRYPT_OPTIONS,
+  METHODS,
+  WALLET_TYPES,
+} from '@/constants';
 import host from '@/class/singleton/host';
 
 const { ERRORS } = ConnectError;
@@ -38,8 +43,16 @@ class AccountsModule extends VuexModule {
     return this.accounts.map(({ address }) => address);
   }
 
+  /**
+   * @deprecated
+   * @return {boolean}
+   */
   get isOtpMode() {
     return !!this.settings.otpEnabled;
+  }
+
+  get challengeType() {
+    return this.settings.challengeType || CHALLENGE_TYPES.PASSWORD;
   }
 
   /**
@@ -69,7 +82,7 @@ class AccountsModule extends VuexModule {
   async disableOtpInStore() {
     await this.changeSettings({
       ...this.settings,
-      otpEnabled: false,
+      challengeType: CHALLENGE_TYPES.PASSWORD,
     });
   }
 

@@ -94,6 +94,10 @@ export default {
           this.openRoute('RegularPasswordCreation');
           break;
 
+        case name === 'OtpRecovery':
+          this.replaceRoute('EmailCode');
+          break;
+
         case name === 'RegularPasswordCreation' && this.isOtp:
         case name === 'RegularPasswordRecovery' && this.isOtp:
           this.replaceRoute('AppCode');
@@ -101,7 +105,6 @@ export default {
 
         case name === 'RegularPasswordCreation' && !this.isOtp:
         case name === 'RegularPasswordRecovery' && !this.isOtp:
-        case name === 'OtpRecovery':
           this.replaceRoute('EmailCode');
           break;
 
@@ -130,10 +133,7 @@ export default {
       if (!payload) return;
 
       Object.keys(payload).forEach(propName => {
-        // TODO: await https://github.com/babel/babel-eslint/issues/815
-        // eslint-disable-next-line
-        const emitMsg = 'update:' + propName;
-        this.$emit(emitMsg, payload[propName]);
+        this.$emit(`update:${propName}`, payload[propName]);
       });
     },
 
