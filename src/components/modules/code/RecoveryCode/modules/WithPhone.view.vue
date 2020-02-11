@@ -1,14 +1,11 @@
 <template>
   <form
-    data-test="sms-code-form"
+    data-test="recover-otp"
     @submit.prevent="onSubmit"
   >
     <v-title>
-      {{ $t('components.smsCode.title') }}
+      {{ $t('components.recoverOtpSms.title') }}
     </v-title>
-    <v-description>
-      {{ $t('components.smsCode.description') }}
-    </v-description>
 
     <form-item>
       <v-input
@@ -18,28 +15,39 @@
         data-vv-name="code"
         :error="errors.first('code')"
         name="code"
-        :placeholder="$t('components.smsCode.enterReceivedCode')"
+        :placeholder="$t('components.appCode.enterReceivedCode')"
         data-test="code-input"
       />
     </form-item>
     <form-item class="v-mb-24">
-      <v-button
-        :disabled="!isFormValid || isLoading"
-        :is-loading="isLoading"
-        type="submit"
-        data-test="submit-button"
-      >
-        {{ $t('global.confirm') }}
-      </v-button>
+      <form-controls>
+        <v-button
+          :disabled="isLoading"
+          skin="quaternary"
+          data-test="cancel-button"
+          type="button"
+          @click="onCancel"
+        >
+          {{ $t('global.cancel') }}
+        </v-button>
+        <v-button
+          :disabled="!isFormValid || isLoading"
+          :is-loading="isLoading"
+          type="submit"
+          data-test="submit-button"
+        >
+          {{ $t('global.confirm') }}
+        </v-button>
+      </form-controls>
     </form-item>
     <form-row class="v-fs-14 v-text-center">
       <v-link
         :disabled="isLoading"
         role="button"
         data-test="recovery-link"
-        @click.prevent="onRecover"
+        @click.prevent="onSendCode"
       >
-        {{ $t('components.smsCode.noCode') }}
+        {{ $t('components.recoverOtpSms.sendTitle') }}
       </v-link>
     </form-row>
   </form>
@@ -51,12 +59,12 @@ import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
+import FormControls from '@/components/common/FormControls';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
-import VDescription from '@/components/common/VDescription';
 
 export default {
-  name: 'SmsCodeView',
+  name: 'OtpRecoveryWithPhone',
 
   props: {
     isLoading: {
@@ -92,12 +100,18 @@ export default {
   },
 
   methods: {
-    onSubmit() {
-      this.$emit('submit', { code: this.code });
+    onSendCode() {
+      this.$emit('send-code');
     },
 
-    onRecover() {
-      this.$emit('recover');
+    onSubmit() {
+      this.$emit('submit', {
+        code: this.code,
+      });
+    },
+
+    onCancel() {
+      this.$emit('cancel');
     },
   },
 
@@ -105,12 +119,12 @@ export default {
 
   components: {
     VTitle,
-    VDescription,
     VLink,
     VButton,
     VInput,
     FormItem,
     FormRow,
+    FormControls,
   },
 };
 </script>

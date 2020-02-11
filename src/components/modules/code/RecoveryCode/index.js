@@ -1,1 +1,1 @@
-export { default } from './OtpRecovery.view';
+export { default } from './OtpRecovery.interface';
