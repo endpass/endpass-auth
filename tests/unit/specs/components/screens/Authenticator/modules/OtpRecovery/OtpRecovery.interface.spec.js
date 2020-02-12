@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import OtpRecoveryInterface from '@/components/screens/Authenticator/modules/OtpRecovery/OtpRecovery.interface';
-import OtpRecoveryInteractor from '@/components/screens/Authenticator/modules/OtpRecovery/OtpRecovery.interactor';
+import OtpRecoveryInterface from '@/components/screens/Authenticator/modules/RecoveryCode/RecoveryCode.interface';
+import OtpRecoveryInteractor from '@/components/screens/Authenticator/modules/RecoveryCode/RecoveryCode.interactor';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

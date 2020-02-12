@@ -63,6 +63,7 @@
     "@endpass/ui": "^0.17.3",
     "@endpass/utils": "^1.9.2",
     "@endpass/web3": "^0.0.2-beta",
+    "@vue/composition-api": "^0.3.4",
     "axios": "^0.19.0",
     "bignumber.js": "^9.0.0",
     "ethereum-blockies-base64": "^1.0.2",

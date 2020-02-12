@@ -1,3 +1,5 @@
+import { CHALLENGE_TYPES } from '@/constants';
+
 export default [
   {
     path: '/authenticator',
@@ -66,8 +68,11 @@ export default [
         name: 'EmailCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-email-code" */ '@/components/screens/Authenticator/modules/Codes/EmailCode'
+            /* webpackChunkName: "component-email-code" */ '@/components/modules/Codes'
           ),
+        props: {
+          challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+        },
 
         meta: {
           isBackground: true,
@@ -79,8 +84,11 @@ export default [
         name: 'AppCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-app-code" */ '@/components/screens/Authenticator/modules/Codes/AppCode'
+            /* webpackChunkName: "component-app-code" */ '@/components/modules/Codes'
           ),
+        props: {
+          challengeType: CHALLENGE_TYPES.APP_OTP,
+        },
 
         meta: {
           isBackground: true,
@@ -92,8 +100,11 @@ export default [
         name: 'SmsCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-sms-code" */ '@/components/screens/Authenticator/modules/Codes/SmsCode'
+            /* webpackChunkName: "component-sms-code" */ '@/components/modules/Codes'
           ),
+        props: {
+          challengeType: CHALLENGE_TYPES.SMS_OTP,
+        },
 
         meta: {
           isBackground: true,
@@ -105,7 +116,7 @@ export default [
         name: 'OtpRecovery',
         component: () =>
           import(
-            /* webpackChunkName: "component-otp-recovery" */ '@/components/screens/Authenticator/modules/OtpRecovery'
+            /* webpackChunkName: "component-otp-recovery" */ '@/components/screens/Authenticator/modules/RecoveryCode'
           ),
 
         meta: {

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import EmailCodeView from '@/components/modules/code/EmailCode/EmailCode.view';
+import EmailCodeView from '@/components/modules/Codes/EmailCode/EmailCode.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

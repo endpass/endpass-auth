@@ -13,7 +13,7 @@ import {
  */
 
 @Module({ generateMutationSetters: true })
-class RecoverController extends VuexModule {
+class RecoveryController extends VuexModule {
   /**
    * @param {import('vuex-class-modules').RegisterOptions} props
    * @param {object} params
@@ -57,4 +57,4 @@ class RecoverController extends VuexModule {
   }
 }
 
-export default () => createController(RecoverController);
+export default () => createController(RecoveryController);

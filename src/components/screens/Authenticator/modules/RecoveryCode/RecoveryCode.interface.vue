@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import OtpRecovery from './OtpRecovery.interactor';
+import OtpRecovery from './RecoveryCode.interactor';
 
 export default {
   name: 'OtpRecoveryInterface',

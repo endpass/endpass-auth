@@ -1,25 +1,33 @@
 <template>
-  <sms-code
-    v-bind="$attrs"
+  <Code
+    :challenge-type="challengeType"
     :is-loading="isLoading"
     :error="error"
-    @submit="onSubmit"
+    :email="email"
+    @recover="onRecover"
     @send-code="sendCode"
+    @submit="onSubmit"
   />
 </template>
 
 <script>
-import SmsCode from '@/components/modules/code/SmsCode';
+import Code from './Code.container';
 import { authStore } from '@/store';
-import createAuthController from '../AuthController';
+import createAuthController from './AuthController';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
-  name: 'SmsCodeInteractor',
+  name: 'CodeInteractor',
 
-  authStore,
   authController: createAuthController(),
+  authStore,
 
   props: {
+    challengeType: {
+      type: String,
+      required: true,
+    },
+
     email: {
       type: String,
       required: true,
@@ -37,7 +45,6 @@ export default {
   },
 
   data: () => ({
-    code: '',
     error: null,
     isLoading: false,
   }),
@@ -62,7 +69,7 @@ export default {
 
         this.$emit('auth');
       } catch (err) {
-        this.error = this.$i18n.t('components.otpBlock.authFailed');
+        this.error = this.$i18n.t('components.code.authFailed');
       } finally {
         this.isLoading = false;
       }
@@ -77,19 +84,29 @@ export default {
 
         await this.$options.authStore.sendCode({ email: this.email });
       } catch (error) {
-        this.error = this.$i18n.t('components.smsCode.sendError');
+        this.error = this.$i18n.t('components.code.sendError');
       } finally {
         this.isLoading = false;
       }
     },
+
+    onRecover() {
+      if (this.isLoading) return;
+
+      this.$emit('recover');
+    },
   },
 
   mounted() {
+    if (this.challengeType === CHALLENGE_TYPES.EMAIL_OTP) {
+      return;
+    }
+
     this.sendCode();
   },
 
   components: {
-    SmsCode,
+    Code,
   },
 };
 </script>
