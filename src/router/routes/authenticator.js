@@ -88,6 +88,19 @@ export default [
       },
 
       {
+        path: 'sms-code',
+        name: 'SmsCode',
+        component: () =>
+          import(
+            /* webpackChunkName: "component-sms-code" */ '@/components/screens/Authenticator/modules/SmsCode'
+          ),
+
+        meta: {
+          isBackground: true,
+        },
+      },
+
+      {
         path: 'otp-recovery',
         name: 'OtpRecovery',
         component: () =>

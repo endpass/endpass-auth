@@ -10,6 +10,7 @@
         v-bind="$attrs"
         :is-closable="isClosable"
         :is-returnable="isReturnable"
+        :challenge-type="challengeType"
         @complete="onComplete"
         @switch="onSwitch"
         @social="handleAuth"
@@ -20,6 +21,7 @@
 
 <script>
 import AuthFormContainer from './Authenticator.interactor';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'AuthenticatorContainer',
@@ -30,9 +32,9 @@ export default {
       default: false,
     },
 
-    isOtp: {
-      type: Boolean,
-      default: false,
+    challengeType: {
+      type: String,
+      required: true,
     },
   },
 
@@ -66,6 +68,7 @@ export default {
         case to === 'regular-password':
         case to === 'sign-in':
         case to === 'app-code':
+        case to === 'sms-code':
           this.onReturn();
           break;
 
@@ -85,6 +88,10 @@ export default {
     nextScreen() {
       const { name } = this.$route;
 
+      const isSmsOtp = this.challengeType === CHALLENGE_TYPES.SMS_OTP;
+      const isAppOtp = this.challengeType === CHALLENGE_TYPES.APP_OTP;
+      const isEmailOtp = this.challengeType === CHALLENGE_TYPES.EMAIL_OTP;
+
       switch (true) {
         case name === 'SignIn' && this.isPasswordExist:
           this.openRoute('RegularPassword');
@@ -98,23 +105,33 @@ export default {
           this.replaceRoute('EmailCode');
           break;
 
-        case name === 'RegularPasswordCreation' && this.isOtp:
-        case name === 'RegularPasswordRecovery' && this.isOtp:
+        case name === 'RegularPasswordCreation' && isSmsOtp:
+        case name === 'RegularPasswordRecovery' && isSmsOtp:
+          this.replaceRoute('SmsCode');
+          break;
+
+        case name === 'RegularPasswordCreation' && isAppOtp:
+        case name === 'RegularPasswordRecovery' && isAppOtp:
           this.replaceRoute('AppCode');
           break;
 
-        case name === 'RegularPasswordCreation' && !this.isOtp:
-        case name === 'RegularPasswordRecovery' && !this.isOtp:
+        case name === 'RegularPasswordCreation' && isEmailOtp:
+        case name === 'RegularPasswordRecovery' && isEmailOtp:
           this.replaceRoute('EmailCode');
           break;
 
-        case name === 'SignUp' && this.isOtp:
-        case name === 'RegularPassword' && this.isOtp:
+        case name === 'SignUp' && isSmsOtp:
+        case name === 'RegularPassword' && isSmsOtp:
+          this.openRoute('SmsCode');
+          break;
+
+        case name === 'SignUp' && isAppOtp:
+        case name === 'RegularPassword' && isAppOtp:
           this.openRoute('AppCode');
           break;
 
-        case name === 'SignUp' && !this.isOtp:
-        case name === 'RegularPassword' && !this.isOtp:
+        case name === 'SignUp' && isEmailOtp:
+        case name === 'RegularPassword' && isEmailOtp:
           this.openRoute('EmailCode');
           break;
 

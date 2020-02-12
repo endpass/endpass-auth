@@ -51,7 +51,7 @@ export default {
     },
 
     isOtp() {
-      return this.$options.accountsStore.isOtpMode;
+      return this.$options.accountsStore.isAppOtp;
     },
   },
 

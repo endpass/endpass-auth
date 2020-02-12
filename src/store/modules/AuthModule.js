@@ -42,14 +42,6 @@ class AuthModule extends VuexModule {
     this.sharedStore = sharedStore;
   }
 
-  get isAppOtp() {
-    return this.challengeType === CHALLENGE_TYPES.APP;
-  }
-
-  get isSmsOtp() {
-    return this.challengeType === CHALLENGE_TYPES.SMS;
-  }
-
   get isAuthorized() {
     return this.isLogin && this.isPermission;
   }

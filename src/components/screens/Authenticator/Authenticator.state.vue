@@ -5,8 +5,8 @@
     :server-mode.sync="serverMode"
     :password.sync="password"
     :is-password-exist.sync="isPasswordExist"
-    :is-otp.sync="isOtp"
     :is-sign-up.sync="isSignUp"
+    :challenge-type.sync="challengeType"
     @authorize="onAuth"
     @cancel="onCancel"
   />
@@ -14,6 +14,7 @@
 
 <script>
 import Authenticator from './Authenticator.container';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'AuthenticatorState',
@@ -23,8 +24,8 @@ export default {
     serverMode: {},
     password: '',
     isPasswordExist: false,
-    isOtp: false,
     isSignUp: false,
+    challengeType: CHALLENGE_TYPES.EMAIL_OTP,
   }),
 
   methods: {
