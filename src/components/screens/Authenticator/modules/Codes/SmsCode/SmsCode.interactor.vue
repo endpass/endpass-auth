@@ -3,8 +3,8 @@
     v-bind="$attrs"
     :is-loading="isLoading"
     :error="error"
-    @recover="onRecover"
     @submit="onSubmit"
+    @send-code="sendCode"
   />
 </template>
 
@@ -66,12 +66,6 @@ export default {
       } finally {
         this.isLoading = false;
       }
-    },
-
-    onRecover() {
-      if (this.isLoading) return;
-
-      this.$emit('recover');
     },
 
     async sendCode() {

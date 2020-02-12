@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password, code } from '@unitFixtures/auth';
-import EmailCodeInteractor from '@/components/screens/Authenticator/modules/EmailCode/EmailCode.interactor';
+import EmailCodeInteractor from '@/components/screens/Authenticator/modules/Codes/EmailCode/EmailCode.interactor';
 import EmailCodeView from '@/components/modules/code/EmailCode';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';

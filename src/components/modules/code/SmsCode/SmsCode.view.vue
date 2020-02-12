@@ -33,14 +33,10 @@
       </v-button>
     </form-item>
     <form-row class="v-fs-14 v-text-center">
-      <v-link
-        :disabled="isLoading"
-        role="button"
-        data-test="recovery-link"
-        @click.prevent="onRecover"
-      >
-        {{ $t('components.smsCode.noCode') }}
-      </v-link>
+      <send-code
+        :is-loading="isLoading"
+        @click="sendCode"
+      />
     </form-row>
   </form>
 </template>
@@ -48,7 +44,7 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
-import VLink from '@endpass/ui/kit/VLink';
+import SendCode from '@/components/common/SendCode';
 import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
@@ -96,8 +92,8 @@ export default {
       this.$emit('submit', { code: this.code });
     },
 
-    onRecover() {
-      this.$emit('recover');
+    sendCode() {
+      this.$emit('send-code');
     },
   },
 
@@ -106,7 +102,7 @@ export default {
   components: {
     VTitle,
     VDescription,
-    VLink,
+    SendCode,
     VButton,
     VInput,
     FormItem,

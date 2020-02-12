@@ -66,7 +66,7 @@ export default [
         name: 'EmailCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-email-code" */ '@/components/screens/Authenticator/modules/code/EmailCode'
+            /* webpackChunkName: "component-email-code" */ '@/components/screens/Authenticator/modules/Codes/EmailCode'
           ),
 
         meta: {
@@ -79,7 +79,7 @@ export default [
         name: 'AppCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-app-code" */ '@/components/screens/Authenticator/modules/code/AppCode'
+            /* webpackChunkName: "component-app-code" */ '@/components/screens/Authenticator/modules/Codes/AppCode'
           ),
 
         meta: {
@@ -92,7 +92,7 @@ export default [
         name: 'SmsCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-sms-code" */ '@/components/screens/Authenticator/modules/code/SmsCode'
+            /* webpackChunkName: "component-sms-code" */ '@/components/screens/Authenticator/modules/Codes/SmsCode'
           ),
 
         meta: {

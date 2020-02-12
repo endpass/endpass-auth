@@ -2,7 +2,6 @@
   <sms-code
     v-bind="$attrs"
     @auth="onAuth"
-    @recover="onRecover"
   />
 </template>
 
@@ -15,10 +14,6 @@ export default {
   methods: {
     onAuth() {
       this.$emit('complete');
-    },
-
-    onRecover() {
-      this.$emit('switch', { to: 'otp-recovery' });
     },
   },
 

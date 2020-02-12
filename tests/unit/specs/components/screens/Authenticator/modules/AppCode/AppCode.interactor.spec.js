@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password, code } from '@unitFixtures/auth';
-import AppCodeInteractor from '@/components/screens/Authenticator/modules/AppCode/AppCode.interactor';
+import AppCodeInteractor from '@/components/screens/Authenticator/modules/Codes/AppCode/AppCode.interactor';
 import AppCodeView from '@/components/modules/code/AppCode';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
