@@ -51,14 +51,6 @@ class AccountsModule extends VuexModule {
     return !!this.settings.otpEnabled;
   }
 
-  /**
-   * @deprecated
-   * @return {boolean}
-   */
-  get isSmsOtp() {
-    return !!this.settings.smsCodeEnabled;
-  }
-
   get challengeType() {
     if (this.settings.challengeType) {
       return this.settings.challengeType;

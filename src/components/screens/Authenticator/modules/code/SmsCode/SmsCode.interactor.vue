@@ -11,8 +11,7 @@
 <script>
 import SmsCode from '@/components/modules/code/SmsCode';
 import { authStore } from '@/store';
-import createAuthController from './AuthController';
-import { CHALLENGE_TYPES } from '@/constants';
+import createAuthController from '../AuthController';
 
 export default {
   name: 'SmsCodeInteractor',
@@ -59,7 +58,6 @@ export default {
           password,
           code,
           isRemember,
-          challengeType: CHALLENGE_TYPES.SMS_OTP,
         });
 
         this.$emit('auth');
@@ -85,7 +83,7 @@ export default {
 
         await this.$options.authStore.sendCode({ email: this.email });
       } catch (error) {
-        this.error = this.$i18n.t('components.emailCode.sendError');
+        this.error = this.$i18n.t('components.smsCode.sendError');
       } finally {
         this.isLoading = false;
       }

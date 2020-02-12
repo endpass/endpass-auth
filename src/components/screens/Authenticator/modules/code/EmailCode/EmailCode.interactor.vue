@@ -1,24 +1,24 @@
 <template>
-  <app-code
+  <email-code
     v-bind="$attrs"
     :is-loading="isLoading"
     :error="error"
-    @recover="onRecover"
+    :email="email"
+    @send-code="sendCode"
     @submit="onSubmit"
   />
 </template>
 
 <script>
-import AppCode from '@/components/modules/code/AppCode';
+import EmailCode from '@/components/modules/code/EmailCode';
 import { authStore } from '@/store';
-import createAuthController from './AuthController';
-import { CHALLENGE_TYPES } from '@/constants';
+import createAuthController from '../AuthController';
 
 export default {
-  name: 'AppCodeInteractor',
+  name: 'EmailCodeInteractor',
 
-  authStore,
   authController: createAuthController(),
+  authStore,
 
   props: {
     email: {
@@ -38,7 +38,6 @@ export default {
   },
 
   data: () => ({
-    code: '',
     error: null,
     isLoading: false,
   }),
@@ -59,7 +58,6 @@ export default {
           password,
           code,
           isRemember,
-          challengeType: CHALLENGE_TYPES.APP,
         });
 
         this.$emit('auth');
@@ -70,15 +68,28 @@ export default {
       }
     },
 
-    onRecover() {
+    async sendCode() {
       if (this.isLoading) return;
 
-      this.$emit('recover');
+      try {
+        this.isLoading = true;
+        this.error = null;
+
+        await this.$options.authStore.sendCode({ email: this.email });
+      } catch (error) {
+        this.error = this.$i18n.t('components.emailCode.sendError');
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 
+  mounted() {
+    this.sendCode();
+  },
+
   components: {
-    AppCode,
+    EmailCode,
   },
 };
 </script>

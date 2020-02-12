@@ -94,26 +94,15 @@ export const DOCUMENT_SIDES = {
 
 /**
  * @type {{
- *   EMAIL: 'emailLink',
- *   APP: 'otp',
- *   PASSWORD: 'password',
- *   SMS: 'sms',
-    EMAIL_OTP: 'EMAIL_OTP',
-    APP_OTP: 'APP_OTP',
-    SMS_OTP: 'SMS_OTP',
-
+    EMAIL_OTP: 'password',
+    APP_OTP: 'otp',
+    SMS_OTP: 'sms',
  * }}
  */
 export const CHALLENGE_TYPES = {
-  // move to adapter
-  EMAIL: 'emailLink',
-  APP: 'otp', // application code
-  PASSWORD: 'password',
-  SMS: 'sms',
-
-  EMAIL_OTP: 'EMAIL_OTP',
-  APP_OTP: 'APP_OTP',
-  SMS_OTP: 'SMS_OTP',
+  EMAIL_OTP: 'password',
+  APP_OTP: 'otp',
+  SMS_OTP: 'sms',
 };
 
 /**

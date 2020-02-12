@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
+import VueCompositionApi from '@vue/composition-api';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
@@ -19,6 +20,7 @@ import e2eSetup from '@/util/e2eSetup';
     /* eslint-disable-next-line */
   } catch (e) {}
 
+  Vue.use(VueCompositionApi);
   Vue.use(validation);
   Vue.use(VShowSlide);
   Vue.config.productionTip = false;
