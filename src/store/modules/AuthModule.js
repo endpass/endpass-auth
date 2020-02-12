@@ -31,7 +31,7 @@ class AuthModule extends VuexModule {
   cookieExpireChecker = new NonReactive(new CookieExpireChecker());
 
   /** @type {CHALLENGE_TYPES[keyof CHALLENGE_TYPES]?} */
-  challengeType = null;
+  challengeType = CHALLENGE_TYPES.EMAIL_OTP;
 
   isLogin = false;
 
@@ -42,8 +42,12 @@ class AuthModule extends VuexModule {
     this.sharedStore = sharedStore;
   }
 
-  get isOtp() {
+  get isAppOtp() {
     return this.challengeType === CHALLENGE_TYPES.APP;
+  }
+
+  get isSmsOtp() {
+    return this.challengeType === CHALLENGE_TYPES.SMS;
   }
 
   get isAuthorized() {
@@ -142,7 +146,7 @@ class AuthModule extends VuexModule {
    */
   @Action
   async disableOtpInStore() {
-    this.challengeType = CHALLENGE_TYPES.PASSWORD;
+    this.challengeType = CHALLENGE_TYPES.EMAIL_OTP;
   }
 
   @Action
@@ -211,7 +215,7 @@ class AuthModule extends VuexModule {
     this.cookieExpireChecker.value.setExpireAt(0);
     this.cookieExpireChecker.value.stopChecking();
     this.changeAuthByStatus({ status: AUTH_STATUS_CODE.LOGOUT, hash: '' });
-    this.challengeType = null;
+    this.challengeType = CHALLENGE_TYPES.EMAIL_OTP;
     this.setAuthParams(null);
     settingsService.clearLocalSettings();
   }

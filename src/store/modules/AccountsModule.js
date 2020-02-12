@@ -47,12 +47,33 @@ class AccountsModule extends VuexModule {
    * @deprecated
    * @return {boolean}
    */
-  get isOtpMode() {
+  get isAppOtp() {
     return !!this.settings.otpEnabled;
   }
 
+  /**
+   * @deprecated
+   * @return {boolean}
+   */
+  get isSmsOtp() {
+    return !!this.settings.smsCodeEnabled;
+  }
+
   get challengeType() {
-    return this.settings.challengeType || CHALLENGE_TYPES.PASSWORD;
+    if (this.settings.challengeType) {
+      return this.settings.challengeType;
+    }
+
+    // support for old settings defined
+    if (this.settings.smsCodeEnabled) {
+      return CHALLENGE_TYPES.SMS_OTP;
+    }
+
+    if (this.settings.otpEnabled) {
+      return CHALLENGE_TYPES.APP_OTP;
+    }
+
+    return CHALLENGE_TYPES.EMAIL_OTP;
   }
 
   /**
@@ -82,7 +103,7 @@ class AccountsModule extends VuexModule {
   async disableOtpInStore() {
     await this.changeSettings({
       ...this.settings,
-      challengeType: CHALLENGE_TYPES.PASSWORD,
+      challengeType: CHALLENGE_TYPES.EMAIL_OTP,
     });
   }
 

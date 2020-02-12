@@ -2,6 +2,7 @@
 import get from 'lodash/get';
 import request from '@/class/singleton/request';
 import { AUTH_STATUS_CODE } from '@/constants';
+import authAdapter from '@/service/auth/authAdapter';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
@@ -36,14 +37,15 @@ const createTimeout = handler => setTimeout(handler, TIMEOUT_DEFAULT);
 
 /**
  * @param {string} email
- * @return {Promise<any>}
+ * @return {Promise<*>}
  */
-const getAuthChallenge = email => {
-  return withSuccess(
+const getAuthChallenge = async email => {
+  const data = await withSuccess(
     request.post(`${identityBaseUrl}/auth`, {
       email,
     }),
   );
+  return authAdapter(data);
 };
 
 /**
@@ -94,10 +96,10 @@ const authWithCode = async ({
 
 /**
  * @param {string} idToken
- * @return {Promise<any>}
+ * @return {Promise<*>}
  */
-const authWithGoogle = idToken =>
-  request
+const authWithGoogle = async idToken => {
+  const data = await request
     .post(`${identityBaseUrl}/auth/google`, {
       token: idToken,
     })
@@ -109,12 +111,15 @@ const authWithGoogle = idToken =>
       throw err.response.data;
     });
 
+  return authAdapter(data);
+};
+
 /**
  * @param {string} code
- * @return {Promise<any>}
+ * @return {Promise<*>}
  */
-const authWithGitHub = code =>
-  request
+const authWithGitHub = async code => {
+  const data = await request
     .post(`${identityBaseUrl}/auth/github`, {
       code,
     })
@@ -125,6 +130,8 @@ const authWithGitHub = code =>
     .catch(err => {
       throw err.response.data;
     });
+  return authAdapter(data);
+};
 
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 

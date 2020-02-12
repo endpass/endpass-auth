@@ -4,12 +4,14 @@ import isV3 from '@endpass/utils/isV3';
 import request from '@/class/singleton/request';
 import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
 import { WALLET_TYPES } from '@/constants';
+import settingsAdapter from '@/service/user/settingsAdapter';
 
 const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 export default {
-  getSettings() {
-    return request.get(`${identityBaseUrl}/settings`);
+  async getSettings() {
+    const settings = request.get(`${identityBaseUrl}/settings`);
+    return settingsAdapter(settings);
   },
 
   setSettings(settings) {
