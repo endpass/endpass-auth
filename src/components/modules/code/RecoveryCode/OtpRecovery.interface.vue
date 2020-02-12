@@ -1,5 +1,5 @@
 <template>
-  <otp-recovery-container
+  <otp-recovery
     :is-loading="isLoading"
     :error="error"
     @send-code="onSendCode"
@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import OtpRecoveryContainer from './OtpRecovery.container';
+import OtpRecovery from './OtpRecovery.container';
 
 export default {
   props: {
@@ -34,10 +34,8 @@ export default {
       this.$emit('send-code');
     },
 
-    onSubmit() {
-      this.$emit('submit', {
-        code: this.code,
-      });
+    onSubmit({ code }) {
+      this.$emit('submit', { code });
     },
 
     onCancel() {
@@ -46,7 +44,7 @@ export default {
   },
 
   components: {
-    OtpRecoveryContainer,
+    OtpRecovery,
   },
 };
 </script>

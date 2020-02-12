@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import NoPhoneView from './modules/NoPhone.view';
-import WithPhoneView from './modules/WithPhone.view';
+import NoPhone from './modules/NoPhone';
+import WithPhone from './modules/WithPhone';
 import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
@@ -35,7 +35,7 @@ export default {
 
   computed: {
     current() {
-      return this.isPhoneExist ? WithPhoneView : NoPhoneView;
+      return this.isPhoneExist ? WithPhone : NoPhone;
     },
   },
 
@@ -44,10 +44,8 @@ export default {
       this.$emit('send-code');
     },
 
-    onSubmit() {
-      this.$emit('submit', {
-        code: this.code,
-      });
+    onSubmit({ code }) {
+      this.$emit('submit', { code });
     },
 
     onCancel() {
