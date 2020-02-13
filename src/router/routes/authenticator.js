@@ -68,7 +68,7 @@ export default [
         name: 'EmailCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-email-code" */ '@/components/modules/Codes'
+            /* webpackChunkName: "component-email-code" */ '@/components/modules/Code'
           ),
         props: {
           challengeType: CHALLENGE_TYPES.EMAIL_OTP,
@@ -84,7 +84,7 @@ export default [
         name: 'AppCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-app-code" */ '@/components/modules/Codes'
+            /* webpackChunkName: "component-app-code" */ '@/components/modules/Code'
           ),
         props: {
           challengeType: CHALLENGE_TYPES.APP_OTP,
@@ -100,7 +100,7 @@ export default [
         name: 'SmsCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-sms-code" */ '@/components/modules/Codes'
+            /* webpackChunkName: "component-sms-code" */ '@/components/modules/Code'
           ),
         props: {
           challengeType: CHALLENGE_TYPES.SMS_OTP,
