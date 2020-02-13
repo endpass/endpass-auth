@@ -1,8 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
-import OtpRecoveryInteractor from '@/components/screens/Authenticator/modules/RecoveryCode/RecoveryCode.interactor';
-import OtpRecoveryView from '@/components/modules/RecoveryCode';
+import RecoveryCodeContainer from '@/components/modules/RecoveryCode/RecoveryCode.container';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 
@@ -10,17 +9,18 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('OtpRecoveryInteractor', () => {
+describe('RecoveryCodeContainer', () => {
   let wrapper;
-  const createWrapper = (options, props) =>
-    shallowMount(OtpRecoveryInteractor, {
+  const createWrapper = props =>
+    shallowMount(RecoveryCodeContainer, {
       localVue,
       propsData: {
-        email,
+        isPhoneExist: false,
+        error: '',
+        isLoading: false,
         ...props,
       },
       i18n,
-      ...options,
     });
 
   beforeEach(async () => {
@@ -32,12 +32,12 @@ describe('OtpRecoveryInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('OtpRecoveryInteractor');
+      expect(wrapper.name()).toBe('RecoveryCodeContainer');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render form', () => {
-      expect(wrapper.find('otp-recovery-stub').exists()).toBe(true);
+    it('should render ', () => {
+      expect(wrapper.name()).toBe('RecoveryCodeContainer');
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -54,7 +54,7 @@ describe('OtpRecoveryInteractor', () => {
 
         expect(authService.disableOtpViaSms).not.toBeCalled();
 
-        wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+        wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
 
         expect(authService.disableOtpViaSms).toBeCalledTimes(1);
         expect(authService.disableOtpViaSms).toBeCalledWith({
@@ -65,13 +65,13 @@ describe('OtpRecoveryInteractor', () => {
       it('should emit event after handling submit', async () => {
         expect.assertions(3);
 
-        expect(wrapper.emitted()['otp-recovered']).toBeUndefined();
+        expect(wrapper.emitted().recovered).toBeUndefined();
 
-        wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+        wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
         await global.flushPromises();
 
-        expect(wrapper.emitted()['otp-recovered']).toHaveLength(1);
-        expect(wrapper.emitted()['otp-recovered'][0]).toEqual([]);
+        expect(wrapper.emitted().recovered).toHaveLength(1);
+        expect(wrapper.emitted().recovered[0]).toEqual([]);
       });
 
       it('should not handle submit event when loading status true', async () => {
@@ -79,8 +79,8 @@ describe('OtpRecoveryInteractor', () => {
 
         expect(authService.disableOtpViaSms).not.toBeCalled();
 
-        wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
-        wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+        wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
+        wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
 
         expect(authService.disableOtpViaSms).toBeCalledTimes(1);
       });
@@ -88,26 +88,26 @@ describe('OtpRecoveryInteractor', () => {
       describe('loading status', () => {
         it('should be false before submit', () => {
           expect(
-            wrapper.find('otp-recovery-stub').attributes().isloading,
+            wrapper.find('recovery-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
 
         it('should be true after submit', () => {
-          wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+          wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
 
-          expect(wrapper.find('otp-recovery-stub').attributes().isloading).toBe(
-            'true',
-          );
+          expect(
+            wrapper.find('recovery-code-stub').attributes().isloading,
+          ).toBe('true');
         });
 
         it('should be false after handling submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+          wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
           await global.flushPromises();
 
           expect(
-            wrapper.find('otp-recovery-stub').attributes().isloading,
+            wrapper.find('recovery-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
       });
@@ -123,13 +123,13 @@ describe('OtpRecoveryInteractor', () => {
           expect.assertions(2);
 
           expect(
-            wrapper.find('otp-recovery-stub').attributes().error,
+            wrapper.find('recovery-code-stub').attributes().error,
           ).toBeFalsy();
 
-          wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+          wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(wrapper.find('otp-recovery-stub').attributes().error).toBe(
+          expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
             i18n.t('components.recoverOtpSms.recoverError'),
           );
         });
@@ -137,18 +137,18 @@ describe('OtpRecoveryInteractor', () => {
         it('should remove error if exists before submit', async () => {
           expect.assertions(2);
 
-          wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+          wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
           await global.flushPromises();
 
           expect(
-            wrapper.find('otp-recovery-stub').attributes().error,
+            wrapper.find('recovery-code-stub').attributes().error,
           ).toBeTruthy();
 
-          wrapper.find(OtpRecoveryView).vm.$emit('submit', { code });
+          wrapper.find(RecoveryCodeContainer).vm.$emit('submit', { code });
           await global.flushPromises();
 
           expect(
-            wrapper.find('otp-recovery-stub').attributes().error,
+            wrapper.find('recovery-code-stub').attributes().error,
           ).toBeFalsy();
         });
       });
@@ -160,10 +160,10 @@ describe('OtpRecoveryInteractor', () => {
 
         expect(wrapper.emitted().cancel).toBeUndefined();
 
-        wrapper.find(OtpRecoveryView).vm.$emit('cancel');
+        wrapper.find(RecoveryCodeContainer).vm.$emit('cancel');
 
-        expect(wrapper.emitted().cancel).toHaveLength(1);
-        expect(wrapper.emitted().cancel[0]).toEqual([]);
+        expect(wrapper.emitted()['recovery-cancel']).toHaveLength(1);
+        expect(wrapper.emitted()['recovery-cancel'][0]).toEqual([]);
       });
     });
 
@@ -178,7 +178,7 @@ describe('OtpRecoveryInteractor', () => {
 
         expect(authService.sendOtpRecoverSms).not.toBeCalled();
 
-        wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+        wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
 
         expect(authService.sendOtpRecoverSms).toBeCalledTimes(1);
         expect(authService.sendOtpRecoverSms).toBeCalledWith(email);
@@ -187,26 +187,26 @@ describe('OtpRecoveryInteractor', () => {
       describe('loading status', () => {
         it('should be false before sending', () => {
           expect(
-            wrapper.find('otp-recovery-stub').attributes().isloading,
+            wrapper.find('recovery-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
 
         it('should be true while sending', () => {
-          wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+          wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
 
-          expect(wrapper.find('otp-recovery-stub').attributes().isloading).toBe(
-            'true',
-          );
+          expect(
+            wrapper.find('recovery-code-stub').attributes().isloading,
+          ).toBe('true');
         });
 
         it('should be false after sending', async () => {
           expect.assertions(1);
 
-          wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+          wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
           await global.flushPromises();
 
           expect(
-            wrapper.find('otp-recovery-stub').attributes().isloading,
+            wrapper.find('recovery-code-stub').attributes().isloading,
           ).toBeFalsy();
         });
       });
@@ -223,13 +223,13 @@ describe('OtpRecoveryInteractor', () => {
             expect.assertions(2);
 
             expect(
-              wrapper.find('otp-recovery-stub').attributes().error,
+              wrapper.find('recovery-code-stub').attributes().error,
             ).toBeFalsy();
 
-            wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+            wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
             await global.flushPromises();
 
-            expect(wrapper.find('otp-recovery-stub').attributes().error).toBe(
+            expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
               i18n.t('components.recoverOtpSms.sendSmsError'),
             );
           });
@@ -237,14 +237,14 @@ describe('OtpRecoveryInteractor', () => {
           it('should remove error if exists before', async () => {
             expect.assertions(1);
 
-            wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+            wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
             await global.flushPromises();
 
-            wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+            wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
             await global.flushPromises();
 
             expect(
-              wrapper.find('otp-recovery-stub').attributes().error,
+              wrapper.find('recovery-code-stub').attributes().error,
             ).toBeFalsy();
           });
         });
@@ -260,14 +260,14 @@ describe('OtpRecoveryInteractor', () => {
             expect.assertions(2);
 
             expect(
-              wrapper.find('otp-recovery-stub').attributes().isphoneexist,
+              wrapper.find('recovery-code-stub').attributes().isphoneexist,
             ).toBe('true');
 
-            wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+            wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
             await global.flushPromises();
 
             expect(
-              wrapper.find('otp-recovery-stub').attributes().isphoneexist,
+              wrapper.find('recovery-code-stub').attributes().isphoneexist,
             ).toBeUndefined();
           });
 
@@ -275,13 +275,13 @@ describe('OtpRecoveryInteractor', () => {
             expect.assertions(2);
 
             expect(
-              wrapper.find('otp-recovery-stub').attributes().error,
+              wrapper.find('recovery-code-stub').attributes().error,
             ).toBeFalsy();
 
-            wrapper.find(OtpRecoveryView).vm.$emit('send-code');
+            wrapper.find(RecoveryCodeContainer).vm.$emit('send-code');
             await global.flushPromises();
 
-            expect(wrapper.find('otp-recovery-stub').attributes().error).toBe(
+            expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
               '',
             );
           });

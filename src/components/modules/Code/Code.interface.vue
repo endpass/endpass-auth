@@ -1,17 +1,17 @@
 <template>
   <Code
     :challenge-type="challengeType"
-    :is-loading="isLoading"
     :email="email"
+    :is-loading="isLoading"
     :error="error"
-    @send-code="onSendCode"
     @recover="onRecover"
     @submit="onSubmit"
+    @update="onUpdate"
   />
 </template>
 
 <script>
-import Code from './Code.container';
+import Code from './Code.interactor';
 
 export default {
   name: 'CodeInterface',
@@ -39,16 +39,17 @@ export default {
   },
 
   methods: {
-    onSendCode() {
-      this.$emit('send-code');
-    },
-
     onRecover() {
       this.$emit('recover');
     },
 
     onSubmit({ code }) {
       this.$emit('submit', { code });
+    },
+
+    onUpdate({ isLoading = this.isLoading, error = this.error }) {
+      this.$emit('update:is-loading', isLoading);
+      this.$emit('update:error', error);
     },
   },
 

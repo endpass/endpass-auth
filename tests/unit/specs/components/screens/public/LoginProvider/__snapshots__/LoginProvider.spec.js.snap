@@ -1,9 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `
-<loading-screen-stub isloading="true">
-  <v-frame-stub title="" isclosable="true">
-    <login-provider-code-stub></login-provider-code-stub>
-  </v-frame-stub>
-</loading-screen-stub>
-`;
+exports[`LoginProvider render should correctly render LoginProvider screen 1`] = `<login-provider-stub></login-provider-stub>`;

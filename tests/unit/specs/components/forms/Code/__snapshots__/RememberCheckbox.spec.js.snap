@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`RememberCheckbox render should correctly render component 1`] = `
-<v-checkbox-stub name="checkbox" truevalue="true" type="checkbox">
-  Remember me on this device
-</v-checkbox-stub>
-`;

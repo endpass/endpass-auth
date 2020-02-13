@@ -1,11 +1,10 @@
 <template>
   <Code
     :challenge-type="challengeType"
-    :is-loading="isLoading"
-    :error="error"
+    :is-loading.sync="isLoading"
+    :error.sync="error"
     :email="email"
     @recover="onRecover"
-    @send-code="sendCode"
     @submit="onSubmit"
   />
 </template>
@@ -14,7 +13,6 @@
 import Code from '@/components/modules/Code';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
-import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'CodeInteractor',
@@ -75,34 +73,9 @@ export default {
       }
     },
 
-    async sendCode() {
-      if (this.isLoading) return;
-
-      try {
-        this.isLoading = true;
-        this.error = '';
-
-        await this.$options.authStore.sendCode({ email: this.email });
-      } catch (error) {
-        this.error = this.$i18n.t('components.code.sendError');
-      } finally {
-        this.isLoading = false;
-      }
-    },
-
     onRecover() {
-      if (this.isLoading) return;
-
       this.$emit('recover');
     },
-  },
-
-  mounted() {
-    if (this.challengeType === CHALLENGE_TYPES.APP_OTP) {
-      return;
-    }
-
-    this.sendCode();
   },
 
   components: {

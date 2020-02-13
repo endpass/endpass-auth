@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`AppCodeInterface render should correctly render component 1`] = `<app-code-stub email="" password=""></app-code-stub>`;
-
-exports[`AppCodeInterface render should render otp form 1`] = `<app-code-stub email="" password=""></app-code-stub>`;
