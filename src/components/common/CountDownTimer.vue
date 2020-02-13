@@ -29,7 +29,7 @@ export default {
     },
 
     isRequestTimerRunning() {
-      return this.$timer.request.isRunning;
+      return this.timers.request.isRunning;
     },
   },
 
