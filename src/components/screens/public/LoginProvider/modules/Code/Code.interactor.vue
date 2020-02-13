@@ -80,7 +80,7 @@ export default {
   },
 
   mounted() {
-    if (this.challengeType === CHALLENGE_TYPES.EMAIL_OTP) {
+    if (this.challengeType === CHALLENGE_TYPES.APP_OTP) {
       return;
     }
 

@@ -94,15 +94,15 @@ export const DOCUMENT_SIDES = {
 
 /**
  * @type {{
-    EMAIL_OTP: 'password',
-    APP_OTP: 'otp',
-    SMS_OTP: 'sms',
+    EMAIL_OTP: 'EMAIL_OTP',
+    APP_OTP: 'APP_OTP',
+    SMS_OTP: 'SMS_OTP',
  * }}
  */
 export const CHALLENGE_TYPES = {
-  EMAIL_OTP: 'password',
-  APP_OTP: 'otp',
-  SMS_OTP: 'sms',
+  EMAIL_OTP: 'EMAIL_OTP',
+  APP_OTP: 'APP_OTP',
+  SMS_OTP: 'SMS_OTP',
 };
 
 /**

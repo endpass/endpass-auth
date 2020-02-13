@@ -45,7 +45,7 @@ export default {
   },
 
   data: () => ({
-    error: null,
+    error: '',
     isLoading: false,
   }),
 
@@ -55,7 +55,7 @@ export default {
 
       try {
         this.isLoading = true;
-        this.error = null;
+        this.error = '';
 
         const { email, password, isSignUp } = this;
 
@@ -80,7 +80,7 @@ export default {
 
       try {
         this.isLoading = true;
-        this.error = null;
+        this.error = '';
 
         await this.$options.authStore.sendCode({ email: this.email });
       } catch (error) {
@@ -98,7 +98,7 @@ export default {
   },
 
   mounted() {
-    if (this.challengeType === CHALLENGE_TYPES.EMAIL_OTP) {
+    if (this.challengeType === CHALLENGE_TYPES.APP_OTP) {
       return;
     }
 
