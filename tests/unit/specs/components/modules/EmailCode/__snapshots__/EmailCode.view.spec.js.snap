@@ -15,7 +15,7 @@ exports[`EmailCodeView render should correctly render component 1`] = `
     </v-button-stub>
   </form-item-stub>
   <form-row-stub class="v-fs-14 v-text-center">
-    <send-code-stub></send-code-stub>
+    <send-code-stub timeout="60000"></send-code-stub>
   </form-row-stub>
 </form>
 `;
@@ -35,7 +35,7 @@ exports[`EmailCodeView render should render form 1`] = `
     </v-button-stub>
   </form-item-stub>
   <form-row-stub class="v-fs-14 v-text-center">
-    <send-code-stub></send-code-stub>
+    <send-code-stub timeout="60000"></send-code-stub>
   </form-row-stub>
 </form>
 `;
