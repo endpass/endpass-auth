@@ -64,10 +64,6 @@ export default {
     onSubmit({ code }) {
       this.$emit('submit', { code });
     },
-
-    onCancel() {
-      this.$emit('cancel');
-    },
   },
 
   components: {

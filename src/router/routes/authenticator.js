@@ -1,5 +1,3 @@
-import { CHALLENGE_TYPES } from '@/constants';
-
 export default [
   {
     path: '/authenticator',
@@ -70,9 +68,6 @@ export default [
           import(
             /* webpackChunkName: "component-email-code" */ '@/components/modules/Code'
           ),
-        props: {
-          challengeType: CHALLENGE_TYPES.EMAIL_OTP,
-        },
 
         meta: {
           isBackground: true,
@@ -86,9 +81,6 @@ export default [
           import(
             /* webpackChunkName: "component-app-code" */ '@/components/modules/Code'
           ),
-        props: {
-          challengeType: CHALLENGE_TYPES.APP_OTP,
-        },
 
         meta: {
           isBackground: true,
@@ -102,9 +94,6 @@ export default [
           import(
             /* webpackChunkName: "component-sms-code" */ '@/components/modules/Code'
           ),
-        props: {
-          challengeType: CHALLENGE_TYPES.SMS_OTP,
-        },
 
         meta: {
           isBackground: true,

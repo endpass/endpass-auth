@@ -16,7 +16,6 @@ class AuthController extends VuexModule {
    * @param {string} password
    * @param {string} code
    * @param {boolean} isRemember
-   * @param {string} challengeType
    * @return {Promise<void>}
    */
   @Action

@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import OtpRecovery from './OtpRecovery.container';
+import OtpRecovery from './RecoveryCode.container';
 
 export default {
   props: {

@@ -26,7 +26,7 @@ import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 
 export default {
-  name: 'OtpRecoveryNoPhone',
+  name: 'NoPhone',
 
   props: {
     isLoading: {
