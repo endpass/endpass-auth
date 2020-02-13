@@ -3,6 +3,7 @@
     :challenge-type="challengeType"
     :is-loading="isLoading"
     :email="email"
+    :error="error"
     @send-code="onSendCode"
     @recover="onRecover"
     @submit="onSubmit"

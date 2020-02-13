@@ -33,12 +33,12 @@ export default {
   },
 
   methods: {
-    onComplete() {
-      this.$emit('complete');
+    onComplete({ redirect }) {
+      this.$emit('complete', { redirect });
     },
 
     onRecover() {
-      this.$emit('switch', { to: 'recovery-code' });
+      this.$emit('recover');
     },
   },
 

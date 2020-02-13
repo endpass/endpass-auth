@@ -11,7 +11,7 @@
         :is-loading="isLoading"
         :login-challenge="loginChallenge"
         :challenge-type="challengeType"
-        @code="onCode"
+        @complete="onComplete"
       />
     </v-frame>
   </loading-screen>
@@ -23,7 +23,6 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import { authStore, accountsStore, coreStore } from '@/store';
 import LoginProvider from './LoginProvider.container';
-import createLoginController from './LoginController';
 
 export default {
   name: 'LoginProviderInteractor',
@@ -31,7 +30,6 @@ export default {
   accountsStore,
   authStore,
   coreStore,
-  loginController: createLoginController(),
 
   data: () => ({
     loginChallenge: null,
@@ -64,16 +62,8 @@ export default {
       this.$options.coreStore.dialogClose();
     },
 
-    async onCode({ code }) {
-      try {
-        this.isLoading = true;
-        await this.$options.loginController.authLoginChallenge({
-          challengeId: this.loginChallenge,
-          code,
-        });
-      } finally {
-        this.isLoading = false;
-      }
+    onComplete({ redirect }) {
+      window.location.href = redirect;
     },
   },
 

@@ -14,25 +14,20 @@
 
 <script>
 import RecoveryCode from '@/components/modules/RecoveryCode';
-import Code from '@/components/modules/Code';
+import Code from './modules/Code';
 import Error from './modules/Error';
 import NoChallenge from './modules/NoChallenge';
 
-import Message from '@/components/common/Message';
 import { accountsStore } from '@/store';
-import CodeForm from '@/components/forms/Code';
-import createLoginController from './LoginController';
 
 export default {
   name: 'LoginProviderContainer',
   accountsStore,
 
-  loginController: createLoginController(),
-
   props: {
     error: {
       type: String,
-      required: true,
+      default: '',
     },
 
     isLoading: {
@@ -79,8 +74,8 @@ export default {
   },
 
   methods: {
-    onComplete({ code }) {
-      this.$emit('code', { code });
+    onComplete({ redirect }) {
+      this.$emit('compete', { redirect });
     },
 
     onRecover() {
@@ -94,11 +89,6 @@ export default {
     onRecoveryCancel() {
       this.isRecovering = false;
     },
-  },
-
-  components: {
-    CodeForm,
-    Message,
   },
 };
 </script>

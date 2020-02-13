@@ -6,11 +6,12 @@ import permissionsService from '@/service/permissions';
 class LoginController extends VuexModule {
   @Action
   async authLoginChallenge({ challengeId, code }) {
-    const { redirect } = await permissionsService.login({
+    const data = await permissionsService.login({
       challengeId,
       code,
     });
-    window.location.href = redirect;
+
+    return data;
   }
 }
 
