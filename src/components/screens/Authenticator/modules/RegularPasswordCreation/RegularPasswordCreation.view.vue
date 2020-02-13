@@ -92,12 +92,10 @@ export default {
       type: String,
       default: null,
     },
-
     isLoading: {
       type: Boolean,
       default: false,
     },
-
     error: {
       type: String,
       default: '',

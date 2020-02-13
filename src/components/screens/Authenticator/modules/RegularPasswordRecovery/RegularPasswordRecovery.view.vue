@@ -96,12 +96,10 @@ export default {
       type: String,
       required: true,
     },
-
     isLoading: {
       type: Boolean,
       default: false,
     },
-
     error: {
       type: String,
       default: '',

@@ -1,12 +1,15 @@
 {
   "components": {
-    "account": {
-      "activeNet": "Active network",
-      "address": "Active account address",
-      "donationError": "Something went wrong. Try request donation later!",
-      "requestEth": "Request 1 ETH from faucet",
-      "requestEthLoading": "Loading...",
-      "updateAccount": "Update account"
+    "gitAuthButton": {
+      "authWithGitHub": "GitHub"
+    },
+    "googleAuthButton": {
+      "authWithGoogle": "Google"
+    },
+    "serverModeSelect": {
+      "identityServer": "Select Identity Server",
+      "customIdentityServer": "Custom Identity Server",
+      "example": "Example"
     },
     "auth": {
       "and": "and",
@@ -134,7 +137,8 @@
     },
     "sendCode": {
       "didntGetCode": "Didn't get the code?",
-      "sendTitle": "Resend code"
+      "sendTitle": "Resend code",
+      "youCanRequestCodeAfter": "You can request a new code in {seconds} seconds"
     },
     "serverModeSelect": {
       "customIdentityServer": "Custom Identity Server",

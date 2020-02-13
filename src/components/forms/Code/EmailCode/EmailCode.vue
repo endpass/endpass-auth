@@ -20,7 +20,7 @@
     </form-item>
     <form-item class="v-mb-24">
       <v-button
-        :disabled="!isFormValid || isLoading"
+        :disabled="isSubmitDisabled"
         :is-loading="isLoading"
         type="submit"
         data-test="submit-button"
@@ -58,17 +58,14 @@ export default {
       type: String,
       required: true,
     },
-
     password: {
       type: String,
       required: true,
     },
-
     isSignUp: {
       type: Boolean,
       required: true,
     },
-
     submitHandler: {
       type: Function,
       required: true,
@@ -80,6 +77,12 @@ export default {
     error: null,
     isLoading: false,
   }),
+
+  computed: {
+    isSubmitDisabled() {
+      return !this.isFormValid || this.isLoading;
+    },
+  },
 
   methods: {
     async onSubmit() {
