@@ -172,6 +172,4 @@ export const AUTH_STATUS_CODE = {
   NEED_PERMISSION: 'NEED_PERMISSION',
 };
 
-export const DEFAULT_SEND_CODE_TIMEOUT = 60000;
-
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
