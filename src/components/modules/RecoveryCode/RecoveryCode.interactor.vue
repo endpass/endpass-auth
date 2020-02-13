@@ -69,7 +69,7 @@ export default {
           code,
         });
 
-        this.$emit('otp-recovered');
+        this.$emit('recovered');
       } catch (err) {
         this.error = this.$i18n.t('components.recoverOtpSms.recoverError');
       } finally {
@@ -78,7 +78,7 @@ export default {
     },
 
     onCancel() {
-      this.$emit('cancel');
+      this.$emit('recovery-cancel');
     },
   },
 

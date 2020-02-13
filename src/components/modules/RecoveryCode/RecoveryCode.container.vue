@@ -49,7 +49,7 @@ export default {
     },
 
     onCancel() {
-      this.$emit('cancel');
+      this.$emit('recovery-cancel');
     },
   },
 

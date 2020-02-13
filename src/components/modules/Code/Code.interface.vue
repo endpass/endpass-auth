@@ -1,21 +1,31 @@
 <template>
   <Code
     :challenge-type="challengeType"
+    :is-loading="isLoading"
     :email="email"
-    :password="password"
-    :is-sign-up="isSignUp"
-    @auth="onAuth"
+    @send-code="onSendCode"
     @recover="onRecover"
+    @submit="onSubmit"
   />
 </template>
 
 <script>
-import Code from './Code.interactor';
+import Code from './Code.container';
 
 export default {
   name: 'CodeInterface',
 
   props: {
+    isLoading: {
+      type: Boolean,
+      default: false,
+    },
+
+    error: {
+      type: String,
+      default: '',
+    },
+
     challengeType: {
       type: String,
       required: true,
@@ -25,25 +35,19 @@ export default {
       type: String,
       required: true,
     },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    isSignUp: {
-      type: Boolean,
-      required: true,
-    },
   },
 
   methods: {
-    onAuth() {
-      this.$emit('complete');
+    onSendCode() {
+      this.$emit('send-code');
     },
 
     onRecover() {
       this.$emit('recover');
+    },
+
+    onSubmit({ code }) {
+      this.$emit('submit', { code });
     },
   },
 

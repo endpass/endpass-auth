@@ -1,8 +1,8 @@
 <template>
   <recovery-code
     :email="email"
-    @otp-recovered="onRecovered"
-    @cancel="onCancel"
+    @recovered="onRecovered"
+    @recovery-cancel="onCancel"
   />
 </template>
 

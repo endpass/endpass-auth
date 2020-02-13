@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Code from './Code.container';
+import Code from '@/components/modules/Code';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
 import { CHALLENGE_TYPES } from '@/constants';
@@ -67,7 +67,7 @@ export default {
           isRemember,
         });
 
-        this.$emit('auth');
+        this.$emit('complete');
       } catch (err) {
         this.error = this.$i18n.t('components.code.authFailed');
       } finally {

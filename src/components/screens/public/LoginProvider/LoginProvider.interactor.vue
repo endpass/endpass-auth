@@ -1,21 +1,17 @@
 <template>
-  <loading-screen :is-loading="isLoading">
+  <loading-screen :is-loading="isLoadingChallenge">
     <v-frame
       title=""
       :is-closable="$options.coreStore.isDialog"
       @close="onClose"
     >
-      <message
-        v-if="error"
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
-      <login-provider-code
-        v-else
+      <login-provider
+        :error="error"
         :email="currentUserEmail"
+        :is-loading="isLoading"
         :login-challenge="loginChallenge"
+        :challenge-type="challengeType"
+        @code="onCode"
       />
     </v-frame>
   </loading-screen>
@@ -24,22 +20,24 @@
 <script>
 import get from 'lodash/get';
 import LoadingScreen from '@/components/common/LoadingScreen';
-import LoginProviderCode from './LoginProviderCode';
 import VFrame from '@/components/common/VFrame';
-import Message from '@/components/common/Message';
 import { authStore, accountsStore, coreStore } from '@/store';
+import LoginProvider from './LoginProvider.container';
+import createLoginController from './LoginController';
 
 export default {
-  name: 'LoginProvider',
+  name: 'LoginProviderInteractor',
 
   accountsStore,
   authStore,
   coreStore,
+  loginController: createLoginController(),
 
   data: () => ({
     loginChallenge: null,
-    error: null,
-    isLoading: true,
+    error: '',
+    isLoading: false,
+    isLoadingChallenge: true,
   }),
 
   computed: {
@@ -54,6 +52,10 @@ export default {
     currentUserEmail() {
       return get(this.settings, 'email');
     },
+
+    challengeType() {
+      return this.$options.accountsStore.challengeType;
+    },
   },
 
   methods: {
@@ -61,10 +63,22 @@ export default {
       this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
+
+    async onCode({ code }) {
+      try {
+        this.isLoading = true;
+        await this.$options.loginController.authLoginChallenge({
+          challengeId: this.loginChallenge,
+          code,
+        });
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 
   async mounted() {
-    this.isLoading = true;
+    this.isLoadingChallenge = true;
     this.error = null;
 
     const { query } = this.$route;
@@ -72,7 +86,7 @@ export default {
 
     this.loginChallenge = loginChallenge;
     if (!loginChallenge) {
-      this.isLoading = false;
+      this.isLoadingChallenge = false;
       return;
     }
 
@@ -101,14 +115,13 @@ export default {
     } catch (e) {
       this.error = this.$i18n.t('components.loginProvider.notWorkingError');
     }
-    this.isLoading = false;
+    this.isLoadingChallenge = false;
   },
 
   components: {
+    LoginProvider,
     LoadingScreen,
-    LoginProviderCode,
     VFrame,
-    Message,
   },
 };
 </script>

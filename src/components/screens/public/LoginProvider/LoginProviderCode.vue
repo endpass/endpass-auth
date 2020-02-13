@@ -53,6 +53,10 @@ export default {
     isOtp() {
       return this.$options.accountsStore.isAppOtp;
     },
+
+    challengeType() {
+      return this.$options.accountsStore.challengeType;
+    },
   },
 
   methods: {

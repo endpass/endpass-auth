@@ -5,7 +5,7 @@ import permissionsService from '@/service/permissions';
 @Module({ generateMutationSetters: true })
 class LoginController extends VuexModule {
   @Action
-  async authWithCode({ challengeId, code }) {
+  async authLoginChallenge({ challengeId, code }) {
     const { redirect } = await permissionsService.login({
       challengeId,
       code,

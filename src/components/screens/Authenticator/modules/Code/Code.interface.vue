@@ -1,6 +1,9 @@
 <template>
   <Code
-    v-bind="$attrs"
+    :challenge-type="challengeType"
+    :email="email"
+    :password="password"
+    :is-sign-up="isSignUp"
     @complete="onComplete"
     @recover="onRecover"
   />
