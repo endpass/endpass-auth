@@ -2,9 +2,9 @@
 
 exports[`RateLimit render should render rate limit 1`] = `
 <screen-stub>
-  <v-frame-stub title="The&nbsp;rate limit exceeded!">
+  <v-frame-stub title="The rate limit exceeded!">
     <div data-test="rate-limit-body" class="v-rate-limit-body">
-      Too many requests from your&nbsp;IP&nbsp;address, please wait some time and try again.
+      Too many requests from your IP address, please wait some time and try again.
       <div class="v-rate-limit-timeout">
         10
       </div>

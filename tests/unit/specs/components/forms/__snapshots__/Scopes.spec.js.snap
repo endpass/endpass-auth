@@ -4,7 +4,7 @@ exports[`Scopes render should correctly render component 1`] = `
 <form>
   <form-field-stub>
     <v-description-stub>
-      Application requests following scopes. Press the&nbsp;"Allow" button to&nbsp;grant these permissions.
+      Application requests following scopes. Press the "Allow" button to grant these permissions.
     </v-description-stub>
   </form-field-stub>
   <div class="form-field v-mb-24"></div>
@@ -20,7 +20,7 @@ exports[`Scopes render should render checkboxes with given scopes 1`] = `
 <form>
   <form-field-stub>
     <v-description-stub>
-      Application requests following scopes. Press the&nbsp;"Allow" button to&nbsp;grant these permissions.
+      Application requests following scopes. Press the "Allow" button to grant these permissions.
     </v-description-stub>
   </form-field-stub>
   <div class="form-field v-mb-24">
