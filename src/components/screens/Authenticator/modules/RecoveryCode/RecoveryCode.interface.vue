@@ -1,16 +1,23 @@
 <template>
-  <otp-recovery
-    v-bind="$attrs"
+  <recovery-code
+    :email="email"
     @otp-recovered="onRecovered"
     @cancel="onCancel"
   />
 </template>
 
 <script>
-import OtpRecovery from './RecoveryCode.interactor';
+import RecoveryCode from '@/components/modules/RecoveryCode';
 
 export default {
-  name: 'OtpRecoveryInterface',
+  name: 'RecoveryCodeInterface',
+
+  props: {
+    email: {
+      type: String,
+      default: '',
+    },
+  },
 
   methods: {
     onRecovered() {
@@ -23,7 +30,7 @@ export default {
   },
 
   components: {
-    OtpRecovery,
+    RecoveryCode,
   },
 };
 </script>

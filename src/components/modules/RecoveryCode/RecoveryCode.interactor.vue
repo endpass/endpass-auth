@@ -1,6 +1,5 @@
 <template>
-  <otp-recovery
-    v-bind="$attrs"
+  <recovery-code
     :is-loading="isLoading"
     :error="error"
     :is-phone-exist="isPhoneExist"
@@ -11,12 +10,12 @@
 </template>
 
 <script>
-import OtpRecovery from '@/components/modules/RecoveryCode';
+import RecoveryCode from './RecoveryCode.container';
 import { authStore } from '@/store';
 import createRecoverController from './RecoveryController';
 
 export default {
-  name: 'OtpRecoveryInteractor',
+  name: 'RecoveryCodeInteractor',
 
   authStore,
   recoverController: createRecoverController(),
@@ -88,7 +87,7 @@ export default {
   },
 
   components: {
-    OtpRecovery,
+    RecoveryCode,
   },
 };
 </script>

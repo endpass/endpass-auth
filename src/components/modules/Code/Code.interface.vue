@@ -5,6 +5,7 @@
     :password="password"
     :is-sign-up="isSignUp"
     @auth="onAuth"
+    @recover="onRecover"
   />
 </template>
 
@@ -39,6 +40,10 @@ export default {
   methods: {
     onAuth() {
       this.$emit('complete');
+    },
+
+    onRecover() {
+      this.$emit('recover');
     },
   },
 

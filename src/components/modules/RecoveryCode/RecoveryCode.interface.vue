@@ -1,41 +1,25 @@
 <template>
-  <otp-recovery
-    :is-loading="isLoading"
-    :error="error"
-    @send-code="onSendCode"
-    @submit="onSubmit"
+  <recovery-code
+    :email="email"
+    @otp-recovered="onRecovered"
     @cancel="onCancel"
   />
 </template>
 
 <script>
-import OtpRecovery from './RecoveryCode.container';
+import RecoveryCode from './RecoveryCode.interactor';
 
 export default {
   props: {
-    isLoading: {
-      type: Boolean,
-      default: false,
-    },
-
-    error: {
+    email: {
       type: String,
       default: '',
-    },
-
-    isPhoneExist: {
-      type: Boolean,
-      default: true,
     },
   },
 
   methods: {
-    onSendCode() {
-      this.$emit('send-code');
-    },
-
-    onSubmit({ code }) {
-      this.$emit('submit', { code });
+    onRecovered() {
+      this.$emit('recovered');
     },
 
     onCancel() {
@@ -44,7 +28,7 @@ export default {
   },
 
   components: {
-    OtpRecovery,
+    RecoveryCode,
   },
 };
 </script>
