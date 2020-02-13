@@ -61,8 +61,8 @@ export default {
           this.openRoute('RegularPasswordRecovery');
           break;
 
-        case to === 'otp-recovery':
-          this.openRoute('OtpRecovery');
+        case to === 'recovery-code':
+          this.openRoute('RecoveryCode');
           break;
 
         case to === 'regular-password':

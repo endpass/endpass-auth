@@ -33,7 +33,7 @@ export default {
 
     isSignUp: {
       type: Boolean,
-      default: false,
+      required: true,
     },
   },
 

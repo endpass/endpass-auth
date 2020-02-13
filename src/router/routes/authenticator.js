@@ -66,7 +66,7 @@ export default [
         name: 'EmailCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-email-code" */ '@/components/modules/Code'
+            /* webpackChunkName: "component-email-code" */ '@/components/screens/Authenticator/modules/Code'
           ),
 
         meta: {
@@ -79,7 +79,7 @@ export default [
         name: 'AppCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-app-code" */ '@/components/modules/Code'
+            /* webpackChunkName: "component-app-code" */ '@/components/screens/Authenticator/modules/Code'
           ),
 
         meta: {
@@ -92,7 +92,7 @@ export default [
         name: 'SmsCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-sms-code" */ '@/components/modules/Code'
+            /* webpackChunkName: "component-sms-code" */ '@/components/screens/Authenticator/modules/Code'
           ),
 
         meta: {
@@ -101,11 +101,11 @@ export default [
       },
 
       {
-        path: 'otp-recovery',
-        name: 'OtpRecovery',
+        path: 'recovery-code',
+        name: 'RecoveryCode',
         component: () =>
           import(
-            /* webpackChunkName: "component-otp-recovery" */ '@/components/screens/Authenticator/modules/RecoveryCode'
+            /* webpackChunkName: "component-recovery-code" */ '@/components/screens/Authenticator/modules/RecoveryCode'
           ),
 
         meta: {
