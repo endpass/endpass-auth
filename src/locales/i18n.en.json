@@ -1,15 +1,12 @@
 {
   "components": {
-    "gitAuthButton": {
-      "authWithGitHub": "GitHub"
-    },
-    "googleAuthButton": {
-      "authWithGoogle": "Google"
-    },
-    "serverModeSelect": {
-      "identityServer": "Select Identity Server",
-      "customIdentityServer": "Custom Identity Server",
-      "example": "Example"
+    "account": {
+      "activeNet": "Active network",
+      "address": "Active account address",
+      "donationError": "Something went wrong. Try request donation later!",
+      "requestEth": "Request 1 ETH from faucet",
+      "requestEthLoading": "Loading...",
+      "updateAccount": "Update account"
     },
     "auth": {
       "and": "and",
@@ -17,35 +14,35 @@
       "dontHaveAccount": "Don't have an account?",
       "enterEmail": "Enter your email...",
       "haveAccount": "Already have an account?",
-      "iAccept": "By continuing, you agree to Endpass's",
-      "loginToContinue": "Log in to your Endpass account to access site actions",
+      "iAccept": "By continuing, you agree to Endpass's",
+      "loginToContinue": "Log in to your Endpass account to access site actions",
       "orRegisterWith": "or register with",
       "orSignInWith": "or sign in with",
       "password": "Enter password...",
-      "privacyPolicy": "Privacy Policy",
+      "privacyPolicy": "Privacy Policy",
       "signIn": "Sign in",
       "signUp": "Sign up",
-      "signUpToContinue": "Sign up to your Endpass account to access site actions",
-      "termsOfService": "Terms of Service"
+      "signUpToContinue": "Sign up to your Endpass account to access site actions",
+      "termsOfService": "Terms of Service"
     },
     "compositeAuth": {
       "authFailed": "Authentication failed. Please, try again."
     },
     "consentProvider": {
-      "loadScopesError": "Something went wrong while loading scopes.",
+      "loadScopesError": "Something went wrong while loading scopes.",
       "scopesRequired": "Scopes are required for make a request",
       "title": "Permissions",
-      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"
+      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"
     },
     "createPassword": {
-      "confirmError": "Something went wrong while creating a password. Please, try again",
-      "description": "You have no regular password for the Endpass account. This password for login only.",
+      "confirmError": "Something went wrong while creating a password. Please, try again",
+      "description": "You have no regular password for the Endpass account. This password for login only.",
       "labelCode": "Code from email",
       "labelCodeEmail": "Code from: {email}",
       "newPassword": "Enter new password...",
       "placeholderCode": "Enter received code...",
       "repeatPassword": "Repeat new password...",
-      "sendError": "Something went wrong while sending the code. Please, try again",
+      "sendError": "Something went wrong while sending the code. Please, try again",
       "title": "Create regular password"
     },
     "createWallet": {
@@ -55,15 +52,15 @@
       "enterPass": "Enter password...",
       "error": "Something went wrong while creating the new Wallet",
       "passwordCreate": "Create wallet password",
-      "passwordDescription": "Please define password for your wallet account. This password must <span class='v-fw-b'>NOT</span> be equal with the regular password",
-      "recoverySubtitle": "The words below are called your Seed Phrase. It enables you accessing your Endpass and restore your wallet. Notice that the order of the words is significant, and it is recognized while checking.",
+      "passwordDescription": "Please define password for your wallet account. This password must <span class='v-fw-b'>NOT</span> be equal with the regular password",
+      "recoverySubtitle": "The words below are called your Seed Phrase. It enables you accessing your Endpass and restore your wallet. Notice that the order of the words is significant, and it is recognized while checking.",
       "recoveryTitle": "Write your Seed Phrase below",
-      "seedConfirmation": "Yes, I've written down the words and stored them in a secure place."
+      "seedConfirmation": "Yes, I've written down the words and stored them in a secure place."
     },
     "emailCode": {
-      "description": "We've just emailed a 6-digit code to <span class='v-fw-b'>{email}</span>. Enter the code below to confirm.",
+      "description": "We've just emailed a 6-digit code to <span class='v-fw-b'>{email}</span>. Enter the code below to confirm.",
       "placeholder": "Enter received code...",
-      "sendError": "Something went wrong while sending the code. Please, try again",
+      "sendError": "Something went wrong while sending the code. Please, try again",
       "title": "Verify email"
     },
     "gitAuthButton": {
@@ -73,49 +70,49 @@
       "authWithGoogle": "Google"
     },
     "loginProvider": {
-      "notWorkingError": "Sorry, the login provider is temporarily not working."
+      "notWorkingError": "Sorry, the login provider is temporarily not working."
     },
     "loginProviderPassword": {
-      "loginChallenge": "Please, add the 'login_challenge' param in URL, and try again!"
+      "loginChallenge": "Please, add the 'login_challenge' param in URL, and try again!"
     },
-    "notFound": "Oops, the page what are you looking for is not found.",
+    "notFound": "Oops, the page what are you looking for is not found.",
     "otp": {
-      "description": "Enter the 6 digit code generated by your authenticator app.",
+      "description": "Enter the 6 digit code generated by your authenticator app.",
       "enterReceivedCode": "Enter received code...",
-      "noCode": "Don't know the code?",
+      "noCode": "Don't know the code?",
       "title": "Verify OTP code"
     },
     "otpBlock": {
       "authFailed": "Authentication failed. Please, try again"
     },
     "passwordForm": {
-      "applyConnectTo": "Please apply connect to",
+      "applyConnectTo": "Please apply connect to",
       "enterPassword": "Enter your password...",
       "regularPassword": "Your regular password:"
     },
     "rateLimit": {
-      "title": "The rate limit exceeded!",
-      "toMuch": "Too many requests from your IP address, please wait some time and try again."
+      "title": "The rate limit exceeded!",
+      "toMuch": "Too many requests from your IP address, please wait some time and try again."
     },
     "recoverOtpSms": {
       "recoverError": "Something went wrong. Please try again",
-      "sendSmsError": "Something went wrong while sending SMS. Please try again",
+      "sendSmsError": "Something went wrong while sending SMS. Please try again",
       "sendTitle": "Resend code",
       "title": "Disable OTP setting via SMS",
-      "titlePhoneNotExist": "You don't have the registered phone number"
+      "titlePhoneNotExist": "You don't have the registered phone number"
     },
     "regularPasswordForm": {
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?",
-      "title": "Log in to your Endpass account to access site actions"
+      "title": "Log in to your Endpass account to access site actions"
     },
     "regularPasswordRecover": {
       "labelCode": "Code from email",
       "newPassword": "Enter new password...",
       "placeholderCode": "Enter received code...",
-      "recoveryError": "Something went wrong while password recovering. Please, try again",
+      "recoveryError": "Something went wrong while password recovering. Please, try again",
       "repeatPassword": "Repeat new password...",
-      "sendError": "Something went wrong while sending the code. Please, try again",
+      "sendError": "Something went wrong while sending the code. Please, try again",
       "title": "Change password"
     },
     "rememberCheckbox": {
@@ -123,7 +120,7 @@
     },
     "scopes": {
       "address": "Read address",
-      "allowScopes": "Application requests following scopes. Press the \"Allow\" button to grant these permissions.",
+      "allowScopes": "Application requests following scopes. Press the \"Allow\" button to grant these permissions.",
       "content": "Read document content",
       "documents": "Read all documents",
       "email": "Read email",
@@ -184,11 +181,11 @@
       "uploading": "Uploading"
     },
     "user": {
-      "donationSuccess": "A donation request is successfully sent. In general, it takes some time before you will receive funds."
+      "donationSuccess": "A donation request is successfully sent. In general, it takes some time before you will receive funds."
     },
     "walletCreateError": {
       "check": "check again",
-      "error": "Something went wrong while trying to check Wallet existence"
+      "error": "Something went wrong while trying to check Wallet existence"
     },
     "widgetContent": {
       "newAccount": "New account"
@@ -230,29 +227,29 @@
   },
   "services": {
     "mode": {
-      "notLogged": "You are not logged in at your identity server. Please, log in with your identity provider, come back to this page, and try again.",
-      "serverInvalid": "The URL you've entered does not point to a valid identity server. Please, check the address and try again."
+      "notLogged": "You are not logged in at your identity server. Please, log in with your identity provider, come back to this page, and try again.",
+      "serverInvalid": "The URL you've entered does not point to a valid identity server. Please, check the address and try again."
     },
     "signer": {
-      "typedData": "Sign typed data is not supported yet!"
+      "typedData": "Sign typed data is not supported yet!"
     },
     "wallet": {
-      "addressIncorrect": "{address} is not valid Etherium address!"
+      "addressIncorrect": "{address} is not valid Etherium address!"
     }
   },
   "store": {
     "auth": {
-      "authCanceled": "Authentication is canceled by the user!",
+      "authCanceled": "Authentication is canceled by the user!",
       "authFailed": "Authentication failed!",
       "failedToCheckStatus": "Failed to check Oauth login status",
       "passwordIncorrect": "Password is incorrect"
     },
     "error": {
       "uploadDocument": {
-        "confirm": "Something went wrong while document recognition. Please try again.",
-        "default": "Something went wrong while file uploading.",
+        "confirm": "Something went wrong while document recognition. Please try again.",
+        "default": "Something went wrong while file uploading.",
         "exist": "File already exists, please upload another file.",
-        "invalidFile": "The uploaded file is broken or has an unknown format.",
+        "invalidFile": "The uploaded file is broken or has an unknown format.",
         "sizeLimit": "Maximum file size exceeded."
       },
       "wallet": {
@@ -260,8 +257,8 @@
       }
     },
     "requests": {
-      "gasTooLow": "Transaction gas is too low. Try to increase gas price or gas limit.",
-      "passIncorrect": "You've entered an incorrect password."
+      "gasTooLow": "Transaction gas is too low. Try to increase gas price or gas limit.",
+      "passIncorrect": "You've entered an incorrect password."
     }
   }
 }
