@@ -16,7 +16,7 @@ import WithPhone from './modules/WithPhone';
 import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
-  name: 'RecoveryCodeContainer',
+  name: 'RecoveryViewContainer',
 
   props: {
     isLoading: {

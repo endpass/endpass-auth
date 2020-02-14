@@ -1,1 +1,1 @@
-export { default } from './LoginProvider.interface';
+export { default } from './Provider.interface';

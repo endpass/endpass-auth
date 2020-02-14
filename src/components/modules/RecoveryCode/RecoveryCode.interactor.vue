@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import RecoveryCode from './RecoveryCode.container';
+import RecoveryCode from './modules/RecoveryView';
 import { authStore } from '@/store';
 import createRecoverController from './RecoveryController';
 

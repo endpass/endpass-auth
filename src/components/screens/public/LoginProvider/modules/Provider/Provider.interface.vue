@@ -1,5 +1,5 @@
 <template>
-  <login-provider
+  <provider
     :email="email"
     :error="error"
     :is-loading="isLoading"
@@ -10,10 +10,10 @@
 </template>
 
 <script>
-import LoginProvider from './LoginProvider.container';
+import Provider from './Provider.container';
 
 export default {
-  name: 'LoginProviderInterface',
+  name: 'ProviderInterface',
 
   props: {
     error: {
@@ -49,7 +49,7 @@ export default {
   },
 
   components: {
-    LoginProvider,
+    Provider,
   },
 };
 </script>

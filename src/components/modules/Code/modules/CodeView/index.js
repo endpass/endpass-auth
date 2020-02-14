@@ -1,1 +1,1 @@
-export { default } from './CodeView.container';
+export { default } from './CodeView.interface';

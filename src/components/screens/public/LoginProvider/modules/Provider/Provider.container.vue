@@ -21,7 +21,7 @@ import NoChallenge from './modules/NoChallenge';
 import { accountsStore } from '@/store';
 
 export default {
-  name: 'LoginProviderContainer',
+  name: 'ProviderContainer',
   accountsStore,
 
   props: {
