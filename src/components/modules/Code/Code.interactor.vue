@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import Code from './Code.container';
+import Code from './modules/CodeView';
 import { authStore } from '@/store';
 import { CHALLENGE_TYPES } from '@/constants';
 

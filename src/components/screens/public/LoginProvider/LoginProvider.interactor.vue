@@ -22,7 +22,7 @@ import get from 'lodash/get';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import { authStore, accountsStore, coreStore } from '@/store';
-import LoginProvider from './LoginProvider.container';
+import LoginProvider from './modules/Provider';
 
 export default {
   name: 'LoginProviderInteractor',

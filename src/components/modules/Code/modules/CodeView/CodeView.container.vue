@@ -10,9 +10,9 @@
   />
 </template>
 <script>
-import AppCode from './AppCode';
-import EmailCode from './EmailCode';
-import SmsCode from './SmsCode';
+import AppCode from './modules/AppCode';
+import EmailCode from './modules/EmailCode';
+import SmsCode from './modules/SmsCode';
 import { CHALLENGE_TYPES } from '@/constants';
 
 const COMPONENT_BY_TYPE = {
