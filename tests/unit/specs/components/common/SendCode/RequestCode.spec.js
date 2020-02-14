@@ -37,15 +37,14 @@ describe('SendCode / RequestCodeLayout', () => {
   });
 
   describe('behavior', () => {
-    it('should emit by click on link', async () => {
-      expect.assertions(2);
+    it('should emit `send-code` by click on link', async () => {
+      expect.assertions(1);
 
       await global.flushPromises();
 
       wrapper.find('[data-test=send-code]').vm.$emit('click', createPrevent());
 
-      expect(wrapper.emitted('click')).toBeTruthy();
-      expect(wrapper.emitted('update:is-locked')).toBeTruthy();
+      expect(wrapper.emitted('send-code')).toBeTruthy();
     });
   });
 });

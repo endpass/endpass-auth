@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'CodeRequested',
+  name: 'CountLabel',
 
   props: {
     counter: {

@@ -48,7 +48,7 @@ describe('SendCode', () => {
 
       await global.flushPromises();
 
-      expect(wrapper.find('coderequested-stub').exists()).toBeTruthy();
+      expect(wrapper.find('countlabel-stub').exists()).toBeTruthy();
     });
   });
 });

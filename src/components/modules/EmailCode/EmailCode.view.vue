@@ -34,7 +34,7 @@
     <form-row class="v-fs-14 v-text-center">
       <send-code
         :is-loading="isLoading"
-        @click="sendCode"
+        @send-code="onSendCode"
       />
     </form-row>
   </form>
@@ -100,7 +100,7 @@ export default {
       this.$emit('submit', { code: this.code });
     },
 
-    sendCode() {
+    onSendCode() {
       this.$emit('send-code');
     },
   },

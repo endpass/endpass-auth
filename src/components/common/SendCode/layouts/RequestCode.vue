@@ -27,8 +27,7 @@ export default {
 
   methods: {
     onClick() {
-      this.$emit('update:is-locked', true);
-      this.$emit('click');
+      this.$emit('send-code');
     },
   },
 

@@ -3,9 +3,8 @@
     <component
       :is="codeLayout"
       :is-loading="isLoading"
-      :is-locked.sync="isLocked"
       :counter="counter"
-      v-on="$listeners"
+      @send-code="onSendCode"
     />
     <count-down-timer
       :timeout="timeout"
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-import CodeRequestedLayout from './layouts/CodeRequested';
+import CountLabelLayout from './layouts/CountLabel';
 import RequestCodeLayout from './layouts/RequestCode';
 import CountDownTimer from '@/components/common/CountDownTimer';
 
@@ -42,10 +41,17 @@ export default {
   computed: {
     codeLayout() {
       if (this.isLocked) {
-        return CodeRequestedLayout;
+        return CountLabelLayout;
       }
 
       return RequestCodeLayout;
+    },
+  },
+
+  methods: {
+    onSendCode() {
+      this.isLocked = true;
+      this.$emit('send-code');
     },
   },
 

@@ -24,10 +24,6 @@ export default {
   },
 
   computed: {
-    initialCounter() {
-      return this.timeout / 1000;
-    },
-
     isRequestTimerRunning() {
       return this.timers.request.isRunning;
     },
@@ -36,10 +32,7 @@ export default {
   watch: {
     isLocked(newValue) {
       if (!newValue) {
-        if (this.isRequestTimerRunning) {
-          this.stopRequestTimer();
-        }
-
+        this.stopRequestTimer();
         return;
       }
 
@@ -49,14 +42,18 @@ export default {
 
   methods: {
     startRequestTimer() {
+      const initialCounter = this.timeout / 1000;
+
       this.$emit('update:is-locked', true);
-      this.$emit('update:counter', this.initialCounter);
+      this.$emit('update:counter', initialCounter);
       this.$timer.start('request');
     },
 
     stopRequestTimer() {
-      this.$emit('update:is-locked', false);
-      this.$timer.stop('request');
+      if (this.isRequestTimerRunning) {
+        this.$emit('update:is-locked', false);
+        this.$timer.stop('request');
+      }
     },
 
     onRequestTick() {
