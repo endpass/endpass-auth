@@ -23,12 +23,6 @@ export default {
     },
   },
 
-  computed: {
-    isRequestTimerStopped() {
-      return !this.timers.request.isRunning;
-    },
-  },
-
   watch: {
     isLocked(newValue) {
       if (!newValue) {
@@ -50,7 +44,7 @@ export default {
     },
 
     stopRequestTimer() {
-      if (this.isRequestTimerStopped) {
+      if (!this.timers.request.isRunning) {
         return;
       }
 
