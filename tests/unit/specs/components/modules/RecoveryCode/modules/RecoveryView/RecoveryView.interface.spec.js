@@ -29,7 +29,7 @@ describe('RecoveryViewInterface', () => {
     });
 
     it('should render recovery code', () => {
-      expect(wrapper.find('recovery-code-stub').exists()).toBe(true);
+      expect(wrapper.find('recovery-view-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });

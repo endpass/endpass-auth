@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import { email, code } from '@unitFixtures/auth';
+import { code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import OtpRecoveryView from '@/components/modules/RecoveryCode/RecoveryCode.container';
+import SmsCodeView from '@/components/modules/Code/modules/CodeView/modules/SmsCode/SmsCode.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -9,16 +9,17 @@ const i18n = setupI18n(localVue);
 
 localVue.use(VeeValidate);
 
-describe('OtpRecoveryView', () => {
+describe('SmsCodeView', () => {
   let wrapper;
   const createWrapper = (options, props) =>
-    shallowMount(OtpRecoveryView, {
+    shallowMount(SmsCodeView, {
       provide: {
         theme: 'default',
       },
       localVue,
       propsData: {
-        email,
+        isLoading: false,
+        error: '',
         ...props,
       },
       sync: false,
@@ -34,12 +35,12 @@ describe('OtpRecoveryView', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('OtpRecoveryView');
+      expect(wrapper.name()).toBe('SmsCodeView');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render form', () => {
-      expect(wrapper.find('[data-test=recover-otp]').exists()).toBe(true);
+      expect(wrapper.find('[data-test=sms-code-form]').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -98,62 +99,32 @@ describe('OtpRecoveryView', () => {
       });
     });
   });
-
   describe('behavior', () => {
-    describe('phone exist', () => {
-      it('should emit submit event', async () => {
-        expect.assertions(4);
+    it('should emit submit event', async () => {
+      expect.assertions(4);
 
-        expect(wrapper.emitted().submit).toBeUndefined();
+      expect(wrapper.emitted().submit).toBeUndefined();
 
-        wrapper.find('[data-test=code-input]').vm.$emit('input', code);
-        await global.flushPromises();
+      wrapper.find('[data-test=code-input]').vm.$emit('input', code);
+      await global.flushPromises();
 
-        expect(
-          wrapper.find('[data-test=submit-button]').attributes().disabled,
-        ).toBeUndefined();
+      expect(
+        wrapper.find('[data-test=submit-button]').attributes().disabled,
+      ).toBeUndefined();
 
-        wrapper.find('[data-test=recover-otp]').trigger('submit');
+      wrapper.find('[data-test=sms-code-form]').trigger('submit');
 
-        expect(wrapper.emitted().submit.length).toBe(1);
-        expect(wrapper.emitted().submit[0]).toEqual([{ code }]);
-      });
-
-      it('should emit send code event', () => {
-        expect(wrapper.emitted()['send-code']).toBeUndefined();
-
-        wrapper
-          .find('[data-test=recovery-link]')
-          .vm.$emit('click', { preventDefault: () => {} });
-
-        expect(wrapper.emitted()['send-code'].length).toBe(1);
-        expect(wrapper.emitted()['send-code'][0]).toEqual([]);
-      });
+      expect(wrapper.emitted().submit.length).toBe(1);
+      expect(wrapper.emitted().submit[0]).toEqual([{ code }]);
     });
 
-    describe('phone is not exist', () => {
-      beforeEach(() => {
-        wrapper = createWrapper(null, { isPhoneExist: false });
-      });
+    it('should emit send code event', () => {
+      expect(wrapper.emitted()['send-code']).toBeUndefined();
 
-      it('should show message', () => {
-        expect(wrapper.find('[data-test=phone-not-exist]').exists()).toBe(true);
-      });
+      wrapper.find('send-code-stub').vm.$emit('click');
 
-      it('should emit cancel event', () => {
-        expect.assertions(4);
-
-        expect(wrapper.emitted().cancel).toBeUndefined();
-
-        expect(
-          wrapper.find('[data-test=submit-button]').attributes().disabled,
-        ).toBeUndefined();
-
-        wrapper.find('[data-test=phone-not-exist]').trigger('submit');
-
-        expect(wrapper.emitted().cancel.length).toBe(1);
-        expect(wrapper.emitted().cancel[0]).toEqual([]);
-      });
+      expect(wrapper.emitted()['send-code'].length).toBe(1);
+      expect(wrapper.emitted()['send-code'][0]).toEqual([]);
     });
   });
 

@@ -5,7 +5,7 @@ import {
   getRecoveryIdentifierResponse,
 } from '@unitFixtures/services/identity';
 import http from '@/class/singleton/request/http';
-import { AUTH_STATUS_CODE } from '@/constants';
+import { AUTH_STATUS_CODE, CHALLENGE_TYPES } from '@/constants';
 
 const authService = require.requireActual('@/service/auth').default;
 
@@ -182,11 +182,17 @@ describe('auth service', () => {
 
       axiosMock.onPost(url).reply(200, {
         success: true,
+        challenge: {
+          challengeType: 'otp',
+        },
       });
       const res = await authService.authWithGoogle(token);
 
       expect(res).toEqual({
         success: true,
+        challenge: {
+          challengeType: CHALLENGE_TYPES.APP_OTP,
+        },
       });
     });
 
@@ -215,11 +221,17 @@ describe('auth service', () => {
 
       axiosMock.onPost(url).reply(200, {
         success: true,
+        challenge: {
+          challengeType: 'otp',
+        },
       });
       const res = await authService.authWithGitHub(code);
 
       expect(res).toEqual({
         success: true,
+        challenge: {
+          challengeType: CHALLENGE_TYPES.APP_OTP,
+        },
       });
     });
 

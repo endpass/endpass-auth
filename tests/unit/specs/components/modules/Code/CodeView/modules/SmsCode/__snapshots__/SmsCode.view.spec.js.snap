@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`SmsCodeView render should correctly render component 1`] = `
+<form data-test="sms-code-form">
+  <v-title-stub>
+    Verify SMS code
+  </v-title-stub>
+  <v-description-stub>
+    Enter the&nbsp;6&nbsp;digit code sent on your phone
+  </v-description-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
+    <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
+      Confirm
+    </v-button-stub>
+  </form-item-stub>
+  <form-row-stub class="v-fs-14 v-text-center">
+    <send-code-stub></send-code-stub>
+  </form-row-stub>
+</form>
+`;
+
+exports[`SmsCodeView render should render form 1`] = `
+<form data-test="sms-code-form">
+  <v-title-stub>
+    Verify SMS code
+  </v-title-stub>
+  <v-description-stub>
+    Enter the&nbsp;6&nbsp;digit code sent on your phone
+  </v-description-stub>
+  <form-item-stub>
+    <v-input-stub value="" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
+    <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
+      Confirm
+    </v-button-stub>
+  </form-item-stub>
+  <form-row-stub class="v-fs-14 v-text-center">
+    <send-code-stub></send-code-stub>
+  </form-row-stub>
+</form>
+`;

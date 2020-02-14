@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import EmailCodeView from '@/components/modules/Code/EmailCode/EmailCode.view';
+import EmailCodeView from '@/components/modules/Code/modules/CodeView/modules/EmailCode/EmailCode.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -19,6 +19,8 @@ describe('EmailCodeView', () => {
       localVue,
       propsData: {
         email,
+        isLoading: false,
+        error: '',
         ...props,
       },
       sync: false,

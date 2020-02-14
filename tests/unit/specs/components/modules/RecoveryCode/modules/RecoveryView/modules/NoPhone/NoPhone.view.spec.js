@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import NoPhoneView from '@/components/modules/RecoveryCode/modules/NoPhone/NoPhone.view';
+import NoPhoneView from '@/components/modules/RecoveryCode/modules/RecoveryView/modules/NoPhone/NoPhone.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
