@@ -24,8 +24,8 @@ export default {
   },
 
   computed: {
-    isRequestTimerRunning() {
-      return this.timers.request.isRunning;
+    isRequestTimerStopped() {
+      return !this.timers.request.isRunning;
     },
   },
 
@@ -50,18 +50,22 @@ export default {
     },
 
     stopRequestTimer() {
-      if (this.isRequestTimerRunning) {
-        this.$emit('update:is-locked', false);
-        this.$timer.stop('request');
+      if (this.isRequestTimerStopped) {
+        return;
       }
+
+      this.$emit('update:is-locked', false);
+      this.$timer.stop('request');
     },
 
     onRequestTick() {
-      if (this.counter === 0) {
+      const nextCounterValue = this.counter - 1;
+
+      this.$emit('update:counter', nextCounterValue);
+
+      if (nextCounterValue === 0) {
         this.stopRequestTimer();
       }
-
-      this.$emit('update:counter', this.counter - 1);
     },
   },
 

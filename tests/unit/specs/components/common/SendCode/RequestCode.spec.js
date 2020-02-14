@@ -34,6 +34,24 @@ describe('SendCode / RequestCodeLayout', () => {
     it('should correctly render component', () => {
       expect(wrapper.name()).toBe('RequestCode');
     });
+
+    it("link should be not disabled, if it's not loading", () => {
+      expect(
+        wrapper.find('[data-test=send-code]').attributes().disabled,
+      ).toBeFalsy();
+    });
+
+    it("link should be disabled, if it's loading", () => {
+      wrapper = wrapperFactory({
+        propsData: {
+          isLoading: true,
+        },
+      });
+
+      expect(
+        wrapper.find('[data-test=send-code]').attributes().disabled,
+      ).toBeTruthy();
+    });
   });
 
   describe('behavior', () => {

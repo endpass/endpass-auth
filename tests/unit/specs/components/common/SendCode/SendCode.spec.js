@@ -39,14 +39,14 @@ describe('SendCode', () => {
       expect(wrapper.find('requestcode-stub').exists()).toBeTruthy();
     });
 
-    it('should render CodeRequested layout if it locked', async () => {
+    it('should render CountLabel layout when code will sent', async () => {
       expect.assertions(1);
 
-      wrapper.setData({
-        isLocked: true,
-      });
-
       await global.flushPromises();
+
+      wrapper.find('requestcode-stub').vm.$emit('send-code');
+
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.find('countlabel-stub').exists()).toBeTruthy();
     });
