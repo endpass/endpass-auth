@@ -151,7 +151,7 @@ describe('AppCodeInteractor', () => {
           await global.flushPromises();
 
           expect(wrapper.find('app-code-stub').attributes().error).toBe(
-            i18n.t('components.otpBlock.authFailed'),
+            i18n.t('components.code.authFailed'),
           );
         });
 

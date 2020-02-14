@@ -74,6 +74,9 @@ export default {
     },
 
     onRecover() {
+      if (this.isLoading) {
+        return;
+      }
       this.$emit('recover');
     },
   },

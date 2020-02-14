@@ -1,23 +1,27 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password, code } from '@unitFixtures/auth';
-import AppCodeInteractor from '@/components/screens/Authenticator/modules/Code/AppCode/AppCode.interactor';
-import AppCodeView from '@/components/modules/Code/AppCode';
+import CodeInteractor from '@/components/screens/Authenticator/modules/Code/Code.interactor';
+import Code from '@/components/modules/Code';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
+import { CHALLENGE_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('AppCodeInteractor', () => {
+describe('CodeInteractor', () => {
   let wrapper;
+  const challengeType = CHALLENGE_TYPES.EMAIL_OTP;
+
   const createWrapper = (options, props) =>
-    shallowMount(AppCodeInteractor, {
+    shallowMount(CodeInteractor, {
       localVue,
       propsData: {
         email,
         password,
+        challengeType,
         isSignUp: false,
         ...props,
       },
@@ -34,12 +38,12 @@ describe('AppCodeInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('AppCodeInteractor');
+      expect(wrapper.name()).toBe('CodeInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render form', () => {
-      expect(wrapper.find('app-code-stub').exists()).toBe(true);
+      expect(wrapper.find('code-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -58,7 +62,7 @@ describe('AppCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(AppCodeView).vm.$emit('submit', { code });
+        wrapper.find(Code).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -74,7 +78,7 @@ describe('AppCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(AppCodeView).vm.$emit('submit', { code });
+        wrapper.find(Code).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -88,9 +92,7 @@ describe('AppCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper
-          .find(AppCodeView)
-          .vm.$emit('submit', { code, isRemember: true });
+        wrapper.find(Code).vm.$emit('submit', { code, isRemember: true });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -104,36 +106,30 @@ describe('AppCodeInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(AppCodeView).vm.$emit('submit', { code });
-        wrapper.find(AppCodeView).vm.$emit('submit', { code });
+        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(Code).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
       });
 
       describe('loading status', () => {
         it('should be false before submit', () => {
-          expect(
-            wrapper.find('app-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find('code-stub').attributes().isloading).toBeFalsy();
         });
 
         it('should be true after submit', () => {
-          wrapper.find(AppCodeView).vm.$emit('submit', { code });
+          wrapper.find(Code).vm.$emit('submit', { code });
 
-          expect(wrapper.find('app-code-stub').attributes().isloading).toBe(
-            'true',
-          );
+          expect(wrapper.find('code-stub').attributes().isloading).toBe('true');
         });
 
         it('should be false after handling submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(AppCodeView).vm.$emit('submit', { code });
+          wrapper.find(Code).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(
-            wrapper.find('app-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find('code-stub').attributes().isloading).toBeFalsy();
         });
       });
 
@@ -145,25 +141,25 @@ describe('AppCodeInteractor', () => {
         it('should pass error', async () => {
           expect.assertions(2);
 
-          expect(wrapper.find('app-code-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find('code-stub').attributes().error).toBeFalsy();
 
-          wrapper.find(AppCodeView).vm.$emit('submit', { code });
+          wrapper.find(Code).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(wrapper.find('app-code-stub').attributes().error).toBe(
-            i18n.t('components.otpBlock.authFailed'),
+          expect(wrapper.find('code-stub').attributes().error).toBe(
+            i18n.t('components.code.authFailed'),
           );
         });
 
         it('should remove error if exists before submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(AppCodeView).vm.$emit('submit', { code });
+          wrapper.find(Code).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          wrapper.find(AppCodeView).vm.$emit('submit', { code });
+          wrapper.find(Code).vm.$emit('submit', { code });
 
-          expect(wrapper.find('app-code-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find('code-stub').attributes().error).toBeFalsy();
         });
       });
     });
@@ -172,15 +168,15 @@ describe('AppCodeInteractor', () => {
       it('should emit recover event', () => {
         expect(wrapper.emitted().recover).toBeUndefined();
 
-        wrapper.find(AppCodeView).vm.$emit('recover');
+        wrapper.find(Code).vm.$emit('recover');
 
         expect(wrapper.emitted().recover.length).toBe(1);
         expect(wrapper.emitted().recover[0]).toEqual([]);
       });
 
       it('should not emit recover event while loading', () => {
-        wrapper.find(AppCodeView).vm.$emit('submit', { code });
-        wrapper.find(AppCodeView).vm.$emit('recover');
+        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(Code).vm.$emit('recover');
 
         expect(wrapper.emitted().recover).toBeUndefined();
       });
