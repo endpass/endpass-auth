@@ -33,7 +33,7 @@ export default {
   },
 
   data: () => ({
-    error: null,
+    error: '',
     isLoading: false,
   }),
 

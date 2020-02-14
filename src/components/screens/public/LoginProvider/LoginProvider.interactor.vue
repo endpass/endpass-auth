@@ -69,7 +69,7 @@ export default {
 
   async mounted() {
     this.isLoadingChallenge = true;
-    this.error = null;
+    this.error = '';
 
     const { query } = this.$route;
     const { login_challenge: loginChallenge } = query;
