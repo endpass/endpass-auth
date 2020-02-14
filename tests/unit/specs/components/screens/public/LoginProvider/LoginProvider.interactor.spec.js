@@ -1,7 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import '@mocks/window';
-import LoginProvider from '@/components/screens/public/LoginProvider';
+import LoginProviderInteractor from '@/components/screens/public/LoginProvider/LoginProvider.interactor';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
 import userService from '@/service/user';
@@ -11,14 +11,13 @@ import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import { AUTH_STATUS_CODE, METHODS } from '@/constants';
 
 const localVue = createLocalVue();
-
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('LoginProvider', () => {
+describe('LoginProviderInteractor', () => {
+  let wrapper;
   let $router;
   let $route;
-  let wrapper;
 
   const createWrapper = ({ isAuthed, ...options } = {}) => {
     const store = createStore();
@@ -30,8 +29,7 @@ describe('LoginProvider', () => {
     if (isAuthed === false) {
       authStore.updateAuthStateByStatus(AUTH_STATUS_CODE.LOGOUT);
     }
-
-    return shallowMount(LoginProvider, {
+    return shallowMount(LoginProviderInteractor, {
       authStore,
       accountsStore,
       localVue,
@@ -44,8 +42,7 @@ describe('LoginProvider', () => {
     });
   };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
+  const createRouters = () => {
     window.location.href = jest.fn();
 
     $router = {
@@ -63,19 +60,31 @@ describe('LoginProvider', () => {
         login_challenge: 'foo',
       },
     };
+  };
+
+  beforeEach(async () => {
+    jest.clearAllMocks();
+
+    createRouters();
+    wrapper = createWrapper();
+    await global.flushPromises();
   });
 
   describe('render', () => {
-    it('should correctly render LoginProvider screen', () => {
-      wrapper = createWrapper();
-
+    it('should correctly render component', () => {
+      expect(wrapper.name()).toBe('LoginProviderInteractor');
       expect(wrapper.html()).toMatchSnapshot();
-      expect(wrapper.find('[data-test=error-message]').exists()).toBe(false);
+    });
+
+    it('should render form', () => {
+      expect(wrapper.find('login-provider-stub').exists()).toBe(true);
+      expect(wrapper.html()).toMatchSnapshot();
     });
   });
 
   describe('behavior', () => {
     it('should takes query params from current location and assign error if challengeId is not in params', () => {
+      createRouters();
       wrapper = createWrapper({
         mocks: {
           $router,
@@ -85,7 +94,6 @@ describe('LoginProvider', () => {
         },
       });
 
-      expect(wrapper.find('sign-password-stub').exists()).toBe(false);
       expect($router.replace).not.toBeCalled();
     });
 
@@ -112,14 +120,19 @@ describe('LoginProvider', () => {
       });
 
       it('should show error if check oauth if fault', async () => {
-        expect.assertions(1);
+        expect.assertions(2);
 
         permissionsService.getLoginDetails.mockRejectedValueOnce('error');
 
         wrapper = createWrapper({ isAuthed: true });
+
+        expect(wrapper.find('login-provider-stub').attributes().error).toBe('');
+
         await global.flushPromises();
 
-        expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
+        expect(wrapper.find('login-provider-stub').attributes().error).toBe(
+          i18n.t('components.loginProvider.notWorkingError'),
+        );
       });
 
       it('should make redirect if skip status is truthy on received redirect url', async () => {
@@ -144,10 +157,11 @@ describe('LoginProvider', () => {
         skip: false,
       });
 
+      createRouters();
       wrapper = createWrapper({ isAuthed: true });
       await global.flushPromises();
 
-      expect(wrapper.vm.error).toBeNull();
+      expect(wrapper.find('login-provider-stub').attributes().error).toBe('');
       expect($router.replace).not.toBeCalled();
     });
 
@@ -170,6 +184,20 @@ describe('LoginProvider', () => {
       wrapper.find('v-frame-stub').vm.$emit('close');
 
       expect(bridgeMessenger.send).toBeCalledWith(METHODS.DIALOG_CLOSE);
+    });
+
+    it('should handle password submit and makes hydra login', async () => {
+      expect.assertions(1);
+
+      permissionsService.getLoginDetails.mockResolvedValueOnce({});
+
+      wrapper
+        .find('login-provider-stub')
+        .vm.$emit('complete', { redirect: 'new/path' });
+
+      await global.flushPromises();
+
+      expect(window.location.href).toBe('new/path');
     });
   });
 });
