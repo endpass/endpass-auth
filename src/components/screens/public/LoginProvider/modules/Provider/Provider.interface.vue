@@ -44,7 +44,7 @@ export default {
 
   methods: {
     onComplete({ redirect }) {
-      this.$emit('compete', { redirect });
+      this.$emit('complete', { redirect });
     },
   },
 

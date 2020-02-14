@@ -11,7 +11,7 @@
 import Code from './Code.interactor';
 
 export default {
-  name: 'CodeInterface',
+  name: 'Code',
 
   props: {
     challengeType: {

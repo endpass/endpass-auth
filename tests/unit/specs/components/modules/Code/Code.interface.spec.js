@@ -32,7 +32,7 @@ describe('CodeInterface', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render otp form', () => {
+    it('should render code form', () => {
       expect(wrapper.find('code-stub').exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProviderContainer render should correctly render component 1`] = `<code-stub challengetype="EMAIL_OTP" email="user@email.com" error=""></code-stub>`;

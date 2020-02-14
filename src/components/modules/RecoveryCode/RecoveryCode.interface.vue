@@ -10,7 +10,7 @@
 import RecoveryCode from './RecoveryCode.interactor';
 
 export default {
-  name: 'RecoveryCodeInterface',
+  name: 'RecoveryCode',
 
   props: {
     email: {

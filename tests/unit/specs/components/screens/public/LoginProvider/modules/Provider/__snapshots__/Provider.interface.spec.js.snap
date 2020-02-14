@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProviderInterface render should correctly render component 1`] = `<provider-stub error="" loginchallenge="" email="user@email.com" challengetype="EMAIL_OTP"></provider-stub>`;
+
+exports[`ProviderInterface render should render code form 1`] = `<provider-stub error="" loginchallenge="" email="user@email.com" challengetype="EMAIL_OTP"></provider-stub>`;
