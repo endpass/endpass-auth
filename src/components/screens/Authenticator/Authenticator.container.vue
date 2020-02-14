@@ -101,7 +101,7 @@ export default {
           this.openRoute('RegularPasswordCreation');
           break;
 
-        case name === 'OtpRecovery':
+        case name === 'RecoveryCode':
           this.replaceRoute('EmailCode');
           break;
 
