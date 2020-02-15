@@ -23,7 +23,7 @@ describe('RecoveryCodeInterface', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('RecoveryCodeInterface');
+      expect(wrapper.name()).toBe('AuthRecoveryCode');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

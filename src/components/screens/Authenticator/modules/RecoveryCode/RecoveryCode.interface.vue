@@ -10,7 +10,7 @@
 import RecoveryCode from '@/components/modules/RecoveryCode';
 
 export default {
-  name: 'RecoveryCodeInterface',
+  name: 'AuthRecoveryCode',
 
   props: {
     email: {
