@@ -22,7 +22,7 @@ const COMPONENT_BY_TYPE = {
 };
 
 export default {
-  name: 'CodeContainer',
+  name: 'CodeViewContainer',
 
   props: {
     isLoading: {

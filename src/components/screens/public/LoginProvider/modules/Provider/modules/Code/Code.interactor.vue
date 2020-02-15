@@ -11,19 +11,22 @@
 
 <script>
 import Code from '@/components/modules/Code';
-import { authStore } from '@/store';
 import createLoginController from './LoginController';
 
 export default {
   name: 'CodeInteractor',
 
   loginController: createLoginController(),
-  authStore,
 
   props: {
     challengeType: {
       type: String,
       required: true,
+    },
+
+    loginChallenge: {
+      type: String,
+      default: '',
     },
 
     email: {
@@ -41,6 +44,7 @@ export default {
     async onSubmit({ code }) {
       try {
         this.isLoading = true;
+        this.error = '';
         const {
           redirect,
         } = await this.$options.loginController.authLoginChallenge({

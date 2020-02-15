@@ -28,7 +28,7 @@ describe('CodeViewInterface', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('CodeInterface');
+      expect(wrapper.name()).toBe('CodeViewInterface');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

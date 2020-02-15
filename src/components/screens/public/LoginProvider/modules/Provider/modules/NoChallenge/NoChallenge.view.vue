@@ -11,7 +11,7 @@
 import Message from '@/components/common/Message';
 
 export default {
-  name: 'NoChallenge',
+  name: 'NoChallengeView',
 
   components: {
     Message,

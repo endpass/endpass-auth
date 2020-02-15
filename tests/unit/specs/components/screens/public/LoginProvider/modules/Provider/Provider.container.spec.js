@@ -2,6 +2,8 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email } from '@unitFixtures/auth';
 import ProviderContainer from '@/components/screens/public/LoginProvider/modules/Provider/Provider.container';
 import Code from '@/components/screens/public/LoginProvider/modules/Provider/modules/Code';
+import NoChallenge from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge';
+import Error from '@/components/screens/public/LoginProvider/modules/Provider/modules/Error';
 import RecoveryCode from '@/components/modules/RecoveryCode';
 import setupI18n from '@/locales/i18nSetup';
 import { CHALLENGE_TYPES } from '@/constants';
@@ -43,7 +45,7 @@ describe('ProviderContainer', () => {
     it('should render code', () => {
       wrapper = wrapperFactory();
 
-      expect(wrapper.find('code-stub').exists()).toBe(true);
+      expect(wrapper.find(Code).exists()).toBe(true);
     });
 
     it('should render error', () => {
@@ -51,7 +53,7 @@ describe('ProviderContainer', () => {
         error: 'error',
       });
 
-      expect(wrapper.find('error-stub').exists()).toBe(true);
+      expect(wrapper.find(Error).exists()).toBe(true);
     });
 
     it('should render no challenge', () => {
@@ -59,7 +61,7 @@ describe('ProviderContainer', () => {
         loginChallenge: '',
       });
 
-      expect(wrapper.find('nochallenge-stub').exists()).toBe(true);
+      expect(wrapper.find(NoChallenge).exists()).toBe(true);
     });
 
     it('should render recovery code', async () => {
@@ -71,7 +73,7 @@ describe('ProviderContainer', () => {
 
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('recoverycode-stub').exists()).toBe(true);
+      expect(wrapper.find(RecoveryCode).exists()).toBe(true);
     });
 
     it('should return from recovery code', async () => {
@@ -95,7 +97,7 @@ describe('ProviderContainer', () => {
       expect(wrapper.emitted().complete).toBeUndefined();
       const redirect = 'redirect';
 
-      wrapper.find('code-stub').vm.$emit('complete', { redirect });
+      wrapper.find(Code).vm.$emit('complete', { redirect });
 
       expect(wrapper.emitted().complete.length).toBe(1);
       expect(wrapper.emitted().complete[0]).toEqual([{ redirect }]);

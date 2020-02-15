@@ -14,7 +14,7 @@
 import CodeView from './CodeView.container';
 
 export default {
-  name: 'CodeInterface',
+  name: 'CodeViewInterface',
 
   props: {
     isLoading: {

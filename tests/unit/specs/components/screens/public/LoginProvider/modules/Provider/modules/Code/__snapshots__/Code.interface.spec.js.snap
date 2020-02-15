@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CodeInterface render should correctly render component 1`] = `<code-stub challengetype="EMAIL_OTP" loginchallenge="" email="user@email.com"></code-stub>`;
+
+exports[`CodeInterface render should render code form 1`] = `<code-stub challengetype="EMAIL_OTP" loginchallenge="" email="user@email.com"></code-stub>`;

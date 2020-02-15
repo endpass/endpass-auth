@@ -2,6 +2,7 @@
   <Code
     :challenge-type="challengeType"
     :email="email"
+    :login-challenge="loginChallenge"
     @complete="onComplete"
     @recover="onRecover"
   />
@@ -11,12 +12,17 @@
 import Code from './Code.interactor';
 
 export default {
-  name: 'Code',
+  name: 'CodeInterface',
 
   props: {
     challengeType: {
       type: String,
       required: true,
+    },
+
+    loginChallenge: {
+      type: String,
+      default: '',
     },
 
     email: {

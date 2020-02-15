@@ -5,6 +5,7 @@
     :error="error"
     :is-loading="isLoading"
     :challenge-type="challengeType"
+    :login-challenge="loginChallenge"
     @complete="onComplete"
     @recover="onRecover"
     @recovered="onRecovered"

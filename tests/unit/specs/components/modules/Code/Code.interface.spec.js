@@ -33,7 +33,7 @@ describe('CodeInterface', () => {
     });
 
     it('should render code form', () => {
-      expect(wrapper.find('code-stub').exists()).toBe(true);
+      expect(wrapper.find(CodeInteractor).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });

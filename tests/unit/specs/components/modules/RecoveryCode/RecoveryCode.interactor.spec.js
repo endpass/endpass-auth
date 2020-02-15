@@ -35,7 +35,7 @@ describe('RecoveryCodeInteractor', () => {
     });
 
     it('should render form', () => {
-      expect(wrapper.find('recovery-code-stub').exists()).toBe(true);
+      expect(wrapper.find(RecoveryView).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -85,17 +85,15 @@ describe('RecoveryCodeInteractor', () => {
 
       describe('loading status', () => {
         it('should be false before submit', () => {
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBeFalsy();
         });
 
         it('should be true after submit', () => {
           wrapper.find(RecoveryView).vm.$emit('submit', { code });
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBe('true');
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBe(
+            'true',
+          );
         });
 
         it('should be false after handling submit', async () => {
@@ -104,9 +102,7 @@ describe('RecoveryCodeInteractor', () => {
           wrapper.find(RecoveryView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBeFalsy();
         });
       });
 
@@ -120,14 +116,12 @@ describe('RecoveryCodeInteractor', () => {
         it('should pass error', async () => {
           expect.assertions(2);
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().error,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().error).toBeFalsy();
 
           wrapper.find(RecoveryView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
+          expect(wrapper.find(RecoveryView).attributes().error).toBe(
             i18n.t('components.recoverOtpSms.recoverError'),
           );
         });
@@ -138,16 +132,12 @@ describe('RecoveryCodeInteractor', () => {
           wrapper.find(RecoveryView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().error,
-          ).toBeTruthy();
+          expect(wrapper.find(RecoveryView).attributes().error).toBeTruthy();
 
           wrapper.find(RecoveryView).vm.$emit('submit', { code });
           await global.flushPromises();
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().error,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().error).toBeFalsy();
         });
       });
     });
@@ -184,17 +174,15 @@ describe('RecoveryCodeInteractor', () => {
 
       describe('loading status', () => {
         it('should be false before sending', () => {
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBeFalsy();
         });
 
         it('should be true while sending', () => {
           wrapper.find(RecoveryView).vm.$emit('send-code');
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBe('true');
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBe(
+            'true',
+          );
         });
 
         it('should be false after sending', async () => {
@@ -203,9 +191,7 @@ describe('RecoveryCodeInteractor', () => {
           wrapper.find(RecoveryView).vm.$emit('send-code');
           await global.flushPromises();
 
-          expect(
-            wrapper.find('recovery-code-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(RecoveryView).attributes().isloading).toBeFalsy();
         });
       });
 
@@ -220,14 +206,12 @@ describe('RecoveryCodeInteractor', () => {
           it('should pass error', async () => {
             expect.assertions(2);
 
-            expect(
-              wrapper.find('recovery-code-stub').attributes().error,
-            ).toBeFalsy();
+            expect(wrapper.find(RecoveryView).attributes().error).toBeFalsy();
 
             wrapper.find(RecoveryView).vm.$emit('send-code');
             await global.flushPromises();
 
-            expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
+            expect(wrapper.find(RecoveryView).attributes().error).toBe(
               i18n.t('components.recoverOtpSms.sendSmsError'),
             );
           });
@@ -241,9 +225,7 @@ describe('RecoveryCodeInteractor', () => {
             wrapper.find(RecoveryView).vm.$emit('send-code');
             await global.flushPromises();
 
-            expect(
-              wrapper.find('recovery-code-stub').attributes().error,
-            ).toBeFalsy();
+            expect(wrapper.find(RecoveryView).attributes().error).toBeFalsy();
           });
         });
 
@@ -257,31 +239,27 @@ describe('RecoveryCodeInteractor', () => {
           it('should pass prop', async () => {
             expect.assertions(2);
 
-            expect(
-              wrapper.find('recovery-code-stub').attributes().isphoneexist,
-            ).toBe('true');
+            expect(wrapper.find(RecoveryView).attributes().isphoneexist).toBe(
+              'true',
+            );
 
             wrapper.find(RecoveryView).vm.$emit('send-code');
             await global.flushPromises();
 
             expect(
-              wrapper.find('recovery-code-stub').attributes().isphoneexist,
+              wrapper.find(RecoveryView).attributes().isphoneexist,
             ).toBeUndefined();
           });
 
           it('should not pass error', async () => {
             expect.assertions(2);
 
-            expect(
-              wrapper.find('recovery-code-stub').attributes().error,
-            ).toBeFalsy();
+            expect(wrapper.find(RecoveryView).attributes().error).toBeFalsy();
 
             wrapper.find(RecoveryView).vm.$emit('send-code');
             await global.flushPromises();
 
-            expect(wrapper.find('recovery-code-stub').attributes().error).toBe(
-              '',
-            );
+            expect(wrapper.find(RecoveryView).attributes().error).toBe('');
           });
         });
       });
