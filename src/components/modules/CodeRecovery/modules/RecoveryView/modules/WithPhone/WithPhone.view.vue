@@ -85,10 +85,9 @@ export default {
   watch: {
     error: {
       handler(msg) {
-        if (!msg) {
-          this.$validator.errors.removeById('sendCodeId');
-          return;
-        }
+        this.$validator.errors.removeById('sendCodeId');
+
+        if (!msg) return;
 
         this.$validator.errors.add({
           id: 'sendCodeId',
