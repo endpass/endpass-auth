@@ -73,7 +73,7 @@ describe('RegularPasswordRecoveryView', () => {
     it('should emit send code event', () => {
       expect(wrapper.emitted()['send-code']).toBeUndefined();
 
-      wrapper.find('[data-test=send-code-button]').vm.$emit('click');
+      wrapper.find('[data-test=send-code-button]').vm.$emit('send-code');
 
       expect(wrapper.emitted()['send-code'].length).toBe(1);
       expect(wrapper.emitted()['send-code'][0]).toEqual([]);

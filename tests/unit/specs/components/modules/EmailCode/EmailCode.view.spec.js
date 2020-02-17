@@ -120,7 +120,7 @@ describe('EmailCodeView', () => {
     it('should emit send code event', () => {
       expect(wrapper.emitted()['send-code']).toBeUndefined();
 
-      wrapper.find('send-code-stub').vm.$emit('click');
+      wrapper.find('send-code-stub').vm.$emit('send-code');
 
       expect(wrapper.emitted()['send-code'].length).toBe(1);
       expect(wrapper.emitted()['send-code'][0]).toEqual([]);

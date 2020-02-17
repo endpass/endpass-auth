@@ -3,7 +3,7 @@
 exports[`SignUpView render should correctly render component 1`] = `
 <form data-test="auth-form">
   <v-title-stub>
-    Sign up to&nbsp;your Endpass account to&nbsp;access site actions
+    Sign up to your Endpass account to access site actions
   </v-title-stub>
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
@@ -27,13 +27,13 @@ exports[`SignUpView render should correctly render component 1`] = `
   </form-item-stub>
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
     <div>
-      By continuing, you agree to&nbsp;Endpass's
+      By continuing, you agree to Endpass's
       <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
-        Terms&nbsp;of&nbsp;Service
+        Terms of Service
       </v-link-stub>
       and
       <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
-        Privacy&nbsp;Policy
+        Privacy Policy
       </v-link-stub>
     </div>
   </form-row-stub>
@@ -50,7 +50,7 @@ exports[`SignUpView render should correctly render component 1`] = `
 exports[`SignUpView render should render pasword form 1`] = `
 <form data-test="auth-form">
   <v-title-stub>
-    Sign up to&nbsp;your Endpass account to&nbsp;access site actions
+    Sign up to your Endpass account to access site actions
   </v-title-stub>
   <form-item-stub>
     <v-input-stub value="" data-vv-as="email" data-vv-name="email" name="email" type="email" placeholder="Enter your email..." data-test="email-input"></v-input-stub>
@@ -74,13 +74,13 @@ exports[`SignUpView render should render pasword form 1`] = `
   </form-item-stub>
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
     <div>
-      By continuing, you agree to&nbsp;Endpass's
+      By continuing, you agree to Endpass's
       <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
-        Terms&nbsp;of&nbsp;Service
+        Terms of Service
       </v-link-stub>
       and
       <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
-        Privacy&nbsp;Policy
+        Privacy Policy
       </v-link-stub>
     </div>
   </form-row-stub>

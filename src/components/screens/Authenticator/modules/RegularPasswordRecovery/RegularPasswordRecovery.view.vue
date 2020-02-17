@@ -72,7 +72,7 @@
       <send-code
         :is-loading="isLoading"
         data-test="send-code-button"
-        @click="onSendCode"
+        @send-code="onSendCode"
       />
     </form-row>
   </form>
@@ -96,12 +96,10 @@ export default {
       type: String,
       required: true,
     },
-
     isLoading: {
       type: Boolean,
       default: false,
     },
-
     error: {
       type: String,
       default: '',

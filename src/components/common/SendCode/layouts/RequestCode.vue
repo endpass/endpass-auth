@@ -16,7 +16,7 @@
 import VLink from '@endpass/ui/kit/VLink';
 
 export default {
-  name: 'SendCode',
+  name: 'RequestCode',
 
   props: {
     isLoading: {
@@ -27,7 +27,7 @@ export default {
 
   methods: {
     onClick() {
-      this.$emit('click');
+      this.$emit('send-code');
     },
   },
 

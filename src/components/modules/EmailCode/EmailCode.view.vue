@@ -23,7 +23,7 @@
     </form-item>
     <form-item class="v-mb-24">
       <v-button
-        :disabled="isSubmitEnable"
+        :disabled="isSubmitDisabled"
         :is-loading="isLoading"
         type="submit"
         data-test="submit-button"
@@ -34,7 +34,7 @@
     <form-row class="v-fs-14 v-text-center">
       <send-code
         :is-loading="isLoading"
-        @click="sendCode"
+        @send-code="onSendCode"
       />
     </form-row>
   </form>
@@ -58,12 +58,10 @@ export default {
       type: String,
       required: true,
     },
-
     isLoading: {
       type: Boolean,
       default: false,
     },
-
     error: {
       type: String,
       default: '',
@@ -75,7 +73,7 @@ export default {
   }),
 
   computed: {
-    isSubmitEnable() {
+    isSubmitDisabled() {
       return !this.isFormValid || this.isLoading;
     },
   },
@@ -102,7 +100,7 @@ export default {
       this.$emit('submit', { code: this.code });
     },
 
-    sendCode() {
+    onSendCode() {
       this.$emit('send-code');
     },
   },
