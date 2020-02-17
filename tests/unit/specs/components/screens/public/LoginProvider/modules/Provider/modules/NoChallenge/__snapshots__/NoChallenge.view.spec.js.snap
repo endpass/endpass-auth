@@ -1,13 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`NoChallengeView render should correctly render component 1`] = `
-<message-stub error="true" data-test="error-message">
-  Please, add the&nbsp;'login_challenge' param in&nbsp;URL, and try again!
-</message-stub>
-`;
+exports[`NoChallengeView render should correctly render component 1`] = `<error-stub error="Please, add the&nbsp;'login_challenge' param in&nbsp;URL, and try again!"></error-stub>`;
 
-exports[`NoChallengeView render should render message 1`] = `
-<message-stub error="true" data-test="error-message">
-  Please, add the&nbsp;'login_challenge' param in&nbsp;URL, and try again!
-</message-stub>
-`;
+exports[`NoChallengeView render should render message 1`] = `<error-stub error="Please, add the&nbsp;'login_challenge' param in&nbsp;URL, and try again!"></error-stub>`;

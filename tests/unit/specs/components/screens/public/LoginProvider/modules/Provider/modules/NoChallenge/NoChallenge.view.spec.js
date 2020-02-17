@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
 import NoChallengeView from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge/NoChallenge.view';
+import Error from '@/components/modules/Error';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -33,7 +34,9 @@ describe('NoChallengeView', () => {
     });
 
     it('should render message', () => {
-      expect(wrapper.find('[data-test=error-message]').exists()).toBe(true);
+      expect(wrapper.find(Error).attributes().error).toBe(
+        i18n.t('components.loginProviderPassword.loginChallenge'),
+      );
       expect(wrapper.html()).toMatchSnapshot();
     });
   });

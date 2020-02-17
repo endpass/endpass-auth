@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VeeValidate from 'vee-validate';
-import ErrorView from '@/components/screens/public/LoginProvider/modules/Provider/modules/Error/Error.view';
+import ErrorView from '@/components/modules/Error/Error.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

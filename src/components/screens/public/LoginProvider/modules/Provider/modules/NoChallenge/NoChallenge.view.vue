@@ -1,20 +1,15 @@
 <template>
-  <message
-    :error="true"
-    data-test="error-message"
-  >
-    {{ $t('components.loginProviderPassword.loginChallenge') }}
-  </message>
+  <error :error="$t('components.loginProviderPassword.loginChallenge')" />
 </template>
 
 <script>
-import Message from '@/components/common/Message';
+import Error from '@/components/modules/Error';
 
 export default {
   name: 'NoChallengeView',
 
   components: {
-    Message,
+    Error,
   },
 };
 </script>

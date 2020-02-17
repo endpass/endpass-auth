@@ -3,7 +3,7 @@ import { email } from '@unitFixtures/auth';
 import ProviderContainer from '@/components/screens/public/LoginProvider/modules/Provider/Provider.container';
 import Code from '@/components/screens/public/LoginProvider/modules/Provider/modules/Code';
 import NoChallenge from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge';
-import Error from '@/components/screens/public/LoginProvider/modules/Provider/modules/Error';
+import Error from '@/components/modules/Error';
 import RecoveryCode from '@/components/modules/RecoveryCode';
 import setupI18n from '@/locales/i18nSetup';
 import { CHALLENGE_TYPES } from '@/constants';

@@ -16,7 +16,7 @@
 <script>
 import RecoveryCode from '@/components/modules/RecoveryCode';
 import Code from './modules/Code';
-import Error from './modules/Error';
+import Error from '@/components/modules/Error';
 import NoChallenge from './modules/NoChallenge';
 
 import { accountsStore } from '@/store';
