@@ -40,16 +40,16 @@ export default {
 
       this.$emit('update:is-locked', true);
       this.$emit('update:counter', initialCounter);
-      this.$timer.start('request');
+      this.$timer.start('counter');
     },
 
     stopRequestTimer() {
-      if (!this.timers.request.isRunning) {
+      if (!this.timers.counter.isRunning) {
         return;
       }
 
       this.$emit('update:is-locked', false);
-      this.$timer.stop('request');
+      this.$timer.stop('counter');
     },
 
     onRequestTick() {
@@ -66,7 +66,7 @@ export default {
   mixins: [VueTimers],
 
   timers: {
-    request: {
+    counter: {
       repeat: true,
       time: 1000,
       callback() {
