@@ -1,7 +1,7 @@
 <template>
   <loading-screen :is-loading="isLoading">
     <component
-      :is="current"
+      :is="currentComponent"
       :error="error"
       @send-code="onSendCode"
       @submit="onSubmit"
@@ -36,7 +36,7 @@ export default {
   },
 
   computed: {
-    current() {
+    currentComponent() {
       return this.isPhoneExist ? WithPhone : NoPhone;
     },
   },

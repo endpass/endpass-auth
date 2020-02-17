@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="current"
+    :is="currentComponent"
     :is-loading="isLoading"
     :error="error"
     :email="email"
@@ -47,7 +47,7 @@ export default {
   },
 
   computed: {
-    current() {
+    currentComponent() {
       return COMPONENT_BY_TYPE[this.challengeType];
     },
   },

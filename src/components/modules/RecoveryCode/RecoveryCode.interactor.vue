@@ -1,5 +1,5 @@
 <template>
-  <recovery-code-view
+  <recovery-view
     :is-loading="isLoading"
     :error="error"
     :is-phone-exist="isPhoneExist"
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import RecoveryCodeView from './modules/RecoveryView';
+import RecoveryView from './modules/RecoveryView';
 import { authStore } from '@/store';
 import createRecoverController from './RecoveryController';
 
@@ -87,7 +87,7 @@ export default {
   },
 
   components: {
-    RecoveryCodeView,
+    RecoveryView,
   },
 };
 </script>

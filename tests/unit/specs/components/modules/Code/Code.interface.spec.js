@@ -44,7 +44,7 @@ describe('CodeInterface', () => {
 
       wrapper.find(CodeInteractor).vm.$emit('recover');
 
-      expect(wrapper.emitted().recover.length).toBe(1);
+      expect(wrapper.emitted().recover).toHaveLength(1);
       expect(wrapper.emitted().recover[0]).toEqual([]);
     });
 
@@ -65,8 +65,8 @@ describe('CodeInterface', () => {
 
       expect(wrapper.emitted()['update:is-loading'].length).toBe(1);
       expect(wrapper.emitted()['update:error'].length).toBe(1);
-      expect(wrapper.emitted()['update:is-loading'][0]).toEqual([true]);
-      expect(wrapper.emitted()['update:error'][0]).toEqual(['']);
+      expect(wrapper.emitted()['update:is-loading']).toEqual([[true]]);
+      expect(wrapper.emitted()['update:error']).toEqual([['']]);
     });
   });
 });

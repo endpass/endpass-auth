@@ -52,7 +52,7 @@ describe('CodeInterface', () => {
 
       wrapper.find(CodeInteractor).vm.$emit('recover');
 
-      expect(wrapper.emitted().recover.length).toBe(1);
+      expect(wrapper.emitted().recover).toHaveLength(1);
       expect(wrapper.emitted().recover[0]).toEqual([]);
     });
   });

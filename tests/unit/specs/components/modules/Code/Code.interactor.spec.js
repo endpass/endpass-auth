@@ -41,7 +41,7 @@ describe('CodeInteractor', () => {
     });
 
     it('should render form', () => {
-      expect(wrapper.find('code-stub').exists()).toBe(true);
+      expect(wrapper.find(CodeView).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -116,7 +116,7 @@ describe('CodeInteractor', () => {
             isLoading: true,
           });
 
-          expect(wrapper.find('code-stub').attributes().isloading).toBeTruthy();
+          expect(wrapper.find(CodeView).attributes().isloading).toBeTruthy();
         });
 
         it('should pass isLoading as false', () => {
@@ -124,7 +124,7 @@ describe('CodeInteractor', () => {
             isLoading: false,
           });
 
-          expect(wrapper.find('code-stub').attributes().isloading).toBeFalsy();
+          expect(wrapper.find(CodeView).attributes().isloading).toBeFalsy();
         });
       });
 
@@ -160,7 +160,7 @@ describe('CodeInteractor', () => {
 
         wrapper.find(CodeView).vm.$emit('recover');
 
-        expect(wrapper.emitted().recover.length).toBe(1);
+        expect(wrapper.emitted().recover).toHaveLength(1);
         expect(wrapper.emitted().recover[0]).toEqual([]);
       });
 

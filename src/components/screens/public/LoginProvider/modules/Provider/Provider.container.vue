@@ -1,6 +1,6 @@
 <template>
   <component
-    :is="current"
+    :is="currentComponent"
     :email="email"
     :error="error"
     :is-loading="isLoading"
@@ -57,7 +57,7 @@ export default {
   }),
 
   computed: {
-    current() {
+    currentComponent() {
       if (this.error) {
         return Error;
       }
