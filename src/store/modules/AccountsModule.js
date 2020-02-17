@@ -56,7 +56,7 @@ class AccountsModule extends VuexModule {
       return this.settings.challengeType;
     }
 
-    // support for old settings defined
+    // :TODO support for old settings defined, can be drop after
     if (this.settings.smsCodeEnabled) {
       return CHALLENGE_TYPES.SMS_OTP;
     }
