@@ -62,7 +62,7 @@ export default {
           break;
 
         case to === 'recovery-code':
-          this.openRoute('RecoveryCode');
+          this.openRoute('CodeRecovery');
           break;
 
         case to === 'regular-password':
@@ -101,7 +101,7 @@ export default {
           this.openRoute('RegularPasswordCreation');
           break;
 
-        case name === 'RecoveryCode':
+        case name === 'CodeRecovery':
           this.replaceRoute('EmailCode');
           break;
 

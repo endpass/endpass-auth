@@ -1,8 +1,8 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { code } from '@unitFixtures/auth';
-import RecoveryViewContainer from '@/components/modules/RecoveryCode/modules/RecoveryView/RecoveryView.container';
-import NoPhone from '@/components/modules/RecoveryCode/modules/RecoveryView/modules/NoPhone';
-import WithPhone from '@/components/modules/RecoveryCode/modules/RecoveryView/modules/WithPhone';
+import RecoveryViewContainer from '@/components/modules/CodeRecovery/modules/RecoveryView/RecoveryView.container';
+import NoPhone from '@/components/modules/CodeRecovery/modules/RecoveryView/modules/NoPhone';
+import WithPhone from '@/components/modules/CodeRecovery/modules/RecoveryView/modules/WithPhone';
 import setupI18n from '@/locales/i18nSetup';
 import LoadingScreen from '@/components/common/LoadingScreen';
 

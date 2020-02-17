@@ -1,6 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import RecoveryViewContainer from '@/components/modules/RecoveryCode/modules/RecoveryView/RecoveryView.container';
-import RecoveryViewInterface from '@/components/modules/RecoveryCode/modules/RecoveryView/RecoveryView.interface';
+import RecoveryViewContainer from '@/components/modules/CodeRecovery/modules/RecoveryView/RecoveryView.container';
+import RecoveryViewInterface from '@/components/modules/CodeRecovery/modules/RecoveryView/RecoveryView.interface';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

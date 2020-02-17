@@ -4,7 +4,7 @@ import ProviderContainer from '@/components/screens/public/LoginProvider/modules
 import Code from '@/components/screens/public/LoginProvider/modules/Provider/modules/Code';
 import NoChallenge from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge';
 import Error from '@/components/modules/Error';
-import RecoveryCode from '@/components/modules/RecoveryCode';
+import CodeRecovery from '@/components/modules/CodeRecovery';
 import setupI18n from '@/locales/i18nSetup';
 import { CHALLENGE_TYPES } from '@/constants';
 
@@ -73,7 +73,7 @@ describe('ProviderContainer', () => {
 
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find(RecoveryCode).exists()).toBe(true);
+      expect(wrapper.find(CodeRecovery).exists()).toBe(true);
     });
 
     it('should return from recovery code', async () => {
@@ -83,9 +83,9 @@ describe('ProviderContainer', () => {
       wrapper.find(Code).vm.$emit('recover');
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find(RecoveryCode).exists()).toBe(true);
+      expect(wrapper.find(CodeRecovery).exists()).toBe(true);
 
-      wrapper.find(RecoveryCode).vm.$emit('recovered');
+      wrapper.find(CodeRecovery).vm.$emit('recovered');
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(Code).exists()).toBe(true);

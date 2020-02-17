@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import RecoveryCode from '@/components/modules/RecoveryCode';
+import CodeRecovery from '@/components/modules/CodeRecovery';
 import Code from './modules/Code';
 import Error from '@/components/modules/Error';
 import NoChallenge from './modules/NoChallenge';
@@ -67,7 +67,7 @@ export default {
       }
 
       if (this.isRecovering) {
-        return RecoveryCode;
+        return CodeRecovery;
       }
 
       return Code;

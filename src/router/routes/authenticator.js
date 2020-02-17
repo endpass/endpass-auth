@@ -102,10 +102,10 @@ export default [
 
       {
         path: 'recovery-code',
-        name: 'RecoveryCode',
+        name: 'CodeRecovery',
         component: () =>
           import(
-            /* webpackChunkName: "component-recovery-code" */ '@/components/screens/Authenticator/modules/RecoveryCode'
+            /* webpackChunkName: "component-recovery-code" */ '@/components/screens/Authenticator/modules/CodeRecovery'
           ),
 
         meta: {

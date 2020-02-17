@@ -1,5 +1,5 @@
 <template>
-  <recovery-code
+  <code-recovery
     :email="email"
     @recovered="onRecovered"
     @recovery-cancel="onCancel"
@@ -7,10 +7,10 @@
 </template>
 
 <script>
-import RecoveryCode from '@/components/modules/RecoveryCode';
+import CodeRecovery from './CodeRecovery.interactor';
 
 export default {
-  name: 'AuthRecoveryCode',
+  name: 'CodeRecoveryInterface',
 
   props: {
     email: {
@@ -21,16 +21,16 @@ export default {
 
   methods: {
     onRecovered() {
-      this.$emit('complete');
+      this.$emit('recovered');
     },
 
     onCancel() {
-      this.$emit('switch', { to: 'app-code' });
+      this.$emit('recovery-cancel');
     },
   },
 
   components: {
-    RecoveryCode,
+    CodeRecovery,
   },
 };
 </script>

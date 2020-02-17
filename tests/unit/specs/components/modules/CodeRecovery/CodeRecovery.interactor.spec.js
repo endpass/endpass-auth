@@ -1,8 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
-import RecoveryCodeInteractor from '@/components/modules/RecoveryCode/RecoveryCode.interactor';
-import RecoveryView from '@/components/modules/RecoveryCode/modules/RecoveryView';
+import CodeRecoveryInteractor from '@/components/modules/CodeRecovery/CodeRecovery.interactor';
+import RecoveryView from '@/components/modules/CodeRecovery/modules/RecoveryView';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 
@@ -10,10 +10,10 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('RecoveryCodeInteractor', () => {
+describe('CodeRecoveryInteractor', () => {
   let wrapper;
   const createWrapper = () =>
-    shallowMount(RecoveryCodeInteractor, {
+    shallowMount(CodeRecoveryInteractor, {
       localVue,
       propsData: {
         email,
@@ -30,7 +30,7 @@ describe('RecoveryCodeInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('RecoveryCodeInteractor');
+      expect(wrapper.name()).toBe('CodeRecoveryInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

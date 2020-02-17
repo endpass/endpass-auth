@@ -15,7 +15,7 @@ import { authStore } from '@/store';
 import createRecoverController from './RecoveryController';
 
 export default {
-  name: 'RecoveryCodeInteractor',
+  name: 'CodeRecoveryInteractor',
 
   authStore,
   recoverController: createRecoverController(),

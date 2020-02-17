@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import WithPhone from '@/components/modules/RecoveryCode/modules/RecoveryView/modules/WithPhone';
+import WithPhone from '@/components/modules/CodeRecovery/modules/RecoveryView/modules/WithPhone';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
