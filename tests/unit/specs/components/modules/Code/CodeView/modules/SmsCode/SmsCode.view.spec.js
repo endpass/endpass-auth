@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { code } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import SmsCodeView from '@/components/modules/Code/modules/CodeView/modules/SmsCode/SmsCode.view';
+import SmsCodeView from '@/components/modules/CodeRequest/modules/CodeView/modules/SmsCode/SmsCode.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();

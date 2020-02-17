@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
-import CodeViewInterface from '@/components/modules/Code/modules/CodeView/CodeView.interface';
-import CodeViewContainer from '@/components/modules/Code/modules/CodeView/CodeView.container';
+import CodeViewInterface from '@/components/modules/CodeRequest/modules/CodeView/CodeView.interface';
+import CodeViewContainer from '@/components/modules/CodeRequest/modules/CodeView/CodeView.container';
 import setupI18n from '@/locales/i18nSetup';
 import { CHALLENGE_TYPES } from '@/constants';
 

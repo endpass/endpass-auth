@@ -1,8 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
-import CodeInteractor from '@/components/modules/Code/Code.interactor';
-import CodeView from '@/components/modules/Code/modules/CodeView';
+import CodeRequestInteractor from '@/components/modules/CodeRequest/CodeRequest.interactor';
+import CodeView from '@/components/modules/CodeRequest/modules/CodeView';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 import { CHALLENGE_TYPES } from '@/constants';
@@ -11,10 +11,10 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('CodeInteractor', () => {
+describe('CodeRequestInteractor', () => {
   let wrapper;
   const createWrapper = (options, props) =>
-    shallowMount(CodeInteractor, {
+    shallowMount(CodeRequestInteractor, {
       localVue,
       propsData: {
         email,
@@ -36,7 +36,7 @@ describe('CodeInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('CodeInteractor');
+      expect(wrapper.name()).toBe('CodeRequestInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

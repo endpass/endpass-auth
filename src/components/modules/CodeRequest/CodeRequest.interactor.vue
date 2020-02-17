@@ -16,7 +16,7 @@ import { authStore } from '@/store';
 import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
-  name: 'CodeInteractor',
+  name: 'CodeRequestInteractor',
 
   authStore,
 

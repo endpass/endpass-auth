@@ -1,8 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, code } from '@unitFixtures/auth';
-import CodeInteractor from '@/components/screens/public/LoginProvider/modules/Provider/modules/Code/Code.interactor';
-import Code from '@/components/modules/Code';
+import CodeRequestInteractor from '@/components/screens/public/LoginProvider/modules/Provider/modules/CodeRequest/CodeRequest.interactor';
+import CodeRequest from '@/components/modules/CodeRequest';
 import setupI18n from '@/locales/i18nSetup';
 import { CHALLENGE_TYPES } from '@/constants';
 import permissionsService from '@/service/permissions';
@@ -11,13 +11,13 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 const i18n = setupI18n(localVue);
 
-describe('CodeInteractor', () => {
+describe('CodeRequestInteractor', () => {
   let wrapper;
   const challengeType = CHALLENGE_TYPES.EMAIL_OTP;
   const loginChallenge = 'bar';
 
   const createWrapper = (options, props) =>
-    shallowMount(CodeInteractor, {
+    shallowMount(CodeRequestInteractor, {
       localVue,
       propsData: {
         email,
@@ -38,12 +38,12 @@ describe('CodeInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('CodeInteractor');
+      expect(wrapper.name()).toBe('CodeRequestInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render form', () => {
-      expect(wrapper.find('code-stub').exists()).toBe(true);
+      expect(wrapper.find(CodeRequest).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -60,7 +60,7 @@ describe('CodeInteractor', () => {
           redirect,
         });
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
 
         await global.flushPromises();
 
@@ -80,7 +80,7 @@ describe('CodeInteractor', () => {
           redirect,
         });
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
 
         await global.flushPromises();
 
@@ -91,22 +91,22 @@ describe('CodeInteractor', () => {
 
     describe('loading status', () => {
       it('should be false before submit', () => {
-        expect(wrapper.find('code-stub').attributes().isloading).toBeFalsy();
+        expect(wrapper.find(CodeRequest).attributes().isloading).toBeFalsy();
       });
 
       it('should be true after submit', () => {
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
 
-        expect(wrapper.find('code-stub').attributes().isloading).toBe('true');
+        expect(wrapper.find(CodeRequest).attributes().isloading).toBe('true');
       });
 
       it('should be false after handling submit', async () => {
         expect.assertions(1);
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
         await global.flushPromises();
 
-        expect(wrapper.find('code-stub').attributes().isloading).toBeFalsy();
+        expect(wrapper.find(CodeRequest).attributes().isloading).toBeFalsy();
       });
     });
 
@@ -118,12 +118,12 @@ describe('CodeInteractor', () => {
       it('should pass error', async () => {
         expect.assertions(2);
 
-        expect(wrapper.find('code-stub').attributes().error).toBeFalsy();
+        expect(wrapper.find(CodeRequest).attributes().error).toBeFalsy();
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
         await global.flushPromises();
 
-        expect(wrapper.find('code-stub').attributes().error).toBe(
+        expect(wrapper.find(CodeRequest).attributes().error).toBe(
           i18n.t('components.loginProvider.notWorkingError'),
         );
       });
@@ -131,12 +131,12 @@ describe('CodeInteractor', () => {
       it('should remove error if exists before submit', async () => {
         expect.assertions(1);
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
         await global.flushPromises();
 
-        wrapper.find(Code).vm.$emit('submit', { code });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
 
-        expect(wrapper.find('code-stub').attributes().error).toBeFalsy();
+        expect(wrapper.find(CodeRequest).attributes().error).toBeFalsy();
       });
     });
 
@@ -144,7 +144,7 @@ describe('CodeInteractor', () => {
       it('should emit recover event', () => {
         expect(wrapper.emitted().recover).toBeUndefined();
 
-        wrapper.find(Code).vm.$emit('recover');
+        wrapper.find(CodeRequest).vm.$emit('recover');
 
         expect(wrapper.emitted().recover).toHaveLength(1);
         expect(wrapper.emitted().recover[0]).toEqual([]);

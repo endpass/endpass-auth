@@ -15,7 +15,7 @@
 
 <script>
 import CodeRecovery from '@/components/modules/CodeRecovery';
-import Code from './modules/Code';
+import CodeRequest from './modules/CodeRequest';
 import Error from '@/components/modules/Error';
 import NoChallenge from './modules/NoChallenge';
 
@@ -70,7 +70,7 @@ export default {
         return CodeRecovery;
       }
 
-      return Code;
+      return CodeRequest;
     },
   },
 

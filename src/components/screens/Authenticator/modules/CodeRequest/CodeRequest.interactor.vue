@@ -1,5 +1,5 @@
 <template>
-  <Code
+  <code-request
     :challenge-type="challengeType"
     :is-loading.sync="isLoading"
     :error.sync="error"
@@ -10,12 +10,12 @@
 </template>
 
 <script>
-import Code from '@/components/modules/Code';
+import CodeRequest from '@/components/modules/CodeRequest';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
 
 export default {
-  name: 'CodeInteractor',
+  name: 'CodeRequestInteractor',
 
   authController: createAuthController(),
   authStore,
@@ -82,7 +82,7 @@ export default {
   },
 
   components: {
-    Code,
+    CodeRequest,
   },
 };
 </script>

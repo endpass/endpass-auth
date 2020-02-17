@@ -1,5 +1,5 @@
 <template>
-  <Code
+  <code-request
     :challenge-type="challengeType"
     :email="email"
     :is-loading="isLoading"
@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import Code from './Code.interactor';
+import CodeRequest from './CodeRequest.interactor';
 
 export default {
-  name: 'CodeInterface',
+  name: 'CodeRequestInterface',
 
   props: {
     isLoading: {
@@ -54,7 +54,7 @@ export default {
   },
 
   components: {
-    Code,
+    CodeRequest,
   },
 };
 </script>

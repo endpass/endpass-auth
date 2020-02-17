@@ -1,3 +1,3 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ProviderContainer render should correctly render component 1`] = `<codeinterface-stub challengetype="EMAIL_OTP" loginchallenge="123" email="user@email.com" error=""></codeinterface-stub>`;
+exports[`ProviderContainer render should correctly render component 1`] = `<coderequestinterface-stub challengetype="EMAIL_OTP" loginchallenge="123" email="user@email.com" error=""></coderequestinterface-stub>`;

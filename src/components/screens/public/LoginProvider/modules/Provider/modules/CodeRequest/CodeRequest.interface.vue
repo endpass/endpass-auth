@@ -1,19 +1,18 @@
 <template>
-  <Code
+  <code-request
     :challenge-type="challengeType"
     :email="email"
-    :password="password"
-    :is-sign-up="isSignUp"
+    :login-challenge="loginChallenge"
     @complete="onComplete"
     @recover="onRecover"
   />
 </template>
 
 <script>
-import Code from './Code.interactor';
+import CodeRequest from './CodeRequest.interactor';
 
 export default {
-  name: 'CodeInterface',
+  name: 'CodeRequestInterface',
 
   props: {
     challengeType: {
@@ -21,34 +20,29 @@ export default {
       required: true,
     },
 
+    loginChallenge: {
+      type: String,
+      default: '',
+    },
+
     email: {
       type: String,
-      required: true,
-    },
-
-    password: {
-      type: String,
-      required: true,
-    },
-
-    isSignUp: {
-      type: Boolean,
       required: true,
     },
   },
 
   methods: {
-    onComplete() {
-      this.$emit('complete');
+    onComplete({ redirect }) {
+      this.$emit('complete', { redirect });
     },
 
     onRecover() {
-      this.$emit('switch', { to: 'recovery-code' });
+      this.$emit('recover');
     },
   },
 
   components: {
-    Code,
+    CodeRequest,
   },
 };
 </script>

@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email } from '@unitFixtures/auth';
 import ProviderContainer from '@/components/screens/public/LoginProvider/modules/Provider/Provider.container';
-import Code from '@/components/screens/public/LoginProvider/modules/Provider/modules/Code';
+import CodeRequest from '@/components/screens/public/LoginProvider/modules/Provider/modules/CodeRequest';
 import NoChallenge from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge';
 import Error from '@/components/modules/Error';
 import CodeRecovery from '@/components/modules/CodeRecovery';
@@ -45,7 +45,7 @@ describe('ProviderContainer', () => {
     it('should render code', () => {
       wrapper = wrapperFactory();
 
-      expect(wrapper.find(Code).exists()).toBe(true);
+      expect(wrapper.find(CodeRequest).exists()).toBe(true);
     });
 
     it('should render error', () => {
@@ -69,7 +69,7 @@ describe('ProviderContainer', () => {
 
       wrapper = wrapperFactory();
 
-      wrapper.find(Code).vm.$emit('recover');
+      wrapper.find(CodeRequest).vm.$emit('recover');
 
       await wrapper.vm.$nextTick();
 
@@ -80,7 +80,7 @@ describe('ProviderContainer', () => {
       expect.assertions(2);
 
       wrapper = wrapperFactory();
-      wrapper.find(Code).vm.$emit('recover');
+      wrapper.find(CodeRequest).vm.$emit('recover');
       await wrapper.vm.$nextTick();
 
       expect(wrapper.find(CodeRecovery).exists()).toBe(true);
@@ -88,7 +88,7 @@ describe('ProviderContainer', () => {
       wrapper.find(CodeRecovery).vm.$emit('recovered');
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find(Code).exists()).toBe(true);
+      expect(wrapper.find(CodeRequest).exists()).toBe(true);
     });
   });
 
@@ -97,7 +97,7 @@ describe('ProviderContainer', () => {
       expect(wrapper.emitted().complete).toBeUndefined();
       const redirect = 'redirect';
 
-      wrapper.find(Code).vm.$emit('complete', { redirect });
+      wrapper.find(CodeRequest).vm.$emit('complete', { redirect });
 
       expect(wrapper.emitted().complete.length).toBe(1);
       expect(wrapper.emitted().complete[0]).toEqual([{ redirect }]);

@@ -1,5 +1,5 @@
 <template>
-  <Code
+  <code-request
     :challenge-type="challengeType"
     :is-loading.sync="isLoading"
     :error.sync="error"
@@ -10,11 +10,11 @@
 </template>
 
 <script>
-import Code from '@/components/modules/Code';
+import CodeRequest from '@/components/modules/CodeRequest';
 import createLoginController from './LoginController';
 
 export default {
-  name: 'CodeInteractor',
+  name: 'CodeRequestInteractor',
 
   loginController: createLoginController(),
 
@@ -65,7 +65,7 @@ export default {
   },
 
   components: {
-    Code,
+    CodeRequest,
   },
 };
 </script>
