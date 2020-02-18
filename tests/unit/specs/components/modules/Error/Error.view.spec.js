@@ -43,7 +43,7 @@ describe('ErrorView', () => {
       wrapper = createWrapper(null, {
         error,
       });
-      expect(wrapper.find('[data-test=error-message]').text()).toMatch(error);
+      expect(wrapper.find('message-stub').text()).toMatch(error);
     });
   });
 });

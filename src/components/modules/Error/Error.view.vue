@@ -1,8 +1,5 @@
 <template>
-  <message
-    :error="true"
-    data-test="error-message"
-  >
+  <message :error="true">
     {{ error }}
   </message>
 </template>
