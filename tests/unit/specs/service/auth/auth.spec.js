@@ -216,7 +216,7 @@ describe('auth service', () => {
     const url = `${identityBaseUrl}/auth/github`;
     const code = '123';
 
-    it('should return 200 OK', async () => {
+    it('should return 200 OK for app otp', async () => {
       expect.assertions(1);
 
       axiosMock.onPost(url).reply(200, {
@@ -231,6 +231,25 @@ describe('auth service', () => {
         success: true,
         challenge: {
           challengeType: CHALLENGE_TYPES.APP_OTP,
+        },
+      });
+    });
+
+    it('should return 200 OK for sms otp', async () => {
+      expect.assertions(1);
+
+      axiosMock.onPost(url).reply(200, {
+        success: true,
+        challenge: {
+          challengeType: 'sms',
+        },
+      });
+      const res = await authService.authWithGitHub(code);
+
+      expect(res).toEqual({
+        success: true,
+        challenge: {
+          challengeType: CHALLENGE_TYPES.SMS_OTP,
         },
       });
     });

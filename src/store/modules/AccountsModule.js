@@ -31,7 +31,9 @@ const { ERRORS } = ConnectError;
 class AccountsModule extends VuexModule {
   accounts = [];
 
-  settings = {};
+  settings = {
+    challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+  };
 
   constructor(props, { sharedStore, balanceStore }) {
     super(props);
@@ -43,29 +45,8 @@ class AccountsModule extends VuexModule {
     return this.accounts.map(({ address }) => address);
   }
 
-  /**
-   * @deprecated
-   * @return {boolean}
-   */
-  get isAppOtp() {
-    return !!this.settings.otpEnabled;
-  }
-
   get challengeType() {
-    if (this.settings.challengeType) {
-      return this.settings.challengeType;
-    }
-
-    // :TODO support for old settings defined, can be drop after
-    if (this.settings.smsCodeEnabled) {
-      return CHALLENGE_TYPES.SMS_OTP;
-    }
-
-    if (this.settings.otpEnabled) {
-      return CHALLENGE_TYPES.APP_OTP;
-    }
-
-    return CHALLENGE_TYPES.EMAIL_OTP;
+    return this.settings.challengeType;
   }
 
   /**

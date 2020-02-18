@@ -107,6 +107,17 @@ export const CHALLENGE_TYPES = {
 
 /**
  * @type {{
+  OTP: 'otp',
+  SMS: 'sms',
+ * }}
+ */
+export const CHALLENGE_TYPES_ANSWER = {
+  OTP: 'otp',
+  SMS: 'sms',
+};
+
+/**
+ * @type {{
  *  NO_CONTENT: 'NoContent',
  *  UPLOADED: 'Uploaded',
  *  PROCESSING: 'Processing',

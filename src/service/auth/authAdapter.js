@@ -1,11 +1,11 @@
-import { CHALLENGE_TYPES } from '@/constants';
+import { CHALLENGE_TYPES, CHALLENGE_TYPES_ANSWER } from '@/constants';
 
 function getChallengeType(challengeType) {
-  if (challengeType === 'sms') {
+  if (challengeType === CHALLENGE_TYPES_ANSWER.SMS) {
     return CHALLENGE_TYPES.SMS_OTP;
   }
 
-  if (challengeType === 'otp') {
+  if (challengeType === CHALLENGE_TYPES_ANSWER.OTP) {
     return CHALLENGE_TYPES.APP_OTP;
   }
 

@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`LoginProviderInteractor render should correctly render component 1`] = `<login-provider-stub error="" isloading="true" isclosable="true" email="" challengetype="EMAIL_OTP" oauthloginchallenge="foo"></login-provider-stub>`;
+exports[`LoginProviderInteractor render should correctly render component 1`] = `<login-provider-stub error="" isloading="true" isclosable="true" oauthloginchallenge="foo" email="" challengetype="EMAIL_OTP"></login-provider-stub>`;
 
-exports[`LoginProviderInteractor render should render form 1`] = `<login-provider-stub error="" isloading="true" isclosable="true" email="" challengetype="EMAIL_OTP" oauthloginchallenge="foo"></login-provider-stub>`;
+exports[`LoginProviderInteractor render should render form 1`] = `<login-provider-stub error="" isloading="true" isclosable="true" oauthloginchallenge="foo" email="" challengetype="EMAIL_OTP"></login-provider-stub>`;

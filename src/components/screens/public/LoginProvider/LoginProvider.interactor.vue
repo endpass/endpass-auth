@@ -24,7 +24,7 @@ export default {
   coreStore,
 
   data: () => ({
-    oauthLoginChallenge: null,
+    oauthLoginChallenge: '',
     error: '',
     isLoading: true,
   }),
@@ -34,12 +34,8 @@ export default {
       return this.$options.authStore.isLogin;
     },
 
-    settings() {
-      return this.$options.accountsStore.settings;
-    },
-
     currentUserEmail() {
-      return get(this.settings, 'email');
+      return get(this.$options.accountsStore.settings, 'email');
     },
 
     challengeType() {

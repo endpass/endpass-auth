@@ -10,7 +10,7 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 export default {
   async getSettings() {
-    const settings = request.get(`${identityBaseUrl}/settings`);
+    const settings = await request.get(`${identityBaseUrl}/settings`);
     return settingsAdapter(settings);
   },
 
@@ -18,8 +18,11 @@ export default {
     return request.post(`${identityBaseUrl}/settings`, settings);
   },
 
-  getSettingsSkipPermission() {
-    return requestSkipPermission.get(`${identityBaseUrl}/settings`);
+  async getSettingsSkipPermission() {
+    const settings = await requestSkipPermission.get(
+      `${identityBaseUrl}/settings`,
+    );
+    return settingsAdapter(settings);
   },
 
   /**
