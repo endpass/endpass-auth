@@ -1,26 +1,18 @@
 <template>
-  <loading-screen :is-loading="isLoadingChallenge">
-    <v-frame
-      title=""
-      :is-closable="$options.coreStore.isDialog"
-      @close="onClose"
-    >
-      <login-provider
-        :error="error"
-        :email="currentUserEmail"
-        :is-loading="isLoading"
-        :login-challenge="loginChallenge"
-        :challenge-type="challengeType"
-        @complete="onComplete"
-      />
-    </v-frame>
-  </loading-screen>
+  <login-provider
+    :error="error"
+    :email="currentUserEmail"
+    :is-closable="$options.coreStore.isDialog"
+    :is-loading="isLoading"
+    :oauth-login-challenge="oauthLoginChallenge"
+    :challenge-type="challengeType"
+    @complete="onComplete"
+    @close="onClose"
+  />
 </template>
 
 <script>
 import get from 'lodash/get';
-import LoadingScreen from '@/components/common/LoadingScreen';
-import VFrame from '@/components/common/VFrame';
 import { authStore, accountsStore, coreStore } from '@/store';
 import LoginProvider from './modules/Provider';
 
@@ -32,10 +24,9 @@ export default {
   coreStore,
 
   data: () => ({
-    loginChallenge: null,
+    oauthLoginChallenge: null,
     error: '',
-    isLoading: false,
-    isLoadingChallenge: true,
+    isLoading: true,
   }),
 
   computed: {
@@ -68,15 +59,15 @@ export default {
   },
 
   async mounted() {
-    this.isLoadingChallenge = true;
+    this.isLoading = true;
     this.error = '';
 
     const { query } = this.$route;
-    const { login_challenge: loginChallenge } = query;
+    const { login_challenge: oauthLoginChallenge } = query;
 
-    this.loginChallenge = loginChallenge;
-    if (!loginChallenge) {
-      this.isLoadingChallenge = false;
+    this.oauthLoginChallenge = oauthLoginChallenge;
+    if (!oauthLoginChallenge) {
+      this.isLoading = false;
       return;
     }
 
@@ -93,7 +84,7 @@ export default {
 
     try {
       const res = await this.$options.accountsStore.checkOauthLoginRequirements(
-        loginChallenge,
+        oauthLoginChallenge,
       );
 
       if (res.skip) {
@@ -105,13 +96,11 @@ export default {
     } catch (e) {
       this.error = this.$i18n.t('components.loginProvider.notWorkingError');
     }
-    this.isLoadingChallenge = false;
+    this.isLoading = false;
   },
 
   components: {
     LoginProvider,
-    LoadingScreen,
-    VFrame,
   },
 };
 </script>

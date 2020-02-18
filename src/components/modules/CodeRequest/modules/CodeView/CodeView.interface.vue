@@ -12,6 +12,7 @@
 
 <script>
 import CodeView from './CodeView.container';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'CodeViewInterface',
@@ -30,6 +31,9 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
 
     email: {

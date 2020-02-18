@@ -13,6 +13,7 @@
 import CodeRequest from '@/components/modules/CodeRequest';
 import { authStore } from '@/store';
 import createAuthController from './AuthController';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'CodeRequestInteractor',
@@ -24,6 +25,9 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
 
     email: {

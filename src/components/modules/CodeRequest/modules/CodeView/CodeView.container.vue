@@ -38,6 +38,9 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
 
     email: {

@@ -1,16 +1,23 @@
 <template>
-  <component
-    :is="currentComponent"
-    :email="email"
-    :error="error"
-    :is-loading="isLoading"
-    :challenge-type="challengeType"
-    :login-challenge="loginChallenge"
-    @complete="onComplete"
-    @recover="onRecover"
-    @recovered="onRecovered"
-    @recovery-cancel="onRecoveryCancel"
-  />
+  <loading-screen :is-loading="isLoading">
+    <v-frame
+      title=""
+      :is-closable="isClosable"
+      @close="onClose"
+    >
+      <component
+        :is="currentComponent"
+        :email="email"
+        :error="error"
+        :challenge-type="challengeType"
+        :oauth-login-challenge="oauthLoginChallenge"
+        @complete="onComplete"
+        @recover="onRecover"
+        @recovered="onRecovered"
+        @recovery-cancel="onRecoveryCancel"
+      />
+    </v-frame>
+  </loading-screen>
 </template>
 
 <script>
@@ -19,11 +26,12 @@ import CodeRequest from './modules/CodeRequest';
 import Error from '@/components/modules/Error';
 import NoChallenge from './modules/NoChallenge';
 
-import { accountsStore } from '@/store';
+import LoadingScreen from '@/components/common/LoadingScreen';
+import VFrame from '@/components/common/VFrame';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'ProviderContainer',
-  accountsStore,
 
   props: {
     error: {
@@ -36,7 +44,12 @@ export default {
       required: true,
     },
 
-    loginChallenge: {
+    isClosable: {
+      type: Boolean,
+      default: false,
+    },
+
+    oauthLoginChallenge: {
       type: String,
       default: '',
     },
@@ -49,6 +62,9 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
   },
 
@@ -62,7 +78,7 @@ export default {
         return Error;
       }
 
-      if (!this.loginChallenge) {
+      if (!this.oauthLoginChallenge) {
         return NoChallenge;
       }
 
@@ -90,6 +106,12 @@ export default {
     onRecoveryCancel() {
       this.isRecovering = false;
     },
+
+    onClose() {
+      this.$emit('close');
+    },
   },
+
+  components: { VFrame, LoadingScreen },
 };
 </script>

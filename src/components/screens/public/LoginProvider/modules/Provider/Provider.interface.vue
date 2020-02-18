@@ -4,13 +4,14 @@
     :error="error"
     :is-loading="isLoading"
     :challenge-type="challengeType"
-    :login-challenge="loginChallenge"
+    :oauth-login-challenge="oauthLoginChallenge"
     @complete="onComplete"
   />
 </template>
 
 <script>
 import Provider from './Provider.container';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'ProviderInterface',
@@ -26,7 +27,12 @@ export default {
       required: true,
     },
 
-    loginChallenge: {
+    isClosable: {
+      type: Boolean,
+      default: false,
+    },
+
+    oauthLoginChallenge: {
       type: String,
       default: '',
     },
@@ -39,6 +45,9 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
   },
 

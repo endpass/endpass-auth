@@ -12,6 +12,7 @@
 <script>
 import CodeRequest from '@/components/modules/CodeRequest';
 import createLoginController from './LoginController';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'CodeRequestInteractor',
@@ -22,9 +23,12 @@ export default {
     challengeType: {
       type: String,
       required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
 
-    loginChallenge: {
+    oauthLoginChallenge: {
       type: String,
       default: '',
     },
@@ -48,7 +52,7 @@ export default {
         const {
           redirect,
         } = await this.$options.loginController.authLoginChallenge({
-          challengeId: this.loginChallenge,
+          challengeId: this.oauthLoginChallenge,
           code,
         });
         this.$emit('complete', { redirect });
