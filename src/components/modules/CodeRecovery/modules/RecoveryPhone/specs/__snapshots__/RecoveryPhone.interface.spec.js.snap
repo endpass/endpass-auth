@@ -1,0 +1,5 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecoveryPhoneInterface render should correctly render component 1`] = `<recovery-phone-stub error="" isphoneexist="true" email=""></recovery-phone-stub>`;
+
+exports[`RecoveryPhoneInterface render should render recovery code 1`] = `<recovery-phone-stub error="" isphoneexist="true" email=""></recovery-phone-stub>`;

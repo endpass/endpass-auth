@@ -1,5 +1,5 @@
 <template>
-  <code-view
+  <code-otp
     :challenge-type="challengeType"
     :is-loading="isLoading"
     :email="email"
@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import CodeView from './modules/CodeView';
+import CodeOtp from './modules/CodeOtp';
 import { authStore } from '@/store';
 import { CHALLENGE_TYPES } from '@/constants';
 
@@ -89,7 +89,7 @@ export default {
   },
 
   components: {
-    CodeView,
+    CodeOtp,
   },
 };
 </script>

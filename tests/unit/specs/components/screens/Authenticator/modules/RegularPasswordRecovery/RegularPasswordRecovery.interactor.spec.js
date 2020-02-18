@@ -2,7 +2,7 @@ import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email, regularPassword as password, code } from '@unitFixtures/auth';
 import RegularPasswordRecoveryInteractor from '@/components/screens/Authenticator/modules/RegularPasswordRecovery/RegularPasswordRecovery.interactor';
-import RegularPasswordRecoveryView from '@/components/screens/Authenticator/modules/RegularPasswordRecovery/RegularPasswordRecovery.view';
+import RegularPasswordRecoveryPhone from '@/components/screens/Authenticator/modules/RegularPasswordRecovery/RegularPasswordRecovery.view';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 import identityService from '@/service/identity';
@@ -50,7 +50,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
       it('should emit cancel', () => {
         expect(wrapper.emitted().cancel).toBeUndefined();
 
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('cancel');
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('cancel');
 
         expect(wrapper.emitted().cancel.length).toBe(1);
         expect(wrapper.emitted().cancel[0]).toEqual([]);
@@ -68,7 +68,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
 
         expect(authService.sendEmailCode).not.toBeCalled();
 
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
 
         expect(authService.sendEmailCode).toBeCalledTimes(1);
         expect(authService.sendEmailCode).toBeCalledWith(email);
@@ -79,8 +79,8 @@ describe('RegularPasswordRecoveryInteractor', () => {
 
         expect(authService.sendEmailCode).not.toBeCalled();
 
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
 
         expect(authService.sendEmailCode).toBeCalledTimes(1);
         expect(authService.sendEmailCode).toBeCalledWith(email);
@@ -95,7 +95,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
         });
 
         it('should be true while sending', () => {
-          wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+          wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
 
           expect(
             wrapper.find('regular-password-recovery-stub').attributes()
@@ -106,7 +106,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
         it('should be false after sending', async () => {
           expect.assertions(1);
 
-          wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+          wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
           await global.flushPromises();
 
           expect(
@@ -128,7 +128,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
             wrapper.find('regular-password-recovery-stub').attributes().error,
           ).toBeFalsy();
 
-          wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+          wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
           await global.flushPromises();
 
           expect(
@@ -139,10 +139,10 @@ describe('RegularPasswordRecoveryInteractor', () => {
         it('should remove error if exists before', async () => {
           expect.assertions(1);
 
-          wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+          wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
           await global.flushPromises();
 
-          wrapper.find(RegularPasswordRecoveryView).vm.$emit('send-code');
+          wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('send-code');
 
           expect(
             wrapper.find('regular-password-recovery-stub').attributes().error,
@@ -163,7 +163,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
         expect(identityService.confirmResetRegularPassword).not.toBeCalled();
 
         wrapper
-          .find(RegularPasswordRecoveryView)
+          .find(RegularPasswordRecoveryPhone)
           .vm.$emit('submit', { password, code });
 
         expect(identityService.confirmResetRegularPassword).toBeCalledTimes(1);
@@ -175,8 +175,8 @@ describe('RegularPasswordRecoveryInteractor', () => {
       it('should not handle submit event when loading status true', async () => {
         expect.assertions(1);
 
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('submit', { code });
-        wrapper.find(RegularPasswordRecoveryView).vm.$emit('submit', { code });
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('submit', { code });
+        wrapper.find(RegularPasswordRecoveryPhone).vm.$emit('submit', { code });
 
         expect(identityService.confirmResetRegularPassword).toBeCalledTimes(1);
       });
@@ -187,7 +187,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
         expect(wrapper.emitted()['password-recovered']).toBeUndefined();
 
         wrapper
-          .find(RegularPasswordRecoveryView)
+          .find(RegularPasswordRecoveryPhone)
           .vm.$emit('submit', { password, code });
         await global.flushPromises();
 
@@ -207,7 +207,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
 
         it('should be true after submit', () => {
           wrapper
-            .find(RegularPasswordRecoveryView)
+            .find(RegularPasswordRecoveryPhone)
             .vm.$emit('submit', { code });
 
           expect(
@@ -220,7 +220,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
           expect.assertions(1);
 
           wrapper
-            .find(RegularPasswordRecoveryView)
+            .find(RegularPasswordRecoveryPhone)
             .vm.$emit('submit', { code });
           await global.flushPromises();
 
@@ -246,7 +246,7 @@ describe('RegularPasswordRecoveryInteractor', () => {
           ).toBeFalsy();
 
           wrapper
-            .find(RegularPasswordRecoveryView)
+            .find(RegularPasswordRecoveryPhone)
             .vm.$emit('submit', { code });
           await global.flushPromises();
 
@@ -259,12 +259,12 @@ describe('RegularPasswordRecoveryInteractor', () => {
           expect.assertions(1);
 
           wrapper
-            .find(RegularPasswordRecoveryView)
+            .find(RegularPasswordRecoveryPhone)
             .vm.$emit('submit', { code });
           await global.flushPromises();
 
           wrapper
-            .find(RegularPasswordRecoveryView)
+            .find(RegularPasswordRecoveryPhone)
             .vm.$emit('submit', { code });
 
           expect(

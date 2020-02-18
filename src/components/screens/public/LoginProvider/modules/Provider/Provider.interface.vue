@@ -6,6 +6,7 @@
     :challenge-type="challengeType"
     :oauth-login-challenge="oauthLoginChallenge"
     @complete="onComplete"
+    @close="onClose"
   />
 </template>
 
@@ -54,6 +55,10 @@ export default {
   methods: {
     onComplete({ redirect }) {
       this.$emit('complete', { redirect });
+    },
+
+    onClose() {
+      this.$emit('close');
     },
   },
 

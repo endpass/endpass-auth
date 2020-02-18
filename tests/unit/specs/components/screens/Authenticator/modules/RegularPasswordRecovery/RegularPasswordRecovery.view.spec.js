@@ -6,7 +6,7 @@ import {
   code,
 } from '@unitFixtures/auth';
 import VeeValidate from 'vee-validate';
-import RegularPasswordRecoveryView from '@/components/screens/Authenticator/modules/RegularPasswordRecovery/RegularPasswordRecovery.view';
+import RegularPasswordRecoveryPhone from '@/components/screens/Authenticator/modules/RegularPasswordRecovery/RegularPasswordRecovery.view';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -14,13 +14,13 @@ const i18n = setupI18n(localVue);
 
 localVue.use(VeeValidate);
 
-describe('RegularPasswordRecoveryView', () => {
+describe('RegularPasswordRecoveryPhone', () => {
   let wrapper;
 
   beforeEach(() => {
     jest.clearAllMocks();
 
-    wrapper = shallowMount(RegularPasswordRecoveryView, {
+    wrapper = shallowMount(RegularPasswordRecoveryPhone, {
       provide: {
         theme: 'default',
       },
@@ -35,7 +35,7 @@ describe('RegularPasswordRecoveryView', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
-      expect(wrapper.name()).toBe('RegularPasswordRecoveryView');
+      expect(wrapper.name()).toBe('RegularPasswordRecoveryPhone');
       expect(wrapper.html()).toMatchSnapshot();
     });
 

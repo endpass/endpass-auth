@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`RecoveryViewContainer render should correctly render component 1`] = `
-<loading-screen-stub>
-  <withphone-stub error=""></withphone-stub>
-</loading-screen-stub>
-`;

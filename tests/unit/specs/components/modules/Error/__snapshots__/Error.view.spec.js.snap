@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`ErrorView render should correctly render component 1`] = `
-<message-stub error="true" data-test="error-message">
-
-</message-stub>
-`;
