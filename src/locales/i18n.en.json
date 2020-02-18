@@ -36,14 +36,14 @@
     },
     "createPassword": {
       "confirmError": "Something went wrong while creating a password. Please, try again",
-      "description": "You have no regular password for the Endpass account. This password for login only.",
+      "description": "You have no password for the Endpass account. This password for login only.",
       "labelCode": "Code from email",
       "labelCodeEmail": "Code from: {email}",
       "newPassword": "Enter new password...",
       "placeholderCode": "Enter received code...",
       "repeatPassword": "Repeat new password...",
       "sendError": "Something went wrong while sending the code. Please, try again",
-      "title": "Create regular password"
+      "title": "Create password"
     },
     "createWallet": {
       "confirmPass": "Confirm password...",
@@ -52,7 +52,7 @@
       "enterPass": "Enter password...",
       "error": "Something went wrong while creating the new Wallet",
       "passwordCreate": "Create wallet password",
-      "passwordDescription": "Please define password for your wallet account. This password must <span class='v-fw-b'>NOT</span> be equal with the regular password",
+      "passwordDescription": "Please define password for your wallet account. This password must <span class='v-fw-b'>NOT</span> be equal with the password",
       "recoverySubtitle": "The words below are called your Seed Phrase. It enables you accessing your Endpass and restore your wallet. Notice that the order of the words is significant, and it is recognized while checking.",
       "recoveryTitle": "Write your Seed Phrase below",
       "seedConfirmation": "Yes, I've written down the words and stored them in a secure place."
@@ -88,7 +88,7 @@
     "passwordForm": {
       "applyConnectTo": "Please apply connect to",
       "enterPassword": "Enter your password...",
-      "regularPassword": "Your regular password:"
+      "regularPassword": "Your password:"
     },
     "rateLimit": {
       "title": "The rate limit exceeded!",
