@@ -89,7 +89,7 @@ import FormControls from '@/components/common/FormControls';
 import SendCode from '@/components/common/SendCode';
 
 export default {
-  name: 'RegularPasswordRecoveryPhone',
+  name: 'RegularPasswordRecoveryView',
 
   props: {
     email: {
