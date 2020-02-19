@@ -158,10 +158,14 @@ export default {
     },
 
     openRoute(name) {
+      // if do .push to the same route, throw will called (because it promise)
+      // that's why we need make it empty
       this.$router.push({ name }).catch(() => {});
     },
 
     replaceRoute(name) {
+      // if do .replace to the same route, throw will called (because it promise)
+      // that's why we need make it empty
       this.$router.replace({ name }).catch(() => {});
     },
 
