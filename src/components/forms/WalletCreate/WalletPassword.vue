@@ -12,6 +12,7 @@
       </v-description>
       <form-item>
         <v-input
+          ref="password"
           v-model="password"
           v-validate="'required|min:8'"
           data-vv-as="password"
@@ -26,7 +27,7 @@
       <form-item>
         <v-input
           v-model="passwordConfirm"
-          v-validate="'required|min:8'"
+          v-validate="'required|confirmed:password'"
           label=""
           data-vv-as="password confirm"
           data-vv-name="passwordConfirm"
@@ -89,11 +90,7 @@ export default {
 
   computed: {
     isSubmitAvailable() {
-      return this.isPasswordEqual && !this.isLoading && this.isFormValid;
-    },
-
-    isPasswordEqual() {
-      return this.password && this.password === this.passwordConfirm;
+      return !this.isLoading && this.isFormValid;
     },
   },
 

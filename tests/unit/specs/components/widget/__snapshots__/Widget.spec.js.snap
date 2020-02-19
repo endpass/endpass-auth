@@ -4,7 +4,7 @@ exports[`Widget render should correctly render 1`] = `
 <div data-test="widget-container" class="widget">
   <!---->
   <div class="widget-frame bottom">
-    <widget-header-stub fiatcurrency="USD" iscollapsed="true"></widget-header-stub>
+    <widget-header-stub fiatcurrency="USD" iscollapsed="true" ethbalance="0.0001"></widget-header-stub>
     <widget-content-stub iscollapsed="true">
       <widget-accounts-stub accounts="[object Object]" iscollapsed="true" currentaccount="0x68Aa50bB77C85F99D55f3Ad3762C5EcD250967Cb"></widget-accounts-stub>
     </widget-content-stub>

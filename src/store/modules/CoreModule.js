@@ -1,5 +1,5 @@
 import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import { METHODS, DIRECTION } from '@/constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import settingsService from '@/service/settings';
@@ -12,7 +12,7 @@ import {
 
 // TODO: move it to the streams methods
 import dialogClose from '@/streams/actions/dialogClose';
-import isDialogUtil from '@/util/isDialog';
+import isDialog from '@/util/isDialog';
 import { initDialogResize } from '@/streams/actions/dialogResize';
 import { sendOpen } from '@/streams/actions/dialogOpen';
 import Answer from '@/class/Answer';
@@ -38,9 +38,9 @@ class CoreModule extends VuexModule {
 
   rateLimitTimeout = 0;
 
-  isIdentityMode = '';
+  isIdentityMode = false;
 
-  isDialog = isDialogUtil;
+  isDialog = isDialog;
 
   constructor(props, { authStore, sharedStore }) {
     super(props);
@@ -71,43 +71,39 @@ class CoreModule extends VuexModule {
   }
 
   @Action
-  async initStreams({ isDialog, isWidget }) {
+  async initStreams({ isDialogStream, isWidgetStream }) {
     this.isInitStarted = true;
     this.isIniting = true;
 
     try {
-      if (isDialog || isWidget) {
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_OPEN);
+
+      if (isDialogStream || isWidgetStream) {
         await this.setupCore();
       }
 
       await this.setupResize();
 
-      if (isDialog) {
+      if (isDialogStream) {
         await this.setupDialog();
       }
 
-      if (isWidget) {
+      if (isWidgetStream) {
         await this.setupWidget();
       }
 
       await this.authStore.defineAuthStatus();
       await this.startBridge();
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_READY);
+
+      // deprecated
+      bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
     } catch (e) {
+      bridgeMessenger.send(METHODS.BRIDGE_CONNECTION_ERROR);
       console.error(e);
       throw e;
     } finally {
       this.isIniting = false;
-    }
-  }
-
-  @Action
-  async init() {
-    try {
-      await this.authStore.defineAuthStatus();
-      await this.startBridge();
-      // eslint-disable-next-line
-    } catch (err) {
-      console.error(err);
     }
   }
 
@@ -172,7 +168,6 @@ class CoreModule extends VuexModule {
     }
 
     initCoreStream();
-    bridgeMessenger.send(METHODS.READY_STATE_BRIDGE);
   }
 
   @Action

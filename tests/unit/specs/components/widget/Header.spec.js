@@ -11,21 +11,28 @@ const i18n = setupI18n(localVue);
 localVue.use(Vuex);
 
 describe('Widget Header', () => {
-  let wrapperFactory;
   let wrapper;
+  let accountsStore;
+  jest.useFakeTimers();
+
+  const wrapperFactory = (options = {}) => {
+    const store = createStore();
+    const {
+      accountsStore: accountsStoreModule,
+      gasPriceStore,
+    } = createStoreModules(store);
+
+    accountsStore = accountsStoreModule;
+    return shallowMount(Header, {
+      gasPriceStore,
+      accountsStore,
+      localVue,
+      i18n,
+      ...options,
+    });
+  };
 
   beforeEach(() => {
-    wrapperFactory = (options = {}) => {
-      const store = createStore();
-      const { gasPriceStore } = createStoreModules(store);
-      return shallowMount(Header, {
-        gasPriceStore,
-        localVue,
-        i18n,
-        ...options,
-      });
-    };
-
     wrapper = wrapperFactory();
   });
 
@@ -37,14 +44,11 @@ describe('Widget Header', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render spinner if balance is not passed', () => {
-      expect(wrapper.find('spinner-stub').exists()).toBe(true);
-    });
-
     it('should render spinner if current mode is fiat and eth price is not defined', () => {
       wrapper = wrapperFactory({
         propsData: {
           balance: '1000',
+          isBalanceLoading: false,
         },
       });
       wrapper.setData({
@@ -54,23 +58,31 @@ describe('Widget Header', () => {
       expect(wrapper.find('spinner-stub').exists()).toBe(true);
     });
 
-    it('should not render spinner if balance is passed and should render balance', () => {
+    it('should not render spinner if balance is passed and should render balance', async () => {
+      expect.assertions(2);
+
       wrapper = wrapperFactory({
         propsData: {
-          balance: '1000',
+          ethBalance: '1000',
+          isBalanceLoading: false,
         },
       });
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
       expect(wrapper.find('spinner-stub').exists()).toBe(false);
     });
 
-    it('should not render spinner if balance equals to stringified 0', () => {
+    it('should not render spinner if balance equals to 0 as String ', async () => {
+      expect.assertions(2);
+
       wrapper = wrapperFactory({
         propsData: {
-          balance: '0',
+          ethBalance: '1000',
+          isBalanceLoading: false,
         },
       });
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').exists()).toBe(true);
       expect(wrapper.find('spinner-stub').exists()).toBe(false);
@@ -89,26 +101,35 @@ describe('Widget Header', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render balance in ether', () => {
+    it('should render balance in ether', async () => {
+      expect.assertions(1);
+
       wrapper = wrapperFactory({
         propsData: {
-          balance: '1000000000000000000',
+          isBalanceLoading: false,
+          ethBalance: '1',
         },
       });
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
     });
 
-    it('should render balance in fiat', () => {
+    it('should render balance in fiat', async () => {
+      expect.assertions(1);
+
       wrapper = wrapperFactory({
         propsData: {
-          balance: '1000000000000000000',
+          isBalanceLoading: false,
+          ethBalance: '1',
         },
       });
       wrapper.setData({
         ethPriceInFiat: '100',
         isBalanceInFiat: true,
       });
+
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('100.00');
     });
@@ -128,9 +149,15 @@ describe('Widget Header', () => {
     it('should emit toggle event on header click if loading is falsy', async () => {
       expect.assertions(1);
 
-      wrapper.setProps({
-        balance: '10000000000',
+      wrapper = wrapperFactory({
+        propsData: {
+          isBalanceLoading: false,
+          ethBalance: '10000000000',
+        },
       });
+
+      await global.flushPromises();
+
       wrapper.find('[data-test=widget-header]').trigger('click');
 
       await wrapper.vm.$nextTick();
@@ -138,16 +165,21 @@ describe('Widget Header', () => {
       expect(wrapper.emitted().toggle).toBeTruthy();
     });
 
-    it('should change balance render mode in currency toggler changes', () => {
+    it('should change balance render mode in currency toggle changes', async () => {
+      expect.assertions(2);
+
       wrapper = wrapperFactory({
         propsData: {
-          balance: '1000000000000000000',
+          isBalanceLoading: false,
+          ethBalance: '1',
           fiatCurrency: 'USD',
         },
       });
       wrapper.setData({
         ethPriceInFiat: '100',
       });
+
+      await global.flushPromises();
 
       expect(wrapper.find('[data-test=balance-label]').text()).toBe('1.000000');
 

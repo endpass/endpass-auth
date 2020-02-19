@@ -2,6 +2,6 @@
 
 exports[`Bridge render should render "empty" markup 1`] = `
 <v-frame-stub title="Connect" isclosable="true">
-  <v-description-stub>Endpass Auth bridge v1.3.2</v-description-stub>
+  <v-description-stub>Endpass Auth bridge v1.3.4</v-description-stub>
 </v-frame-stub>
 `;

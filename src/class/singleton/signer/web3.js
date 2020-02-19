@@ -1,22 +1,17 @@
-import Web3 from 'web3';
 import Network from '@endpass/class/Network';
-import ProviderFactory from '@endpass/class/ProviderFactory';
+import Web3Api from '@endpass/web3/public-api';
 
-const netUrl = Network.NETWORK_URL_HTTP[Network.NET_ID.MAIN][0];
+const NETWORK_URLS = Network.NETWORK_URL_HTTP;
 
-export const web3 = new Web3(netUrl);
+const defaultUrl = NETWORK_URLS[Network.NET_ID.MAIN][0];
 
-export const setWeb3Network = (net = Network.NET_ID.MAIN) => {
-  if (
-    web3.currentProvider &&
-    web3.currentProvider.connection &&
-    web3.currentProvider.connection.isMock
-  ) {
-    return;
-  }
+const web3 = new Web3Api({
+  netUrl: defaultUrl,
+});
 
-  const nextNetUrl = Network.NETWORK_URL_HTTP[net][0];
-  const nextProvider = ProviderFactory.getInstance(nextNetUrl);
-
-  web3.setProvider(nextProvider);
+export const setWeb3Network = (netId = Network.NET_ID.MAIN) => {
+  const nextNetUrl = NETWORK_URLS[netId][0];
+  web3.setNetwork(nextNetUrl);
 };
+
+export default web3;

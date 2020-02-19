@@ -1,23 +1,10 @@
 <template>
-  <screen @close="onCancel">
-    <v-modal-card
-      :is-closable="isDialog"
-      @close="onCancel"
-    >
-      <composite-auth-form
-        :is-closable="isDialog"
-        @cancel="onCancel"
-        @authorize="onAuth"
-      />
-    </v-modal-card>
-  </screen>
+  <loading-screen :is-loading="true" />
 </template>
 
 <script>
-import VModalCard from '@endpass/ui/kit/VModalCard';
-import Screen from '@/components/common/Screen';
-import CompositeAuthForm from '@/components/forms/CompositeAuth';
 import { authStore, coreStore } from '@/store';
+import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
   name: 'Auth',
@@ -32,20 +19,37 @@ export default {
   },
 
   methods: {
-    onCancel() {
+    cancelAuth() {
       this.$options.authStore.cancelAuth();
       this.$options.coreStore.dialogClose();
     },
 
-    onAuth({ serverMode } = {}) {
+    handleAuth({ serverMode } = {}) {
       this.$options.authStore.confirmAuth(serverMode);
     },
   },
 
+  mounted() {
+    const { params } = this.$route;
+
+    switch (true) {
+      case params.isAuthCancel:
+        this.cancelAuth();
+        break;
+
+      case params.isAuthSuccess: {
+        const { serverMode } = params;
+        this.handleAuth({ serverMode });
+        break;
+      }
+
+      default:
+        this.$router.replace({ name: 'SignIn' }).catch(() => {});
+    }
+  },
+
   components: {
-    Screen,
-    VModalCard,
-    CompositeAuthForm,
+    LoadingScreen,
   },
 };
 </script>

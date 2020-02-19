@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProviderContainer render should correctly render component 1`] = `
+<loading-screen-stub>
+  <v-frame-stub title="">
+    <coderequestinterface-stub challengetype="EMAIL_OTP" oauthloginchallenge="123" email="user@email.com" error=""></coderequestinterface-stub>
+  </v-frame-stub>
+</loading-screen-stub>
+`;

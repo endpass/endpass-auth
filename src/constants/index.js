@@ -9,7 +9,14 @@ export const METHODS = {
   AUTH_STATUS: 'AUTH_STATUS',
   LOGOUT: 'LOGOUT',
   INITIATE: 'INITIATE',
+
+  // deprecated
   READY_STATE_BRIDGE: 'READY_STATE_BRIDGE',
+
+  BRIDGE_CONNECTION_OPEN: 'BRIDGE_CONNECTION_OPEN',
+  BRIDGE_CONNECTION_READY: 'BRIDGE_CONNECTION_READY',
+  BRIDGE_CONNECTION_ERROR: 'BRIDGE_CONNECTION_ERROR',
+
   EXCHANGE_TOKEN_REQUEST: 'EXCHANGE_TOKEN_REQUEST',
   CREATE_DOCUMENT: 'CREATE_DOCUMENT',
   GENERATE_WALLET: 'GENERATE_WALLET',
@@ -87,15 +94,26 @@ export const DOCUMENT_SIDES = {
 
 /**
  * @type {{
- *   EMAIL: 'emailLink',
- *   OTP: 'otp',
- *   PASSWORD: 'password',
+    EMAIL_OTP: 'EMAIL_OTP',
+    APP_OTP: 'APP_OTP',
+    SMS_OTP: 'SMS_OTP',
  * }}
  */
 export const CHALLENGE_TYPES = {
-  EMAIL: 'emailLink',
+  EMAIL_OTP: 'EMAIL_OTP',
+  APP_OTP: 'APP_OTP',
+  SMS_OTP: 'SMS_OTP',
+};
+
+/**
+ * @type {{
   OTP: 'otp',
-  PASSWORD: 'password',
+  SMS: 'sms',
+ * }}
+ */
+export const CHALLENGE_TYPES_ANSWER = {
+  OTP: 'otp',
+  SMS: 'sms',
 };
 
 /**

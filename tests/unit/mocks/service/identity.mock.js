@@ -13,6 +13,8 @@ jest.mock('@/service/identity', () => {
     otpAuth: jest.fn(),
     checkAccountExist: jest.fn(),
     getSettingsSkipPermission: jest.fn(),
+    resetRegularPassword: jest.fn(),
+    confirmResetRegularPassword: jest.fn(),
   };
 });
 

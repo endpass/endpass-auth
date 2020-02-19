@@ -1,0 +1,52 @@
+<template>
+  <auth-form-container
+    :is-returnable="isReturnable"
+    :is-closable="isDialog"
+    v-bind="$attrs"
+    v-on="$listeners"
+  >
+    <slot :is-closable="isDialog" />
+  </auth-form-container>
+</template>
+
+<script>
+import AuthFormContainer from './Authenticator.view';
+import { coreStore, authStore } from '@/store';
+
+export default {
+  name: 'AuthenticatorInteractor',
+
+  authStore,
+  coreStore,
+
+  props: {
+    isReturnable: {
+      type: Boolean,
+      default: false,
+    },
+  },
+
+  computed: {
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
+
+    challengeType() {
+      return this.$options.authStore.challengeType;
+    },
+  },
+
+  watch: {
+    challengeType: {
+      handler(newVal) {
+        this.$emit('update:challenge-type', newVal);
+      },
+      immediate: true,
+    },
+  },
+
+  components: {
+    AuthFormContainer,
+  },
+};
+</script>

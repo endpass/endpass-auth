@@ -1,61 +1,11 @@
+import publicRoutes from './routes/public';
+import authenticator from './routes/authenticator';
+import wallet from './routes/wallet';
+
 const routes = [
-  {
-    path: '/public/widget',
-    name: 'Widget',
-    component: () =>
-      import(/* webpackChunkName: "widget" */ '@/components/widget/Widget'),
-    meta: {
-      isWidget: true,
-    },
-  },
-  {
-    path: '/public/auth',
-    name: 'PublicAuthScreen',
-    component: () =>
-      import(
-        /* webpackChunkName: "component-public-auth" */ '@/components/screens/public/Auth'
-      ),
-
-    meta: {
-      isBackground: true,
-    },
-  },
-  {
-    path: '/public/login',
-    name: 'LoginProvider',
-    component: () =>
-      import(
-        /* webpackChunkName: "component-login-provider" */ '@/components/screens/public/LoginProvider'
-      ),
-
-    meta: {
-      isBackground: true,
-    },
-  },
-  {
-    path: '/public/consent',
-    name: 'ConsentProvider',
-    component: () =>
-      import(
-        /* webpackChunkName: "component-consent-provider" */ '@/components/screens/public/ConsentProvider'
-      ),
-
-    meta: {
-      isBackground: true,
-    },
-  },
-  {
-    path: '/public/error',
-    name: 'Error',
-    component: () =>
-      import(
-        /* webpackChunkName: "component-error" */ '@/components/screens/public/Error'
-      ),
-
-    meta: {
-      isBackground: true,
-    },
-  },
+  ...publicRoutes,
+  ...authenticator,
+  ...wallet,
   {
     path: '/bridge',
     name: 'Bridge',
@@ -65,7 +15,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -90,7 +40,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -103,7 +53,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -116,7 +66,7 @@ const routes = [
       ),
 
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -126,7 +76,7 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "screen-sign" */ '@/components/screens/Sign'),
     meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },
@@ -138,43 +88,7 @@ const routes = [
         /* webpackChunkName: "document-create" */ '@/components/screens/DocumentCreate'
       ),
     meta: {
-      isDialog: true,
-      isBackground: true,
-    },
-  },
-  {
-    path: '/wallet-generate',
-    name: 'WalletGenerate',
-    component: () =>
-      import(
-        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletGenerate'
-      ),
-    meta: {
-      isDialog: true,
-      isBackground: true,
-    },
-  },
-  {
-    path: '/wallet-create',
-    name: 'WalletCreate',
-    component: () =>
-      import(
-        /* webpackChunkName: "wallet-create" */ '@/components/screens/WalletCreate'
-      ),
-    meta: {
-      isDialog: true,
-      isBackground: true,
-    },
-  },
-  {
-    path: '/wallet-create/error',
-    name: 'WalletCreateError',
-    component: () =>
-      import(
-        /* webpackChunkName: "wallet-create-error" */ '@/components/screens/WalletCreateError'
-      ),
-    meta: {
-      isDialog: true,
+      isDialogStream: true,
       isBackground: true,
     },
   },

@@ -136,7 +136,7 @@ const documentsService = {
    * @param {string} docId
    * @return {Promise<void>}
    */
-  async waitDocumentRecognition(docId) {
+  async waitDocumentUpload(docId) {
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,

@@ -1,13 +1,15 @@
+import signer from '@/class/singleton/signer';
+
 export default async function() {
   // eslint-disable-next-line global-require
-  const { web3, setWeb3Network } = require('@/class/singleton/signer/web3');
+  const web3 = await signer.getWeb3Instance();
 
   /* eslint-disable-next-line */
   console.warn('AUTH is working on E2E MODE');
 
   window.Cypress = true;
   window.parent.setWeb3AuthProvider = net => {
-    setWeb3Network(net);
+    signer.setWeb3Network(net);
     window.parent.web3AuthNet = net;
     window.parent.web3Auth = web3;
   };

@@ -142,5 +142,18 @@ describe('ConsentProvider', () => {
 
       expect(window.location.href).toBe(redirectUrl);
     });
+
+    it('should show scopes error, if details is empty', async () => {
+      expect.assertions(1);
+
+      permissionsService.getConsentDetails.mockResolvedValueOnce({});
+
+      wrapper = createWrapper();
+      await global.flushPromises();
+
+      expect(wrapper.find('v-error-stub').attributes().hint).toBe(
+        i18n.t('components.consentProvider.scopesRequired'),
+      );
+    });
   });
 });

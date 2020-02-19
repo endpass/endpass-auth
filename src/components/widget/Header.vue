@@ -4,7 +4,7 @@
     data-test="widget-header"
     role="button"
     tabindex="0"
-    @click="handleTogglerClick"
+    @click="onToggle"
   >
     <section class="widget-header-control">
       <h3 class="widget-header-title v-lh-1-3">
@@ -62,23 +62,18 @@
 <script>
 import BigNumber from 'bignumber.js';
 import VLink from '@endpass/ui/kit/VLink';
-import { fromWei } from '@/util/number';
 import Spinner from '@/components/common/Spinner';
 import VSvgIcon from '@/components/common/VSvgIcon';
 import CurrencyToggler from './CurrencyToggler.vue';
-import { gasPriceStore } from '@/store';
+import { gasPriceStore, accountsStore } from '@/store';
 
 export default {
   name: 'WidgetHeader',
 
+  accountsStore,
   gasPriceStore,
 
   props: {
-    balance: {
-      type: String,
-      default: null,
-    },
-
     fiatCurrency: {
       type: String,
       default: 'USD',
@@ -88,12 +83,23 @@ export default {
       type: Boolean,
       default: true,
     },
+
+    isBalanceLoading: {
+      type: Boolean,
+      default: true,
+    },
+
+    ethBalance: {
+      type: String,
+      default: '0',
+    },
   },
 
   data: () => ({
     ethPriceInFiat: 0,
     isSubscribedOnPrices: false,
     isBalanceInFiat: false,
+    handlerTimerId: null,
   }),
 
   computed: {
@@ -108,7 +114,8 @@ export default {
     },
 
     actualBalance() {
-      const balanceInEth = fromWei(this.balance);
+      // TODO: move this logic to store
+      const balanceInEth = this.ethBalance;
 
       if (BigNumber(balanceInEth).isZero()) {
         return '0';
@@ -141,9 +148,13 @@ export default {
     },
 
     isLoading() {
-      const { balance, isBalanceInFiat, ethPriceInFiat } = this;
+      if (this.isBalanceLoading) {
+        return true;
+      }
 
-      return !balance || (isBalanceInFiat && !ethPriceInFiat);
+      const { isBalanceInFiat, ethPriceInFiat } = this;
+
+      return isBalanceInFiat && !ethPriceInFiat;
     },
   },
 
@@ -157,24 +168,28 @@ export default {
 
   methods: {
     subscribeOnEthPrices() {
-      const handler = () =>
-        setTimeout(async () => {
-          if (!this.isBalanceInFiat) {
-            this.isSubscribedOnPrices = false;
-            return;
-          }
+      // TODO: move this logic to store
+      window.clearTimeout(this.handlerTimerId);
 
-          this.ethPriceInFiat = await this.$options.gasPriceStore.getEtherPrice(
-            this.fiatCurrency,
-          );
+      const handler = async () => {
+        if (!this.isBalanceInFiat) {
+          this.isSubscribedOnPrices = false;
+          return;
+        }
 
+        this.ethPriceInFiat = await this.$options.gasPriceStore.getEtherPrice(
+          this.fiatCurrency,
+        );
+
+        this.handlerTimerId = setTimeout(() => {
           handler();
         }, 5000);
+      };
 
       handler();
     },
 
-    handleTogglerClick() {
+    onToggle() {
       if (this.isLoading) return;
 
       this.$emit('toggle');

@@ -84,10 +84,6 @@ export default {
     },
 
     onClose() {
-      if (window.opener) {
-        window.self.opener = window.self;
-        window.self.close();
-      }
       this.$options.coreStore.cancelAllChannels();
       this.$options.coreStore.dialogClose();
     },
@@ -106,6 +102,13 @@ export default {
         if (skip) {
           this.isSkipped = true;
           window.location.href = redirectUrl;
+        }
+
+        if (!requestedScope) {
+          this.setError(
+            this.$i18n.t('components.consentProvider.scopesRequired'),
+          );
+          return;
         }
 
         this.scopesList = requestedScope;

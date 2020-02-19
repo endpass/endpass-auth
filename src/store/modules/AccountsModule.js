@@ -1,21 +1,28 @@
-import { Action, VuexModule, Module, Mutation } from 'vuex-class-modules';
+import { Action, VuexModule, Module } from 'vuex-class-modules';
 import get from 'lodash/get';
 import isEmpty from 'lodash/isEmpty';
 import isV3 from '@endpass/utils/isV3';
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import Network from '@endpass/class/Network';
+import { toChecksumAddress } from 'web3-utils';
 import identityService from '@/service/identity';
 import signer from '@/class/singleton/signer';
 import permissionsService from '@/service/permissions';
 import settingsService from '@/service/settings';
-import cryptoDataService from '@/service/cryptoData';
 import userService from '@/service/user';
 import authService from '@/service/auth';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 import i18n from '@/locales/i18n';
+
 import { accountChannel, permissionChannel } from '@/class/singleton/channels';
+
 import Answer from '@/class/Answer';
-import { ENCRYPT_OPTIONS, METHODS, WALLET_TYPES } from '@/constants';
+import {
+  CHALLENGE_TYPES,
+  ENCRYPT_OPTIONS,
+  METHODS,
+  WALLET_TYPES,
+} from '@/constants';
 import host from '@/class/singleton/host';
 
 const { ERRORS } = ConnectError;
@@ -24,21 +31,42 @@ const { ERRORS } = ConnectError;
 class AccountsModule extends VuexModule {
   accounts = [];
 
-  settings = {};
+  settings = {
+    challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+  };
 
-  balance = null;
-
-  constructor(props, { sharedStore }) {
+  constructor(props, { sharedStore, balanceStore }) {
     super(props);
     this.sharedStore = sharedStore;
+    this.balanceStore = balanceStore;
   }
 
   get addresses() {
     return this.accounts.map(({ address }) => address);
   }
 
-  get isOtpMode() {
-    return !!this.settings.otpEnabled;
+  get challengeType() {
+    return this.settings.challengeType;
+  }
+
+  /**
+   * @param {object} newSettings
+   */
+  @Action
+  async changeSettings(newSettings = {}) {
+    const oldSettings = this.settings;
+    this.settings = newSettings;
+
+    const isNetworkChanged =
+      newSettings.net && oldSettings.net !== newSettings.net;
+    if (isNetworkChanged) {
+      await signer.setWeb3Network(newSettings.net);
+    }
+
+    await this.balanceStore.subscribeOnBalanceUpdates({
+      netId: newSettings.net,
+      address: newSettings.lastActiveAccount,
+    });
   }
 
   /**
@@ -46,10 +74,10 @@ class AccountsModule extends VuexModule {
    */
   @Action
   async disableOtpInStore() {
-    this.settings = {
+    await this.changeSettings({
       ...this.settings,
-      otpEnabled: false,
-    };
+      challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+    });
   }
 
   @Action
@@ -77,13 +105,10 @@ class AccountsModule extends VuexModule {
       Buffer.from(password),
       ENCRYPT_OPTIONS,
     );
-    // TODO: change to utils get
-    const web3 = await signer.getWeb3Instance();
-    const checksumAddress = web3.utils.toChecksumAddress(
-      v3KeyStoreChild.address,
-    );
 
-    await userService.setAccount(checksumAddress, {
+    const checksumAddress = toChecksumAddress(v3KeyStoreChild.address);
+
+    await userService.setAccount({
       ...v3KeyStoreChild,
       address: checksumAddress,
     });
@@ -155,10 +180,10 @@ class AccountsModule extends VuexModule {
 
     settingsService.setLocalSettings(mergedSettings);
 
-    this.settings = {
+    await this.changeSettings({
       ...settings,
       ...mergedSettings,
-    };
+    });
   }
 
   @Action
@@ -166,10 +191,10 @@ class AccountsModule extends VuexModule {
     const settings = await this.getSettingsWithoutPermission();
     const mergedSettings = settingsService.mergeSettings(settings);
 
-    this.settings = {
+    await this.changeSettings({
       ...settings,
       ...mergedSettings,
-    };
+    });
   }
 
   @Action
@@ -183,7 +208,7 @@ class AccountsModule extends VuexModule {
 
     try {
       await this.setSettings(payload);
-      await this.defineSettings();
+      await this.defineSettings(payload);
 
       const { settings } = this;
       const settingsToSend = {
@@ -194,8 +219,6 @@ class AccountsModule extends VuexModule {
         type: 'update',
         settings: settingsToSend,
       });
-
-      this.balance = null;
 
       bridgeMessenger.send(METHODS.CHANGE_SETTINGS_REQUEST, settingsToSend);
       accountChannel.put(answer);
@@ -261,34 +284,12 @@ class AccountsModule extends VuexModule {
   }
 
   @Action
-  async getAccountBalance({ address, net }) {
-    const { balance } = await cryptoDataService.getAccountBalance({
-      network: net,
-      address,
-    });
+  async getAccountBalance() {
+    const web3 = await signer.getWeb3Instance();
+    const address = get(this.settings, 'lastActiveAccount');
+    const data = await web3.getBalance(address);
 
-    return balance;
-  }
-
-  @Action
-  subscribeOnBalanceUpdates() {
-    const handler = () =>
-      setTimeout(async () => {
-        const address = get(this.settings, 'lastActiveAccount');
-        const net = get(this.settings, 'net', 1);
-
-        if (address) {
-          try {
-            this.balance = await this.getAccountBalance({ address, net });
-          } catch (err) {
-            this.balance = null;
-          }
-        }
-
-        handler();
-      }, 1500);
-
-    handler();
+    return data;
   }
 
   @Action
@@ -316,10 +317,10 @@ class AccountsModule extends VuexModule {
     return authService.getSeedTemplateUrl();
   }
 
-  @Mutation
+  @Action
   logout() {
     this.accounts = [];
-    this.settings = {};
+    this.changeSettings({});
   }
 }
 

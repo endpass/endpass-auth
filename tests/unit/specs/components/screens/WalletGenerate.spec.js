@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import ConnectError from '@endpass/connect/ConnectError';
+import ConnectError from '@endpass/connect/error';
 import WalletGenerate from '@/components/screens/WalletGenerate';
 import setupI18n from '@/locales/i18nSetup';
 import { walletChannel } from '@/class/singleton/channels';

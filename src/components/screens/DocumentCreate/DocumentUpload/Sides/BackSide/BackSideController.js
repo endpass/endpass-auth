@@ -118,7 +118,7 @@ class BackSideController extends VuexModule {
     try {
       this.progressLabel = i18n.t('components.uploadDocument.uploading');
 
-      timer.startProgress(0, 50);
+      timer.startProgress(0, 40);
       await documentsService.uploadBackFile(
         {
           file,
@@ -126,6 +126,9 @@ class BackSideController extends VuexModule {
         },
         this.getUploadRequestConfig(),
       );
+
+      timer.continueProgress(40, 50);
+      await documentsService.waitDocumentUpload(docId);
     } catch (e) {
       throw this.createError(e);
     } finally {

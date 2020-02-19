@@ -25,9 +25,10 @@
       }"
     >
       <widget-header
-        :balance="balance"
         :fiat-currency="fiatCurrency"
         :is-collapsed="isCollapsed"
+        :is-balance-loading="isBalanceLoading"
+        :eth-balance="ethBalance"
         @toggle="handleWidgetToggle"
       />
       <widget-content :is-collapsed="isCollapsed">
@@ -60,7 +61,7 @@ import WidgetContent from './Content';
 import WidgetAccounts from './Accounts';
 import WidgetNewAccountForm from './NewAccountForm';
 import TriggerButton from './TriggerButton';
-import { authStore, accountsStore, coreStore } from '@/store';
+import { authStore, accountsStore, coreStore, balanceStore } from '@/store';
 
 export default {
   name: 'Widget',
@@ -68,6 +69,7 @@ export default {
   accountsStore,
   coreStore,
   authStore,
+  balanceStore,
 
   data: () => ({
     widgetSettings: null,
@@ -88,20 +90,19 @@ export default {
     settings() {
       return this.$options.accountsStore.settings;
     },
-    balance() {
-      return this.$options.accountsStore.balance;
-    },
     isLoading() {
       return this.$options.coreStore.isLoading;
+    },
+    isBalanceLoading() {
+      return this.$options.balanceStore.isLoading;
+    },
+    ethBalance() {
+      return this.$options.balanceStore.ethBalance;
     },
     ...mapGetters(['isWidgetPinnedToBottom', 'isWidgetPinnedToTop']),
 
     fiatCurrency() {
       return get(this.settings, 'fiatCurrency', 'USD');
-    },
-
-    currentNet() {
-      return get(this.settings, 'net', 1);
     },
 
     currentAccount() {
@@ -199,7 +200,16 @@ export default {
 
     await this.$options.accountsStore.defineOnlyV3Accounts();
     await this.$options.authStore.defineAuthStatus();
-    this.$options.accountsStore.subscribeOnBalanceUpdates();
+
+    const { lastActiveAccount, net } = this.$options.accountsStore.settings;
+    await this.$options.balanceStore.enableSubscriptionBalanceUpdates({
+      netId: net,
+      address: lastActiveAccount,
+    });
+  },
+
+  beforeDestroy() {
+    this.$options.balanceStore.disableBalanceUpdates();
   },
 
   components: {

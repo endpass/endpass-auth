@@ -161,6 +161,7 @@ export default {
     gasPrices: null,
     value: '0',
     data: '',
+    balance: '0',
     gasPrice: '0',
     gasLimit: '0',
     ethPrice: '0',
@@ -171,10 +172,6 @@ export default {
   computed: {
     settings() {
       return this.$options.accountsStore.settings;
-    },
-
-    balance() {
-      return this.$options.accountsStore.balance;
     },
 
     maxAmount() {
@@ -252,14 +249,12 @@ export default {
     },
   },
 
-  created() {
-    this.$options.accountsStore.subscribeOnBalanceUpdates();
-  },
-
   async mounted() {
     const { net } = this.request;
     const { to, value, gasPrice, gas, gasLimit, data } = this.transaction;
     const trxGasLimit = gas || gasLimit;
+
+    this.balance = await this.$options.accountsStore.getAccountBalance();
 
     this.ethPrice = await this.$options.gasPriceStore.getEtherPrice(
       this.fiatCurrency,

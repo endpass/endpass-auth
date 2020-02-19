@@ -12,13 +12,16 @@ const ENV = objectUtils.parseObjectProperties(process.env, 'VUE_APP');
 
 ENV.VUE_APP_VERSION = pkg.version;
 
+// eslint-disable-next-line no-console
 console.log('NODE_ENV', NODE_ENV);
+// eslint-disable-next-line no-console
 console.log('ENV', ENV);
 
 const commitHash = buildUtils.getCommitHash();
 
 module.exports = {
   productionSourceMap: false,
+  lintOnSave: false,
 
   publicPath: '/',
 
@@ -112,8 +115,16 @@ module.exports = {
 
     config.plugins.delete('prefetch-version');
     config.plugins.delete('preload-version');
+    // For yarn link
+    config.resolve.symlinks(false);
   },
   devServer: {
+    // hack for websocket drop dev build,
+    // https://github.com/webpack/webpack-dev-server/issues/2199#issuecomment-528669873
+    contentBase: path.join(__dirname, 'dist'),
+    compress: true,
+    port: 3434,
+
     proxy: {
       '^/identity/api/v1.1': {
         target: 'https://identity-dev.endpass.com',
