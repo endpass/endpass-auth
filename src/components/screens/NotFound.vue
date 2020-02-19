@@ -9,7 +9,7 @@
 <script>
 import pkg from '@/../package.json';
 import VFrame from '@/components/common/VFrame';
-import { accountsStore } from '@/store';
+import { coreStore, accountsStore } from '@/store';
 import VDescription from '@/components/common/VDescription';
 import Message from '@/components/common/Message';
 
@@ -17,6 +17,7 @@ export default {
   name: 'NotFound',
 
   accountsStore,
+  coreStore,
 
   data() {
     return {

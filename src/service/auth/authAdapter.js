@@ -1,6 +1,7 @@
 import { CHALLENGE_TYPES, CHALLENGE_TYPES_ANSWER } from '@/constants';
 
-function getChallengeType(challengeType) {
+function getChallengeType(challenge) {
+  const { challengeType } = challenge || {};
   if (challengeType === CHALLENGE_TYPES_ANSWER.SMS) {
     return CHALLENGE_TYPES.SMS_OTP;
   }
@@ -17,7 +18,7 @@ export default function(authData) {
     ...authData,
     challenge: {
       ...authData.challenge,
-      challengeType: getChallengeType(authData.challenge.challengeType),
+      challengeType: getChallengeType(authData.challenge),
     },
   };
 
