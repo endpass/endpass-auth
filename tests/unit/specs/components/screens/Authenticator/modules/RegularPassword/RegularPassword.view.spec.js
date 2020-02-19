@@ -65,7 +65,7 @@ describe('RegularPasswordView', () => {
         .find('[data-test=password-recover]')
         .vm.$emit('click', { preventDefault: () => {} });
 
-      expect(wrapper.emitted().recover.length).toBe(1);
+      expect(wrapper.emitted().recover).toHaveLength(1);
       expect(wrapper.emitted().recover[0]).toEqual([]);
     });
   });

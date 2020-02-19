@@ -9,12 +9,7 @@
       </message>
     </form-field>
     <form-field v-if="error">
-      <message
-        :error="true"
-        data-test="error-message"
-      >
-        {{ error }}
-      </message>
+      <error :error="error" />
     </form-field>
     <form-field :label="$t('components.account.address')">
       <v-select
@@ -103,6 +98,7 @@ import Message from '@/components/common/Message.vue';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import FormItem from '@/components/common/FormItem';
+import Error from '@/components/modules/Error';
 
 export default {
   name: 'AccountForm',
@@ -189,6 +185,7 @@ export default {
   },
 
   components: {
+    Error,
     FormItem,
     VFaucetButton,
     VButton,

@@ -10,6 +10,7 @@
         v-bind="$attrs"
         :is-closable="isClosable"
         :is-returnable="isReturnable"
+        :challenge-type="challengeType"
         @complete="onComplete"
         @switch="onSwitch"
         @social="handleAuth"
@@ -20,6 +21,7 @@
 
 <script>
 import AuthFormContainer from './Authenticator.interactor';
+import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'AuthenticatorContainer',
@@ -30,9 +32,12 @@ export default {
       default: false,
     },
 
-    isOtp: {
-      type: Boolean,
-      default: false,
+    challengeType: {
+      type: String,
+      required: true,
+      validator(value) {
+        return Object.keys(CHALLENGE_TYPES).includes(value);
+      },
     },
   },
 
@@ -52,22 +57,21 @@ export default {
     onSwitch({ to }) {
       switch (true) {
         case to === 'sign-up':
-          this.$router.push({ name: 'SignUp' }).catch(() => {});
+          this.openRoute('SignUp');
           break;
 
         case to === 'regular-password-recovery':
-          this.$router
-            .push({ name: 'RegularPasswordRecovery' })
-            .catch(() => {});
+          this.openRoute('RegularPasswordRecovery');
           break;
 
-        case to === 'otp-recovery':
-          this.$router.push({ name: 'OtpRecovery' }).catch(() => {});
+        case to === 'recovery-code':
+          this.openRoute('CodeRecovery');
           break;
 
         case to === 'regular-password':
         case to === 'sign-in':
-        case to === 'otp-code':
+        case to === 'app-code':
+        case to === 'sms-code':
           this.onReturn();
           break;
 
@@ -87,43 +91,55 @@ export default {
     nextScreen() {
       const { name } = this.$route;
 
+      const isSmsOtp = this.challengeType === CHALLENGE_TYPES.SMS_OTP;
+      const isAppOtp = this.challengeType === CHALLENGE_TYPES.APP_OTP;
+      const isEmailOtp = this.challengeType === CHALLENGE_TYPES.EMAIL_OTP;
+
       switch (true) {
         case name === 'SignIn' && this.isPasswordExist:
-          this.$router
-            .push({
-              name: 'RegularPassword',
-            })
-            .catch(() => {});
+          this.openRoute('RegularPassword');
           break;
 
         case name === 'SignIn' && !this.isPasswordExist:
-          this.$router
-            .push({ name: 'RegularPasswordCreation' })
-            .catch(() => {});
+          this.openRoute('RegularPasswordCreation');
           break;
 
-        case name === 'RegularPasswordCreation' && this.isOtp:
-        case name === 'RegularPasswordRecovery' && this.isOtp:
-          this.$router.replace({ name: 'OtpCode' }).catch(() => {});
+        case name === 'CodeRecovery':
+          this.replaceRoute('EmailCode');
           break;
 
-        case name === 'RegularPasswordCreation' && !this.isOtp:
-        case name === 'RegularPasswordRecovery' && !this.isOtp:
-        case name === 'OtpRecovery':
-          this.$router.replace({ name: 'EmailCode' }).catch(() => {});
+        case name === 'RegularPasswordCreation' && isSmsOtp:
+        case name === 'RegularPasswordRecovery' && isSmsOtp:
+          this.replaceRoute('SmsCode');
           break;
 
-        case name === 'SignUp' && this.isOtp:
-        case name === 'RegularPassword' && this.isOtp:
-          this.$router.push({ name: 'OtpCode' }).catch(() => {});
+        case name === 'RegularPasswordCreation' && isAppOtp:
+        case name === 'RegularPasswordRecovery' && isAppOtp:
+          this.replaceRoute('AppCode');
           break;
 
-        case name === 'SignUp' && !this.isOtp:
-        case name === 'RegularPassword' && !this.isOtp:
-          this.$router.push({ name: 'EmailCode' }).catch(() => {});
+        case name === 'RegularPasswordCreation' && isEmailOtp:
+        case name === 'RegularPasswordRecovery' && isEmailOtp:
+          this.replaceRoute('EmailCode');
           break;
 
-        case name === 'OtpCode':
+        case name === 'SignUp' && isSmsOtp:
+        case name === 'RegularPassword' && isSmsOtp:
+          this.openRoute('SmsCode');
+          break;
+
+        case name === 'SignUp' && isAppOtp:
+        case name === 'RegularPassword' && isAppOtp:
+          this.openRoute('AppCode');
+          break;
+
+        case name === 'SignUp' && isEmailOtp:
+        case name === 'RegularPassword' && isEmailOtp:
+          this.openRoute('EmailCode');
+          break;
+
+        case name === 'SmsCode':
+        case name === 'AppCode':
         case name === 'EmailCode':
           this.handleAuth();
           break;
@@ -139,6 +155,18 @@ export default {
       Object.keys(payload).forEach(propName => {
         this.$emit(`update:${propName}`, payload[propName]);
       });
+    },
+
+    openRoute(name) {
+      // if do .push to the same route, throw will called (because it promise)
+      // that's why we need make it empty
+      this.$router.push({ name }).catch(() => {});
+    },
+
+    replaceRoute(name) {
+      // if do .replace to the same route, throw will called (because it promise)
+      // that's why we need make it empty
+      this.$router.replace({ name }).catch(() => {});
     },
 
     handleAuth() {

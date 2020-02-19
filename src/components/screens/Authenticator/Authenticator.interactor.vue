@@ -31,16 +31,15 @@ export default {
       return this.$options.coreStore.isDialog;
     },
 
-    isOtp() {
-      // TODO: move checking logic to accountStore
-      return this.$options.authStore.isOtp;
+    challengeType() {
+      return this.$options.authStore.challengeType;
     },
   },
 
   watch: {
-    isOtp: {
+    challengeType: {
       handler(newVal) {
-        this.$emit('update:is-otp', newVal);
+        this.$emit('update:challenge-type', newVal);
       },
       immediate: true,
     },

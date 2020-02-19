@@ -1,5 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`EmailCodeInterface render should correctly render component 1`] = `<email-code-stub email="" password=""></email-code-stub>`;
-
-exports[`EmailCodeInterface render should render email form 1`] = `<email-code-stub email="" password=""></email-code-stub>`;
