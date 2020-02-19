@@ -43,4 +43,16 @@ describe('authAdapter', () => {
       },
     });
   });
+
+  it('should return email if challenge is null', () => {
+    const result = authAdapter({
+      challenge: null,
+    });
+
+    expect(result).toEqual({
+      challenge: {
+        challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+      },
+    });
+  });
 });
