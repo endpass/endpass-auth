@@ -35,7 +35,7 @@
     <form-row class="v-fs-14 v-text-center">
       <send-code
         :is-loading="isLoading"
-        @click="sendCode"
+        @send-code="sendCode"
       />
     </form-row>
   </form>
