@@ -1,6 +1,7 @@
 <template>
   <sign-up
     v-bind="$attrs"
+    :initial-email="email"
     :is-loading="isLoading"
     :error.sync="error"
     @sign-in="onSignIn"
@@ -15,6 +16,13 @@ import { authStore } from '@/store';
 
 export default {
   name: 'SignUpInteractor',
+
+  props: {
+    email: {
+      type: String,
+      default: '',
+    },
+  },
 
   authStore,
 
