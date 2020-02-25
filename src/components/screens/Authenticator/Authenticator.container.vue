@@ -96,6 +96,10 @@ export default {
       const isEmailOtp = this.challengeType === CHALLENGE_TYPES.EMAIL_OTP;
 
       switch (true) {
+        case name === 'SignIn' && isEmailOtp && !this.isPasswordExist:
+          this.openRoute('SignUp');
+          break;
+
         case name === 'SignIn' && this.isPasswordExist:
           this.openRoute('RegularPassword');
           break;

@@ -174,6 +174,18 @@ describe('SignUpView', () => {
 
   describe('validation', () => {
     describe('email input', () => {
+      it('should pass initial email', () => {
+        const initialEmail = 'init@email.email';
+
+        wrapper = createWrapper(null, {
+          initialEmail,
+        });
+
+        expect(wrapper.find('[data-test=email-input]').attributes().value).toBe(
+          initialEmail,
+        );
+      });
+
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=email-input]').attributes().error,

@@ -1,5 +1,6 @@
 <template>
   <sign-up
+    :email="email"
     @sign-in="onSignIn"
     @sign-up="onSignUp"
     @social="onSocial"
@@ -11,6 +12,13 @@ import SignUp from './SignUp.interactor';
 
 export default {
   name: 'SignUpInterface',
+
+  props: {
+    email: {
+      type: String,
+      default: '',
+    },
+  },
 
   methods: {
     onSignIn() {

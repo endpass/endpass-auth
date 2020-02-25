@@ -127,17 +127,24 @@ export default {
       default: false,
     },
 
+    initialEmail: {
+      type: String,
+      default: '',
+    },
+
     error: {
       type: String,
       default: '',
     },
   },
 
-  data: () => ({
-    email: '',
-    password: '',
-    confirmPassword: '',
-  }),
+  data() {
+    return {
+      email: this.initialEmail,
+      password: '',
+      confirmPassword: '',
+    };
+  },
 
   computed: {
     isSubmitEnable() {
