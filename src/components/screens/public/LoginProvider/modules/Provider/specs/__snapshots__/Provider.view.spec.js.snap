@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Provider render should correctly render component 1`] = `
+<loading-screen-stub>
+  <v-frame-stub title=""></v-frame-stub>
+</loading-screen-stub>
+`;
