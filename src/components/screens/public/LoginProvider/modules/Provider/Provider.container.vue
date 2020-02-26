@@ -1,26 +1,25 @@
 <template>
-  <loading-screen :is-loading="isLoading">
-    <v-frame
-      title=""
-      :is-closable="isClosable"
-      @close="onClose"
-    >
-      <component
-        :is="currentComponent"
-        :email="email"
-        :error="error"
-        :challenge-type="challengeType"
-        :oauth-login-challenge="oauthLoginChallenge"
-        @complete="onComplete"
-        @recover="onRecover"
-        @recovered="onRecovered"
-        @recovery-cancel="onRecoveryCancel"
-      />
-    </v-frame>
-  </loading-screen>
+  <provider
+    :is-loading="isLoading"
+    :is-closable="isClosable"
+    @close="onClose"
+  >
+    <component
+      :is="currentComponent"
+      :email="email"
+      :error="error"
+      :challenge-type="challengeType"
+      :oauth-login-challenge="oauthLoginChallenge"
+      @complete="onComplete"
+      @recover="onRecover"
+      @recovered="onRecovered"
+      @recovery-cancel="onRecoveryCancel"
+    />
+  </provider>
 </template>
 
 <script>
+import Provider from './Provider.view';
 import CodeRecovery from '@/components/modules/CodeRecovery';
 import CodeRequest from './modules/CodeRequest';
 import Error from '@/components/modules/Error';
@@ -112,6 +111,10 @@ export default {
     },
   },
 
-  components: { VFrame, LoadingScreen },
+  components: {
+    Provider,
+    VFrame,
+    LoadingScreen,
+  },
 };
 </script>
