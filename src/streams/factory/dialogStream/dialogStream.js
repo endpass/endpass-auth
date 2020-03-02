@@ -29,7 +29,16 @@ function initDialogStream() {
     },
     [METHODS.CREATE_DOCUMENT]: {
       commit(payload) {
-        sharedStore.setDocumentUploadOptions(payload);
+        sharedStore.setPayload(payload);
+      },
+      routeName: 'document-create',
+      channel: documentChannel,
+      needAuth: true,
+      needPermission: true,
+    },
+    [METHODS.UPLOAD_REQUIRED_DOCUMENTS]: {
+      commit(payload) {
+        sharedStore.setPayload(payload);
       },
       routeName: 'document-create',
       channel: documentChannel,

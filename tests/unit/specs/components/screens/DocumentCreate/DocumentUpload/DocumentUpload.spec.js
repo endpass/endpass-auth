@@ -3,7 +3,7 @@ import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import DocumentUpload from '@/components/screens/DocumentCreate/DocumentUpload';
+import DocumentUpload from '@/components/screens/DocumentCreate/Upload';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import { DOC_TYPES } from '@/constants';

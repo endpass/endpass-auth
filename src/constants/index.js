@@ -19,6 +19,7 @@ export const METHODS = {
 
   EXCHANGE_TOKEN_REQUEST: 'EXCHANGE_TOKEN_REQUEST',
   CREATE_DOCUMENT: 'CREATE_DOCUMENT',
+  UPLOAD_REQUIRED_DOCUMENTS: 'UPLOAD_REQUIRED_DOCUMENTS',
   GENERATE_WALLET: 'GENERATE_WALLET',
 
   // Dialog-level messages
@@ -132,7 +133,7 @@ export const UPLOAD_STATUSES = {
 };
 
 /**
- * Document statuses
+ * document statuses
  * @type {{
     DRAFT: 'Draft',
     RECOGNITION: 'Recognition',
@@ -152,7 +153,7 @@ export const DOC_STATUSES = {
 };
 
 /**
- * Document types
+ * document types
  * @type {{
     PASSPORT: 'Passport',
     DRIVER_LICENSE: 'DriverLicense',

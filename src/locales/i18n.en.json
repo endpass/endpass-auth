@@ -172,7 +172,6 @@
       "addBackFile": "Add back side",
       "addFrontFile": "Add front File",
       "backIsSelected": "Back File selected",
-      "documentType": "Document type",
       "fileSize": "10Mb max file size.",
       "frontIsSelected": "Front File selected",
       "orDrop": "or drop file here",
@@ -180,6 +179,7 @@
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
       "uploadDocument": "Upload document",
+      "requestedInformation": "Requested Information",
       "uploading": "Uploading"
     },
     "user": {
@@ -209,6 +209,14 @@
       "idCard": "Id Card",
       "passport": "Passport",
       "proofOfAddress": "Proof of Address"
+    },
+    "documentStatus": {
+      "draft": "Draft",
+      "notReadable": "Not Readable",
+      "notVerified": "Not Verified",
+      "recognition": "Recognizing",
+      "pendingReview": "Pending review",
+      "verified": "Verified"
     }
   },
   "global": {

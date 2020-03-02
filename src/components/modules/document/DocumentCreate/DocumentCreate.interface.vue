@@ -1,34 +1,36 @@
 <template>
-  <screen @close="onCancel">
-    <document-upload
-      @confirm="onConfirm"
-      @cancel="onCancel"
-    />
-  </screen>
+  <document-create
+    @request="onRequest"
+    @create="onCreate"
+    @cancel="onCancel"
+  />
 </template>
 
 <script>
-import DocumentUpload from './DocumentUpload';
-import Screen from '@/components/common/Screen';
+import DocumentCreate from './DocumentCreate.state';
 import createDocumentController from './DocumentCreateController';
 
 export default {
   name: 'DocumentCreate',
 
+  documentCreateController: createDocumentController(),
+
   methods: {
     onCancel() {
       this.$options.documentCreateController.cancelCreate();
     },
-    onConfirm(documentId) {
+
+    onCreate(documentId) {
       this.$options.documentCreateController.finishCreate(documentId);
+    },
+
+    onRequest() {
+      this.$options.documentCreateController.finishRequest();
     },
   },
 
-  documentCreateController: createDocumentController(),
-
   components: {
-    Screen,
-    DocumentUpload,
+    DocumentCreate,
   },
 };
 </script>

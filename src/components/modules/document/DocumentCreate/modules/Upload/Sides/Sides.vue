@@ -4,6 +4,7 @@
     :document-type="documentType"
     v-bind="$attrs"
     v-on="$listeners"
+    @toggle="onToggle"
   />
 </template>
 
@@ -30,6 +31,12 @@ export default {
         return FrontSideOnly;
       }
       return BackAndFront;
+    },
+  },
+
+  methods: {
+    onToggle() {
+      this.$emit('toggle');
     },
   },
 };

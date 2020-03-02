@@ -14,6 +14,8 @@ export default store => {
 
   const sharedStore = createModule(SharedModule, 'shared');
 
+  const documentStore = createModule(SharedModule, 'document');
+
   const balanceStore = createModule(BalanceModule, 'balance');
 
   const accountsStore = createModule(AccountsModule, 'accounts', {
@@ -36,6 +38,7 @@ export default store => {
   });
 
   return {
+    documentStore,
     gasPriceStore,
     sharedStore,
     accountsStore,

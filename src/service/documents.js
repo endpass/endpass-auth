@@ -152,6 +152,22 @@ const documentsService = {
       }
     }
   },
+
+  /**
+   *
+   * @param {string} clientId
+   * @return {Promise<any>}
+   */
+  async getRequiredDocumentsTypes(clientId) {
+    return withSuccess(request.get(`apps/${clientId}/documents/required`));
+  },
+
+  /**
+   * @return {Promise<any>}
+   */
+  async getDocumentsList() {
+    return withSuccess(request.get(docBaseURL));
+  },
 };
 
 export default documentsService;

@@ -4,7 +4,7 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 
-import FrontSide from '@/components/screens/DocumentCreate/DocumentUpload/Sides/FrontSide';
+import FrontSide from '@/components/screens/DocumentCreate/Upload/Sides/FrontSide';
 import documentsService from '@/service/documents';
 
 const localVue = createLocalVue();

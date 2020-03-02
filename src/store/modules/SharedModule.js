@@ -5,13 +5,6 @@ class SharedModule extends VuexModule {
   // old this.loading from core
   isLoading = false;
 
-  documentUploadOptions = {};
-
-  @Mutation
-  setDocumentUploadOptions(documentUploadOptions = {}) {
-    this.documentUploadOptions = documentUploadOptions;
-  }
-
   @Mutation
   changeLoadingStatus(value) {
     this.isLoading = value;
