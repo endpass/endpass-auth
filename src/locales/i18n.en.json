@@ -181,8 +181,12 @@
       "noTypes": "No any required document type",
       "notUploaded": "Not uploaded yet",
       "upload": "Upload",
+      "loading": "Loading details",
+      "pleaseWait": "Please wait",
       "requestedInformation": "Requested Information",
-      "uploading": "Uploading"
+      "uploading": "Uploading",
+      "success": "Success",
+      "allUploaded": "All requested documents is verified and ready to use"
     },
     "user": {
       "donationSuccess": "A donation request is successfully sent. In general, it takes some time before you will receive funds."

@@ -16,6 +16,14 @@
 import DocumentCreate from '../DocumentCreate';
 import createDocumentController from './CreateRequiredController';
 import LoadingScreen from '@/components/common/LoadingScreen';
+import { DOC_STATUSES } from '@/constants';
+
+const BAD_STATUSES = [
+  DOC_STATUSES.RECOGNITION,
+  DOC_STATUSES.DRAFT,
+  DOC_STATUSES.NOT_READABLE,
+  DOC_STATUSES.NOT_VERIFIED,
+];
 
 export default {
   name: 'CreateRequiredInteractor',
@@ -32,6 +40,32 @@ export default {
     };
   },
 
+  computed: {
+    isAllVerified() {
+      const isVerified = this.types.every(type => {
+        const status = this.typeToStatus[type];
+        return status === DOC_STATUSES.VERIFIED;
+      });
+
+      return isVerified;
+    },
+
+    isHaveBad() {
+      const res = Object.values(this.typeToStatus).every(
+        status => !BAD_STATUSES.includes(status),
+      );
+      return res;
+    },
+  },
+
+  watch: {
+    isExtraLoading(newValue) {
+      if (!newValue) {
+        // what to do here?
+      }
+    },
+  },
+
   methods: {
     onCancel() {
       this.documentType = '';
@@ -41,26 +75,50 @@ export default {
       this.$options.createRequiredController.cancelCreate();
     },
 
-    onCreate() {
+    async onCreate() {
       // check status for show extra loading and first screen again
       // this.$options.createRequiredController.finishCreate();
+      await this.switchScreen();
+    },
+
+    handleFinish() {
+      this.$options.createRequiredController.finishCreate();
+    },
+
+    async loadRequiredTypes() {
+      try {
+        this.isLoading = true;
+        const {
+          types,
+          typeToStatus,
+        } = await this.$options.createRequiredController.getRequiredTypes();
+        this.types = types;
+        this.typeToStatus = typeToStatus;
+      } catch (e) {
+        console.error(e);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async switchScreen() {
+      await this.loadRequiredTypes();
+
+      this.documentType = '';
+
+      if (this.isAllVerified) {
+        this.handleFinish();
+        return;
+      }
+
+      if (!this.isHaveBad) {
+        this.isExtraLoading = true;
+      }
     },
   },
 
   async mounted() {
-    try {
-      this.isLoading = true;
-      const {
-        types,
-        typeToStatus,
-      } = await this.$options.createRequiredController.getRequiredTypes();
-      this.types = types;
-      this.typeToStatus = typeToStatus;
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading = false;
-    }
+    await this.switchScreen();
   },
 
   components: {

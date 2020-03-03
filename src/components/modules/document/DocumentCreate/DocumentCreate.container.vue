@@ -59,12 +59,12 @@ export default {
         return NoTypes;
       }
 
-      if (!this.documentType) {
-        return RequestedInfo;
-      }
-
       if (this.isExtraLoading) {
         return ExtraLoading;
+      }
+
+      if (!this.documentType) {
+        return RequestedInfo;
       }
 
       return Upload;
