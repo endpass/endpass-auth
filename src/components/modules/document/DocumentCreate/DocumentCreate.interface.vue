@@ -4,9 +4,9 @@
     :type-to-status="typeToStatus"
     :is-extra-loading="isExtraLoading"
     :document-type="documentType"
-    @compoete="onComplete"
+    @complete="onComplete"
     @create="onCreate"
-    @cancel="onCancel"
+    @close="onClose"
   />
 </template>
 
@@ -14,7 +14,7 @@
 import DocumentCreate from './DocumentCreate.container';
 
 export default {
-  name: 'DocumentCreate',
+  name: 'DocumentCreateInterface',
 
   props: {
     documentType: {
@@ -51,8 +51,8 @@ export default {
       });
     },
 
-    onCancel() {
-      this.$emit('cancel');
+    onClose() {
+      this.$emit('close');
     },
 
     onCreate(documentId) {

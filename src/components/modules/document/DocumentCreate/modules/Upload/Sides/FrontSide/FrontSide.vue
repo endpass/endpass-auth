@@ -27,7 +27,7 @@
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createFrontSideController from './FrontSideController';
 import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
-import DropArea from '@/components/screens/DocumentCreate/Upload/Sides/DropArea';
+import DropArea from '../DropArea';
 
 export default {
   name: 'DocumentUpload',

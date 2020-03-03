@@ -1,6 +1,7 @@
 <template>
   <document-types
-    :statuses="statuses"
+    :types="types"
+    :type-to-status="typeToStatus"
     @select="onSelect"
   />
 </template>
@@ -12,7 +13,12 @@ export default {
   name: 'DocumentTypesInterface',
 
   props: {
-    statuses: {
+    typeToStatus: {
+      type: Object,
+      required: true,
+    },
+
+    types: {
       type: Array,
       required: true,
     },

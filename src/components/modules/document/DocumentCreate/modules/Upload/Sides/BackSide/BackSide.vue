@@ -34,7 +34,7 @@ import DocumentUploadDescription from '../DocumentUploadDescription';
 import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
 import FooterDoneButtons from '../FooterButtons/FooterDoneButtons';
-import DropArea from '@/components/screens/DocumentCreate/Upload/Sides/DropArea';
+import DropArea from '../DropArea';
 
 export default {
   name: 'BackSide',

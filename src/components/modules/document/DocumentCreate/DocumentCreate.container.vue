@@ -1,11 +1,15 @@
 <template>
-  <document-create @cancel="onCancel">
+  <document-create
+    :is-closable="isClosable"
+    @cancel="onClose"
+  >
     <component
       :is="currentComponent"
       :document-type="documentType"
       :types="types"
       :type-to-status="typeToStatus"
-      @complete="onComplete"
+      @upload="onUpload"
+      @complete="handleComplete"
       @cancel="onCancel"
     />
   </document-create>
@@ -44,6 +48,11 @@ export default {
   },
 
   computed: {
+    isClosable() {
+      // TODO: add check from store
+      return !this.documentType;
+    },
+
     currentComponent() {
       if (!this.documentType) {
         return RequestedInfo;
@@ -58,15 +67,24 @@ export default {
   },
 
   methods: {
-    async onComplete(payload) {
+    async handleComplete(payload) {
       this.$emit('complete', payload);
     },
 
-    onCancel() {
-      this.$emit('cancel');
+    onClose() {
+      this.$emit('close');
     },
 
-    onCreate(documentId) {
+    onCancel() {
+      this.handleComplete({
+        documentType: '',
+      });
+    },
+
+    onUpload(documentId) {
+      this.handleComplete({
+        documentType: '',
+      });
       this.$emit('create', documentId);
     },
   },

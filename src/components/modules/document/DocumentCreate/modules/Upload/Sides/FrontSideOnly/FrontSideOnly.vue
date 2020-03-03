@@ -31,7 +31,7 @@ import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentU
 import createFrontSideController from './FrontSideOnlyController';
 import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
-import DropArea from '@/components/screens/DocumentCreate/Upload/Sides/DropArea';
+import DropArea from '../DropArea';
 
 export default {
   name: 'FrontSideOnly',

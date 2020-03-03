@@ -4,7 +4,7 @@
     :is-extra-loading.sync="isExtraLoading"
     :document-type.sync="documentType"
     @create="onCreate"
-    @cancel="onCancel"
+    @close="onClose"
   />
 </template>
 
@@ -14,7 +14,7 @@ import CreateSingleController from './CreateSingleController';
 import { DOC_TYPES } from '@/constants';
 
 export default {
-  name: 'DocumentCreate',
+  name: 'CreateSingleInteractor',
 
   createSingleController: CreateSingleController(),
 
@@ -32,12 +32,12 @@ export default {
   },
 
   methods: {
-    onCancel() {
-      this.$options.createSingleController.cancelCreate();
-    },
-
     onCreate(documentId) {
       this.$options.createSingleController.finishCreate(documentId);
+    },
+
+    onClose() {
+      this.$options.createSingleController.cancelCreate();
     },
   },
 
