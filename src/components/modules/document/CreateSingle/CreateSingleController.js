@@ -9,7 +9,7 @@ import Answer from '@/class/Answer';
 const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
-class DocumentCreateController extends VuexModule {
+class CreateSingleController extends VuexModule {
   @Action
   cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
@@ -22,17 +22,12 @@ class DocumentCreateController extends VuexModule {
   @Action
   finishCreate(documentId) {
     if (!documentId) {
+      // TODO: check error processing
       throw new Error('Not defined document Id');
     }
     const result = Answer.createOk({ id: documentId });
     documentChannel.put(result);
   }
-
-  @Action
-  finishRequest() {
-    const result = Answer.createOk();
-    documentChannel.put(result);
-  }
 }
 
-export default () => createController(DocumentCreateController);
+export default () => createController(CreateSingleController);

@@ -1,6 +1,7 @@
 <template>
   <document-create
     :is-returnable="isReturnable"
+    :is-closable="isClosable"
     @cancel="onCancel"
   >
     <component
@@ -9,14 +10,12 @@
       :is-returnable="isReturnable"
       @complete="onComplete"
       @cancel="onCancel"
-      @request="onRequest"
-      @create="onCreate"
     />
   </document-create>
 </template>
 
 <script>
-import DocumentCreate from './DocumentCreate.interactor';
+import DocumentCreate from './DocumentCreate.view';
 
 import RequestedInfo from './modules/RequestedInfo';
 import Upload from './modules/Upload';

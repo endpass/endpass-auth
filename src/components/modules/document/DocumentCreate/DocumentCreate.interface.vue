@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import DocumentCreate from './DocumentCreate.state';
+import DocumentCreate from './DocumentCreate.container';
 import createDocumentController from './DocumentCreateController';
 
 export default {

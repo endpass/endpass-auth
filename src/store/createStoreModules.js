@@ -1,5 +1,6 @@
 import GasPriceModule from '@/store/modules/GasPriceModule';
 import SharedModule from '@/store/modules/SharedModule';
+import ChannelStore from '@/store/modules/ChannelStore';
 import BalanceModule from '@/store/modules/BalanceModule';
 import AccountsModule from '@/store/modules/AccountsModule';
 import AuthModule from '@/store/modules/AuthModule';
@@ -14,7 +15,7 @@ export default store => {
 
   const sharedStore = createModule(SharedModule, 'shared');
 
-  const documentStore = createModule(SharedModule, 'document');
+  const channelStore = createModule(ChannelStore, 'channel');
 
   const balanceStore = createModule(BalanceModule, 'balance');
 
@@ -38,7 +39,7 @@ export default store => {
   });
 
   return {
-    documentStore,
+    channelStore,
     gasPriceStore,
     sharedStore,
     accountsStore,
