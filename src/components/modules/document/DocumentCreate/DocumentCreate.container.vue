@@ -21,6 +21,7 @@ import DocumentCreate from './DocumentCreate.view';
 import RequestedInfo from './modules/RequestedInfo';
 import Upload from './modules/Upload';
 import ExtraLoading from './modules/ExtraLoading';
+import NoTypes from './modules/NoTypes';
 
 export default {
   name: 'DocumentCreateContainer',
@@ -54,6 +55,10 @@ export default {
     },
 
     currentComponent() {
+      if (this.types.length === 0) {
+        return NoTypes;
+      }
+
       if (!this.documentType) {
         return RequestedInfo;
       }

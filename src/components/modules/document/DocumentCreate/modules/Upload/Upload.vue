@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-title>
-      {{ $t('components.uploadDocument.uploadDocument') }}
+      {{ $t('components.uploadDocument.upload') }}
       {{ $options.DOC_TYPES_TRANSLATES[documentType] }}
     </v-title>
     <sides

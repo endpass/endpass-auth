@@ -13,8 +13,11 @@
         <div class="document-type-label">
           {{ $options.DOC_TYPES_TRANSLATES[type] }}
         </div>
-        <div class="document-type-status">
-          {{ $options.DOC_STATUSES_TRANSLATES[typeToStatus[type]] }}
+        <div
+          class="document-type-status"
+          :class="{ 'is-verified': isVerified(type) }"
+        >
+          {{ getStatusLabel(type) }}
         </div>
       </div>
       <div class="document-type-arrow">
@@ -34,9 +37,12 @@ import {
   DOC_STATUSES_TRANSLATES,
   DOC_TYPES_TRANSLATES,
 } from '@/constants/translates';
+import { DOC_STATUSES } from '@/constants';
 
 export default {
   name: 'DocumentTypesView',
+
+  DOC_STATUSES,
 
   DOC_STATUSES_TRANSLATES,
   DOC_TYPES_TRANSLATES,
@@ -54,6 +60,19 @@ export default {
   },
 
   methods: {
+    isVerified(type) {
+      return this.typeToStatus[type] === this.$options.DOC_STATUSES.VERIFIED;
+    },
+
+    getStatusLabel(type) {
+      const status = this.typeToStatus[type];
+      const label = this.$options.DOC_STATUSES_TRANSLATES[status];
+      if (!label) {
+        return this.$i18n.t('components.uploadDocument.notUploaded');
+      }
+      return label;
+    },
+
     onSelect(documentType) {
       this.$emit('select', documentType);
     },
@@ -84,13 +103,20 @@ export default {
 }
 .document-type-details {
   margin: 0 16px;
+  display: flex;
+  flex-direction: column;
 }
 .document-type-label {
   font-size: 16px;
   color: var(--endpass-ui-color-grey-8);
+  margin: 4px 0;
 }
 .document-type-status {
   font-size: 12px;
+  color: #ee538b;
+}
+.document-type-status.is-verified {
+  color: var(--endpass-ui-color-success);
 }
 .document-type-arrow {
   display: flex;

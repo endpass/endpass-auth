@@ -154,19 +154,25 @@ const documentsService = {
   },
 
   /**
-   *
-   * @param {string} clientId
    * @return {Promise<any>}
    */
-  async getRequiredDocumentsTypes(clientId) {
-    return withSuccess(request.get(`apps/${clientId}/documents/required`));
+  async getRequiredDocumentsTypes(/* clientId */) {
+    // return request.get(
+    //   `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
+    // );
+    // TODO: replace mock with request.get
+    return ['Passport', 'IdCard'];
   },
 
   /**
    * @return {Promise<any>}
    */
   async getDocumentsList() {
-    return withSuccess(request.get(docBaseURL));
+    const { items, total } = await request.get(docBaseURL);
+    return {
+      items,
+      total,
+    };
   },
 };
 

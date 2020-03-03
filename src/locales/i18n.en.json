@@ -178,7 +178,9 @@
       "recognition": "Recognition",
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "uploadDocument": "Upload",
+      "noTypes": "No any required document type",
+      "notUploaded": "Not uploaded yet",
+      "upload": "Upload",
       "requestedInformation": "Requested Information",
       "uploading": "Uploading"
     },

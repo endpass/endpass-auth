@@ -36,7 +36,10 @@ export default {
     onCancel() {
       if (this.$options.createSingleController.defaultDocumentType) {
         this.handleClose();
+        return;
       }
+
+      this.documentType = '';
     },
 
     onCreate(documentId) {

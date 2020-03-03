@@ -58,10 +58,11 @@ class CreateRequiredController extends VuexModule {
   @Action
   async getRequiredTypes() {
     const { clientId } = this.channelStore.payload;
-    const [requiredTypes, documentsList] = await Promise.all([
+    const [requiredTypes, documentsListDetails] = await Promise.all([
       documentsService.getRequiredDocumentsTypes(clientId),
       documentsService.getDocumentsList(),
     ]);
+    const { items: documentsList } = documentsListDetails;
 
     const typeToStatus = this.getTypeToStatus(requiredTypes, documentsList);
 
