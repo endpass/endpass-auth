@@ -1,8 +1,8 @@
 <template>
   <document-create
     :types="types"
-    :is-loading="isLoading"
-    :is-extra-loading="isExtraLoading"
+    :is-extra-loading.sync="isExtraLoading"
+    :document-type.sync="documentType"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -26,8 +26,8 @@ export default {
         DOC_TYPES.ID_CARD,
         DOC_TYPES.PROOF_OF_ADDRESS,
       ],
-      isLoading: true,
       isExtraLoading: false,
+      documentType: '',
     };
   },
 

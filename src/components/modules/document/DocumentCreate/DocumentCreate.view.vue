@@ -22,12 +22,12 @@ export default {
   props: {
     isReturnable: {
       type: Boolean,
-      required: true,
+      default: false,
     },
 
     isClosable: {
       type: Boolean,
-      required: true,
+      default: false,
     },
   },
 

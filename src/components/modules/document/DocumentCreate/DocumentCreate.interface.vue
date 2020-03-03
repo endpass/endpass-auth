@@ -1,6 +1,10 @@
 <template>
   <document-create
-    @request="onRequest"
+    :types="types"
+    :type-to-status="typeToStatus"
+    :is-extra-loading="isExtraLoading"
+    :document-type="documentType"
+    @compoete="onComplete"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -8,24 +12,51 @@
 
 <script>
 import DocumentCreate from './DocumentCreate.container';
-import createDocumentController from './DocumentCreateController';
 
 export default {
   name: 'DocumentCreate',
 
-  documentCreateController: createDocumentController(),
+  props: {
+    documentType: {
+      type: String,
+      default: '',
+    },
+
+    typeToStatus: {
+      type: Object,
+      default: () => ({}),
+    },
+
+    types: {
+      type: Array,
+      required: true,
+    },
+
+    isExtraLoading: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   methods: {
+    onComplete(payload) {
+      this.updateProps(payload);
+    },
+
+    updateProps(payload) {
+      if (!payload) return;
+
+      Object.keys(payload).forEach(propName => {
+        this.$emit(`update:${propName}`, payload[propName]);
+      });
+    },
+
     onCancel() {
-      this.$options.documentCreateController.cancelCreate();
+      this.$emit('cancel');
     },
 
     onCreate(documentId) {
-      this.$options.documentCreateController.finishCreate(documentId);
-    },
-
-    onRequest() {
-      this.$options.documentCreateController.finishRequest();
+      this.$emit('create', documentId);
     },
   },
 

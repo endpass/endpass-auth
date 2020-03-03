@@ -1,13 +1,10 @@
 <template>
-  <document-create
-    :is-returnable="isReturnable"
-    :is-closable="isClosable"
-    @cancel="onCancel"
-  >
+  <document-create @cancel="onCancel">
     <component
       :is="currentComponent"
-      :is-closable="isClosable"
-      :is-returnable="isReturnable"
+      :document-type="documentType"
+      :types="types"
+      :type-to-status="typeToStatus"
       @complete="onComplete"
       @cancel="onCancel"
     />
@@ -25,24 +22,24 @@ export default {
   name: 'DocumentCreateContainer',
 
   props: {
-    isReturnable: {
-      type: Boolean,
-      default: false,
-    },
-
-    isClosable: {
-      type: Boolean,
-      default: false,
-    },
-
-    isProcessing: {
-      type: Boolean,
-      default: false,
-    },
-
     documentType: {
       type: String,
       default: '',
+    },
+
+    typeToStatus: {
+      type: Object,
+      required: true,
+    },
+
+    types: {
+      type: Array,
+      required: true,
+    },
+
+    isExtraLoading: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -52,7 +49,7 @@ export default {
         return RequestedInfo;
       }
 
-      if (this.isProcessing) {
+      if (this.isExtraLoading) {
         return ExtraLoading;
       }
 
@@ -62,15 +59,7 @@ export default {
 
   methods: {
     async onComplete(payload) {
-      this.updateProps(payload);
-    },
-
-    updateProps(payload) {
-      if (!payload) return;
-
-      Object.keys(payload).forEach(propName => {
-        this.$emit(`update:${propName}`, payload[propName]);
-      });
+      this.$emit('complete', payload);
     },
 
     onCancel() {
@@ -79,10 +68,6 @@ export default {
 
     onCreate(documentId) {
       this.$emit('create', documentId);
-    },
-
-    onRequest() {
-      this.$emit('request');
     },
   },
 

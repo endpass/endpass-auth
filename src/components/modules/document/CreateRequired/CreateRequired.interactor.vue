@@ -1,5 +1,6 @@
 <template>
   <document-create
+    :types="types"
     :type-to-status="typeToStatus"
     :is-loading="isLoading"
     :is-extra-loading="isExtraLoading"
