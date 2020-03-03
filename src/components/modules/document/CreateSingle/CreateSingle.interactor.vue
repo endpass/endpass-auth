@@ -4,7 +4,8 @@
     :is-extra-loading.sync="isExtraLoading"
     :document-type.sync="documentType"
     @create="onCreate"
-    @close="onClose"
+    @cancel="onCancel"
+    @close="handleClose"
   />
 </template>
 
@@ -27,16 +28,22 @@ export default {
         DOC_TYPES.PROOF_OF_ADDRESS,
       ],
       isExtraLoading: false,
-      documentType: '',
+      documentType: this.$options.createSingleController.defaultDocumentType,
     };
   },
 
   methods: {
+    onCancel() {
+      if (this.$options.createSingleController.defaultDocumentType) {
+        this.handleClose();
+      }
+    },
+
     onCreate(documentId) {
       this.$options.createSingleController.finishCreate(documentId);
     },
 
-    onClose() {
+    handleClose() {
       this.$options.createSingleController.cancelCreate();
     },
   },

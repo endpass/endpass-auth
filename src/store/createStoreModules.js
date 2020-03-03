@@ -1,6 +1,6 @@
 import GasPriceModule from '@/store/modules/GasPriceModule';
 import SharedModule from '@/store/modules/SharedModule';
-import ChannelStore from '@/store/modules/ChannelStore';
+import ChannelStore from '@/store/modules/ChannelModule';
 import BalanceModule from '@/store/modules/BalanceModule';
 import AccountsModule from '@/store/modules/AccountsModule';
 import AuthModule from '@/store/modules/AuthModule';

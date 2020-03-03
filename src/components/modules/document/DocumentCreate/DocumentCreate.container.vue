@@ -76,15 +76,10 @@ export default {
     },
 
     onCancel() {
-      this.handleComplete({
-        documentType: '',
-      });
+      this.$emit('cancel');
     },
 
     onUpload(documentId) {
-      this.handleComplete({
-        documentType: '',
-      });
       this.$emit('create', documentId);
     },
   },

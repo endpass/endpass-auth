@@ -6,6 +6,7 @@
     :document-type="documentType"
     @complete="onComplete"
     @create="onCreate"
+    @cancel="onCancel"
     @close="onClose"
   />
 </template>
@@ -53,6 +54,10 @@ export default {
 
     onClose() {
       this.$emit('close');
+    },
+
+    onCancel() {
+      this.$emit('cancel');
     },
 
     onCreate(documentId) {
