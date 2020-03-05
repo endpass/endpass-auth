@@ -5,11 +5,11 @@
       :error.sync="error"
       @change="onFileChange"
     >
-      <document-upload-front
+      <document-upload-back
         :error="error"
         :is-loading="isLoading"
-        :progress-value="$options.frontSideController.progress"
-        :progress-label="$options.frontSideController.progressLabel"
+        :progress-value="$options.backSideController.progress"
+        :progress-label="$options.backSideController.progressLabel"
         :file="selectedFile"
         @file-remove="onFileRemove"
       />
@@ -20,39 +20,41 @@
       :is-upload-ready="isUploadReady"
       @cancel="onClose"
       @done="onRecognize"
-      @upload="onUploadClick"
+      @upload="onUploadFile"
       @repeat="onRecognize"
     />
   </div>
 </template>
 
 <script>
-import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
-import createFrontSideController from './FrontSideOnlyController';
-import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
+import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
+import FormItem from '@/components/common/FormItem';
+import createBackSideController from './BackSideController';
+import DocumentUploadDescription from '../DocumentUploadDescription';
+import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
+import FooterDoneButtons from '../FooterButtons/FooterDoneButtons';
 import DropArea from '../DropArea';
 
 export default {
-  name: 'FrontSideOnly',
-
-  frontSideController: createFrontSideController(),
+  name: 'BackSide',
 
   inject: ['$validator'],
 
+  backSideController: createBackSideController(),
+
   props: {
-    documentType: {
+    documentId: {
       type: String,
       default: '',
     },
   },
 
   data: () => ({
-    documentId: '',
     error: null,
     selectedFile: null,
-    isLoading: false,
     isRecognitionError: false,
+    isLoading: false,
     isUploaded: false,
   }),
 
@@ -60,17 +62,12 @@ export default {
     isUploadReady() {
       return !this.isLoading && !!this.selectedFile && !this.error;
     },
+
     currentButtons() {
       if (this.isRecognitionError) {
         return FooterRepeatButtons;
       }
-      return FooterFrontButtons;
-    },
-  },
-
-  watch: {
-    documentType() {
-      this.error = '';
+      return FooterDoneButtons;
     },
   },
 
@@ -94,8 +91,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        await this.$options.frontSideController.recognize(this.documentId);
-        this.$emit('confirm', this.documentId);
+        const status = await this.$options.backSideController.recognize(
+          this.documentId,
+        );
+        this.handleConfirm(status);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -104,30 +103,30 @@ export default {
       }
     },
 
-    async startCreateDocument() {
+    async startUpload() {
       try {
         this.isLoading = true;
-        this.documentId = await this.$options.frontSideController.startCreateDocument(
-          {
-            file: this.selectedFile,
-            type: this.documentType,
-          },
-        );
+        await this.$options.backSideController.startUpload({
+          file: this.selectedFile,
+          docId: this.documentId,
+        });
+        this.isUploaded = true;
       } catch (e) {
+        this.isUploaded = false;
         this.error = e.message;
       } finally {
         this.isLoading = false;
       }
     },
 
-    async continueCreateDocument() {
+    async continueUpload() {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        await this.$options.frontSideController.continueCreateDocument(
+        const status = await this.$options.backSideController.continueUpload(
           this.documentId,
         );
-        this.$emit('confirm', this.documentId);
+        this.handleConfirm(status);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -136,23 +135,28 @@ export default {
       }
     },
 
-    async onUploadClick() {
-      await this.startCreateDocument();
-      if (!this.documentId) {
+    handleConfirm(status) {
+      this.$emit('confirm', {
+        documentId: this.documentId,
+        status,
+      });
+    },
+
+    async onUploadFile() {
+      await this.startUpload();
+      if (!this.isUploaded) {
         return;
       }
-      await this.continueCreateDocument();
+      await this.continueUpload();
     },
-  },
-
-  mounted() {
-    this.$options.frontSideController.init();
   },
 
   components: {
     DropArea,
-    FooterFrontButtons,
-    DocumentUploadFront,
+    DocumentUploadBack,
+    DocumentUploadDescription,
+    FormItem,
+    VFileDropArea,
   },
 };
 </script>

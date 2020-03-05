@@ -4,8 +4,8 @@
       {{ $t('components.uploadDocument.requestedInformation') }}
     </v-title>
     <document-types
-      :types="types"
-      :type-to-status="typeToStatus"
+      :doc-types-list="docTypesList"
+      :doc-type-to-status="docTypeToStatus"
       @select="onSelectType"
     />
   </div>
@@ -19,12 +19,12 @@ export default {
   name: 'RequestedInfoView',
 
   props: {
-    typeToStatus: {
+    docTypeToStatus: {
       type: Object,
       required: true,
     },
 
-    types: {
+    docTypesList: {
       type: Array,
       required: true,
     },

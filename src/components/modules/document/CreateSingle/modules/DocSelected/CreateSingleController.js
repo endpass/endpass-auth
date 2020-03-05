@@ -4,35 +4,11 @@ import createController from '@/controllers/createController';
 import { documentChannel } from '@/class/singleton/channels';
 
 import Answer from '@/class/Answer';
-import { channelStore as channelStoreModule } from '@/store';
 
 const { ERRORS } = ConnectError;
 
-/**
- * @typedef { import("@/store/modules/channelModule").default } channelModule
- */
-
 @Module({ generateMutationSetters: true })
 class CreateSingleController extends VuexModule {
-  /**
-   *
-   * @param {import('vuex-class-modules').RegisterOptions} props
-   * @param {object} params
-   * @param {{channelStore?: channelModule}} params.channelStore
-   */
-  constructor(props, { channelStore = channelStoreModule }) {
-    super(props);
-    this.channelStore = channelStore;
-  }
-
-  /**
-   *
-   * @return {*|"DriverLicense"|string|string}
-   */
-  get defaultDocumentType() {
-    return this.channelStore.payload.defaultDocumentType || '';
-  }
-
   @Action
   cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
@@ -40,10 +16,11 @@ class CreateSingleController extends VuexModule {
   }
 
   /**
-   * @param {string?} documentId
+   * @param {object} params
+   * @param {string?} params.documentId
    */
   @Action
-  finishCreate(documentId) {
+  finishCreate({ documentId }) {
     if (!documentId) {
       // TODO: check error processing
       throw new Error('Not defined document Id');

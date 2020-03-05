@@ -1,58 +1,35 @@
 <template>
-  <document-create
-    :types="types"
-    :is-extra-loading.sync="isExtraLoading"
-    :document-type.sync="documentType"
-    @create="onCreate"
-    @cancel="onCancel"
-    @close="handleClose"
+  <create-single
+    :doc-types-list="$options.DOC_TYPES_LIST"
+    :is-doc-type-exist="isDocTypeExist"
   />
 </template>
 
 <script>
-import DocumentCreate from '../DocumentCreate';
-import CreateSingleController from './CreateSingleController';
+import CreateSingle from './CreateSingle.container';
 import { DOC_TYPES } from '@/constants';
+import { channelStore } from '@/store';
 
 export default {
   name: 'CreateSingleInteractor',
 
-  createSingleController: CreateSingleController(),
+  channelStore,
 
-  data() {
-    return {
-      types: [
-        DOC_TYPES.PASSPORT,
-        DOC_TYPES.DRIVER_LICENSE,
-        DOC_TYPES.ID_CARD,
-        DOC_TYPES.PROOF_OF_ADDRESS,
-      ],
-      isExtraLoading: false,
-      documentType: this.$options.createSingleController.defaultDocumentType,
-    };
-  },
+  DOC_TYPES_LIST: [
+    DOC_TYPES.PASSPORT,
+    DOC_TYPES.DRIVER_LICENSE,
+    DOC_TYPES.ID_CARD,
+    DOC_TYPES.PROOF_OF_ADDRESS,
+  ],
 
-  methods: {
-    onCancel() {
-      if (this.$options.createSingleController.defaultDocumentType) {
-        this.handleClose();
-        return;
-      }
-
-      this.documentType = '';
-    },
-
-    onCreate(documentId) {
-      this.$options.createSingleController.finishCreate(documentId);
-    },
-
-    handleClose() {
-      this.$options.createSingleController.cancelCreate();
+  computed: {
+    isDocTypeExist() {
+      return !!this.$options.channelStore.payload.defaultDocumentType;
     },
   },
 
   components: {
-    DocumentCreate,
+    CreateSingle,
   },
 };
 </script>

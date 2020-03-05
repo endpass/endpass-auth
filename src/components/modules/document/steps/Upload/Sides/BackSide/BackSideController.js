@@ -104,7 +104,8 @@ class BackSideController extends VuexModule {
   @Action
   async confirmAndWait(docId) {
     await documentsService.confirmDocument(docId);
-    await documentsService.waitDocumentReady(docId);
+    const status = await documentsService.waitDocumentReady(docId);
+    return status;
   }
 
   /**
@@ -146,7 +147,8 @@ class BackSideController extends VuexModule {
     const timer = this.getTimer();
     this.progressLabel = i18n.t('components.uploadDocument.recognition');
     timer.startProgress(50, 100);
-    await this.confirmAndWait(docId);
+    const status = await this.confirmAndWait(docId);
+    return status;
   }
 
   /**
@@ -160,7 +162,8 @@ class BackSideController extends VuexModule {
       timer.startProgress();
 
       this.progressLabel = i18n.t('components.uploadDocument.recognition');
-      await this.confirmAndWait(docId);
+      const status = await this.confirmAndWait(docId);
+      return status;
     } catch (e) {
       e.message = i18n.t('store.error.uploadDocument.confirm');
       throw e;

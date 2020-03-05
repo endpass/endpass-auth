@@ -1,5 +1,5 @@
 import ConnectError from '@endpass/connect/error';
-import DocumentCreateController from '@/components/screens/DocumentCreate/DocumentCreateController';
+import DocumentCreateController from '@/components/screens/DocLayout/DocumentCreateController';
 import { documentChannel } from '@/class/singleton/channels';
 
 const { ERRORS } = ConnectError;

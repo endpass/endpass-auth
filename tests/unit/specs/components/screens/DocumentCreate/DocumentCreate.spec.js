@@ -3,7 +3,7 @@ import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import DocumentCreate from '@/components/screens/DocumentCreate';
+import DocumentCreate from '@/components/screens/DocLayout';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);

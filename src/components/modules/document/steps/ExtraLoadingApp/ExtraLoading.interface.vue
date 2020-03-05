@@ -10,9 +10,7 @@ export default {
 
   methods: {
     onDone() {
-      this.$emit('complete', {
-        isExtraLoading: false,
-      });
+      this.$emit('timeout');
     },
   },
 

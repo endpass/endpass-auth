@@ -91,7 +91,10 @@ const documentsService = {
    * @return {Promise<void>}
    */
   async waitDocumentReady(id) {
+    // TODO: need rename 'waitDocumentReady' to something better for read
+
     const waitingStatuses = [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION];
+    let status;
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
@@ -101,12 +104,14 @@ const documentsService = {
         throw new Error('Recognize error');
       }
 
-      const { status } = document;
+      status = document.status;
 
       if (!waitingStatuses.includes(status)) {
         break;
       }
     }
+
+    return status;
   },
 
   /**

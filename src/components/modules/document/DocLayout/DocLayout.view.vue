@@ -1,10 +1,10 @@
 <template>
-  <screen @close="onCancel">
+  <screen @close="onClose">
     <v-frame
       :is-closable="isClosable"
       :is-returnable="isReturnable"
       title=""
-      @close="onCancel"
+      @close="onClose"
       @return="onReturn"
     >
       <slot />
@@ -17,7 +17,7 @@ import Screen from '@/components/common/Screen';
 import VFrame from '@/components/common/VFrame';
 
 export default {
-  name: 'DocumentCreateView',
+  name: 'DocLayoutView',
 
   props: {
     isReturnable: {
@@ -36,8 +36,8 @@ export default {
       this.$emit('return');
     },
 
-    onCancel() {
-      this.$emit('cancel');
+    onClose() {
+      this.$emit('close');
     },
   },
 

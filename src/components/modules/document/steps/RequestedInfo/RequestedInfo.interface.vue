@@ -1,7 +1,7 @@
 <template>
   <requested-info
-    :types="types"
-    :type-to-status="typeToStatus"
+    :doc-types-list="docTypesList"
+    :doc-type-to-status="docTypeToStatus"
     @select-document-type="onSelectDocumentType"
   />
 </template>
@@ -13,12 +13,12 @@ export default {
   name: 'RequestedInfoInterface',
 
   props: {
-    typeToStatus: {
+    docTypeToStatus: {
       type: Object,
       required: true,
     },
 
-    types: {
+    docTypesList: {
       type: Array,
       required: true,
     },

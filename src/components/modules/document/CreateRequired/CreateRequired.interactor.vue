@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import DocumentCreate from '../DocumentCreate';
+import DocumentCreate from '../DocLayout';
 import createDocumentController from './CreateRequiredController';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import { DOC_STATUSES } from '@/constants';
@@ -78,7 +78,7 @@ export default {
     async onCreate() {
       // check status for show extra loading and first screen again
       // this.$options.createRequiredController.finishCreate();
-      await this.switchScreen();
+      await this.loadTypesAndSwitch();
     },
 
     handleFinish() {
@@ -101,9 +101,7 @@ export default {
       }
     },
 
-    async switchScreen() {
-      await this.loadRequiredTypes();
-
+    switchScreen() {
       this.documentType = '';
 
       if (this.isAllVerified) {
@@ -115,10 +113,16 @@ export default {
         this.isExtraLoading = true;
       }
     },
+
+    async loadTypesAndSwitch() {
+      await this.loadRequiredTypes();
+
+      this.switchScreen();
+    },
   },
 
   async mounted() {
-    await this.switchScreen();
+    await this.loadTypesAndSwitch();
   },
 
   components: {

@@ -35,8 +35,9 @@ export default {
       this.$emit('side-changed');
     },
 
-    onConfirm(docId) {
-      this.$emit('upload', docId);
+    onConfirm({ documentId, status }) {
+      // TODO: add processing data from lower levels
+      this.$emit('complete', { documentId, status });
     },
   },
 
