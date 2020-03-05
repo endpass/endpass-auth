@@ -2,6 +2,7 @@
   <requested-info
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
+    :is-show-status="isShowStatus"
     @select-document-type="onSelectDocumentType"
   />
 </template>
@@ -15,11 +16,16 @@ export default {
   props: {
     docTypeToStatus: {
       type: Object,
-      required: true,
+      default: () => ({}),
     },
 
     docTypesList: {
       type: Array,
+      required: true,
+    },
+
+    isShowStatus: {
+      type: Boolean,
       required: true,
     },
   },

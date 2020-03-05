@@ -26,7 +26,7 @@ export default {
 
   methods: {
     onDone() {
-      this.$emit('done');
+      this.$emit('create');
     },
   },
 

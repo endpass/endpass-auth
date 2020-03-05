@@ -1,11 +1,15 @@
 <template>
-  <doc-layout :is-closable="false">
+  <doc-layout
+    :is-closable="false"
+    @close="onClose"
+  >
     <component
       :is="currentComponent"
       :doc-types-list="docTypesList"
-      :document-id="mutables.documentId"
+      :document-id="documentId"
       :selected-document-type="selectedDocumentType"
-      @complete="onCompete"
+      :is-show-status="false"
+      @next="onNext"
       @create="onCreate"
       @cancel="onCancel"
     />
@@ -33,24 +37,25 @@ export default {
       type: String,
       required: true,
     },
-  },
 
-  data() {
-    return {
-      mutables: {
-        status: '',
-        documentId: '',
-      },
-    };
+    status: {
+      type: String,
+      required: true,
+    },
+
+    documentId: {
+      type: String,
+      required: true,
+    },
   },
 
   computed: {
     currentComponent() {
-      if (this.mutables.status === DOC_STATUSES.VERIFIED) {
+      if (this.status === DOC_STATUSES.VERIFIED) {
         return Success;
       }
 
-      if (this.mutables.status === DOC_STATUSES.PENDING_REVIEW) {
+      if (this.status === DOC_STATUSES.PENDING_REVIEW) {
         return ExtraLoadingDocument;
       }
 
@@ -63,17 +68,19 @@ export default {
       this.$emit('create', { documentId });
     },
 
-    onCompete(payload) {
+    onNext(payload) {
       if (!payload) return;
 
-      Object.keys(payload).forEach(fieldKey => {
-        if (Object.getOwnPropertyDescriptor(this.mutables, fieldKey)) {
-          this.mutables[fieldKey] = payload[fieldKey];
-        }
+      Object.keys(payload).forEach(propName => {
+        this.$emit(`update:${propName}`, payload[propName]);
       });
     },
 
     onCancel() {
+      this.$emit('cancel');
+    },
+
+    onClose() {
       this.$emit('cancel');
     },
   },

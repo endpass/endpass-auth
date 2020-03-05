@@ -24,7 +24,7 @@ export default {
   DOC_TYPES_TRANSLATES,
 
   props: {
-    documentType: {
+    selectedDocumentType: {
       type: String,
       required: true,
     },
@@ -35,9 +35,17 @@ export default {
       this.$emit('side-changed');
     },
 
+    onCancel() {
+      this.$emit('cancel');
+    },
+
     onConfirm({ documentId, status }) {
       // TODO: add processing data from lower levels
-      this.$emit('complete', { documentId, status });
+      this.$emit('next', {
+        documentId,
+        status,
+        selectedDocumentType: '',
+      });
     },
   },
 

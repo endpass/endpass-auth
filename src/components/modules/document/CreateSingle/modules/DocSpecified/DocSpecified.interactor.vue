@@ -2,24 +2,19 @@
   <doc-specified
     :doc-types-list="docTypesList"
     @create="onCreate"
-    @cancel="onClose"
-    @close="onClose"
+    @cancel="onCancel"
   />
 </template>
 
 <script>
-import DocSpecified from './DocSpecified.container';
+import DocSpecified from './DocSpecified.state';
 import CreateSingleController from './CreateSingleController';
-
-import { channelStore } from '@/store';
 
 export default {
   name: 'DocSpecifiedInteractor',
 
   createSingleController: CreateSingleController(),
   // TODO: maybe move to gateway and use controller from top level?
-
-  channelStore,
 
   props: {
     docTypesList: {
@@ -30,10 +25,10 @@ export default {
 
   methods: {
     onCreate({ documentId }) {
-      this.$options.createSingleController.finishCreate(documentId);
+      this.$options.createSingleController.finishCreate({ documentId });
     },
 
-    onClose() {
+    onCancel() {
       this.$options.createSingleController.cancelCreate();
     },
   },

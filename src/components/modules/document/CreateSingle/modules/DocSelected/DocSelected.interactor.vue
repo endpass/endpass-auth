@@ -3,13 +3,12 @@
     :doc-types-list="docTypesList"
     :selected-document-type="selectedDocumentType"
     @create="onCreate"
-    @cancel="onClose"
-    @close="onClose"
+    @cancel="onCancel"
   />
 </template>
 
 <script>
-import DocSelected from './DocSelected.container';
+import DocSelected from './DocSelected.state';
 import CreateSingleController from './CreateSingleController';
 
 import { channelStore } from '@/store';
@@ -35,10 +34,10 @@ export default {
 
   methods: {
     onCreate({ documentId }) {
-      this.$options.createSingleController.finishCreate(documentId);
+      this.$options.createSingleController.finishCreate({ documentId });
     },
 
-    onClose() {
+    onCancel() {
       this.$options.createSingleController.cancelCreate();
     },
   },

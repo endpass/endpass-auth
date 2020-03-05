@@ -6,6 +6,7 @@
     <document-types
       :doc-types-list="docTypesList"
       :doc-type-to-status="docTypeToStatus"
+      :is-show-status="isShowStatus"
       @select="onSelectType"
     />
   </div>
@@ -26,6 +27,11 @@ export default {
 
     docTypesList: {
       type: Array,
+      required: true,
+    },
+
+    isShowStatus: {
+      type: Boolean,
       required: true,
     },
   },

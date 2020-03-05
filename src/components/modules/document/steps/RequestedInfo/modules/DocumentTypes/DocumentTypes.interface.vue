@@ -1,7 +1,8 @@
 <template>
   <document-types
-    :types="types"
-    :type-to-status="typeToStatus"
+    :doc-types-list="docTypesList"
+    :doc-type-to-status="docTypeToStatus"
+    :is-show-status="isShowStatus"
     @select="onSelect"
   />
 </template>
@@ -13,14 +14,19 @@ export default {
   name: 'DocumentTypesInterface',
 
   props: {
-    typeToStatus: {
+    docTypeToStatus: {
       type: Object,
       required: true,
     },
 
-    types: {
+    docTypesList: {
       type: Array,
       required: true,
+    },
+
+    isShowStatus: {
+      type: Boolean,
+      default: false,
     },
   },
 

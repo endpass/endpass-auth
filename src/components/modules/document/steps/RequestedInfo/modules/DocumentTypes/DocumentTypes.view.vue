@@ -1,7 +1,7 @@
 <template>
   <div class="document-types">
     <div
-      v-for="(type, index) in types"
+      v-for="(type, index) in docTypesList"
       :key="type"
       class="document-types-item"
       @click="onSelect(type)"
@@ -48,24 +48,33 @@ export default {
   DOC_TYPES_TRANSLATES,
 
   props: {
-    typeToStatus: {
+    docTypeToStatus: {
       type: Object,
       required: true,
     },
 
-    types: {
+    docTypesList: {
       type: Array,
+      required: true,
+    },
+
+    isShowStatus: {
+      type: Boolean,
       required: true,
     },
   },
 
   methods: {
     isVerified(type) {
-      return this.typeToStatus[type] === this.$options.DOC_STATUSES.VERIFIED;
+      return this.docTypeToStatus[type] === this.$options.DOC_STATUSES.VERIFIED;
     },
 
     getStatusLabel(type) {
-      const status = this.typeToStatus[type];
+      if (!this.isShowStatus) {
+        return '';
+      }
+
+      const status = this.docTypeToStatus[type];
       const label = this.$options.DOC_STATUSES_TRANSLATES[status];
       if (!label) {
         return this.$i18n.t('components.uploadDocument.notUploaded');
@@ -84,8 +93,6 @@ export default {
 };
 </script>
 <style lang="postcss">
-.document-types {
-}
 .document-types-item {
   display: flex;
   padding: 16px 0;
