@@ -27,12 +27,10 @@ export default {
     },
   },
 
-  data() {
-    return {
-      status: '',
-      documentId: '',
-    };
-  },
+  data: () => ({
+    status: '',
+    documentId: '',
+  }),
 
   methods: {
     onCreate({ documentId }) {

@@ -112,15 +112,16 @@ export default {
   margin: 0 16px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
 }
 .document-type-label {
   font-size: 16px;
   color: var(--endpass-ui-color-grey-8);
-  margin: 4px 0;
 }
 .document-type-status {
   font-size: 12px;
   color: #ee538b;
+  margin-top: 4px;
 }
 .document-type-status.is-verified {
   color: var(--endpass-ui-color-success);

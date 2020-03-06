@@ -5,7 +5,7 @@ import { documentChannel } from '@/class/singleton/channels';
 import { channelStore as channelStoreModule } from '@/store';
 
 import Answer from '@/class/Answer';
-import documentsService from '@/service/documents';
+// import documentsService from '@/service/documents';
 import { DOC_STATUSES } from '@/constants';
 
 const { ERRORS } = ConnectError;
@@ -57,19 +57,19 @@ class CreateRequiredController extends VuexModule {
 
   @Action
   async getRequiredTypes() {
-    const { clientId } = this.channelStore.payload;
-    const [requiredTypes, documentsListDetails] = await Promise.all([
-      documentsService.getRequiredDocumentsTypes(clientId),
-      documentsService.getDocumentsList(),
-    ]);
-    const { items: documentsList } = documentsListDetails;
-
-    const typeToStatus = this.getTypeToStatus(requiredTypes, documentsList);
-
-    return {
-      types: requiredTypes,
-      typeToStatus,
-    };
+    // const { requiredTypes, documentsList } = documentsRequiredStore;
+    // TODO: move getTypeToStatus to documentsRequiredStore
+    // const [requiredTypes, documentsListDetails] = await Promise.all([
+    //   documentsService.getRequiredDocumentsTypes(clientId),
+    //   documentsService.getDocumentsList(),
+    // ]);
+    // const { items: documentsList } = documentsListDetails;
+    // const typeToStatus = this.getTypeToStatus(requiredTypes, documentsList);
+    //
+    // return {
+    //   types: requiredTypes,
+    //   typeToStatus,
+    // };
   }
 }
 

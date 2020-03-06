@@ -22,13 +22,11 @@ export default {
     },
   },
 
-  data() {
-    return {
-      status: '',
-      documentId: '',
-      selectedDocumentType: '',
-    };
-  },
+  data: () => ({
+    status: '',
+    documentId: '',
+    selectedDocumentType: '',
+  }),
 
   methods: {
     onCreate({ documentId }) {
@@ -36,7 +34,7 @@ export default {
     },
 
     onCancel() {
-      this.$emit('update:selected-document-type', '');
+      this.selectedDocumentType = '';
     },
   },
 

@@ -10,7 +10,7 @@ import DocSelected from './modules/DocSelected';
 import DocSpecified from './modules/DocSpecified';
 
 export default {
-  name: 'CreateSingleContainer',
+  name: 'DocSingleCreationContainer',
 
   props: {
     docTypesList: {

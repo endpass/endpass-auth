@@ -5,7 +5,7 @@ export default [
     // TODO: replace after finished task with create required
     component: () =>
       import(
-        /* webpackChunkName: "document-create-single" */ '@/components/modules/document/CreateRequired'
+        /* webpackChunkName: "document-create-single" */ '@/components/modules/document/DocSingleCreation'
       ),
     meta: {
       isDialogStream: true,
@@ -17,7 +17,7 @@ export default [
     name: 'DocumentCreateRequired',
     component: () =>
       import(
-        /* webpackChunkName: "document-create-required" */ '@/components/modules/document/CreateRequired'
+        /* webpackChunkName: "document-create-required" */ '@/components/modules/document/DocRequiredCreation'
       ),
     meta: {
       isDialogStream: true,

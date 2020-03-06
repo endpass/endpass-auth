@@ -1,7 +1,7 @@
 <template>
   <doc-layout
     :is-closable="false"
-    @close="onClose"
+    @close="onCancel"
   >
     <component
       :is="currentComponent"
@@ -82,10 +82,6 @@ export default {
     },
 
     onCancel() {
-      this.$emit('cancel');
-    },
-
-    onClose() {
       this.$emit('cancel');
     },
   },

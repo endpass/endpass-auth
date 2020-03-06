@@ -7,6 +7,7 @@ import Answer from '@/class/Answer';
 
 const { ERRORS } = ConnectError;
 
+// TODO: rename DocumentSingleController
 @Module({ generateMutationSetters: true })
 class CreateSingleController extends VuexModule {
   @Action

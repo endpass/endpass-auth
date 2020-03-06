@@ -32,8 +32,8 @@ export default {
 
   methods: {
     onSelectDocumentType(docType) {
-      this.$emit('complete', {
-        documentType: docType,
+      this.$emit('next', {
+        selectedDocumentType: docType,
       });
     },
   },

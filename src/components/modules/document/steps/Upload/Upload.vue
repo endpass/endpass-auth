@@ -2,13 +2,14 @@
   <div>
     <v-title>
       {{ $t('components.uploadDocument.upload') }}
-      {{ $options.DOC_TYPES_TRANSLATES[documentType] }}
+      {{ $options.DOC_TYPES_TRANSLATES[selectedDocumentType] }}
     </v-title>
     <sides
-      :document-type="documentType"
+      :document-type="selectedDocumentType"
       v-on="$listeners"
       @toggle="onToggle"
       @confirm="onConfirm"
+      @cancel="onCancel"
     />
   </div>
 </template>

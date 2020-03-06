@@ -1,34 +1,24 @@
 <template>
-  <doc-selected
+  <doc-specified
     :doc-types-list="docTypesList"
-    :selected-document-type="selectedDocumentType"
     @create="onCreate"
     @cancel="onCancel"
   />
 </template>
 
 <script>
-import DocSelected from './DocSelected.state';
-import CreateSingleController from './CreateSingleController';
-
-import { channelStore } from '@/store';
+import DocSpecified from './DocSpecified.state';
+import CreateSingleController from '../controllers/CreateSingleController';
 
 export default {
-  name: 'DocSelectedInteractor',
+  name: 'DocSpecifiedInteractor',
 
   createSingleController: CreateSingleController(),
-  channelStore,
 
   props: {
     docTypesList: {
       type: Array,
       required: true,
-    },
-  },
-
-  computed: {
-    selectedDocumentType() {
-      return this.$options.channelStore.payload.defaultDocumentType;
     },
   },
 
@@ -43,7 +33,7 @@ export default {
   },
 
   components: {
-    DocSelected,
+    DocSpecified,
   },
 };
 </script>

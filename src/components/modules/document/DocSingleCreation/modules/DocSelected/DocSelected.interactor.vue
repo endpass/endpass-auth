@@ -1,25 +1,34 @@
 <template>
-  <doc-specified
+  <doc-selected
     :doc-types-list="docTypesList"
+    :selected-document-type="selectedDocumentType"
     @create="onCreate"
     @cancel="onCancel"
   />
 </template>
 
 <script>
-import DocSpecified from './DocSpecified.state';
-import CreateSingleController from './CreateSingleController';
+import DocSelected from './DocSelected.state';
+import CreateSingleController from '../controllers/CreateSingleController';
+
+import { channelStore } from '@/store';
 
 export default {
-  name: 'DocSpecifiedInteractor',
+  name: 'DocSelectedInteractor',
 
   createSingleController: CreateSingleController(),
-  // TODO: maybe move to gateway and use controller from top level?
+  channelStore,
 
   props: {
     docTypesList: {
       type: Array,
       required: true,
+    },
+  },
+
+  computed: {
+    selectedDocumentType() {
+      return this.$options.channelStore.payload.defaultDocumentType;
     },
   },
 
@@ -34,7 +43,7 @@ export default {
   },
 
   components: {
-    DocSpecified,
+    DocSelected,
   },
 };
 </script>

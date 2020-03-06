@@ -1,17 +1,17 @@
 <template>
-  <create-single
+  <doc-single-creation
     :doc-types-list="$options.DOC_TYPES_LIST"
     :is-doc-type-exist="isDocTypeExist"
   />
 </template>
 
 <script>
-import CreateSingle from './CreateSingle.container';
+import DocSingleCreation from './DocSingleCreation.container';
 import { DOC_TYPES } from '@/constants';
 import { channelStore } from '@/store';
 
 export default {
-  name: 'CreateSingleInteractor',
+  name: 'DocSingleCreationInteractor',
 
   channelStore,
 
@@ -29,7 +29,7 @@ export default {
   },
 
   components: {
-    CreateSingle,
+    DocSingleCreation,
   },
 };
 </script>
