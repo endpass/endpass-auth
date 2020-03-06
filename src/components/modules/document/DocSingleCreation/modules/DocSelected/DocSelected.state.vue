@@ -5,7 +5,7 @@
     :document-id.sync="documentId"
     :status.sync="status"
     @create="onCreate"
-    @cancel="onCancel"
+    @close="onClose"
   />
 </template>
 
@@ -33,12 +33,12 @@ export default {
   }),
 
   methods: {
-    onCreate({ documentId }) {
-      this.$emit('create', { documentId });
+    onCreate() {
+      this.$emit('create', { documentId: this.documentId });
     },
 
-    onCancel() {
-      this.$emit('cancel');
+    onClose() {
+      this.$emit('close');
     },
   },
 

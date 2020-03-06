@@ -1,15 +1,15 @@
 <template>
-  <create-required />
+  <doc-required-creation />
 </template>
 
 <script>
-import CreateRequired from './CreateRequired.interactor';
+import DocRequiredCreation from './DocRequiredCreation.interactor';
 
 export default {
   name: 'CreateRequiredInterface',
 
   components: {
-    CreateRequired,
+    DocRequiredCreation,
   },
 };
 </script>

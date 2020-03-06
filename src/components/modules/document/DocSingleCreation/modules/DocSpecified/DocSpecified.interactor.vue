@@ -2,18 +2,18 @@
   <doc-specified
     :doc-types-list="docTypesList"
     @create="onCreate"
-    @cancel="onCancel"
+    @close="onClose"
   />
 </template>
 
 <script>
 import DocSpecified from './DocSpecified.state';
-import CreateSingleController from '../controllers/CreateSingleController';
+import createDocSingleController from '../controllers/DocumentSingleController';
 
 export default {
   name: 'DocSpecifiedInteractor',
 
-  createSingleController: CreateSingleController(),
+  docSingleController: createDocSingleController(),
 
   props: {
     docTypesList: {
@@ -24,11 +24,11 @@ export default {
 
   methods: {
     onCreate({ documentId }) {
-      this.$options.createSingleController.finishCreate({ documentId });
+      this.$options.docSingleController.finishCreate({ documentId });
     },
 
-    onCancel() {
-      this.$options.createSingleController.cancelCreate();
+    onClose() {
+      this.$options.docSingleController.cancelCreate();
     },
   },
 

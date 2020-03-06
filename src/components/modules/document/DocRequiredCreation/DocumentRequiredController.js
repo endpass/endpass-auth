@@ -20,7 +20,7 @@ const PRIORITY = {
 };
 
 @Module({ generateMutationSetters: true })
-class CreateRequiredController extends VuexModule {
+class DocumentRequiredController extends VuexModule {
   constructor(props, { channelStore = channelStoreModule }) {
     super(props);
     this.channelStore = channelStore;
@@ -73,4 +73,4 @@ class CreateRequiredController extends VuexModule {
   }
 }
 
-export default () => createController(CreateRequiredController);
+export default () => createController(DocumentRequiredController);

@@ -1,8 +1,9 @@
 <template>
   <doc-layout
     :is-closable="false"
-    @close="onCancel"
+    @close="onClose"
   >
+    selected
     <component
       :is="currentComponent"
       :doc-types-list="docTypesList"
@@ -11,7 +12,6 @@
       :is-show-status="false"
       @next="onNext"
       @create="onCreate"
-      @cancel="onCancel"
     />
   </doc-layout>
 </template>
@@ -20,7 +20,7 @@
 import DocLayout from '@/components/modules/document/DocLayout';
 import { DOC_STATUSES } from '@/constants';
 
-import ExtraLoadingDocument from '@/components/modules/document/steps/ExtraLoadingDocument';
+import ExtraLoadingDocument from '@/components/modules/document/steps/extraLoading/ModeDocument';
 import Success from '@/components/modules/document/steps/Success';
 import Upload from '@/components/modules/document/steps/Upload';
 
@@ -55,7 +55,7 @@ export default {
         return Success;
       }
 
-      if (this.status === DOC_STATUSES.PENDING_REVIEW) {
+      if (this.status) {
         return ExtraLoadingDocument;
       }
 
@@ -64,8 +64,8 @@ export default {
   },
 
   methods: {
-    onCreate({ documentId }) {
-      this.$emit('create', { documentId });
+    onCreate() {
+      this.$emit('create');
     },
 
     onNext(payload) {
@@ -76,8 +76,8 @@ export default {
       });
     },
 
-    onCancel() {
-      this.$emit('cancel');
+    onClose() {
+      this.$emit('close');
     },
   },
 

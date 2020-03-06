@@ -1,8 +1,9 @@
 <template>
   <doc-layout
-    :is-closable="false"
-    @close="onCancel"
+    :is-closable="isClosable"
+    @close="onClose"
   >
+    specified
     <component
       :is="currentComponent"
       :doc-types-list="docTypesList"
@@ -20,7 +21,7 @@
 import DocLayout from '@/components/modules/document/DocLayout';
 import { DOC_STATUSES } from '@/constants';
 
-import ExtraLoadingDocument from '@/components/modules/document/steps/ExtraLoadingDocument';
+import ExtraLoading from '@/components/modules/document/steps/extraLoading/ModeDocument';
 import Success from '@/components/modules/document/steps/Success';
 import Upload from '@/components/modules/document/steps/Upload';
 import RequestedInfo from '@/components/modules/document/steps/RequestedInfo';
@@ -34,9 +35,9 @@ export default {
       required: true,
     },
 
-    documentId: {
+    selectedDocumentType: {
       type: String,
-      default: '',
+      required: true,
     },
 
     status: {
@@ -44,13 +45,17 @@ export default {
       required: true,
     },
 
-    selectedDocumentType: {
+    documentId: {
       type: String,
       required: true,
     },
   },
 
   computed: {
+    isClosable() {
+      return !this.documentId && !this.status;
+    },
+
     currentComponent() {
       if (!this.documentId && !this.selectedDocumentType) {
         return RequestedInfo;
@@ -60,8 +65,8 @@ export default {
         return Success;
       }
 
-      if (this.status === DOC_STATUSES.PENDING_REVIEW) {
-        return ExtraLoadingDocument;
+      if (this.status) {
+        return ExtraLoading;
       }
 
       return Upload;
@@ -69,8 +74,8 @@ export default {
   },
 
   methods: {
-    onCreate({ documentId }) {
-      this.$emit('create', { documentId });
+    onCreate() {
+      this.$emit('create');
     },
 
     onNext(payload) {
@@ -83,6 +88,10 @@ export default {
 
     onCancel() {
       this.$emit('cancel');
+    },
+
+    onClose() {
+      this.$emit('close');
     },
   },
 

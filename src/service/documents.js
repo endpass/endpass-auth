@@ -88,30 +88,57 @@ const documentsService = {
 
   /**
    * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getDocumentStatus(id) {
+    const document = await request.get(`${docBaseURL}/${id}`);
+    if (!document) {
+      throw new Error('Recognize error');
+    }
+
+    return document.status;
+  },
+
+  /**
+   * @param {object} params
+   * @param {string} params.id
+   * @param {string[]} params.waitingStatuses
+   * @param {number=} params.timeoutMS
    * @return {Promise<void>}
    */
-  async waitDocumentReady(id) {
-    // TODO: need rename 'waitDocumentReady' to something better for read
+  async waitDocumentStatus({ id, timeoutMS, waitingStatuses }) {
+    if (!waitingStatuses.length) {
+      throw new Error('Please define waitingStatuses option');
+    }
 
-    const waitingStatuses = [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION];
-    let status;
+    const startTime = Date.now();
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
     )) {
-      const document = await request.get(`${docBaseURL}/${id}`);
-      if (!document) {
-        throw new Error('Recognize error');
-      }
-
-      status = document.status;
+      const status = await documentsService.getDocumentStatus(id);
 
       if (!waitingStatuses.includes(status)) {
         break;
       }
-    }
 
-    return status;
+      const spendTime = Date.now() - startTime;
+      if (timeoutMS && spendTime > timeoutMS) {
+        break;
+      }
+    }
+  },
+
+  /**
+   * @param {object} params
+   * @param {string} params.id
+   * @return {Promise<void>}
+   */
+  async waitDocumentReady({ id }) {
+    await documentsService.waitDocumentStatus({
+      id,
+      waitingStatuses: [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION],
+    });
   },
 
   /**

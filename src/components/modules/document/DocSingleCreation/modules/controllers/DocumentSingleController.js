@@ -9,7 +9,7 @@ const { ERRORS } = ConnectError;
 
 // TODO: rename DocumentSingleController
 @Module({ generateMutationSetters: true })
-class CreateSingleController extends VuexModule {
+class DocumentSingleController extends VuexModule {
   @Action
   cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
@@ -32,4 +32,4 @@ class CreateSingleController extends VuexModule {
 }
 
 // @ts-ignore
-export default () => createController(CreateSingleController);
+export default () => createController(DocumentSingleController);

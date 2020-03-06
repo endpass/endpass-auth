@@ -1,1 +1,1 @@
-export { default } from './CreateRequired.interface';
+export { default } from './DocRequiredCreation.interface';

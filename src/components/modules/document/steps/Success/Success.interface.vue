@@ -1,5 +1,5 @@
 <template>
-  <success @done="onDone" />
+  <success @create="onCreate" />
 </template>
 
 <script>
@@ -8,8 +8,10 @@ import Success from './Success.view';
 export default {
   name: 'SuccessInterface',
 
-  method: {
-    onDone() {},
+  methods: {
+    onCreate() {
+      this.$emit('create');
+    },
   },
 
   components: {

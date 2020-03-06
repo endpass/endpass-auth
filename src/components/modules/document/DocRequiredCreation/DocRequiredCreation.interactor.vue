@@ -14,7 +14,7 @@
 
 <script>
 import DocumentCreate from '../DocLayout';
-import createDocumentController from './CreateRequiredController';
+import createDocumentController from './DocumentRequiredController';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import { DOC_STATUSES } from '@/constants';
 

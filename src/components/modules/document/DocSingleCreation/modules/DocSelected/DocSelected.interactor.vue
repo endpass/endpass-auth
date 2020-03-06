@@ -3,20 +3,20 @@
     :doc-types-list="docTypesList"
     :selected-document-type="selectedDocumentType"
     @create="onCreate"
-    @cancel="onCancel"
+    @close="onClose"
   />
 </template>
 
 <script>
 import DocSelected from './DocSelected.state';
-import CreateSingleController from '../controllers/CreateSingleController';
+import createDocSingleController from '../controllers/DocumentSingleController';
 
 import { channelStore } from '@/store';
 
 export default {
   name: 'DocSelectedInteractor',
 
-  createSingleController: CreateSingleController(),
+  docSingleController: createDocSingleController(),
   channelStore,
 
   props: {
@@ -34,11 +34,11 @@ export default {
 
   methods: {
     onCreate({ documentId }) {
-      this.$options.createSingleController.finishCreate({ documentId });
+      this.$options.docSingleController.finishCreate({ documentId });
     },
 
-    onCancel() {
-      this.$options.createSingleController.cancelCreate();
+    onClose() {
+      this.$options.docSingleController.cancelCreate();
     },
   },
 
