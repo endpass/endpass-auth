@@ -24,7 +24,7 @@ import { DOC_STATUSES } from '@/constants';
 import ExtraLoading from '@/components/modules/document/steps/extraLoading/ModeDocument';
 import Success from '@/components/modules/document/steps/Success';
 import Upload from '@/components/modules/document/steps/Upload';
-import RequestedInfo from '@/components/modules/document/steps/RequestedInfo';
+import DocumentTypes from '@/components/modules/document/steps/DocumentTypes';
 
 export default {
   name: 'DocSpecifiedContainer',
@@ -59,7 +59,7 @@ export default {
     currentComponent() {
       switch (true) {
         case !this.documentId && !this.selectedDocumentType:
-          return RequestedInfo;
+          return DocumentTypes;
 
         case this.status === DOC_STATUSES.VERIFIED:
           return Success;

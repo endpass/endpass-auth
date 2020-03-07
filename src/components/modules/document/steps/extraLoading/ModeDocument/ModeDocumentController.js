@@ -12,7 +12,7 @@ class ModeDocumentController extends VuexModule {
    * @return {Promise<void>}
    */
   @Action
-  async waitDocumentStatus(docId) {
+  async waitDocumentVerified(docId) {
     await documentsService.waitDocumentVerified(docId);
   }
 

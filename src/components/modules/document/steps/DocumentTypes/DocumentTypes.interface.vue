@@ -1,17 +1,17 @@
 <template>
-  <requested-info
+  <document-types
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
     :is-show-status="isShowStatus"
-    @select-document-type="onSelectDocumentType"
+    @select="onSelect"
   />
 </template>
 
 <script>
-import RequestedInfo from './RequestedInfo.view';
+import DocumentTypes from './DocumentTypes.view';
 
 export default {
-  name: 'RequestedInfoInterface',
+  name: 'DocumentTypesInterface',
 
   props: {
     docTypeToStatus: {
@@ -31,7 +31,7 @@ export default {
   },
 
   methods: {
-    onSelectDocumentType(docType) {
+    onSelect(docType) {
       this.$emit('next', {
         selectedDocumentType: docType,
       });
@@ -39,7 +39,7 @@ export default {
   },
 
   components: {
-    RequestedInfo,
+    DocumentTypes,
   },
 };
 </script>

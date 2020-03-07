@@ -1,31 +1,36 @@
 <template>
-  <div class="document-types">
-    <div
-      v-for="(type, index) in docTypesList"
-      :key="type"
-      class="document-types-item"
-      @click="onSelect(type)"
-    >
-      <div class="document-type-index">
-        {{ index + 1 }}
-      </div>
-      <div class="document-type-details">
-        <div class="document-type-label">
-          {{ $options.DOC_TYPES_TRANSLATES[type] }}
+  <div>
+    <v-title>
+      {{ $t('components.uploadDocument.requestedInformation') }}
+    </v-title>
+    <div class="document-types">
+      <div
+        v-for="(type, index) in docTypesList"
+        :key="type"
+        class="document-types-item"
+        @click="onSelect(type)"
+      >
+        <div class="document-type-index">
+          {{ index + 1 }}
         </div>
-        <div
-          class="document-type-status"
-          :class="{ 'is-verified': isVerified(type) }"
-        >
-          {{ getStatusLabel(type) }}
+        <div class="document-type-details">
+          <div class="document-type-label">
+            {{ $options.DOC_TYPES_TRANSLATES[type] }}
+          </div>
+          <div
+            class="document-type-status"
+            :class="{ 'is-verified': isVerified(type) }"
+          >
+            {{ getStatusLabel(type) }}
+          </div>
         </div>
-      </div>
-      <div class="document-type-arrow">
-        <v-svg-icon
-          width="28px"
-          height="28px"
-          name="chevron-right"
-        />
+        <div class="document-type-arrow">
+          <v-svg-icon
+            width="28px"
+            height="28px"
+            name="chevron-right"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -33,6 +38,7 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
+import VTitle from '@/components/common/VTitle';
 import {
   DOC_STATUSES_TRANSLATES,
   DOC_TYPES_TRANSLATES,
@@ -89,9 +95,11 @@ export default {
 
   components: {
     VSvgIcon,
+    VTitle,
   },
 };
 </script>
+
 <style lang="postcss">
 .document-types-item {
   display: flex;
