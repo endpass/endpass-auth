@@ -5,7 +5,8 @@
     :document-id.sync="documentId"
     :status.sync="status"
     @create="onCreate"
-    @close="onClose"
+    @cancel="handleCancel"
+    @back="onBack"
   />
 </template>
 
@@ -37,8 +38,14 @@ export default {
       this.$emit('create', { documentId: this.documentId });
     },
 
-    onClose() {
-      this.$emit('close');
+    handleCancel() {
+      this.$emit('cancel');
+    },
+
+    onBack() {
+      if (!this.documentId) {
+        this.handleCancel();
+      }
     },
   },
 

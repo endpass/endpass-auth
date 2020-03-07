@@ -6,7 +6,6 @@
     :status.sync="status"
     @create="onCreate"
     @cancel="onCancel"
-    @close="onClose"
   />
 </template>
 
@@ -37,11 +36,7 @@ export default {
     },
 
     onCancel() {
-      this.selectedDocumentType = '';
-    },
-
-    onClose() {
-      this.$emit('close');
+      this.$emit('cancel');
     },
   },
 

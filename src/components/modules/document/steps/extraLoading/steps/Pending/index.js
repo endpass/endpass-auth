@@ -1,1 +1,1 @@
-export { default } from './Pending.view';
+export { default } from './Pending.interface';

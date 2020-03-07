@@ -109,7 +109,7 @@ class FrontSideOnlyController extends VuexModule {
   @Action
   async confirmAndWait(docId) {
     await documentsService.confirmDocument(docId);
-    await documentsService.waitDocumentReady({ id: docId });
+    await documentsService.waitDocumentFinishRecognition(docId);
   }
 
   /**

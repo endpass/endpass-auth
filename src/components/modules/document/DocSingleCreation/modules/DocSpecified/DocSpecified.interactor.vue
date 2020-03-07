@@ -2,7 +2,7 @@
   <doc-specified
     :doc-types-list="docTypesList"
     @create="onCreate"
-    @close="onClose"
+    @cancel="onCancel"
   />
 </template>
 
@@ -27,7 +27,7 @@ export default {
       this.$options.docSingleController.finishCreate({ documentId });
     },
 
-    onClose() {
+    onCancel() {
       this.$options.docSingleController.cancelCreate();
     },
   },

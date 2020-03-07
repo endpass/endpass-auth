@@ -9,9 +9,9 @@
     <v-button
       skin="quaternary"
       data-test="success-button"
-      @click="onDone"
+      @click="onContinue"
     >
-      {{ $t('global.done') }}
+      {{ $t('global.continue') }}
     </v-button>
   </div>
 </template>
@@ -25,8 +25,8 @@ export default {
   name: 'SuccessView',
 
   methods: {
-    onDone() {
-      this.$emit('create');
+    onContinue() {
+      this.$emit('continue');
     },
   },
 

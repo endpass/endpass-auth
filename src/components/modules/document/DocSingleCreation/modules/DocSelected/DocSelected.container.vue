@@ -1,7 +1,7 @@
 <template>
   <doc-layout
-    :is-closable="false"
-    @close="onClose"
+    :is-closable="isClosable"
+    @close="onCancel"
   >
     selected
     <component
@@ -12,6 +12,7 @@
       :is-show-status="false"
       @next="onNext"
       @create="onCreate"
+      @cancel="onBack"
     />
   </doc-layout>
 </template>
@@ -50,6 +51,10 @@ export default {
   },
 
   computed: {
+    isClosable() {
+      return !this.documentId && !this.status;
+    },
+
     currentComponent() {
       if (this.status === DOC_STATUSES.VERIFIED) {
         return Success;
@@ -76,8 +81,12 @@ export default {
       });
     },
 
-    onClose() {
-      this.$emit('close');
+    onCancel() {
+      this.$emit('cancel');
+    },
+
+    onBack() {
+      this.$emit('back');
     },
   },
 

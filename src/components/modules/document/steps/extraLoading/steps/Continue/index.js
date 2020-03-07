@@ -1,1 +1,1 @@
-export { default } from './Continue.view';
+export { default } from './Continue.interface';

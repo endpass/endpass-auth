@@ -45,7 +45,6 @@ export default {
       this.$emit('next', {
         documentId,
         status,
-        selectedDocumentType: '',
       });
     },
   },

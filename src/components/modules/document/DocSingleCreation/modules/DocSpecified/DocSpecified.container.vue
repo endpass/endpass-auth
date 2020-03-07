@@ -1,7 +1,7 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    @close="onClose"
+    @close="onCancel"
   >
     specified
     <component
@@ -12,7 +12,7 @@
       :is-show-status="false"
       @next="onNext"
       @create="onCreate"
-      @cancel="onCancel"
+      @cancel="onBack"
     />
   </doc-layout>
 </template>
@@ -57,19 +57,19 @@ export default {
     },
 
     currentComponent() {
-      if (!this.documentId && !this.selectedDocumentType) {
-        return RequestedInfo;
-      }
+      switch (true) {
+        case !this.documentId && !this.selectedDocumentType:
+          return RequestedInfo;
 
-      if (this.status === DOC_STATUSES.VERIFIED) {
-        return Success;
-      }
+        case this.status === DOC_STATUSES.VERIFIED:
+          return Success;
 
-      if (this.status) {
-        return ExtraLoading;
-      }
+        case !!this.status:
+          return ExtraLoading;
 
-      return Upload;
+        default:
+          return Upload;
+      }
     },
   },
 
@@ -90,8 +90,8 @@ export default {
       this.$emit('cancel');
     },
 
-    onClose() {
-      this.$emit('close');
+    onBack() {
+      this.$emit('update:selectedDocumentType', '');
     },
   },
 

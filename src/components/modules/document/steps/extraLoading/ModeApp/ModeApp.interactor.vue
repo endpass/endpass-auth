@@ -1,5 +1,5 @@
 <template>
-  <mode-app
+  <mode-layout
     :is-loading="isLoading"
     :is-verified="isVerified"
     @continue="onContinue"
@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import ModeApp from './ModeApp.container';
+import ModeLayout from '../ModeLayout';
 import createModeAppController from './ModeAppController';
 import { DOC_STATUSES } from '@/constants';
 
@@ -38,7 +38,7 @@ export default {
     try {
       this.isLoading = true;
       const { modeAppController } = this.$options;
-      await modeAppController.waitDocumentStatus(this.documentId);
+      await modeAppController.waitDocumentVerified(this.documentId);
       const status = await modeAppController.getDocumentStatus(this.documentId);
       this.isVerified = status === DOC_STATUSES.VERIFIED;
     } finally {
@@ -47,7 +47,7 @@ export default {
   },
 
   components: {
-    ModeApp,
+    ModeLayout,
   },
 };
 </script>

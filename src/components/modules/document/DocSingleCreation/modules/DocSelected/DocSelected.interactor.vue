@@ -3,7 +3,7 @@
     :doc-types-list="docTypesList"
     :selected-document-type="selectedDocumentType"
     @create="onCreate"
-    @close="onClose"
+    @cancel="onCancel"
   />
 </template>
 
@@ -37,7 +37,7 @@ export default {
       this.$options.docSingleController.finishCreate({ documentId });
     },
 
-    onClose() {
+    onCancel() {
       this.$options.docSingleController.cancelCreate();
     },
   },

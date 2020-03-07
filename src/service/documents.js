@@ -100,25 +100,21 @@ const documentsService = {
   },
 
   /**
-   * @param {object} params
-   * @param {string} params.id
-   * @param {string[]} params.waitingStatuses
-   * @param {number=} params.timeoutMS
+   * @param {string} id
    * @return {Promise<void>}
    */
-  async waitDocumentStatus({ id, timeoutMS, waitingStatuses }) {
-    if (!waitingStatuses.length) {
-      throw new Error('Please define waitingStatuses option');
-    }
-
+  async waitDocumentVerified(id) {
     const startTime = Date.now();
+    const timeoutMS = 30000;
+    const statuses = [DOC_STATUSES.VERIFIED];
+
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
     )) {
       const status = await documentsService.getDocumentStatus(id);
 
-      if (!waitingStatuses.includes(status)) {
+      if (statuses.includes(status)) {
         break;
       }
 
@@ -130,15 +126,22 @@ const documentsService = {
   },
 
   /**
-   * @param {object} params
-   * @param {string} params.id
+   * @param {string} id
    * @return {Promise<void>}
    */
-  async waitDocumentReady({ id }) {
-    await documentsService.waitDocumentStatus({
-      id,
-      waitingStatuses: [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION],
-    });
+  async waitDocumentFinishRecognition(id) {
+    const statuses = [DOC_STATUSES.RECOGNITION];
+
+    // eslint-disable-next-line no-unused-vars
+    for await (const index of generators.repeatWithInterval(
+      CHECK_RECOGNIZE_TIMEOUT,
+    )) {
+      const status = await documentsService.getDocumentStatus(id);
+
+      if (!statuses.includes(status)) {
+        break;
+      }
+    }
   },
 
   /**

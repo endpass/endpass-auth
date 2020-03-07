@@ -8,6 +8,9 @@
     <v-title>
       {{ $t('components.uploadDocument.pending') }}
     </v-title>
+    <v-button @click="onContinue">
+      {{ $t('global.continue') }}
+    </v-button>
     <v-description>
       {{ $t('components.uploadDocument.pleaseWait') }}
     </v-description>
@@ -16,19 +19,28 @@
 
 <script>
 import VProgressCircle from '@endpass/ui/kit/VProgressCircle';
+import VButton from '@endpass/ui/kit/VButton';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
 export default {
   name: 'ExtraLoadingView',
 
+  methods: {
+    onContinue() {
+      this.$emit('continue');
+    },
+  },
+
   components: {
+    VButton,
     VTitle,
     VDescription,
     VProgressCircle,
   },
 };
 </script>
+
 <style scoped lang="postcss">
 .extra-loading-progress {
   display: flex;

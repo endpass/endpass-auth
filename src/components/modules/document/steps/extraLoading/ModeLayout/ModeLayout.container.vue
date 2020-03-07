@@ -1,7 +1,6 @@
 <template>
   <component
     :is="currentComponent"
-    @create="onContinue"
     @continue="onContinue"
   />
 </template>
@@ -12,7 +11,7 @@ import Continue from '../steps/Continue';
 import Pending from '../steps/Pending';
 
 export default {
-  name: 'ModeDocumentContainer',
+  name: 'ModeLayoutContainer',
 
   props: {
     isLoading: {
