@@ -3,7 +3,7 @@ import permissionsService from '@/service/permissions';
 import withPayloadHandler from '@/streams/middleware/withPayloadHandler';
 import answerToRequest from '@/streams/middleware/answerToRequest';
 import subscribe from '@/streams/subscribe';
-// import documentsService from '@/service/documents';
+import { documentsRequiredStore } from '@/store';
 
 function initDialogRequestStream() {
   const methodToOptions = {
@@ -14,23 +14,15 @@ function initDialogRequestStream() {
       },
     },
 
-    // [METHODS.CHECK_DOCUMENTS_REQUIRED]: {
-    //   async payloadHandler({ clientId, documentList }) {
-    // check doc req list
-    // cache them
-    // if all ok, return 'success'
-    // if error, return error
-    // return documentsRequiredStore.checkRequired({ clientId, documentList });
-
-    // move this to documentsRequiredStore
-    // if (documentsRequiredStore.check) {
-    //   return cache;
-    // }
-    // const res = await documentsService.getRequiredDocumentsTypes({ clientId });
-    // cache = res;
-    // return res;
-    // },
-    // },
+    [METHODS.CHECK_DOCUMENTS_REQUIRED]: {
+      async payloadHandler({ clientId, data }) {
+        const res = await documentsRequiredStore.checkRequired({
+          clientId,
+          data,
+        });
+        return res;
+      },
+    },
   };
 
   subscribe(methodToOptions, [withPayloadHandler, answerToRequest]);

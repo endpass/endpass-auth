@@ -2,11 +2,10 @@ import { VuexModule, Action, Module } from 'vuex-class-modules';
 import ConnectError from '@endpass/connect/error';
 import createController from '@/controllers/createController';
 import { documentChannel } from '@/class/singleton/channels';
-import { channelStore as channelStoreModule } from '@/store';
-
+import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 import Answer from '@/class/Answer';
-// import documentsService from '@/service/documents';
 import { DOC_STATUSES } from '@/constants';
+import documentsService from '@/service/documents';
 
 const { ERRORS } = ConnectError;
 
@@ -19,29 +18,48 @@ const PRIORITY = {
   [DOC_STATUSES.RECOGNITION]: 6,
 };
 
+const BAD_STATUSES = [
+  DOC_STATUSES.RECOGNITION,
+  DOC_STATUSES.DRAFT,
+  DOC_STATUSES.NOT_READABLE,
+  DOC_STATUSES.NOT_VERIFIED,
+];
+
 @Module({ generateMutationSetters: true })
 class DocumentRequiredController extends VuexModule {
-  constructor(props, { channelStore = channelStoreModule }) {
+  documentsList = [];
+
+  docTypeToStatus = {};
+
+  constructor(
+    props,
+    { documentsRequiredStore = documentsRequiredStoreModule },
+  ) {
     super(props);
-    this.channelStore = channelStore;
+    this.documentsRequiredStore = documentsRequiredStore;
   }
 
-  @Action
-  cancelCreate() {
-    const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
-    documentChannel.put(result);
+  get docRequiredTypes() {
+    return this.documentsRequiredStore.docRequiredTypes;
   }
 
-  @Action
-  finishCreate() {
-    const result = Answer.createOk();
-    documentChannel.put(result);
+  get isRequiredVerified() {
+    return this.docRequiredTypes.every(type => {
+      const status = this.docTypeToStatus[type];
+      return status === DOC_STATUSES.VERIFIED;
+    });
   }
 
-  getTypeToStatus(requiredTypes, documentsList) {
+  get isHaveBad() {
+    return Object.values(this.docTypeToStatus).every(
+      status => !BAD_STATUSES.includes(status),
+    );
+  }
+
+  getDocTypeToStatus(documentsList) {
     return documentsList.reduce((statusMap, document) => {
       const { documentType, status } = document;
-      if (!requiredTypes.includes(documentType)) {
+      if (!this.docRequiredTypes.includes(documentType)) {
         return statusMap;
       }
       const currentStatus = statusMap[documentType];
@@ -56,20 +74,22 @@ class DocumentRequiredController extends VuexModule {
   }
 
   @Action
-  async getRequiredTypes() {
-    // const { requiredTypes, documentsList } = documentsRequiredStore;
-    // TODO: move getTypeToStatus to documentsRequiredStore
-    // const [requiredTypes, documentsListDetails] = await Promise.all([
-    //   documentsService.getRequiredDocumentsTypes(clientId),
-    //   documentsService.getDocumentsList(),
-    // ]);
-    // const { items: documentsList } = documentsListDetails;
-    // const typeToStatus = this.getTypeToStatus(requiredTypes, documentsList);
-    //
-    // return {
-    //   types: requiredTypes,
-    //   typeToStatus,
-    // };
+  async loadDocuments() {
+    const { items } = await documentsService.getDocumentsList();
+    this.documentsList = items;
+    this.docTypeToStatus = this.getDocTypeToStatus(items);
+  }
+
+  @Action
+  cancelCreate() {
+    const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
+    documentChannel.put(result);
+  }
+
+  @Action
+  finishCreate() {
+    const result = Answer.createOk();
+    documentChannel.put(result);
   }
 }
 

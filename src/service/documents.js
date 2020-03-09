@@ -195,7 +195,7 @@ const documentsService = {
     // return request.get(
     //   `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
     // );
-    // TODO: replace mock with request.get
+    // TODO: replace mock after implement
     return ['Passport', 'IdCard'];
   },
 

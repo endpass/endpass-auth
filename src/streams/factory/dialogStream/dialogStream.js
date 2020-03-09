@@ -36,7 +36,7 @@ function initDialogStream() {
       needAuth: true,
       needPermission: true,
     },
-    [METHODS.UPLOAD_REQUIRED_DOCUMENTS]: {
+    [METHODS.CREATE_DOCUMENTS_REQUIRED]: {
       commit(payload) {
         channelStore.setPayload(payload);
       },

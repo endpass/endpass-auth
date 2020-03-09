@@ -17,6 +17,7 @@ export const {
   authStore,
   balanceStore,
   channelStore,
+  documentsRequiredStore,
 } = createStoreModules(store);
 
 export default store;

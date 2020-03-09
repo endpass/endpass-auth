@@ -6,6 +6,7 @@ import AccountsModule from '@/store/modules/AccountsModule';
 import AuthModule from '@/store/modules/AuthModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
+import DocumentsRequiredModule from '@/store/modules/DocumentsRequiredModule';
 import moduleFactory from '@/store/moduleFactory';
 
 export default store => {
@@ -38,6 +39,11 @@ export default store => {
     sharedStore,
   });
 
+  const documentsRequiredStore = createModule(
+    DocumentsRequiredModule,
+    'documentsRequired',
+  );
+
   return {
     channelStore,
     gasPriceStore,
@@ -47,5 +53,6 @@ export default store => {
     authStore,
     coreStore,
     requestStore,
+    documentsRequiredStore,
   };
 };
