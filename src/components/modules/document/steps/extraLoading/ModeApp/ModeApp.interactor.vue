@@ -9,18 +9,15 @@
 
 <script>
 import ModeLayout from '../ModeLayout';
-import createModeAppController from './ModeAppController';
 
 import { documentsRequiredStore } from '@/store';
 
-const TIMEOUT_MS = 3 * 1000;
+const TIMEOUT_MS = 30 * 1000;
 
 export default {
   name: 'ModeAppInteractor',
 
   documentsRequiredStore,
-
-  modeAppController: createModeAppController(),
 
   props: {
     isHasBadStatus: {
