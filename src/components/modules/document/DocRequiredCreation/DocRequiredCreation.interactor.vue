@@ -1,11 +1,8 @@
 <template>
   <doc-required-creation
-    :is-loading="isLoading"
-    :doc-types-list="$options.docRequiredController.docRequiredTypes"
-    :doc-type-to-status="$options.docRequiredController.docTypeToStatus"
-    :documents-list="$options.docRequiredController.documentsList"
-    :is-required-verified="$options.docRequiredController.isRequiredVerified"
-    :is-have-bad="$options.docRequiredController.isHaveBad"
+    :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
+    :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
+    :is-has-bad-status="$options.documentsRequiredStore.isHasBadStatus"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -15,14 +12,14 @@
 import DocRequiredCreation from './DocRequiredCreation.state';
 import createDocumentRequiredController from './DocumentRequiredController';
 
+import { documentsRequiredStore } from '@/store';
+
 export default {
   name: 'DocRequiredCreationInteractor',
 
-  docRequiredController: createDocumentRequiredController(),
+  documentsRequiredStore,
 
-  data: () => ({
-    isLoading: true,
-  }),
+  docRequiredController: createDocumentRequiredController(),
 
   methods: {
     onCancel() {
@@ -32,17 +29,6 @@ export default {
     onCreate() {
       this.$options.docRequiredController.finishCreate();
     },
-  },
-
-  async mounted() {
-    try {
-      this.isLoading = true;
-      await this.$options.docRequiredController.loadDocuments();
-    } catch (e) {
-      console.error(e);
-    } finally {
-      this.isLoading = false;
-    }
   },
 
   components: {

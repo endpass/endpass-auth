@@ -2,7 +2,6 @@ import { VuexModule, Action, Module } from 'vuex-class-modules';
 import ConnectError from '@endpass/connect/error';
 import createController from '@/controllers/createController';
 import { documentChannel } from '@/class/singleton/channels';
-
 import Answer from '@/class/Answer';
 
 const { ERRORS } = ConnectError;

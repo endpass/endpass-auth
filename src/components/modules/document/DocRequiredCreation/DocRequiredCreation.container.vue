@@ -1,28 +1,27 @@
 <template>
-  <loading-screen :is-loading="isLoading">
-    <doc-layout
-      :is-closable="isClosable"
-      @close="onCancel"
-    >
-      <component
-        :is="currentComponent"
-        :doc-type-to-status="docTypeToStatus"
-        :doc-types-list="docTypesList"
-        :is-show-status="true"
-        @next="onNext"
-        @create="onCreate"
-        @cancel="onBack"
-      />
-    </doc-layout>
-  </loading-screen>
+  <doc-layout
+    :is-closable="isClosable"
+    @close="handleCancel"
+  >
+    <component
+      :is="currentComponent"
+      :document-id="documentId"
+      :doc-type-to-status="docTypeToStatus"
+      :doc-types-list="docTypesList"
+      :selected-document-type="selectedDocumentType"
+      :is-has-bad-status="isHasBadStatus"
+      :is-show-status="true"
+      @next="onNext"
+      @create="onCreate"
+      @cancel="onBack"
+    />
+  </doc-layout>
 </template>
 
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
-// import { DOC_STATUSES } from '@/constants';
 
-// import ModeApp from '@/components/modules/document/steps/extraLoading/ModeApp';
-// import Success from '@/components/modules/document/steps/Success';
+import ModeApp from '@/components/modules/document/steps/extraLoading/ModeApp';
 import Upload from '@/components/modules/document/steps/Upload';
 import DocumentTypes from '@/components/modules/document/steps/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
@@ -31,11 +30,6 @@ export default {
   name: 'DocRequiredCreationContainer',
 
   props: {
-    isLoading: {
-      type: Boolean,
-      required: true,
-    },
-
     docTypesList: {
       type: Array,
       required: true,
@@ -46,17 +40,7 @@ export default {
       required: true,
     },
 
-    documentsList: {
-      type: Array,
-      required: true,
-    },
-
-    isRequiredVerified: {
-      type: Boolean,
-      required: true,
-    },
-
-    isHaveBad: {
+    isHasBadStatus: {
       type: Boolean,
       required: true,
     },
@@ -77,9 +61,11 @@ export default {
     },
   },
 
-  data: () => ({
-    currentComponent: DocumentTypes,
-  }),
+  data() {
+    return {
+      currentComponent: this.isHasBadStatus ? 'document-types' : 'mode-app',
+    };
+  },
 
   computed: {
     isClosable() {
@@ -88,7 +74,7 @@ export default {
   },
 
   methods: {
-    onCancel() {
+    handleCancel() {
       this.$emit('cancel');
     },
 
@@ -109,29 +95,46 @@ export default {
 
       await this.$nextTick();
 
-      this.nextScreen();
+      this.openNextScreen();
     },
 
-    nextScreen() {
+    openNextScreen() {
       switch (true) {
-        case this.currentComponent === DocumentTypes &&
-          this.selectedDocumentType:
-          this.currentComponent = Upload;
+        case this.currentComponent === 'document-types':
+          this.currentComponent = 'upload';
+          break;
+
+        case this.currentComponent === 'upload':
+          this.currentComponent = 'mode-app';
+          break;
+
+        case this.currentComponent === 'mode-app':
+          this.$emit('update:selectedDocumentType', '');
+          this.$emit('update:documentId', '');
+          this.$emit('update:status', '');
+          this.currentComponent = 'document-types';
           break;
 
         default:
           throw new Error(
-            'Wrong state case with document required types upload',
+            'Wrong next case with document required types upload',
           );
       }
     },
 
-    onBack() {},
+    onBack() {
+      if (this.currentComponent === 'upload') {
+        this.currentComponent = 'document-types';
+      }
+    },
   },
 
   components: {
     LoadingScreen,
     DocLayout,
+    DocumentTypes,
+    Upload,
+    ModeApp,
   },
 };
 </script>

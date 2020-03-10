@@ -1,7 +1,8 @@
 <template>
   <mode-app
-    :document-id="documentId"
+    :is-has-bad-status="isHasBadStatus"
     @continue="onContinue"
+    @create="onCreate"
   />
 </template>
 
@@ -12,14 +13,18 @@ export default {
   name: 'ModeAppInterface',
 
   props: {
-    documentId: {
-      type: String,
+    isHasBadStatus: {
+      type: Boolean,
       required: true,
     },
   },
 
   methods: {
     onContinue() {
+      this.$emit('next');
+    },
+
+    onCreate() {
       this.$emit('create');
     },
   },

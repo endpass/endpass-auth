@@ -1,9 +1,10 @@
 <template>
   <div>
-    EXTRA LOADING DOCUMENT. PENDING
-
-    <div class="extra-loading-progress">
-      <v-progress-circle :progress="25" />
+    <div class="pending-progress-container">
+      <v-progress-circle
+        :progress="25"
+        :line-thickness="1"
+      />
     </div>
     <v-title>
       {{ $t('components.uploadDocument.pending') }}
@@ -29,10 +30,12 @@ export default {
   },
 };
 </script>
+
 <style scoped lang="postcss">
-.extra-loading-progress {
+.pending-progress-container {
   display: flex;
   align-items: center;
   flex-direction: column;
+  margin: 20px;
 }
 </style>

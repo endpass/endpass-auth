@@ -2,6 +2,7 @@
   <component
     :is="currentComponent"
     @continue="onContinue"
+    @create="onCreate"
   />
 </template>
 
@@ -42,6 +43,10 @@ export default {
   methods: {
     onContinue() {
       this.$emit('continue');
+    },
+
+    onCreate() {
+      this.$emit('create');
     },
   },
 };

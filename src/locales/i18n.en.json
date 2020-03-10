@@ -182,9 +182,10 @@
       "upload": "Upload",
       "pending": "Pending",
       "pleaseWait": "Please do not close the app, your documents are being processed.",
+      "waitHeader": "Wait header",
+      "pendingInProgress": "Some of documents still in pending status.",
       "requestedInformation": "Requested Information",
       "uploading": "Uploading",
-      "success": "Success",
       "allUploaded": "All requested documents is verified and ready to use"
     },
     "user": {
@@ -231,6 +232,7 @@
     "close": "Close",
     "confirm": "Confirm",
     "continue": "Continue",
+    "congratulation": "Congratulation!",
     "done": "Done",
     "error": "Error",
     "login": "Login",

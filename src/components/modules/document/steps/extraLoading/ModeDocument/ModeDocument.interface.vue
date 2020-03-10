@@ -1,7 +1,8 @@
 <template>
   <mode-document
     :document-id="documentId"
-    @continue="onContinue"
+    @continue="onCreate"
+    @create="onCreate"
   />
 </template>
 
@@ -19,7 +20,7 @@ export default {
   },
 
   methods: {
-    onContinue() {
+    onCreate() {
       this.$emit('create');
     },
   },

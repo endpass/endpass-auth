@@ -3,6 +3,7 @@
     :is-loading="isLoading"
     :is-verified="isVerified"
     @continue="onContinue"
+    @create="onCreate"
   />
 </template>
 
@@ -27,6 +28,10 @@ export default {
   methods: {
     onContinue() {
       this.$emit('continue');
+    },
+
+    onCreate() {
+      this.$emit('create');
     },
   },
 
