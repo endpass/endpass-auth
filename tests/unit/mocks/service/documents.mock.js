@@ -1,11 +1,14 @@
 jest.mock('@/service/documents', () => {
   const { docStatusesMap } = require('@unitFixtures/documents');
+  const { DOC_STATUSES } = require('@/constants');
 
   return {
     checkFile: jest.fn().mockResolvedValue(),
     confirmDocument: jest.fn().mockResolvedValue(),
     waitDocumentUpload: jest.fn(),
-    waitDocumentReady: jest.fn(),
+    waitDocumentFinishRecognition: jest.fn(),
+    waitDocumentVerified: jest.fn(),
+    getDocumentStatus: jest.fn().mockResolvedValue(DOC_STATUSES.PENDING_REVIEW),
     uploadFrontFile: jest.fn().mockResolvedValue({
       message: 'document uploaded',
       success: true,

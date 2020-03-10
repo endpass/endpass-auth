@@ -1,11 +1,13 @@
 import publicRoutes from './routes/public';
 import authenticator from './routes/authenticator';
 import wallet from './routes/wallet';
+import document from './routes/document';
 
 const routes = [
   ...publicRoutes,
   ...authenticator,
   ...wallet,
+  ...document,
   {
     path: '/bridge',
     name: 'Bridge',
@@ -75,18 +77,6 @@ const routes = [
     name: 'SignScreen',
     component: () =>
       import(/* webpackChunkName: "screen-sign" */ '@/components/screens/Sign'),
-    meta: {
-      isDialogStream: true,
-      isBackground: true,
-    },
-  },
-  {
-    path: '/document-create',
-    name: 'DocumentCreate',
-    component: () =>
-      import(
-        /* webpackChunkName: "document-create" */ '@/components/screens/DocumentCreate'
-      ),
     meta: {
       isDialogStream: true,
       isBackground: true,

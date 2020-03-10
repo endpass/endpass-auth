@@ -88,22 +88,57 @@ const documentsService = {
 
   /**
    * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getDocumentStatus(id) {
+    const document = await request.get(`${docBaseURL}/${id}`);
+    if (!document) {
+      throw new Error('Recognize error');
+    }
+
+    return document.status;
+  },
+
+  /**
+   * @param {string} id
    * @return {Promise<void>}
    */
-  async waitDocumentReady(id) {
-    const waitingStatuses = [DOC_STATUSES.DRAFT, DOC_STATUSES.RECOGNITION];
+  async waitDocumentVerified(id) {
+    const startTime = Date.now();
+    const timeoutMS = 30000;
+    const statuses = [DOC_STATUSES.VERIFIED];
+
     // eslint-disable-next-line no-unused-vars
     for await (const index of generators.repeatWithInterval(
       CHECK_RECOGNIZE_TIMEOUT,
     )) {
-      const document = await request.get(`${docBaseURL}/${id}`);
-      if (!document) {
-        throw new Error('Recognize error');
+      const status = await documentsService.getDocumentStatus(id);
+
+      if (statuses.includes(status)) {
+        break;
       }
 
-      const { status } = document;
+      const spendTime = Date.now() - startTime;
+      if (timeoutMS && spendTime > timeoutMS) {
+        break;
+      }
+    }
+  },
 
-      if (!waitingStatuses.includes(status)) {
+  /**
+   * @param {string} id
+   * @return {Promise<void>}
+   */
+  async waitDocumentFinishRecognition(id) {
+    const statuses = [DOC_STATUSES.RECOGNITION];
+
+    // eslint-disable-next-line no-unused-vars
+    for await (const index of generators.repeatWithInterval(
+      CHECK_RECOGNIZE_TIMEOUT,
+    )) {
+      const status = await documentsService.getDocumentStatus(id);
+
+      if (!statuses.includes(status)) {
         break;
       }
     }
@@ -151,6 +186,27 @@ const documentsService = {
         break;
       }
     }
+  },
+
+  /**
+   * @param {string} clientId
+   * @return {Promise<any>}
+   */
+  async getRequiredDocumentsTypes(clientId) {
+    return request.get(
+      `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
+    );
+  },
+
+  /**
+   * @return {Promise<any>}
+   */
+  async getDocumentsList() {
+    const { items, total } = await request.get(docBaseURL);
+    return {
+      items,
+      total,
+    };
   },
 };
 
