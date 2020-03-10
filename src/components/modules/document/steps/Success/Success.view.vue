@@ -50,7 +50,7 @@ export default {
 
 <style scoped lang="postcss">
 .success-titles {
-  margin: 156px 0;
+  margin: 150px 0 170px;
 }
 
 .success-svg-icon-container {

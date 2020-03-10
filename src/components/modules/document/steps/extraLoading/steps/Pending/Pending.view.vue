@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="pending-titles">
     <div class="pending-progress-container">
       <v-progress-circle
         :progress="25"
@@ -32,6 +32,10 @@ export default {
 </script>
 
 <style scoped lang="postcss">
+.pending-titles {
+  margin: 150px 0 170px;
+}
+
 .pending-progress-container {
   display: flex;
   align-items: center;

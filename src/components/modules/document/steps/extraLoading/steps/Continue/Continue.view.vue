@@ -1,18 +1,20 @@
 <template>
   <div>
-    <div class="continue-svg-icon-container">
-      <v-svg-icon
-        name="feature-wait"
-        width="75px"
-        height="75px"
-      />
+    <div class="continue-titles">
+      <div class="continue-svg-icon-container">
+        <v-svg-icon
+          name="feature-wait"
+          width="75px"
+          height="75px"
+        />
+      </div>
+      <v-title>
+        {{ $t('components.uploadDocument.waitHeader') }}
+      </v-title>
+      <v-description>
+        {{ $t('components.uploadDocument.pendingInProgress') }}
+      </v-description>
     </div>
-    <v-title>
-      {{ $t('components.uploadDocument.waitHeader') }}
-    </v-title>
-    <v-description>
-      {{ $t('components.uploadDocument.pendingInProgress') }}
-    </v-description>
     <v-button @click="onContinue">
       {{ $t('global.continue') }}
     </v-button>
@@ -44,6 +46,10 @@ export default {
 </script>
 
 <style scoped lang="postcss">
+.continue-titles {
+  margin: 150px 0 170px;
+}
+
 .continue-svg-icon-container {
   display: flex;
   align-items: center;
