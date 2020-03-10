@@ -189,14 +189,13 @@ const documentsService = {
   },
 
   /**
+   * @param {string} clientId
    * @return {Promise<any>}
    */
-  async getRequiredDocumentsTypes(/* clientId */) {
-    // return request.get(
-    //   `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
-    // );
-    // TODO: replace mock after implement
-    return ['Passport', 'IdCard'];
+  async getRequiredDocumentsTypes(clientId) {
+    return request.get(
+      `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
+    );
   },
 
   /**
