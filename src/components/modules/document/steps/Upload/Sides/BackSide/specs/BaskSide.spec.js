@@ -4,8 +4,9 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 
-import BackSide from '@/components/screens/DocLayout/Upload/Sides/BackSide';
+import BackSide from '@/components/modules/document/steps/Upload/Sides/BackSide/BackSide';
 import documentsService from '@/service/documents';
+import { DOC_STATUSES } from '@/constants';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -56,7 +57,14 @@ describe('UploadDocument > BackSide', () => {
 
       await emitDone();
 
-      expect(wrapper.emitted().confirm).toEqual([[docId]]);
+      expect(wrapper.emitted().confirm).toEqual([
+        [
+          {
+            documentId: docId,
+            status: DOC_STATUSES.PENDING_REVIEW,
+          },
+        ],
+      ]);
     });
 
     it('should show repeat buttons if have recognize errors', async () => {
@@ -100,7 +108,14 @@ describe('UploadDocument > BackSide', () => {
 
       await emitUpload();
 
-      expect(wrapper.emitted().confirm).toEqual([[docId]]);
+      expect(wrapper.emitted().confirm).toEqual([
+        [
+          {
+            documentId: docId,
+            status: DOC_STATUSES.PENDING_REVIEW,
+          },
+        ],
+      ]);
     });
 
     it('should not emit confirm, if error', async () => {

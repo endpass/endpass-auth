@@ -4,8 +4,9 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 
-import FrontSideOnly from '@/components/screens/DocLayout/Upload/Sides/FrontSideOnly';
+import FrontSideOnly from '@/components/modules/document/steps/Upload/Sides/FrontSideOnly';
 import documentsService from '@/service/documents';
+import { DOC_STATUSES } from '@/constants';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -50,7 +51,14 @@ describe('UploadDocument > FrontSideOnly', () => {
 
     await emitUpload();
 
-    expect(wrapper.emitted().confirm).toEqual([[docId]]);
+    expect(wrapper.emitted().confirm).toEqual([
+      [
+        {
+          documentId: docId,
+          status: DOC_STATUSES.PENDING_REVIEW,
+        },
+      ],
+    ]);
   });
 
   it('should not emit confirm, if error in recognize', async () => {
@@ -111,6 +119,13 @@ describe('UploadDocument > FrontSideOnly', () => {
     wrapper.find('footerrepeatbuttons-stub').vm.$emit('done');
     await global.flushPromises();
 
-    expect(wrapper.emitted().confirm).toEqual([[docId]]);
+    expect(wrapper.emitted().confirm).toEqual([
+      [
+        {
+          documentId: docId,
+          status: DOC_STATUSES.PENDING_REVIEW,
+        },
+      ],
+    ]);
   });
 });

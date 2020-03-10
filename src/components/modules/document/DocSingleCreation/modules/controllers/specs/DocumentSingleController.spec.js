@@ -1,15 +1,15 @@
 import ConnectError from '@endpass/connect/error';
-import DocumentCreateController from '@/components/screens/DocLayout/DocumentCreateController';
+import DocumentSingleController from '@/components/modules/document/DocSingleCreation/modules/controllers/DocumentSingleController';
 import { documentChannel } from '@/class/singleton/channels';
 
 const { ERRORS } = ConnectError;
 
-describe('DocumentCreateController', () => {
+describe('DocumentSingleController', () => {
   let controller;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    controller = DocumentCreateController();
+    controller = DocumentSingleController();
   });
 
   it('should finish create with document id', async () => {
@@ -19,7 +19,7 @@ describe('DocumentCreateController', () => {
     const handler = jest.fn();
     documentChannel.take().then(handler);
 
-    await controller.finishCreate(docId);
+    await controller.finishCreate({ documentId: docId });
 
     expect(handler).toBeCalledWith({
       payload: { id: docId },

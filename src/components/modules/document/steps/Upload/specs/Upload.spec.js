@@ -3,9 +3,7 @@ import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import DocumentUpload from '@/components/screens/DocLayout/Upload';
-import createStore from '@/store/createStore';
-import createStoreModules from '@/store/createStoreModules';
+import DocumentUpload from '@/components/modules/document/steps/Upload';
 import { DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
@@ -16,22 +14,15 @@ localVue.use(UIComponents);
 describe('DocumentUpload', () => {
   let wrapper;
 
-  const getDocType = root =>
-    root.find('[data-test=document-type]').attributes().value;
-
-  const createStores = () => {
-    const store = createStore();
-    const { sharedStore } = createStoreModules(store);
-
-    return { sharedStore };
-  };
-
-  const createWrapper = (stores = createStores()) => {
+  const createWrapper = options => {
     return shallowMount(DocumentUpload, {
-      ...stores,
+      propsData: {
+        selectedDocumentType: DOC_TYPES.PASSPORT,
+      },
       localVue,
       i18n,
       sync: false,
+      ...options,
     });
   };
 
@@ -47,18 +38,20 @@ describe('DocumentUpload', () => {
   it('should define default doc type', () => {
     wrapper = createWrapper();
 
-    expect(getDocType(wrapper)).toBe(DOC_TYPES.PASSPORT);
+    expect(wrapper.find('sides-stub').attributes().documenttype).toBe(
+      DOC_TYPES.PASSPORT,
+    );
   });
 
   it('should show document type as driver license', () => {
-    const { sharedStore } = createStores();
-
-    sharedStore.setDocumentUploadOptions({
-      defaultDocumentType: DOC_TYPES.DRIVER_LICENSE,
+    wrapper = createWrapper({
+      propsData: {
+        selectedDocumentType: DOC_TYPES.DRIVER_LICENSE,
+      },
     });
 
-    wrapper = createWrapper({ sharedStore });
-
-    expect(getDocType(wrapper)).toBe(DOC_TYPES.DRIVER_LICENSE);
+    expect(wrapper.find('sides-stub').attributes().documenttype).toBe(
+      DOC_TYPES.DRIVER_LICENSE,
+    );
   });
 });

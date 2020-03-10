@@ -1,7 +1,0 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`DocumentCreate should match snapshot 1`] = `
-<screen-stub>
-  <document-upload-stub></document-upload-stub>
-</screen-stub>
-`;
