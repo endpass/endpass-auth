@@ -127,7 +127,27 @@
       "phone": "Read phone",
       "scopeWallet": "Read information about wallet",
       "status": "Read document status",
-      "user": "Read user information"
+      "user": "Read user information",
+      "passport": {
+        "status": "Read passport status",
+        "data": "Read passport data",
+        "image": "Read passport image"
+      },
+      "driverLicense": {
+        "status": "Read driver license status",
+        "data": "Read driver license data",
+        "image": "Read driver license image"
+      },
+      "idCard": {
+        "status": "Read ID card status",
+        "data": "Read ID card data",
+        "image": "Read ID card image"
+      },
+      "proofOfAddress": {
+        "status": "Read proof of address status",
+        "data": "Read proof of address data",
+        "image": "Read proof of address image"
+      }
     },
     "sendCode": {
       "didntGetCode": "Didn't get the code?",
