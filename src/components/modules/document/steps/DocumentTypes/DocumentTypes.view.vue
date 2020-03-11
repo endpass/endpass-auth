@@ -19,7 +19,10 @@
           </div>
           <div
             class="document-type-status"
-            :class="{ 'is-verified': isVerified(type) }"
+            :class="{
+              'is-verified': isVerified(type),
+              'is-pending-review': isPendingReview(type),
+            }"
           >
             {{ getStatusLabel(type) }}
           </div>
@@ -73,6 +76,12 @@ export default {
   methods: {
     isVerified(type) {
       return this.docTypeToStatus[type] === this.$options.DOC_STATUSES.VERIFIED;
+    },
+
+    isPendingReview(type) {
+      return (
+        this.docTypeToStatus[type] === this.$options.DOC_STATUSES.PENDING_REVIEW
+      );
     },
 
     getStatusLabel(type) {
@@ -133,6 +142,9 @@ export default {
 }
 .document-type-status.is-verified {
   color: var(--endpass-ui-color-success);
+}
+.document-type-status.is-pending-review {
+  color: var(--endpass-ui-color-grey-6);
 }
 .document-type-arrow {
   display: flex;

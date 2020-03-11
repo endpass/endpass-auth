@@ -43,7 +43,7 @@ function initDialogStream() {
       routeName: 'document-create-required',
       channel: documentChannel,
       needAuth: true,
-      needPermission: true,
+      needPermission: false,
     },
     [METHODS.AUTH]: {
       commit(payload) {

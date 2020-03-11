@@ -4,6 +4,7 @@ import isNil from 'lodash.isnil';
 import get from 'lodash/get';
 import generators from '@endpass/utils/generators';
 import request from '@/class/singleton/request';
+import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
 import { DOC_STATUSES, DOCUMENT_SIDES, UPLOAD_STATUSES } from '@/constants';
 
 const docBaseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
@@ -193,7 +194,7 @@ const documentsService = {
    * @return {Promise<any>}
    */
   async getRequiredDocumentsTypes(clientId) {
-    return request.get(
+    return requestSkipPermission.get(
       `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
     );
   },
@@ -202,7 +203,7 @@ const documentsService = {
    * @return {Promise<any>}
    */
   async getDocumentsList() {
-    const { items, total } = await request.get(docBaseURL);
+    const { items, total } = await requestSkipPermission.get(docBaseURL);
     return {
       items,
       total,
