@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { email } from '@unitFixtures/auth';
 import ProviderContainer from '@/components/screens/public/LoginProvider/modules/Provider/Provider.container';
+import ProviderView from '@/components/screens/public/LoginProvider/modules/Provider/Provider.view';
 import CodeRequest from '@/components/screens/public/LoginProvider/modules/Provider/modules/CodeRequest';
 import NoChallenge from '@/components/screens/public/LoginProvider/modules/Provider/modules/NoChallenge';
 import Error from '@/components/modules/Error';
@@ -106,7 +107,7 @@ describe('ProviderContainer', () => {
     it('should emit close', () => {
       expect(wrapper.emitted().close).toBeUndefined();
 
-      wrapper.find('v-frame-stub').vm.$emit('close');
+      wrapper.find(ProviderView).vm.$emit('close');
 
       expect(wrapper.emitted().close).toHaveLength(1);
       expect(wrapper.emitted().close).toEqual([[]]);

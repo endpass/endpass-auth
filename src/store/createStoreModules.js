@@ -1,10 +1,12 @@
 import GasPriceModule from '@/store/modules/GasPriceModule';
 import SharedModule from '@/store/modules/SharedModule';
+import ChannelStore from '@/store/modules/ChannelModule';
 import BalanceModule from '@/store/modules/BalanceModule';
 import AccountsModule from '@/store/modules/AccountsModule';
 import AuthModule from '@/store/modules/AuthModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
+import DocumentsRequiredModule from '@/store/modules/DocumentsRequiredModule';
 import moduleFactory from '@/store/moduleFactory';
 
 export default store => {
@@ -13,6 +15,8 @@ export default store => {
   const gasPriceStore = createModule(GasPriceModule, 'gasPrice');
 
   const sharedStore = createModule(SharedModule, 'shared');
+
+  const channelStore = createModule(ChannelStore, 'channel');
 
   const balanceStore = createModule(BalanceModule, 'balance');
 
@@ -35,7 +39,13 @@ export default store => {
     sharedStore,
   });
 
+  const documentsRequiredStore = createModule(
+    DocumentsRequiredModule,
+    'documentsRequired',
+  );
+
   return {
+    channelStore,
     gasPriceStore,
     sharedStore,
     accountsStore,
@@ -43,5 +53,6 @@ export default store => {
     authStore,
     coreStore,
     requestStore,
+    documentsRequiredStore,
   };
 };

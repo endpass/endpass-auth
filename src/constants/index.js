@@ -17,8 +17,10 @@ export const METHODS = {
   BRIDGE_CONNECTION_READY: 'BRIDGE_CONNECTION_READY',
   BRIDGE_CONNECTION_ERROR: 'BRIDGE_CONNECTION_ERROR',
 
+  CHECK_DOCUMENTS_REQUIRED: 'CHECK_DOCUMENTS_REQUIRED',
   EXCHANGE_TOKEN_REQUEST: 'EXCHANGE_TOKEN_REQUEST',
   CREATE_DOCUMENT: 'CREATE_DOCUMENT',
+  CREATE_DOCUMENTS_REQUIRED: 'CREATE_DOCUMENTS_REQUIRED',
   GENERATE_WALLET: 'GENERATE_WALLET',
 
   // Dialog-level messages
@@ -132,7 +134,7 @@ export const UPLOAD_STATUSES = {
 };
 
 /**
- * Document statuses
+ * document statuses
  * @type {{
     DRAFT: 'Draft',
     RECOGNITION: 'Recognition',
@@ -152,7 +154,7 @@ export const DOC_STATUSES = {
 };
 
 /**
- * Document types
+ * document types
  * @type {{
     PASSPORT: 'Passport',
     DRIVER_LICENSE: 'DriverLicense',

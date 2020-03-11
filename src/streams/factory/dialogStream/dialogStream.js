@@ -1,4 +1,4 @@
-import { authStore, accountsStore, requestStore, sharedStore } from '@/store';
+import { authStore, accountsStore, requestStore, channelStore } from '@/store';
 import {
   accountChannel,
   authChannel,
@@ -29,12 +29,21 @@ function initDialogStream() {
     },
     [METHODS.CREATE_DOCUMENT]: {
       commit(payload) {
-        sharedStore.setDocumentUploadOptions(payload);
+        channelStore.setPayload(payload);
       },
-      routeName: 'document-create',
+      routeName: 'document-create-single',
       channel: documentChannel,
       needAuth: true,
       needPermission: true,
+    },
+    [METHODS.CREATE_DOCUMENTS_REQUIRED]: {
+      commit(payload) {
+        channelStore.setPayload(payload);
+      },
+      routeName: 'document-create-required',
+      channel: documentChannel,
+      needAuth: true,
+      needPermission: false,
     },
     [METHODS.AUTH]: {
       commit(payload) {
