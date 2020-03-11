@@ -9,7 +9,7 @@
         />
       </div>
       <v-title>
-        {{ $t('components.uploadDocument.waitHeader') }}
+        {{ $t('components.uploadDocument.comebackLater') }}
       </v-title>
       <v-description>
         {{ $t('components.uploadDocument.pendingInProgress') }}
