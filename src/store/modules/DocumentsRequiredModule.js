@@ -84,12 +84,8 @@ class DocumentsRequiredModule extends VuexModule {
       return;
     }
 
-    const docRequiredTypes = await documentsService.getRequiredDocumentsTypes(
+    this.docRequiredTypes = await documentsService.getRequiredDocumentsTypes(
       clientId,
-    );
-
-    this.docRequiredTypes = docRequiredTypes.filter(
-      (docType, index) => docRequiredTypes.indexOf(docType) === index,
     );
   }
 
