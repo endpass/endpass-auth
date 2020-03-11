@@ -3,7 +3,6 @@
     :is-closable="isClosable"
     @close="onCancel"
   >
-    specified
     <component
       :is="currentComponent"
       :doc-types-list="docTypesList"
