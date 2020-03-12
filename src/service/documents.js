@@ -3,7 +3,6 @@ import omitBy from 'lodash.omitby';
 import isNil from 'lodash.isnil';
 import get from 'lodash/get';
 import generators from '@endpass/utils/generators';
-import request from '@/class/singleton/request';
 import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
 import { DOC_STATUSES, DOCUMENT_SIDES, UPLOAD_STATUSES } from '@/constants';
 
@@ -33,7 +32,9 @@ const documentsService = {
    * @returns {Promise}
    */
   async checkFile(file) {
-    return withSuccess(request.upload(`${docBaseURL}/file/check`, { file }));
+    return withSuccess(
+      requestSkipPermission.upload(`${docBaseURL}/file/check`, { file }),
+    );
   },
 
   /**
@@ -43,7 +44,10 @@ const documentsService = {
    */
   async createDocument({ type, description }) {
     const { message: docId } = await withSuccess(
-      request.post(docBaseURL, omitBy({ type, description }, isNil)),
+      requestSkipPermission.post(
+        docBaseURL,
+        omitBy({ type, description }, isNil),
+      ),
     );
 
     if (!docId) {
@@ -58,7 +62,9 @@ const documentsService = {
    * @return {Promise<void>}
    */
   async confirmDocument(docId) {
-    return withSuccess(request.post(`${docBaseURL}/${docId}/confirm`));
+    return withSuccess(
+      requestSkipPermission.post(`${docBaseURL}/${docId}/confirm`),
+    );
   },
 
   /**
@@ -70,7 +76,11 @@ const documentsService = {
    */
   async uploadFrontFile({ file, docId }, config) {
     return withSuccess(
-      request.upload(`${docBaseURL}/${docId}/front`, { file }, config),
+      requestSkipPermission.upload(
+        `${docBaseURL}/${docId}/front`,
+        { file },
+        config,
+      ),
     );
   },
 
@@ -83,7 +93,11 @@ const documentsService = {
    */
   async uploadBackFile({ file, docId }, config) {
     return withSuccess(
-      request.upload(`${docBaseURL}/${docId}/back`, { file }, config),
+      requestSkipPermission.upload(
+        `${docBaseURL}/${docId}/back`,
+        { file },
+        config,
+      ),
     );
   },
 
@@ -92,7 +106,7 @@ const documentsService = {
    * @return {Promise<*>}
    */
   async getDocumentStatus(id) {
-    const document = await request.get(`${docBaseURL}/${id}`);
+    const document = await requestSkipPermission.get(`${docBaseURL}/${id}`);
     if (!document) {
       throw new Error('Recognize error');
     }
@@ -152,7 +166,9 @@ const documentsService = {
    * @return {Promise<T[keyof T]>}
    */
   async getDocumentUploadStatusById(id) {
-    const data = await request.get(`${docBaseURL}/${id}/status/upload`);
+    const data = await requestSkipPermission.get(
+      `${docBaseURL}/${id}/status/upload`,
+    );
     const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
     const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
 
