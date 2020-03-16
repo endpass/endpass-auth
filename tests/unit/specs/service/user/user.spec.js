@@ -51,11 +51,8 @@ describe('auth service', () => {
 
     it('should throw error on invalid request', async () => {
       expect.assertions(1);
-      const message = 'Incorrect request';
 
-      axiosMock.onGet(url).reply(500, {
-        message,
-      });
+      axiosMock.onGet(url).reply(500, {});
 
       try {
         await userService.getSettings();
@@ -100,11 +97,8 @@ describe('auth service', () => {
 
     it('should throw error on invalid request', async () => {
       expect.assertions(1);
-      const message = 'Incorrect request';
 
-      axiosMock.onGet(url).reply(500, {
-        message,
-      });
+      axiosMock.onGet(url).reply(500, {});
 
       try {
         await userService.getSettingsSkipPermission();

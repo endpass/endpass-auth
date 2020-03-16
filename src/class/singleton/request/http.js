@@ -1,10 +1,16 @@
 import axios from 'axios';
+import get from 'lodash/get';
 import ServerError from '@/class/errors/ServerError';
 import processResponse from './processResponse';
 
-const createHandlerResponseError = error => {
-  const { response } = error;
-  const responseError = new ServerError(error.message, response.status);
+const createHandlerResponseError = ({ response, message }) => {
+  const errorMessage = get(response, 'data.message', message);
+  const errorCode = get(response, 'data.code', response.status);
+  const responseError = new ServerError({
+    message: errorMessage,
+    code: errorCode,
+    response,
+  });
 
   processResponse(response);
 

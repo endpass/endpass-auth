@@ -198,6 +198,7 @@ describe('auth service', () => {
 
     it('should throw error on invalid request', async () => {
       expect.assertions(1);
+
       const message = 'Incorrect request';
 
       axiosMock.onPost(url).reply(500, {
@@ -256,6 +257,7 @@ describe('auth service', () => {
 
     it('should throw error on invalid request', async () => {
       expect.assertions(1);
+
       const message = 'Incorrect request';
 
       axiosMock.onPost(url).reply(500, {
