@@ -71,7 +71,13 @@ export default {
 
         this.$emit('complete');
       } catch (err) {
-        this.error = this.$i18n.t('components.code.authFailed');
+        switch (err.code) {
+          case 409:
+            this.error = this.$i18n.t('components.code.userAlreadyExists');
+            break;
+          default:
+            this.error = this.$i18n.t('components.code.authFailed');
+        }
       } finally {
         this.isLoading = false;
       }
