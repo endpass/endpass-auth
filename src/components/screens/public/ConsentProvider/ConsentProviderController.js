@@ -15,15 +15,19 @@ class ConsentProviderController extends VuexModule {
   }
 
   openRedirectUrl(url) {
+    const isSameHost = url.indexOf(window.location.origin) === 0;
+    if (!isSameHost) {
+      setTimeout(() => {
+        this.error = i18n.t('components.consentProvider.redirectUrl');
+      }, OPEN_URL_TIMEOUT_MS);
+    }
+
     window.location.href = url;
-    setTimeout(() => {
-      this.error = i18n.t('components.consentProvider.redirectUrl');
-    }, OPEN_URL_TIMEOUT_MS);
   }
 
   /**
    * @param {object} params
-   * @param {String[]} params.scopesList
+   * @param {string[]} params.scopesList
    * @return {Promise<void>}
    */
   @Action
