@@ -33,7 +33,8 @@
     },
     "code": {
       "authFailed": "Authentication failed. Please, try again",
-      "sendError": "Something went wrong while sending the code. Please, try again"
+      "sendError": "Something went wrong while sending the code. Please, try again",
+      "userAlreadyExists": "User with this email is already exists. Please, try another one"
     },
     "compositeAuth": {
       "authFailed": "Authentication failed. Please, try again."

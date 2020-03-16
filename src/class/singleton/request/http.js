@@ -1,12 +1,14 @@
 import axios from 'axios';
+import ServerError from '@/class/errors/ServerError';
 import processResponse from './processResponse';
 
 const createHandlerResponseError = error => {
   const { response } = error;
+  const responseError = new ServerError(error.message, response.status);
 
   processResponse(response);
 
-  return Promise.reject(error);
+  return Promise.reject(responseError);
 };
 
 const createHandleResponseSuccess = response => {
