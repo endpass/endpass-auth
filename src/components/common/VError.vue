@@ -1,7 +1,7 @@
 <template>
   <div>
     <message :error="true">
-      {{ hint }}
+      {{ label }}
     </message>
 
     <message :error="true">
@@ -15,16 +15,19 @@ import Message from '@/components/common/Message';
 
 export default {
   name: 'VError',
+
   props: {
-    hint: {
+    label: {
       type: String,
       default: '',
     },
+
     description: {
       type: String,
       default: '',
     },
   },
+
   components: { Message },
 };
 </script>
