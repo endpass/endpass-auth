@@ -5,6 +5,7 @@
     :is-loading="isLoading"
     :challenge-type="challengeType"
     :oauth-login-challenge="oauthLoginChallenge"
+    :is-closable="isClosable"
     @complete="onComplete"
     @close="onClose"
   />
