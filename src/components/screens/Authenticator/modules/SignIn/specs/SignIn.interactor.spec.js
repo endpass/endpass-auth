@@ -6,7 +6,7 @@ import SignInView from '@/components/screens/Authenticator/modules/SignIn/SignIn
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
 import identityService from '@/service/identity';
-import { IDENTITY_MODE } from '@/constants';
+import { CHALLENGE_TYPES, IDENTITY_MODE } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -14,12 +14,11 @@ const i18n = setupI18n(localVue);
 
 describe('SignInInteractor', () => {
   let wrapper;
-  const createWrapper = (options, props) =>
+  const createWrapper = options =>
     shallowMount(SignInInteractor, {
       localVue,
       propsData: {
-        email,
-        ...props,
+        challengeType: CHALLENGE_TYPES.EMAIL_OTP,
       },
       i18n,
       ...options,
@@ -39,7 +38,7 @@ describe('SignInInteractor', () => {
     });
 
     it('should render form', () => {
-      expect(wrapper.find('sign-in-stub').exists()).toBe(true);
+      expect(wrapper.find(SignInView).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
@@ -58,7 +57,7 @@ describe('SignInInteractor', () => {
       it('should call service', () => {
         expect(authService.waitLogin).not.toBeCalled();
 
-        wrapper.find(SignInView).vm.$emit('social');
+        wrapper.find(SignInView).vm.$emit('social', { email });
 
         expect(authService.waitLogin).toBeCalledTimes(1);
         expect(authService.waitLogin).toBeCalledWith();
@@ -69,36 +68,71 @@ describe('SignInInteractor', () => {
 
         expect(wrapper.emitted().social).toBeUndefined();
 
-        wrapper.find(SignInView).vm.$emit('social');
+        wrapper.find(SignInView).vm.$emit('social', { email });
         await global.flushPromises();
 
         expect(wrapper.emitted().social).toHaveLength(1);
       });
 
+      describe('social login by app otp', () => {
+        beforeEach(() => {
+          wrapper = createWrapper({
+            propsData: {
+              challengeType: CHALLENGE_TYPES.APP_OTP,
+            },
+          });
+        });
+
+        it('should not emit social', async () => {
+          expect.assertions(2);
+
+          expect(wrapper.emitted().social).toBeUndefined();
+
+          wrapper.find(SignInView).vm.$emit('social', { email });
+          await global.flushPromises();
+
+          expect(wrapper.emitted().social).toBeUndefined();
+        });
+
+        it('should emit sign-in', async () => {
+          expect.assertions(2);
+
+          expect(wrapper.emitted()['sign-in']).toBeUndefined();
+
+          identityService.checkRegularPassword.mockResolvedValueOnce(true);
+
+          wrapper.find(SignInView).vm.$emit('social', { email });
+          await global.flushPromises();
+
+          expect(wrapper.emitted()['sign-in']).toEqual([
+            [
+              {
+                email,
+                isPasswordExist: true,
+              },
+            ],
+          ]);
+        });
+      });
+
       describe('loading status', () => {
         it('should be false before event', () => {
-          expect(
-            wrapper.find('sign-in-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().isloading).toBeFalsy();
         });
 
         it('should be true while waiting', () => {
-          wrapper.find(SignInView).vm.$emit('social');
+          wrapper.find(SignInView).vm.$emit('social', { email });
 
-          expect(wrapper.find('sign-in-stub').attributes().isloading).toBe(
-            'true',
-          );
+          expect(wrapper.find(SignInView).attributes().isloading).toBe('true');
         });
 
         it('should be false after sending', async () => {
           expect.assertions(1);
 
-          wrapper.find(SignInView).vm.$emit('social');
+          wrapper.find(SignInView).vm.$emit('social', { email });
           await global.flushPromises();
 
-          expect(
-            wrapper.find('sign-in-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().isloading).toBeFalsy();
         });
       });
     });
@@ -219,17 +253,13 @@ describe('SignInInteractor', () => {
 
       describe('loading status', () => {
         it('should be false before submit', () => {
-          expect(
-            wrapper.find('sign-in-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().isloading).toBeFalsy();
         });
 
         it('should be true after submit', () => {
           wrapper.find(SignInView).vm.$emit('submit', defaultEventParams);
 
-          expect(wrapper.find('sign-in-stub').attributes().isloading).toBe(
-            'true',
-          );
+          expect(wrapper.find(SignInView).attributes().isloading).toBe('true');
         });
 
         it('should be false after handling submit', async () => {
@@ -238,9 +268,7 @@ describe('SignInInteractor', () => {
           wrapper.find(SignInView).vm.$emit('submit', defaultEventParams);
           await global.flushPromises();
 
-          expect(
-            wrapper.find('sign-in-stub').attributes().isloading,
-          ).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().isloading).toBeFalsy();
         });
       });
 
@@ -254,12 +282,12 @@ describe('SignInInteractor', () => {
         it('should pass error', async () => {
           expect.assertions(2);
 
-          expect(wrapper.find('sign-in-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().error).toBeFalsy();
 
           wrapper.find(SignInView).vm.$emit('submit', defaultEventParams);
           await global.flushPromises();
 
-          expect(wrapper.find('sign-in-stub').attributes().error).toBe(
+          expect(wrapper.find(SignInView).attributes().error).toBe(
             i18n.t('components.compositeAuth.authFailed'),
           );
         });
@@ -272,7 +300,7 @@ describe('SignInInteractor', () => {
 
           wrapper.find(SignInView).vm.$emit('submit', defaultEventParams);
 
-          expect(wrapper.find('sign-in-stub').attributes().error).toBeFalsy();
+          expect(wrapper.find(SignInView).attributes().error).toBeFalsy();
         });
       });
     });

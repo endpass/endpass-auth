@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { IDENTITY_MODE } from '@/constants';
+import { CHALLENGE_TYPES, IDENTITY_MODE } from '@/constants';
 import { coreStore, authStore } from '@/store';
 import SignIn from './SignIn.view';
 
@@ -19,6 +19,13 @@ export default {
 
   coreStore,
   authStore,
+
+  props: {
+    challengeType: {
+      type: String,
+      required: true,
+    },
+  },
 
   data: () => ({
     isLoading: false,
@@ -61,12 +68,20 @@ export default {
       }
     },
 
-    async onSocial() {
+    async onSocial({ email }) {
+      if (this.challengeType === CHALLENGE_TYPES.APP_OTP) {
+        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
+          email,
+        );
+
+        this.$emit('sign-in', { email, isPasswordExist });
+        return;
+      }
+
       this.isLoading = true;
-
       await this.$options.authStore.waitLogin();
-      this.$emit('social');
 
+      this.$emit('social');
       this.isLoading = false;
     },
   },
