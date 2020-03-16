@@ -2,12 +2,15 @@
 
 class ServerError extends Error {
   /**
-   * @param {string} message
-   * @param {string} [code]
+   * @param {object} params
+   * @param {string} params.message
+   * @param {string|number} [params.code]
+   * @param {object} [params.response]
    */
-  constructor(message, code) {
+  constructor({ message, code, response }) {
     super(message);
     this.code = code;
+    this.response = response;
   }
 }
 
