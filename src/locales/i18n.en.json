@@ -41,6 +41,7 @@
     },
     "consentProvider": {
       "loadScopesError": "Something went wrong while loading scopes.",
+      "redirectUrl": "Something wrong with redirect url",
       "scopesRequired": "Scopes are required for make a request",
       "title": "Permissions",
       "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"

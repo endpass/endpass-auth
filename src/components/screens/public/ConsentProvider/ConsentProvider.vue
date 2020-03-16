@@ -3,13 +3,13 @@
   <v-frame
     v-else
     :title="$t('components.consentProvider.title')"
-    :is-closable="$options.coreStore.isDialog"
+    :is-closable="isClosable"
     @close="onClose"
   >
     <v-error
-      v-if="error.show"
-      :hint="error.hint"
-      :description="error.description"
+      v-if="isError"
+      :label="errorLabel"
+      :description="errorDescription"
     />
     <scopes-form
       v-if="scopesList.length > 0"
@@ -25,62 +25,56 @@ import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import ScopesForm from '@/components/forms/Scopes';
 import VError from '@/components/common/VError';
-import { authStore, accountsStore, coreStore } from '@/store';
+import { authStore, coreStore } from '@/store';
+import createConsentProviderController from './ConsentProviderController';
 
 export default {
   name: 'ConsentProvider',
 
-  accountsStore,
   coreStore,
   authStore,
+
+  consentProviderController: createConsentProviderController(),
 
   data: () => ({
     consentChallenge: null,
     isLoading: true,
     isSkipped: false,
     scopesList: [],
-    error: {
-      show: false,
-      hint: '',
-      description: '',
-    },
+    errorHint: '',
+    errorDescription: '',
   }),
 
   computed: {
+    isError() {
+      return !!this.errorLabel;
+    },
+
+    errorLabel() {
+      return this.errorHint || this.$options.consentProviderController.error;
+    },
+
+    isClosable() {
+      return this.$options.coreStore.isDialog;
+    },
+
     isLogin() {
       return this.$options.authStore.isLogin;
     },
+
     isLoadingScreen() {
-      return (
-        this.isSkipped || (this.scopesList.length === 0 && !this.error.show)
-      );
+      return this.isSkipped || (this.scopesList.length === 0 && !this.isError);
     },
   },
 
   methods: {
-    setError(hint, description = '') {
-      this.error = {
-        show: true,
-        hint,
-        description,
-      };
-    },
-
     async handleScopesSubmit(scopesList) {
       this.isLoading = true;
-
-      try {
-        const {
-          redirect,
-        } = await this.$options.accountsStore.grantPermissionsWithOauth({
-          consentChallenge: this.consentChallenge,
-          scopesList,
-        });
-        window.location.href = redirect;
-      } catch (err) {
-        this.setError(err.message);
-        this.isLoading = false;
-      }
+      await this.$options.consentProviderController.submitScopes({
+        consentChallenge: this.consentChallenge,
+        scopesList,
+      });
+      this.isLoading = false;
     },
 
     onClose() {
@@ -90,35 +84,18 @@ export default {
 
     async loadScopes() {
       this.isLoading = true;
-      try {
-        const {
-          requested_scope: requestedScope,
-          skip,
-          redirect_url: redirectUrl,
-        } = await this.$options.accountsStore.getConsentDetails(
-          this.consentChallenge,
-        );
 
-        if (skip) {
-          this.isSkipped = true;
-          window.location.href = redirectUrl;
-        }
+      const {
+        scopesList,
+        isSkip,
+      } = await this.$options.consentProviderController.loadScopes({
+        consentChallenge: this.consentChallenge,
+      });
 
-        if (!requestedScope) {
-          this.setError(
-            this.$i18n.t('components.consentProvider.scopesRequired'),
-          );
-          return;
-        }
+      this.isSkipped = isSkip;
+      this.scopesList = scopesList;
 
-        this.scopesList = requestedScope;
-      } catch (err) {
-        this.setError(
-          this.$i18n.t('components.consentProvider.loadScopesError'),
-        );
-      } finally {
-        this.isLoading = false;
-      }
+      this.isLoading = false;
     },
   },
 
@@ -133,12 +110,14 @@ export default {
         error_hint: errorHint,
         error_description: errorDescription,
       } = query;
-      this.setError(errorHint, errorDescription);
+
+      this.errorHint = errorHint;
+      this.errorDescription = errorDescription;
       return;
     }
 
     if (!consentChallenge) {
-      this.setError(this.$i18n.t('components.consentProvider.urlError'));
+      this.errorHint = this.$i18n.t('components.consentProvider.urlError');
       return;
     }
 
