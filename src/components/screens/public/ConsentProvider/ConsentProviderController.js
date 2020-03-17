@@ -26,6 +26,10 @@ class ConsentProviderController extends VuexModule {
       }
 
       window.location.href = url;
+
+      if (isSameHost) {
+        resolve();
+      }
     });
   }
 
