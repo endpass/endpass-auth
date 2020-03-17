@@ -69,12 +69,17 @@ export default {
 
   methods: {
     async handleScopesSubmit(scopesList) {
-      this.isLoading = true;
-      await this.$options.consentProviderController.submitScopes({
-        consentChallenge: this.consentChallenge,
-        scopesList,
-      });
-      this.isLoading = false;
+      try {
+        this.isLoading = true;
+        await this.$options.consentProviderController.grantScopes({
+          consentChallenge: this.consentChallenge,
+          scopesList,
+        });
+      } catch (e) {
+        this.errorHint = e.message;
+      } finally {
+        this.isLoading = false;
+      }
     },
 
     onClose() {
@@ -83,19 +88,23 @@ export default {
     },
 
     async loadScopes() {
-      this.isLoading = true;
+      try {
+        this.isLoading = true;
 
-      const {
-        scopesList,
-        isSkip,
-      } = await this.$options.consentProviderController.loadScopes({
-        consentChallenge: this.consentChallenge,
-      });
+        const {
+          scopesList,
+          isSkip,
+        } = await this.$options.consentProviderController.loadScopes({
+          consentChallenge: this.consentChallenge,
+        });
 
-      this.isSkipped = isSkip;
-      this.scopesList = scopesList;
-
-      this.isLoading = false;
+        this.isSkipped = isSkip;
+        this.scopesList = scopesList;
+      } catch (e) {
+        this.errorHint = e.message;
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 

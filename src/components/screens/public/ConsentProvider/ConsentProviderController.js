@@ -7,22 +7,26 @@ const OPEN_URL_TIMEOUT_MS = 5000;
 
 @Module({ generateMutationSetters: true })
 class ConsentProviderController extends VuexModule {
-  error = '';
-
   constructor(props, { accountsStore = accountsStoreModule }) {
     super(props);
     this.accountsStore = accountsStore;
   }
 
-  openRedirectUrl(url) {
-    const isSameHost = url.indexOf(window.location.origin) === 0;
-    if (!isSameHost) {
-      setTimeout(() => {
-        this.error = i18n.t('components.consentProvider.redirectUrl');
-      }, OPEN_URL_TIMEOUT_MS);
-    }
+  /**
+   * @param {string} url
+   * @return {Promise<void>}
+   */
+  async openRedirectUrl(url) {
+    return new Promise((resolve, reject) => {
+      const isSameHost = url.indexOf(window.location.origin) === 0;
+      if (!isSameHost) {
+        setTimeout(() => {
+          reject(i18n.t('components.consentProvider.redirectTimeoutError'));
+        }, OPEN_URL_TIMEOUT_MS);
+      }
 
-    window.location.href = url;
+      window.location.href = url;
+    });
   }
 
   /**
@@ -31,16 +35,12 @@ class ConsentProviderController extends VuexModule {
    * @return {Promise<void>}
    */
   @Action
-  async submitScopes({ consentChallenge, scopesList }) {
-    try {
-      const { redirect } = await this.accountsStore.grantPermissionsWithOauth({
-        consentChallenge,
-        scopesList,
-      });
-      this.openRedirectUrl(redirect);
-    } catch (e) {
-      this.error = e.message;
-    }
+  async grantScopes({ consentChallenge, scopesList }) {
+    const { redirect } = await this.accountsStore.grantPermissionsWithOauth({
+      consentChallenge,
+      scopesList,
+    });
+    await this.openRedirectUrl(redirect);
   }
 
   /**
@@ -50,28 +50,28 @@ class ConsentProviderController extends VuexModule {
    */
   @Action
   async loadScopes({ consentChallenge }) {
-    let scopesList = [];
-    let isSkip = false;
+    let consentDetails = {};
 
     try {
-      const {
-        requested_scope: requestedScope,
-        skip,
-        redirect_url: redirectUrl,
-      } = await this.accountsStore.getConsentDetails(consentChallenge);
-
-      isSkip = skip;
-      scopesList = requestedScope;
-
-      if (isSkip) {
-        this.openRedirectUrl(redirectUrl);
-      }
-
-      if (!requestedScope) {
-        this.error = i18n.t('components.consentProvider.scopesRequired');
-      }
+      consentDetails = await this.accountsStore.getConsentDetails(
+        consentChallenge,
+      );
     } catch (e) {
-      this.error = i18n.t('components.consentProvider.loadScopesError');
+      throw new Error(i18n.t('components.consentProvider.loadScopesError'));
+    }
+
+    const {
+      requested_scope: scopesList,
+      skip: isSkip,
+      redirect_url: redirectUrl,
+    } = consentDetails;
+
+    if (isSkip) {
+      await this.openRedirectUrl(redirectUrl);
+    }
+
+    if (!scopesList) {
+      throw new Error(i18n.t('components.consentProvider.scopesRequired'));
     }
 
     return {
