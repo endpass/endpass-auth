@@ -14,6 +14,11 @@ import { CHALLENGE_TYPES, IDENTITY_MODE } from '@/constants';
 import { coreStore, authStore } from '@/store';
 import SignIn from './SignIn.view';
 
+const SING_IN_CHALLENGE_TYPES = [
+  CHALLENGE_TYPES.APP_OTP,
+  CHALLENGE_TYPES.SMS_OTP,
+];
+
 export default {
   name: 'SignInInteractor',
 
@@ -69,7 +74,7 @@ export default {
     },
 
     async onSocial({ email }) {
-      if (this.challengeType === CHALLENGE_TYPES.APP_OTP) {
+      if (SING_IN_CHALLENGE_TYPES.includes(this.challengeType)) {
         const isPasswordExist = await this.$options.authStore.checkRegularPassword(
           email,
         );

@@ -1,7 +1,7 @@
 <template lang="html">
   <v-button
-    :disabled="!isLoading"
-    :is-loading="!isLoading"
+    :disabled="!isInited"
+    :is-loading="isLoading"
     skin="social"
     type="button"
     data-test="submit-button-google"
@@ -24,6 +24,7 @@ import { authStore } from '@/store';
 
 export default {
   data: () => ({
+    isInited: false,
     isLoading: false,
     interval: null,
   }),
@@ -62,7 +63,7 @@ export default {
 
     loadAuth2() {
       window.gapi.load('auth2', () => {
-        this.isLoading = true;
+        this.isInited = true;
       });
     },
 
