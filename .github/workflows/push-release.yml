@@ -1,4 +1,5 @@
-name: auth release
+---
+name: release build and deploy
 on: 
   push:
     branches:
@@ -7,14 +8,11 @@ on:
       - '**.md'
 
 jobs:
-  build:
-
-    runs-on: ubuntu-latest
-
+  build-and-deploy:
+    runs-on: ubuntu-18.04
     steps:
-
     - name: Checkout repo
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
   
     - name: Setup node version
       uses: actions/setup-node@v1
@@ -24,34 +22,17 @@ jobs:
     - name: Set auth version env
       run: echo ::set-env name=AUTH_VERSION::$(jq .version package.json | tr -d \" | cut -d . -f 1-2 | tr . -)
 
-    - name: Show auth version env
-      run: echo ${{ env.AUTH_VERSION }}
-      
     - name: Install packages
       run: yarn install --frozen-lockfile
 
     - name: Build
       run: yarn build:staging
 
-    - name: Deploy to S3 bucket
-      uses: jakejarvis/s3-sync-action@master
-      with:
-        args: --delete
-      env:
-        AWS_S3_BUCKET: auth-staging.endpass.com
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        SOURCE_DIR: 'dist/app'
+    - name: Deploy static site to S3 bucket
+      run: aws s3 sync ./dist/app/ s3://auth-staging.endpass.com --exclude ".git*" --delete
 
     - name: Deploy to versioned S3 bucket
-      uses: jakejarvis/s3-sync-action@master
-      with:
-        args: --delete
-      env:
-        AWS_S3_BUCKET: auth${{ env.AUTH_VERSION }}-staging.endpass.com
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        SOURCE_DIR: 'dist/app'
+      run: aws s3 sync ./dist/app/ s3://auth${{env.AUTH_VERSION}}-staging.endpass.com --exclude ".git*" --delete
 
     - name: Slack Notification
       uses: homoluctus/slatify@master
@@ -62,4 +43,4 @@ jobs:
         job_name: 'auth build and deploy'
         username: 'GitHub Actions'
         icon_emoji: ':github:'
-        url: ${{ secrets.SLACK_WEBHOOK }}
+        url: ${{ secrets.SLACK_WEBHOOK_URL }}
