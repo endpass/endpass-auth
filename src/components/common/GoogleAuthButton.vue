@@ -1,6 +1,6 @@
 <template lang="html">
   <v-button
-    :disabled="!isInited"
+    :disabled="isIniting"
     :is-loading="isLoading"
     skin="social"
     type="button"
@@ -24,9 +24,9 @@ import { authStore } from '@/store';
 
 export default {
   data: () => ({
-    isInited: false,
-    isLoading: false,
-    interval: null,
+    isIniting: true,
+    isLoading: true,
+    intervalId: null,
   }),
 
   authStore,
@@ -63,7 +63,8 @@ export default {
 
     loadAuth2() {
       window.gapi.load('auth2', () => {
-        this.isInited = true;
+        this.isIniting = false;
+        this.isLoading = false;
       });
     },
 
@@ -71,10 +72,10 @@ export default {
       if (window.gapi) {
         this.loadAuth2();
       } else {
-        this.interval = setInterval(() => {
+        this.intervalId = setInterval(() => {
           if (window.gapi) {
             this.loadAuth2();
-            clearInterval(this.interval);
+            clearInterval(this.intervalId);
           }
         }, 300);
       }
@@ -84,7 +85,7 @@ export default {
     this.initGoogle();
   },
   destroyed() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalId);
   },
   components: {
     VSvgIcon,
