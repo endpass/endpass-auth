@@ -2,6 +2,7 @@
   <sign-in
     v-bind="$attrs"
     :is-public="isPublic"
+    :challenge-type="challengeType"
     @sign-in="onSignIn"
     @sign-up="onSignUp"
     @social="onSocial"
@@ -18,6 +19,11 @@ export default {
     isPublic: {
       type: Boolean,
       default: false,
+    },
+
+    challengeType: {
+      type: String,
+      required: true,
     },
   },
 

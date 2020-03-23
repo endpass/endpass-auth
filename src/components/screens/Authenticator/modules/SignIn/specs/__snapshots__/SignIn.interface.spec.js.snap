@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SignInInterface render should correctly render component 1`] = `<sign-in-stub password="" email=""></sign-in-stub>`;
+exports[`SignInInterface render should correctly render component 1`] = `<sign-in-stub challengetype="EMAIL_OTP"></sign-in-stub>`;
 
-exports[`SignInInterface render should render form 1`] = `<sign-in-stub password="" email=""></sign-in-stub>`;
+exports[`SignInInterface render should render form 1`] = `<sign-in-stub challengetype="EMAIL_OTP"></sign-in-stub>`;

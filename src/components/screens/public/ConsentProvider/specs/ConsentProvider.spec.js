@@ -1,6 +1,7 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import ConsentProvider from '@/components/screens/public/ConsentProvider';
+import VError from '@/components/common/VError';
 import '@mocks/window';
 import setupI18n from '@/locales/i18nSetup';
 import permissionsService from '@/service/permissions';
@@ -17,6 +18,7 @@ describe('ConsentProvider', () => {
   let $router;
   let $route;
   let wrapper;
+  const redirectUrl = 'http://kek.kek';
 
   function createRouter() {
     return {
@@ -84,14 +86,13 @@ describe('ConsentProvider', () => {
         },
       });
 
-      expect(wrapper.vm.error.show).toBe(true);
+      expect(wrapper.find(VError).exists()).toBe(true);
       expect($router.replace).not.toBeCalled();
     });
 
     it('should should redirect if consent request provided skip', async () => {
       expect.assertions(1);
 
-      const redirectUrl = 'http://kek.kek';
       permissionsService.getConsentDetails.mockResolvedValueOnce({
         skip: true,
         requested_scope: [],
@@ -110,21 +111,26 @@ describe('ConsentProvider', () => {
       expect($router.replace).toBeCalled();
     });
 
-    it('should not do anything on mounting if challengeId is present in query params and user authorized', () => {
+    it('should not do anything on mounting if challengeId is present in query params and user authorized', async () => {
+      expect.assertions(2);
+
+      permissionsService.getConsentDetails.mockResolvedValueOnce({
+        skip: true,
+        requested_scope: [],
+        redirect_url: redirectUrl,
+      });
+
       wrapper = createWrapper();
 
-      expect(wrapper.vm.error).toEqual({
-        show: false,
-        hint: '',
-        description: '',
-      });
+      await global.flushPromises();
+
+      expect(wrapper.find(VError).exists()).toBe(false);
       expect($router.replace).not.toBeCalled();
     });
 
     it('should grant permissions on scopes form submit', async () => {
       expect.assertions(1);
 
-      const redirectUrl = 'http://kek.kek';
       wrapper = createWrapper();
       wrapper.setData({
         scopesList: ['foo', 'bar', 'baz'],
@@ -151,7 +157,7 @@ describe('ConsentProvider', () => {
       wrapper = createWrapper();
       await global.flushPromises();
 
-      expect(wrapper.find('v-error-stub').attributes().hint).toBe(
+      expect(wrapper.find(VError).attributes().label).toBe(
         i18n.t('components.consentProvider.scopesRequired'),
       );
     });

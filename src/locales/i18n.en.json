@@ -33,13 +33,15 @@
     },
     "code": {
       "authFailed": "Authentication failed. Please, try again",
-      "sendError": "Something went wrong while sending the code. Please, try again"
+      "sendError": "Something went wrong while sending the code. Please, try again",
+      "userAlreadyExists": "User with this email is already exists. Please, try another one"
     },
     "compositeAuth": {
       "authFailed": "Authentication failed. Please, try again."
     },
     "consentProvider": {
       "loadScopesError": "Something went wrong while loading scopes.",
+      "redirectTimeoutError": "Something wrong with redirect url",
       "scopesRequired": "Scopes are required for make a request",
       "title": "Permissions",
       "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"

@@ -1,5 +1,6 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import Vuex from 'vuex';
+import { email } from '@unitFixtures/auth';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
@@ -20,7 +21,7 @@ describe('GoogleAuthButton', () => {
           getBasicProfile() {
             return {
               getEmail() {
-                return 'email';
+                return email;
               },
             };
           },
@@ -100,6 +101,7 @@ describe('GoogleAuthButton', () => {
       expect.assertions(3);
       authService.authWithGoogle.mockResolvedValueOnce({
         success: true,
+        email,
       });
 
       wrapper.find('[data-test=submit-button-google]').trigger('click');
@@ -111,7 +113,13 @@ describe('GoogleAuthButton', () => {
       });
 
       expect(authService.authWithGoogle).toHaveBeenCalledWith('id_token');
-      expect(wrapper.emitted().submit).toEqual([[]]);
+      expect(wrapper.emitted().submit).toEqual([
+        [
+          {
+            email,
+          },
+        ],
+      ]);
     });
   });
 });

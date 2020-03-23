@@ -110,10 +110,14 @@ describe('SignInView', () => {
 
         expect(wrapper.emitted().social).toBeUndefined();
 
-        wrapper.find('google-auth-button-stub').vm.$emit('submit');
+        wrapper.find('google-auth-button-stub').vm.$emit('submit', { email });
 
         expect(wrapper.emitted().social.length).toBe(1);
-        expect(wrapper.emitted().social[0]).toEqual([]);
+        expect(wrapper.emitted().social[0]).toEqual([
+          {
+            email,
+          },
+        ]);
       });
 
       it('should update error if social failed', () => {

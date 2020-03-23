@@ -104,9 +104,6 @@ const authWithGoogle = async idToken => {
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
-    })
-    .catch(err => {
-      throw err.response.data;
     });
 
   return authAdapter(data);
@@ -124,10 +121,8 @@ const authWithGitHub = async code => {
     .then(res => {
       if (!res.success) throw new Error(res.message);
       return res;
-    })
-    .catch(err => {
-      throw err.response.data;
     });
+
   return authAdapter(data);
 };
 
@@ -141,17 +136,18 @@ const getAuthStatus = async () => {
     const { expiresAt, hash } = await request.get(
       `${identityBaseUrl}/auth/check`,
     );
+
     return {
       status: AUTH_STATUS_CODE.LOGGED_IN,
       hash,
       expiresAt,
     };
   } catch (e) {
-    const statusCode = get(e, ['response', 'status']);
+    const statusCode = get(e, 'response.status');
     const status = CODE_TO_STATUS[statusCode] || AUTH_STATUS_CODE.NOT_LOGGED;
+    const hash = get(e, 'response.data.hash', '');
+    const expiresAt = get(e, 'response.data.expiresAt', 0);
 
-    const hash = get(e, ['response', 'data', 'hash'], '');
-    const expiresAt = get(e, ['response', 'data', 'expiresAt'], 0);
     return {
       status,
       hash,

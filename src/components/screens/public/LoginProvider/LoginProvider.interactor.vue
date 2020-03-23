@@ -2,7 +2,7 @@
   <login-provider
     :error="error"
     :email="currentUserEmail"
-    :is-closable="$options.coreStore.isDialog"
+    :is-closable="isDialog"
     :is-loading="isLoading"
     :oauth-login-challenge="oauthLoginChallenge"
     :challenge-type="challengeType"
@@ -30,6 +30,10 @@ export default {
   }),
 
   computed: {
+    isDialog() {
+      return this.$options.coreStore.isDialog;
+    },
+
     isLogin() {
       return this.$options.authStore.isLogin;
     },

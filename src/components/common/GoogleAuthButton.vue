@@ -1,11 +1,11 @@
 <template lang="html">
   <v-button
-    :disabled="!auth2Loaded"
-    :is-loading="!auth2Loaded"
+    :disabled="isIniting"
+    :is-loading="isLoading"
     skin="social"
     type="button"
     data-test="submit-button-google"
-    @click.native="loginWithGoogle"
+    @click.native="onLogin"
   >
     <v-svg-icon
       slot="iconBefore"
@@ -23,53 +23,59 @@ import VSvgIcon from '@/components/common/VSvgIcon';
 import { authStore } from '@/store';
 
 export default {
-  data() {
-    return {
-      auth2Loaded: false,
-      interval: null,
-    };
-  },
+  data: () => ({
+    isIniting: true,
+    isLoading: true,
+    intervalId: null,
+  }),
 
   authStore,
 
   methods: {
-    async loginWithGoogle() {
-      // eslint-disable-next-line no-undef
-      const auth = gapi.auth2.init({
-        client_id: ENV.VUE_APP_GOOGLE_CLIENT_ID,
-        scope: 'profile',
-      });
-      await auth.signIn();
-
+    async onLogin() {
       try {
-        await this.$options.authStore.authWithGoogle({
+        this.isLoading = true;
+
+        // eslint-disable-next-line no-undef
+        const auth = gapi.auth2.init({
+          client_id: ENV.VUE_APP_GOOGLE_CLIENT_ID,
+          scope: 'profile',
+        });
+        await auth.signIn();
+        const { email } = await this.$options.authStore.authWithGoogle({
           email: auth.currentUser
             .get()
             .getBasicProfile()
             .getEmail(),
           idToken: auth.currentUser.get().getAuthResponse().id_token,
         });
-        this.$emit('submit');
+        this.$emit('submit', { email });
       } catch (err) {
         this.handleAuthError(err);
+      } finally {
+        this.isLoading = false;
       }
     },
+
     handleAuthError(err) {
       this.$emit('error', err);
     },
+
     loadAuth2() {
       window.gapi.load('auth2', () => {
-        this.auth2Loaded = true;
+        this.isIniting = false;
+        this.isLoading = false;
       });
     },
+
     initGoogle() {
       if (window.gapi) {
         this.loadAuth2();
       } else {
-        this.interval = setInterval(() => {
+        this.intervalId = setInterval(() => {
           if (window.gapi) {
             this.loadAuth2();
-            clearInterval(this.interval);
+            clearInterval(this.intervalId);
           }
         }, 300);
       }
@@ -79,7 +85,7 @@ export default {
     this.initGoogle();
   },
   destroyed() {
-    clearInterval(this.interval);
+    clearInterval(this.intervalId);
   },
   components: {
     VSvgIcon,

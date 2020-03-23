@@ -1,6 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { loginWithGithub } from 'github-oauth-popup';
 import Vuex from 'vuex';
+import { email } from '@unitFixtures/auth';
 import GitAuthButton from '@/components/common/GitAuthButton';
 import setupI18n from '@/locales/i18nSetup';
 import authService from '@/service/auth';
@@ -57,6 +58,7 @@ describe('GitAuthButton', () => {
       const code = 'kek';
       authService.authWithGitHub.mockResolvedValueOnce({
         success: true,
+        email,
       });
       loginWithGithub.mockResolvedValue({
         code,
@@ -69,7 +71,13 @@ describe('GitAuthButton', () => {
         client_id: ENV.VUE_APP_GIT_CLIENT_ID,
         scope: 'user:email',
       });
-      expect(wrapper.emitted().submit).toEqual([[]]);
+      expect(wrapper.emitted().submit).toEqual([
+        [
+          {
+            email,
+          },
+        ],
+      ]);
     });
   });
 });
