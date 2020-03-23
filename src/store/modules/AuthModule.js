@@ -47,20 +47,11 @@ class AuthModule extends VuexModule {
   }
 
   @Action
-  async loadAuthChallenge({ email }) {
-    const request = authService.getAuthChallenge(email);
-
-    await this.handleAuthRequest({
-      request,
-    });
-  }
-
-  @Action
   async authWithGoogle({ idToken }) {
-    const request = authService.authWithGoogle(idToken);
+    const { email } = await authService.authWithGoogle(idToken);
 
-    const { email } = await this.handleAuthRequest({
-      request,
+    await this.loadAuthChallenge({
+      email,
     });
 
     return { email };
@@ -68,36 +59,20 @@ class AuthModule extends VuexModule {
 
   @Action
   async authWithGitHub(code) {
-    try {
-      const {
-        success,
-        message,
-        challenge,
-        email,
-      } = await authService.authWithGitHub(code);
+    const { email } = await authService.authWithGitHub(code);
 
-      if (!success) {
-        throw new Error(message || i18n.t('store.auth.authFailed'));
-      }
+    await this.loadAuthChallenge({
+      email,
+    });
 
-      settingsService.clearLocalSettings();
-
-      this.challengeType = get(challenge, 'challengeType');
-      return {
-        email,
-      };
-    } catch (err) {
-      console.error(err);
-      throw new Error(err.message);
-    }
+    return { email };
   }
 
   @Action
-  async handleAuthRequest({ request }) {
+  async loadAuthChallenge({ email }) {
     this.sharedStore.changeLoadingStatus(true);
-    let res;
     try {
-      res = await request;
+      const res = await authService.getAuthChallenge(email);
 
       if (!res.success) throw new Error(i18n.t('store.auth.authFailed'));
 
@@ -107,7 +82,6 @@ class AuthModule extends VuexModule {
     } finally {
       this.sharedStore.changeLoadingStatus(false);
     }
-    return res;
   }
 
   @Action
