@@ -1,5 +1,5 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`SignInInteractor render should correctly render component 1`] = `<sign-in-stub error="" email="user@email.com"></sign-in-stub>`;
+exports[`SignInInteractor render should correctly render component 1`] = `<sign-in-stub error=""></sign-in-stub>`;
 
-exports[`SignInInteractor render should render form 1`] = `<sign-in-stub error="" email="user@email.com"></sign-in-stub>`;
+exports[`SignInInteractor render should render form 1`] = `<sign-in-stub error=""></sign-in-stub>`;

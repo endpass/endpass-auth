@@ -10,15 +10,27 @@
 </template>
 
 <script>
-import { IDENTITY_MODE } from '@/constants';
+import { CHALLENGE_TYPES, IDENTITY_MODE } from '@/constants';
 import { coreStore, authStore } from '@/store';
 import SignIn from './SignIn.view';
+
+const SING_IN_CHALLENGE_TYPES = [
+  CHALLENGE_TYPES.APP_OTP,
+  CHALLENGE_TYPES.SMS_OTP,
+];
 
 export default {
   name: 'SignInInteractor',
 
   coreStore,
   authStore,
+
+  props: {
+    challengeType: {
+      type: String,
+      required: true,
+    },
+  },
 
   data: () => ({
     isLoading: false,
@@ -61,12 +73,20 @@ export default {
       }
     },
 
-    async onSocial() {
+    async onSocial({ email }) {
+      if (SING_IN_CHALLENGE_TYPES.includes(this.challengeType)) {
+        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
+          email,
+        );
+
+        this.$emit('sign-in', { email, isPasswordExist });
+        return;
+      }
+
       this.isLoading = true;
-
       await this.$options.authStore.waitLogin();
-      this.$emit('social');
 
+      this.$emit('social');
       this.isLoading = false;
     },
   },

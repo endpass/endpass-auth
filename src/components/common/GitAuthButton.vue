@@ -2,6 +2,7 @@
   <v-button
     skin="social"
     type="button"
+    :is-loading="isLoading"
     data-test="submit-button-github"
     @click.native="loginWithGithub"
   >
@@ -26,17 +27,26 @@ export default {
 
   authStore,
 
+  data: () => ({
+    isLoading: false,
+  }),
+
   methods: {
     async loginWithGithub() {
       try {
+        this.isLoading = true;
         const response = await loginWithGithub({
           client_id: ENV.VUE_APP_GIT_CLIENT_ID,
           scope: 'user:email',
         });
-        await this.$options.authStore.authWithGitHub(response.code);
-        this.$emit('submit');
+        const { email } = await this.$options.authStore.authWithGitHub(
+          response.code,
+        );
+        this.$emit('submit', { email });
       } catch (e) {
         this.handleAuthError(e);
+      } finally {
+        this.isLoading = false;
       }
     },
     handleAuthError(err) {

@@ -178,8 +178,8 @@ export default {
       this.$emit('submit', { email, serverMode });
     },
 
-    onSocialSubmit() {
-      this.$emit('social');
+    onSocialSubmit({ email }) {
+      this.$emit('social', { email });
     },
 
     onSocialError() {

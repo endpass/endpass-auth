@@ -3,6 +3,7 @@ import { email } from '@unitFixtures/auth';
 import SignInInterface from '@/components/screens/Authenticator/modules/SignIn/SignIn.interface';
 import SignInInteractor from '@/components/screens/Authenticator/modules/SignIn/SignIn.interactor';
 import setupI18n from '@/locales/i18nSetup';
+import { CHALLENGE_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -17,8 +18,8 @@ describe('SignInInterface', () => {
       localVue,
       i18n,
       propsData: {
-        password: '',
-        email: '',
+        challengeType: CHALLENGE_TYPES.EMAIL_OTP,
+        isPublic: false,
       },
     });
   });
@@ -30,7 +31,7 @@ describe('SignInInterface', () => {
     });
 
     it('should render form', () => {
-      expect(wrapper.find('sign-in-stub').exists()).toBe(true);
+      expect(wrapper.find(SignInInteractor).exists()).toBe(true);
       expect(wrapper.html()).toMatchSnapshot();
     });
   });
