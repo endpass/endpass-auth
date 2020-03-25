@@ -141,10 +141,10 @@ export default {
   margin-top: 4px;
 }
 .document-type-status.is-verified {
-  color: var(--endpass-ui-color-success);
+  color: #22a143;
 }
 .document-type-status.is-pending-review {
-  color: var(--endpass-ui-color-grey-6);
+  color: #fed02d;
 }
 .document-type-arrow {
   display: flex;
