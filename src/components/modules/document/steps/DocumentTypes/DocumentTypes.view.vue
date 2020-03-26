@@ -116,6 +116,9 @@ export default {
   box-shadow: inset 0 -1px 0 var(--endpass-ui-color-grey-1);
   cursor: pointer;
 }
+.document-types-item:last-of-type {
+  box-shadow: none;
+}
 .document-type-index {
   display: flex;
   align-items: center;
