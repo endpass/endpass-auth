@@ -76,7 +76,7 @@ describe('SmsCodeView', () => {
 
         expect(
           wrapper.find('[data-test=code-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should update error when not empty', () => {
@@ -133,7 +133,7 @@ describe('SmsCodeView', () => {
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=code-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should not show error with valid data', async () => {
@@ -144,7 +144,7 @@ describe('SmsCodeView', () => {
 
         expect(
           wrapper.find('[data-test=code-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should show error with invalid code', async () => {

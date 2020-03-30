@@ -38,7 +38,12 @@ export default {
 
   methods: {
     onContinue() {
-      this.$emit('continue');
+      if (this.isHasBadStatus) {
+        this.$emit('continue');
+        return;
+      }
+
+      this.$emit('create');
     },
 
     onCreate() {

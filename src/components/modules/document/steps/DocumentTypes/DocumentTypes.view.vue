@@ -116,6 +116,9 @@ export default {
   box-shadow: inset 0 -1px 0 var(--endpass-ui-color-grey-1);
   cursor: pointer;
 }
+.document-types-item:last-of-type {
+  box-shadow: none;
+}
 .document-type-index {
   display: flex;
   align-items: center;
@@ -141,10 +144,10 @@ export default {
   margin-top: 4px;
 }
 .document-type-status.is-verified {
-  color: var(--endpass-ui-color-success);
+  color: var(--endpass-ui-color-green-1);
 }
 .document-type-status.is-pending-review {
-  color: var(--endpass-ui-color-grey-6);
+  color: var(--endpass-ui-color-yellow-1);
 }
 .document-type-arrow {
   display: flex;
