@@ -38,6 +38,10 @@ export default {
     isPasswordExist() {
       return this.$options.authStore.isPasswordExist;
     },
+
+    isRemembered() {
+      return this.$options.authStore.isRemembered;
+    },
   },
 
   watch: {
@@ -48,13 +52,21 @@ export default {
       immediate: true,
     },
 
+
     isPasswordExist: {
       handler(newVal) {
         this.$emit('update:is-password-exist', newVal);
       },
       immediate: true,
     },
-  },
+    
+    isRemembered: {
+      handler(newVal) {
+        this.$emit('update:is-remembered', newVal);
+      },
+      immediate: true,
+    },
+          },
 
   components: {
     AuthFormContainer,

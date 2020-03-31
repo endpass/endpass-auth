@@ -39,6 +39,11 @@ export default {
         return Object.keys(CHALLENGE_TYPES).includes(value);
       },
     },
+
+    isRemembered: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
@@ -100,7 +105,7 @@ export default {
           this.openRoute('SignUp');
           break;
 
-        case name === 'SignIn' && this.isPasswordExist:
+        case name === 'SignIn' && this.isPasswordExist && !this.isRemembered:
           this.openRoute('RegularPassword');
           break;
 
@@ -127,16 +132,19 @@ export default {
           this.replaceRoute('EmailCode');
           break;
 
+        case name === 'SignIn' && this.isRemembered && isSmsOtp:
         case name === 'SignUp' && isSmsOtp:
         case name === 'RegularPassword' && isSmsOtp:
           this.openRoute('SmsCode');
           break;
 
+        case name === 'SignIn' && this.isRemembered && isAppOtp:
         case name === 'SignUp' && isAppOtp:
         case name === 'RegularPassword' && isAppOtp:
           this.openRoute('AppCode');
           break;
 
+        case name === 'SignIn' && this.isRemembered && isEmailOtp:
         case name === 'SignUp' && isEmailOtp:
         case name === 'RegularPassword' && isEmailOtp:
           this.openRoute('EmailCode');
