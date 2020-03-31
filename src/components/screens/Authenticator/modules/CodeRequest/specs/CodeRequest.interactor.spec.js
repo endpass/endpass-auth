@@ -15,16 +15,18 @@ describe('CodeRequestInteractor', () => {
   let wrapper;
   const challengeType = CHALLENGE_TYPES.EMAIL_OTP;
 
-  const createWrapper = (options, props) =>
+  const defaultProps = {
+    email,
+    password,
+    challengeType,
+    isSignUp: false,
+    isRemember: false,
+  };
+
+  const createWrapper = options =>
     shallowMount(CodeRequestInteractor, {
       localVue,
-      propsData: {
-        email,
-        password,
-        challengeType,
-        isSignUp: false,
-        ...props,
-      },
+      propsData: defaultProps,
       i18n,
       ...options,
     });
@@ -55,6 +57,7 @@ describe('CodeRequestInteractor', () => {
         password,
         email,
         isSignUp: false,
+        isRemember: false,
       };
 
       it('should handle submit event', async () => {
@@ -73,7 +76,12 @@ describe('CodeRequestInteractor', () => {
       it('should handle submit event with sign up prop', async () => {
         expect.assertions(3);
 
-        wrapper = createWrapper({}, { isSignUp: true });
+        wrapper = createWrapper({
+          propsData: {
+            ...defaultProps,
+            isSignUp: true,
+          },
+        });
         await global.flushPromises();
 
         expect(authService.authWithCode).not.toBeCalled();
@@ -90,11 +98,16 @@ describe('CodeRequestInteractor', () => {
       it('should handle submit event with remember prop', async () => {
         expect.assertions(3);
 
+        wrapper = createWrapper({
+          propsData: {
+            ...defaultProps,
+            isRemember: true,
+          },
+        });
+
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper
-          .find(CodeRequest)
-          .vm.$emit('submit', { code, isRemember: true });
+        wrapper.find(CodeRequest).vm.$emit('submit', { code });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({

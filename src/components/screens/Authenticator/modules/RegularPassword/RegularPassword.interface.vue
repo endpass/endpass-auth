@@ -12,8 +12,8 @@ export default {
   name: 'RegularPasswordInterface',
 
   methods: {
-    onSubmit({ password }) {
-      this.$emit('complete', { password });
+    onSubmit({ password, isRemember }) {
+      this.$emit('complete', { password, isRemember });
     },
 
     onRecover() {

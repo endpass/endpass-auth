@@ -45,6 +45,11 @@ export default {
       type: Boolean,
       required: true,
     },
+
+    isRemember: {
+      type: Boolean,
+      required: true,
+    },
   },
 
   data: () => ({
@@ -53,7 +58,7 @@ export default {
   }),
 
   methods: {
-    async onSubmit({ code, isRemember }) {
+    async onSubmit({ code }) {
       if (this.isLoading) return;
 
       try {
@@ -67,7 +72,7 @@ export default {
           email,
           password,
           code,
-          isRemember,
+          isRemember: this.isRemember,
         });
 
         this.$emit('complete');

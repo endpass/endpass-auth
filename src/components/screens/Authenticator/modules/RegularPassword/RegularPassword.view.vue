@@ -21,6 +21,14 @@
       />
     </form-item>
     <form-item class="v-mb-24">
+      <v-checkbox
+        v-model="isRemember"
+        data-test="remember-me-checkbox"
+      >
+        {{ $t('components.regularPasswordForm.rememberMe') }}
+      </v-checkbox>
+    </form-item>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid"
         type="submit"
@@ -42,6 +50,7 @@
 </template>
 
 <script>
+import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
@@ -55,11 +64,15 @@ export default {
 
   data: () => ({
     password: '',
+    isRemember: false,
   }),
 
   methods: {
     onSubmit() {
-      this.$emit('submit', { password: this.password });
+      this.$emit('submit', {
+        password: this.password,
+        isRemember: this.isRemember,
+      });
     },
 
     onRecover() {
@@ -76,6 +89,7 @@ export default {
     VInput,
     FormItem,
     FormRow,
+    VCheckbox,
   },
 };
 </script>

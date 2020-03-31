@@ -106,7 +106,8 @@
     "regularPasswordForm": {
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?",
-      "title": "Log in to your Endpass account to access site actions"
+      "title": "Log in to your Endpass account to access site actions",
+      "rememberMe": "Remember Me"
     },
     "regularPasswordRecover": {
       "labelCode": "Code from email",
