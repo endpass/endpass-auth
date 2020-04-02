@@ -75,7 +75,7 @@ describe('RegularPasswordView', () => {
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should not show error with valid password', async () => {
@@ -86,7 +86,7 @@ describe('RegularPasswordView', () => {
 
         expect(
           wrapper.find('[data-test=password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should show error with invalid password', async () => {

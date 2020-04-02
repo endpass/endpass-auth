@@ -85,7 +85,7 @@ describe('RegularPasswordRecoveryView', () => {
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should not show error with valid password', async () => {
@@ -96,7 +96,7 @@ describe('RegularPasswordRecoveryView', () => {
 
         expect(
           wrapper.find('[data-test=password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should show error with invalid password', async () => {
@@ -128,7 +128,7 @@ describe('RegularPasswordRecoveryView', () => {
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=repeat-password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should not show error with valid password', async () => {
@@ -142,7 +142,7 @@ describe('RegularPasswordRecoveryView', () => {
 
         expect(
           wrapper.find('[data-test=repeat-password-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should show error with invalid password', async () => {
@@ -192,7 +192,7 @@ describe('RegularPasswordRecoveryView', () => {
       it('should not show error by default', () => {
         expect(
           wrapper.find('[data-test=code-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should not show error with valid code', async () => {
@@ -203,7 +203,7 @@ describe('RegularPasswordRecoveryView', () => {
 
         expect(
           wrapper.find('[data-test=code-input]').attributes().error,
-        ).toBeUndefined();
+        ).toBeFalsy();
       });
 
       it('should show error with short code', async () => {
