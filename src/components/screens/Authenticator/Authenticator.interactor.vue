@@ -34,12 +34,23 @@ export default {
     challengeType() {
       return this.$options.authStore.challengeType;
     },
+
+    isPasswordExist() {
+      return this.$options.authStore.isPasswordExist;
+    },
   },
 
   watch: {
     challengeType: {
       handler(newVal) {
         this.$emit('update:challenge-type', newVal);
+      },
+      immediate: true,
+    },
+
+    isPasswordExist: {
+      handler(newVal) {
+        this.$emit('update:is-password-exist', newVal);
       },
       immediate: true,
     },
