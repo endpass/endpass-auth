@@ -32,7 +32,10 @@
         {{ $t('global.confirm') }}
       </v-button>
     </form-item>
-    <form-row class="v-fs-14 v-text-center">
+    <form-row
+      v-if="isPhoneExist"
+      class="v-fs-14 v-text-center"
+    >
       <v-link
         :disabled="isLoading"
         role="button"
@@ -60,6 +63,11 @@ export default {
 
   props: {
     isLoading: {
+      type: Boolean,
+      default: false,
+    },
+
+    isPhoneExist: {
       type: Boolean,
       default: false,
     },

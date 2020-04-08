@@ -2,6 +2,7 @@
   <code-request
     :challenge-type="challengeType"
     :is-loading.sync="isLoading"
+    :is-phone-exist="$options.authStore.isPhoneExist"
     :error.sync="error"
     :email="email"
     @recover="onRecover"

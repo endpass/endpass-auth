@@ -11,16 +11,17 @@ localVue.use(VeeValidate);
 
 describe('AppCodeView', () => {
   let wrapper;
-  const createWrapper = (options, props) =>
+  const defaultProps = {
+    email,
+    isPhoneExist: true,
+  };
+  const createWrapper = options =>
     shallowMount(AppCodeView, {
       provide: {
         theme: 'default',
       },
       localVue,
-      propsData: {
-        email,
-        ...props,
-      },
+      propsData: defaultProps,
       sync: false,
       i18n,
       ...options,
@@ -45,13 +46,31 @@ describe('AppCodeView', () => {
   });
 
   describe('props', () => {
+    it('should show request code', () => {
+      wrapper = createWrapper({
+        propsData: { ...defaultProps, isPhoneExist: true },
+      });
+
+      expect(wrapper.find('[ data-test=recovery-link ]').exists()).toBe(true);
+    });
+
+    it('should hide request code', () => {
+      wrapper = createWrapper({
+        propsData: { ...defaultProps, isPhoneExist: false },
+      });
+
+      expect(wrapper.find('[ data-test=recovery-link ]').exists()).toBe(false);
+    });
+
     describe('error', () => {
       const error = 'error';
 
       it('should show error from prop', () => {
         expect.assertions(1);
 
-        wrapper = createWrapper(null, { error });
+        wrapper = createWrapper({
+          propsData: { ...defaultProps, error },
+        });
 
         expect(wrapper.find('[data-test=code-input]').attributes().error).toBe(
           error,
@@ -61,7 +80,9 @@ describe('AppCodeView', () => {
       it('should remove error when empty', async () => {
         expect.assertions(2);
 
-        wrapper = createWrapper(null, { error });
+        wrapper = createWrapper({
+          propsData: { ...defaultProps, error },
+        });
         await wrapper.vm.$nextTick();
 
         expect(wrapper.find('[data-test=code-input]').attributes().error).toBe(
