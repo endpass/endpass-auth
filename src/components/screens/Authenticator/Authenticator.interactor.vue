@@ -52,21 +52,23 @@ export default {
       immediate: true,
     },
 
-
     isPasswordExist: {
       handler(newVal) {
         this.$emit('update:is-password-exist', newVal);
       },
       immediate: true,
     },
-    
+
     isRemembered: {
       handler(newVal) {
         this.$emit('update:is-remembered', newVal);
+        if (newVal) {
+          this.$emit('update:is-remember', newVal);
+        }
       },
       immediate: true,
     },
-          },
+  },
 
   components: {
     AuthFormContainer,
