@@ -13,13 +13,11 @@
 <script>
 import CodeRequest from '@/components/modules/CodeRequest';
 import { authStore } from '@/store';
-import createAuthController from './AuthController';
 import { CHALLENGE_TYPES } from '@/constants';
 
 export default {
   name: 'CodeRequestInteractor',
 
-  authController: createAuthController(),
   authStore,
 
   props: {
@@ -58,7 +56,7 @@ export default {
   }),
 
   methods: {
-    async onSubmit({ code }) {
+    async onSubmit({ code, isRemember }) {
       if (this.isLoading) return;
 
       try {
@@ -67,12 +65,12 @@ export default {
 
         const { email, password, isSignUp } = this;
 
-        await this.$options.authController.authWithCode({
+        await this.$options.authStore.authWithCode({
           isSignUp,
           email,
           password,
           code,
-          isRemember: this.isRemember,
+          isRemember,
         });
 
         this.$emit('complete');

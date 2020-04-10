@@ -47,8 +47,8 @@ export default {
       this.$emit('recover');
     },
 
-    onSubmit({ code }) {
-      this.$emit('submit', { code });
+    onSubmit({ code, isRemember }) {
+      this.$emit('submit', { code, isRemember });
     },
 
     onUpdate({ isLoading = this.isLoading, error = this.error }) {

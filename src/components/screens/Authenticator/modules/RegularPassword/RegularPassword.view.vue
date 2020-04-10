@@ -8,8 +8,8 @@
     </v-title>
     <form-item>
       <v-input
-        v-model="password"
         v-validate="'required|min:8'"
+        :value="password"
         data-vv-as="password"
         data-vv-name="password"
         :error="errors.first('password')"
@@ -18,15 +18,8 @@
         required
         :placeholder="$t('components.regularPasswordForm.placeholder')"
         data-test="password-input"
+        @input="onPassword"
       />
-    </form-item>
-    <form-item class="v-mb-24">
-      <v-checkbox
-        v-model="isRemember"
-        data-test="remember-me-checkbox"
-      >
-        {{ $t('components.regularPasswordForm.rememberMe') }}
-      </v-checkbox>
     </form-item>
     <form-item class="v-mb-24">
       <v-button
@@ -50,7 +43,6 @@
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
@@ -62,21 +54,48 @@ import VTitle from '@/components/common/VTitle';
 export default {
   name: 'RegularPasswordView',
 
-  data: () => ({
-    password: '',
-    isRemember: false,
-  }),
+  props: {
+    password: {
+      type: String,
+      required: true,
+    },
+
+    error: {
+      type: String,
+      default: '',
+    },
+  },
+
+  watch: {
+    error: {
+      handler(msg) {
+        this.$validator.errors.removeById('passwordId');
+
+        if (!msg) return;
+
+        this.$validator.errors.add({
+          id: 'passwordId',
+          field: 'password',
+          msg,
+        });
+      },
+      immediate: true,
+    },
+  },
 
   methods: {
     onSubmit() {
       this.$emit('submit', {
         password: this.password,
-        isRemember: this.isRemember,
       });
     },
 
     onRecover() {
       this.$emit('recover');
+    },
+
+    onPassword(password) {
+      this.$emit('update:password', password);
     },
   },
 
@@ -89,7 +108,6 @@ export default {
     VInput,
     FormItem,
     FormRow,
-    VCheckbox,
   },
 };
 </script>

@@ -74,6 +74,26 @@ class AuthModule extends VuexModule {
     return { email };
   }
 
+  /**
+   * @param {boolean} isSignUp
+   * @param {string} email
+   * @param {string} password
+   * @param {string} code
+   * @param {boolean} isRemember
+   * @return {Promise<void>}
+   */
+  @Action
+  async authWithCode({ isSignUp, email, password, code, isRemember }) {
+    await authService.authWithCode({
+      email,
+      code,
+      password,
+      isSignUp,
+      isRemember,
+    });
+    await this.defineAuthStatus();
+  }
+
   @Action
   async loadAuthChallenge({ email }) {
     this.sharedStore.changeLoadingStatus(true);
