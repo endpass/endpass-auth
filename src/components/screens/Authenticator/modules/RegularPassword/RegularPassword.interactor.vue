@@ -1,6 +1,5 @@
 <template>
   <regular-password
-    :password.sync="password"
     :error="error"
     @submit="onSubmit"
     @recover="onRecover"
@@ -27,11 +26,6 @@ export default {
       required: true,
     },
 
-    isRemember: {
-      type: Boolean,
-      required: true,
-    },
-
     isRemembered: {
       type: Boolean,
       required: true,
@@ -39,7 +33,6 @@ export default {
   },
 
   data: () => ({
-    password: '',
     error: '',
     isLoading: false,
   }),
@@ -49,7 +42,7 @@ export default {
       if (this.isLoading) return;
 
       if (this.isRemembered) {
-        await this.auth();
+        await this.auth({ password });
       }
 
       if (this.error) return;
@@ -57,30 +50,28 @@ export default {
       this.$emit('submit', { password });
     },
 
-    onRecover() {
-      this.$emit('recover');
-    },
-
-    async auth() {
+    async auth({ password }) {
       try {
         this.isLoading = true;
         this.error = '';
 
-        const { email, password, isSignUp, isRemember } = this;
+        const { email, isSignUp } = this;
 
         await this.$options.authStore.authWithCode({
           isSignUp,
           email,
           password,
-          isRemember,
+          isRemember: true,
         });
-
-        this.$emit('complete');
       } catch (err) {
         this.error = this.$i18n.t('components.code.authFailed');
       } finally {
         this.isLoading = false;
       }
+    },
+
+    onRecover() {
+      this.$emit('recover');
     },
   },
 

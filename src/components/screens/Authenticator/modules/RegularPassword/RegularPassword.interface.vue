@@ -2,7 +2,6 @@
   <regular-password
     :email="email"
     :is-sign-up="isSignUp"
-    :is-remember="isRemember"
     :is-remembered="isRemembered"
     @submit="onSubmit"
     @recover="onRecover"
@@ -22,11 +21,6 @@ export default {
     },
 
     isSignUp: {
-      type: Boolean,
-      required: true,
-    },
-
-    isRemember: {
       type: Boolean,
       required: true,
     },

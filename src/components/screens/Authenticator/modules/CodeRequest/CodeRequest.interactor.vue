@@ -43,11 +43,6 @@ export default {
       type: Boolean,
       required: true,
     },
-
-    isRemember: {
-      type: Boolean,
-      required: true,
-    },
   },
 
   data: () => ({

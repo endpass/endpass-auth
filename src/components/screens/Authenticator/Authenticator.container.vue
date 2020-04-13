@@ -14,7 +14,7 @@
         :challenge-type="challengeType"
         @complete="onComplete"
         @switch="onSwitch"
-        @social="handleFinishAuthorize"
+        @social="finishAuth"
       />
     </template>
   </auth-form-container>
@@ -133,34 +133,31 @@ export default {
           this.replaceRoute('EmailCode');
           break;
 
-        case name === 'SignIn' && this.isRemembered:
-        case name === 'SignUp' && this.isRemembered:
-        case name === 'RegularPassword' && this.isRemembered:
-          this.handleFinishAuthorize();
-          break;
-
-        case name === 'SignIn' && isSmsOtp:
-        case name === 'SignUp' && isSmsOtp:
-        case name === 'RegularPassword' && isSmsOtp:
+        case name === 'SignIn' && isSmsOtp && !this.isRemembered:
+        case name === 'SignUp' && isSmsOtp && !this.isRemembered:
+        case name === 'RegularPassword' && isSmsOtp && !this.isRemembered:
           this.openRoute('SmsCode');
           break;
 
-        case name === 'SignIn' && isAppOtp:
-        case name === 'SignUp' && isAppOtp:
-        case name === 'RegularPassword' && isAppOtp:
+        case name === 'SignIn' && isAppOtp && !this.isRemembered:
+        case name === 'SignUp' && isAppOtp && !this.isRemembered:
+        case name === 'RegularPassword' && isAppOtp && !this.isRemembered:
           this.openRoute('AppCode');
           break;
 
-        case name === 'SignIn' && isEmailOtp:
-        case name === 'SignUp' && isEmailOtp:
-        case name === 'RegularPassword' && isEmailOtp:
+        case name === 'SignIn' && isEmailOtp && !this.isRemembered:
+        case name === 'SignUp' && isEmailOtp && !this.isRemembered:
+        case name === 'RegularPassword' && isEmailOtp && !this.isRemembered:
           this.openRoute('EmailCode');
           break;
 
+        case name === 'SignIn' && this.isRemembered:
+        case name === 'SignUp' && this.isRemembered:
+        case name === 'RegularPassword' && this.isRemembered:
         case name === 'SmsCode':
         case name === 'AppCode':
         case name === 'EmailCode':
-          this.handleFinishAuthorize();
+          this.finishAuth();
           break;
 
         default:
@@ -188,7 +185,7 @@ export default {
       this.$router.replace({ name }).catch(() => {});
     },
 
-    handleFinishAuthorize() {
+    finishAuth() {
       this.$emit('authorize');
     },
   },

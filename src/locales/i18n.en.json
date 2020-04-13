@@ -103,11 +103,13 @@
       "title": "Disable OTP setting via SMS",
       "titlePhoneNotExist": "You don't have the registered phone number"
     },
+    "rememberCheckbox": {
+      "rememberMe": "Remember me on this device"
+    },
     "regularPasswordForm": {
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?",
-      "title": "Log in to your Endpass account to access site actions",
-      "rememberMe": "Remember Me"
+      "title": "Log in to your Endpass account to access site actions"
     },
     "regularPasswordRecover": {
       "labelCode": "Code from email",

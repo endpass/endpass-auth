@@ -31,7 +31,7 @@ describe('RegularPasswordView', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render pasword form', () => {
+    it('should render password form', () => {
       expect(wrapper.find('[data-test=regular-password-form]').exists()).toBe(
         true,
       );
@@ -67,26 +67,6 @@ describe('RegularPasswordView', () => {
       expect(wrapper.emitted().submit[0]).toEqual([
         {
           password,
-          isRemember: false,
-        },
-      ]);
-    });
-
-    it('should emit submit with remember me flag', async () => {
-      expect(wrapper.emitted().submit).toBeUndefined();
-
-      wrapper.find('[data-test=password-input]').vm.$emit('input', password);
-      wrapper.find('[data-test=remember-me-checkbox]').vm.$emit('input', true);
-
-      await global.flushPromises();
-
-      wrapper.find('[data-test=regular-password-form]').trigger('submit');
-
-      expect(wrapper.emitted().submit.length).toBe(1);
-      expect(wrapper.emitted().submit[0]).toEqual([
-        {
-          password,
-          isRemember: true,
         },
       ]);
     });

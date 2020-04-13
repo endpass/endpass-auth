@@ -26,7 +26,7 @@
         v-model="isRemember"
         data-test="remember-me-checkbox"
       >
-        {{ $t('components.regularPasswordForm.rememberMe') }}
+        {{ $t('components.rememberCheckbox.rememberMe') }}
       </v-checkbox>
     </form-item>
     <form-item class="v-mb-24">

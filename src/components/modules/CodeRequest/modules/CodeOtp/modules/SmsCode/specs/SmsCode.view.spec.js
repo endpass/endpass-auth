@@ -115,7 +115,28 @@ describe('SmsCodeView', () => {
       wrapper.find('[data-test=sms-code-form]').trigger('submit');
 
       expect(wrapper.emitted().submit.length).toBe(1);
-      expect(wrapper.emitted().submit[0]).toEqual([{ code }]);
+      expect(wrapper.emitted().submit[0]).toEqual([
+        { code, isRemember: false },
+      ]);
+    });
+
+    it('should emit submit event with remember', async () => {
+      expect.assertions(4);
+
+      expect(wrapper.emitted().submit).toBeUndefined();
+
+      wrapper.find('[data-test=code-input]').vm.$emit('input', code);
+      wrapper.find('[data-test=remember-me-checkbox]').vm.$emit('input', true);
+      await global.flushPromises();
+
+      expect(
+        wrapper.find('[data-test=submit-button]').attributes().disabled,
+      ).toBeUndefined();
+
+      wrapper.find('[data-test=sms-code-form]').trigger('submit');
+
+      expect(wrapper.emitted().submit.length).toBe(1);
+      expect(wrapper.emitted().submit[0]).toEqual([{ code, isRemember: true }]);
     });
 
     it('should emit send code event', () => {

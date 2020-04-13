@@ -4,7 +4,6 @@
     :email="email"
     :password="password"
     :is-sign-up="isSignUp"
-    :is-remember="isRemember"
     @complete="onComplete"
     @recover="onRecover"
   />
@@ -37,11 +36,6 @@ export default {
     },
 
     isSignUp: {
-      type: Boolean,
-      required: true,
-    },
-
-    isRemember: {
       type: Boolean,
       required: true,
     },

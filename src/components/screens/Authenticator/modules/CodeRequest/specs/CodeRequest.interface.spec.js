@@ -22,7 +22,6 @@ describe('CodeRequestInterface', () => {
         email,
         challengeType: CHALLENGE_TYPES.EMAIL_OTP,
         isSignUp: false,
-        isRemember: false,
       },
     });
   });

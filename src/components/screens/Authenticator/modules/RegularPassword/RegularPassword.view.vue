@@ -8,8 +8,8 @@
     </v-title>
     <form-item>
       <v-input
+        v-model="password"
         v-validate="'required|min:8'"
-        :value="password"
         data-vv-as="password"
         data-vv-name="password"
         :error="errors.first('password')"
@@ -18,7 +18,6 @@
         required
         :placeholder="$t('components.regularPasswordForm.placeholder')"
         data-test="password-input"
-        @input="onPassword"
       />
     </form-item>
     <form-item class="v-mb-24">
@@ -55,16 +54,15 @@ export default {
   name: 'RegularPasswordView',
 
   props: {
-    password: {
-      type: String,
-      required: true,
-    },
-
     error: {
       type: String,
       default: '',
     },
   },
+
+  data: () => ({
+    password: '',
+  }),
 
   watch: {
     error: {
@@ -92,10 +90,6 @@ export default {
 
     onRecover() {
       this.$emit('recover');
-    },
-
-    onPassword(password) {
-      this.$emit('update:password', password);
     },
   },
 
