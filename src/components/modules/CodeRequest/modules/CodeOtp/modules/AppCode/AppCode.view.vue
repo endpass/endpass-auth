@@ -23,12 +23,10 @@
       />
     </form-item>
     <form-item class="v-mb-24">
-      <v-checkbox
+      <v-checkbox-remember
         v-model="isRemember"
         data-test="remember-me-checkbox"
-      >
-        {{ $t('components.rememberCheckbox.rememberMe') }}
-      </v-checkbox>
+      />
     </form-item>
     <form-item class="v-mb-24">
       <v-button
@@ -57,7 +55,6 @@
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import VLink from '@endpass/ui/kit/VLink';
@@ -66,6 +63,7 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
+import VCheckboxRemember from '@/components/common/VCheckboxRemember';
 
 export default {
   name: 'AppCodeView',
@@ -125,6 +123,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    VCheckboxRemember,
     VTitle,
     VDescription,
     VLink,
@@ -132,7 +131,6 @@ export default {
     VInput,
     FormItem,
     FormRow,
-    VCheckbox,
   },
 };
 </script>

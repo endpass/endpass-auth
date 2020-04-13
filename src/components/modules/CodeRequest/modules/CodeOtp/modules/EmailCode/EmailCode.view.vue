@@ -22,12 +22,10 @@
       />
     </form-item>
     <form-item class="v-mb-24">
-      <v-checkbox
+      <v-checkbox-remember
         v-model="isRemember"
         data-test="remember-me-checkbox"
-      >
-        {{ $t('components.rememberCheckbox.rememberMe') }}
-      </v-checkbox>
+      />
     </form-item>
     <form-item class="v-mb-24">
       <v-button
@@ -49,7 +47,6 @@
 </template>
 
 <script>
-import VCheckbox from '@endpass/ui/kit/VCheckbox';
 import VButton from '@endpass/ui/kit/VButton';
 import VInput from '@endpass/ui/kit/VInput';
 import FormItem from '@/components/common/FormItem';
@@ -58,6 +55,7 @@ import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 import SendCode from '@/components/common/SendCode';
+import VCheckboxRemember from '@/components/common/VCheckboxRemember';
 
 export default {
   name: 'EmailCodeView',
@@ -123,7 +121,7 @@ export default {
   mixins: [formMixin],
 
   components: {
-    VCheckbox,
+    VCheckboxRemember,
     SendCode,
     VTitle,
     VDescription,
