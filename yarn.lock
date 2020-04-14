@@ -1722,10 +1722,10 @@
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.18.9":
-  version "0.18.9"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.9.tgz#0c1ecd615966ae7c2ac2a1f82de822eb83123d14"
-  integrity sha512-MUYqSJwfr5MQW/Y1btLq8ZMbYfzHN3NVqIYvzItK8tqVN5BkCp9j/XFpXle4dlysP0qn0jJ2NLETvsldWOnuqw==
+"@endpass/ui@^0.18.14":
+  version "0.18.14"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.14.tgz#b537fa7772546d609aea7b1a96f38e85afbf03ff"
+  integrity sha512-/PJVgHLy2OY6qhu4gIkobaHhlRdhALPflNnwPdao4wR6RciaoWZXihq7HvZSqOBUMMZC2g64OrEBnKnI8rRPSg==
   dependencies:
     dayjs "^1.8.18"
     lodash.chunk "^4.2.0"
