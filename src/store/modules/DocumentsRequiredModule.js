@@ -1,6 +1,6 @@
 import { VuexModule, Module, Action, Mutation } from 'vuex-class-modules';
 import documentsService from '@/service/documents';
-import { DOC_STATUSES } from '@/constants';
+import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
 
 const GOOD_STATUSES = [
   //
@@ -84,8 +84,12 @@ class DocumentsRequiredModule extends VuexModule {
       return;
     }
 
-    this.docRequiredTypes = await documentsService.getRequiredDocumentsTypes(
+    const requiredTypes = await documentsService.getRequiredDocumentsTypes(
       clientId,
+    );
+
+    this.docRequiredTypes = DOC_TYPES_ORDER.filter(docType =>
+      requiredTypes.includes(docType),
     );
   }
 
