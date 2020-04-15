@@ -1,5 +1,8 @@
 <template>
-  <v-checkbox v-model="value">
+  <v-checkbox
+    :model-value="value"
+    @change="onChange"
+  >
     {{ $t('components.rememberCheckbox.rememberMe') }}
   </v-checkbox>
 </template>
@@ -13,7 +16,13 @@ export default {
   props: {
     value: {
       type: Boolean,
-      default: false,
+      required: true,
+    },
+  },
+
+  methods: {
+    onChange(value) {
+      this.$emit('input', value);
     },
   },
 
