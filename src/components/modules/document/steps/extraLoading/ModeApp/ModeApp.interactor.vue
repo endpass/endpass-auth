@@ -37,7 +37,7 @@ export default {
       return this.$options.documentsRequiredStore.isRequiredDocsVerifiedStatus;
     },
 
-    timeout() {
+    pendingTimeout() {
       const extraClientIds = ENV.VUE_APP_EXTRA_TIMEOUT_FOR_CLIENT_IDS;
       const { clientId } = this.$options.documentsRequiredStore;
       if (extraClientIds.includes(clientId)) {
@@ -81,7 +81,7 @@ export default {
         return;
       }
 
-      await new Promise(resolve => setTimeout(resolve, this.timeout));
+      await new Promise(resolve => setTimeout(resolve, this.pendingTimeout));
 
       await this.$options.documentsRequiredStore.loadDocuments();
     } finally {
