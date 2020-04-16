@@ -170,7 +170,7 @@ export const DOC_TYPES = {
 };
 
 /**
- * @type {string[]}
+ * @type { Array<typeof DOC_TYPES[keyof typeof DOC_TYPES]> }
  */
 export const DOC_TYPES_ORDER = [
   DOC_TYPES.PASSPORT,
