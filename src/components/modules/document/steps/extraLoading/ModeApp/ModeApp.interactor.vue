@@ -14,6 +14,8 @@ import { documentsRequiredStore } from '@/store';
 
 const TIMEOUT_MS = 30 * 1000;
 
+const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
+
 export default {
   name: 'ModeAppInteractor',
 
@@ -33,6 +35,16 @@ export default {
   computed: {
     isRequiredDocsVerifiedStatus() {
       return this.$options.documentsRequiredStore.isRequiredDocsVerifiedStatus;
+    },
+
+    pendingTimeout() {
+      const extraClientIds = ENV.VUE_APP_EXTRA_TIMEOUT_FOR_CLIENT_IDS;
+      const { clientId } = this.$options.documentsRequiredStore;
+      if (extraClientIds.includes(clientId)) {
+        return EXTRA_TIMEOUT_MS;
+      }
+
+      return TIMEOUT_MS;
     },
   },
 
@@ -69,7 +81,7 @@ export default {
         return;
       }
 
-      await new Promise(resolve => setTimeout(resolve, TIMEOUT_MS));
+      await new Promise(resolve => setTimeout(resolve, this.pendingTimeout));
 
       await this.$options.documentsRequiredStore.loadDocuments();
     } finally {

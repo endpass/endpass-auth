@@ -23,6 +23,8 @@ class DocumentsRequiredModule extends VuexModule {
 
   docRequiredTypes = [];
 
+  clientId = '';
+
   documentsList = [];
 
   get isNeedUploadDocument() {
@@ -95,6 +97,7 @@ class DocumentsRequiredModule extends VuexModule {
 
   @Action
   async checkRequired({ clientId }) {
+    this.clientId = clientId;
     await Promise.all([
       //
       this.loadRequiredTypes(clientId),
