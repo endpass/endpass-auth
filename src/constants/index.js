@@ -170,6 +170,16 @@ export const DOC_TYPES = {
 };
 
 /**
+ * @type { Array<typeof DOC_TYPES[keyof typeof DOC_TYPES]> }
+ */
+export const DOC_TYPES_ORDER = [
+  DOC_TYPES.PASSPORT,
+  DOC_TYPES.DRIVER_LICENSE,
+  DOC_TYPES.ID_CARD,
+  DOC_TYPES.PROOF_OF_ADDRESS,
+];
+
+/**
  *
  * @type {{
     LOGGED_IN: 'LOGGED_IN',

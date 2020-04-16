@@ -1,13 +1,13 @@
 <template>
   <doc-single-creation
-    :doc-types-list="$options.DOC_TYPES_LIST"
+    :doc-types-list="$options.DOC_TYPES_ORDER"
     :is-doc-type-exist="isDocTypeExist"
   />
 </template>
 
 <script>
 import DocSingleCreation from './DocSingleCreation.container';
-import { DOC_TYPES } from '@/constants';
+import { DOC_TYPES_ORDER } from '@/constants';
 import { channelStore } from '@/store';
 
 export default {
@@ -15,12 +15,7 @@ export default {
 
   channelStore,
 
-  DOC_TYPES_LIST: [
-    DOC_TYPES.PASSPORT,
-    DOC_TYPES.DRIVER_LICENSE,
-    DOC_TYPES.ID_CARD,
-    DOC_TYPES.PROOF_OF_ADDRESS,
-  ],
+  DOC_TYPES_ORDER,
 
   computed: {
     isDocTypeExist() {
