@@ -60,7 +60,7 @@
     "@endpass/class": "^0.19.6",
     "@endpass/connect": "^0.31.4-beta",
     "@endpass/faucet": "^0.2.1",
-    "@endpass/ui": "^0.18.9",
+    "@endpass/ui": "^0.18.14",
     "@endpass/utils": "^1.9.2",
     "@endpass/web3": "^0.0.2-beta",
     "@vue/composition-api": "^0.3.4",

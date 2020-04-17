@@ -2,6 +2,7 @@
   <code-otp
     :challenge-type="challengeType"
     :is-loading="isLoading"
+    :is-phone-exist="$options.authStore.isPhoneExist"
     :email="email"
     :error="error"
     @send-code="sendCode"

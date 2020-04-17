@@ -28,11 +28,11 @@ exports[`SignUpView render should correctly render component 1`] = `
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
     <div>
       By continuing, you agree to Endpass's
-      <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
+      <v-link-stub href="https://endpass.com/terms/" target="_blank" isunderline="true">
         Terms of Service
       </v-link-stub>
       and
-      <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
+      <v-link-stub href="https://endpass.com/privacy/" target="_blank" isunderline="true">
         Privacy Policy
       </v-link-stub>
     </div>
@@ -75,11 +75,11 @@ exports[`SignUpView render should render pasword form 1`] = `
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
     <div>
       By continuing, you agree to Endpass's
-      <v-link-stub isunderline="true" href="https://endpass.com/terms/" target="_blank">
+      <v-link-stub href="https://endpass.com/terms/" target="_blank" isunderline="true">
         Terms of Service
       </v-link-stub>
       and
-      <v-link-stub isunderline="true" href="https://endpass.com/privacy/" target="_blank">
+      <v-link-stub href="https://endpass.com/privacy/" target="_blank" isunderline="true">
         Privacy Policy
       </v-link-stub>
     </div>

@@ -2,6 +2,7 @@
   <component
     :is="currentComponent"
     :is-loading="isLoading"
+    :is-phone-exist="isPhoneExist"
     :error="error"
     :email="email"
     @recover="onRecover"
@@ -46,6 +47,11 @@ export default {
     email: {
       type: String,
       required: true,
+    },
+
+    isPhoneExist: {
+      type: Boolean,
+      default: false,
     },
   },
 

@@ -55,17 +55,11 @@ export default {
         this.isLoading = true;
         this.error = '';
 
-        let isPasswordExist = false;
-
         if (serverMode.type === IDENTITY_MODE.DEFAULT) {
           await this.$options.authStore.loadAuthChallenge({ email });
-
-          isPasswordExist = await this.$options.authStore.checkRegularPassword(
-            email,
-          );
         }
 
-        this.$emit('sign-in', { email, serverMode, isPasswordExist });
+        this.$emit('sign-in', { email, serverMode });
       } catch (error) {
         this.error = this.$i18n.t('components.compositeAuth.authFailed');
       } finally {
@@ -75,11 +69,7 @@ export default {
 
     async onSocial({ email }) {
       if (SING_IN_CHALLENGE_TYPES.includes(this.challengeType)) {
-        const isPasswordExist = await this.$options.authStore.checkRegularPassword(
-          email,
-        );
-
-        this.$emit('sign-in', { email, isPasswordExist });
+        this.$emit('sign-in', { email });
         return;
       }
 

@@ -35,6 +35,10 @@ class AuthModule extends VuexModule {
 
   isLogin = false;
 
+  isPhoneExist = false;
+
+  isPasswordExist = false;
+
   isPermission = false;
 
   constructor(props, { sharedStore }) {
@@ -79,6 +83,8 @@ class AuthModule extends VuexModule {
       settingsService.clearLocalSettings();
 
       this.challengeType = get(res, 'challenge.challengeType');
+      this.isPhoneExist = get(res, 'hasPhone');
+      this.isPasswordExist = get(res, 'hasPassword');
     } finally {
       this.sharedStore.changeLoadingStatus(false);
     }

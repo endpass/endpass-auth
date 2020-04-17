@@ -108,7 +108,6 @@ describe('SignInInteractor', () => {
             [
               {
                 email,
-                isPasswordExist: true,
               },
             ],
           ]);
@@ -154,7 +153,6 @@ describe('SignInInteractor', () => {
           const defaultParams = {
             email,
             serverMode: defaultServerMode,
-            isPasswordExist: true,
           };
 
           identityService.checkRegularPassword.mockResolvedValueOnce(true);
@@ -178,19 +176,6 @@ describe('SignInInteractor', () => {
           expect(authService.getAuthChallenge).toBeCalledTimes(1);
           expect(authService.getAuthChallenge).toBeCalledWith(email);
         });
-
-        it('should check password existance', async () => {
-          expect.assertions(3);
-
-          // identityService.checkRegularPassword.mockResolvedValueOnce(true)
-          expect(identityService.checkRegularPassword).not.toBeCalled();
-
-          wrapper.find(SignInView).vm.$emit('submit', defaultEventParams);
-          await global.flushPromises();
-
-          expect(identityService.checkRegularPassword).toBeCalledTimes(1);
-          expect(identityService.checkRegularPassword).toBeCalledWith(email);
-        });
       });
 
       describe('not default auth mode', () => {
@@ -210,7 +195,6 @@ describe('SignInInteractor', () => {
           const defaultParams = {
             email,
             serverMode: notDefaultServerMode,
-            isPasswordExist: false,
           };
 
           expect(wrapper.emitted()['sign-in']).toBeUndefined();

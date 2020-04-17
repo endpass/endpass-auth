@@ -3,6 +3,7 @@
     :challenge-type="challengeType"
     :email="email"
     :is-loading="isLoading"
+    :is-phone-exist="isPhoneExist"
     :error="error"
     @send-code="onSendCode"
     @recover="onRecover"
@@ -38,6 +39,11 @@ export default {
 
     email: {
       type: String,
+      required: true,
+    },
+
+    isPhoneExist: {
+      type: Boolean,
       required: true,
     },
   },

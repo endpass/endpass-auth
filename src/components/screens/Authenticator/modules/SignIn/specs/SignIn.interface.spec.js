@@ -43,7 +43,6 @@ describe('SignInInterface', () => {
       const params = {
         email,
         serverMode: false,
-        isPasswordExist: false,
         isSignUp: false,
       };
 

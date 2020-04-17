@@ -32,8 +32,8 @@ export default {
       this.$emit('switch', { to: 'sign-up' });
     },
 
-    onSignIn({ email, serverMode, isPasswordExist, isSignUp = false }) {
-      this.$emit('complete', { email, serverMode, isPasswordExist, isSignUp });
+    onSignIn({ email, serverMode, isSignUp = false }) {
+      this.$emit('complete', { email, serverMode, isSignUp });
     },
 
     onSocial() {
