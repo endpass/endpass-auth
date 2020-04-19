@@ -3,6 +3,7 @@
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
     :is-has-bad-status="isHasBadStatus"
+    :is-all-required-uploaded="isAllRequiredUploaded"
     :selected-document-type.sync="selectedDocumentType"
     :document-id.sync="documentId"
     :status.sync="status"
@@ -29,6 +30,11 @@ export default {
     },
 
     isHasBadStatus: {
+      type: Boolean,
+      required: true,
+    },
+
+    isAllRequiredUploaded: {
       type: Boolean,
       required: true,
     },

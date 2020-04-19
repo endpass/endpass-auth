@@ -45,6 +45,11 @@ export default {
       required: true,
     },
 
+    isAllRequiredUploaded: {
+      type: Boolean,
+      required: true,
+    },
+
     selectedDocumentType: {
       type: String,
       required: true,
@@ -104,15 +109,16 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload':
-          this.currentComponent = 'mode-app';
-          break;
-
+        case this.currentComponent === 'upload' && !this.isAllRequiredUploaded:
         case this.currentComponent === 'mode-app':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');
           this.$emit('update:status', '');
           this.currentComponent = 'document-types';
+          break;
+
+        case this.currentComponent === 'upload':
+          this.currentComponent = 'mode-app';
           break;
 
         default:
