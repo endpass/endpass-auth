@@ -46,18 +46,10 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
-  get isHasBadStatus() {
-    const isGoodStatuses = this.docRequiredTypes.every(type => {
+  get isAllHasAppropriateStatus() {
+    return this.docRequiredTypes.every(type => {
       const status = this.docTypeToStatus[type];
       return GOOD_STATUSES.includes(status);
-    });
-
-    return !isGoodStatuses;
-  }
-
-  get isAllRequiredUploaded() {
-    return this.docRequiredTypes.every(type => {
-      return !!this.docTypeToStatus[type];
     });
   }
 

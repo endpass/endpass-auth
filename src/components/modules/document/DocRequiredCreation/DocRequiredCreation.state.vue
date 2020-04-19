@@ -2,8 +2,7 @@
   <doc-required-creation
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
-    :is-has-bad-status="isHasBadStatus"
-    :is-all-required-uploaded="isAllRequiredUploaded"
+    :is-all-has-appropriate-status="isAllHasAppropriateStatus"
     :selected-document-type.sync="selectedDocumentType"
     :document-id.sync="documentId"
     :status.sync="status"
@@ -29,12 +28,7 @@ export default {
       required: true,
     },
 
-    isHasBadStatus: {
-      type: Boolean,
-      required: true,
-    },
-
-    isAllRequiredUploaded: {
+    isAllHasAppropriateStatus: {
       type: Boolean,
       required: true,
     },
