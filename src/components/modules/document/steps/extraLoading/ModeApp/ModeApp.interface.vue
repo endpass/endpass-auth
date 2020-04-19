@@ -1,6 +1,6 @@
 <template>
   <mode-app
-    :is-has-bad-status="isHasBadStatus"
+    :is-all-has-appropriate-status="isAllHasAppropriateStatus"
     @continue="onContinue"
     @create="onCreate"
   />
@@ -13,7 +13,7 @@ export default {
   name: 'ModeAppInterface',
 
   props: {
-    isHasBadStatus: {
+    isAllHasAppropriateStatus: {
       type: Boolean,
       required: true,
     },

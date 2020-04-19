@@ -9,7 +9,7 @@
       :doc-type-to-status="docTypeToStatus"
       :doc-types-list="docTypesList"
       :selected-document-type="selectedDocumentType"
-      :is-has-bad-status="isHasBadStatus"
+      :is-all-has-appropriate-status="isAllHasAppropriateStatus"
       :is-show-status="true"
       @next="onNext"
       @create="onCreate"
@@ -40,12 +40,7 @@ export default {
       required: true,
     },
 
-    isHasBadStatus: {
-      type: Boolean,
-      required: true,
-    },
-
-    isAllRequiredUploaded: {
+    isAllHasAppropriateStatus: {
       type: Boolean,
       required: true,
     },
@@ -68,7 +63,9 @@ export default {
 
   data() {
     return {
-      currentComponent: this.isHasBadStatus ? 'document-types' : 'mode-app',
+      currentComponent: this.isAllHasAppropriateStatus
+        ? 'mode-app'
+        : 'document-types',
     };
   },
 
@@ -109,7 +106,8 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload' && !this.isAllRequiredUploaded:
+        case this.currentComponent === 'upload' &&
+          !this.isAllHasAppropriateStatus:
         case this.currentComponent === 'mode-app':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');

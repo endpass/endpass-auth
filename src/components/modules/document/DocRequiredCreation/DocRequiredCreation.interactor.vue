@@ -2,9 +2,8 @@
   <doc-required-creation
     :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
     :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
-    :is-has-bad-status="$options.documentsRequiredStore.isHasBadStatus"
-    :is-all-required-uploaded="
-      $options.documentsRequiredStore.isAllRequiredUploaded
+    :is-all-has-appropriate-status="
+      $options.documentsRequiredStore.isAllHasAppropriateStatus
     "
     @create="onCreate"
     @cancel="onCancel"

@@ -22,7 +22,7 @@ export default {
   documentsRequiredStore,
 
   props: {
-    isHasBadStatus: {
+    isAllHasAppropriateStatus: {
       type: Boolean,
       required: true,
     },
@@ -50,7 +50,7 @@ export default {
 
   methods: {
     onContinue() {
-      if (this.isHasBadStatus) {
+      if (!this.isAllHasAppropriateStatus) {
         this.$emit('continue');
         return;
       }
@@ -72,11 +72,11 @@ export default {
     try {
       this.isLoading = true;
 
-      if (this.isHasBadStatus) {
+      if (!this.isAllHasAppropriateStatus) {
         await this.$options.documentsRequiredStore.loadDocuments();
       }
 
-      if (this.isHasBadStatus) {
+      if (!this.isAllHasAppropriateStatus) {
         this.isLoading = false;
         return;
       }
