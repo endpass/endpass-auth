@@ -10,7 +10,7 @@
         v-bind="$attrs"
         :is-closable="isClosable"
         :is-returnable="isReturnable"
-        :is-remembered="isRemembered"
+        :is-device-remembered="isDeviceRemembered"
         :challenge-type="challengeType"
         @complete="onComplete"
         @switch="onSwitch"
@@ -41,7 +41,7 @@ export default {
       },
     },
 
-    isRemembered: {
+    isDeviceRemembered: {
       type: Boolean,
       default: false,
     },
@@ -133,27 +133,29 @@ export default {
           this.replaceRoute('EmailCode');
           break;
 
-        case name === 'SignIn' && isSmsOtp && !this.isRemembered:
-        case name === 'SignUp' && isSmsOtp && !this.isRemembered:
-        case name === 'RegularPassword' && isSmsOtp && !this.isRemembered:
+        case name === 'SignIn' && isSmsOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isSmsOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' && isSmsOtp && !this.isDeviceRemembered:
           this.openRoute('SmsCode');
           break;
 
-        case name === 'SignIn' && isAppOtp && !this.isRemembered:
-        case name === 'SignUp' && isAppOtp && !this.isRemembered:
-        case name === 'RegularPassword' && isAppOtp && !this.isRemembered:
+        case name === 'SignIn' && isAppOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isAppOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' && isAppOtp && !this.isDeviceRemembered:
           this.openRoute('AppCode');
           break;
 
-        case name === 'SignIn' && isEmailOtp && !this.isRemembered:
-        case name === 'SignUp' && isEmailOtp && !this.isRemembered:
-        case name === 'RegularPassword' && isEmailOtp && !this.isRemembered:
+        case name === 'SignIn' && isEmailOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isEmailOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' &&
+          isEmailOtp &&
+          !this.isDeviceRemembered:
           this.openRoute('EmailCode');
           break;
 
-        case name === 'SignIn' && this.isRemembered:
-        case name === 'SignUp' && this.isRemembered:
-        case name === 'RegularPassword' && this.isRemembered:
+        case name === 'SignIn' && this.isDeviceRemembered:
+        case name === 'SignUp' && this.isDeviceRemembered:
+        case name === 'RegularPassword' && this.isDeviceRemembered:
         case name === 'SmsCode':
         case name === 'AppCode':
         case name === 'EmailCode':

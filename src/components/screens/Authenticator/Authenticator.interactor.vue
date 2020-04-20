@@ -39,8 +39,8 @@ export default {
       return this.$options.authStore.isPasswordExist;
     },
 
-    isRemembered() {
-      return this.$options.authStore.isRemembered;
+    isDeviceRemembered() {
+      return this.$options.authStore.isDeviceRemembered;
     },
   },
 
@@ -59,9 +59,9 @@ export default {
       immediate: true,
     },
 
-    isRemembered: {
+    isDeviceRemembered: {
       handler(newVal) {
-        this.$emit('update:is-remembered', newVal);
+        this.$emit('update:is-device-remembered', newVal);
         if (newVal) {
           this.$emit('update:is-remember', newVal);
         }

@@ -26,7 +26,7 @@ export default {
       required: true,
     },
 
-    isRemembered: {
+    isDeviceRemembered: {
       type: Boolean,
       required: true,
     },
@@ -41,7 +41,7 @@ export default {
     async onSubmit({ password }) {
       if (this.isLoading) return;
 
-      if (this.isRemembered) {
+      if (this.isDeviceRemembered) {
         await this.auth({ password });
       }
 

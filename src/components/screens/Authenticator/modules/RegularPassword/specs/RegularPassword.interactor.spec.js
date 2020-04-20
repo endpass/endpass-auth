@@ -17,7 +17,7 @@ describe('RegularPassword', () => {
   const defaultProps = {
     email: 'email',
     isSignUp: false,
-    isRemembered: false,
+    isDeviceRemembered: false,
   };
 
   const createWrapper = options => {
@@ -72,7 +72,7 @@ describe('RegularPassword', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isRemembered: true,
+          isDeviceRemembered: true,
         },
       });
 
@@ -95,7 +95,7 @@ describe('RegularPassword', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isRemembered: true,
+          isDeviceRemembered: true,
         },
       });
 
@@ -119,7 +119,7 @@ describe('RegularPassword', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isRemembered: true,
+          isDeviceRemembered: true,
         },
       });
 
@@ -137,7 +137,7 @@ describe('RegularPassword', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isRemembered: true,
+          isDeviceRemembered: true,
         },
       });
 

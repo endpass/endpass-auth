@@ -18,7 +18,7 @@ describe('RegularPasswordInterface', () => {
       i18n,
       propsData: {
         isSignUp: false,
-        isRemembered: false,
+        isDeviceRemembered: false,
         email: '',
       },
     });
