@@ -4,7 +4,6 @@
     :email.sync="email"
     :server-mode.sync="serverMode"
     :password.sync="password"
-    :is-remember.sync="isRemember"
     :is-device-remembered.sync="isDeviceRemembered"
     :is-password-exist.sync="isPasswordExist"
     :is-sign-up.sync="isSignUp"
@@ -25,7 +24,6 @@ export default {
     email: '',
     serverMode: {},
     password: '',
-    isRemember: false,
     isDeviceRemembered: false,
     isPasswordExist: false,
     isSignUp: false,
