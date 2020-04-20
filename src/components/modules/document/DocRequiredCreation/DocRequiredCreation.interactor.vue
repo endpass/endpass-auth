@@ -1,10 +1,8 @@
 <template>
   <doc-required-creation
-    :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
-    :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
-    :is-all-has-appropriate-status="
-      $options.documentsRequiredStore.isAllHasAppropriateStatus
-    "
+    :doc-types-list="docTypesList"
+    :doc-type-to-status="docTypeToStatus"
+    :is-all-has-appropriate-status="isAllHasAppropriateStatus"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -12,33 +10,45 @@
 
 <script>
 import DocRequiredCreation from './DocRequiredCreation.state';
-import createDocumentRequiredController from './DocumentRequiredController';
-
-import { documentsRequiredStore } from '@/store';
 
 export default {
   name: 'DocRequiredCreationInteractor',
 
-  documentsRequiredStore,
+  inject: ['gateway'],
 
-  docRequiredController: createDocumentRequiredController(),
+  props: {
+    docTypesList: {
+      type: Array,
+      required: true,
+    },
+
+    docTypeToStatus: {
+      type: Object,
+      required: true,
+    },
+
+    isAllHasAppropriateStatus: {
+      type: Boolean,
+      required: true,
+    },
+  },
 
   methods: {
     onCancel() {
-      this.$options.docRequiredController.cancelCreate();
+      this.gateway.cancelCreate();
     },
 
     onCreate() {
-      this.$options.docRequiredController.finishCreate();
+      this.gateway.finishCreate();
     },
   },
 
   beforeMount() {
-    this.$options.documentsRequiredStore.initEvents();
+    this.gateway.initEvents();
   },
 
   beforeDestroy() {
-    this.$options.documentsRequiredStore.stopEvents();
+    this.gateway.stopEvents();
   },
 
   components: {

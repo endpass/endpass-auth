@@ -7,7 +7,7 @@ import Answer from '@/class/Answer';
 const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
-class DocumentRequiredController extends VuexModule {
+class DocRequiredCreationController extends VuexModule {
   @Action
   cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
@@ -21,4 +21,4 @@ class DocumentRequiredController extends VuexModule {
   }
 }
 
-export default () => createController(DocumentRequiredController);
+export default () => createController(DocRequiredCreationController);
