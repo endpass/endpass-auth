@@ -1,6 +1,7 @@
 import { VuexModule, Module, Action, Mutation } from 'vuex-class-modules';
 import documentsService from '@/service/documents';
-import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
+import eventChannel from '@/class/singleton/eventChannel';
+import { DOC_STATUSES, DOC_TYPES_ORDER, NOTIFY_SERVER } from '@/constants';
 
 const GOOD_STATUSES = [
   //
@@ -161,6 +162,27 @@ class DocumentsRequiredModule extends VuexModule {
    * @param {string} params.clientId
    * @returns {Promise<{isNeedUploadDocument: boolean}>}
    */
+  @Action
+  async initEvents() {
+    eventChannel.initEvents();
+    const iterator = eventChannel.getEventIterator([
+      NOTIFY_SERVER.USER_DOCUMENT_STATUS_UPDATED,
+    ]);
+    for await (const { eventType, payload } of iterator) {
+      await this.updateDocStatus({ eventType, payload });
+    }
+  }
+
+  @Action
+  async updateDocStatus(/* { eventType, payload } */) {
+    // TODO: add update doc status here
+  }
+
+  @Action
+  async stopEvents() {
+    await eventChannel.stopEvents();
+  }
+
   @Action
   async checkRequired({ clientId }) {
     this.clientId = clientId;

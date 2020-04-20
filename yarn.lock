@@ -4142,7 +4142,7 @@ callbag-create@^1.1.1:
   resolved "https://registry.yarnpkg.com/callbag-create/-/callbag-create-1.1.1.tgz#328719f7d10f105846d83d2ca9e45c996093f7f2"
   integrity sha512-9j1aiW7wlGwB/GXjnlRaqrikhB3zuatdl0YE1x6dZFN/HSuYcbo9u9LmtiB684+jlpfzzUssDJm4slztHCyXcA==
 
-callbag-filter@1:
+callbag-filter@1, callbag-filter@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/callbag-filter/-/callbag-filter-1.1.0.tgz#d3116bf839702e859ee7e76eb9525925a6bff8b3"
   integrity sha512-m6ZHEd9JYHBAYJAdeqgt3gIKSoZOizfJTxIPd8EvDwY8Dr44+slm090WvCrrlz2SZoU8mCqpmZ8TFrGKXHo/yw==

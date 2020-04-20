@@ -33,6 +33,14 @@ export default {
     },
   },
 
+  beforeMount() {
+    this.$options.documentsRequiredStore.initEvents();
+  },
+
+  beforeDestroy() {
+    this.$options.documentsRequiredStore.stopEvents();
+  },
+
   components: {
     DocRequiredCreation,
   },

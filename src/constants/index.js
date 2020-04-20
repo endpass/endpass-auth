@@ -180,6 +180,16 @@ export const DOC_TYPES_ORDER = [
 ];
 
 /**
+ * Notify server
+ * @type {{
+    USER_DOCUMENT_STATUS_UPDATED: 'user:document:status:updated',
+  }}
+ */
+export const NOTIFY_SERVER = {
+  USER_DOCUMENT_STATUS_UPDATED: 'user:document:status:updated',
+};
+
+/**
  *
  * @type {{
     LOGGED_IN: 'LOGGED_IN',

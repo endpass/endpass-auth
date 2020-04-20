@@ -66,6 +66,7 @@
     "@vue/composition-api": "^0.5.0",
     "axios": "^0.19.2",
     "bignumber.js": "^9.0.0",
+    "callbag-filter": "^1.1.0",
     "callbag-from-event-pattern": "^1.0.0",
     "callbag-map": "^1.1.0",
     "callbag-pipe": "^1.2.0",
