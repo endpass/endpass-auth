@@ -17,6 +17,10 @@ const PRIORITY = {
   [DOC_STATUSES.RECOGNITION]: 6,
 };
 
+/**
+ * @typedef { import("@/constants").DOC_TYPES } DOC_TYPES
+ */
+
 @Module({ generateMutationSetters: true })
 class DocumentsRequiredModule extends VuexModule {
   docTypeToStatus = {};
@@ -27,6 +31,9 @@ class DocumentsRequiredModule extends VuexModule {
 
   documentsList = [];
 
+  /**
+   * @returns {boolean}
+   */
   get isNeedUploadDocument() {
     if (this.docRequiredTypes.length === 0) {
       return false;
@@ -39,6 +46,9 @@ class DocumentsRequiredModule extends VuexModule {
     return !this.isRequiredDocsVerifiedStatus;
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isRequiredDocsVerifiedStatus() {
     return this.docRequiredTypes.every(type => {
       const status = this.docTypeToStatus[type];
@@ -46,6 +56,9 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isAllHasAppropriateStatus() {
     return this.docRequiredTypes.every(type => {
       const status = this.docTypeToStatus[type];
@@ -53,17 +66,43 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
+  /**
+   *
+   * @param {{}} docTypeToStatus
+   * @param {keyof typeof DOC_TYPES} documentType
+   * @param {keyof typeof DOC_STATUSES} status
+   * @returns {boolean}
+   */
+  isStatusAppliedToDocType(docTypeToStatus, documentType, status) {
+    if (!this.docRequiredTypes.includes(documentType)) {
+      return false;
+    }
+
+    const currentStatus = docTypeToStatus[documentType];
+
+    if (!currentStatus) {
+      return true;
+    }
+
+    if (PRIORITY[status] > PRIORITY[currentStatus]) {
+      return false;
+    }
+
+    return true;
+  }
+
+  /**
+   * @private
+   */
   @Mutation
   updateDocTypeToStatus() {
     this.docTypeToStatus = this.documentsList.reduce((statusMap, document) => {
       const { documentType, status } = document;
-      if (!this.docRequiredTypes.includes(documentType)) {
+
+      if (!this.isStatusAppliedToDocType(statusMap, documentType, status)) {
         return statusMap;
       }
-      const currentStatus = statusMap[documentType];
-      if (PRIORITY[status] > PRIORITY[currentStatus]) {
-        return statusMap;
-      }
+
       return {
         ...statusMap,
         [documentType]: status,
@@ -71,6 +110,25 @@ class DocumentsRequiredModule extends VuexModule {
     }, {});
   }
 
+  /**
+   *
+   * @param {object} params
+   * @param {keyof typeof DOC_TYPES} params.documentType
+   * @param {keyof typeof DOC_STATUSES} params.status
+   * @returns {Promise<void>}
+   */
+  @Action
+  async changeDocTypeStatus({ documentType, status }) {
+    if (
+      this.isStatusAppliedToDocType(this.docTypeToStatus, documentType, status)
+    ) {
+      this.docTypeToStatus[documentType] = status;
+    }
+  }
+
+  /**
+   * @returns {Promise<void>}
+   */
   @Action
   async loadDocuments() {
     const { items } = await documentsService.getDocumentsList();
@@ -78,6 +136,10 @@ class DocumentsRequiredModule extends VuexModule {
     this.updateDocTypeToStatus();
   }
 
+  /**
+   * @param {string} clientId
+   * @returns {Promise<void>}
+   */
   @Action
   async loadRequiredTypes(clientId) {
     if (this.docRequiredTypes.length) {
@@ -93,6 +155,12 @@ class DocumentsRequiredModule extends VuexModule {
     );
   }
 
+  /**
+   *
+   * @param {object} params
+   * @param {string} params.clientId
+   * @returns {Promise<{isNeedUploadDocument: boolean}>}
+   */
   @Action
   async checkRequired({ clientId }) {
     this.clientId = clientId;

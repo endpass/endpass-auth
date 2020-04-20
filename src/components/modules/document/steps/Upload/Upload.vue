@@ -7,7 +7,6 @@
     <sides
       :document-type="selectedDocumentType"
       v-on="$listeners"
-      @toggle="onToggle"
       @confirm="onConfirm"
       @cancel="onCancel"
     />
@@ -32,10 +31,6 @@ export default {
   },
 
   methods: {
-    onToggle() {
-      this.$emit('side-changed');
-    },
-
     onCancel() {
       this.$emit('cancel');
     },

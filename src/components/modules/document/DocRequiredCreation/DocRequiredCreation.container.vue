@@ -22,9 +22,9 @@
 import DocLayout from '@/components/modules/document/DocLayout';
 
 import ModeApp from '@/components/modules/document/steps/extraLoading/ModeApp';
-import Upload from '@/components/modules/document/steps/Upload';
 import DocumentTypes from '@/components/modules/document/steps/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
+import Upload from './modules/UploadRequired';
 
 export default {
   name: 'DocRequiredCreationContainer',
