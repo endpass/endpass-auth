@@ -7,11 +7,6 @@ const VALUE = Symbol('value');
 
 export default class NonReactive {
   /**
-   * @type {any}
-   */
-  [VALUE] = undefined;
-
-  /**
    * @param {T} value
    */
   constructor(value) {

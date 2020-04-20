@@ -1,5 +1,6 @@
 // @ts-check
 import { VuexModule, Action, Module, Mutation } from 'vuex-class-modules';
+import get from 'lodash/get';
 import createController from '@/controllers/createController';
 import i18n from '@/locales/i18n';
 
@@ -89,7 +90,7 @@ class BackSideController extends VuexModule {
    * @param {object} e
    */
   createError(e) {
-    const respCode = e.response && e.response.status;
+    const respCode = get(e, 'response.status');
     const res = new Error(
       UPLOAD_CODE_ERRORS[respCode] || UPLOAD_CODE_ERRORS.default,
     );

@@ -4137,6 +4137,11 @@ callbag-concat@1:
   dependencies:
     callbag "^1.2.0"
 
+callbag-create@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/callbag-create/-/callbag-create-1.1.1.tgz#328719f7d10f105846d83d2ca9e45c996093f7f2"
+  integrity sha512-9j1aiW7wlGwB/GXjnlRaqrikhB3zuatdl0YE1x6dZFN/HSuYcbo9u9LmtiB684+jlpfzzUssDJm4slztHCyXcA==
+
 callbag-filter@1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/callbag-filter/-/callbag-filter-1.1.0.tgz#d3116bf839702e859ee7e76eb9525925a6bff8b3"
@@ -4162,6 +4167,13 @@ callbag-for-each@1:
   integrity sha512-/FKC/dd3hnw/M1G5mlZrz/+UbtHYPz5PsmmBvpthNb67v6XuQlT93BzxQDxRHAalAjsOci8ZqoYFgmmJxwGhvg==
   dependencies:
     callbag "^1.1.0"
+
+callbag-from-event-pattern@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-from-event-pattern/-/callbag-from-event-pattern-1.0.0.tgz#f09f652c31430cd52825e8e7b25151de8cd05975"
+  integrity sha512-c0+WvmEDu+ARa57fVhqQzV25y/bWJWeXjpk/2GILR7X6yEDjSbEbh6rloUDtBzEWe0FiZb+hnhqQzZLDzL1DqA==
+  dependencies:
+    callbag-create "^1.1.1"
 
 callbag-from-event@1:
   version "1.2.1"
@@ -4205,7 +4217,7 @@ callbag-map-promise@^0.1.3:
     callbag-from-promise "^1.0.0"
     callbag-pipe "^1.1.1"
 
-callbag-map@1:
+callbag-map@1, callbag-map@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/callbag-map/-/callbag-map-1.1.0.tgz#6ddd28a3f634fbd2394ef136a181b4ba5e3b062c"
   integrity sha512-/xFzvJCtx1xulZpFeI4wq+ZD7tkg417XOeJ3wS9v8bHLLpt+fHKXgbZ8TBnnIxywJN6Uu/ZhL+c1DzUG6KXYFQ==
@@ -4217,7 +4229,7 @@ callbag-merge@2:
   resolved "https://registry.yarnpkg.com/callbag-merge/-/callbag-merge-2.0.1.tgz#69c2c031fdb40964fe766399fb5af21f50d3270e"
   integrity sha512-Kl6JQ8Swc7DBuIL+Yjkgm92l82vrD2yQCNZHO8M8o6zVI+a0/RAAPLD5qrnGA1WwHLOOD6xAYsm0gzfzAJ3hkA==
 
-callbag-pipe@1, callbag-pipe@^1.1.1:
+callbag-pipe@1, callbag-pipe@^1.1.1, callbag-pipe@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/callbag-pipe/-/callbag-pipe-1.2.0.tgz#7c00f47774da0096a7c5afa8a14f7873b5be1daf"
   integrity sha512-M+LdHUK0qJkm4CRe+I870ZzD/SnzcpTsfJRzFoB2hOkNXlrVdoj002KMkfdS4pHMfV6egzZFd8j+xJu6C4kwEQ==
@@ -4273,6 +4285,11 @@ callbag-tap@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/callbag-tap/-/callbag-tap-1.3.0.tgz#d35eb002deb35979cf388c3532d95fa9348e2cf2"
   integrity sha512-K2SarqzmLgl2OuzPQY7sQc9JzJ/n3C9Xkug4bLJfuecnhTTv6+y7O1JJ5ky4yXyYZ1eWkMrztnheQhs62wBPhw==
+
+callbag-to-async-iterable@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/callbag-to-async-iterable/-/callbag-to-async-iterable-1.0.0.tgz#d2ed65831a91e4ed9e23b4a37187370b9fad3cb8"
+  integrity sha512-+N53OaDKIq/LfZf20IkoiltbYx/8RI6d+j8A9vaYP5/VsoxXFKscz9Mz6JaBprb1I/PVq1b9CKOrTe7ESxiPVw==
 
 callbag@1, callbag@^1.1.0, callbag@^1.2.0:
   version "1.2.0"
@@ -14591,10 +14608,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^3.6.4:
-  version "3.6.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.6.4.tgz#b18752bb3792bc1a0281335f7f6ebf1bbfc5b91d"
-  integrity sha512-unoCll1+l+YK4i4F8f22TaNVPRHcD9PA3yCuZ8g5e0qGqlVlJ/8FSateOLLSagn+Yg5+ZwuPkL8LFUc0Jcvksg==
+typescript@^3.8.3:
+  version "3.8.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.8.3.tgz#409eb8544ea0335711205869ec458ab109ee1061"
+  integrity sha512-MYlEfn5VrLNsgudQTVJeNaQFUAI7DkhnOjdpAp4T+ku1TfQClewlbSuTVHiA+8skNBgaf02TL/kLOvig4y3G8w==
 
 u2f-api@0.2.7:
   version "0.2.7"
@@ -14851,11 +14868,6 @@ utility-types@^3.10.0:
   version "3.10.0"
   resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.10.0.tgz#ea4148f9a741015f05ed74fd615e1d20e6bed82b"
   integrity sha512-O11mqxmi7wMKCo6HKFt5AhO4BwY3VV68YU07tgxfz8zJTIxr4BpsezN49Ffwy9j3ZpwwJp4fkRwjRzq3uWE6Rg==
-
-utility-types@^3.9.0:
-  version "3.9.0"
-  resolved "https://registry.yarnpkg.com/utility-types/-/utility-types-3.9.0.tgz#c322d974e7062ec967077384c3b75077a955d83b"
-  integrity sha512-bUUsGr7NuI1p/6GpDCI/PUCJ1y5KWO4xul8RWOcmUwXSjLoi6WoV9YLNqBF7lH4RRy/jgmhYCE49eM0bnaijMQ==
 
 utils-merge@1.0.1:
   version "1.0.1"

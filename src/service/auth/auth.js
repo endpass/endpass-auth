@@ -9,7 +9,9 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 const TIMEOUT_DEFAULT = 1500;
 
 /**
- * @type {object}
+ * @type {{
+  [key: number]: any
+  }}
  */
 const CODE_TO_STATUS = {
   200: AUTH_STATUS_CODE.LOGGED_IN,
@@ -18,7 +20,7 @@ const CODE_TO_STATUS = {
 };
 
 /**
- * @param {Promise} promise
+ * @param {Promise<any>} promise
  * @return {Promise<any>}
  */
 const withSuccess = promise => {
