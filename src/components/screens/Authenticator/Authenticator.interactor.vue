@@ -62,9 +62,6 @@ export default {
     isDeviceRemembered: {
       handler(newVal) {
         this.$emit('update:is-device-remembered', newVal);
-        if (newVal) {
-          this.$emit('update:is-remember', newVal);
-        }
       },
       immediate: true,
     },
