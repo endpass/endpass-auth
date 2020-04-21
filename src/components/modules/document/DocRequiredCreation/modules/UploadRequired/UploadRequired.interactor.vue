@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Upload from '@/components/modules/document/steps/Upload';
+import Upload from '@/components/modules/document/common/Upload';
 import { documentsRequiredStore } from '@/store';
 
 export default {

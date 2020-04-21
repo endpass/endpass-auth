@@ -4,7 +4,7 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 
-import BackSide from '@/components/modules/document/steps/Upload/Sides/BackSide/BackSide';
+import BackSide from '@/components/modules/document/common/Upload/Sides/BackSide/BackSide';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES } from '@/constants';
 

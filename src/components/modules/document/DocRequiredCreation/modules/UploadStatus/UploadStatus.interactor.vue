@@ -1,6 +1,6 @@
 <template>
-  <mode-layout
-    :is-loading="isLoading"
+  <upload-status-layout
+    :is-pending="isPending"
     :is-verified="isRequiredDocsVerifiedStatus"
     @continue="onContinue"
     @create="onCreate"
@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import ModeLayout from '../ModeLayout';
+import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
 
 import { documentsRequiredStore } from '@/store';
 
@@ -17,19 +17,12 @@ const TIMEOUT_MS = 30 * 1000;
 const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
 
 export default {
-  name: 'ModeAppInteractor',
+  name: 'UploadStatusInteractor',
 
   documentsRequiredStore,
 
-  props: {
-    isAllHasAppropriateStatus: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   data: () => ({
-    isLoading: true,
+    isPending: true,
   }),
 
   computed: {
@@ -65,19 +58,19 @@ export default {
 
   async mounted() {
     if (this.isRequiredDocsVerifiedStatus) {
-      this.isLoading = false;
+      this.isPending = false;
       return;
     }
 
     try {
-      this.isLoading = true;
+      this.isPending = true;
 
-      if (!this.isAllHasAppropriateStatus) {
+      if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
         await this.$options.documentsRequiredStore.loadDocuments();
       }
 
-      if (!this.isAllHasAppropriateStatus) {
-        this.isLoading = false;
+      if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
+        this.isPending = false;
         return;
       }
 
@@ -85,12 +78,12 @@ export default {
 
       await this.$options.documentsRequiredStore.loadDocuments();
     } finally {
-      this.isLoading = false;
+      this.isPending = false;
     }
   },
 
   components: {
-    ModeLayout,
+    UploadStatusLayout,
   },
 };
 </script>

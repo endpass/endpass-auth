@@ -7,6 +7,7 @@
       :is="currentComponent"
       :doc-types-list="docTypesList"
       :document-id="documentId"
+      :status="status"
       :selected-document-type="selectedDocumentType"
       :is-show-status="false"
       @next="onNext"
@@ -18,11 +19,9 @@
 
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
-import { DOC_STATUSES } from '@/constants';
 
-import ExtraLoadingDocument from '@/components/modules/document/steps/extraLoading/ModeDocument';
-import Success from '@/components/modules/document/steps/Success';
-import Upload from '@/components/modules/document/steps/Upload';
+import UploadStatus from '@/components/modules/document/DocSingleCreation/modules/UploadStatus';
+import Upload from '@/components/modules/document/common/Upload';
 
 export default {
   name: 'DocSelectedContainer',
@@ -55,12 +54,8 @@ export default {
     },
 
     currentComponent() {
-      if (this.status === DOC_STATUSES.VERIFIED) {
-        return Success;
-      }
-
       if (this.status) {
-        return ExtraLoadingDocument;
+        return UploadStatus;
       }
 
       return Upload;

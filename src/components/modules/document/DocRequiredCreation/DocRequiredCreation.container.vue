@@ -9,7 +9,6 @@
       :doc-type-to-status="docTypeToStatus"
       :doc-types-list="docTypesList"
       :selected-document-type="selectedDocumentType"
-      :is-all-has-appropriate-status="isAllHasAppropriateStatus"
       :is-show-status="true"
       @next="onNext"
       @create="onCreate"
@@ -21,8 +20,8 @@
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
 
-import ModeApp from '@/components/modules/document/steps/extraLoading/ModeApp';
-import DocumentTypes from '@/components/modules/document/steps/DocumentTypes';
+import ModeApp from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
+import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import Upload from './modules/UploadRequired';
 

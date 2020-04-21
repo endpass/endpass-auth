@@ -7,15 +7,15 @@
 </template>
 
 <script>
-import Success from '@/components/modules/document/steps/Success';
-import Continue from '../steps/Continue';
-import Pending from '../steps/Pending';
+import Success from './modules/Success';
+import Continue from './modules/Continue';
+import Pending from './modules/Pending';
 
 export default {
-  name: 'ModeLayoutContainer',
+  name: 'UploadStatusLayoutContainer',
 
   props: {
-    isLoading: {
+    isPending: {
       type: Boolean,
       required: true,
     },
@@ -32,7 +32,7 @@ export default {
         return Success;
       }
 
-      if (this.isLoading) {
+      if (this.isPending) {
         return Pending;
       }
 

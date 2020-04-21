@@ -21,7 +21,7 @@ import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 
 export default {
-  name: 'ExtraLoadingView',
+  name: 'PendingView',
 
   components: {
     VTitle,

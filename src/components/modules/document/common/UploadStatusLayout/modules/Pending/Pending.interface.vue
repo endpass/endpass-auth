@@ -5,7 +5,7 @@
 import Pending from './Pending.view';
 
 export default {
-  name: 'ContinueInterface',
+  name: 'PendingInterface',
 
   components: {
     Pending,

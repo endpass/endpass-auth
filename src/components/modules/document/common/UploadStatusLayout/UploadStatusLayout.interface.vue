@@ -1,6 +1,6 @@
 <template>
-  <mode-layout
-    :is-loading="isLoading"
+  <upload-status-layout
+    :is-pending="isPending"
     :is-verified="isVerified"
     @continue="onContinue"
     @create="onCreate"
@@ -8,13 +8,13 @@
 </template>
 
 <script>
-import ModeLayout from './ModeLayout.container';
+import UploadStatusLayout from './UploadStatusLayout.container';
 
 export default {
-  name: 'ModeLayoutInterface',
+  name: 'UploadStatusLayoutInterface',
 
   props: {
-    isLoading: {
+    isPending: {
       type: Boolean,
       required: true,
     },
@@ -36,7 +36,7 @@ export default {
   },
 
   components: {
-    ModeLayout,
+    UploadStatusLayout,
   },
 };
 </script>

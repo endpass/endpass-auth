@@ -3,7 +3,7 @@ import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import DocumentUpload from '@/components/modules/document/steps/Upload';
+import DocumentUpload from '@/components/modules/document/common/Upload';
 import { DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
