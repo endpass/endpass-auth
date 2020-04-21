@@ -5,6 +5,9 @@
     :is-all-has-appropriate-status="
       $options.documentsRequiredStore.isAllHasAppropriateStatus
     "
+    :is-required-docs-verified-status="
+      $options.documentsRequiredStore.isRequiredDocsVerifiedStatus
+    "
   />
 </template>
 
@@ -28,7 +31,7 @@ export default {
           docRequiredController.cancelCreate();
         },
 
-        onCreate() {
+        finishCreate() {
           docRequiredController.finishCreate();
         },
 

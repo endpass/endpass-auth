@@ -3,6 +3,7 @@
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
     :is-all-has-appropriate-status="isAllHasAppropriateStatus"
+    :is-required-docs-verified-status="isRequiredDocsVerifiedStatus"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -28,6 +29,11 @@ export default {
     },
 
     isAllHasAppropriateStatus: {
+      type: Boolean,
+      required: true,
+    },
+
+    isRequiredDocsVerifiedStatus: {
       type: Boolean,
       required: true,
     },

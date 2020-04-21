@@ -3,6 +3,7 @@
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
     :is-all-has-appropriate-status="isAllHasAppropriateStatus"
+    :is-required-docs-verified-status="isRequiredDocsVerifiedStatus"
     :selected-document-type.sync="selectedDocumentType"
     :document-id.sync="documentId"
     :status.sync="status"
@@ -29,6 +30,11 @@ export default {
     },
 
     isAllHasAppropriateStatus: {
+      type: Boolean,
+      required: true,
+    },
+
+    isRequiredDocsVerifiedStatus: {
       type: Boolean,
       required: true,
     },

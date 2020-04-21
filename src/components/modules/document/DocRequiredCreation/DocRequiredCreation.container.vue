@@ -44,6 +44,11 @@ export default {
       required: true,
     },
 
+    isRequiredDocsVerifiedStatus: {
+      type: Boolean,
+      required: true,
+    },
+
     selectedDocumentType: {
       type: String,
       required: true,
@@ -69,6 +74,17 @@ export default {
   computed: {
     isClosable() {
       return !this.documentId && !this.status;
+    },
+  },
+
+  watch: {
+    isRequiredDocsVerifiedStatus: {
+      handler(isAllVerified) {
+        if (isAllVerified && this.currentComponent === 'document-types') {
+          this.currentComponent = 'mode-app';
+        }
+      },
+      immediate: true,
     },
   },
 
