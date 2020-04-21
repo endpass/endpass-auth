@@ -44,11 +44,11 @@ export default {
   },
 
   beforeMount() {
-    this.gateway.initEvents();
+    this.gateway.subscribeToUpdateStatus();
   },
 
   beforeDestroy() {
-    this.gateway.stopEvents();
+    this.gateway.unsubscribeFromUpdateStatus();
   },
 
   components: {

@@ -21,7 +21,7 @@ export default {
   documentsRequiredStore: documentsRequiredStoreModule,
 
   provide() {
-    const { docRequiredController, documentsRequiredStore } = this.$options;
+    const { docRequiredController } = this.$options;
     return {
       gateway: {
         cancelCreate() {
@@ -32,12 +32,12 @@ export default {
           docRequiredController.finishCreate();
         },
 
-        initEvents() {
-          documentsRequiredStore.initEvents();
+        subscribeToUpdateStatus() {
+          docRequiredController.subscribeToUpdateStatus();
         },
 
-        stopEvents() {
-          documentsRequiredStore.stopEvents();
+        unsubscribeFromUpdateStatus() {
+          docRequiredController.unsubscribeFromUpdateStatus();
         },
       },
     };
