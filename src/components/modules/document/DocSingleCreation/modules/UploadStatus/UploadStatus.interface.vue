@@ -1,19 +1,25 @@
 <template>
-  <mode-document
+  <upload-status
     :document-id="documentId"
+    :status="status"
     @continue="onCreate"
     @create="onCreate"
   />
 </template>
 
 <script>
-import ModeDocument from './ModeDocument.interactor';
+import UploadStatus from './UploadStatus.interactor';
 
 export default {
-  name: 'ModeDocumentInterface',
+  name: 'UploadStatusInterface',
 
   props: {
     documentId: {
+      type: String,
+      required: true,
+    },
+
+    status: {
       type: String,
       required: true,
     },
@@ -26,7 +32,7 @@ export default {
   },
 
   components: {
-    ModeDocument,
+    UploadStatus,
   },
 };
 </script>

@@ -1,23 +1,15 @@
 <template>
-  <mode-app
-    :is-all-has-appropriate-status="isAllHasAppropriateStatus"
+  <upload-status
     @continue="onContinue"
     @create="onCreate"
   />
 </template>
 
 <script>
-import ModeApp from './ModeApp.interactor';
+import UploadStatus from './UploadStatus.interactor';
 
 export default {
-  name: 'ModeAppInterface',
-
-  props: {
-    isAllHasAppropriateStatus: {
-      type: Boolean,
-      required: true,
-    },
-  },
+  name: 'UploadStatusInterface',
 
   methods: {
     onContinue() {
@@ -30,7 +22,7 @@ export default {
   },
 
   components: {
-    ModeApp,
+    UploadStatus,
   },
 };
 </script>
