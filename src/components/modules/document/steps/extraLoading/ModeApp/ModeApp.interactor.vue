@@ -50,12 +50,12 @@ export default {
 
   methods: {
     onContinue() {
-      if (!this.isAllHasAppropriateStatus) {
-        this.$emit('continue');
+      if (this.isRequiredDocsVerifiedStatus) {
+        this.$emit('create');
         return;
       }
 
-      this.$emit('create');
+      this.$emit('continue');
     },
 
     onCreate() {

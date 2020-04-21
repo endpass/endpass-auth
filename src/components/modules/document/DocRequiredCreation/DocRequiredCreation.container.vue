@@ -63,9 +63,7 @@ export default {
 
   data() {
     return {
-      currentComponent: this.isAllHasAppropriateStatus
-        ? 'mode-app'
-        : 'document-types',
+      currentComponent: 'document-types',
     };
   },
 
