@@ -42,6 +42,21 @@ export default {
     onCreate() {
       this.$emit('create');
     },
+
+    async updateUploadStatus() {
+      try {
+        this.isPending = true;
+        const { uploadStatusController } = this.$options;
+        await uploadStatusController.waitDocumentVerified(this.documentId);
+        const status = await uploadStatusController.getDocumentStatus(
+          this.documentId,
+        );
+
+        this.isVerified = status === DOC_STATUSES.VERIFIED;
+      } finally {
+        this.isPending = false;
+      }
+    },
   },
 
   async mounted() {
@@ -51,18 +66,7 @@ export default {
       return;
     }
 
-    try {
-      this.isPending = true;
-      const { uploadStatusController } = this.$options;
-      await uploadStatusController.waitDocumentVerified(this.documentId);
-      const status = await uploadStatusController.getDocumentStatus(
-        this.documentId,
-      );
-
-      this.isVerified = status === DOC_STATUSES.VERIFIED;
-    } finally {
-      this.isPending = false;
-    }
+    await this.updateUploadStatus();
   },
 
   components: {

@@ -54,6 +54,27 @@ export default {
     onCreate() {
       this.$emit('create');
     },
+
+    async updateUploadStatus() {
+      try {
+        this.isPending = true;
+
+        if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
+          await this.$options.documentsRequiredStore.loadDocuments();
+        }
+
+        if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
+          this.isPending = false;
+          return;
+        }
+
+        await new Promise(resolve => setTimeout(resolve, this.pendingTimeout));
+
+        await this.$options.documentsRequiredStore.loadDocuments();
+      } finally {
+        this.isPending = false;
+      }
+    },
   },
 
   async mounted() {
@@ -62,24 +83,7 @@ export default {
       return;
     }
 
-    try {
-      this.isPending = true;
-
-      if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
-        await this.$options.documentsRequiredStore.loadDocuments();
-      }
-
-      if (!this.$options.documentsRequiredStore.isAllHasAppropriateStatus) {
-        this.isPending = false;
-        return;
-      }
-
-      await new Promise(resolve => setTimeout(resolve, this.pendingTimeout));
-
-      await this.$options.documentsRequiredStore.loadDocuments();
-    } finally {
-      this.isPending = false;
-    }
+    await this.updateUploadStatus();
   },
 
   components: {
