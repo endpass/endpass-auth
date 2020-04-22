@@ -20,7 +20,7 @@
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
 
-import ModeApp from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
+import UploadStatus from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
 import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
 import Upload from './modules/UploadRequired';
@@ -81,7 +81,7 @@ export default {
     isRequiredDocsVerifiedStatus: {
       handler(isAllVerified) {
         if (isAllVerified && this.currentComponent === 'document-types') {
-          this.currentComponent = 'mode-app';
+          this.currentComponent = 'upload-status';
         }
       },
       immediate: true,
@@ -121,7 +121,7 @@ export default {
 
         case this.currentComponent === 'upload' &&
           !this.isAllHasAppropriateStatus:
-        case this.currentComponent === 'mode-app':
+        case this.currentComponent === 'upload-status':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');
           this.$emit('update:status', '');
@@ -129,7 +129,7 @@ export default {
           break;
 
         case this.currentComponent === 'upload':
-          this.currentComponent = 'mode-app';
+          this.currentComponent = 'upload-status';
           break;
 
         default:
@@ -151,7 +151,7 @@ export default {
     DocLayout,
     DocumentTypes,
     Upload,
-    ModeApp,
+    UploadStatus,
   },
 };
 </script>
