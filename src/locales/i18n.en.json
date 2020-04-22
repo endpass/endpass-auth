@@ -122,7 +122,7 @@
     },
     "scopes": {
       "address": "Read address",
-      "allowScopes": "Application requests following scopes. Press the \"Allow\" button to grant these permissions.",
+      "allowScopes": "This application is requesting the following permissions in-app popup modal. Please press \"Allow\" to grant access to this information.",
       "content": "Read document content",
       "documents": "Read all documents",
       "email": "Read email",
