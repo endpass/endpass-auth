@@ -1,6 +1,6 @@
 <template>
   <v-checkbox
-    :model-value="value"
+    :value="value"
     @change="onChange"
   >
     {{ $t('components.rememberCheckbox.rememberMe') }}
@@ -11,7 +11,7 @@
 import VCheckbox from '@endpass/ui/kit/VCheckbox';
 
 export default {
-  name: 'VCheckboxRemember',
+  name: 'RememberMe',
 
   props: {
     value: {

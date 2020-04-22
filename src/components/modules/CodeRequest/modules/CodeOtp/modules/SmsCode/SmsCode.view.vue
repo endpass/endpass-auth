@@ -23,7 +23,7 @@
       />
     </form-item>
     <form-item class="v-mb-24">
-      <v-checkbox-remember
+      <remember-me
         v-model="isRemember"
         data-test="remember-me-checkbox"
       />
@@ -56,7 +56,7 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
-import VCheckboxRemember from '@/components/common/VCheckboxRemember';
+import RememberMe from '../RememberMe';
 
 export default {
   name: 'SmsCodeView',
@@ -111,7 +111,7 @@ export default {
   mixins: [formMixin],
 
   components: {
-    VCheckboxRemember,
+    RememberMe,
     VTitle,
     VDescription,
     SendCode,
