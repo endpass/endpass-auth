@@ -103,6 +103,9 @@
       "title": "Disable OTP setting via SMS",
       "titlePhoneNotExist": "You don't have the registered phone number"
     },
+    "rememberCheckbox": {
+      "rememberMe": "Remember me on this device"
+    },
     "regularPasswordForm": {
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?",

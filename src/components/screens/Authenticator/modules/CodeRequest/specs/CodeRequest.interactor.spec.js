@@ -15,16 +15,17 @@ describe('CodeRequestInteractor', () => {
   let wrapper;
   const challengeType = CHALLENGE_TYPES.EMAIL_OTP;
 
-  const createWrapper = (options, props) =>
+  const defaultProps = {
+    email,
+    password,
+    challengeType,
+    isSignUp: false,
+  };
+
+  const createWrapper = options =>
     shallowMount(CodeRequestInteractor, {
       localVue,
-      propsData: {
-        email,
-        password,
-        challengeType,
-        isSignUp: false,
-        ...props,
-      },
+      propsData: defaultProps,
       i18n,
       ...options,
     });
@@ -55,6 +56,7 @@ describe('CodeRequestInteractor', () => {
         password,
         email,
         isSignUp: false,
+        isRemember: false,
       };
 
       it('should handle submit event', async () => {
@@ -62,7 +64,9 @@ describe('CodeRequestInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(CodeRequest).vm.$emit('submit', { code });
+        wrapper
+          .find(CodeRequest)
+          .vm.$emit('submit', { code, isRemember: false });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -73,12 +77,19 @@ describe('CodeRequestInteractor', () => {
       it('should handle submit event with sign up prop', async () => {
         expect.assertions(3);
 
-        wrapper = createWrapper({}, { isSignUp: true });
+        wrapper = createWrapper({
+          propsData: {
+            ...defaultProps,
+            isSignUp: true,
+          },
+        });
         await global.flushPromises();
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(CodeRequest).vm.$emit('submit', { code });
+        wrapper
+          .find(CodeRequest)
+          .vm.$emit('submit', { code, isRemember: false });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
         expect(authService.authWithCode).toBeCalledWith({
@@ -89,6 +100,8 @@ describe('CodeRequestInteractor', () => {
 
       it('should handle submit event with remember prop', async () => {
         expect.assertions(3);
+
+        wrapper = createWrapper();
 
         expect(authService.authWithCode).not.toBeCalled();
 
@@ -108,8 +121,12 @@ describe('CodeRequestInteractor', () => {
 
         expect(authService.authWithCode).not.toBeCalled();
 
-        wrapper.find(CodeRequest).vm.$emit('submit', { code });
-        wrapper.find(CodeRequest).vm.$emit('submit', { code });
+        wrapper
+          .find(CodeRequest)
+          .vm.$emit('submit', { code, isRemember: false });
+        wrapper
+          .find(CodeRequest)
+          .vm.$emit('submit', { code, isRemember: false });
 
         expect(authService.authWithCode).toBeCalledTimes(1);
       });
@@ -120,7 +137,9 @@ describe('CodeRequestInteractor', () => {
         });
 
         it('should be true after submit', () => {
-          wrapper.find(CodeRequest).vm.$emit('submit', { code });
+          wrapper
+            .find(CodeRequest)
+            .vm.$emit('submit', { code, isRemember: false });
 
           expect(wrapper.find(CodeRequest).attributes().isloading).toBe('true');
         });
@@ -128,7 +147,9 @@ describe('CodeRequestInteractor', () => {
         it('should be false after handling submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(CodeRequest).vm.$emit('submit', { code });
+          wrapper
+            .find(CodeRequest)
+            .vm.$emit('submit', { code, isRemember: false });
           await global.flushPromises();
 
           expect(wrapper.find(CodeRequest).attributes().isloading).toBeFalsy();
@@ -145,7 +166,9 @@ describe('CodeRequestInteractor', () => {
 
           expect(wrapper.find(CodeRequest).attributes().error).toBeFalsy();
 
-          wrapper.find(CodeRequest).vm.$emit('submit', { code });
+          wrapper
+            .find(CodeRequest)
+            .vm.$emit('submit', { code, isRemember: false });
           await global.flushPromises();
 
           expect(wrapper.find(CodeRequest).attributes().error).toBe(
@@ -156,10 +179,14 @@ describe('CodeRequestInteractor', () => {
         it('should remove error if exists before submit', async () => {
           expect.assertions(1);
 
-          wrapper.find(CodeRequest).vm.$emit('submit', { code });
+          wrapper
+            .find(CodeRequest)
+            .vm.$emit('submit', { code, isRemember: false });
           await global.flushPromises();
 
-          wrapper.find(CodeRequest).vm.$emit('submit', { code });
+          wrapper
+            .find(CodeRequest)
+            .vm.$emit('submit', { code, isRemember: false });
 
           expect(wrapper.find(CodeRequest).attributes().error).toBeFalsy();
         });
@@ -177,7 +204,9 @@ describe('CodeRequestInteractor', () => {
       });
 
       it('should not emit recover event while loading', () => {
-        wrapper.find(CodeRequest).vm.$emit('submit', { code });
+        wrapper
+          .find(CodeRequest)
+          .vm.$emit('submit', { code, isRemember: false });
         wrapper.find(CodeRequest).vm.$emit('recover');
 
         expect(wrapper.emitted().recover).toBeUndefined();

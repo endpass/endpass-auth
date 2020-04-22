@@ -38,6 +38,10 @@ export default {
     isPasswordExist() {
       return this.$options.authStore.isPasswordExist;
     },
+
+    isDeviceRemembered() {
+      return this.$options.authStore.isDeviceRemembered;
+    },
   },
 
   watch: {
@@ -51,6 +55,13 @@ export default {
     isPasswordExist: {
       handler(newVal) {
         this.$emit('update:is-password-exist', newVal);
+      },
+      immediate: true,
+    },
+
+    isDeviceRemembered: {
+      handler(newVal) {
+        this.$emit('update:is-device-remembered', newVal);
       },
       immediate: true,
     },

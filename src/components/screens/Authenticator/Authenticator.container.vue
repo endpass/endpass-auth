@@ -10,10 +10,11 @@
         v-bind="$attrs"
         :is-closable="isClosable"
         :is-returnable="isReturnable"
+        :is-device-remembered="isDeviceRemembered"
         :challenge-type="challengeType"
         @complete="onComplete"
         @switch="onSwitch"
-        @social="handleAuth"
+        @social="finishAuth"
       />
     </template>
   </auth-form-container>
@@ -38,6 +39,11 @@ export default {
       validator(value) {
         return Object.keys(CHALLENGE_TYPES).includes(value);
       },
+    },
+
+    isDeviceRemembered: {
+      type: Boolean,
+      default: false,
     },
   },
 
@@ -127,25 +133,33 @@ export default {
           this.replaceRoute('EmailCode');
           break;
 
-        case name === 'SignUp' && isSmsOtp:
-        case name === 'RegularPassword' && isSmsOtp:
+        case name === 'SignIn' && isSmsOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isSmsOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' && isSmsOtp && !this.isDeviceRemembered:
           this.openRoute('SmsCode');
           break;
 
-        case name === 'SignUp' && isAppOtp:
-        case name === 'RegularPassword' && isAppOtp:
+        case name === 'SignIn' && isAppOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isAppOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' && isAppOtp && !this.isDeviceRemembered:
           this.openRoute('AppCode');
           break;
 
-        case name === 'SignUp' && isEmailOtp:
-        case name === 'RegularPassword' && isEmailOtp:
+        case name === 'SignIn' && isEmailOtp && !this.isDeviceRemembered:
+        case name === 'SignUp' && isEmailOtp && !this.isDeviceRemembered:
+        case name === 'RegularPassword' &&
+          isEmailOtp &&
+          !this.isDeviceRemembered:
           this.openRoute('EmailCode');
           break;
 
+        case name === 'SignIn' && this.isDeviceRemembered:
+        case name === 'SignUp' && this.isDeviceRemembered:
+        case name === 'RegularPassword' && this.isDeviceRemembered:
         case name === 'SmsCode':
         case name === 'AppCode':
         case name === 'EmailCode':
-          this.handleAuth();
+          this.finishAuth();
           break;
 
         default:
@@ -173,7 +187,7 @@ export default {
       this.$router.replace({ name }).catch(() => {});
     },
 
-    handleAuth() {
+    finishAuth() {
       this.$emit('authorize');
     },
   },

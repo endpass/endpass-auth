@@ -53,13 +53,39 @@ import VTitle from '@/components/common/VTitle';
 export default {
   name: 'RegularPasswordView',
 
+  props: {
+    error: {
+      type: String,
+      default: '',
+    },
+  },
+
   data: () => ({
     password: '',
   }),
 
+  watch: {
+    error: {
+      handler(msg) {
+        this.$validator.errors.removeById('passwordId');
+
+        if (!msg) return;
+
+        this.$validator.errors.add({
+          id: 'passwordId',
+          field: 'password',
+          msg,
+        });
+      },
+      immediate: true,
+    },
+  },
+
   methods: {
     onSubmit() {
-      this.$emit('submit', { password: this.password });
+      this.$emit('submit', {
+        password: this.password,
+      });
     },
 
     onRecover() {

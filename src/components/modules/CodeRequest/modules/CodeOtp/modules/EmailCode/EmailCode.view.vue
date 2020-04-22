@@ -22,6 +22,12 @@
       />
     </form-item>
     <form-item class="v-mb-24">
+      <remember-me
+        v-model="isRemember"
+        data-test="remember-me-checkbox"
+      />
+    </form-item>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="isSubmitDisabled"
         :is-loading="isLoading"
@@ -49,6 +55,7 @@ import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
 import SendCode from '@/components/common/SendCode';
+import RememberMe from '../RememberMe';
 
 export default {
   name: 'EmailCodeView',
@@ -58,10 +65,12 @@ export default {
       type: String,
       required: true,
     },
+
     isLoading: {
       type: Boolean,
       default: false,
     },
+
     error: {
       type: String,
       default: '',
@@ -70,6 +79,7 @@ export default {
 
   data: () => ({
     code: '',
+    isRemember: false,
   }),
 
   computed: {
@@ -97,7 +107,10 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$emit('submit', { code: this.code });
+      this.$emit('submit', {
+        code: this.code,
+        isRemember: this.isRemember,
+      });
     },
 
     onSendCode() {
@@ -108,6 +121,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    RememberMe,
     SendCode,
     VTitle,
     VDescription,

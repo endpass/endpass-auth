@@ -47,10 +47,10 @@ export default {
   },
 
   methods: {
-    async onSubmit({ code }) {
+    async onSubmit({ code, isRemember }) {
       if (this.isLoading) return;
 
-      this.$emit('submit', { code });
+      this.$emit('submit', { code, isRemember });
     },
 
     async sendCode() {
