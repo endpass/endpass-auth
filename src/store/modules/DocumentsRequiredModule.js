@@ -136,7 +136,6 @@ class DocumentsRequiredModule extends VuexModule {
   async loadDocuments() {
     const { items } = await documentsService.getDocumentsList();
     this.documentsList = items;
-    this.updateDocTypeToStatus();
   }
 
   /**
@@ -158,6 +157,21 @@ class DocumentsRequiredModule extends VuexModule {
     );
   }
 
+  /**
+   * @returns {Promise<void>}
+   */
+  @Action
+  async reloadDocumentsStatuses() {
+    await this.loadDocuments();
+    this.updateDocTypeToStatus();
+  }
+
+  /**
+   *
+   * @param {object} params
+   * @param {string} params.clientId
+   * @returns {Promise<{isNeedUploadDocument: boolean}>}
+   */
   @Action
   async checkRequired({ clientId }) {
     this.clientId = clientId;
