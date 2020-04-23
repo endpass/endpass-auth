@@ -19,7 +19,7 @@ describe('UploadStatusInteractor', () => {
 
   const createWrapper = options => {
     gateway = {
-      loadTypesAndStatuses: jest.fn(),
+      loadDocumentsTypesAndStatuses: jest.fn(),
     };
     return shallowMount(UploadStatusInteractor, {
       localVue,
@@ -191,7 +191,7 @@ describe('UploadStatusInteractor', () => {
 
       await global.flushPromises();
 
-      expect(gateway.loadTypesAndStatuses).toBeCalledTimes(1);
+      expect(gateway.loadDocumentsTypesAndStatuses).toBeCalledTimes(1);
     });
 
     it('should not load types and statuses if have appropriate statuses', async () => {
@@ -206,7 +206,7 @@ describe('UploadStatusInteractor', () => {
 
       await global.flushPromises();
 
-      expect(gateway.loadTypesAndStatuses).not.toBeCalled();
+      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
     });
 
     it('should not load types and statuses if not have appropriate statuses but have verified', async () => {
@@ -221,7 +221,7 @@ describe('UploadStatusInteractor', () => {
 
       await global.flushPromises();
 
-      expect(gateway.loadTypesAndStatuses).not.toBeCalled();
+      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
     });
   });
 });

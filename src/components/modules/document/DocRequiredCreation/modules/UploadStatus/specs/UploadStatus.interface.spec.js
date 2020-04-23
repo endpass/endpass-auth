@@ -67,7 +67,9 @@ describe('UploadStatusInterface', () => {
           items: [],
         });
 
-        await wrapper.find(GatewayComponent).vm.gateway.loadTypesAndStatuses();
+        await wrapper
+          .find(GatewayComponent)
+          .vm.gateway.loadDocumentsTypesAndStatuses();
         await global.flushPromises();
       });
 
@@ -84,7 +86,9 @@ describe('UploadStatusInterface', () => {
           ],
         });
 
-        await wrapper.find(GatewayComponent).vm.gateway.loadTypesAndStatuses();
+        await wrapper
+          .find(GatewayComponent)
+          .vm.gateway.loadDocumentsTypesAndStatuses();
         await global.flushPromises();
 
         expect(
@@ -110,7 +114,9 @@ describe('UploadStatusInterface', () => {
           ],
         });
 
-        await wrapper.find(GatewayComponent).vm.gateway.loadTypesAndStatuses();
+        await wrapper
+          .find(GatewayComponent)
+          .vm.gateway.loadDocumentsTypesAndStatuses();
         await global.flushPromises();
 
         expect(

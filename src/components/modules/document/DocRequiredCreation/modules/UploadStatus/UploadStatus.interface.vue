@@ -23,8 +23,8 @@ export default {
     const { documentsRequiredStore } = this.$options;
     return {
       gateway: {
-        async loadTypesAndStatuses() {
-          await documentsRequiredStore.loadTypesAndStatuses();
+        async loadDocumentsTypesAndStatuses() {
+          await documentsRequiredStore.loadDocumentsTypesAndStatuses();
         },
       },
     };

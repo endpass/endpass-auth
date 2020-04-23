@@ -124,7 +124,7 @@ class DocumentsRequiredModule extends VuexModule {
    * @returns {Promise<void>}
    */
   @Action
-  async loadTypesAndStatuses() {
+  async loadDocumentsTypesAndStatuses() {
     const { items } = await documentsService.getDocumentsList();
     this.docTypesStatusList = items.map(({ documentType, status }) => ({
       documentType,
@@ -161,9 +161,8 @@ class DocumentsRequiredModule extends VuexModule {
   async checkRequired({ clientId }) {
     this.clientId = clientId;
     await Promise.all([
-      //
       this.loadRequiredTypes(clientId),
-      this.loadTypesAndStatuses(),
+      this.loadDocumentsTypesAndStatuses(),
     ]);
 
     return {

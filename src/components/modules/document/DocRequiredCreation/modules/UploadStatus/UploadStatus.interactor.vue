@@ -63,7 +63,7 @@ export default {
       this.isPending = true;
 
       if (!this.isStatusesAppropriated) {
-        await this.gateway.loadTypesAndStatuses();
+        await this.gateway.loadDocumentsTypesAndStatuses();
         await this.$nextTick();
       }
 

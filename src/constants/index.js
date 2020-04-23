@@ -180,7 +180,6 @@ export const DOC_TYPES_ORDER = [
 ];
 
 /**
- * Notify server
  * @type {{
     USER_DOCUMENT_STATUS_UPDATED: 'user:document:status:updated',
   }}

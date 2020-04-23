@@ -8,11 +8,6 @@ const identityBaseUrl = ENV.VUE_APP_IDENTITY_API_URL;
 
 const TIMEOUT_DEFAULT = 1500;
 
-/**
- * @type {{
-  [key: number]: any
-  }}
- */
 const CODE_TO_STATUS = {
   200: AUTH_STATUS_CODE.LOGGED_IN,
   401: AUTH_STATUS_CODE.NOT_LOGGED,
@@ -145,6 +140,7 @@ const getAuthStatus = async () => {
       expiresAt,
     };
   } catch (e) {
+    /** @type {keyof typeof CODE_TO_STATUS} */
     const statusCode = get(e, 'response.status');
     const status = CODE_TO_STATUS[statusCode] || AUTH_STATUS_CODE.NOT_LOGGED;
     const hash = get(e, 'response.data.hash', '');
