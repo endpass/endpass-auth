@@ -32,13 +32,14 @@ class DocRequiredCreationController extends VuexModule {
     this.eventsIterator = eventsService.getUserEventsIterator();
 
     for await (const { eventType, payload } of this.eventsIterator) {
-      if (events.includes(eventType)) {
-        const { documentType, status } = payload;
-        await this.documentsRequiredStore.addDocTypeStatus({
-          documentType,
-          status,
-        });
-      }
+      // eslint-disable-next-line no-continue
+      if (!events.includes(eventType)) continue;
+
+      const { documentType, status } = payload;
+      await this.documentsRequiredStore.addDocTypeStatus({
+        documentType,
+        status,
+      });
     }
   }
 
