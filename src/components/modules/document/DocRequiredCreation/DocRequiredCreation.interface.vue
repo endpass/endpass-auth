@@ -2,12 +2,10 @@
   <doc-required-creation
     :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
     :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
-    :is-all-has-appropriate-status="
-      $options.documentsRequiredStore.isAllHasAppropriateStatus
+    :is-statuses-appropriated="
+      $options.documentsRequiredStore.isStatusesAppropriated
     "
-    :is-required-docs-verified-status="
-      $options.documentsRequiredStore.isRequiredDocsVerifiedStatus
-    "
+    :is-statuses-verified="$options.documentsRequiredStore.isStatusesVerified"
   />
 </template>
 

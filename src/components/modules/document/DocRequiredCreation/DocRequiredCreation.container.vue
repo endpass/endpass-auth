@@ -39,12 +39,12 @@ export default {
       required: true,
     },
 
-    isAllHasAppropriateStatus: {
+    isStatusesAppropriated: {
       type: Boolean,
       required: true,
     },
 
-    isRequiredDocsVerifiedStatus: {
+    isStatusesVerified: {
       type: Boolean,
       required: true,
     },
@@ -78,7 +78,7 @@ export default {
   },
 
   watch: {
-    isRequiredDocsVerifiedStatus: {
+    isStatusesVerified: {
       handler(isAllVerified) {
         if (isAllVerified && this.currentComponent === 'document-types') {
           this.currentComponent = 'upload-status';
@@ -119,8 +119,7 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload' &&
-          !this.isAllHasAppropriateStatus:
+        case this.currentComponent === 'upload' && !this.isStatusesAppropriated:
         case this.currentComponent === 'upload-status':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');

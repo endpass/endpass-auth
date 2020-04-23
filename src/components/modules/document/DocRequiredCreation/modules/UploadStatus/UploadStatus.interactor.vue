@@ -1,7 +1,7 @@
 <template>
   <upload-status-layout
     :is-pending="isPending"
-    :is-verified="isRequiredDocsVerifiedStatus"
+    :is-verified="isStatusesVerified"
     @continue="onContinue"
     @create="onCreate"
   />
@@ -10,7 +10,6 @@
 <script>
 import VueTimers from 'vue-timers/mixin';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
-import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 
 const TIMEOUT_MS = 30 * 1000;
 const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
@@ -18,21 +17,32 @@ const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
 export default {
   name: 'UploadStatusInteractor',
 
-  documentsRequiredStore: documentsRequiredStoreModule,
+  inject: ['gateway'],
+
+  props: {
+    isStatusesVerified: {
+      type: Boolean,
+      required: true,
+    },
+
+    isStatusesAppropriated: {
+      type: Boolean,
+      required: true,
+    },
+
+    clientId: {
+      type: String,
+      required: true,
+    },
+  },
 
   data: () => ({
     isPending: true,
   }),
 
   computed: {
-    isRequiredDocsVerifiedStatus() {
-      return this.$options.documentsRequiredStore.isRequiredDocsVerifiedStatus;
-    },
-
     pendingTimeout() {
-      const extraClientIds = ENV.VUE_APP_EXTRA_TIMEOUT_FOR_CLIENT_IDS;
-      const { clientId } = this.$options.documentsRequiredStore;
-      if (extraClientIds.includes(clientId)) {
+      if (ENV.VUE_APP_EXTRA_TIMEOUT_FOR_CLIENT_IDS.includes(this.clientId)) {
         return EXTRA_TIMEOUT_MS;
       }
 
@@ -42,11 +52,6 @@ export default {
 
   methods: {
     onContinue() {
-      if (this.isRequiredDocsVerifiedStatus) {
-        this.$emit('create');
-        return;
-      }
-
       this.$emit('continue');
     },
 
@@ -55,14 +60,14 @@ export default {
     },
 
     async updateUploadStatus() {
-      const { documentsRequiredStore } = this.$options;
       this.isPending = true;
 
-      if (!documentsRequiredStore.isAllHasAppropriateStatus) {
-        await documentsRequiredStore.reloadDocumentsStatuses();
+      if (!this.isStatusesAppropriated) {
+        await this.gateway.loadTypesAndStatuses();
+        await this.$nextTick();
       }
 
-      if (!documentsRequiredStore.isAllHasAppropriateStatus) {
+      if (!this.isStatusesAppropriated) {
         this.isPending = false;
         return;
       }
@@ -73,7 +78,7 @@ export default {
   },
 
   async mounted() {
-    if (this.isRequiredDocsVerifiedStatus) {
+    if (this.isStatusesVerified) {
       this.isPending = false;
       return;
     }

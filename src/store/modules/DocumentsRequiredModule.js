@@ -1,4 +1,4 @@
-import { VuexModule, Module, Action, Mutation } from 'vuex-class-modules';
+import { VuexModule, Module, Action } from 'vuex-class-modules';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
 
@@ -23,13 +23,11 @@ const PRIORITY = {
 
 @Module({ generateMutationSetters: true })
 class DocumentsRequiredModule extends VuexModule {
-  docTypeToStatus = {};
+  clientId = '';
 
   docRequiredTypes = [];
 
-  clientId = '';
-
-  documentsList = [];
+  docTypesStatusList = [];
 
   /**
    * @returns {boolean}
@@ -39,17 +37,17 @@ class DocumentsRequiredModule extends VuexModule {
       return false;
     }
 
-    if (this.documentsList.length === 0) {
+    if (this.docTypesStatusList.length === 0) {
       return true;
     }
 
-    return !this.isRequiredDocsVerifiedStatus;
+    return !this.isStatusesVerified;
   }
 
   /**
    * @returns {boolean}
    */
-  get isRequiredDocsVerifiedStatus() {
+  get isStatusesVerified() {
     return this.docRequiredTypes.every(type => {
       const status = this.docTypeToStatus[type];
       return status === DOC_STATUSES.VERIFIED;
@@ -59,15 +57,30 @@ class DocumentsRequiredModule extends VuexModule {
   /**
    * @returns {boolean}
    */
-  get isAllHasAppropriateStatus() {
+  get isStatusesAppropriated() {
     return this.docRequiredTypes.every(type => {
       const status = this.docTypeToStatus[type];
       return GOOD_STATUSES.includes(status);
     });
   }
 
+  get docTypeToStatus() {
+    return this.docTypesStatusList.reduce((statusMap, document) => {
+      const { documentType, status } = document;
+
+      if (!this.isStatusAppliedToDocType(statusMap, documentType, status)) {
+        return statusMap;
+      }
+
+      return {
+        ...statusMap,
+        [documentType]: status,
+      };
+    }, {});
+  }
+
   /**
-   *
+   * @private
    * @param {{}} docTypeToStatus
    * @param {keyof typeof DOC_TYPES} documentType
    * @param {keyof typeof DOC_STATUSES} status
@@ -92,25 +105,6 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   /**
-   * @private
-   */
-  @Mutation
-  updateDocTypeToStatus() {
-    this.docTypeToStatus = this.documentsList.reduce((statusMap, document) => {
-      const { documentType, status } = document;
-
-      if (!this.isStatusAppliedToDocType(statusMap, documentType, status)) {
-        return statusMap;
-      }
-
-      return {
-        ...statusMap,
-        [documentType]: status,
-      };
-    }, {});
-  }
-
-  /**
    *
    * @param {object} params
    * @param {keyof typeof DOC_TYPES} params.documentType
@@ -118,24 +112,24 @@ class DocumentsRequiredModule extends VuexModule {
    * @returns {Promise<void>}
    */
   @Action
-  async changeDocTypeStatus({ documentType, status }) {
-    if (
-      this.isStatusAppliedToDocType(this.docTypeToStatus, documentType, status)
-    ) {
-      this.docTypeToStatus = {
-        ...this.docTypeToStatus,
-        [documentType]: status,
-      };
-    }
+  async addDocTypeStatus({ documentType, status }) {
+    this.docTypesStatusList = [
+      ...this.docTypesStatusList,
+      { documentType, status },
+    ];
   }
 
   /**
+   * @private
    * @returns {Promise<void>}
    */
   @Action
-  async loadDocuments() {
+  async loadTypesAndStatuses() {
     const { items } = await documentsService.getDocumentsList();
-    this.documentsList = items;
+    this.docTypesStatusList = items.map(({ documentType, status }) => ({
+      documentType,
+      status,
+    }));
   }
 
   /**
@@ -158,15 +152,6 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   /**
-   * @returns {Promise<void>}
-   */
-  @Action
-  async reloadDocumentsStatuses() {
-    await this.loadDocuments();
-    this.updateDocTypeToStatus();
-  }
-
-  /**
    *
    * @param {object} params
    * @param {string} params.clientId
@@ -178,10 +163,8 @@ class DocumentsRequiredModule extends VuexModule {
     await Promise.all([
       //
       this.loadRequiredTypes(clientId),
-      this.loadDocuments(),
+      this.loadTypesAndStatuses(),
     ]);
-
-    this.updateDocTypeToStatus();
 
     return {
       isNeedUploadDocument: this.isNeedUploadDocument,

@@ -185,7 +185,7 @@ export const DOC_TYPES_ORDER = [
     USER_DOCUMENT_STATUS_UPDATED: 'user:document:status:updated',
   }}
  */
-export const NOTIFY_SERVER = {
+export const SERVER_EVENT = {
   USER_DOCUMENT_STATUS_UPDATED: 'user:document:status:updated',
 };
 

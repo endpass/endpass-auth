@@ -7,11 +7,11 @@ import EventPayloadAdapter from '@/class/EventPayloadAdapter';
 
 const url = `${ENV.VUE_APP_IDENTITY_API_URL}/events`;
 
-const urlSource = new DataEventSource(url);
+const dataEventSource = new DataEventSource(url);
 
-const getUserEventsIterator = () => {
-  return pipe(
-    fromEventPattern(urlSource.addHandler, urlSource.removeHandler),
+const getUserEventsIterator = () =>
+  pipe(
+    fromEventPattern(dataEventSource.addHandler, dataEventSource.removeHandler),
     map(({ data }) => JSON.parse(data)),
     map(({ eventType, payload, ...rawData }) => {
       const adapter = EventPayloadAdapter.getAdapterByEvent(eventType);
@@ -23,7 +23,6 @@ const getUserEventsIterator = () => {
     }),
     toAsyncIterable,
   );
-};
 
 export default {
   getUserEventsIterator,

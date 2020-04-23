@@ -2,8 +2,8 @@
   <doc-required-creation
     :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
-    :is-all-has-appropriate-status="isAllHasAppropriateStatus"
-    :is-required-docs-verified-status="isRequiredDocsVerifiedStatus"
+    :is-statuses-appropriated="isStatusesAppropriated"
+    :is-statuses-verified="isStatusesVerified"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -28,12 +28,12 @@ export default {
       required: true,
     },
 
-    isAllHasAppropriateStatus: {
+    isStatusesAppropriated: {
       type: Boolean,
       required: true,
     },
 
-    isRequiredDocsVerifiedStatus: {
+    isStatusesVerified: {
       type: Boolean,
       required: true,
     },

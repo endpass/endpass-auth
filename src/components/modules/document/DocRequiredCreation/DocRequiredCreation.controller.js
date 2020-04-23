@@ -5,7 +5,7 @@ import { documentChannel } from '@/class/singleton/channels';
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 import Answer from '@/class/Answer';
 import eventsService from '@/service/events';
-import { NOTIFY_SERVER } from '@/constants';
+import { SERVER_EVENT } from '@/constants';
 
 const { ERRORS } = ConnectError;
 
@@ -28,13 +28,13 @@ class DocRequiredCreationController extends VuexModule {
 
   @Action
   async subscribeToUpdateStatus() {
-    const events = [NOTIFY_SERVER.USER_DOCUMENT_STATUS_UPDATED];
+    const events = [SERVER_EVENT.USER_DOCUMENT_STATUS_UPDATED];
     this.eventsIterator = eventsService.getUserEventsIterator();
 
     for await (const { eventType, payload } of this.eventsIterator) {
       if (events.includes(eventType)) {
         const { documentType, status } = payload;
-        await this.documentsRequiredStore.changeDocTypeStatus({
+        await this.documentsRequiredStore.addDocTypeStatus({
           documentType,
           status,
         });
