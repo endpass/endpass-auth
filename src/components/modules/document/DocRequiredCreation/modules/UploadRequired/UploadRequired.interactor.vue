@@ -28,7 +28,7 @@ export default {
     },
 
     onConfirm({ documentId, status }) {
-      this.$options.documentsRequiredStore.changeDocTypeStatus({
+      this.$options.documentsRequiredStore.addDocTypeStatus({
         documentType: this.selectedDocumentType,
         status,
       });

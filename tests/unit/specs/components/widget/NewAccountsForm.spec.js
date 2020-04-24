@@ -101,7 +101,6 @@ describe('NewAccountForm', () => {
           password,
           address,
         },
-        undefined,
       );
     });
 
