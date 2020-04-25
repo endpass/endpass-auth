@@ -45,11 +45,29 @@ export default {
       type: Boolean,
       default: false,
     },
+
+    isSocial: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   computed: {
     isReturnable() {
       return this.$route.name !== 'SignIn';
+    },
+  },
+
+  watch: {
+    $route(to, from) {
+      if (to.name !== 'SignIn') {
+        return;
+      }
+
+      // Reset `isSocial` flag to avoid false next screen detections
+      if (from.name === 'SmsCode' || from.name === 'AppCode') {
+        this.$emit('update:isSocial', false);
+      }
     },
   },
 
@@ -102,6 +120,14 @@ export default {
       const isEmailOtp = this.challengeType === CHALLENGE_TYPES.EMAIL_OTP;
 
       switch (true) {
+        case name === 'SignIn' && isSmsOtp && this.isSocial:
+          this.replaceRoute('SmsCode');
+          break;
+
+        case name === 'SignIn' && isAppOtp && this.isSocial:
+          this.replaceRoute('AppCode');
+          break;
+
         case name === 'SignIn' && isEmailOtp && !this.isPasswordExist:
           this.openRoute('SignUp');
           break;

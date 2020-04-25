@@ -94,17 +94,17 @@ describe('SignInInteractor', () => {
           expect(wrapper.emitted().social).toBeUndefined();
         });
 
-        it('should emit sign-in', async () => {
+        it('should emit sign-in-social', async () => {
           expect.assertions(2);
 
-          expect(wrapper.emitted()['sign-in']).toBeUndefined();
+          expect(wrapper.emitted()['sign-in-social']).toBeUndefined();
 
           identityService.checkRegularPassword.mockResolvedValueOnce(true);
 
           wrapper.find(SignInView).vm.$emit('social', { email });
           await global.flushPromises();
 
-          expect(wrapper.emitted()['sign-in']).toEqual([
+          expect(wrapper.emitted()['sign-in-social']).toEqual([
             [
               {
                 email,
