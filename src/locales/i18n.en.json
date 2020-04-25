@@ -74,9 +74,6 @@
       "placeholder": "Enter received code...",
       "title": "Verify email"
     },
-    "gitAuthButton": {
-      "authWithGitHub": "GitHub"
-    },
     "googleAuthButton": {
       "authWithGoogle": "Google"
     },

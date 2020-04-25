@@ -63,17 +63,6 @@ class AuthModule extends VuexModule {
     return { email };
   }
 
-  @Action
-  async authWithGitHub(code) {
-    const { email } = await authService.authWithGitHub(code);
-
-    await this.loadAuthChallenge({
-      email,
-    });
-
-    return { email };
-  }
-
   /**
    * @param {boolean} isSignUp
    * @param {string} email

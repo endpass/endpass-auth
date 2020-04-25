@@ -63,11 +63,6 @@
           @submit="onSocial"
           @error="onOauthError"
         />
-        <git-auth-button
-          type="button"
-          @submit="onSocial"
-          @error="onOauthError"
-        />
       </form-controls>
     </form-item>
     <form-row class="v-fs-12 v-lh-1-4 v-text-center">
@@ -113,7 +108,6 @@ import FormItem from '@/components/common/FormItem';
 import FormRow from '@/components/common/FormRow';
 import VSpacer from '@/components/common/VSpacer';
 import GoogleAuthButton from '@/components/common/GoogleAuthButton';
-import GitAuthButton from '@/components/common/GitAuthButton';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import FormControls from '@/components/common/FormControls';
@@ -221,7 +215,6 @@ export default {
     VSpacer,
     VDivider,
     GoogleAuthButton,
-    GitAuthButton,
     FormItem,
     FormRow,
   },
