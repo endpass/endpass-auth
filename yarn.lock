@@ -1247,14 +1247,6 @@
     "@babel/helper-create-regexp-features-plugin" "^7.8.3"
     "@babel/helper-plugin-utils" "^7.8.3"
 
-"@babel/polyfill@^7.0.0":
-  version "7.2.5"
-  resolved "https://registry.yarnpkg.com/@babel/polyfill/-/polyfill-7.2.5.tgz#6c54b964f71ad27edddc567d065e57e87ed7fa7d"
-  integrity sha512-8Y/t3MWThtMLYr0YNC/Q76tqN1w30+b0uQMeFUYauG2UGTR19zyUtFrAzT23zNtBxPp+LbE5E/nwV/q/r3y6ug==
-  dependencies:
-    core-js "^2.5.7"
-    regenerator-runtime "^0.12.0"
-
 "@babel/preset-env@^7.0.0 < 7.4.0":
   version "7.3.4"
   resolved "https://registry.yarnpkg.com/@babel/preset-env/-/preset-env-7.3.4.tgz#887cf38b6d23c82f19b5135298bdb160062e33e1"
@@ -4824,7 +4816,7 @@ core-js-compat@^3.6.2:
     browserslist "^4.8.3"
     semver "7.0.0"
 
-core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7:
+core-js@^2.4.0, core-js@^2.5.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.1.tgz#87416ae817de957a3f249b3b5ca475d4aaed6042"
   integrity sha512-L72mmmEayPJBejKIWe2pYtGis5r0tQ5NaJekdhyXgeMQTpJoBsH0NL4ElY2LfSoV15xeQWKQ+XTTOZdyero5Xg==
@@ -7328,13 +7320,6 @@ git-raw-commits@^2.0.0:
     meow "^5.0.0"
     split2 "^2.0.0"
     through2 "^3.0.0"
-
-github-oauth-popup@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/github-oauth-popup/-/github-oauth-popup-1.2.0.tgz#2b7bc1f60d3fe963bdab0657a5cf0dd0dde5cad3"
-  integrity sha512-x3T8zqni8pQtYZcLYMIi6Rj/2Tv15Gr0hf0hdQ1DUOYOKShNZi9AljKmdRMZ9hCaRuO9fj27eLhtkMbIerug9Q==
-  dependencies:
-    "@babel/polyfill" "^7.0.0"
 
 glob-base@^0.3.0:
   version "0.3.0"
