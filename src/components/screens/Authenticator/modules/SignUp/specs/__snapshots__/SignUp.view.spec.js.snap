@@ -22,7 +22,6 @@ exports[`SignUpView render should correctly render component 1`] = `
   <form-item-stub>
     <form-controls-stub>
       <google-auth-button-stub type="button"></google-auth-button-stub>
-      <git-auth-button-stub type="button"></git-auth-button-stub>
     </form-controls-stub>
   </form-item-stub>
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
@@ -69,7 +68,6 @@ exports[`SignUpView render should render pasword form 1`] = `
   <form-item-stub>
     <form-controls-stub>
       <google-auth-button-stub type="button"></google-auth-button-stub>
-      <git-auth-button-stub type="button"></git-auth-button-stub>
     </form-controls-stub>
   </form-item-stub>
   <form-row-stub class="v-fs-12 v-lh-1-4 v-text-center">
