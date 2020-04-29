@@ -11,7 +11,7 @@ const docBaseURL = `${ENV.VUE_APP_IDENTITY_API_URL}/documents`;
 const CHECK_RECOGNIZE_TIMEOUT = 1000;
 
 /**
- * @param {Promise} promise
+ * @param {Promise<any>} promise
  * @return {Promise<any>}
  */
 const withSuccess = promise => {
@@ -29,7 +29,7 @@ const withSuccess = promise => {
 const documentsService = {
   /**
    * @param {File} file UserDocument file
-   * @returns {Promise}
+   * @returns {Promise<void>}
    */
   async checkFile(file) {
     return withSuccess(
