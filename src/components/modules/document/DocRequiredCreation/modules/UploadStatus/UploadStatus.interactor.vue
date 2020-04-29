@@ -3,7 +3,7 @@
     :is-pending="isPending"
     :is-verified="isStatusesVerified"
     @continue="onContinue"
-    @create="onCreate"
+    @create="handleCreate"
   />
 </template>
 
@@ -52,10 +52,15 @@ export default {
 
   methods: {
     onContinue() {
+      if (this.isStatusesAppropriated) {
+        this.handleCreate();
+        return;
+      }
+
       this.$emit('continue');
     },
 
-    onCreate() {
+    handleCreate() {
       this.$emit('create');
     },
 
