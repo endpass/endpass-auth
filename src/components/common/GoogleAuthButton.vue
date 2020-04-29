@@ -4,6 +4,7 @@
     :is-loading="isLoading"
     skin="social"
     type="button"
+    size="big"
     data-test="submit-button-google"
     @click.native="onLogin"
   >
