@@ -30,6 +30,7 @@ export default {
     onConfirm({ documentId, status }) {
       this.$options.documentsRequiredStore.addDocTypeStatus({
         documentType: this.selectedDocumentType,
+        id: documentId,
         status,
       });
 

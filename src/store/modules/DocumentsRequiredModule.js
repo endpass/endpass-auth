@@ -107,15 +107,19 @@ class DocumentsRequiredModule extends VuexModule {
   /**
    *
    * @param {object} params
+   * @param {string} id
    * @param {keyof typeof DOC_TYPES} params.documentType
    * @param {keyof typeof DOC_STATUSES} params.status
    * @returns {Promise<void>}
    */
   @Action
-  async addDocTypeStatus({ documentType, status }) {
+  async addDocTypeStatus({ id, documentType, status }) {
+    const docTypesStatusList = this.docTypesStatusList.filter(
+      structure => structure.id !== id,
+    );
     this.docTypesStatusList = [
-      ...this.docTypesStatusList,
-      { documentType, status },
+      ...docTypesStatusList,
+      { id, documentType, status },
     ];
   }
 
@@ -126,7 +130,8 @@ class DocumentsRequiredModule extends VuexModule {
   @Action
   async loadDocumentsTypesAndStatuses() {
     const { items } = await documentsService.getDocumentsList();
-    this.docTypesStatusList = items.map(({ documentType, status }) => ({
+    this.docTypesStatusList = items.map(({ id, documentType, status }) => ({
+      id,
       documentType,
       status,
     }));
