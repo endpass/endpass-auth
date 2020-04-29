@@ -58,19 +58,6 @@ export default {
     },
   },
 
-  watch: {
-    $route(to, from) {
-      if (to.name !== 'SignIn') {
-        return;
-      }
-
-      // Reset `isSocial` flag to avoid false next screen detections
-      if (from.name === 'SmsCode' || from.name === 'AppCode') {
-        this.$emit('update:isSocial', false);
-      }
-    },
-  },
-
   methods: {
     onReturn() {
       if (!this.isReturnable) return;

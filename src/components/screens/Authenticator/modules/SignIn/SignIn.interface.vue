@@ -4,7 +4,6 @@
     :is-public="isPublic"
     :challenge-type="challengeType"
     @sign-in="onSignIn"
-    @sign-in-social="onSignInSocial"
     @sign-up="onSignUp"
     @social="onSocial"
   />
@@ -33,12 +32,8 @@ export default {
       this.$emit('switch', { to: 'sign-up' });
     },
 
-    onSignIn({ email, serverMode, isSignUp = false }) {
-      this.$emit('complete', { email, serverMode, isSignUp });
-    },
-
-    onSignInSocial({ email }) {
-      this.$emit('complete', { email, isSocial: true });
+    onSignIn({ email, serverMode, isSignUp = false, isSocial = false }) {
+      this.$emit('complete', { email, serverMode, isSignUp, isSocial });
     },
 
     onSocial() {
