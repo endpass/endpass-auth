@@ -74,9 +74,6 @@
       "placeholder": "Enter received code...",
       "title": "Verify email"
     },
-    "gitAuthButton": {
-      "authWithGitHub": "GitHub"
-    },
     "googleAuthButton": {
       "authWithGoogle": "Google"
     },
@@ -103,6 +100,9 @@
       "title": "Disable OTP setting via SMS",
       "titlePhoneNotExist": "You don't have the registered phone number"
     },
+    "rememberCheckbox": {
+      "rememberMe": "Remember me on this device"
+    },
     "regularPasswordForm": {
       "placeholder": "Enter your password...",
       "recover": "Forgot your password?",
@@ -119,7 +119,7 @@
     },
     "scopes": {
       "address": "Read address",
-      "allowScopes": "Application requests following scopes. Press the \"Allow\" button to grant these permissions.",
+      "allowScopes": "This application is requesting the following permissions in-app popup modal. Please press \"Allow\" to grant access to this information.",
       "content": "Read document content",
       "documents": "Read all documents",
       "email": "Read email",

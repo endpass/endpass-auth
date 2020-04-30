@@ -9,7 +9,6 @@
       :doc-type-to-status="docTypeToStatus"
       :doc-types-list="docTypesList"
       :selected-document-type="selectedDocumentType"
-      :is-has-bad-status="isHasBadStatus"
       :is-show-status="true"
       @next="onNext"
       @create="onCreate"
@@ -21,10 +20,10 @@
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
 
-import ModeApp from '@/components/modules/document/steps/extraLoading/ModeApp';
-import Upload from '@/components/modules/document/steps/Upload';
-import DocumentTypes from '@/components/modules/document/steps/DocumentTypes';
+import UploadStatus from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
+import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
+import Upload from './modules/UploadRequired';
 
 export default {
   name: 'DocRequiredCreationContainer',
@@ -40,7 +39,12 @@ export default {
       required: true,
     },
 
-    isHasBadStatus: {
+    isStatusesAppropriated: {
+      type: Boolean,
+      required: true,
+    },
+
+    isStatusesVerified: {
       type: Boolean,
       required: true,
     },
@@ -63,13 +67,24 @@ export default {
 
   data() {
     return {
-      currentComponent: this.isHasBadStatus ? 'document-types' : 'mode-app',
+      currentComponent: 'document-types',
     };
   },
 
   computed: {
     isClosable() {
       return !this.documentId && !this.status;
+    },
+  },
+
+  watch: {
+    isStatusesVerified: {
+      handler(isAllVerified) {
+        if (isAllVerified && this.currentComponent === 'document-types') {
+          this.currentComponent = 'upload-status';
+        }
+      },
+      immediate: true,
     },
   },
 
@@ -104,15 +119,16 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload':
-          this.currentComponent = 'mode-app';
-          break;
-
-        case this.currentComponent === 'mode-app':
+        case this.currentComponent === 'upload' && !this.isStatusesAppropriated:
+        case this.currentComponent === 'upload-status':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');
           this.$emit('update:status', '');
           this.currentComponent = 'document-types';
+          break;
+
+        case this.currentComponent === 'upload':
+          this.currentComponent = 'upload-status';
           break;
 
         default:
@@ -134,7 +150,7 @@ export default {
     DocLayout,
     DocumentTypes,
     Upload,
-    ModeApp,
+    UploadStatus,
   },
 };
 </script>

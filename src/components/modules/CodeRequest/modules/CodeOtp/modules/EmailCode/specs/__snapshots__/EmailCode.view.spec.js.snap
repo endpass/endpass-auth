@@ -10,6 +10,9 @@ exports[`EmailCodeView render should correctly render component 1`] = `
     <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
   </form-item-stub>
   <form-item-stub class="v-mb-24">
+    <remember-me-stub data-test="remember-me-checkbox"></remember-me-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
     <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">
       Confirm
     </v-button-stub>
@@ -28,6 +31,9 @@ exports[`EmailCodeView render should render form 1`] = `
   <v-description-stub><span>We've just emailed a 6-digit code to <span class="v-fw-b">user@email.com</span>. Enter the code below to confirm.</span></v-description-stub>
   <form-item-stub>
     <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+  </form-item-stub>
+  <form-item-stub class="v-mb-24">
+    <remember-me-stub data-test="remember-me-checkbox"></remember-me-stub>
   </form-item-stub>
   <form-item-stub class="v-mb-24">
     <v-button-stub skin="primary" size="normal" type="submit" data-test="submit-button" disabled="true">

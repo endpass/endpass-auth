@@ -41,6 +41,8 @@ class AuthModule extends VuexModule {
 
   isPermission = false;
 
+  isDeviceRemembered = false;
+
   constructor(props, { sharedStore }) {
     super(props);
     this.sharedStore = sharedStore;
@@ -61,15 +63,24 @@ class AuthModule extends VuexModule {
     return { email };
   }
 
+  /**
+   * @param {boolean} isSignUp
+   * @param {string} email
+   * @param {string} password
+   * @param {string} code
+   * @param {boolean} isRemember
+   * @return {Promise<void>}
+   */
   @Action
-  async authWithGitHub(code) {
-    const { email } = await authService.authWithGitHub(code);
-
-    await this.loadAuthChallenge({
+  async authWithCode({ isSignUp, email, password, code, isRemember }) {
+    await authService.authWithCode({
       email,
+      code,
+      password,
+      isSignUp,
+      isRemember,
     });
-
-    return { email };
+    await this.defineAuthStatus();
   }
 
   @Action
@@ -83,6 +94,7 @@ class AuthModule extends VuexModule {
       settingsService.clearLocalSettings();
 
       this.challengeType = get(res, 'challenge.challengeType');
+      this.isDeviceRemembered = get(res, 'remembered');
       this.isPhoneExist = get(res, 'hasPhone');
       this.isPasswordExist = get(res, 'hasPassword');
     } finally {

@@ -23,6 +23,12 @@
       />
     </form-item>
     <form-item class="v-mb-24">
+      <remember-me
+        v-model="isRemember"
+        data-test="remember-me-checkbox"
+      />
+    </form-item>
+    <form-item class="v-mb-24">
       <v-button
         :disabled="!isFormValid || isLoading"
         :is-loading="isLoading"
@@ -50,6 +56,7 @@ import FormRow from '@/components/common/FormRow';
 import formMixin from '@/mixins/form';
 import VTitle from '@/components/common/VTitle';
 import VDescription from '@/components/common/VDescription';
+import RememberMe from '../RememberMe';
 
 export default {
   name: 'SmsCodeView',
@@ -68,6 +75,7 @@ export default {
 
   data: () => ({
     code: '',
+    isRemember: false,
   }),
 
   watch: {
@@ -89,7 +97,10 @@ export default {
 
   methods: {
     onSubmit() {
-      this.$emit('submit', { code: this.code });
+      this.$emit('submit', {
+        code: this.code,
+        isRemember: this.isRemember,
+      });
     },
 
     sendCode() {
@@ -100,6 +111,7 @@ export default {
   mixins: [formMixin],
 
   components: {
+    RememberMe,
     VTitle,
     VDescription,
     SendCode,

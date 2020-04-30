@@ -4,6 +4,7 @@
     :email.sync="email"
     :server-mode.sync="serverMode"
     :password.sync="password"
+    :is-device-remembered.sync="isDeviceRemembered"
     :is-password-exist.sync="isPasswordExist"
     :is-sign-up.sync="isSignUp"
     :challenge-type.sync="challengeType"
@@ -23,6 +24,7 @@ export default {
     email: '',
     serverMode: {},
     password: '',
+    isDeviceRemembered: false,
     isPasswordExist: false,
     isSignUp: false,
     challengeType: CHALLENGE_TYPES.EMAIL_OTP,

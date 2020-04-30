@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { regularPassword as password } from '@unitFixtures/auth';
 import RegularPasswordInterface from '@/components/screens/Authenticator/modules/RegularPassword/RegularPassword.interface';
-import RegularPasswordView from '@/components/screens/Authenticator/modules/RegularPassword/RegularPassword.view';
+import RegularPasswordInteractor from '@/components/screens/Authenticator/modules/RegularPassword/RegularPassword.interactor';
 import setupI18n from '@/locales/i18nSetup';
 
 const localVue = createLocalVue();
@@ -17,7 +17,8 @@ describe('RegularPasswordInterface', () => {
       localVue,
       i18n,
       propsData: {
-        password: '',
+        isSignUp: false,
+        isDeviceRemembered: false,
         email: '',
       },
     });
@@ -39,7 +40,7 @@ describe('RegularPasswordInterface', () => {
     it('should emit complete event', () => {
       expect(wrapper.emitted().complete).toBeUndefined();
 
-      wrapper.find(RegularPasswordView).vm.$emit('submit', { password });
+      wrapper.find(RegularPasswordInteractor).vm.$emit('submit', { password });
 
       expect(wrapper.emitted().complete.length).toBe(1);
       expect(wrapper.emitted().complete[0]).toEqual([{ password }]);
@@ -48,7 +49,7 @@ describe('RegularPasswordInterface', () => {
     it('should emit switch event', () => {
       expect(wrapper.emitted().switch).toBeUndefined();
 
-      wrapper.find(RegularPasswordView).vm.$emit('recover');
+      wrapper.find(RegularPasswordInteractor).vm.$emit('recover');
 
       expect(wrapper.emitted().switch.length).toBe(1);
       expect(wrapper.emitted().switch[0]).toEqual([
