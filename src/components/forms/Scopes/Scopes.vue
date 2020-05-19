@@ -1,25 +1,30 @@
 <template>
-  <form @submit.prevent="handleSubmit">
+  <form
+    class="scopes-form"
+    @submit.prevent="handleSubmit"
+  >
     <form-field>
       <v-description>
         {{ $t('components.scopes.allowScopes') }}
       </v-description>
     </form-field>
     <div class="form-field v-mb-24">
-      <scopes-checkbox-tree
-        v-for="level in scopesTree"
-        :key="level.key"
-        :level="level"
-        :children="level.children"
-        :values-map="valuesScopesMap"
-        :disabled="true"
-        data-test="scopes-tree"
-        @change="onChange"
-      />
+      <ul class="scopes-form-groups">
+        <li
+          v-for="(value, key) in grouppedScopes"
+          :key="key"
+          class="scopes-form-group"
+        >
+          <permission-group
+            :root-scope="key"
+            :scopes="value"
+          />
+        </li>
+      </ul>
     </div>
     <form-controls>
       <v-button
-        :disabled="!isFormValid || isLoading"
+        :disabled="isLoading"
         :is-loading="isLoading"
         :fluid="true"
         type="primary"
@@ -35,9 +40,8 @@
 import VButton from '@endpass/ui/kit/VButton';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
-import ScopesCheckboxTree from '@/components/common/ScopesCheckboxTree';
-import scopeTitlesMap from './scopeTitlesMap';
 import VDescription from '@/components/common/VDescription';
+import PermissionGroup from '@/components/common/PermissionGroup';
 
 export default {
   name: 'ScopesForm',
@@ -54,94 +58,61 @@ export default {
     },
   },
 
-  data: () => ({
-    valuesScopesMap: {},
-    scopesTree: {},
-    isFormValid: true,
-  }),
-
   computed: {
     isPopup() {
       return !!window.opener;
     },
-  },
 
-  watch: {
-    scopesList: {
-      handler(scopesList) {
-        const tree = scopesList.reduce((map, key) => {
-          const parentKey = key.split(':').shift();
-          const parent = map[parentKey] || this.createTreeLevel(parentKey);
+    grouppedScopes() {
+      const grouppedScopes = {};
 
-          Object.assign(map, { [parentKey]: parent });
+      this.scopesList.forEach(scope => {
+        const splittedScope = scope.split(':');
 
-          if (parentKey !== key) {
-            parent.children[key] = this.createTreeLevel(key);
-          }
+        if (splittedScope.length === 1) {
+          grouppedScopes[splittedScope[0]] = [];
+          return;
+        }
 
-          return map;
-        }, {});
+        const scopeKeyParts = splittedScope.slice(0, splittedScope.length - 2);
+        const scopeValueParts = splittedScope.slice(scopeKeyParts.length);
+        const scopeKey = scopeKeyParts.join(':');
+        const scopeValue = scopeValueParts.join(':');
 
-        this.valuesScopesMap = Object.keys(tree)
-          .concat(scopesList)
-          .reduce(
-            (acc, key) =>
-              Object.assign(acc, {
-                [key]: true,
-              }),
-            {},
-          );
-        this.scopesTree = tree;
-      },
-      immediate: true,
-    },
+        if (!grouppedScopes[scopeKey]) {
+          grouppedScopes[scopeKey] = [scopeValue];
+          return;
+        }
 
-    valuesScopesMap: {
-      handler() {
-        const res = this.getCheckedScopes();
+        grouppedScopes[scopeKey].push(scopeValue);
+      });
 
-        this.isFormValid = res.length !== 0;
-      },
-      immediate: true,
+      return grouppedScopes;
     },
   },
 
   methods: {
-    createTreeLevel(key) {
-      return {
-        key,
-        title: scopeTitlesMap[key] || '',
-        children: {},
-      };
-    },
-
-    onChange(newValues) {
-      this.valuesScopesMap = { ...this.valuesScopesMap, ...newValues };
-    },
-
     handleSubmit() {
-      if (!this.isFormValid) return;
-
-      const res = this.getCheckedScopes();
-
-      this.$emit('submit', res);
-    },
-
-    getCheckedScopes() {
-      const res = this.scopesList.filter(
-        key => this.valuesScopesMap[key] === true,
-      );
-
-      return res;
+      this.$emit('submit', this.scopesList);
     },
   },
 
   components: {
-    ScopesCheckboxTree,
     VButton,
     FormField,
     FormControls,
     VDescription,
+    PermissionGroup,
   },
 };
 </script>
+
+<style lang="postcss">
+.scopes-form-group {
+  padding: 6px 0;
+}
+
+.scopes-form-group:not(:last-child) {
+  border-bottom: 1px solid #f2f4f8;
+}
+</style>

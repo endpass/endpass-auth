@@ -118,34 +118,34 @@
       "title": "Change password"
     },
     "scopes": {
-      "address": "Read address",
       "allowScopes": "This application is requesting the following permissions in-app popup modal. Please press \"Allow\" to grant access to this information.",
-      "content": "Read document content",
-      "documents": "Read all documents",
-      "email": "Read email",
-      "image": "Read image documents",
-      "onlyAccount": "Read only Accounts data",
-      "onlyAddress": "Read only Address data",
-      "phone": "Read phone",
-      "scopeWallet": "Read information about wallet",
-      "status": "Read document status",
-      "user": "Read user information",
+      "offlineAccess": "Offline access",
+      "user": {
+        "title": "User information",
+        "email": "Read email",
+        "phone": "Read phone",
+        "address": "Read address"
+      },
       "passport": {
+        "title": "Passport",
         "status": "Read passport status",
         "data": "Read passport data",
         "image": "Read passport image"
       },
       "driverLicense": {
+        "title": "Driver license",
         "status": "Read driver license status",
         "data": "Read driver license data",
         "image": "Read driver license image"
       },
       "idCard": {
+        "title": "ID card",
         "status": "Read ID card status",
         "data": "Read ID card data",
         "image": "Read ID card image"
       },
       "proofOfAddress": {
+        "title": "Proof of address",
         "status": "Read proof of address status",
         "data": "Read proof of address data",
         "image": "Read proof of address image"
