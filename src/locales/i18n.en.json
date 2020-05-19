@@ -44,7 +44,14 @@
       "redirectTimeoutError": "Something wrong with redirect url",
       "scopesRequired": "Scopes are required for make a request",
       "title": "Requested Permissions",
-      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"
+      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!",
+      "tooltips": {
+        "user": "Add possibility to read user's data",
+        "proofOfAddress": "Add possibility to read user's proof of address data",
+        "passport": "Add possibility to read user's passport data",
+        "driverLicense": "Add possibility to read user's driver license data",
+        "idCard": "Add possibility to read user's ID card data"
+      }
     },
     "createPassword": {
       "confirmError": "Something went wrong while creating a password. Please, try again",
@@ -120,7 +127,6 @@
     "scopes": {
       "allowScopes": "This application is requesting permission to access the following details from you. Press \"Allow\" if you would like to grant access to this information.",
       "access": "Access",
-      "offlineAccess": "Offline access",
       "user": {
         "title": "User information",
         "email": "Email",

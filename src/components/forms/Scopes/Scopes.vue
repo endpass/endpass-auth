@@ -11,7 +11,7 @@
     <div class="form-field v-mb-24">
       <ul class="scopes-form-groups">
         <li
-          v-for="(value, key) in grouppedScopes"
+          v-for="(value, key) in groupedScopes"
           :key="key"
           class="scopes-form-group"
         >
@@ -38,10 +38,11 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
+import { PUBLIC_SCOPES } from '@/constants';
 import FormField from '@/components/common/FormField.vue';
 import FormControls from '@/components/common/FormControls.vue';
 import VDescription from '@/components/common/VDescription';
-import PermissionGroup from '@/components/common/PermissionGroup';
+import PermissionGroup from './modules/PermissionGroup';
 
 export default {
   name: 'ScopesForm',
@@ -63,31 +64,35 @@ export default {
       return !!window.opener;
     },
 
-    grouppedScopes() {
-      const grouppedScopes = {};
+    filteredScopes() {
+      return this.scopesList.filter(
+        scope => scope !== PUBLIC_SCOPES.OFFLINE_ACCESS,
+      );
+    },
 
-      this.scopesList.forEach(scope => {
+    groupedScopes() {
+      const groupedScopes = {};
+
+      this.filteredScopes.forEach(scope => {
         const splittedScope = scope.split(':');
 
         if (splittedScope.length === 1) {
-          grouppedScopes[splittedScope[0]] = [];
+          groupedScopes[splittedScope[0]] = [];
           return;
         }
 
         const scopeKeyParts = splittedScope.slice(0, splittedScope.length - 2);
-        const scopeValueParts = splittedScope.slice(scopeKeyParts.length);
         const scopeKey = scopeKeyParts.join(':');
-        const scopeValue = scopeValueParts.join(':');
 
-        if (!grouppedScopes[scopeKey]) {
-          grouppedScopes[scopeKey] = [scopeValue];
+        if (!groupedScopes[scopeKey]) {
+          groupedScopes[scopeKey] = [scope];
           return;
         }
 
-        grouppedScopes[scopeKey].push(scopeValue);
+        groupedScopes[scopeKey].push(scope);
       });
 
-      return grouppedScopes;
+      return groupedScopes;
     },
   },
 
@@ -113,6 +118,6 @@ export default {
 }
 
 .scopes-form-group:not(:last-child) {
-  border-bottom: 1px solid #f2f4f8;
+  border-bottom: 1px solid var(--endpass-ui-color-grey-1);
 }
 </style>

@@ -7,6 +7,17 @@
       @return="onReturn"
       @close="onClose"
     >
+      <div
+        v-if="showLogo"
+        slot="icon"
+        data-test="logo"
+        class="frame-logo"
+      >
+        <img
+          src="../../assets/logo.png"
+          alt="Endpass Inc. - Logotype"
+        >
+      </div>
       <template
         v-if="title"
         slot="title"
@@ -34,6 +45,11 @@ export default {
     title: {
       type: String,
       default: 'Connect',
+    },
+
+    showLogo: {
+      type: Boolean,
+      default: false,
     },
 
     isClosable: {
@@ -85,6 +101,16 @@ export default {
   box-shadow: 0 5px 10px 1px rgba(0, 0, 0, 0.15);
   background-color: #fff;
   animation: slideIn 0.75s;
+}
+
+.frame-logo {
+  width: 100%;
+  text-align: left;
+}
+
+.frame-logo img {
+  width: 112px;
+  height: 32px;
 }
 
 .frame-modal-card {

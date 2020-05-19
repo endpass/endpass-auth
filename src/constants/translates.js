@@ -1,6 +1,6 @@
 import TranslateObjectFactory from '@/class/TranslateObjectFactory';
 
-import { DOC_TYPES, DOC_STATUSES } from '@/constants';
+import { DOC_TYPES, DOC_STATUSES, PUBLIC_SCOPES } from '@/constants';
 
 const { $t, createGetters } = TranslateObjectFactory;
 
@@ -21,35 +21,73 @@ export const DOC_STATUSES_TRANSLATES = createGetters({
 });
 
 export const SCOPES_TRANSLATES = createGetters({
-  // Offline access
-  offlineAccess: $t('components.scopes.offlineAccess'),
   // User
-  user: $t('components.scopes.user.title'),
-  userEmailRead: $t('components.scopes.user.email'),
-  userAddressRead: $t('components.scopes.user.address'),
-  userPhoneRead: $t('components.scopes.user.phone'),
+  [PUBLIC_SCOPES.USER]: $t('components.scopes.user.title'),
+  [PUBLIC_SCOPES.USER_EMAIL_READ]: $t('components.scopes.user.email'),
+  [PUBLIC_SCOPES.USER_ADDRESS_READ]: $t('components.scopes.user.address'),
+  [PUBLIC_SCOPES.USER_PHONE_READ]: $t('components.scopes.user.phone'),
   // ID card
-  documentsIdCard: $t('components.scopes.idCard.title'),
-  documentsIdCardImageRead: $t('components.scopes.idCard.image'),
-  documentsIdCardStatusRead: $t('components.scopes.idCard.status'),
-  documentsIdCardDataRead: $t('components.scopes.idCard.data'),
+  [PUBLIC_SCOPES.DOCUMENTS_ID_CARD]: $t('components.scopes.idCard.title'),
+  [PUBLIC_SCOPES.DOCUMENTS_ID_CARD_IMAGE_READ]: $t(
+    'components.scopes.idCard.image',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_ID_CARD_STATUS_READ]: $t(
+    'components.scopes.idCard.status',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_ID_CARD_DATA_READ]: $t(
+    'components.scopes.idCard.data',
+  ),
   // Passport
-  documentsPassport: $t('components.scopes.passport.title'),
-  documentsPassportImageRead: $t('components.scopes.passport.image'),
-  documentsPassportStatusRead: $t('components.scopes.passport.status'),
-  documentsPassportDataRead: $t('components.scopes.passport.data'),
+  [PUBLIC_SCOPES.DOCUMENTS_PASSPORT]: $t('components.scopes.passport.title'),
+  [PUBLIC_SCOPES.DOCUMENTS_PASSPORT_IMAGE_READ]: $t(
+    'components.scopes.passport.image',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PASSPORT_STATUS_READ]: $t(
+    'components.scopes.passport.status',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PASSPORT_DATA_READ]: $t(
+    'components.scopes.passport.data',
+  ),
   // Driver license
-  documentsDriverLicense: $t('components.scopes.driverLicense.title'),
-  documentsDriverLicenseImageRead: $t('components.scopes.driverLicense.image'),
-  documentsDriverLicenseStatusRead: $t(
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE]: $t(
+    'components.scopes.driverLicense.title',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_IMAGE_READ]: $t(
+    'components.scopes.driverLicense.image',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_STATUS_READ]: $t(
     'components.scopes.driverLicense.status',
   ),
-  documentsDriverLicenseDataRead: $t('components.scopes.driverLicense.data'),
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_DATA_READ]: $t(
+    'components.scopes.driverLicense.data',
+  ),
   // Proof of address
-  documentsProofAddress: $t('components.scopes.proofOfAddress.title'),
-  documentsProofAddressImageRead: $t('components.scopes.proofOfAddress.image'),
-  documentsProofAddressStatusRead: $t(
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS]: $t(
+    'components.scopes.proofOfAddress.title',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_IMAGE_READ]: $t(
+    'components.scopes.proofOfAddress.image',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_STATUS_READ]: $t(
     'components.scopes.proofOfAddress.status',
   ),
-  documentsProofAddressDataRead: $t('components.scopes.proofOfAddress.data'),
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_DATA_READ]: $t(
+    'components.scopes.proofOfAddress.data',
+  ),
+});
+
+export const SCOPES_TOOLTIPS_TRANSLATES = createGetters({
+  [PUBLIC_SCOPES.USER]: $t('components.consentProvider.tooltips.user'),
+  [PUBLIC_SCOPES.DOCUMENTS_ID_CARD]: $t(
+    'components.consentProvider.tooltips.idCard',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PASSPORT]: $t(
+    'components.consentProvider.tooltips.passport',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE]: $t(
+    'components.consentProvider.tooltips.driverLicense',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS]: $t(
+    'components.consentProvider.tooltips.proofOfAddress',
+  ),
 });
