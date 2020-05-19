@@ -1,20 +1,14 @@
 <template>
   <section class="permission-group">
     <p class="permission-group-title">
-      {{ title }}
+      {{ scopesTitle }}
     </p>
-    <ul
+    <p
       v-if="!isScopesEmpty"
       class="permission-group-scopes"
     >
-      <li
-        v-for="scope in scopes"
-        :key="scope"
-        class="permission-group-scopes-item"
-      >
-        {{ getScopeTitle(scope) }}
-      </li>
-    </ul>
+      {{ $t('components.scopes.access') }} {{ scopesDescription }}
+    </p>
   </section>
 </template>
 
@@ -42,10 +36,21 @@ export default {
       return this.scopes.length === 0;
     },
 
-    title() {
+    scopesTitle() {
       const normalizedKey = this.normalizeScopeKey(this.rootScope);
 
       return SCOPES_TRANSLATES[normalizedKey] || normalizedKey;
+    },
+
+    scopesDescription() {
+      const normalizedKeys = this.scopes.map(scope =>
+        this.normalizeScopeKey(this.rootScope, scope),
+      );
+      const translatedScopes = normalizedKeys.map(
+        scope => SCOPES_TRANSLATES[scope] || scope,
+      );
+
+      return translatedScopes.join(', ').toLowerCase();
     },
   },
 
@@ -57,12 +62,6 @@ export default {
           .split(':')
           .join('-'),
       );
-    },
-
-    getScopeTitle(scope) {
-      const normalizedKey = this.normalizeScopeKey(this.rootScope, scope);
-
-      return SCOPES_TRANSLATES[normalizedKey] || normalizedKey;
     },
   },
 };
@@ -80,21 +79,6 @@ export default {
 }
 
 .permission-group-scopes {
-  display: flex;
-  align-items: center;
-  flex-flow: row wrap;
   letter-spacing: -0.175px;
-}
-
-.permission-group-scopes-item {
-  text-transform: lowercase;
-}
-
-.permission-group-scopes-item:first-child:first-letter {
-  text-transform: uppercase;
-}
-
-.permission-group-scopes-item:not(:last-child):after {
-  content: ',';
 }
 </style>

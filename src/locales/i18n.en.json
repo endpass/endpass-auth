@@ -43,7 +43,7 @@
       "loadScopesError": "Something went wrong while loading scopes.",
       "redirectTimeoutError": "Something wrong with redirect url",
       "scopesRequired": "Scopes are required for make a request",
-      "title": "Permissions",
+      "title": "Requested Permissions",
       "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"
     },
     "createPassword": {
@@ -118,37 +118,38 @@
       "title": "Change password"
     },
     "scopes": {
-      "allowScopes": "This application is requesting the following permissions in-app popup modal. Please press \"Allow\" to grant access to this information.",
+      "allowScopes": "This application is requesting permission to access the following details from you. Press \"Allow\" if you would like to grant access to this information.",
+      "access": "Access",
       "offlineAccess": "Offline access",
       "user": {
         "title": "User information",
-        "email": "Read email",
-        "phone": "Read phone",
-        "address": "Read address"
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address"
       },
       "passport": {
         "title": "Passport",
-        "status": "Read passport status",
-        "data": "Read passport data",
-        "image": "Read passport image"
+        "status": "Passport status",
+        "data": "Passport data",
+        "image": "Passport image"
       },
       "driverLicense": {
         "title": "Driver license",
-        "status": "Read driver license status",
-        "data": "Read driver license data",
-        "image": "Read driver license image"
+        "status": "Driver license status",
+        "data": "Driver license data",
+        "image": "Driver license image"
       },
       "idCard": {
         "title": "ID card",
-        "status": "Read ID card status",
-        "data": "Read ID card data",
-        "image": "Read ID card image"
+        "status": "ID card status",
+        "data": "ID card data",
+        "image": "ID card image"
       },
       "proofOfAddress": {
         "title": "Proof of address",
-        "status": "Read proof of address status",
-        "data": "Read proof of address data",
-        "image": "Read proof of address image"
+        "status": "Proof of address status",
+        "data": "Proof of address data",
+        "image": "Proof of address image"
       }
     },
     "sendCode": {
