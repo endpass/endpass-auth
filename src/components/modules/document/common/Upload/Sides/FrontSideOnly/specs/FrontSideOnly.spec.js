@@ -6,6 +6,7 @@ import setupI18n from '@/locales/i18nSetup';
 
 import FrontSideOnly from '@/components/modules/document/common/Upload/Sides/FrontSideOnly';
 import documentsService from '@/service/documents';
+import riskScoringService from '@/service/riskScoring';
 import { DOC_STATUSES } from '@/constants';
 
 const localVue = createLocalVue();
@@ -47,7 +48,9 @@ describe('UploadDocument > FrontSideOnly', () => {
   });
 
   it('should upload front side of document and recognize', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
+
+    expect(wrapper.emitted().confirm).toBeUndefined();
 
     await emitUpload();
 
@@ -59,6 +62,16 @@ describe('UploadDocument > FrontSideOnly', () => {
         },
       ],
     ]);
+  });
+
+  it('should send fingerprint after upload', async () => {
+    expect.assertions(2);
+
+    expect(riskScoringService.sendFingerprint).not.toBeCalled();
+
+    await emitUpload();
+
+    expect(riskScoringService.sendFingerprint).toBeCalledTimes(1);
   });
 
   it('should not emit confirm, if error in recognize', async () => {
@@ -110,9 +123,11 @@ describe('UploadDocument > FrontSideOnly', () => {
   });
 
   it('should emit confirm after recognize', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
 
     documentsService.confirmDocument.mockRejectedValueOnce(new Error());
+
+    expect(wrapper.emitted().confirm).toBeUndefined();
 
     await emitUpload();
 

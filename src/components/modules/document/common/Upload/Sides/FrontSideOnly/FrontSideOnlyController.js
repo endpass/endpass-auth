@@ -1,11 +1,10 @@
 // @ts-check
 import { VuexModule, Action, Module, Mutation } from 'vuex-class-modules';
 import get from 'lodash/get';
-import Fingerprint from 'fingerprintjs2';
 import createController from '@/controllers/createController';
 
 import documentsService from '@/service/documents';
-import riskService from '@/service/risk';
+import riskScoringService from '@/service/riskScoring';
 import ProgressTimer from '@/class/ProgressTimer';
 import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
@@ -209,13 +208,7 @@ class FrontSideOnlyController extends VuexModule {
    */
   @Action
   async sendFingerprint() {
-    const finger = new Fingerprint({
-      excludeCanvas: true,
-    });
-
-    finger.get(async (hash, entries) => {
-      await riskService.sendFingerprint(entries);
-    });
+    await riskScoringService.sendFingerprint();
   }
 }
 
