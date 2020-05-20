@@ -111,6 +111,9 @@ export default {
     async startCreateDocument() {
       try {
         this.isLoading = true;
+
+        await this.$options.riskScoringStore.sendFingerprint();
+
         this.documentId = await this.$options.frontSideController.startCreateDocument(
           {
             file: this.selectedFile,
@@ -141,8 +144,6 @@ export default {
     },
 
     handleConfirm(status) {
-      this.$options.riskScoringStore.sendFingerprint();
-
       this.$emit('confirm', {
         documentId: this.documentId,
         status,

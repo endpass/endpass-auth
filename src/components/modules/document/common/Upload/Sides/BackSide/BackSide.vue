@@ -108,6 +108,9 @@ export default {
     async startUpload() {
       try {
         this.isLoading = true;
+
+        await this.$options.riskScoringStore.sendFingerprint();
+
         await this.$options.backSideController.startUpload({
           file: this.selectedFile,
           docId: this.documentId,
@@ -138,8 +141,6 @@ export default {
     },
 
     handleConfirm(status) {
-      this.$options.riskScoringStore.sendFingerprint();
-
       this.$emit('confirm', {
         documentId: this.documentId,
         status,
