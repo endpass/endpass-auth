@@ -17,14 +17,12 @@ const sendFingerprint = () => {
      * }}
      */
     const json = entries.reduce((accumulator, entry) => {
-      Object.assign(accumulator, {
+      return Object.assign(accumulator, {
         [entry.key]: entry.value,
       });
-
-      return accumulator;
     }, {});
 
-    request.post(`${ENV.VUE_APP_IDENTITY_API_URL}/fingerprint`, {
+    await request.post(`${ENV.VUE_APP_IDENTITY_API_URL}/fingerprint`, {
       fingerprint: btoa(JSON.stringify(json)),
     });
   });
