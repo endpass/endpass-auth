@@ -32,11 +32,13 @@ import createFrontSideController from './FrontSideOnlyController';
 import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
 import DropArea from '../DropArea';
+import { riskScoringStore } from '@/store';
 
 export default {
   name: 'FrontSideOnly',
 
   frontSideController: createFrontSideController(),
+  riskScoringStore,
 
   inject: ['$validator'],
 
@@ -139,6 +141,8 @@ export default {
     },
 
     handleConfirm(status) {
+      this.$options.riskScoringStore.sendFingerprint();
+
       this.$emit('confirm', {
         documentId: this.documentId,
         status,

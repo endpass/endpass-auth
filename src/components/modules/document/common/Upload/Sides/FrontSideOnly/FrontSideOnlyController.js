@@ -4,7 +4,6 @@ import get from 'lodash/get';
 import createController from '@/controllers/createController';
 
 import documentsService from '@/service/documents';
-import riskScoringService from '@/service/riskScoring';
 import ProgressTimer from '@/class/ProgressTimer';
 import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
@@ -173,8 +172,6 @@ class FrontSideOnlyController extends VuexModule {
 
       timer.continueProgress(40, 50);
       await documentsService.waitDocumentUpload(this.docId);
-
-      await this.sendFingerprint();
     } catch (e) {
       throw this.createError(e);
     } finally {
@@ -201,14 +198,6 @@ class FrontSideOnlyController extends VuexModule {
   @Action
   init() {
     this.docId = '';
-  }
-
-  /**
-   * @return {Promise<void>}
-   */
-  @Action
-  async sendFingerprint() {
-    await riskScoringService.sendFingerprint();
   }
 }
 
