@@ -5,7 +5,6 @@ import createController from '@/controllers/createController';
 import i18n from '@/locales/i18n';
 
 import documentsService from '@/service/documents';
-import riskScoringService from '@/service/riskScoring';
 import ProgressTimer from '@/class/ProgressTimer';
 import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
 import NonReactive from '@/class/NonReactive';
@@ -140,8 +139,6 @@ class BackSideController extends VuexModule {
 
       timer.continueProgress(40, 50);
       await documentsService.waitDocumentUpload(docId);
-
-      await this.sendFingerprint();
     } catch (e) {
       throw this.createError(e);
     } finally {
@@ -184,14 +181,6 @@ class BackSideController extends VuexModule {
     } finally {
       timer.fillAndStopProgress();
     }
-  }
-
-  /**
-   * @return {Promise<void>}
-   */
-  @Action
-  async sendFingerprint() {
-    await riskScoringService.sendFingerprint();
   }
 }
 

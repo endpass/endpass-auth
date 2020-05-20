@@ -35,6 +35,7 @@ import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUp
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
 import FooterDoneButtons from '../FooterButtons/FooterDoneButtons';
 import DropArea from '../DropArea';
+import { riskScoringStore } from '@/store';
 
 export default {
   name: 'BackSide',
@@ -42,6 +43,7 @@ export default {
   inject: ['$validator'],
 
   backSideController: createBackSideController(),
+  riskScoringStore,
 
   props: {
     documentId: {
@@ -136,6 +138,8 @@ export default {
     },
 
     handleConfirm(status) {
+      this.$options.riskScoringStore.sendFingerprint();
+
       this.$emit('confirm', {
         documentId: this.documentId,
         status,
