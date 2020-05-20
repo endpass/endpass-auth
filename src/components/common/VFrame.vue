@@ -25,18 +25,13 @@
       >
         {{ title }}
       </template>
-      <spinner
-        v-if="isLoading"
-        class="frame-spinner"
-      />
-      <slot v-else />
+      <slot />
     </v-modal-card>
   </div>
 </template>
 
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import Spinner from '@/components/common/Spinner';
 
 export default {
   name: 'VFrame',
@@ -61,11 +56,6 @@ export default {
       type: Boolean,
       default: false,
     },
-
-    isLoading: {
-      type: Boolean,
-      default: false,
-    },
   },
 
   methods: {
@@ -79,7 +69,6 @@ export default {
   },
 
   components: {
-    Spinner,
     VModalCard,
   },
 };
@@ -115,11 +104,6 @@ export default {
 
 .frame-modal-card {
   max-width: initial !important;
-}
-
-.frame-spinner {
-  position: relative;
-  margin: 0 auto;
 }
 
 @media (max-width: 768px) {
