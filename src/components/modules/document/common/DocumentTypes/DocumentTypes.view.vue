@@ -36,6 +36,7 @@
         </div>
       </div>
     </div>
+    <slot name="afterTypes" />
   </div>
 </template>
 
@@ -92,7 +93,7 @@ export default {
       const status = this.docTypeToStatus[type];
       const label = this.$options.DOC_STATUSES_TRANSLATES[status];
       if (!label) {
-        return this.$i18n.t('components.uploadDocument.notUploaded');
+        return this.$i18n.t('components.uploadDocument.notAdded');
       }
       return label;
     },

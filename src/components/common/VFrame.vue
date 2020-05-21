@@ -27,11 +27,13 @@
       </template>
       <slot />
     </v-modal-card>
+    <Footer />
   </div>
 </template>
 
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
+import Footer from '@/components/modules/Footer';
 
 export default {
   name: 'VFrame',
@@ -70,6 +72,7 @@ export default {
 
   components: {
     VModalCard,
+    Footer,
   },
 };
 </script>

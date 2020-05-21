@@ -207,7 +207,7 @@
       "recognition": "Recognition",
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "notUploaded": "Not uploaded yet",
+      "notAdded": "Not added yet",
       "upload": "Upload",
       "pending": "Pending",
       "pleaseWait": "Please do not close the app, your documents are being processed.",

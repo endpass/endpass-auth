@@ -50,6 +50,7 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   isSelectedDocumentsExpired(documentsList) {
+    // TODO: expired date should be checked NOT in client
     const now = Date.now();
     return this.selectedDocumentsIdsList.every(documentId => {
       const doc = documentsList.find(document => document.id === documentId);
@@ -212,7 +213,7 @@ class DocumentsRequiredModule extends VuexModule {
     await this.loadRequiredTypes(clientId);
 
     return {
-      isNeedUploadDocument: this.isNeedUploadDocument,
+      isNeedUploadDocument: true, // this.isNeedUploadDocument,
     };
   }
 }
