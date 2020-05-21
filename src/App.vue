@@ -58,7 +58,7 @@ body,
 input,
 button,
 select {
-  font-family: 'Akkurat Pro', Helvetica, Arial, sans-serif;
+  font-family: 'Brutal Type', Helvetica, Arial, sans-serif;
 }
 
 @media (max-width: 768px) {
