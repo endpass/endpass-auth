@@ -1,6 +1,7 @@
 import { VuexModule, Module, Action } from 'vuex-class-modules';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
+import SignToken from '@/class/SignToken';
 
 const GOOD_STATUSES = [
   //
@@ -29,6 +30,10 @@ class DocumentsRequiredModule extends VuexModule {
 
   docTypesStatusList = [];
 
+  selectedDocumentsIdsList = [];
+
+  signToken = new SignToken();
+
   /**
    * @returns {boolean}
    */
@@ -42,6 +47,16 @@ class DocumentsRequiredModule extends VuexModule {
     }
 
     return !this.isStatusesVerified;
+  }
+
+  isSelectedDocumentsExpired(documentsList) {
+    const now = Date.now();
+    return this.selectedDocumentsIdsList.every(documentId => {
+      const doc = documentsList.find(document => document.id === documentId);
+      if (!doc) return false;
+      if (doc.expiredDate < now) return false;
+      return true;
+    });
   }
 
   /**
@@ -128,13 +143,21 @@ class DocumentsRequiredModule extends VuexModule {
    * @returns {Promise<void>}
    */
   @Action
-  async loadDocumentsTypesAndStatuses() {
-    const { items } = await documentsService.getDocumentsList();
-    this.docTypesStatusList = items.map(({ id, documentType, status }) => ({
-      id,
-      documentType,
-      status,
-    }));
+  async loadDocumentsTypesAndStatuses(documentsList) {
+    // TODO: after implement connect, remove checking for not defined documentsList
+    if (!documentsList) {
+      const { items } = await documentsService.getDocumentsList();
+      // eslint-disable-next-line no-param-reassign
+      documentsList = items;
+    }
+
+    this.docTypesStatusList = documentsList.map(
+      ({ id, documentType, status }) => ({
+        id,
+        documentType,
+        status,
+      }),
+    );
   }
 
   /**
@@ -156,6 +179,14 @@ class DocumentsRequiredModule extends VuexModule {
     );
   }
 
+  @Action
+  setDocumentsSelected(signedString) {
+    const { data } = this.signToken.parse(signedString);
+    if (!data) return;
+    if (!Array.isArray(data.selectedIds)) return;
+    this.selectedDocumentsIdsList = data.selectedIds;
+  }
+
   /**
    *
    * @param {object} params
@@ -163,12 +194,22 @@ class DocumentsRequiredModule extends VuexModule {
    * @returns {Promise<{isNeedUploadDocument: boolean}>}
    */
   @Action
-  async checkRequired({ clientId }) {
+  async checkRequired({ clientId, documentsList, signedString }) {
     this.clientId = clientId;
-    await Promise.all([
-      this.loadRequiredTypes(clientId),
-      this.loadDocumentsTypesAndStatuses(),
-    ]);
+
+    await this.loadDocumentsTypesAndStatuses(documentsList);
+
+    await this.setDocumentsSelected(signedString);
+
+    if (
+      this.selectedDocumentsIdsList.length &&
+      !this.isSelectedDocumentsExpired(documentsList)
+    ) {
+      // if all selected docs is not expired, return {}
+      return {};
+    }
+
+    await this.loadRequiredTypes(clientId);
 
     return {
       isNeedUploadDocument: this.isNeedUploadDocument,
