@@ -1,5 +1,6 @@
 import Fingerprint from 'fingerprintjs2';
 import request from '@/class/singleton/request';
+import { METRIC_TYPES } from '@/constants';
 
 /**
  * @param {object[]} entries
@@ -24,8 +25,9 @@ const sendFingerprint = () => {
       {},
     );
 
-    await request.post(`${ENV.VUE_APP_IDENTITY_API_URL}/fingerprint`, {
-      fingerprint: btoa(JSON.stringify(json)),
+    await request.post(`${ENV.VUE_APP_IDENTITY_API_URL}/user/metric`, {
+      payload: btoa(JSON.stringify(json)),
+      entryType: METRIC_TYPES.USER_BROWSER_FINGERPRINT,
     });
   });
 };
