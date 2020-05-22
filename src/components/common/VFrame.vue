@@ -1,7 +1,7 @@
 <template>
-  <div class="frame">
+  <div class="v-frame">
     <v-modal-card
-      class="frame-modal-card"
+      class="v-frame-modal-card"
       :is-closable="isClosable"
       :is-returnable="isReturnable"
       @return="onReturn"
@@ -85,7 +85,7 @@ export default {
   }
 }
 
-.frame {
+.v-frame {
   overflow: hidden;
   max-width: 360px;
   margin: 50px auto;
@@ -105,12 +105,12 @@ export default {
   height: 32px;
 }
 
-.frame-modal-card {
+.v-frame-modal-card {
   max-width: initial !important;
 }
 
 @media (max-width: 768px) {
-  .frame {
+  .v-frame {
     max-width: initial;
     margin: 0;
     border-radius: 0;

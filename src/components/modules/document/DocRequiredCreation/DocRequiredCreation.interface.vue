@@ -1,11 +1,12 @@
 <template>
   <doc-required-creation
-    :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
-    :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
-    :is-statuses-appropriated="
-      $options.documentsRequiredStore.isStatusesAppropriated
-    "
-    :is-statuses-verified="$options.documentsRequiredStore.isStatusesVerified"
+    :is-available-to-apply="isAvailableToApply"
+    :doc-required-types-list="docRequiredTypes"
+    :selected-documents-by-type="selectedDocumentsByType"
+    :available-documents-list="availableDocumentsList"
+    :doc-type-to-status="docTypeToStatus"
+    :is-statuses-appropriated="isStatusesAppropriated"
+    :is-statuses-verified="isStatusesVerified"
   />
 </template>
 
@@ -42,6 +43,32 @@ export default {
         },
       },
     };
+  },
+
+  computed: {
+    availableDocumentsList() {
+      return this.$options.documentsRequiredStore.availableDocumentsList;
+    },
+    isAvailableToApply() {
+      return this.$options.documentsRequiredStore.isAvailableToApply;
+    },
+    docRequiredTypes() {
+      return this.$options.documentsRequiredStore.docRequiredTypes;
+    },
+
+    docTypeToStatus() {
+      return this.$options.documentsRequiredStore.docTypeToStatus;
+    },
+
+    isStatusesAppropriated() {
+      return this.$options.documentsRequiredStore.isStatusesAppropriated;
+    },
+    selectedDocumentsByType() {
+      return this.$options.documentsRequiredStore.selectedDocumentsByType;
+    },
+    isStatusesVerified() {
+      return this.$options.documentsRequiredStore.isStatusesVerified;
+    },
   },
 
   components: {

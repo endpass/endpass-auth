@@ -9,7 +9,6 @@
       :document-id="documentId"
       :status="status"
       :selected-document-type="selectedDocumentType"
-      :is-show-status="false"
       @next="onNext"
       @create="onCreate"
       @cancel="onBack"
@@ -22,7 +21,7 @@ import DocLayout from '@/components/modules/document/DocLayout';
 
 import UploadStatus from '@/components/modules/document/DocSingleCreation/modules/UploadStatus';
 import Upload from '@/components/modules/document/common/Upload';
-import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
+import DocTypes from './modules/DocTypes';
 
 export default {
   name: 'DocSpecifiedContainer',
@@ -57,7 +56,7 @@ export default {
     currentComponent() {
       switch (true) {
         case !this.documentId && !this.selectedDocumentType:
-          return DocumentTypes;
+          return DocTypes;
 
         case !!this.status:
           return UploadStatus;

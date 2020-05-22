@@ -30,7 +30,7 @@ class DocumentsRequiredModule extends VuexModule {
 
   docTypesStatusList = [];
 
-  selectedDocumentsIdsList = [];
+  selectedDocumentsIdList = [];
 
   signToken = new SignToken();
 
@@ -49,10 +49,24 @@ class DocumentsRequiredModule extends VuexModule {
     return !this.isStatusesVerified;
   }
 
+  get isAvailableToApply() {
+    // TODO: move to controller
+    const { docTypeToStatus } = this;
+    return this.docRequiredTypes.every(
+      documentType => docTypeToStatus[documentType] === DOC_STATUSES.VERIFIED,
+    );
+  }
+
+  get availableDocumentsList() {
+    return this.docTypesStatusList.filter(
+      ({ status }) => status === DOC_STATUSES.VERIFIED,
+    );
+  }
+
   isSelectedDocumentsExpired(documentsList) {
     // TODO: expired date should be checked NOT in client
     const now = Date.now();
-    return this.selectedDocumentsIdsList.every(documentId => {
+    return this.selectedDocumentsIdList.every(documentId => {
       const doc = documentsList.find(document => document.id === documentId);
       if (!doc) return false;
       if (doc.expiredDate < now) return false;
@@ -60,7 +74,21 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
+  get selectedDocumentsByType() {
+    const selectedDocStructuresList = this.docTypesStatusList.filter(
+      structure => this.selectedDocumentsIdList.includes(structure.id),
+    );
+
+    return selectedDocStructuresList.reduce((docByTypeMap, structure) => {
+      return {
+        ...docByTypeMap,
+        [structure.documentType]: structure,
+      };
+    }, {});
+  }
+
   /**
+   * @deprecated
    * @returns {boolean}
    */
   get isStatusesVerified() {
@@ -118,6 +146,16 @@ class DocumentsRequiredModule extends VuexModule {
     }
 
     return true;
+  }
+
+  @Action
+  selectDocumentForType({ documentType, documentId }) {
+    const { selectedDocumentsByType } = this;
+    delete selectedDocumentsByType[documentType];
+    this.selectedDocumentsIdList = [
+      ...Object.values(selectedDocumentsByType),
+      documentId,
+    ];
   }
 
   /**
@@ -185,7 +223,7 @@ class DocumentsRequiredModule extends VuexModule {
     const { data } = this.signToken.parse(signedString);
     if (!data) return;
     if (!Array.isArray(data.selectedIds)) return;
-    this.selectedDocumentsIdsList = data.selectedIds;
+    this.selectedDocumentsIdList = data.selectedIds;
   }
 
   /**
@@ -203,7 +241,7 @@ class DocumentsRequiredModule extends VuexModule {
     await this.setDocumentsSelected(signedString);
 
     if (
-      this.selectedDocumentsIdsList.length &&
+      this.selectedDocumentsIdList.length &&
       !this.isSelectedDocumentsExpired(documentsList)
     ) {
       // if all selected docs is not expired, return {}

@@ -35,12 +35,12 @@ export default {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 106px;
-  height: 80px;
+  width: 142px;
+  height: 91px;
 }
 .footer-gradient {
-  width: 106px;
-  height: 185px;
+  width: 153px;
+  height: 273px;
   transform: rotate(236deg);
   background: linear-gradient(250.32deg, #b067ff 9.73%, #792bef 80.97%);
 }

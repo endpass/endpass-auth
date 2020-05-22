@@ -1,9 +1,12 @@
 <template>
   <doc-required-creation
-    :doc-types-list="docTypesList"
     :doc-type-to-status="docTypeToStatus"
     :is-statuses-appropriated="isStatusesAppropriated"
     :is-statuses-verified="isStatusesVerified"
+    :doc-required-types-list="docRequiredTypesList"
+    :is-available-to-apply="isAvailableToApply"
+    :selected-documents-by-type="selectedDocumentsByType"
+    :available-documents-list="availableDocumentsList"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -18,13 +21,28 @@ export default {
   inject: ['gateway'],
 
   props: {
-    docTypesList: {
+    docRequiredTypesList: {
       type: Array,
       required: true,
     },
 
     docTypeToStatus: {
       type: Object,
+      required: true,
+    },
+
+    isAvailableToApply: {
+      type: Boolean,
+      required: true,
+    },
+
+    selectedDocumentsByType: {
+      type: Object,
+      required: true,
+    },
+
+    availableDocumentsList: {
+      type: Array,
       required: true,
     },
 

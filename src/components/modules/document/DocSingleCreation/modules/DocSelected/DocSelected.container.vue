@@ -9,7 +9,6 @@
       :document-id="documentId"
       :status="status"
       :selected-document-type="selectedDocumentType"
-      :is-show-status="false"
       @next="onNext"
       @create="onCreate"
       @cancel="onBack"

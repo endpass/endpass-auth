@@ -7,9 +7,11 @@
       :is="currentComponent"
       :document-id="documentId"
       :doc-type-to-status="docTypeToStatus"
-      :doc-types-list="docTypesList"
       :selected-document-type="selectedDocumentType"
-      :is-show-status="true"
+      :doc-required-types-list="docRequiredTypesList"
+      :is-available-to-apply="isAvailableToApply"
+      :selected-documents-by-type="selectedDocumentsByType"
+      :available-documents-list="availableDocumentsList"
       @next="onNext"
       @create="onCreate"
       @cancel="onBack"
@@ -19,17 +21,33 @@
 
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
-
-import UploadStatus from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
-import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
+
 import Upload from './modules/UploadRequired';
+import UploadStatus from './modules/UploadStatus';
+import RequiredDocumentTypes from './modules/RequiredDocumentTypes';
+import SelectedDocumentByType from './modules/SelectedDocumentByType';
 
 export default {
   name: 'DocRequiredCreationContainer',
 
   props: {
-    docTypesList: {
+    docRequiredTypesList: {
+      type: Array,
+      required: true,
+    },
+
+    isAvailableToApply: {
+      type: Boolean,
+      required: true,
+    },
+
+    selectedDocumentsByType: {
+      type: Object,
+      required: true,
+    },
+
+    availableDocumentsList: {
       type: Array,
       required: true,
     },
@@ -67,7 +85,7 @@ export default {
 
   data() {
     return {
-      currentComponent: 'document-types',
+      currentComponent: 'required-document-types',
     };
   },
 
@@ -75,12 +93,22 @@ export default {
     isClosable() {
       return !this.documentId && !this.status;
     },
+
+    isDocumentsByTypeExists() {
+      const selectedDocument = this.selectedDocumentsByType[
+        this.selectedDocumentType
+      ];
+      return !!selectedDocument;
+    },
   },
 
   watch: {
     isStatusesVerified: {
       handler(isAllVerified) {
-        if (isAllVerified && this.currentComponent === 'document-types') {
+        if (
+          isAllVerified &&
+          this.currentComponent === 'required-document-types'
+        ) {
           this.currentComponent = 'upload-status';
         }
       },
@@ -94,6 +122,7 @@ export default {
     },
 
     onCreate() {
+      // TODO: rename it to `finish`, not `create`
       this.$emit('create');
     },
 
@@ -115,7 +144,23 @@ export default {
 
     openNextScreen() {
       switch (true) {
-        case this.currentComponent === 'document-types':
+        case this.currentComponent === 'required-document-types' &&
+          this.isDocumentsByTypeExists:
+          this.currentComponent = 'selected-document-by-type';
+          break;
+
+        case this.currentComponent === 'required-document-types' &&
+          !this.isDocumentsByTypeExists:
+          this.currentComponent = 'upload';
+          break;
+
+        case this.currentComponent === 'selected-document-by-type' &&
+          this.documentId:
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'selected-document-by-type' &&
+          !this.documentId:
           this.currentComponent = 'upload';
           break;
 
@@ -124,7 +169,7 @@ export default {
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');
           this.$emit('update:status', '');
-          this.currentComponent = 'document-types';
+          this.currentComponent = 'required-document-types';
           break;
 
         case this.currentComponent === 'upload':
@@ -140,7 +185,7 @@ export default {
 
     onBack() {
       if (this.currentComponent === 'upload') {
-        this.currentComponent = 'document-types';
+        this.currentComponent = 'required-document-types';
       }
     },
   },
@@ -148,7 +193,8 @@ export default {
   components: {
     LoadingScreen,
     DocLayout,
-    DocumentTypes,
+    RequiredDocumentTypes,
+    SelectedDocumentByType,
     Upload,
     UploadStatus,
   },
