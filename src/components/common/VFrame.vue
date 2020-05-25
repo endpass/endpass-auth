@@ -8,7 +8,7 @@
       @close="onClose"
     >
       <div
-        v-if="showLogo"
+        v-if="isShowLogo"
         slot="icon"
         data-test="logo"
         class="frame-logo"
@@ -44,7 +44,7 @@ export default {
       default: 'Connect',
     },
 
-    showLogo: {
+    isShowLogo: {
       type: Boolean,
       default: false,
     },

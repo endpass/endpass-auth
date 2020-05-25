@@ -22,7 +22,7 @@ describe('VFrame', () => {
       it('should render logo if prop passed', () => {
         wrapper = shallowMount(VFrame, {
           propsData: {
-            showLogo: true,
+            isShowLogo: true,
           },
         });
 
