@@ -112,14 +112,14 @@ export default {
       try {
         this.isLoading = true;
 
-        await this.$options.riskScoringStore.sendFingerprint();
-
         this.documentId = await this.$options.frontSideController.startCreateDocument(
           {
             file: this.selectedFile,
             type: this.documentType,
           },
         );
+
+        await this.$options.riskScoringStore.sendFingerprint();
       } catch (e) {
         this.error = e.message;
       } finally {
