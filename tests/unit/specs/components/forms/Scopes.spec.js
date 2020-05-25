@@ -22,7 +22,7 @@ describe('Scopes', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should render checkboxes with given scopes', () => {
+    it('should render given scopes', () => {
       wrapper.setProps({
         scopesList: ['foo', 'bar'],
       });
@@ -39,24 +39,6 @@ describe('Scopes', () => {
 
       expect(submitButton.attributes().isloading).toBeTruthy();
       expect(submitButton.attributes().disabled).toBeTruthy();
-
-      wrapper.setProps({
-        isLoading: false,
-        scopesList: ['foo', 'bar'],
-      });
-      wrapper.vm.onChange({ foo: false, bar: false });
-
-      expect(submitButton.attributes().isloading).toBeFalsy();
-      expect(submitButton.attributes().disabled).toBeTruthy();
-
-      wrapper.setProps({
-        isLoading: false,
-        scopesList: ['foo', 'bar'],
-      });
-      wrapper.vm.onChange({ foo: true, bar: false });
-
-      expect(submitButton.attributes().isloading).toBeFalsy();
-      expect(submitButton.attributes().disabled).toBeFalsy();
     });
   });
 
@@ -66,21 +48,12 @@ describe('Scopes', () => {
         isLoading: false,
         scopesList: ['foo', 'bar'],
       });
-      wrapper.vm.onChange({ foo: true, bar: true });
+
+      expect(wrapper.emitted().submit).toBeUndefined();
+
       wrapper.find('form').trigger('submit');
 
       expect(wrapper.emitted().submit).toEqual([[['foo', 'bar']]]);
-    });
-
-    it('should not submit form if no one scope is not selected', () => {
-      wrapper.setProps({
-        isLoading: false,
-        scopesList: ['foo', 'bar'],
-      });
-      wrapper.vm.onChange({ foo: false, bar: false });
-      wrapper.find('form').trigger('submit');
-
-      expect(wrapper.emitted().submit).toBeFalsy();
     });
   });
 });

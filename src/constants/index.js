@@ -205,3 +205,63 @@ export const AUTH_STATUS_CODE = {
 };
 
 export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
+
+/**
+ * Public Scopes
+ * @type {{
+    OFFLINE_ACCESS: 'offline_access',
+    WALLET: 'wallet',
+    WALLET_ADDRESS_READ: 'wallet:address:read',
+    WALLET_ACCOUNTS_READ: 'wallet:accounts:read',
+    USER: 'user',
+    USER_EMAIL_READ: 'user:email:read',
+    USER_ADDRESS_READ: 'user:address:read',
+    USER_PHONE_READ: 'user:phone:read',
+    USER_DATA_READ: 'user:data:read',
+    DOCUMENTS: 'documents',
+    DOCUMENTS_PASSPORT: 'documents:passport',
+    DOCUMENTS_PASSPORT_STATUS_READ: 'documents:passport:status:read',
+    DOCUMENTS_PASSPORT_DATA_READ: 'documents:passport:data:read',
+    DOCUMENTS_PASSPORT_IMAGE_READ: 'documents:passport:image:read',
+    DOCUMENTS_PROOF_OF_ADDRESS: 'documents:proof_address',
+    DOCUMENTS_PROOF_OF_ADDRESS_STATUS_READ: 'documents:proof_address:status:read',
+    DOCUMENTS_PROOF_OF_ADDRESS_DATA_READ: 'documents:proof_address:data:read',
+    DOCUMENTS_PROOF_OF_ADDRESS_IMAGE_READ: 'documents:proof_address:image:read',
+    DOCUMENTS_DRIVER_LICENSE: 'documents:driver_license',
+    DOCUMENTS_DRIVER_LICENSE_STATUS_READ: 'documents:driver_license:status:read',
+    DOCUMENTS_DRIVER_LICENSE_DATA_READ: 'documents:driver_license:data:read',
+    DOCUMENTS_DRIVER_LICENSE_IMAGE_READ: 'documents:driver_license:image:read',
+    DOCUMENTS_ID_CARD: 'documents:id_card',
+    DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
+    DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
+    DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+  }}
+ */
+export const PUBLIC_SCOPES = {
+  OFFLINE_ACCESS: 'offline_access',
+  WALLET: 'wallet',
+  WALLET_ADDRESS_READ: 'wallet:address:read',
+  WALLET_ACCOUNTS_READ: 'wallet:accounts:read',
+  USER: 'user',
+  USER_EMAIL_READ: 'user:email:read',
+  USER_ADDRESS_READ: 'user:address:read',
+  USER_PHONE_READ: 'user:phone:read',
+  USER_DATA_READ: 'user:data:read',
+  DOCUMENTS: 'documents',
+  DOCUMENTS_PASSPORT: 'documents:passport',
+  DOCUMENTS_PASSPORT_STATUS_READ: 'documents:passport:status:read',
+  DOCUMENTS_PASSPORT_DATA_READ: 'documents:passport:data:read',
+  DOCUMENTS_PASSPORT_IMAGE_READ: 'documents:passport:image:read',
+  DOCUMENTS_PROOF_OF_ADDRESS: 'documents:proof_address',
+  DOCUMENTS_PROOF_OF_ADDRESS_STATUS_READ: 'documents:proof_address:status:read',
+  DOCUMENTS_PROOF_OF_ADDRESS_DATA_READ: 'documents:proof_address:data:read',
+  DOCUMENTS_PROOF_OF_ADDRESS_IMAGE_READ: 'documents:proof_address:image:read',
+  DOCUMENTS_DRIVER_LICENSE: 'documents:driver_license',
+  DOCUMENTS_DRIVER_LICENSE_STATUS_READ: 'documents:driver_license:status:read',
+  DOCUMENTS_DRIVER_LICENSE_DATA_READ: 'documents:driver_license:data:read',
+  DOCUMENTS_DRIVER_LICENSE_IMAGE_READ: 'documents:driver_license:image:read',
+  DOCUMENTS_ID_CARD: 'documents:id_card',
+  DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
+  DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
+  DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+};
