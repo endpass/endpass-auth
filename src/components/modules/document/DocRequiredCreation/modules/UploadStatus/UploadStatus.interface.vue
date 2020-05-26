@@ -6,7 +6,7 @@
     "
     :client-id="$options.documentsRequiredStore.clientId"
     @continue="onContinue"
-    @create="onCreate"
+    @create="onContinue"
   />
 </template>
 
@@ -35,9 +35,9 @@ export default {
       this.$emit('next');
     },
 
-    onCreate() {
-      this.$emit('create');
-    },
+    // onCreate() {
+    //   this.$emit('create');
+    // },
   },
 
   components: {

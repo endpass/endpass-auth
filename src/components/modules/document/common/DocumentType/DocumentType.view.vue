@@ -4,7 +4,11 @@
     @click="onSelect"
   >
     <div class="document-type-index">
-      {{ documentType }}
+      <v-svg-icon
+        :name="icon"
+        height="28px"
+        width="28px"
+      />
     </div>
     <div class="document-type-details">
       <div class="document-type-label">
@@ -36,7 +40,14 @@ import {
   DOC_STATUSES_TRANSLATES,
   DOC_TYPES_TRANSLATES,
 } from '@/constants/translates';
-import { DOC_STATUSES } from '@/constants';
+import { DOC_STATUSES, DOC_TYPES } from '@/constants';
+
+const DOC_TYPE_TO_ICON = {
+  [DOC_TYPES.PASSPORT]: 'doc-type-passport',
+  [DOC_TYPES.DRIVER_LICENSE]: 'doc-type-id',
+  [DOC_TYPES.ID_CARD]: 'doc-type-id',
+  [DOC_TYPES.PROOF_OF_ADDRESS]: 'doc-type-address',
+};
 
 export default {
   name: 'DocumentTypeView',
@@ -77,6 +88,10 @@ export default {
   },
 
   computed: {
+    icon() {
+      return DOC_TYPE_TO_ICON[this.documentType];
+    },
+
     isVerified() {
       return this.documentType === DOC_STATUSES.VERIFIED;
     },
@@ -125,7 +140,7 @@ export default {
   justify-content: center;
   width: 40px;
   height: 40px;
-  background-color: var(--endpass-ui-color-grey-1);
+  color: var(--endpass-ui-color-primary-7);
   border-radius: 50%;
 }
 .document-type-details {
