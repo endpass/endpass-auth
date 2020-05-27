@@ -9,7 +9,7 @@
       :document-type="type"
       :document-status="getDocumentStatusByType(type)"
       :is-status-show="true"
-      :selectable="false"
+      :is-selectable="false"
       @select="onSelectDocumentType"
     />
     <div class="required-document-types-controls">

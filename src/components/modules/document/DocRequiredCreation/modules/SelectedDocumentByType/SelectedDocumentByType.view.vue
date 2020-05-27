@@ -9,8 +9,9 @@
       :document-type="document.documentType"
       :document-status="document.status"
       :is-status-show="true"
+      :is-selectable="true"
       :is-selected="isSelected(document.id)"
-      @click="onSelect(document.id)"
+      @select="onSelect(document.id)"
     />
     <div class="required-document-types-controls">
       <v-button

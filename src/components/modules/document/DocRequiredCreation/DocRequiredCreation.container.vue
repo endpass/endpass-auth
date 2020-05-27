@@ -1,7 +1,9 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    @close="handleCancel"
+    :is-returnable="isReturnable"
+    @return="onReturn"
+    @close="onCancel"
   >
     <component
       :is="currentComponent"
@@ -95,10 +97,21 @@ export default {
     },
 
     isDocumentsByTypeExists() {
-      const selectedDocument = this.selectedDocumentsByType[
-        this.selectedDocumentType
-      ];
-      return !!selectedDocument;
+      const docBySelectedType = this.availableDocumentsList.find(
+        document => document.documentType === this.selectedDocumentType,
+      );
+
+      return !!docBySelectedType;
+    },
+
+    isReturnable() {
+      switch (true) {
+        case this.currentComponent === 'selected-document-by-type':
+          return true;
+
+        default:
+          return false;
+      }
     },
   },
 
@@ -117,7 +130,19 @@ export default {
   },
 
   methods: {
-    handleCancel() {
+    onReturn() {
+      if (!this.isReturnable) return;
+      switch (true) {
+        case this.currentComponent === 'selected-document-by-type':
+          this.currentComponent = 'required-document-types';
+          break;
+
+        default:
+          break;
+      }
+    },
+
+    onCancel() {
       this.$emit('cancel');
     },
 

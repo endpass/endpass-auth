@@ -5,7 +5,7 @@
   >
     <div class="document-type-index">
       <v-svg-icon
-        :name="icon"
+        :name="docTypeIcon"
         height="28px"
         width="28px"
       />
@@ -14,21 +14,29 @@
       <div class="document-type-label">
         {{ $options.DOC_TYPES_TRANSLATES[documentType] }}
       </div>
-      <div
-        class="document-type-status"
-        :class="{
-          'is-verified': isVerified,
-          'is-pending-review': isPendingReview,
-        }"
-      >
-        {{ statusLabel }}
+      <div class="document-type-description">
+        <span
+          class="document-type-status"
+          :class="{
+            'is-empty-status': !isDocumentHaveStatus,
+            'is-verified': isVerified,
+            'is-pending-review': isPendingReview,
+          }"
+        >
+          {{ statusLabel }}
+        </span>
       </div>
     </div>
-    <div class="document-type-arrow">
+    <div
+      class="document-type-action-icon"
+      :class="{
+        'is-selected': isSelected,
+      }"
+    >
       <v-svg-icon
-        width="28px"
-        height="28px"
-        name="chevron-right"
+        width="21px"
+        height="21px"
+        :name="actionIcon"
       />
     </div>
   </div>
@@ -40,14 +48,8 @@ import {
   DOC_STATUSES_TRANSLATES,
   DOC_TYPES_TRANSLATES,
 } from '@/constants/translates';
-import { DOC_STATUSES, DOC_TYPES } from '@/constants';
-
-const DOC_TYPE_TO_ICON = {
-  [DOC_TYPES.PASSPORT]: 'doc-type-passport',
-  [DOC_TYPES.DRIVER_LICENSE]: 'doc-type-id',
-  [DOC_TYPES.ID_CARD]: 'doc-type-id',
-  [DOC_TYPES.PROOF_OF_ADDRESS]: 'doc-type-address',
-};
+import { DOC_STATUSES } from '@/constants';
+import { DOC_TYPE_TO_ICON, DOC_STATUS_VALUES } from './DocumentType.constants';
 
 export default {
   name: 'DocumentTypeView',
@@ -65,7 +67,7 @@ export default {
       required: true,
     },
 
-    selectable: {
+    isSelectable: {
       type: Boolean,
       default: false,
     },
@@ -88,16 +90,24 @@ export default {
   },
 
   computed: {
-    icon() {
+    docTypeIcon() {
       return DOC_TYPE_TO_ICON[this.documentType];
     },
 
+    actionIcon() {
+      return this.isSelectable ? 'check-alt' : 'chevron-right';
+    },
+
     isVerified() {
-      return this.documentType === DOC_STATUSES.VERIFIED;
+      return this.documentStatus === DOC_STATUSES.VERIFIED;
     },
 
     isPendingReview() {
-      return this.documentType === DOC_STATUSES.PENDING_REVIEW;
+      return this.documentStatus === DOC_STATUSES.PENDING_REVIEW;
+    },
+
+    isDocumentHaveStatus() {
+      return DOC_STATUS_VALUES.includes(this.documentStatus);
     },
 
     statusLabel() {
@@ -105,9 +115,10 @@ export default {
         return '';
       }
 
-      if (!DOC_STATUSES[this.documentStatus]) {
+      if (!this.isDocumentHaveStatus) {
         return this.$i18n.t('components.uploadDocument.notAdded');
       }
+
       return DOC_STATUSES_TRANSLATES[this.documentStatus];
     },
   },
@@ -144,7 +155,7 @@ export default {
   border-radius: 50%;
 }
 .document-type-details {
-  margin: 0 16px;
+  margin: 0 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -153,21 +164,33 @@ export default {
   font-size: 16px;
   color: var(--endpass-ui-color-grey-8);
 }
+.document-type-description {
+  margin-top: 8px;
+}
 .document-type-status {
-  font-size: 12px;
+  padding: 4px;
+  border-radius: 2px;
+  font-size: 14px;
   color: var(--endpass-ui-color-grey-5);
-  margin-top: 4px;
+}
+.document-type-status.is-empty-status {
+  padding-left: 0;
 }
 .document-type-status.is-verified {
   color: var(--endpass-ui-color-green-1);
+  background: rgba(36, 161, 72, 0.1);
 }
 .document-type-status.is-pending-review {
   color: var(--endpass-ui-color-yellow-1);
 }
-.document-type-arrow {
+.document-type-action-icon {
   display: flex;
   align-items: center;
   margin-left: auto;
   color: var(--endpass-ui-color-grey-5);
+}
+
+.document-type-action-icon.is-selected {
+  color: var(--endpass-ui-color-green-2);
 }
 </style>

@@ -150,12 +150,16 @@ class DocumentsRequiredModule extends VuexModule {
 
   @Action
   selectDocumentForType({ documentType, documentId }) {
-    const { selectedDocumentsByType } = this;
-    delete selectedDocumentsByType[documentType];
-    this.selectedDocumentsIdList = [
-      ...Object.values(selectedDocumentsByType),
-      documentId,
-    ];
+    const { selectedDocumentsByType, selectedDocumentsIdList } = this;
+
+    const selectedDocumentByType = selectedDocumentsByType[documentType];
+
+    this.selectedDocumentsIdList =
+      selectedDocumentByType && selectedDocumentByType.id === documentId
+        ? selectedDocumentsIdList.filter(
+            selectedId => selectedId !== documentId,
+          )
+        : [...selectedDocumentsIdList, documentId];
   }
 
   /**
