@@ -27,7 +27,7 @@ const sendFingerprint = () => {
 
     await request.post(`${ENV.VUE_APP_IDENTITY_API_URL}/user/metric`, [
       {
-        payload: btoa(JSON.stringify(json)),
+        payload: btoa(unescape(encodeURIComponent(JSON.stringify(json)))),
         eventType: METRIC_TYPES.USER_BROWSER_FINGERPRINT,
       },
     ]);
