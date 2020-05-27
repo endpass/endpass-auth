@@ -14,6 +14,20 @@ describe('VFrame', () => {
         expect(wrapper.name()).toBe('VFrame');
         expect(wrapper.html()).toMatchSnapshot();
       });
+
+      it('should not render logo by default', () => {
+        expect(wrapper.find('[data-test=logo]').exists()).toBe(false);
+      });
+
+      it('should render logo if prop passed', () => {
+        wrapper = shallowMount(VFrame, {
+          propsData: {
+            showLogo: true,
+          },
+        });
+
+        expect(wrapper.find('[data-test=logo]').exists()).toBe(true);
+      });
     });
 
     describe('props', () => {
