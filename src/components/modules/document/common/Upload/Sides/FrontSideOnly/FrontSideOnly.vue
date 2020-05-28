@@ -119,7 +119,7 @@ export default {
           },
         );
 
-        await this.$options.riskScoringStore.sendFingerprint();
+        await this.$options.riskScoringStore.sendUserMetrics();
       } catch (e) {
         this.error = e.message;
       } finally {

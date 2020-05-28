@@ -7,8 +7,8 @@ class RiskScoringModule extends VuexModule {
    * @return {Promise<void>}
    */
   @Action
-  async sendFingerprint() {
-    await riskScoringService.sendFingerprint();
+  async sendUserMetrics() {
+    await riskScoringService.sendUserMetrics();
   }
 }
 

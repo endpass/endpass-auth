@@ -27,11 +27,32 @@ const getFingerprintJsonData = () =>
   });
 
 /**
+ * @returns {{
+ *   timezone: string,
+ *   gmt: number|string,
+ * }}
+ */
+const getUserTimezone = () => {
+  const dateParts = new Date().toString().split(' ');
+  const timezoneType = dateParts[dateParts.length - 2];
+  const timezoneOffset = dateParts[dateParts.length - 1];
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const gmt = `${timezoneType} ${timezoneOffset}`;
+
+  return {
+    timezone,
+    gmt,
+  };
+};
+
+/**
  * @param {object[]} entries
  * @returns {void}
  */
-const sendFingerprint = async () => {
+const sendUserMetrics = async () => {
   const json = await getFingerprintJsonData();
+  const timezoneData = getUserTimezone();
 
   await requestSkipPermission.post(
     `${ENV.VUE_APP_IDENTITY_API_URL}/user/metric`,
@@ -40,10 +61,16 @@ const sendFingerprint = async () => {
         payload: btoa(unescape(encodeURIComponent(JSON.stringify(json)))),
         eventType: METRIC_TYPES.USER_BROWSER_FINGERPRINT,
       },
+      {
+        payload: btoa(
+          unescape(encodeURIComponent(JSON.stringify(timezoneData))),
+        ),
+        eventType: METRIC_TYPES.USER_BROWSER_TIMEZONE,
+      },
     ],
   );
 };
 
 export default {
-  sendFingerprint,
+  sendUserMetrics,
 };

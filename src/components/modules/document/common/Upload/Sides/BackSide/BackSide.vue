@@ -114,7 +114,7 @@ export default {
           docId: this.documentId,
         });
 
-        await this.$options.riskScoringStore.sendFingerprint();
+        await this.$options.riskScoringStore.sendUserMetrics();
 
         this.isUploaded = true;
       } catch (e) {

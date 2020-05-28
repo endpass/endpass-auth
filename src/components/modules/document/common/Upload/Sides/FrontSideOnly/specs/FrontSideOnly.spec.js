@@ -67,11 +67,11 @@ describe('UploadDocument > FrontSideOnly', () => {
   it('should send fingerprint after upload', async () => {
     expect.assertions(2);
 
-    expect(riskScoringService.sendFingerprint).not.toBeCalled();
+    expect(riskScoringService.sendUserMetrics).not.toBeCalled();
 
     await emitUpload();
 
-    expect(riskScoringService.sendFingerprint).toBeCalledTimes(1);
+    expect(riskScoringService.sendUserMetrics).toBeCalledTimes(1);
   });
 
   it('should not emit confirm, if error in recognize', async () => {
