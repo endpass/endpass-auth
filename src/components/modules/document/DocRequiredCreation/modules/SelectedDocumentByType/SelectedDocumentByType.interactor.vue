@@ -46,7 +46,7 @@ export default {
         documentId,
       });
 
-      if (!this.selectedDocumentsByType[documentType]) {
+      if (this.selectedDocumentsByType[documentType]) {
         this.$emit('cancel');
       }
     },
