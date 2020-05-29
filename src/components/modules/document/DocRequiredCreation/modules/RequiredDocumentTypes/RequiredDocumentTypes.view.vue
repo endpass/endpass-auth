@@ -82,3 +82,9 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.required-document-types-controls {
+  padding-top: 20px;
+}
+</style>

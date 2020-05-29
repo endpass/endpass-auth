@@ -1,7 +1,7 @@
 <template>
   <upload
     :selected-document-type="selectedDocumentType"
-    @confirm="onConfirm"
+    @next="onNext"
     @cancel="onCancel"
   />
 </template>
@@ -27,7 +27,7 @@ export default {
       this.$emit('cancel');
     },
 
-    onConfirm({ documentId, status }) {
+    onNext({ documentId, status }) {
       this.$options.documentsRequiredStore.addDocTypeStatus({
         documentType: this.selectedDocumentType,
         id: documentId,

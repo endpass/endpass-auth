@@ -12,18 +12,18 @@
     </div>
     <div class="document-type-details">
       <div class="document-type-label">
-        {{ $options.DOC_TYPES_TRANSLATES[documentType] }}
+        {{ typeTitle }}
       </div>
       <div class="document-type-description">
+        <document-status
+          v-if="isDocumentHaveStatus"
+          :status="documentStatus"
+        />
         <span
-          class="document-type-status"
-          :class="{
-            'is-empty-status': !isDocumentHaveStatus,
-            'is-verified': isVerified,
-            'is-pending-review': isPendingReview,
-          }"
+          v-else
+          class="document-not-added"
         >
-          {{ statusLabel }}
+          {{ $t('components.uploadDocument.notAdded') }}
         </span>
       </div>
     </div>
@@ -44,12 +44,9 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
-import {
-  DOC_STATUSES_TRANSLATES,
-  DOC_TYPES_TRANSLATES,
-} from '@/constants/translates';
-import { DOC_STATUSES } from '@/constants';
+import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 import { DOC_TYPE_TO_ICON, DOC_STATUS_VALUES } from './DocumentType.constants';
+import DocumentStatus from '../DocumentStatus';
 
 export default {
   name: 'DocumentTypeView',
@@ -100,28 +97,12 @@ export default {
       return this.isSelected ? 'check-alt' : 'circle-mark';
     },
 
-    isVerified() {
-      return this.documentStatus === DOC_STATUSES.VERIFIED;
-    },
-
-    isPendingReview() {
-      return this.documentStatus === DOC_STATUSES.PENDING_REVIEW;
-    },
-
     isDocumentHaveStatus() {
       return DOC_STATUS_VALUES.includes(this.documentStatus);
     },
 
-    statusLabel() {
-      if (!this.isStatusShow) {
-        return '';
-      }
-
-      if (!this.isDocumentHaveStatus) {
-        return this.$i18n.t('components.uploadDocument.notAdded');
-      }
-
-      return DOC_STATUSES_TRANSLATES[this.documentStatus];
+    typeTitle() {
+      return DOC_TYPES_TRANSLATES[this.documentType];
     },
   },
 
@@ -132,6 +113,7 @@ export default {
   },
 
   components: {
+    DocumentStatus,
     VSvgIcon,
   },
 };
@@ -167,23 +149,13 @@ export default {
   color: var(--endpass-ui-color-grey-8);
 }
 .document-type-description {
-  margin-top: 8px;
+  margin-top: 4px;
 }
-.document-type-status {
-  padding: 4px;
-  border-radius: 2px;
+.document-not-added {
   font-size: 14px;
+  padding: 4px 0;
+  display: inline-block;
   color: var(--endpass-ui-color-grey-5);
-}
-.document-type-status.is-empty-status {
-  padding-left: 0;
-}
-.document-type-status.is-verified {
-  color: var(--endpass-ui-color-green-1);
-  background: rgba(36, 161, 72, 0.1);
-}
-.document-type-status.is-pending-review {
-  color: var(--endpass-ui-color-yellow-1);
 }
 .document-type-action-icon {
   display: flex;

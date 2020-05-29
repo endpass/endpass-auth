@@ -1,12 +1,9 @@
 <template>
   <upload-status
-    :is-statuses-verified="$options.documentsRequiredStore.isStatusesVerified"
-    :is-statuses-appropriated="
-      $options.documentsRequiredStore.isStatusesAppropriated
-    "
     :client-id="$options.documentsRequiredStore.clientId"
+    :selected-document-type="selectedDocumentType"
+    :selected-documents-by-type="selectedDocumentsByType"
     @continue="onContinue"
-    @create="onContinue"
   />
 </template>
 
@@ -19,25 +16,22 @@ export default {
 
   documentsRequiredStore: documentsRequiredStoreModule,
 
-  provide() {
-    const { documentsRequiredStore } = this.$options;
-    return {
-      gateway: {
-        async loadDocumentsTypesAndStatuses() {
-          await documentsRequiredStore.loadDocumentsTypesAndStatuses();
-        },
-      },
-    };
+  props: {
+    selectedDocumentType: {
+      type: String,
+      required: true,
+    },
+
+    selectedDocumentsByType: {
+      type: Object,
+      required: true,
+    },
   },
 
   methods: {
     onContinue() {
       this.$emit('next');
     },
-
-    // onCreate() {
-    //   this.$emit('create');
-    // },
   },
 
   components: {

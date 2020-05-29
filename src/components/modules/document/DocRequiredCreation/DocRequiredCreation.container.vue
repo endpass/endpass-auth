@@ -177,16 +177,15 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload' && !this.isStatusesAppropriated:
+        case this.currentComponent === 'upload':
+          this.currentComponent = 'upload-status';
+          break;
+
         case this.currentComponent === 'upload-status':
           this.$emit('update:selectedDocumentType', '');
           this.$emit('update:documentId', '');
           this.$emit('update:status', '');
           this.currentComponent = 'required-document-types';
-          break;
-
-        case this.currentComponent === 'upload':
-          this.currentComponent = 'upload-status';
           break;
 
         default:

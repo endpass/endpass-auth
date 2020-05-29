@@ -33,13 +33,13 @@ export default {
   name: 'SelectedDocumentByTypeView',
 
   props: {
-    selectedDocumentType: {
-      type: String,
+    availableDocumentsList: {
+      type: Array,
       required: true,
     },
 
-    availableDocumentsList: {
-      type: Array,
+    selectedDocumentType: {
+      type: String,
       required: true,
     },
 
@@ -83,3 +83,9 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.required-document-types-controls {
+  padding-top: 20px;
+}
+</style>

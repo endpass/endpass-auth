@@ -249,8 +249,8 @@
     },
     "documentStatus": {
       "draft": "Draft",
-      "notReadable": "Not Readable",
-      "notVerified": "Not Verified",
+      "notReadable": "Not readable",
+      "notVerified": "Not verified",
       "recognition": "Recognizing",
       "pendingReview": "Pending review",
       "verified": "Verified"
