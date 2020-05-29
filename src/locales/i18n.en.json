@@ -43,8 +43,15 @@
       "loadScopesError": "Something went wrong while loading scopes.",
       "redirectTimeoutError": "Something wrong with redirect url",
       "scopesRequired": "Scopes are required for make a request",
-      "title": "Permissions",
-      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!"
+      "title": "Requested Permissions",
+      "urlError": "Please, add the 'consent_challenge' param in URL, and try again!",
+      "tooltips": {
+        "user": "Add possibility to read user's data",
+        "proofOfAddress": "Add possibility to read user's proof of address data",
+        "passport": "Add possibility to read user's passport data",
+        "driverLicense": "Add possibility to read user's driver license data",
+        "idCard": "Add possibility to read user's ID card data"
+      }
     },
     "createPassword": {
       "confirmError": "Something went wrong while creating a password. Please, try again",
@@ -118,37 +125,37 @@
       "title": "Change password"
     },
     "scopes": {
-      "address": "Read address",
-      "allowScopes": "This application is requesting the following permissions in-app popup modal. Please press \"Allow\" to grant access to this information.",
-      "content": "Read document content",
-      "documents": "Read all documents",
-      "email": "Read email",
-      "image": "Read image documents",
-      "onlyAccount": "Read only Accounts data",
-      "onlyAddress": "Read only Address data",
-      "phone": "Read phone",
-      "scopeWallet": "Read information about wallet",
-      "status": "Read document status",
-      "user": "Read user information",
+      "allowScopes": "This application is requesting permission to access the following details from you. Press \"Allow\" if you would like to grant access to this information.",
+      "access": "Access",
+      "user": {
+        "title": "User information",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address"
+      },
       "passport": {
-        "status": "Read passport status",
-        "data": "Read passport data",
-        "image": "Read passport image"
+        "title": "Passport",
+        "status": "Passport status",
+        "data": "Passport data",
+        "image": "Passport image"
       },
       "driverLicense": {
-        "status": "Read driver license status",
-        "data": "Read driver license data",
-        "image": "Read driver license image"
+        "title": "Driver license",
+        "status": "Driver license status",
+        "data": "Driver license data",
+        "image": "Driver license image"
       },
       "idCard": {
-        "status": "Read ID card status",
-        "data": "Read ID card data",
-        "image": "Read ID card image"
+        "title": "ID card",
+        "status": "ID card status",
+        "data": "ID card data",
+        "image": "ID card image"
       },
       "proofOfAddress": {
-        "status": "Read proof of address status",
-        "data": "Read proof of address data",
-        "image": "Read proof of address image"
+        "title": "Proof of address",
+        "status": "Proof of address status",
+        "data": "Proof of address data",
+        "image": "Proof of address image"
       }
     },
     "sendCode": {
