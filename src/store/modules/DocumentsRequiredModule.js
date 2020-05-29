@@ -1,22 +1,12 @@
 import { VuexModule, Module, Action } from 'vuex-class-modules';
+import ConnectError from '@endpass/connect/error';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
 import SignToken from '@/class/SignToken';
+import Answer from '@/class/Answer';
+import { documentChannel } from '@/class/singleton/channels';
 
-const GOOD_STATUSES = [
-  //
-  DOC_STATUSES.VERIFIED,
-  DOC_STATUSES.PENDING_REVIEW,
-];
-
-const PRIORITY = {
-  [DOC_STATUSES.VERIFIED]: 1,
-  [DOC_STATUSES.PENDING_REVIEW]: 2,
-  [DOC_STATUSES.NOT_VERIFIED]: 3,
-  [DOC_STATUSES.NOT_READABLE]: 4,
-  [DOC_STATUSES.DRAFT]: 5,
-  [DOC_STATUSES.RECOGNITION]: 6,
-};
+const { ERRORS } = ConnectError;
 
 /**
  * @typedef { import("@/constants").DOC_TYPES } DOC_TYPES
@@ -33,21 +23,6 @@ class DocumentsRequiredModule extends VuexModule {
   selectedDocumentsIdList = [];
 
   signToken = new SignToken();
-
-  /**
-   * @returns {boolean}
-   */
-  get isNeedUploadDocument() {
-    if (this.docRequiredTypes.length === 0) {
-      return false;
-    }
-
-    if (this.docTypesStatusList.length === 0) {
-      return true;
-    }
-
-    return !this.isStatusesVerified;
-  }
 
   get isAvailableToApply() {
     // TODO: move to controller
@@ -66,17 +41,6 @@ class DocumentsRequiredModule extends VuexModule {
     );
   }
 
-  isSelectedDocumentsExpired(documentsList) {
-    // TODO: expired date should be checked NOT in client
-    const now = Date.now();
-    return this.selectedDocumentsIdList.every(documentId => {
-      const doc = documentsList.find(document => document.id === documentId);
-      if (!doc) return false;
-      if (doc.expiredDate < now) return false;
-      return true;
-    });
-  }
-
   get selectedDocumentsByType() {
     const selectedDocStructuresList = this.docTypesStatusList.filter(
       structure => this.selectedDocumentsIdList.includes(structure.id),
@@ -90,65 +54,11 @@ class DocumentsRequiredModule extends VuexModule {
     }, {});
   }
 
-  /**
-   * @deprecated
-   * @returns {boolean}
-   */
-  get isStatusesVerified() {
-    return this.docRequiredTypes.every(type => {
-      const status = this.docTypeToStatus[type];
-      return status === DOC_STATUSES.VERIFIED;
-    });
-  }
-
-  /**
-   * @returns {boolean}
-   */
-  get isStatusesAppropriated() {
-    return this.docRequiredTypes.every(type => {
-      const status = this.docTypeToStatus[type];
-      return GOOD_STATUSES.includes(status);
-    });
-  }
-
-  get docTypeToStatus() {
-    return this.docTypesStatusList.reduce((statusMap, document) => {
-      const { documentType, status } = document;
-
-      if (!this.isStatusAppliedToDocType(statusMap, documentType, status)) {
-        return statusMap;
-      }
-
-      return {
-        ...statusMap,
-        [documentType]: status,
-      };
-    }, {});
-  }
-
-  /**
-   * @private
-   * @param {{}} docTypeToStatus
-   * @param {keyof typeof DOC_TYPES} documentType
-   * @param {keyof typeof DOC_STATUSES} status
-   * @returns {boolean}
-   */
-  isStatusAppliedToDocType(docTypeToStatus, documentType, status) {
-    if (!this.docRequiredTypes.includes(documentType)) {
-      return false;
-    }
-
-    const currentStatus = docTypeToStatus[documentType];
-
-    if (!currentStatus) {
-      return true;
-    }
-
-    if (PRIORITY[status] > PRIORITY[currentStatus]) {
-      return false;
-    }
-
-    return true;
+  get answerResult() {
+    return {
+      filteredIdsList: this.selectedDocumentsIdList,
+      isNeedUploadDocument: false,
+    };
   }
 
   @Action
@@ -244,22 +154,30 @@ class DocumentsRequiredModule extends VuexModule {
     this.clientId = clientId;
 
     await this.loadDocumentsTypesAndStatuses(documentsList);
+    await this.loadRequiredTypes(clientId);
 
     await this.setDocumentsSelected(signedString);
 
-    if (
-      this.selectedDocumentsIdList.length &&
-      !this.isSelectedDocumentsExpired(documentsList)
-    ) {
-      // if all selected docs is not expired, return {}
-      return {};
+    const { docRequiredTypes, selectedDocumentsIdList } = this;
+    if (docRequiredTypes.length && selectedDocumentsIdList.length) {
+      return this.answerResult;
     }
 
-    await this.loadRequiredTypes(clientId);
-
     return {
-      isNeedUploadDocument: true, // this.isNeedUploadDocument,
+      isNeedUploadDocument: docRequiredTypes.length !== 0,
     };
+  }
+
+  @Action
+  answerCancel() {
+    const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
+    documentChannel.put(result);
+  }
+
+  @Action
+  answerFinish() {
+    const result = Answer.createOk(this.answerResult);
+    documentChannel.put(result);
   }
 }
 

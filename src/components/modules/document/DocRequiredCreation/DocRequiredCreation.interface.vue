@@ -17,18 +17,19 @@ export default {
   name: 'CreateRequiredInterface',
 
   docRequiredController: createDocumentRequiredController(),
+
   documentsRequiredStore: documentsRequiredStoreModule,
 
   provide() {
-    const { docRequiredController } = this.$options;
+    const { docRequiredController, documentsRequiredStore } = this.$options;
     return {
       gateway: {
         cancelCreate() {
-          docRequiredController.cancelCreate();
+          documentsRequiredStore.answerCancel();
         },
 
         finishCreate() {
-          docRequiredController.finishCreate();
+          documentsRequiredStore.answerFinish();
         },
 
         subscribeToUpdateStatus() {
