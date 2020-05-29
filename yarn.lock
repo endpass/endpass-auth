@@ -1855,14 +1855,14 @@
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.18.16":
-  version "0.18.16"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.16.tgz#af115bce9770491419e3684a22de382d4f77364c"
-  integrity sha512-miGA6Q672l3s+QNjbhNzVOoqE/VHZkvoWYhbIC0Oi/t56J0fTiW+Qys8sLwFSE7eyaeRBpfcecbNHZF3rAWvuw==
+"@endpass/ui@^0.18.23":
+  version "0.18.23"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.23.tgz#d2c27fb8914b4247f372058b455996adb9d415ce"
+  integrity sha512-KyXd5uYFTnNIv9ecwjhIfe7IpfhRbLGJkjlpPepcojNTq5KS459sv2puyE8Ui3kFMtgRV+L3aB1K0bANZ879Zw==
   dependencies:
-    dayjs "^1.8.18"
+    dayjs "^1.8.27"
     lodash.chunk "^4.2.0"
-    vue "^2.5.21"
+    vue "^2.6.11"
 
 "@endpass/utils@^1.8.3":
   version "1.8.3"
@@ -5517,10 +5517,10 @@ dayjs@^1.8.16:
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.16.tgz#2a3771de537255191b947957af2fd90012e71e64"
   integrity sha512-XPmqzWz/EJiaRHjBqSJ2s6hE/BUoCIHKgdS2QPtTQtKcS9E4/Qn0WomoH1lXanWCzri+g7zPcuNV4aTZ8PMORQ==
 
-dayjs@^1.8.18:
-  version "1.8.19"
-  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.19.tgz#5117dc390d8f8e586d53891dbff3fa308f51abfe"
-  integrity sha512-7kqOoj3oQSmqbvtvGFLU5iYqies+SqUiEGNT0UtUPPxcPYgY1BrkXR0Cq2R9HYSimBXN+xHkEN4Hi399W+Ovlg==
+dayjs@^1.8.27:
+  version "1.8.27"
+  resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.8.27.tgz#a8ae63ee990af28c05c430f0e160ae835a0fbbf8"
+  integrity sha512-Jpa2acjWIeOkg8KURUHICk0EqnEFSSF5eMEscsOgyJ92ZukXwmpmRkPSUka7KHSfbj5eKH30ieosYip+ky9emQ==
 
 de-indent@^1.0.2:
   version "1.0.2"
@@ -15075,11 +15075,6 @@ vue@^2.5.16, vue@^2.6.10:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==
-
-vue@^2.5.21:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.2.tgz#1cc9c9c8f7ba8df45e9b97c284947de78b76301c"
-  integrity sha512-NZAb0H+t3/99g2nygURcEJ+ncvzNLPiEiFI5MGhc1Cjsw5uYprF+Ol7SOd1RXPcmVVzK7jUBl0th2tNgt+VQDg==
 
 vue@^2.6.11:
   version "2.6.11"
