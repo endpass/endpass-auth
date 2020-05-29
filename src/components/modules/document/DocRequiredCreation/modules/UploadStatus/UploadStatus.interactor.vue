@@ -1,6 +1,6 @@
 <template>
   <upload-status-layout
-    :is-pending="isPending"
+    :is-pending="isPendingReview"
     :is-verified="isVerified"
     @continue="onContinue"
     @create="onContinue"
@@ -85,6 +85,8 @@ export default {
 
   async mounted() {
     if (this.isVerified) return;
+
+    if (!this.isPendingReview) return;
 
     this.startTimer();
   },

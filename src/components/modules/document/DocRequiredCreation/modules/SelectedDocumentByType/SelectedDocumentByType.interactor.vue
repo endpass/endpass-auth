@@ -39,9 +39,9 @@ export default {
       this.$emit('next');
     },
 
-    onSelect(documentId) {
+    async onSelect(documentId) {
       const documentType = this.selectedDocumentType;
-      this.$options.documentsRequiredStore.selectDocumentForType({
+      await this.$options.documentsRequiredStore.selectDocumentForType({
         documentType,
         documentId,
       });

@@ -1,8 +1,5 @@
 <template>
   <doc-required-creation
-    :doc-type-to-status="docTypeToStatus"
-    :is-statuses-appropriated="isStatusesAppropriated"
-    :is-statuses-verified="isStatusesVerified"
     :doc-required-types-list="docRequiredTypesList"
     :is-available-to-apply="isAvailableToApply"
     :selected-documents-by-type="selectedDocumentsByType"
@@ -27,11 +24,6 @@ export default {
       required: true,
     },
 
-    docTypeToStatus: {
-      type: Object,
-      required: true,
-    },
-
     isAvailableToApply: {
       type: Boolean,
       required: true,
@@ -44,16 +36,6 @@ export default {
 
     availableDocumentsList: {
       type: Array,
-      required: true,
-    },
-
-    isStatusesAppropriated: {
-      type: Boolean,
-      required: true,
-    },
-
-    isStatusesVerified: {
-      type: Boolean,
       required: true,
     },
   },

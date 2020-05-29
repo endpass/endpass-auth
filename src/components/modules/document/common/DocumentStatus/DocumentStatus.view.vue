@@ -59,8 +59,9 @@ export default {
 
 .document-status.status-recognition,
 .document-status.status-review {
-  color: var(--endpass-ui-color-yellow-1);
-  background-color: rgba(253, 209, 58, 0.1);
+  /*TODO: add to ui-kit*/
+  color: #ff7500;
+  background-color: rgba(253, 209, 58, 0.15);
 }
 
 .document-status.status-not-readable,

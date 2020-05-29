@@ -51,9 +51,12 @@ class DocumentsRequiredModule extends VuexModule {
 
   get isAvailableToApply() {
     // TODO: move to controller
-    const { docTypeToStatus } = this;
+    const { selectedDocumentsByType } = this;
+
     return this.docRequiredTypes.every(
-      documentType => docTypeToStatus[documentType] === DOC_STATUSES.VERIFIED,
+      documentType =>
+        selectedDocumentsByType[documentType] &&
+        selectedDocumentsByType[documentType].status === DOC_STATUSES.VERIFIED,
     );
   }
 
@@ -165,19 +168,19 @@ class DocumentsRequiredModule extends VuexModule {
   /**
    *
    * @param {object} params
-   * @param {string} id
+   * @param {string} params.documentId
    * @param {keyof typeof DOC_TYPES} params.documentType
    * @param {keyof typeof DOC_STATUSES} params.status
    * @returns {Promise<void>}
    */
   @Action
-  async addDocTypeStatus({ id, documentType, status }) {
+  async addDocTypeStatus({ documentId, documentType, status }) {
     const docTypesStatusList = this.docTypesStatusList.filter(
-      structure => structure.id !== id,
+      structure => structure.id !== documentId,
     );
     this.docTypesStatusList = [
       ...docTypesStatusList,
-      { id, documentType, status },
+      { id: documentId, documentType, status },
     ];
   }
 

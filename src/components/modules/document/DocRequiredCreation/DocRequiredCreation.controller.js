@@ -38,7 +38,7 @@ class DocRequiredCreationController extends VuexModule {
       const { id, documentType, status } = payload;
       await this.documentsRequiredStore.addDocTypeStatus({
         documentType,
-        id,
+        documentId: id,
         status,
       });
     }

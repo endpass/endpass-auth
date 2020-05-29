@@ -8,12 +8,11 @@
 
 <script>
 import Upload from '@/components/modules/document/common/Upload';
-import { documentsRequiredStore } from '@/store';
 
 export default {
   name: 'UploadRequiredInteractor',
 
-  documentsRequiredStore,
+  inject: ['gateway'],
 
   props: {
     selectedDocumentType: {
@@ -27,15 +26,16 @@ export default {
       this.$emit('cancel');
     },
 
-    onNext({ documentId, status }) {
-      this.$options.documentsRequiredStore.addDocTypeStatus({
-        documentType: this.selectedDocumentType,
-        id: documentId,
+    async onNext({ documentId, status }) {
+      const { selectedDocumentType: documentType } = this;
+      await this.gateway.addDocTypeStatus({
+        documentType,
+        documentId,
         status,
       });
 
-      this.$options.documentsRequiredStore.selectDocumentForType({
-        documentType: this.selectedDocumentType,
+      await this.gateway.selectDocumentForType({
+        documentType,
         documentId,
       });
 

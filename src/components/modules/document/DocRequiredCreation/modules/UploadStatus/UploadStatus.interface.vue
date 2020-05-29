@@ -1,6 +1,6 @@
 <template>
   <upload-status
-    :client-id="$options.documentsRequiredStore.clientId"
+    :client-id="clientId"
     :selected-document-type="selectedDocumentType"
     :selected-documents-by-type="selectedDocumentsByType"
     @continue="onContinue"
@@ -25,6 +25,12 @@ export default {
     selectedDocumentsByType: {
       type: Object,
       required: true,
+    },
+  },
+
+  computed: {
+    clientId() {
+      return this.$options.documentsRequiredStore.clientId;
     },
   },
 

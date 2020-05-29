@@ -8,7 +8,6 @@
     <component
       :is="currentComponent"
       :document-id="documentId"
-      :doc-type-to-status="docTypeToStatus"
       :selected-document-type="selectedDocumentType"
       :doc-required-types-list="docRequiredTypesList"
       :is-available-to-apply="isAvailableToApply"
@@ -51,21 +50,6 @@ export default {
 
     availableDocumentsList: {
       type: Array,
-      required: true,
-    },
-
-    docTypeToStatus: {
-      type: Object,
-      required: true,
-    },
-
-    isStatusesAppropriated: {
-      type: Boolean,
-      required: true,
-    },
-
-    isStatusesVerified: {
-      type: Boolean,
       required: true,
     },
 
@@ -112,20 +96,6 @@ export default {
         default:
           return false;
       }
-    },
-  },
-
-  watch: {
-    isStatusesVerified: {
-      handler(isAllVerified) {
-        if (
-          isAllVerified &&
-          this.currentComponent === 'required-document-types'
-        ) {
-          this.currentComponent = 'upload-status';
-        }
-      },
-      immediate: true,
     },
   },
 
