@@ -34,6 +34,11 @@ export default {
         status,
       });
 
+      this.$options.documentsRequiredStore.selectDocumentForType({
+        documentType: this.selectedDocumentType,
+        documentId,
+      });
+
       this.$emit('next', {
         documentId,
         status,

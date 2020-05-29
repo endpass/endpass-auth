@@ -68,11 +68,6 @@ export default {
       this.isPending = true;
 
       if (!this.isStatusesAppropriated) {
-        await this.gateway.loadDocumentsTypesAndStatuses();
-        await this.$nextTick();
-      }
-
-      if (!this.isStatusesAppropriated) {
         this.isPending = false;
         return;
       }
@@ -83,12 +78,9 @@ export default {
   },
 
   async mounted() {
-    if (this.isStatusesVerified) {
-      this.isPending = false;
-      return;
-    }
-
-    await this.updateUploadStatus();
+    // if document selected status verified - skip
+    // if document selected status pending - wait
+    // if other document statuses -
   },
 
   mixins: [VueTimers],

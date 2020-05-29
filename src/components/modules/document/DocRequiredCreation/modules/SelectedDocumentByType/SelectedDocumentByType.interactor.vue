@@ -36,21 +36,19 @@ export default {
 
   methods: {
     onStartUpload() {
-      // this.$emit('next');
+      this.$emit('next');
     },
 
     onSelect(documentId) {
+      const documentType = this.selectedDocumentType;
       this.$options.documentsRequiredStore.selectDocumentForType({
-        documentType: this.selectedDocumentType,
+        documentType,
         documentId,
       });
-      this.$emit('next', {
-        documentId,
-      });
-    },
 
-    onCancel() {
-      this.$emit('cancel');
+      if (!this.selectedDocumentsByType[documentType]) {
+        this.$emit('cancel');
+      }
     },
   },
 

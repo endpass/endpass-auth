@@ -2,11 +2,10 @@
   <div>
     <v-title>
       {{ $t('components.uploadDocument.upload') }}
-      {{ $options.DOC_TYPES_TRANSLATES[selectedDocumentType] }}
+      {{ title }}
     </v-title>
     <sides
       :document-type="selectedDocumentType"
-      v-on="$listeners"
       @confirm="onConfirm"
       @cancel="onCancel"
     />
@@ -21,12 +20,16 @@ import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 export default {
   name: 'Upload',
 
-  DOC_TYPES_TRANSLATES,
-
   props: {
     selectedDocumentType: {
       type: String,
       required: true,
+    },
+  },
+
+  computed: {
+    title() {
+      return DOC_TYPES_TRANSLATES[this.selectedDocumentType];
     },
   },
 

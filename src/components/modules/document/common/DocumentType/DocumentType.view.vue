@@ -95,7 +95,9 @@ export default {
     },
 
     actionIcon() {
-      return this.isSelectable ? 'check-alt' : 'chevron-right';
+      if (!this.isSelectable) return 'chevron-right';
+
+      return this.isSelected ? 'check-alt' : 'circle-mark';
     },
 
     isVerified() {

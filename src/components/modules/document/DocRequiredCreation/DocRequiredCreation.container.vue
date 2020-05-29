@@ -16,7 +16,7 @@
       :available-documents-list="availableDocumentsList"
       @next="onNext"
       @create="onCreate"
-      @cancel="onBack"
+      @cancel="handleBack"
     />
   </doc-layout>
 </template>
@@ -132,14 +132,8 @@ export default {
   methods: {
     onReturn() {
       if (!this.isReturnable) return;
-      switch (true) {
-        case this.currentComponent === 'selected-document-by-type':
-          this.currentComponent = 'required-document-types';
-          break;
 
-        default:
-          break;
-      }
+      this.handleBack();
     },
 
     onCancel() {
@@ -179,13 +173,7 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'selected-document-by-type' &&
-          this.documentId:
-          this.currentComponent = 'required-document-types';
-          break;
-
-        case this.currentComponent === 'selected-document-by-type' &&
-          !this.documentId:
+        case this.currentComponent === 'selected-document-by-type':
           this.currentComponent = 'upload';
           break;
 
@@ -208,9 +196,23 @@ export default {
       }
     },
 
-    onBack() {
-      if (this.currentComponent === 'upload') {
-        this.currentComponent = 'required-document-types';
+    handleBack() {
+      switch (true) {
+        case this.currentComponent === 'selected-document-by-type':
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'upload' &&
+          !this.isDocumentsByTypeExists:
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'upload' && this.isDocumentsByTypeExists:
+          this.currentComponent = 'selected-document-by-type';
+          break;
+
+        default:
+          break;
       }
     },
   },
