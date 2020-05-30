@@ -1864,6 +1864,23 @@
     lodash.chunk "^4.2.0"
     vue "^2.5.21"
 
+"@endpass/utils@^1.10.1":
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.10.2.tgz#839a906938b5b8daec7df8d3148a4d6c3df74752"
+  integrity sha512-ZOpTbQzjFUmBMdqwC1cCC1DdYLNe4OMBo2UYCwdwKz4HsC4jvKOm9IGyto1PMi2Dwh71hT7A0dhEny3/yLKdvQ==
+  dependencies:
+    bip39 "^3.0.2"
+    bs58check "^2.1.2"
+    dayjs "^1.8.16"
+    eth-ecies "^1.0.3"
+    ethereumjs-wallet "^0.6.3"
+    export-files "^2.1.1"
+    fingerprintjs2 "1.8.6"
+    keythereum "^1.0.4"
+    lodash "^4.17.15"
+    node-notifier "^5.4.3"
+    secp256k1 "^3.7.1"
+
 "@endpass/utils@^1.8.3":
   version "1.8.3"
   resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.8.3.tgz#7e435d9e61ec5993b0da5d64c9997dfa9751c032"
@@ -2098,11 +2115,6 @@
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
   integrity sha512-EaObqwIvayI5a8dCzhFrjKzVwKLxjoG9T6Ppd5CEo07LRKfQ8Yokw54r5+Wq7FaBQ+yXRvQAYPrHwya1/UFt9g==
-
-"@types/fingerprintjs2@^1.5.3":
-  version "1.5.3"
-  resolved "https://registry.yarnpkg.com/@types/fingerprintjs2/-/fingerprintjs2-1.5.3.tgz#dbd3014c3180e59479cd180fca706260652e352c"
-  integrity sha512-4UuTRiAYHkC5N7fEWEcaLivF1tBuCN4bp6cmR4dU0a42WsVYubluuDHCPOO5nsMUkvw/iU0V4rJiSzMFxkEoTA==
 
 "@types/glob@^7.1.1":
   version "7.1.1"
@@ -7250,7 +7262,7 @@ findup-sync@^3.0.0:
     micromatch "^3.0.4"
     resolve-dir "^1.0.1"
 
-fingerprintjs2@^1.8.6:
+fingerprintjs2@1.8.6:
   version "1.8.6"
   resolved "https://registry.yarnpkg.com/fingerprintjs2/-/fingerprintjs2-1.8.6.tgz#ac92bd3f9965b51f5bf1b2d2d6f4bcc44ac89aab"
   integrity sha512-uarmLgW2QXzu1Ljw3PDcQLJ69w8uT42odab//KOZ+NZsAyAudq5ZvlImEXYd/5sJbtBa5TSQ5OKZX1rkpK/t5w==
