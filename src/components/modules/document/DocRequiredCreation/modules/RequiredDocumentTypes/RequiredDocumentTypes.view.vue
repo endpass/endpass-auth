@@ -3,15 +3,17 @@
     <v-title>
       {{ $t('components.uploadDocument.requestedInformation') }}
     </v-title>
-    <document-type
-      v-for="type in docRequiredTypesList"
-      :key="type"
-      :document-type="type"
-      :document-status="getDocumentStatusByType(type)"
-      :is-status-show="true"
-      :is-selectable="false"
-      @select="onSelectDocumentType"
-    />
+    <div class="required-document-types-list">
+      <document-type
+        v-for="type in docRequiredTypesList"
+        :key="type"
+        :document-type="type"
+        :document-status="getDocumentStatusByType(type)"
+        :is-status-show="true"
+        :is-selectable="false"
+        @select="onSelectDocumentType"
+      />
+    </div>
     <div class="required-document-types-controls">
       <v-button
         :disabled="!isAvailableToApply"
@@ -84,6 +86,9 @@ export default {
 </script>
 
 <style lang="postcss">
+.required-document-types-list {
+  min-height: 296px;
+}
 .required-document-types-controls {
   padding-top: 20px;
 }

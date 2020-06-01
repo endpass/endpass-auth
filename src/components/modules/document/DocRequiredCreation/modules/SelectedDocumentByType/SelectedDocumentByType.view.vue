@@ -3,17 +3,19 @@
     <v-title>
       {{ $t('components.uploadDocument.selectDocument') }}
     </v-title>
-    <document-type
-      v-for="document in documentsListByType"
-      :key="document.id"
-      :document-type="document.documentType"
-      :document-status="document.status"
-      :is-status-show="true"
-      :is-selectable="true"
-      :is-selected="isSelected(document.id)"
-      @select="onSelect(document.id)"
-    />
-    <div class="required-document-types-controls">
+    <div class="selected-document-types-list">
+      <document-type
+        v-for="document in documentsListByType"
+        :key="document.id"
+        :document-type="document.documentType"
+        :document-status="document.status"
+        :is-status-show="true"
+        :is-selectable="true"
+        :is-selected="isSelected(document.id)"
+        @select="onSelect(document.id)"
+      />
+    </div>
+    <div class="selected-document-types-controls">
       <v-button
         data-test="continue-button"
         @click="onStartUpload"
@@ -85,7 +87,10 @@ export default {
 </script>
 
 <style lang="postcss">
-.required-document-types-controls {
+.selected-document-types-list {
+  min-height: 296px;
+}
+.selected-document-types-controls {
   padding-top: 20px;
 }
 </style>
