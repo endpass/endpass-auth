@@ -1,11 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { document } from '@unitFixtures/documents';
 import UploadStatusInterface from '../UploadStatus.interface';
 import UploadStatusInteractor from '../UploadStatus.interactor';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
-import { DOC_STATUSES, DOC_TYPES } from '@/constants';
+import { DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -16,9 +17,7 @@ describe('UploadStatusInterface', () => {
   const clientId = 'clientId';
 
   const selectedDocumentsByType = {
-    [DOC_TYPES.PROOF_OF_ADDRESS]: {
-      status: DOC_STATUSES.PENDING_REVIEW,
-    },
+    [document.documentType]: document,
   };
 
   const defaultProps = {
@@ -34,7 +33,10 @@ describe('UploadStatusInterface', () => {
     } = createStoreModules(store);
 
     const documentsRequiredStore = documentsRequiredStoreModule;
-    await documentsRequiredStore.checkRequired({ clientId });
+    await documentsRequiredStore.checkRequired({
+      clientId,
+      documentsList: [document],
+    });
     const wrapper = shallowMount(UploadStatusInterface, {
       localVue,
       i18n,
@@ -78,7 +80,7 @@ describe('UploadStatusInterface', () => {
       });
     });
 
-    describe('props', () => {
+    describe('client id', () => {
       it('should pass clientId', async () => {
         expect.assertions(1);
 
@@ -94,11 +96,25 @@ describe('UploadStatusInterface', () => {
 
         await bootstrap.documentsRequiredStore.checkRequired({
           clientId: otherClientId,
+          documentsList: [],
         });
 
         expect(
           bootstrap.wrapper.find(UploadStatusInteractor).props().clientId,
         ).toBe(otherClientId);
+      });
+    });
+
+    describe('selected documents by type', () => {
+      it('should select documents', async () => {
+        expect.assertions(1);
+
+        expect(
+          bootstrap.wrapper.find(UploadStatusInteractor).props()
+            .selectedDocumentsByType,
+        ).toEqual({
+          [document.documentType]: document,
+        });
       });
     });
   });

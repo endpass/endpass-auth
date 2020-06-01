@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/prefer-default-export
-import { UPLOAD_STATUSES } from '@/constants';
+import { DOC_STATUSES, DOC_TYPES, UPLOAD_STATUSES } from '@/constants';
 
 const frontStatusError = {
   status: UPLOAD_STATUSES.ERRORED,
@@ -41,4 +41,11 @@ export const docStatusesMap = {
     front: { status: UPLOAD_STATUSES.UPLOADED },
     back: { status: UPLOAD_STATUSES.UPLOADED },
   },
+};
+
+export const document = {
+  id: 'document-id-unique-value',
+  status: DOC_STATUSES.PENDING_REVIEW,
+  documentType: DOC_TYPES.PASSPORT,
+  dateOfExpiry: 76565500,
 };

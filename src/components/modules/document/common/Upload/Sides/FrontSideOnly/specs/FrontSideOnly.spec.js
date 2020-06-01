@@ -2,9 +2,10 @@ import VeeValidate from 'vee-validate';
 import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
-import FrontSideOnly from '@/components/modules/document/common/Upload/Sides/FrontSideOnly';
+import FrontSideOnly from '../FrontSideOnly';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES } from '@/constants';
 
@@ -16,7 +17,7 @@ localVue.use(UIComponents);
 describe('UploadDocument > FrontSideOnly', () => {
   let wrapper;
 
-  const docId = 'docId';
+  const docId = document.id;
   const file = new File([''], 'filename');
 
   beforeEach(() => {
@@ -56,6 +57,7 @@ describe('UploadDocument > FrontSideOnly', () => {
         {
           documentId: docId,
           status: DOC_STATUSES.PENDING_REVIEW,
+          dateOfExpiry: document.dateOfExpiry,
         },
       ],
     ]);
@@ -124,6 +126,7 @@ describe('UploadDocument > FrontSideOnly', () => {
         {
           documentId: docId,
           status: DOC_STATUSES.PENDING_REVIEW,
+          dateOfExpiry: document.dateOfExpiry,
         },
       ],
     ]);

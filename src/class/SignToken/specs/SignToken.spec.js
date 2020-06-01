@@ -13,6 +13,8 @@ describe('SignToken', () => {
   };
 
   it('should decrypt string', () => {
+    expect.assertions(1);
+
     const str = signToken.stringify(checkData);
 
     const parsed = signToken.parse(str);
@@ -20,7 +22,20 @@ describe('SignToken', () => {
     expect(parsed).toEqual(checkData);
   });
 
+  it('should return correct data from string', () => {
+    expect.assertions(1);
+
+    const str =
+      'eyJkIjp7InNlbGVjdGVkSWRzIjpbImRvY3VtZW50LWlkLXVuaXF1ZS12YWx1ZSJdfSwiaCI6Mzc1MzYyNjMzMn0=';
+
+    expect(signToken.parse(str)).toEqual({
+      selectedIds: ['document-id-unique-value'],
+    });
+  });
+
   it('should return different hash of objects', () => {
+    expect.assertions(1);
+
     const hashFirst = signToken.getObjectHash(checkData);
     const hashSecond = signToken.getObjectHash({
       ...checkData,
@@ -31,6 +46,8 @@ describe('SignToken', () => {
   });
 
   it('should return same hash of objects', () => {
+    expect.assertions(1);
+
     const hashFirst = signToken.getObjectHash(checkData);
     const hashSecond = signToken.getObjectHash(checkData);
 
