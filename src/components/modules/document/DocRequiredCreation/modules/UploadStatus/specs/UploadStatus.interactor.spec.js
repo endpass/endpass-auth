@@ -3,6 +3,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import UploadStatusInteractor from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus/UploadStatus.interactor';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
 import setupI18n from '@/locales/i18nSetup';
+import { DOC_STATUSES, DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -10,24 +11,24 @@ const i18n = setupI18n(localVue);
 
 describe('UploadStatusInteractor', () => {
   let wrapper;
-  let gateway;
+
+  const selectedDocumentsByType = {
+    [DOC_TYPES.PROOF_OF_ADDRESS]: {
+      status: DOC_STATUSES.PENDING_REVIEW,
+    },
+  };
+
   const defaultProps = {
-    isStatusesVerified: false,
-    isStatusesAppropriated: false,
+    selectedDocumentType: DOC_TYPES.PROOF_OF_ADDRESS,
+    selectedDocumentsByType,
     clientId: 'clientId',
   };
 
   const createWrapper = options => {
-    gateway = {
-      loadDocumentsTypesAndStatuses: jest.fn(),
-    };
     return shallowMount(UploadStatusInteractor, {
       localVue,
       propsData: defaultProps,
       i18n,
-      provide: {
-        gateway,
-      },
       ...options,
     });
   };
@@ -53,18 +54,11 @@ describe('UploadStatusInteractor', () => {
       await global.flushPromises();
 
       expect(wrapper.find(UploadStatusLayout).props().isVerified).toBe(false);
-      expect(wrapper.find(UploadStatusLayout).props().isPending).toBe(false);
+      expect(wrapper.find(UploadStatusLayout).props().isPending).toBe(true);
     });
 
     it('should switch pending after timeout', async () => {
       expect.assertions(2);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
 
       await global.flushPromises();
 
@@ -78,13 +72,6 @@ describe('UploadStatusInteractor', () => {
     it('should switch pending to true', async () => {
       expect.assertions(2);
 
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
-
       await global.flushPromises();
 
       expect(wrapper.find(UploadStatusLayout).props().isVerified).toBe(false);
@@ -94,6 +81,13 @@ describe('UploadStatusInteractor', () => {
 
   describe('timer', () => {
     it('should not use timer', async () => {
+      wrapper = createWrapper({
+        propsData: {
+          ...defaultProps,
+          selectedDocumentsByType: {},
+        },
+      });
+
       expect.assertions(1);
 
       await global.flushPromises();
@@ -104,12 +98,7 @@ describe('UploadStatusInteractor', () => {
     it('should use timer', async () => {
       expect.assertions(1);
 
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
+      wrapper = createWrapper();
 
       await global.flushPromises();
 
@@ -124,7 +113,6 @@ describe('UploadStatusInteractor', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isStatusesAppropriated: true,
           clientId,
         },
       });
@@ -138,12 +126,7 @@ describe('UploadStatusInteractor', () => {
       expect.assertions(1);
 
       const TIMEOUT_MS = 30 * 1000;
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
+      wrapper = createWrapper();
 
       await global.flushPromises();
 
@@ -164,64 +147,16 @@ describe('UploadStatusInteractor', () => {
       expect(wrapper.emitted().continue).toEqual([[]]);
     });
 
-    it('should emit create', async () => {
+    it('should emit continue by create', async () => {
       expect.assertions(3);
 
-      expect(wrapper.emitted().create).toBeUndefined();
+      expect(wrapper.emitted().continue).toBeUndefined();
 
       wrapper.find(UploadStatusLayout).vm.$emit('create');
       await global.flushPromises();
 
-      expect(wrapper.emitted().create).toHaveLength(1);
-      expect(wrapper.emitted().create).toEqual([[]]);
-    });
-  });
-
-  describe('load statuses', () => {
-    it('should load types and statuses', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesVerified: false,
-          isStatusesAppropriated: false,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).toBeCalledTimes(1);
-    });
-
-    it('should not load types and statuses if have appropriate statuses', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
-    });
-
-    it('should not load types and statuses if not have appropriate statuses but have verified', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesVerified: true,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
+      expect(wrapper.emitted().continue).toHaveLength(1);
+      expect(wrapper.emitted().continue).toEqual([[]]);
     });
   });
 });

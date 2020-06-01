@@ -30,18 +30,6 @@ describe('VFrame', () => {
       });
     });
 
-    describe('props', () => {
-      it('should render loading screen if loading passed as true', () => {
-        wrapper = shallowMount(VFrame, {
-          propsData: {
-            isLoading: true,
-          },
-        });
-
-        expect(wrapper.find('spinner-stub').exists()).toBe(true);
-      });
-    });
-
     describe('behavior', () => {
       it('should emit close on click close button by default', () => {
         wrapper.find('v-modal-card-stub').vm.$emit('close');

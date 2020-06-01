@@ -1,6 +1,6 @@
 <template>
   <upload-status-layout
-    :is-pending="isPendingReview"
+    :is-pending="isPending"
     :is-verified="isVerified"
     @continue="onContinue"
     @create="onContinue"
@@ -17,8 +17,6 @@ const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
 
 export default {
   name: 'UploadStatusInteractor',
-
-  inject: ['gateway'],
 
   props: {
     selectedDocumentType: {
@@ -54,19 +52,17 @@ export default {
       const selectedDocument = this.selectedDocumentsByType[
         this.selectedDocumentType
       ];
-      if (!selectedDocument) return null;
+      if (!selectedDocument) return '';
 
       return selectedDocument.status;
     },
 
     isVerified() {
-      const { selectedDocumentStatus } = this;
-      return selectedDocumentStatus === DOC_STATUSES.VERIFIED;
+      return this.selectedDocumentStatus === DOC_STATUSES.VERIFIED;
     },
 
     isPendingReview() {
-      const { selectedDocumentStatus } = this;
-      return selectedDocumentStatus === DOC_STATUSES.PENDING_REVIEW;
+      return this.selectedDocumentStatus === DOC_STATUSES.PENDING_REVIEW;
     },
   },
 
@@ -86,7 +82,10 @@ export default {
   async mounted() {
     if (this.isVerified) return;
 
-    if (!this.isPendingReview) return;
+    if (!this.isPendingReview) {
+      this.isPending = false;
+      return;
+    }
 
     this.startTimer();
   },

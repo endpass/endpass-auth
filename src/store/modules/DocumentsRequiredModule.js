@@ -56,6 +56,9 @@ class DocumentsRequiredModule extends VuexModule {
 
   get answerResult() {
     return {
+      signedString: this.signToken.stringify({
+        selectedIds: this.selectedDocumentsIdList,
+      }),
       filteredIdsList: this.selectedDocumentsIdList,
       isNeedUploadDocument: false,
     };
@@ -137,7 +140,7 @@ class DocumentsRequiredModule extends VuexModule {
 
   @Action
   setDocumentsSelected(signedString) {
-    const { data } = this.signToken.parse(signedString);
+    const data = this.signToken.parse(signedString);
     if (!data) return;
     if (!Array.isArray(data.selectedIds)) return;
     this.selectedDocumentsIdList = data.selectedIds;

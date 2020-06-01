@@ -35,9 +35,7 @@ export default class SignToken {
         throw new Error('wrong hash');
       }
 
-      return {
-        data,
-      };
+      return data;
     } catch (e) {
       return {
         error: e,

@@ -1,8 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`VFrame render render should correctly render VFrame component without loading screen by default 1`] = `
-<div class="frame">
-  <v-modal-card-stub isclosable="true" class="frame-modal-card">
+<div class="v-frame">
+  <v-modal-card-stub isclosable="true" class="v-frame-modal-card">
     <!----> <template name="title"></template> </v-modal-card-stub>
+  <footer-stub></footer-stub>
 </div>
 `;
