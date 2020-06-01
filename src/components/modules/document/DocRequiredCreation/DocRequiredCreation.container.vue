@@ -111,7 +111,6 @@ export default {
     },
 
     onCreate() {
-      // TODO: rename it to `finish`, not `create`
       this.$emit('create');
     },
 
