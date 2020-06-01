@@ -8,7 +8,7 @@
       :key="type"
       :document-type="type"
       :is-status-show="false"
-      @click="onSelect"
+      @select="onSelect"
     />
   </div>
 </template>
@@ -21,11 +21,6 @@ export default {
   name: 'DocTypesView',
 
   props: {
-    docTypeToStatus: {
-      type: Object,
-      required: true,
-    },
-
     docTypesList: {
       type: Array,
       required: true,

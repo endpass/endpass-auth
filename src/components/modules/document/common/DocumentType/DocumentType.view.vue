@@ -14,7 +14,10 @@
       <div class="document-type-label">
         {{ documentType | documentType }}
       </div>
-      <div class="document-type-description">
+      <div
+        v-if="isStatusShow"
+        class="document-type-description"
+      >
         <document-status
           v-if="isDocumentHaveStatus"
           :status="documentStatus"
