@@ -11,6 +11,7 @@
         :document-status="document.status"
         :is-status-show="true"
         :is-selectable="true"
+        :document-expire-at="document.dateOfExpiry"
         :is-selected="isSelected(document.id)"
         @select="onSelect(document.id)"
       />

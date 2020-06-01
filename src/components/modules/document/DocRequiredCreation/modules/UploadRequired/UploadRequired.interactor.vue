@@ -26,12 +26,13 @@ export default {
       this.$emit('cancel');
     },
 
-    async onNext({ documentId, status }) {
+    async onNext({ documentId, status, dateOfExpiry }) {
       const { selectedDocumentType: documentType } = this;
       await this.gateway.addDocTypeStatus({
         documentType,
         documentId,
         status,
+        dateOfExpiry,
       });
 
       await this.gateway.selectDocumentForType({

@@ -11,6 +11,7 @@
         :document-status="getDocumentStatusByType(type)"
         :is-status-show="true"
         :is-selectable="false"
+        :date-of-expiry="getDocDateOfExpiryByType(type)"
         @select="onSelectDocumentType"
       />
     </div>
@@ -52,9 +53,16 @@ export default {
   },
 
   methods: {
+    getDocDateOfExpiryByType(documentType) {
+      const document = this.selectedDocumentsByType[documentType];
+      if (!document) return null;
+
+      return document.dateOfExpiry;
+    },
+
     getDocumentStatusByType(documentType) {
       const document = this.selectedDocumentsByType[documentType];
-      if (!document) return '';
+      if (!document) return null;
 
       return document.status;
     },

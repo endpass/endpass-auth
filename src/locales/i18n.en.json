@@ -217,6 +217,7 @@
       "requestedInformation": "Requested Information",
       "selectDocument": "Select document",
       "uploading": "Uploading",
+      "pleaseReupload": "Please reupload",
       "allUploaded": "All your documents have been successfully verified, you may continue."
     },
     "user": {

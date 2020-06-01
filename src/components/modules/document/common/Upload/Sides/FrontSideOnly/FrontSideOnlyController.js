@@ -115,15 +115,6 @@ class FrontSideOnlyController extends VuexModule {
 
   /**
    * @param {string} docId
-   * @return {Promise<*>}
-   */
-  @Action
-  async getDocumentStatus(docId) {
-    return documentsService.getDocumentStatus(docId);
-  }
-
-  /**
-   * @param {string} docId
    * @return {Promise<string>}
    */
   @Action
@@ -134,8 +125,8 @@ class FrontSideOnlyController extends VuexModule {
 
       this.progressLabel = i18n.t('components.uploadDocument.recognition');
       await this.confirmAndWait(docId);
-      const status = this.getDocumentStatus(docId);
-      return status;
+      const document = await documentsService.getDocumentById(docId);
+      return document;
     } catch (e) {
       e.message = i18n.t('store.error.uploadDocument.confirm');
       throw e;
@@ -191,8 +182,8 @@ class FrontSideOnlyController extends VuexModule {
     this.progressLabel = i18n.t('components.uploadDocument.recognition');
     timer.startProgress(50, 100);
     await this.confirmAndWait(docId);
-    const status = this.getDocumentStatus(docId);
-    return status;
+    const document = await documentsService.getDocumentById(docId);
+    return document;
   }
 
   @Action

@@ -18,14 +18,13 @@ class DocumentsRequiredModule extends VuexModule {
 
   docRequiredTypes = [];
 
-  docTypesStatusList = [];
+  documentsList = [];
 
   selectedDocumentsIdList = [];
 
   signToken = new SignToken();
 
   get isAvailableToApply() {
-    // TODO: move to controller
     const { selectedDocumentsByType } = this;
 
     return this.docRequiredTypes.every(
@@ -36,14 +35,14 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   get availableDocumentsList() {
-    return this.docTypesStatusList.filter(
+    return this.documentsList.filter(
       ({ status }) => status === DOC_STATUSES.VERIFIED,
     );
   }
 
   get selectedDocumentsByType() {
-    const selectedDocStructuresList = this.docTypesStatusList.filter(
-      structure => this.selectedDocumentsIdList.includes(structure.id),
+    const selectedDocStructuresList = this.documentsList.filter(structure =>
+      this.selectedDocumentsIdList.includes(structure.id),
     );
 
     return selectedDocStructuresList.reduce((docByTypeMap, structure) => {
@@ -55,12 +54,14 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   get answerResult() {
+    const signedString = this.signToken.stringify({
+      selectedIds: this.selectedDocumentsIdList,
+    });
+
     return {
-      signedString: this.signToken.stringify({
-        selectedIds: this.selectedDocumentsIdList,
-      }),
+      signedString,
       filteredIdsList: this.selectedDocumentsIdList,
-      isNeedUploadDocument: false,
+      isNeedUploadDocument: !this.isAvailableToApply,
     };
   }
 
@@ -82,41 +83,21 @@ class DocumentsRequiredModule extends VuexModule {
    *
    * @param {object} params
    * @param {string} params.documentId
+   * @param {number} params.dateOfExpiry
    * @param {keyof typeof DOC_TYPES} params.documentType
    * @param {keyof typeof DOC_STATUSES} params.status
    * @returns {Promise<void>}
    */
   @Action
-  async addDocTypeStatus({ documentId, documentType, status }) {
-    const docTypesStatusList = this.docTypesStatusList.filter(
+  async addDocTypeStatus({ documentId, documentType, dateOfExpiry, status }) {
+    const documentsList = this.documentsList.filter(
       structure => structure.id !== documentId,
     );
-    this.docTypesStatusList = [
-      ...docTypesStatusList,
-      { id: documentId, documentType, status },
+
+    this.documentsList = [
+      ...documentsList,
+      { id: documentId, documentType, status, dateOfExpiry },
     ];
-  }
-
-  /**
-   * @private
-   * @returns {Promise<void>}
-   */
-  @Action
-  async loadDocumentsTypesAndStatuses(documentsList) {
-    // TODO: after implement connect, remove checking for not defined documentsList
-    if (!documentsList) {
-      const { items } = await documentsService.getDocumentsList();
-      // eslint-disable-next-line no-param-reassign
-      documentsList = items;
-    }
-
-    this.docTypesStatusList = documentsList.map(
-      ({ id, documentType, status }) => ({
-        id,
-        documentType,
-        status,
-      }),
-    );
   }
 
   /**
@@ -154,21 +135,17 @@ class DocumentsRequiredModule extends VuexModule {
    */
   @Action
   async checkRequired({ clientId, documentsList, signedString }) {
+    if (this.clientId !== clientId) {
+      this.docRequiredTypes = [];
+    }
     this.clientId = clientId;
+    this.documentsList = documentsList;
 
-    await this.loadDocumentsTypesAndStatuses(documentsList);
     await this.loadRequiredTypes(clientId);
 
     await this.setDocumentsSelected(signedString);
 
-    const { docRequiredTypes, selectedDocumentsIdList } = this;
-    if (docRequiredTypes.length && selectedDocumentsIdList.length) {
-      return this.answerResult;
-    }
-
-    return {
-      isNeedUploadDocument: docRequiredTypes.length !== 0,
-    };
+    return this.answerResult;
   }
 
   @Action

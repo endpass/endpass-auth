@@ -12,12 +12,13 @@
     </div>
     <div class="document-type-details">
       <div class="document-type-label">
-        {{ typeTitle }}
+        {{ documentType | documentType }}
       </div>
       <div class="document-type-description">
         <document-status
           v-if="isDocumentHaveStatus"
           :status="documentStatus"
+          :date-of-expiry="dateOfExpiry"
         />
         <span
           v-else
@@ -44,14 +45,11 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
-import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 import { DOC_TYPE_TO_ICON, DOC_STATUS_VALUES } from './DocumentType.constants';
 import DocumentStatus from '../DocumentStatus';
 
 export default {
   name: 'DocumentTypeView',
-
-  DOC_TYPES_TRANSLATES,
 
   props: {
     documentStatus: {
@@ -79,10 +77,9 @@ export default {
       default: false,
     },
 
-    documentExpireAt: {
-      // TODO: change to correct type date
-      type: String,
-      default: '',
+    dateOfExpiry: {
+      type: Number,
+      default: null,
     },
   },
 
@@ -99,10 +96,6 @@ export default {
 
     isDocumentHaveStatus() {
       return DOC_STATUS_VALUES.includes(this.documentStatus);
-    },
-
-    typeTitle() {
-      return DOC_TYPES_TRANSLATES[this.documentType];
     },
   },
 

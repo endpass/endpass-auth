@@ -91,10 +91,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.backSideController.recognize(
+        const document = await this.$options.backSideController.recognize(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -123,10 +123,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.backSideController.continueUpload(
+        const document = await this.$options.backSideController.continueUpload(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -135,10 +135,11 @@ export default {
       }
     },
 
-    handleConfirm(status) {
+    handleConfirm(document) {
       this.$emit('confirm', {
         documentId: this.documentId,
-        status,
+        status: document.status,
+        dateOfExpiry: document.dateOfExpiry,
       });
     },
 

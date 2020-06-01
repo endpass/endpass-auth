@@ -1,1 +1,1 @@
-export { default } from './DocumentStatus.view';
+export { default } from './DocumentStatus.container';

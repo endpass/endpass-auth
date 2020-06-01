@@ -2,7 +2,7 @@
   <div>
     <v-title>
       {{ $t('components.uploadDocument.upload') }}
-      {{ title }}
+      {{ selectedDocumentType | documentType }}
     </v-title>
     <sides
       :document-type="selectedDocumentType"
@@ -15,7 +15,6 @@
 <script>
 import Sides from './Sides/Sides';
 import VTitle from '@/components/common/VTitle';
-import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 
 export default {
   name: 'Upload',
@@ -27,22 +26,16 @@ export default {
     },
   },
 
-  computed: {
-    title() {
-      return DOC_TYPES_TRANSLATES[this.selectedDocumentType];
-    },
-  },
-
   methods: {
     onCancel() {
       this.$emit('cancel');
     },
 
-    onConfirm({ documentId, status }) {
-      // TODO: add processing data from lower levels
+    onConfirm({ documentId, status, dateOfExpiry }) {
       this.$emit('next', {
         documentId,
         status,
+        dateOfExpiry,
       });
     },
   },

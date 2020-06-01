@@ -3,14 +3,13 @@
     class="document-status"
     :class="statusCssClass"
   >
-    {{ label }}
+    {{ status | documentStatus }}
     <slot />
   </div>
 </template>
 
 <script>
 import { DOC_STATUSES } from '@/constants';
-import { DOC_STATUSES_TRANSLATES } from '@/constants/translates';
 
 const STATUS_TO_CSS = {
   [DOC_STATUSES.DRAFT]: 'status-draft',
@@ -22,7 +21,7 @@ const STATUS_TO_CSS = {
 };
 
 export default {
-  name: 'DocumentStatusView',
+  name: 'StatusView',
 
   props: {
     status: {
@@ -32,10 +31,6 @@ export default {
   },
 
   computed: {
-    label() {
-      return DOC_STATUSES_TRANSLATES[this.status];
-    },
-
     statusCssClass() {
       return STATUS_TO_CSS[this.status];
     },

@@ -35,8 +35,8 @@ export default {
   },
 
   methods: {
-    onConfirm({ documentId, status }) {
-      this.$emit('confirm', { documentId, status });
+    onConfirm({ documentId, status, dateOfExpiry }) {
+      this.$emit('confirm', { documentId, status, dateOfExpiry });
     },
 
     onCancel() {

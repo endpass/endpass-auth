@@ -105,8 +105,21 @@ const documentsService = {
    * @param {string} id
    * @return {Promise<*>}
    */
-  async getDocumentStatus(id) {
+  async getDocumentById(id) {
     const document = await requestSkipPermission.get(`${docBaseURL}/${id}`);
+    if (!document) {
+      throw new Error('Recognize error');
+    }
+
+    return document;
+  },
+
+  /**
+   * @param {string} id
+   * @return {Promise<*>}
+   */
+  async getDocumentStatus(id) {
+    const document = await this.getDocumentById(id);
     if (!document) {
       throw new Error('Recognize error');
     }
@@ -213,17 +226,6 @@ const documentsService = {
     return requestSkipPermission.get(
       `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
     );
-  },
-
-  /**
-   * @return {Promise<any>}
-   */
-  async getDocumentsList() {
-    const { items, total } = await requestSkipPermission.get(docBaseURL);
-    return {
-      items,
-      total,
-    };
   },
 };
 

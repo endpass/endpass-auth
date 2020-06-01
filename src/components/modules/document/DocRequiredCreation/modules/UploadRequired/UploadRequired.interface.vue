@@ -19,11 +19,17 @@ export default {
     const { documentsRequiredStore } = this.$options;
     return {
       gateway: {
-        async addDocTypeStatus({ documentType, documentId, status }) {
+        async addDocTypeStatus({
+          documentType,
+          documentId,
+          status,
+          dateOfExpiry,
+        }) {
           await documentsRequiredStore.addDocTypeStatus({
             documentType,
             documentId,
             status,
+            dateOfExpiry,
           });
         },
 
