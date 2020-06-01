@@ -1864,7 +1864,7 @@
     lodash.chunk "^4.2.0"
     vue "^2.6.11"
 
-"@endpass/utils@^1.10.1":
+"@endpass/utils@^1.10.2":
   version "1.10.2"
   resolved "https://registry.yarnpkg.com/@endpass/utils/-/utils-1.10.2.tgz#839a906938b5b8daec7df8d3148a4d6c3df74752"
   integrity sha512-ZOpTbQzjFUmBMdqwC1cCC1DdYLNe4OMBo2UYCwdwKz4HsC4jvKOm9IGyto1PMi2Dwh71hT7A0dhEny3/yLKdvQ==
