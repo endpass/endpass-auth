@@ -91,16 +91,23 @@ class DocumentsRequiredModule extends VuexModule {
 
   @Action
   selectDocumentForType({ documentType, documentId }) {
-    const { selectedDocumentsByType, selectedDocumentsIdList } = this;
+    const { selectedDocumentsByType, docRequiredTypes } = this;
 
-    const selectedDocumentByType = selectedDocumentsByType[documentType];
+    this.selectedDocumentsIdList = docRequiredTypes.reduce(
+      (documentIdsList, documentTypeKey) => {
+        const document = selectedDocumentsByType[documentTypeKey];
 
-    this.selectedDocumentsIdList =
-      selectedDocumentByType && selectedDocumentByType.id === documentId
-        ? selectedDocumentsIdList.filter(
-            selectedId => selectedId !== documentId,
-          )
-        : [...selectedDocumentsIdList, documentId];
+        if (document && document.id === documentId) return documentIdsList;
+
+        if (documentTypeKey === documentType)
+          return [...documentIdsList, documentId];
+
+        if (document) return [...documentIdsList, document.id];
+
+        return documentIdsList;
+      },
+      [],
+    );
   }
 
   /**
