@@ -20,47 +20,30 @@ export default class SignToken {
     return this.getHash(str);
   }
 
-  parse(rawStr) {
-    if (!rawStr)
-      return {
-        error: new Error('empty string'),
-      };
-
-    try {
-      const jsonString = decodeURIComponent(escape(window.atob(rawStr)));
-      const jsonData = JSON.parse(jsonString);
-      const { d: data, h } = jsonData;
-      const checkHash = this.getObjectHash(data);
-      if (checkHash !== h) {
-        throw new Error('wrong hash');
-      }
-
-      return data;
-    } catch (e) {
-      return {
-        error: e,
-      };
+  parse(rawStr = '') {
+    const jsonString = decodeURIComponent(escape(window.atob(rawStr)));
+    const jsonData = JSON.parse(jsonString);
+    const { d: data, h } = jsonData;
+    const checkHash = this.getObjectHash(data);
+    if (checkHash !== h) {
+      throw new Error('wrong hash');
     }
+
+    return data;
   }
 
+  /**
+   *
+   * @param data
+   * @returns {{error: Error}|string|{error: *}}
+   */
   stringify(data) {
-    if (!data)
-      return {
-        error: new Error('empty object'),
-      };
-
-    try {
-      const hash = this.getObjectHash(data);
-      const signDataObject = {
-        d: data,
-        h: hash,
-      };
-      const jsonString = JSON.stringify(signDataObject);
-      return window.btoa(unescape(encodeURIComponent(jsonString)));
-    } catch (e) {
-      return {
-        error: e,
-      };
-    }
+    const hash = this.getObjectHash(data);
+    const signDataObject = {
+      d: data,
+      h: hash,
+    };
+    const jsonString = JSON.stringify(signDataObject);
+    return window.btoa(unescape(encodeURIComponent(jsonString)));
   }
 }

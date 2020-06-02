@@ -24,6 +24,9 @@ class DocumentsRequiredModule extends VuexModule {
 
   signToken = new SignToken();
 
+  /**
+   * @returns {boolean}
+   */
   get isAllRequiredVerified() {
     const { selectedDocumentsByType } = this;
 
@@ -35,6 +38,9 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isAvailableToApply() {
     const { selectedDocumentsByType } = this;
 
@@ -47,6 +53,9 @@ class DocumentsRequiredModule extends VuexModule {
     });
   }
 
+  /**
+   * @returns {boolean}
+   */
   get isNeedUploadDocument() {
     const { selectedDocumentsByType } = this;
 
@@ -58,12 +67,19 @@ class DocumentsRequiredModule extends VuexModule {
     return !isAllVerified;
   }
 
+  /**
+   * @returns {UserDocument[]}
+   */
   get availableDocumentsList() {
     return this.documentsList.filter(
       ({ status }) => status === DOC_STATUSES.VERIFIED,
     );
   }
 
+  /**
+   *
+   * @returns {{key in [keyof typeof DOC_TYPES]: UserDocument}}
+   */
   get selectedDocumentsByType() {
     const selectedDocStructuresList = this.documentsList.filter(structure =>
       this.selectedDocumentsIdList.includes(structure.id),
@@ -77,6 +93,10 @@ class DocumentsRequiredModule extends VuexModule {
     }, {});
   }
 
+  /**
+   *
+   * @returns {{isNeedUploadDocument: boolean, signedString: string, filteredIdsList: string[]}}
+   */
   get answerResult() {
     const signedString = this.signToken.stringify({
       selectedIds: this.selectedDocumentsIdList,
@@ -89,6 +109,12 @@ class DocumentsRequiredModule extends VuexModule {
     };
   }
 
+  /**
+   *
+   * @param {object} params
+   * @param {keyof typeof DOC_TYPES} documentType
+   * @param {string} documentId
+   */
   @Action
   selectDocumentForType({ documentType, documentId }) {
     const { selectedDocumentsByType, docRequiredTypes } = this;
@@ -147,12 +173,17 @@ class DocumentsRequiredModule extends VuexModule {
     );
   }
 
+  /**
+   * @param {string} signedString
+   */
   @Action
   setDocumentsSelected(signedString) {
-    const data = this.signToken.parse(signedString);
-    if (!data) return;
-    if (!Array.isArray(data.selectedIds)) return;
-    this.selectedDocumentsIdList = data.selectedIds;
+    try {
+      const data = this.signToken.parse(signedString);
+      if (!data) return;
+      if (!Array.isArray(data.selectedIds)) return;
+      this.selectedDocumentsIdList = data.selectedIds;
+    } catch (e) {}
   }
 
   /**

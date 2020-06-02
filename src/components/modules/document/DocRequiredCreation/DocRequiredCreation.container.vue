@@ -28,7 +28,6 @@ import Upload from './modules/UploadRequired';
 import UploadStatus from './modules/UploadStatus';
 import RequiredDocumentTypes from './modules/RequiredDocumentTypes';
 import SelectedDocumentByType from './modules/SelectedDocumentByType';
-import { DOC_STATUSES } from '@/constants';
 
 export default {
   name: 'DocRequiredCreationContainer',
@@ -88,23 +87,7 @@ export default {
     },
 
     isPending() {
-      const { selectedDocumentsByType, docRequiredTypesList } = this;
-      const isAllTypesSelected = docRequiredTypesList.every(documentType => {
-        const selectedDocument = selectedDocumentsByType[documentType];
-        if (!selectedDocument) return false;
-        return (
-          selectedDocument.status === DOC_STATUSES.PENDING_REVIEW ||
-          selectedDocument.status === DOC_STATUSES.VERIFIED
-        );
-      });
-
-      if (!isAllTypesSelected) return false;
-
-      return docRequiredTypesList.some(
-        documentType =>
-          selectedDocumentsByType[documentType].status ===
-          DOC_STATUSES.PENDING_REVIEW,
-      );
+      return this.isAvailableToApply && !this.isAllRequiredVerified;
     },
 
     isReturnable() {
