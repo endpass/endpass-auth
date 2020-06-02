@@ -32,7 +32,7 @@ export default {
     },
 
     onConfirm(document) {
-      this.$emit('next', document);
+      this.$emit('confirm', document);
     },
   },
 
