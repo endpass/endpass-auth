@@ -3,7 +3,7 @@
     class="document-types-item"
     @click="onSelect"
   >
-    <div class="document-type-index">
+    <div class="document-type-icon">
       <v-svg-icon
         :name="docTypeIcon"
         height="28px"
@@ -15,13 +15,13 @@
         {{ documentType | documentType }}
       </div>
       <div
-        v-if="isStatusShow"
+        v-if="isShowDescription"
         class="document-type-description"
       >
         <document-status
           v-if="isDocumentHaveStatus"
           :status="documentStatus"
-          :date-of-expiry="dateOfExpiry"
+          :date="dateOfExpiry"
         />
         <span
           v-else
@@ -49,17 +49,12 @@
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
 import { DOC_TYPE_TO_ICON, DOC_STATUS_VALUES } from './DocumentType.constants';
-import DocumentStatus from '../DocumentStatus';
+import DocumentStatus from './modules/DocumentStatus';
 
 export default {
   name: 'DocumentTypeView',
 
   props: {
-    documentStatus: {
-      type: String,
-      default: '',
-    },
-
     documentType: {
       type: String,
       required: true,
@@ -70,7 +65,7 @@ export default {
       default: false,
     },
 
-    isStatusShow: {
+    isShowDescription: {
       type: Boolean,
       default: false,
     },
@@ -80,9 +75,9 @@ export default {
       default: false,
     },
 
-    dateOfExpiry: {
-      type: Number,
-      default: null,
+    document: {
+      type: Object,
+      default: () => ({}),
     },
   },
 
@@ -95,6 +90,17 @@ export default {
       if (!this.isSelectable) return 'chevron-right';
 
       return this.isSelected ? 'check-alt' : 'circle-mark';
+    },
+
+    documentStatus() {
+      if (!this.document) return null;
+      return this.document.status;
+    },
+
+    dateOfExpiry() {
+      const { dateOfExpiry, createdAt } = this.document || {};
+      if (!dateOfExpiry || dateOfExpiry < 0) return createdAt;
+      return dateOfExpiry;
     },
 
     isDocumentHaveStatus() {
@@ -125,7 +131,7 @@ export default {
 .document-types-item:last-of-type {
   box-shadow: none;
 }
-.document-type-index {
+.document-type-icon {
   display: flex;
   align-items: center;
   justify-content: center;

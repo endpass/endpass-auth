@@ -4,7 +4,6 @@
     :document-type="documentType"
     @confirm="onConfirm"
     @cancel="onCancel"
-    @toggle="onToggle"
   />
 </template>
 
@@ -35,16 +34,12 @@ export default {
   },
 
   methods: {
-    onConfirm({ documentId, status, dateOfExpiry }) {
-      this.$emit('confirm', { documentId, status, dateOfExpiry });
+    onConfirm(document) {
+      this.$emit('confirm', document);
     },
 
     onCancel() {
       this.$emit('cancel');
-    },
-
-    onToggle() {
-      this.$emit('toggle');
     },
   },
 };

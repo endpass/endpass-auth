@@ -10,9 +10,7 @@
 import Upload from '@/components/modules/document/common/Upload';
 
 export default {
-  name: 'UploadRequiredInteractor',
-
-  inject: ['gateway'],
+  name: 'UploadSingleInterface',
 
   props: {
     selectedDocumentType: {
@@ -27,16 +25,10 @@ export default {
     },
 
     async onConfirm(document) {
-      const { selectedDocumentType: documentType } = this;
-      const documentId = document.id;
-      await this.gateway.addDocTypeStatus(document);
-
-      await this.gateway.selectDocumentForType({
-        documentType,
-        documentId,
+      this.$emit('next', {
+        documentId: document.id,
+        status: document.status,
       });
-
-      this.$emit('next');
     },
   },
 

@@ -136,11 +136,7 @@ export default {
     },
 
     handleConfirm(document) {
-      this.$emit('confirm', {
-        documentId: this.documentId,
-        status: document.status,
-        dateOfExpiry: document.dateOfExpiry,
-      });
+      this.$emit('confirm', document);
     },
 
     async onUploadFile() {

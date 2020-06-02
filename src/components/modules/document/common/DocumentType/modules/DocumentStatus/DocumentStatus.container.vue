@@ -2,7 +2,7 @@
   <component
     :is="currentComponent"
     :status="status"
-    :date-of-expiry="dateOfExpiry"
+    :date="date"
   />
 </template>
 
@@ -21,7 +21,7 @@ export default {
       required: true,
     },
 
-    dateOfExpiry: {
+    date: {
       type: Number,
       default: null,
     },

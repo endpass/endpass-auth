@@ -8,10 +8,9 @@
         v-for="type in docRequiredTypesList"
         :key="type"
         :document-type="type"
-        :document-status="getDocumentStatusByType(type)"
-        :is-status-show="true"
+        :is-show-description="true"
         :is-selectable="false"
-        :date-of-expiry="getDocDateOfExpiryByType(type)"
+        :document="getDocumentByType(type)"
         @select="onSelectDocumentType"
       />
     </div>
@@ -53,18 +52,11 @@ export default {
   },
 
   methods: {
-    getDocDateOfExpiryByType(documentType) {
+    getDocumentByType(documentType) {
       const document = this.selectedDocumentsByType[documentType];
       if (!document) return null;
 
-      return document.dateOfExpiry;
-    },
-
-    getDocumentStatusByType(documentType) {
-      const document = this.selectedDocumentsByType[documentType];
-      if (!document) return null;
-
-      return document.status;
+      return document;
     },
 
     onContinue() {
@@ -72,15 +64,12 @@ export default {
         this.$emit('create');
         return;
       }
-      this.$emit('next', {
-        documentId: '',
-      });
+      this.$emit('next');
     },
 
     onSelectDocumentType(documentType) {
       this.$emit('next', {
         selectedDocumentType: documentType,
-        documentId: '',
       });
     },
   },

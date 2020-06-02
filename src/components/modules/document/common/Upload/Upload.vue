@@ -31,12 +31,8 @@ export default {
       this.$emit('cancel');
     },
 
-    onConfirm({ documentId, status, dateOfExpiry }) {
-      this.$emit('next', {
-        documentId,
-        status,
-        dateOfExpiry,
-      });
+    onConfirm(document) {
+      this.$emit('next', document);
     },
   },
 

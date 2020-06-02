@@ -8,10 +8,9 @@
         v-for="document in documentsListByType"
         :key="document.id"
         :document-type="document.documentType"
-        :document-status="document.status"
-        :is-status-show="true"
+        :is-show-description="true"
         :is-selectable="true"
-        :document-expire-at="document.dateOfExpiry"
+        :document="document"
         :is-selected="isSelected(document.id)"
         @select="onSelect(document.id)"
       />

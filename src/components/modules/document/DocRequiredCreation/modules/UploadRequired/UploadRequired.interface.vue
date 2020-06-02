@@ -19,18 +19,8 @@ export default {
     const { documentsRequiredStore } = this.$options;
     return {
       gateway: {
-        async addDocTypeStatus({
-          documentType,
-          documentId,
-          status,
-          dateOfExpiry,
-        }) {
-          await documentsRequiredStore.addDocTypeStatus({
-            documentType,
-            documentId,
-            status,
-            dateOfExpiry,
-          });
+        async addDocTypeStatus(document) {
+          await documentsRequiredStore.addDocTypeStatus(document);
         },
 
         async selectDocumentForType({ documentType, documentId }) {
@@ -55,11 +45,8 @@ export default {
       this.$emit('cancel');
     },
 
-    onNext({ documentId, status }) {
-      this.$emit('next', {
-        documentId,
-        status,
-      });
+    onNext() {
+      this.$emit('next');
     },
   },
 

@@ -30,13 +30,7 @@ class DocRequiredCreationController extends VuexModule {
       // eslint-disable-next-line no-continue
       if (!events.includes(eventType)) continue;
 
-      const { id, documentType, status, dateOfExpiry } = payload;
-      await this.documentsRequiredStore.addDocTypeStatus({
-        documentType,
-        documentId: id,
-        dateOfExpiry,
-        status,
-      });
+      await this.documentsRequiredStore.addDocTypeStatus(payload);
     }
   }
 

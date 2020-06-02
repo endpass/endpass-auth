@@ -7,7 +7,7 @@
       v-for="type in docTypesList"
       :key="type"
       :document-type="type"
-      :is-status-show="false"
+      :is-show-description="false"
       @select="onSelect"
     />
   </div>

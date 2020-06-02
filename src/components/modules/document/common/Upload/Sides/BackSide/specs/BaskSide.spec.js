@@ -6,7 +6,6 @@ import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
 import documentsService from '@/service/documents';
-import { DOC_STATUSES } from '@/constants';
 
 import BackSide from '../BackSide';
 
@@ -59,15 +58,7 @@ describe('UploadDocument > BackSide', () => {
 
       await emitDone();
 
-      expect(wrapper.emitted().confirm).toEqual([
-        [
-          {
-            documentId: docId,
-            status: DOC_STATUSES.PENDING_REVIEW,
-            dateOfExpiry: document.dateOfExpiry,
-          },
-        ],
-      ]);
+      expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
 
     it('should show repeat buttons if have recognize errors', async () => {
@@ -111,15 +102,7 @@ describe('UploadDocument > BackSide', () => {
 
       await emitUpload();
 
-      expect(wrapper.emitted().confirm).toEqual([
-        [
-          {
-            documentId: docId,
-            status: DOC_STATUSES.PENDING_REVIEW,
-            dateOfExpiry: document.dateOfExpiry,
-          },
-        ],
-      ]);
+      expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
 
     it('should not emit confirm, if error', async () => {
