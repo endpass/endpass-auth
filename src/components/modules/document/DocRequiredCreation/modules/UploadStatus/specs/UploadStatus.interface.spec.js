@@ -6,7 +6,6 @@ import UploadStatusInteractor from '../UploadStatus.interactor';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
-import { DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -16,14 +15,9 @@ describe('UploadStatusInterface', () => {
   let bootstrap;
   const clientId = 'clientId';
 
-  const selectedDocumentsByType = {
-    [document.documentType]: document,
-  };
-
   const defaultProps = {
-    selectedDocumentType: DOC_TYPES.PROOF_OF_ADDRESS,
-    selectedDocumentsByType,
-    clientId: 'clientId',
+    isAvailableToApply: true,
+    isAllRequiredVerified: true,
   };
 
   const createBootstrap = async options => {
@@ -102,19 +96,6 @@ describe('UploadStatusInterface', () => {
         expect(
           bootstrap.wrapper.find(UploadStatusInteractor).props().clientId,
         ).toBe(otherClientId);
-      });
-    });
-
-    describe('selected documents by type', () => {
-      it('should select documents', async () => {
-        expect.assertions(1);
-
-        expect(
-          bootstrap.wrapper.find(UploadStatusInteractor).props()
-            .selectedDocumentsByType,
-        ).toEqual({
-          [document.documentType]: document,
-        });
       });
     });
   });

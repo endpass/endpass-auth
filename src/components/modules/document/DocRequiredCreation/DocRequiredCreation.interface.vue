@@ -1,6 +1,7 @@
 <template>
   <doc-required-creation
     :is-available-to-apply="isAvailableToApply"
+    :is-all-required-verified="isAllRequiredVerified"
     :doc-required-types-list="docRequiredTypes"
     :selected-documents-by-type="selectedDocumentsByType"
     :available-documents-list="availableDocumentsList"
@@ -50,6 +51,10 @@ export default {
 
     isAvailableToApply() {
       return this.$options.documentsRequiredStore.isAvailableToApply;
+    },
+
+    isAllRequiredVerified() {
+      return this.$options.documentsRequiredStore.isAllRequiredVerified;
     },
 
     docRequiredTypes() {

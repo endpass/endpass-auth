@@ -1,7 +1,7 @@
 <template>
   <upload-status-layout
     :is-pending="isPending"
-    :is-verified="isVerified"
+    :is-verified="isAllRequiredVerified"
     @continue="onContinue"
     @create="onContinue"
   />
@@ -10,7 +10,6 @@
 <script>
 import VueTimers from 'vue-timers/mixin';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
-import { DOC_STATUSES } from '@/constants';
 
 const TIMEOUT_MS = 30 * 1000;
 const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
@@ -19,13 +18,13 @@ export default {
   name: 'UploadStatusInteractor',
 
   props: {
-    selectedDocumentType: {
-      type: String,
+    isAvailableToApply: {
+      type: Boolean,
       required: true,
     },
 
-    selectedDocumentsByType: {
-      type: Object,
+    isAllRequiredVerified: {
+      type: Boolean,
       required: true,
     },
 
@@ -47,23 +46,6 @@ export default {
 
       return TIMEOUT_MS;
     },
-
-    selectedDocumentStatus() {
-      const selectedDocument = this.selectedDocumentsByType[
-        this.selectedDocumentType
-      ];
-      if (!selectedDocument) return '';
-
-      return selectedDocument.status;
-    },
-
-    isVerified() {
-      return this.selectedDocumentStatus === DOC_STATUSES.VERIFIED;
-    },
-
-    isPendingReview() {
-      return this.selectedDocumentStatus === DOC_STATUSES.PENDING_REVIEW;
-    },
   },
 
   methods: {
@@ -80,9 +62,9 @@ export default {
   },
 
   async mounted() {
-    if (this.isVerified) return;
+    if (this.isAllRequiredVerified) return;
 
-    if (!this.isPendingReview) {
+    if (!this.isAvailableToApply) {
       this.isPending = false;
       return;
     }

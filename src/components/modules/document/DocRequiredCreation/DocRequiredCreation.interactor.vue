@@ -2,6 +2,7 @@
   <doc-required-creation
     :doc-required-types-list="docRequiredTypesList"
     :is-available-to-apply="isAvailableToApply"
+    :is-all-required-verified="isAllRequiredVerified"
     :selected-documents-by-type="selectedDocumentsByType"
     :available-documents-list="availableDocumentsList"
     @create="onCreate"
@@ -24,6 +25,11 @@ export default {
     },
 
     isAvailableToApply: {
+      type: Boolean,
+      required: true,
+    },
+
+    isAllRequiredVerified: {
       type: Boolean,
       required: true,
     },

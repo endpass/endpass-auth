@@ -1,8 +1,8 @@
 <template>
   <upload-status
     :client-id="clientId"
-    :selected-document-type="selectedDocumentType"
-    :selected-documents-by-type="selectedDocumentsByType"
+    :is-available-to-apply="isAvailableToApply"
+    :is-all-required-verified="isAllRequiredVerified"
     @continue="onContinue"
   />
 </template>
@@ -17,13 +17,13 @@ export default {
   documentsRequiredStore: documentsRequiredStoreModule,
 
   props: {
-    selectedDocumentType: {
-      type: String,
+    isAvailableToApply: {
+      type: Boolean,
       required: true,
     },
 
-    selectedDocumentsByType: {
-      type: Object,
+    isAllRequiredVerified: {
+      type: Boolean,
       required: true,
     },
   },

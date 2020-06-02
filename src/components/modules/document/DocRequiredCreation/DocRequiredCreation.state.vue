@@ -2,11 +2,10 @@
   <doc-required-creation
     :doc-required-types-list="docRequiredTypesList"
     :is-available-to-apply="isAvailableToApply"
+    :is-all-required-verified="isAllRequiredVerified"
     :selected-documents-by-type="selectedDocumentsByType"
     :available-documents-list="availableDocumentsList"
     :selected-document-type.sync="selectedDocumentType"
-    :document-id.sync="documentId"
-    :status.sync="status"
     @create="onCreate"
     @cancel="onCancel"
   />
@@ -29,6 +28,11 @@ export default {
       required: true,
     },
 
+    isAllRequiredVerified: {
+      type: Boolean,
+      required: true,
+    },
+
     selectedDocumentsByType: {
       type: Object,
       required: true,
@@ -41,8 +45,6 @@ export default {
   },
 
   data: () => ({
-    status: '',
-    documentId: '',
     selectedDocumentType: '',
   }),
 

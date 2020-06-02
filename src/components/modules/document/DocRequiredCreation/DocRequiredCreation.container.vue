@@ -7,10 +7,10 @@
   >
     <component
       :is="currentComponent"
-      :document-id="documentId"
       :selected-document-type="selectedDocumentType"
       :doc-required-types-list="docRequiredTypesList"
       :is-available-to-apply="isAvailableToApply"
+      :is-all-required-verified="isAllRequiredVerified"
       :selected-documents-by-type="selectedDocumentsByType"
       :available-documents-list="availableDocumentsList"
       @next="onNext"
@@ -28,6 +28,7 @@ import Upload from './modules/UploadRequired';
 import UploadStatus from './modules/UploadStatus';
 import RequiredDocumentTypes from './modules/RequiredDocumentTypes';
 import SelectedDocumentByType from './modules/SelectedDocumentByType';
+import { DOC_STATUSES } from '@/constants';
 
 export default {
   name: 'DocRequiredCreationContainer',
@@ -39,6 +40,11 @@ export default {
     },
 
     isAvailableToApply: {
+      type: Boolean,
+      required: true,
+    },
+
+    isAllRequiredVerified: {
       type: Boolean,
       required: true,
     },
@@ -57,27 +63,20 @@ export default {
       type: String,
       required: true,
     },
-
-    status: {
-      type: String,
-      required: true,
-    },
-
-    documentId: {
-      type: String,
-      required: true,
-    },
   },
 
   data() {
     return {
-      currentComponent: 'required-document-types',
+      currentComponent: null,
     };
   },
 
   computed: {
     isClosable() {
-      return !this.documentId && !this.status;
+      return (
+        this.currentComponent === 'required-document-types' ||
+        this.currentComponent === 'selected-document-by-type'
+      );
     },
 
     isDocumentsByTypeExists() {
@@ -86,6 +85,26 @@ export default {
       );
 
       return !!docBySelectedType;
+    },
+
+    isPending() {
+      const { selectedDocumentsByType, docRequiredTypesList } = this;
+      const isAllTypesSelected = docRequiredTypesList.every(documentType => {
+        const selectedDocument = selectedDocumentsByType[documentType];
+        if (!selectedDocument) return false;
+        return (
+          selectedDocument.status === DOC_STATUSES.PENDING_REVIEW ||
+          selectedDocument.status === DOC_STATUSES.VERIFIED
+        );
+      });
+
+      if (!isAllTypesSelected) return false;
+
+      return docRequiredTypesList.some(
+        documentType =>
+          selectedDocumentsByType[documentType].status ===
+          DOC_STATUSES.PENDING_REVIEW,
+      );
     },
 
     isReturnable() {
@@ -146,14 +165,15 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload':
+        case this.currentComponent === 'upload' && this.isPending:
           this.currentComponent = 'upload-status';
           break;
 
+        case this.currentComponent === 'upload' && !this.isPending:
+          this.currentComponent = 'required-document-types';
+          break;
+
         case this.currentComponent === 'upload-status':
-          this.$emit('update:selectedDocumentType', '');
-          this.$emit('update:documentId', '');
-          this.$emit('update:status', '');
           this.currentComponent = 'required-document-types';
           break;
 
@@ -183,6 +203,12 @@ export default {
           break;
       }
     },
+  },
+
+  mounted() {
+    this.currentComponent = this.isPending
+      ? 'upload-status'
+      : 'required-document-types';
   },
 
   components: {

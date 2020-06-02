@@ -1,7 +1,7 @@
 <template>
   <div>
     <span
-      v-if="dateOfExpiry"
+      v-if="isDateOfExpiryExist"
       class="document-status-verified-expire-date"
     >
       {{ dateOfExpiry | formatUnixDate('MMM DD, YYYY') }}
@@ -24,7 +24,13 @@ export default {
 
     dateOfExpiry: {
       type: Number,
-      default: 123123123,
+      default: null,
+    },
+  },
+
+  computed: {
+    isDateOfExpiryExist() {
+      return this.dateOfExpiry && this.dateOfExpiry > 0;
     },
   },
 

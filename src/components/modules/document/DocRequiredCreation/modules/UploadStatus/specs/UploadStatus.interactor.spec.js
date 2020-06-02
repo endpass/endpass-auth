@@ -1,9 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import UploadStatusInteractor from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus/UploadStatus.interactor';
+import UploadStatusInteractor from '../UploadStatus.interactor';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
 import setupI18n from '@/locales/i18nSetup';
-import { DOC_STATUSES, DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -12,15 +11,9 @@ const i18n = setupI18n(localVue);
 describe('UploadStatusInteractor', () => {
   let wrapper;
 
-  const selectedDocumentsByType = {
-    [DOC_TYPES.PROOF_OF_ADDRESS]: {
-      status: DOC_STATUSES.PENDING_REVIEW,
-    },
-  };
-
   const defaultProps = {
-    selectedDocumentType: DOC_TYPES.PROOF_OF_ADDRESS,
-    selectedDocumentsByType,
+    isAvailableToApply: true,
+    isAllRequiredVerified: false,
     clientId: 'clientId',
   };
 
@@ -84,7 +77,7 @@ describe('UploadStatusInteractor', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          selectedDocumentsByType: {},
+          isAllRequiredVerified: true,
         },
       });
 

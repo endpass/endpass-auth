@@ -24,14 +24,38 @@ class DocumentsRequiredModule extends VuexModule {
 
   signToken = new SignToken();
 
+  get isAllRequiredVerified() {
+    const { selectedDocumentsByType } = this;
+
+    return this.docRequiredTypes.every(documentType => {
+      const document = selectedDocumentsByType[documentType];
+      if (!document) return false;
+      if (document.status === DOC_STATUSES.VERIFIED) return true;
+      return false;
+    });
+  }
+
   get isAvailableToApply() {
     const { selectedDocumentsByType } = this;
 
-    return this.docRequiredTypes.every(
+    return this.docRequiredTypes.every(documentType => {
+      const document = selectedDocumentsByType[documentType];
+      if (!document) return false;
+      if (document.status === DOC_STATUSES.VERIFIED) return true;
+      if (document.status === DOC_STATUSES.PENDING_REVIEW) return true;
+      return false;
+    });
+  }
+
+  get isNeedUploadDocument() {
+    const { selectedDocumentsByType } = this;
+
+    const isAllVerified = this.docRequiredTypes.every(
       documentType =>
         selectedDocumentsByType[documentType] &&
         selectedDocumentsByType[documentType].status === DOC_STATUSES.VERIFIED,
     );
+    return !isAllVerified;
   }
 
   get availableDocumentsList() {
@@ -61,7 +85,7 @@ class DocumentsRequiredModule extends VuexModule {
     return {
       signedString,
       filteredIdsList: this.selectedDocumentsIdList,
-      isNeedUploadDocument: !this.isAvailableToApply,
+      isNeedUploadDocument: this.isNeedUploadDocument,
     };
   }
 
@@ -135,9 +159,8 @@ class DocumentsRequiredModule extends VuexModule {
    */
   @Action
   async checkRequired({ clientId, documentsList, signedString }) {
-    if (this.clientId !== clientId) {
-      this.docRequiredTypes = [];
-    }
+    this.docRequiredTypes = [];
+    this.selectedDocumentsIdList = [];
     this.clientId = clientId;
     this.documentsList = documentsList;
 
