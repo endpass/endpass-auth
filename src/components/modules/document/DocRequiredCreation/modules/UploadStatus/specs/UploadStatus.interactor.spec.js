@@ -128,28 +128,26 @@ describe('UploadStatusInteractor', () => {
   });
 
   describe('events', () => {
-    it('should emit continue', async () => {
-      expect.assertions(3);
+    it('should emit finish by continue', async () => {
+      expect.assertions(2);
 
-      expect(wrapper.emitted().continue).toBeUndefined();
+      expect(wrapper.emitted().finish).toBeUndefined();
 
       wrapper.find(UploadStatusLayout).vm.$emit('continue');
       await global.flushPromises();
 
-      expect(wrapper.emitted().continue).toHaveLength(1);
-      expect(wrapper.emitted().continue).toEqual([[]]);
+      expect(wrapper.emitted().finish).toEqual([[]]);
     });
 
-    it('should emit continue by create', async () => {
-      expect.assertions(3);
+    it('should emit finish by create', async () => {
+      expect.assertions(2);
 
-      expect(wrapper.emitted().continue).toBeUndefined();
+      expect(wrapper.emitted().finish).toBeUndefined();
 
       wrapper.find(UploadStatusLayout).vm.$emit('create');
       await global.flushPromises();
 
-      expect(wrapper.emitted().continue).toHaveLength(1);
-      expect(wrapper.emitted().continue).toEqual([[]]);
+      expect(wrapper.emitted().finish).toEqual([[]]);
     });
   });
 });

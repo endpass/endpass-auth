@@ -59,17 +59,17 @@ describe('UploadStatusInterface', () => {
 
   describe('behavior', () => {
     describe('events', () => {
-      it('should emit next', async () => {
-        expect.assertions(3);
+      it('should emit finish', async () => {
+        expect.assertions(2);
 
         const { wrapper } = bootstrap;
 
-        expect(wrapper.emitted().next).toBeUndefined();
+        expect(wrapper.emitted().finish).toBeUndefined();
 
-        wrapper.find(UploadStatusInteractor).vm.$emit('continue');
+        wrapper.find(UploadStatusInteractor).vm.$emit('finish');
         await global.flushPromises();
 
-        expect(wrapper.emitted().next).toEqual([[]]);
+        expect(wrapper.emitted().finish).toEqual([[]]);
       });
     });
 
