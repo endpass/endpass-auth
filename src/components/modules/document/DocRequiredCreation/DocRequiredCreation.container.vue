@@ -9,12 +9,12 @@
       :is="currentComponent"
       :selected-document-type="selectedDocumentType"
       :doc-required-types-list="docRequiredTypesList"
-      :is-available-to-apply="isAvailableToApply"
-      :is-all-required-verified="isAllRequiredVerified"
+      :is-available-to-finish="isAvailableToFinish"
+      :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
       :selected-documents-by-type="selectedDocumentsByType"
       :available-documents-list="availableDocumentsList"
       @next="onNext"
-      @create="onCreate"
+      @finish="onFinish"
       @cancel="handleBack"
     />
   </doc-layout>
@@ -38,12 +38,12 @@ export default {
       required: true,
     },
 
-    isAvailableToApply: {
+    isAvailableToFinish: {
       type: Boolean,
       required: true,
     },
 
-    isAllRequiredVerified: {
+    isAllDocRequiredTypesVerified: {
       type: Boolean,
       required: true,
     },
@@ -87,7 +87,7 @@ export default {
     },
 
     isPending() {
-      return this.isAvailableToApply && !this.isAllRequiredVerified;
+      return this.isAvailableToFinish && !this.isAllDocRequiredTypesVerified;
     },
 
     isReturnable() {
@@ -106,18 +106,17 @@ export default {
       this.$emit('cancel');
     },
 
-    onCreate() {
-      this.handleCreate();
+    onFinish() {
+      this.handleFinish();
     },
 
-    handleCreate() {
-      // TODO: change from create to confirm
+    handleFinish() {
       if (this.isPending) {
         this.currentComponent = 'upload-status';
         return;
       }
 
-      this.$emit('create');
+      this.$emit('finish');
     },
 
     updateProps(payload) {
@@ -157,7 +156,7 @@ export default {
           break;
 
         case this.currentComponent === 'upload-status':
-          this.handleCreate();
+          this.handleFinish();
           break;
 
         default:

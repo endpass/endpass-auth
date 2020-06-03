@@ -36,7 +36,7 @@ class DocumentsRequiredModule extends VuexModule {
   /**
    * @returns {boolean}
    */
-  get isAllRequiredVerified() {
+  get isAllDocRequiredTypesVerified() {
     const { selectedDocumentsByType } = this;
 
     return this.docRequiredTypes.every(documentType => {
@@ -50,7 +50,7 @@ class DocumentsRequiredModule extends VuexModule {
   /**
    * @returns {boolean}
    */
-  get isAvailableToApply() {
+  get isAvailableToFinish() {
     const { selectedDocumentsByType } = this;
 
     return this.docRequiredTypes.every(documentType => {

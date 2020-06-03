@@ -16,8 +16,8 @@ describe('UploadStatusInterface', () => {
   const clientId = 'clientId';
 
   const defaultProps = {
-    isAvailableToApply: true,
-    isAllRequiredVerified: true,
+    isAvailableToFinish: true,
+    isAllDocRequiredTypesVerified: true,
   };
 
   const createBootstrap = async options => {

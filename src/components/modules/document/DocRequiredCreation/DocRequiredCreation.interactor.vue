@@ -2,7 +2,7 @@
   <div>
     <slot
       :onCancel="onCancel"
-      :onCreate="onCreate"
+      :onFinish="onFinish"
     />
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
       await this.gateway.cancelCreate();
     },
 
-    async onCreate() {
+    async onFinish() {
       await this.gateway.finishCreate();
     },
   },

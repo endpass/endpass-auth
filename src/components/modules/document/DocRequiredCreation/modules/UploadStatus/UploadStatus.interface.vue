@@ -1,9 +1,9 @@
 <template>
   <upload-status
     :client-id="clientId"
-    :is-available-to-apply="isAvailableToApply"
-    :is-all-required-verified="isAllRequiredVerified"
-    @continue="onContinue"
+    :is-available-to-finish="isAvailableToFinish"
+    :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
+    @finish="onFinish"
   />
 </template>
 
@@ -17,12 +17,12 @@ export default {
   documentsRequiredStore: documentsRequiredStoreModule,
 
   props: {
-    isAvailableToApply: {
+    isAvailableToFinish: {
       type: Boolean,
       required: true,
     },
 
-    isAllRequiredVerified: {
+    isAllDocRequiredTypesVerified: {
       type: Boolean,
       required: true,
     },
@@ -35,8 +35,8 @@ export default {
   },
 
   methods: {
-    onContinue() {
-      this.$emit('next');
+    onFinish() {
+      this.$emit('finish');
     },
   },
 

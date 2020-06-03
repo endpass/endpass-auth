@@ -1,9 +1,9 @@
 <template>
   <upload-status-layout
     :is-pending="isPending"
-    :is-verified="isAllRequiredVerified"
-    @continue="onContinue"
-    @create="onContinue"
+    :is-verified="isAllDocRequiredTypesVerified"
+    @continue="onFinish"
+    @create="onFinish"
   />
 </template>
 
@@ -18,12 +18,12 @@ export default {
   name: 'UploadStatusInteractor',
 
   props: {
-    isAvailableToApply: {
+    isAvailableToFinish: {
       type: Boolean,
       required: true,
     },
 
-    isAllRequiredVerified: {
+    isAllDocRequiredTypesVerified: {
       type: Boolean,
       required: true,
     },
@@ -49,8 +49,8 @@ export default {
   },
 
   methods: {
-    onContinue() {
-      this.$emit('continue');
+    onFinish() {
+      this.$emit('finish');
     },
 
     startTimer() {
@@ -62,9 +62,9 @@ export default {
   },
 
   async mounted() {
-    if (this.isAllRequiredVerified) return;
+    if (this.isAllDocRequiredTypesVerified) return;
 
-    if (!this.isAvailableToApply) {
+    if (!this.isAvailableToFinish) {
       this.isPending = false;
       return;
     }

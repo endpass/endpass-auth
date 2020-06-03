@@ -12,8 +12,8 @@ describe('UploadStatusInteractor', () => {
   let wrapper;
 
   const defaultProps = {
-    isAvailableToApply: true,
-    isAllRequiredVerified: false,
+    isAvailableToFinish: true,
+    isAllDocRequiredTypesVerified: false,
     clientId: 'clientId',
   };
 
@@ -77,7 +77,7 @@ describe('UploadStatusInteractor', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isAllRequiredVerified: true,
+          isAllDocRequiredTypesVerified: true,
         },
       });
 

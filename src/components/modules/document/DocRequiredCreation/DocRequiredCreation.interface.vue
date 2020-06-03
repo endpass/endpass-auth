@@ -2,17 +2,17 @@
   <doc-required-creation-state
     #default="{ selectedDocumentType, setDocumentType }"
   >
-    <doc-required-creation-interactor #default="{ onCancel, onCreate }">
+    <doc-required-creation-interactor #default="{ onCancel, onFinish }">
       <doc-required-creation-container
         :selected-document-type="selectedDocumentType"
-        :is-available-to-apply="isAvailableToApply"
-        :is-all-required-verified="isAllRequiredVerified"
+        :is-available-to-finish="isAvailableToFinish"
+        :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
         :doc-required-types-list="docRequiredTypes"
         :selected-documents-by-type="selectedDocumentsByType"
         :available-documents-list="availableDocumentsList"
         @update:selectedDocumentType="setDocumentType"
         @cancel="onCancel"
-        @create="onCreate"
+        @finish="onFinish"
       />
     </doc-required-creation-interactor>
   </doc-required-creation-state>
@@ -61,12 +61,12 @@ export default {
       return this.$options.documentsRequiredStore.availableDocumentsList;
     },
 
-    isAvailableToApply() {
-      return this.$options.documentsRequiredStore.isAvailableToApply;
+    isAvailableToFinish() {
+      return this.$options.documentsRequiredStore.isAvailableToFinish;
     },
 
-    isAllRequiredVerified() {
-      return this.$options.documentsRequiredStore.isAllRequiredVerified;
+    isAllDocRequiredTypesVerified() {
+      return this.$options.documentsRequiredStore.isAllDocRequiredTypesVerified;
     },
 
     docRequiredTypes() {

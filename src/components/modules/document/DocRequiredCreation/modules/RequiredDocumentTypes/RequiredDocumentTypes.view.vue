@@ -16,7 +16,7 @@
     </div>
     <div class="required-document-types-controls">
       <v-button
-        :disabled="!isAvailableToApply"
+        :disabled="!isAvailableToFinish"
         data-test="submit-button"
         @click="onContinue"
       >
@@ -35,7 +35,7 @@ export default {
   name: 'RequiredDocumentTypesView',
 
   props: {
-    isAvailableToApply: {
+    isAvailableToFinish: {
       type: Boolean,
       required: true,
     },
@@ -60,8 +60,8 @@ export default {
     },
 
     onContinue() {
-      if (this.isAvailableToApply) {
-        this.$emit('create');
+      if (this.isAvailableToFinish) {
+        this.$emit('finish');
         return;
       }
       this.$emit('next');
