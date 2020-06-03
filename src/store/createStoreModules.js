@@ -7,7 +7,6 @@ import AuthModule from '@/store/modules/AuthModule';
 import CoreModule from '@/store/modules/CoreModule';
 import RequestsModule from '@/store/modules/RequestsModule';
 import DocumentsRequiredModule from '@/store/modules/DocumentsRequiredModule';
-import RiskScoringModule from '@/store/modules/RiskScoringModule';
 import moduleFactory from '@/store/moduleFactory';
 
 export default store => {
@@ -45,8 +44,6 @@ export default store => {
     'documentsRequired',
   );
 
-  const riskScoringStore = createModule(RiskScoringModule, 'riskScoring');
-
   return {
     channelStore,
     gasPriceStore,
@@ -57,6 +54,5 @@ export default store => {
     coreStore,
     requestStore,
     documentsRequiredStore,
-    riskScoringStore,
   };
 };

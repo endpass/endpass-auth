@@ -32,13 +32,11 @@ import createFrontSideController from './FrontSideOnlyController';
 import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
 import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
 import DropArea from '../DropArea';
-import { riskScoringStore } from '@/store';
 
 export default {
   name: 'FrontSideOnly',
 
   frontSideController: createFrontSideController(),
-  riskScoringStore,
 
   inject: ['$validator'],
 
@@ -119,7 +117,7 @@ export default {
           },
         );
 
-        await this.$options.riskScoringStore.sendUserMetrics();
+        await this.$options.frontSideController.sendUserMetrics();
       } catch (e) {
         this.error = e.message;
       } finally {

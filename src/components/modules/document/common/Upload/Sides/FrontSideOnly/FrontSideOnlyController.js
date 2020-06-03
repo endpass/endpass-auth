@@ -2,6 +2,7 @@
 import { VuexModule, Action, Module, Mutation } from 'vuex-class-modules';
 import get from 'lodash/get';
 import createController from '@/controllers/createController';
+import riskScoringService from '@/service/riskScoring';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
@@ -198,6 +199,14 @@ class FrontSideOnlyController extends VuexModule {
   @Action
   init() {
     this.docId = '';
+  }
+
+  /**
+   * @return {Promise<void>}
+   */
+  @Action
+  async sendUserMetrics() {
+    await riskScoringService.sendUserMetrics();
   }
 }
 

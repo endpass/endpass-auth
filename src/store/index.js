@@ -18,7 +18,6 @@ export const {
   balanceStore,
   channelStore,
   documentsRequiredStore,
-  riskScoringStore,
 } = createStoreModules(store);
 
 export default store;

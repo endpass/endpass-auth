@@ -5,7 +5,7 @@ import {
   encryptMetric,
 } from '@endpass/utils/metrics';
 import requestSkipPermission from '@/class/singleton/request/requestSkipPermission';
-import { METRIC_TYPES } from '@/constants';
+import { METRIC_TYPES } from './riskScoring.constants';
 
 /**
  * @returns {Promise<void>}
