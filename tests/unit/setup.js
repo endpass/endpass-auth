@@ -7,6 +7,7 @@ import './mocks/service/cryptoData.mock';
 import './mocks/service/documents.mock';
 import './mocks/service/permissions.mock';
 import './mocks/service/user.mock';
+import './mocks/service/riskScoring.mock';
 import './mocks/service/mode.mock';
 import './mocks/util/core-class';
 import './mocks/util/isDialog';
