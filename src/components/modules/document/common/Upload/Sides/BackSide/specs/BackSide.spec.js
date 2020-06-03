@@ -5,6 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
 
 import BackSide from '@/components/modules/document/common/Upload/Sides/BackSide/BackSide';
+import riskScoringService from '@/service/riskScoring';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES } from '@/constants';
 
@@ -53,7 +54,9 @@ describe('UploadDocument > BackSide', () => {
 
   describe('recognize only without upload', () => {
     it('should recognize only without upload', async () => {
-      expect.assertions(1);
+      expect.assertions(2);
+
+      expect(wrapper.emitted().confirm).toBeUndefined();
 
       await emitDone();
 
@@ -104,7 +107,9 @@ describe('UploadDocument > BackSide', () => {
 
   describe('upload and recognize', () => {
     it('should upload back side of document and recognize', async () => {
-      expect.assertions(1);
+      expect.assertions(2);
+
+      expect(wrapper.emitted().confirm).toBeUndefined();
 
       await emitUpload();
 
@@ -116,6 +121,16 @@ describe('UploadDocument > BackSide', () => {
           },
         ],
       ]);
+    });
+
+    it('should send fingerprint after upload', async () => {
+      expect.assertions(2);
+
+      expect(riskScoringService.sendUserMetrics).not.toBeCalled();
+
+      await emitUpload();
+
+      expect(riskScoringService.sendUserMetrics).toBeCalledTimes(1);
     });
 
     it('should not emit confirm, if error', async () => {
