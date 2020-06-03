@@ -4,6 +4,7 @@ import get from 'lodash/get';
 import createController from '@/controllers/createController';
 import i18n from '@/locales/i18n';
 
+import riskScoringService from '@/service/riskScoring';
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
 import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
@@ -172,6 +173,14 @@ class BackSideController extends VuexModule {
     } finally {
       timer.fillAndStopProgress();
     }
+  }
+
+  /**
+   * @return {Promise<void>}
+   */
+  @Action
+  async sendUserMetrics() {
+    await riskScoringService.sendUserMetrics();
   }
 }
 
