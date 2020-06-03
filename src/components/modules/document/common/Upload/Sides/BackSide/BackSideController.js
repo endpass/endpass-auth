@@ -131,6 +131,8 @@ class BackSideController extends VuexModule {
 
       timer.continueProgress(40, 50);
       await documentsService.waitDocumentUpload(docId);
+
+      riskScoringService.sendUserMetrics();
     } catch (e) {
       throw this.createError(e);
     } finally {
@@ -173,14 +175,6 @@ class BackSideController extends VuexModule {
     } finally {
       timer.fillAndStopProgress();
     }
-  }
-
-  /**
-   * @return {Promise<void>}
-   */
-  @Action
-  async sendUserMetrics() {
-    await riskScoringService.sendUserMetrics();
   }
 }
 

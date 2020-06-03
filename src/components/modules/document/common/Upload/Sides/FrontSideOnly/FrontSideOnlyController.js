@@ -164,6 +164,8 @@ class FrontSideOnlyController extends VuexModule {
 
       timer.continueProgress(40, 50);
       await documentsService.waitDocumentUpload(this.docId);
+
+      riskScoringService.sendUserMetrics();
     } catch (e) {
       throw this.createError(e);
     } finally {
@@ -190,14 +192,6 @@ class FrontSideOnlyController extends VuexModule {
   @Action
   init() {
     this.docId = '';
-  }
-
-  /**
-   * @return {Promise<void>}
-   */
-  @Action
-  async sendUserMetrics() {
-    await riskScoringService.sendUserMetrics();
   }
 }
 

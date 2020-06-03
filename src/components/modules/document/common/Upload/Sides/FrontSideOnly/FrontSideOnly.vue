@@ -116,8 +116,6 @@ export default {
             type: this.documentType,
           },
         );
-
-        await this.$options.frontSideController.sendUserMetrics();
       } catch (e) {
         this.error = e.message;
       } finally {

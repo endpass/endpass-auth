@@ -112,8 +112,6 @@ export default {
           docId: this.documentId,
         });
 
-        await this.$options.backSideController.sendUserMetrics();
-
         this.isUploaded = true;
       } catch (e) {
         this.isUploaded = false;
