@@ -140,7 +140,7 @@ class BackSideController extends VuexModule {
   /**
    *
    * @param {string} docId
-   * @return {Promise<void>}
+   * @return {Promise<UserDocument>}
    */
   @Action
   async continueUpload(docId) {
@@ -154,7 +154,7 @@ class BackSideController extends VuexModule {
 
   /**
    * @param {string} docId
-   * @return {Promise<void>}
+   * @return {Promise<UserDocument>}
    */
   @Action
   async recognize(docId) {

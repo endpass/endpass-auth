@@ -10,7 +10,9 @@
       height="14px"
       width="14px"
     />
-    {{ $t('components.uploadDocument.pleaseReupload') }}
+    <span>
+      {{ $t('components.uploadDocument.pleaseReupload') }}
+    </span>
   </div>
 </template>
 
@@ -44,8 +46,10 @@ export default {
 }
 .document-status-not-readable-status {
   margin-right: 5px;
+  flex: 0 0 auto;
 }
 .document-status-not-readable-icon {
   margin-right: 5px;
+  flex: 0 0 auto;
 }
 </style>

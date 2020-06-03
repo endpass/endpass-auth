@@ -116,6 +116,7 @@ const documentsService = {
 
   /**
    * @param {string} id
+   * @throws {Error}
    * @return {Promise<*>}
    */
   async getDocumentStatus(id) {

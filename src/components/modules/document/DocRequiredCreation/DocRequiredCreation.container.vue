@@ -91,13 +91,7 @@ export default {
     },
 
     isReturnable() {
-      switch (true) {
-        case this.currentComponent === 'selected-document-by-type':
-          return true;
-
-        default:
-          return false;
-      }
+      return this.currentComponent === 'selected-document-by-type';
     },
   },
 

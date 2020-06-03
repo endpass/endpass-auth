@@ -1,5 +1,9 @@
 /* eslint-disable no-bitwise */
 export default class SignToken {
+  /**
+   * @param {string} str
+   * @return {number}
+   */
   getHash(str) {
     let hash = 4678;
     let i = str.length;
@@ -15,11 +19,19 @@ export default class SignToken {
     return hash >>> 0;
   }
 
+  /**
+   * @param {*} obj
+   * @return {number}
+   */
   getObjectHash(obj) {
     const str = JSON.stringify(obj);
     return this.getHash(str);
   }
 
+  /**
+   * @param {string} rawStr
+   * @return {*}
+   */
   parse(rawStr = '') {
     const jsonString = decodeURIComponent(escape(window.atob(rawStr)));
     const jsonData = JSON.parse(jsonString);
@@ -34,8 +46,8 @@ export default class SignToken {
 
   /**
    *
-   * @param data
-   * @returns {{error: Error}|string|{error: *}}
+   * @param {*} data
+   * @returns {string}
    */
   stringify(data) {
     const hash = this.getObjectHash(data);

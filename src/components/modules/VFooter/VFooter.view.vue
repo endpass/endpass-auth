@@ -9,7 +9,7 @@
 
 <script>
 export default {
-  name: 'FooterView',
+  name: 'VFooterView',
 };
 </script>
 

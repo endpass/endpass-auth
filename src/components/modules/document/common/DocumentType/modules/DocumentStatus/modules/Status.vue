@@ -11,7 +11,7 @@
 <script>
 import { DOC_STATUSES } from '@/constants';
 
-const STATUS_TO_CSS = {
+const CSS_CLASSES_BY_STATUSES = {
   [DOC_STATUSES.DRAFT]: 'status-draft',
   [DOC_STATUSES.NOT_READABLE]: 'status-not-readable',
   [DOC_STATUSES.NOT_VERIFIED]: 'status-not-verified',
@@ -32,13 +32,16 @@ export default {
 
   computed: {
     statusCssClass() {
-      return STATUS_TO_CSS[this.status];
+      return CSS_CLASSES_BY_STATUSES[this.status];
     },
   },
 };
 </script>
 
 <style lang="postcss">
+:root {
+  --endpass-ui-color-orange-2: #ff7500;
+}
 .document-status {
   text-align: center;
   color: var(--endpass-ui-color-grey-9);
@@ -50,12 +53,13 @@ export default {
   border-radius: 2px;
   padding: 2px 4px;
   display: inline-block;
+  vertical-align: middle;
 }
 
 .document-status.status-recognition,
 .document-status.status-review {
-  /*TODO: add to ui-kit*/
-  color: #ff7500;
+  /* TODO: add to ui-kit */
+  color: var(--endpass-ui-color-orange-2);
   background-color: rgba(253, 209, 58, 0.15);
 }
 

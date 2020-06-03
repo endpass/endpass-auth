@@ -20,7 +20,7 @@ describe('UploadStatusInteractor', () => {
   const createWrapper = options => {
     return shallowMount(UploadStatusInteractor, {
       localVue,
-      propsData: defaultProps,
+      propsData: { ...defaultProps },
       i18n,
       ...options,
     });

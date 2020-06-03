@@ -69,7 +69,6 @@ describe('UploadStatusInterface', () => {
         wrapper.find(UploadStatusInteractor).vm.$emit('continue');
         await global.flushPromises();
 
-        expect(wrapper.emitted().next).toHaveLength(1);
         expect(wrapper.emitted().next).toEqual([[]]);
       });
     });

@@ -16,10 +16,19 @@ const { ERRORS } = ConnectError;
 class DocumentsRequiredModule extends VuexModule {
   clientId = '';
 
+  /**
+   * @type {<keyof typeof DOC_TYPES>[]}
+   */
   docRequiredTypes = [];
 
+  /**
+   * @type {UserDocument[]}
+   */
   documentsList = [];
 
+  /**
+   * @type {string[]}
+   */
   selectedDocumentsIdList = [];
 
   signToken = new SignToken();
@@ -211,12 +220,18 @@ class DocumentsRequiredModule extends VuexModule {
     return this.answerResult;
   }
 
+  /**
+   * @return {Promise<void>}
+   */
   @Action
   async answerCancel() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
     documentChannel.put(result);
   }
 
+  /**
+   * @return {Promise<void>}
+   */
   @Action
   async answerFinish() {
     const result = Answer.createOk(this.answerResult);

@@ -115,7 +115,7 @@ class FrontSideOnlyController extends VuexModule {
 
   /**
    * @param {string} docId
-   * @return {Promise<string>}
+   * @return {Promise<UserDocument>}
    */
   @Action
   async recognize(docId) {
@@ -174,7 +174,7 @@ class FrontSideOnlyController extends VuexModule {
   /**
    *
    * @param {string} docId
-   * @return {Promise<void>}
+   * @return {Promise<UserDocument>}
    */
   @Action
   async continueCreateDocument(docId) {

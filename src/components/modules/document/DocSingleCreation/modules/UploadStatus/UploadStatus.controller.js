@@ -18,7 +18,7 @@ class ModeDocumentController extends VuexModule {
 
   /**
    * @param {string} docId
-   * @return {Promise<*>}
+   * @return {Promise<string>}
    */
   @Action
   async getDocumentStatus(docId) {

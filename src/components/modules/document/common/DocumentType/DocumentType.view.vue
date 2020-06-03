@@ -19,7 +19,7 @@
         class="document-type-description"
       >
         <document-status
-          v-if="isDocumentHaveStatus"
+          v-if="isDocumentStatusExist"
           :status="documentStatus"
           :date="dateOfExpiry"
         />
@@ -48,7 +48,10 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
-import { DOC_TYPE_TO_ICON, DOC_STATUS_VALUES } from './DocumentType.constants';
+import {
+  DOC_ICONS_BY_TYPES,
+  DOC_STATUS_VALUES,
+} from './DocumentType.constants';
 import DocumentStatus from './modules/DocumentStatus';
 
 export default {
@@ -83,7 +86,7 @@ export default {
 
   computed: {
     docTypeIcon() {
-      return DOC_TYPE_TO_ICON[this.documentType];
+      return DOC_ICONS_BY_TYPES[this.documentType];
     },
 
     actionIcon() {
@@ -103,7 +106,7 @@ export default {
       return dateOfExpiry;
     },
 
-    isDocumentHaveStatus() {
+    isDocumentStatusExist() {
       return DOC_STATUS_VALUES.includes(this.documentStatus);
     },
   },
@@ -128,9 +131,11 @@ export default {
   box-shadow: inset 0 -1px 0 var(--endpass-ui-color-grey-1);
   cursor: pointer;
 }
+
 .document-types-item:last-of-type {
   box-shadow: none;
 }
+
 .document-type-icon {
   display: flex;
   align-items: center;
@@ -140,25 +145,30 @@ export default {
   color: var(--endpass-ui-color-primary-7);
   border-radius: 50%;
 }
+
 .document-type-details {
   margin: 0 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
+
 .document-type-label {
   font-size: 16px;
   color: var(--endpass-ui-color-grey-8);
 }
+
 .document-type-description {
   margin-top: 4px;
 }
+
 .document-not-added {
   font-size: 14px;
   padding: 4px 0;
   display: inline-block;
   color: var(--endpass-ui-color-grey-5);
 }
+
 .document-type-action-icon {
   display: flex;
   align-items: center;

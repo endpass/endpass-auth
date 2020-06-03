@@ -1,7 +1,7 @@
 <template>
-  <div class="v-frame">
+  <div class="frame">
     <v-modal-card
-      class="v-frame-modal-card"
+      class="frame-modal-card"
       :is-closable="isClosable"
       :is-returnable="isReturnable"
       @return="onReturn"
@@ -27,13 +27,13 @@
       </template>
       <slot />
     </v-modal-card>
-    <Footer />
+    <v-footer />
   </div>
 </template>
 
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import Footer from '@/components/modules/Footer';
+import VFooter from '@/components/modules/VFooter';
 
 export default {
   name: 'VFrame',
@@ -72,7 +72,7 @@ export default {
 
   components: {
     VModalCard,
-    Footer,
+    VFooter,
   },
 };
 </script>
@@ -85,7 +85,7 @@ export default {
   }
 }
 
-.v-frame {
+.frame {
   overflow: hidden;
   max-width: 360px;
   margin: 50px auto;
@@ -105,12 +105,12 @@ export default {
   height: 32px;
 }
 
-.v-frame-modal-card {
+.frame-modal-card {
   max-width: initial !important;
 }
 
 @media (max-width: 768px) {
-  .v-frame {
+  .frame {
     max-width: initial;
     margin: 0;
     border-radius: 0;
