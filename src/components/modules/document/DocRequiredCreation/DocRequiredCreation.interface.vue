@@ -1,8 +1,8 @@
 <template>
   <doc-required-creation-state
-    v-slot:default="{ selectedDocumentType, setDocumentType }"
+    #default="{ selectedDocumentType, setDocumentType }"
   >
-    <doc-required-creation-interactor v-slot:default="{ onCancel, onCreate }">
+    <doc-required-creation-interactor #default="{ onCancel, onCreate }">
       <doc-required-creation-container
         :selected-document-type="selectedDocumentType"
         :is-available-to-apply="isAvailableToApply"
@@ -17,7 +17,6 @@
     </doc-required-creation-interactor>
   </doc-required-creation-state>
 </template>
-
 <script>
 import DocRequiredCreationInteractor from './DocRequiredCreation.interactor';
 import DocRequiredCreationState from './DocRequiredCreation.state';
