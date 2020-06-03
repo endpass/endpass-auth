@@ -34,7 +34,7 @@
     <div
       class="document-type-action-icon"
       :class="{
-        'is-selected': isSelected,
+        'is-chosen': isChosen,
       }"
     >
       <v-svg-icon
@@ -70,7 +70,7 @@ export default {
       default: false,
     },
 
-    isSelected: {
+    isChosen: {
       type: Boolean,
       default: false,
     },
@@ -89,7 +89,7 @@ export default {
     actionIcon() {
       if (!this.isSelectable) return 'chevron-right';
 
-      return this.isSelected ? 'check-alt' : 'circle-mark';
+      return this.isChosen ? 'check-alt' : 'circle-mark';
     },
 
     documentStatus() {
@@ -166,7 +166,7 @@ export default {
   color: var(--endpass-ui-color-grey-5);
 }
 
-.document-type-action-icon.is-selected {
+.document-type-action-icon.is-chosen {
   color: var(--endpass-ui-color-green-2);
 }
 </style>

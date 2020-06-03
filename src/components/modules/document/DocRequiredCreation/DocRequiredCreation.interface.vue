@@ -25,20 +25,20 @@ export default {
     const { docRequiredController, documentsRequiredStore } = this.$options;
     return {
       gateway: {
-        cancelCreate() {
-          documentsRequiredStore.answerCancel();
+        async cancelCreate() {
+          await documentsRequiredStore.answerCancel();
         },
 
-        finishCreate() {
-          documentsRequiredStore.answerFinish();
+        async finishCreate() {
+          await documentsRequiredStore.answerFinish();
         },
 
-        subscribeToUpdateStatus() {
-          docRequiredController.subscribeToUpdateStatus();
+        async subscribeToUpdateStatus() {
+          await docRequiredController.subscribeToUpdateStatus();
         },
 
-        unsubscribeFromUpdateStatus() {
-          docRequiredController.unsubscribeFromUpdateStatus();
+        async unsubscribeFromUpdateStatus() {
+          await docRequiredController.unsubscribeFromUpdateStatus();
         },
       },
     };

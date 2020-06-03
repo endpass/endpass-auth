@@ -35,7 +35,7 @@ class DocRequiredCreationController extends VuexModule {
   }
 
   @Action
-  unsubscribeFromUpdateStatus() {
+  async unsubscribeFromUpdateStatus() {
     if (!this.eventsIterator) {
       return;
     }

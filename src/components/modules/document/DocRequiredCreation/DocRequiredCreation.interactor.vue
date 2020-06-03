@@ -46,12 +46,12 @@ export default {
   },
 
   methods: {
-    onCancel() {
-      this.gateway.cancelCreate();
+    async onCancel() {
+      await this.gateway.cancelCreate();
     },
 
-    onCreate() {
-      this.gateway.finishCreate();
+    async onCreate() {
+      await this.gateway.finishCreate();
     },
   },
 

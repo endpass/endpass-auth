@@ -11,7 +11,7 @@
         :is-show-description="true"
         :is-selectable="true"
         :document="document"
-        :is-selected="isSelected(document.id)"
+        :is-chosen="isChosen(document.id)"
         @select="onSelect(document.id)"
       />
     </div>
@@ -60,7 +60,7 @@ export default {
   },
 
   methods: {
-    isSelected(documentId) {
+    isChosen(documentId) {
       const selectedDocument = this.selectedDocumentsByType[
         this.selectedDocumentType
       ];

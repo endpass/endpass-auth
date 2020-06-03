@@ -31,8 +31,8 @@ class DocumentsRequiredModule extends VuexModule {
     const { selectedDocumentsByType } = this;
 
     return this.docRequiredTypes.every(documentType => {
-      const document = selectedDocumentsByType[documentType];
-      if (!document) return false;
+      const document = selectedDocumentsByType[documentType] || {};
+
       if (document.status === DOC_STATUSES.VERIFIED) return true;
       return false;
     });
@@ -45,10 +45,15 @@ class DocumentsRequiredModule extends VuexModule {
     const { selectedDocumentsByType } = this;
 
     return this.docRequiredTypes.every(documentType => {
-      const document = selectedDocumentsByType[documentType];
-      if (!document) return false;
-      if (document.status === DOC_STATUSES.VERIFIED) return true;
-      if (document.status === DOC_STATUSES.PENDING_REVIEW) return true;
+      const document = selectedDocumentsByType[documentType] || {};
+
+      if (
+        document.status === DOC_STATUSES.PENDING_REVIEW ||
+        document.status === DOC_STATUSES.VERIFIED
+      ) {
+        return true;
+      }
+
       return false;
     });
   }
@@ -85,12 +90,13 @@ class DocumentsRequiredModule extends VuexModule {
       this.selectedDocumentsIdList.includes(structure.id),
     );
 
-    return selectedDocStructuresList.reduce((docByTypeMap, structure) => {
-      return {
+    return selectedDocStructuresList.reduce(
+      (docByTypeMap, structure) => ({
         ...docByTypeMap,
         [structure.documentType]: structure,
-      };
-    }, {});
+      }),
+      {},
+    );
   }
 
   /**
@@ -160,10 +166,6 @@ class DocumentsRequiredModule extends VuexModule {
    */
   @Action
   async loadRequiredTypes(clientId) {
-    if (this.docRequiredTypes.length) {
-      return;
-    }
-
     const requiredTypes = await documentsService.getRequiredDocumentsTypes(
       clientId,
     );
@@ -177,10 +179,10 @@ class DocumentsRequiredModule extends VuexModule {
    * @param {string} signedString
    */
   @Action
-  setDocumentsSelected(signedString) {
+  setSelectedDocIdsFromSignString(signedString) {
+    this.selectedDocumentsIdList = [];
     try {
       const data = this.signToken.parse(signedString);
-      if (!data) return;
       if (!Array.isArray(data.selectedIds)) return;
       this.selectedDocumentsIdList = data.selectedIds;
     } catch (e) {}
@@ -194,26 +196,29 @@ class DocumentsRequiredModule extends VuexModule {
    */
   @Action
   async checkRequired({ clientId, documentsList, signedString }) {
-    this.docRequiredTypes = [];
-    this.selectedDocumentsIdList = [];
+    if (this.clientId !== clientId) {
+      this.docRequiredTypes = [];
+    }
     this.clientId = clientId;
     this.documentsList = documentsList;
 
-    await this.loadRequiredTypes(clientId);
+    if (!this.docRequiredTypes.length) {
+      await this.loadRequiredTypes(clientId);
+    }
 
-    await this.setDocumentsSelected(signedString);
+    await this.setSelectedDocIdsFromSignString(signedString);
 
     return this.answerResult;
   }
 
   @Action
-  answerCancel() {
+  async answerCancel() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
     documentChannel.put(result);
   }
 
   @Action
-  answerFinish() {
+  async answerFinish() {
     const result = Answer.createOk(this.answerResult);
     documentChannel.put(result);
   }

@@ -66,7 +66,7 @@ export default {
 
   data() {
     return {
-      currentComponent: null,
+      currentComponent: 'required-document-types',
     };
   },
 
@@ -113,6 +113,16 @@ export default {
     },
 
     onCreate() {
+      this.handleCreate();
+    },
+
+    handleCreate() {
+      // TODO: change from create to confirm
+      if (this.isPending) {
+        this.currentComponent = 'upload-status';
+        return;
+      }
+
       this.$emit('create');
     },
 
@@ -148,16 +158,12 @@ export default {
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload' && this.isPending:
-          this.currentComponent = 'upload-status';
-          break;
-
-        case this.currentComponent === 'upload' && !this.isPending:
+        case this.currentComponent === 'upload':
           this.currentComponent = 'required-document-types';
           break;
 
         case this.currentComponent === 'upload-status':
-          this.currentComponent = 'required-document-types';
+          this.handleCreate();
           break;
 
         default:
@@ -186,12 +192,6 @@ export default {
           break;
       }
     },
-  },
-
-  mounted() {
-    this.currentComponent = this.isPending
-      ? 'upload-status'
-      : 'required-document-types';
   },
 
   components: {
