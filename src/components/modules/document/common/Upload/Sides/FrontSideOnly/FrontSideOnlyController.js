@@ -117,6 +117,7 @@ class FrontSideOnlyController extends VuexModule {
   /**
    * @param {string} docId
    * @return {Promise<UserDocument>}
+   * @throws
    */
   @Action
   async recognize(docId) {
@@ -140,6 +141,7 @@ class FrontSideOnlyController extends VuexModule {
    * @param {object} fields UserDocument object for upload
    * @param {string} fields.type UserDocument type
    * @param {File} fields.file UserDocument file
+   * @throws
    */
   @Action
   async startCreateDocument({ file, type }) {

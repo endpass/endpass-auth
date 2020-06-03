@@ -1,6 +1,9 @@
+// @ts-check
+
 /* eslint-disable no-bitwise */
 export default class SignToken {
   /**
+   * @private
    * @param {string} str
    * @return {number}
    */
@@ -20,11 +23,12 @@ export default class SignToken {
   }
 
   /**
-   * @param {*} obj
+   * @private
+   * @param {*} data
    * @return {number}
    */
-  getObjectHash(obj) {
-    const str = JSON.stringify(obj);
+  getDataHash(data) {
+    const str = JSON.stringify(data);
     return this.getHash(str);
   }
 
@@ -36,7 +40,7 @@ export default class SignToken {
     const jsonString = decodeURIComponent(escape(window.atob(rawStr)));
     const jsonData = JSON.parse(jsonString);
     const { d: data, h } = jsonData;
-    const checkHash = this.getObjectHash(data);
+    const checkHash = this.getDataHash(data);
     if (checkHash !== h) {
       throw new Error('wrong hash');
     }
@@ -50,7 +54,7 @@ export default class SignToken {
    * @returns {string}
    */
   stringify(data) {
-    const hash = this.getObjectHash(data);
+    const hash = this.getDataHash(data);
     const signDataObject = {
       d: data,
       h: hash,

@@ -21,7 +21,7 @@ import DocLayout from '@/components/modules/document/DocLayout';
 
 import UploadStatus from '../UploadStatus';
 import UploadSingle from '../UploadSingle';
-import DocTypes from './modules/DocTypes';
+import DocTypesList from './modules/DocTypesList';
 
 export default {
   name: 'DocSpecifiedContainer',
@@ -56,7 +56,7 @@ export default {
     currentComponent() {
       switch (true) {
         case !this.documentId && !this.selectedDocumentType:
-          return DocTypes;
+          return DocTypesList;
 
         case !!this.status:
           return UploadStatus;

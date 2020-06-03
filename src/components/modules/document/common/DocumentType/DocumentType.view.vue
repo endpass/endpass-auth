@@ -12,7 +12,7 @@
     </div>
     <div class="document-type-details">
       <div class="document-type-label">
-        {{ documentType | documentType }}
+        {{ $options.DOC_TYPES_TRANSLATES[documentType] }}
       </div>
       <div
         v-if="isShowDescription"
@@ -53,9 +53,12 @@ import {
   DOC_STATUS_VALUES,
 } from './DocumentType.constants';
 import DocumentStatus from './modules/DocumentStatus';
+import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 
 export default {
   name: 'DocumentTypeView',
+
+  DOC_TYPES_TRANSLATES,
 
   props: {
     documentType: {

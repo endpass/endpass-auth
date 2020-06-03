@@ -103,7 +103,7 @@ const documentsService = {
 
   /**
    * @param {string} id
-   * @return {Promise<*>}
+   * @return {Promise<UserDocument>}
    */
   async getDocumentById(id) {
     const document = await requestSkipPermission.get(`${docBaseURL}/${id}`);
@@ -117,7 +117,7 @@ const documentsService = {
   /**
    * @param {string} id
    * @throws {Error}
-   * @return {Promise<*>}
+   * @return {Promise<typeof DOC_STATUSES[keyof typeof DOC_STATUSES]>}
    */
   async getDocumentStatus(id) {
     const document = await this.getDocumentById(id);
@@ -135,6 +135,8 @@ const documentsService = {
   async waitDocumentVerified(id) {
     const startTime = Date.now();
     const timeoutMS = 30000;
+
+    /** @type {typeof DOC_STATUSES[keyof typeof DOC_STATUSES][]} */
     const statuses = [DOC_STATUSES.VERIFIED];
 
     // eslint-disable-next-line no-unused-vars
@@ -159,6 +161,7 @@ const documentsService = {
    * @return {Promise<void>}
    */
   async waitDocumentFinishRecognition(id) {
+    /** @type {typeof DOC_STATUSES[keyof typeof DOC_STATUSES][]} */
     const statuses = [DOC_STATUSES.RECOGNITION];
 
     // eslint-disable-next-line no-unused-vars

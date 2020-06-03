@@ -18,7 +18,7 @@ import VTitle from '@/components/common/VTitle';
 import DocumentType from '@/components/modules/document/common/DocumentType';
 
 export default {
-  name: 'DocTypesView',
+  name: 'DocTypesListView',
 
   props: {
     docTypesList: {

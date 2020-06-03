@@ -3,7 +3,7 @@
     :is-closable="isClosable"
     :is-returnable="isReturnable"
     @return="onReturn"
-    @close="onCancel"
+    @close="onCancelSelectionRequired"
   >
     <component
       :is="currentComponent"
@@ -14,7 +14,7 @@
       :selected-documents-by-type="selectedDocumentsByType"
       :available-documents-list="availableDocumentsList"
       @next="onNext"
-      @finish="onFinish"
+      @finish="handleFinishSelectionRequired"
       @cancel="handleBack"
     />
   </doc-layout>
@@ -102,16 +102,12 @@ export default {
       this.handleBack();
     },
 
-    onCancel() {
+    onCancelSelectionRequired() {
       this.$emit('cancel');
     },
 
-    onFinish() {
-      this.handleFinish();
-    },
-
-    handleFinish() {
-      if (this.isPending) {
+    handleFinishSelectionRequired() {
+      if (this.isPending && this.currentComponent !== 'upload-status') {
         this.currentComponent = 'upload-status';
         return;
       }
@@ -156,7 +152,7 @@ export default {
           break;
 
         case this.currentComponent === 'upload-status':
-          this.handleFinish();
+          this.handleFinishSelectionRequired();
           break;
 
         default:

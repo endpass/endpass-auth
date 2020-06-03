@@ -113,6 +113,7 @@ class BackSideController extends VuexModule {
    * @param {object} fields UserDocument object for upload
    * @param {string} fields.docId UserDocument type
    * @param {File} fields.file UserDocument file
+   * @throws
    */
   @Action
   async startUpload({ file, docId }) {
@@ -158,6 +159,7 @@ class BackSideController extends VuexModule {
   /**
    * @param {string} docId
    * @return {Promise<UserDocument>}
+   * @throws
    */
   @Action
   async recognize(docId) {

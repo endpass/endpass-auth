@@ -36,8 +36,8 @@ describe('SignToken', () => {
   it('should return different hash of objects', () => {
     expect.assertions(1);
 
-    const hashFirst = signToken.getObjectHash(checkData);
-    const hashSecond = signToken.getObjectHash({
+    const hashFirst = signToken.getDataHash(checkData);
+    const hashSecond = signToken.getDataHash({
       ...checkData,
       num: 11,
     });
@@ -48,8 +48,8 @@ describe('SignToken', () => {
   it('should return same hash of objects', () => {
     expect.assertions(1);
 
-    const hashFirst = signToken.getObjectHash(checkData);
-    const hashSecond = signToken.getObjectHash(checkData);
+    const hashFirst = signToken.getDataHash(checkData);
+    const hashSecond = signToken.getDataHash(checkData);
 
     expect(hashFirst).toBe(hashSecond);
   });
