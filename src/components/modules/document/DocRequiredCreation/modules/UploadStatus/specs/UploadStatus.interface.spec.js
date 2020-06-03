@@ -52,6 +52,8 @@ describe('UploadStatusInterface', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
+      expect.assertions(2);
+
       expect(bootstrap.wrapper.name()).toBe('UploadStatusInterface');
       expect(bootstrap.wrapper.html()).toMatchSnapshot();
     });
