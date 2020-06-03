@@ -1,10 +1,10 @@
 <template>
-  <div class="footer">
+  <footer class="footer">
     <div class="footer-powered-by" />
     <div class="footer-gradient-container">
       <div class="footer-gradient" />
     </div>
-  </div>
+  </footer>
 </template>
 
 <script>

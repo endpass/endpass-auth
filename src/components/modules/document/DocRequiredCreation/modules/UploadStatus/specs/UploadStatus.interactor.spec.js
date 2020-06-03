@@ -35,6 +35,8 @@ describe('UploadStatusInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
+      expect.assertions(2);
+
       expect(wrapper.name()).toBe('UploadStatusInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -74,14 +76,14 @@ describe('UploadStatusInteractor', () => {
 
   describe('timer', () => {
     it('should not use timer', async () => {
+      expect.assertions(1);
+
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
           isAllDocRequiredTypesVerified: true,
         },
       });
-
-      expect.assertions(1);
 
       await global.flushPromises();
 
