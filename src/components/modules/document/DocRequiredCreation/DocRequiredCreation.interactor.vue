@@ -1,49 +1,17 @@
 <template>
-  <doc-required-creation
-    :doc-required-types-list="docRequiredTypesList"
-    :is-available-to-apply="isAvailableToApply"
-    :is-all-required-verified="isAllRequiredVerified"
-    :selected-documents-by-type="selectedDocumentsByType"
-    :available-documents-list="availableDocumentsList"
-    @create="onCreate"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :onCancel="onCancel"
+      :onCreate="onCreate"
+    />
+  </div>
 </template>
 
 <script>
-import DocRequiredCreation from './DocRequiredCreation.state';
-
 export default {
   name: 'DocRequiredCreationInteractor',
 
   inject: ['gateway'],
-
-  props: {
-    docRequiredTypesList: {
-      type: Array,
-      required: true,
-    },
-
-    isAvailableToApply: {
-      type: Boolean,
-      required: true,
-    },
-
-    isAllRequiredVerified: {
-      type: Boolean,
-      required: true,
-    },
-
-    selectedDocumentsByType: {
-      type: Object,
-      required: true,
-    },
-
-    availableDocumentsList: {
-      type: Array,
-      required: true,
-    },
-  },
 
   methods: {
     async onCancel() {
@@ -61,10 +29,6 @@ export default {
 
   beforeDestroy() {
     this.gateway.unsubscribeFromUpdateStatus();
-  },
-
-  components: {
-    DocRequiredCreation,
   },
 };
 </script>

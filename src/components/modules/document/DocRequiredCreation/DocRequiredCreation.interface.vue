@@ -1,15 +1,28 @@
 <template>
-  <doc-required-creation
-    :is-available-to-apply="isAvailableToApply"
-    :is-all-required-verified="isAllRequiredVerified"
-    :doc-required-types-list="docRequiredTypes"
-    :selected-documents-by-type="selectedDocumentsByType"
-    :available-documents-list="availableDocumentsList"
-  />
+  <doc-required-creation-state
+    v-slot:default="{ selectedDocumentType, setDocumentType }"
+  >
+    <doc-required-creation-interactor v-slot:default="{ onCancel, onCreate }">
+      <doc-required-creation-container
+        :selected-document-type="selectedDocumentType"
+        :is-available-to-apply="isAvailableToApply"
+        :is-all-required-verified="isAllRequiredVerified"
+        :doc-required-types-list="docRequiredTypes"
+        :selected-documents-by-type="selectedDocumentsByType"
+        :available-documents-list="availableDocumentsList"
+        @update:selectedDocumentType="setDocumentType"
+        @cancel="onCancel"
+        @create="onCreate"
+      />
+    </doc-required-creation-interactor>
+  </doc-required-creation-state>
 </template>
 
 <script>
-import DocRequiredCreation from './DocRequiredCreation.interactor';
+import DocRequiredCreationInteractor from './DocRequiredCreation.interactor';
+import DocRequiredCreationState from './DocRequiredCreation.state';
+import DocRequiredCreationContainer from './DocRequiredCreation.container';
+
 import createDocumentRequiredController from './DocRequiredCreation.controller';
 
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
@@ -67,7 +80,9 @@ export default {
   },
 
   components: {
-    DocRequiredCreation,
+    DocRequiredCreationInteractor,
+    DocRequiredCreationState,
+    DocRequiredCreationContainer,
   },
 };
 </script>
