@@ -1,5 +1,6 @@
 import { accountAddress } from '@unitFixtures/accounts';
-import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
+import { METHODS } from '@/constants';
+import { WIDGET_RESIZE_DURATION } from '../../constants';
 import widgetActions from '@/store/modules/widget/actions';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 

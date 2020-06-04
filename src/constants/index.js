@@ -71,8 +71,6 @@ export const WALLET_TYPES = Object.freeze({
   HD_MAIN: 'HDMainAccount',
 });
 
-export const WIDGET_RESIZE_DURATION = 300;
-
 export const LOCALES = ['en'];
 
 /**
@@ -160,6 +158,7 @@ export const DOC_STATUSES = {
     DRIVER_LICENSE: 'DriverLicense',
     PROOF_OF_ADDRESS: 'ProofOfAddress',
     ID_CARD: 'IdCard',
+    SELFIE: 'Selfie',
   }}
  */
 export const DOC_TYPES = {
@@ -167,6 +166,7 @@ export const DOC_TYPES = {
   DRIVER_LICENSE: 'DriverLicense',
   PROOF_OF_ADDRESS: 'ProofOfAddress',
   ID_CARD: 'IdCard',
+  SELFIE: 'Selfie',
 };
 
 /**
@@ -177,6 +177,7 @@ export const DOC_TYPES_ORDER = [
   DOC_TYPES.DRIVER_LICENSE,
   DOC_TYPES.ID_CARD,
   DOC_TYPES.PROOF_OF_ADDRESS,
+  DOC_TYPES.SELFIE,
 ];
 
 /**
