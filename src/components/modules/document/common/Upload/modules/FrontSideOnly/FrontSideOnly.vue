@@ -1,5 +1,6 @@
 <template>
   <div>
+    <upload-header :document-type="documentType" />
     <drop-area
       :is-loading="isLoading"
       :error.sync="error"
@@ -29,9 +30,10 @@
 <script>
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createFrontSideController from './FrontSideOnlyController';
-import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
-import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
-import DropArea from '../DropArea';
+import FooterFrontButtons from '../../common/FooterButtons/FooterFrontButtons';
+import FooterRepeatButtons from '../../common/FooterButtons/FooterRepeatButtons';
+import DropArea from '../../common/DropArea';
+import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader/UploadHeader.view';
 
 export default {
   name: 'FrontSideOnly',
@@ -157,6 +159,7 @@ export default {
   },
 
   components: {
+    UploadHeader,
     DropArea,
     FooterFrontButtons,
     DocumentUploadFront,

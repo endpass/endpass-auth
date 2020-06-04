@@ -1,17 +1,21 @@
 <template>
-  <component
-    :is="currentSide"
-    :document-id.sync="documentId"
-    :document-type="documentType"
-    @confirm="onConfirm"
-    @cancel="onCancel"
-    @toggle="onToggle"
-  />
+  <div>
+    <upload-header :document-type="documentType" />
+    <component
+      :is="currentSide"
+      :document-id.sync="documentId"
+      :document-type="documentType"
+      @confirm="onConfirm"
+      @cancel="onCancel"
+      @toggle="onToggle"
+    />
+  </div>
 </template>
 
 <script>
-import BackSide from './BackSide';
-import FrontSide from './FrontSide';
+import BackSide from '../../common/BackSide';
+import FrontSide from '../../common/FrontSide';
+import UploadHeader from '../../common/UploadHeader';
 
 export default {
   name: 'BackAndFront',
@@ -41,5 +45,7 @@ export default {
       this.$emit('cancel');
     },
   },
+
+  components: { UploadHeader },
 };
 </script>

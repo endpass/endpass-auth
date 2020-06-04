@@ -3,7 +3,7 @@ import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import setupI18n from '@/locales/i18nSetup';
-import DocumentUpload from '@/components/modules/document/common/Upload';
+import UploadContainer from '../Upload.container';
 import { DOC_TYPES } from '@/constants';
 
 const localVue = createLocalVue();
@@ -11,11 +11,11 @@ const i18n = setupI18n(localVue);
 localVue.use(VeeValidate);
 localVue.use(UIComponents);
 
-describe('DocumentUpload', () => {
+describe('UploadContainer', () => {
   let wrapper;
 
   const createWrapper = options => {
-    return shallowMount(DocumentUpload, {
+    return shallowMount(UploadContainer, {
       propsData: {
         selectedDocumentType: DOC_TYPES.PASSPORT,
       },

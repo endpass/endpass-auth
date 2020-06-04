@@ -1,24 +1,25 @@
 <template>
   <component
     :is="currentSide"
-    :document-type="documentType"
+    :document-type="selectedDocumentType"
     @confirm="onConfirm"
     @cancel="onCancel"
   />
 </template>
 
 <script>
-import BackAndFront from './BackAndFront';
-import FrontSideOnly from './FrontSideOnly';
+import BackAndFront from './modules/BackAndFront';
+import FrontSideOnly from './modules/FrontSideOnly';
+import Video from './modules/Video';
 import { DOC_TYPES } from '@/constants';
 
 const frontSideOnly = [DOC_TYPES.PASSPORT, DOC_TYPES.PROOF_OF_ADDRESS];
 
 export default {
-  name: 'Sides',
+  name: 'UploadContainer',
 
   props: {
-    documentType: {
+    selectedDocumentType: {
       type: String,
       default: '',
     },
@@ -26,10 +27,16 @@ export default {
 
   computed: {
     currentSide() {
-      if (frontSideOnly.includes(this.documentType)) {
-        return FrontSideOnly;
+      switch (true) {
+        case this.selectedDocumentType === DOC_TYPES.SELFIE:
+          return Video;
+
+        case frontSideOnly.includes(this.selectedDocumentType):
+          return FrontSideOnly;
+
+        default:
+          return BackAndFront;
       }
-      return BackAndFront;
     },
   },
 

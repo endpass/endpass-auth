@@ -5,6 +5,7 @@ export const DOC_ICONS_BY_TYPES = {
   [DOC_TYPES.DRIVER_LICENSE]: 'doc-type-id',
   [DOC_TYPES.ID_CARD]: 'doc-type-id',
   [DOC_TYPES.PROOF_OF_ADDRESS]: 'doc-type-address',
+  [DOC_TYPES.SELFIE]: 'doc-type-selfie',
 };
 
 export const DOC_STATUS_VALUES = Object.values(DOC_STATUSES);

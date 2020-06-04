@@ -21,7 +21,7 @@
 <script>
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
-import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from './sidesConstants';
+import { ACCEPT, VALIDATE_ACCEPT, MAX_FILE_SIZE } from '../upload.constants';
 import DocumentUploadDescription from './DocumentUploadDescription';
 
 export default {

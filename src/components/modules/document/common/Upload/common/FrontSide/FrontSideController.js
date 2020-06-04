@@ -5,7 +5,7 @@ import createController from '@/controllers/createController';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
-import { UPLOAD_CODE_ERRORS } from '../sidesConstants';
+import { UPLOAD_CODE_ERRORS } from '../../upload.constants';
 import NonReactive from '@/class/NonReactive';
 import i18n from '@/locales/i18n';
 

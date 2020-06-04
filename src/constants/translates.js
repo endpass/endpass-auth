@@ -9,6 +9,7 @@ export const DOC_TYPES_TRANSLATES = createGetters({
   [DOC_TYPES.DRIVER_LICENSE]: $t('constants.documentType.driverLicense'),
   [DOC_TYPES.PROOF_OF_ADDRESS]: $t('constants.documentType.proofOfAddress'),
   [DOC_TYPES.ID_CARD]: $t('constants.documentType.idCard'),
+  [DOC_TYPES.SELFIE]: $t('constants.documentType.selfie'),
 });
 
 export const DOC_STATUSES_TRANSLATES = createGetters({
