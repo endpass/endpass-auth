@@ -12,6 +12,13 @@ const { ERRORS } = ConnectError;
  * @typedef { import("@/constants").DOC_TYPES } DOC_TYPES
  */
 
+/**
+ * @typedef {
+ * isNeedUploadDocument: boolean,
+ * signedString: string,
+ * filteredIdsList: string[]} AnswerResult
+ */
+
 @Module({ generateMutationSetters: true })
 class DocumentsRequiredModule extends VuexModule {
   clientId = '';
@@ -110,7 +117,7 @@ class DocumentsRequiredModule extends VuexModule {
 
   /**
    *
-   * @returns {{isNeedUploadDocument: boolean, signedString: string, filteredIdsList: string[]}}
+   * @returns {AnswerResult}
    */
   get answerResult() {
     const signedString = this.signToken.stringify({
