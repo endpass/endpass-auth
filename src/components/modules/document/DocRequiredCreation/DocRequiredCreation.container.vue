@@ -107,12 +107,19 @@ export default {
     },
 
     handleFinishSelectionRequired() {
-      if (this.isPending && this.currentComponent !== 'upload-status') {
-        this.currentComponent = 'upload-status';
-        return;
-      }
+      switch (true) {
+        case this.currentComponent !== 'upload-status' && this.isPending:
+          this.currentComponent = 'upload-status';
+          return;
 
-      this.$emit('finish');
+        case this.currentComponent === 'upload-status' &&
+          !this.isAvailableToFinish:
+          this.currentComponent = 'required-document-types';
+          return;
+
+        default:
+          this.$emit('finish');
+      }
     },
 
     updateProps(payload) {

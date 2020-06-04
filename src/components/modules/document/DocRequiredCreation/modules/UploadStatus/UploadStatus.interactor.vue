@@ -13,6 +13,7 @@ import UploadStatusLayout from '@/components/modules/document/common/UploadStatu
 
 const TIMEOUT_MS = 30 * 1000;
 const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
+const TIMER_NAME = 'pendingTimer';
 
 export default {
   name: 'UploadStatusInteractor',
@@ -48,6 +49,20 @@ export default {
     },
   },
 
+  watch: {
+    isAvailableToFinish(newValue) {
+      if (!newValue) {
+        this.stopTimer();
+      }
+    },
+
+    isAllDocRequiredTypesVerified(newValue) {
+      if (newValue) {
+        this.stopTimer();
+      }
+    },
+  },
+
   methods: {
     onFinish() {
       this.$emit('finish');
@@ -57,7 +72,12 @@ export default {
       this.isPending = true;
 
       this.timers.pendingTimer.time = this.pendingTimeout;
-      this.$timer.start('pendingTimer');
+      this.$timer.start(TIMER_NAME);
+    },
+
+    stopTimer() {
+      this.$timer.stop(TIMER_NAME);
+      this.isPending = false;
     },
   },
 
@@ -75,12 +95,12 @@ export default {
   mixins: [VueTimers],
 
   timers: {
-    pendingTimer: {
+    [TIMER_NAME]: {
       repeat: false,
       autostart: false,
       time: 1000,
       callback() {
-        this.isPending = false;
+        this.stopTimer();
       },
     },
   },
