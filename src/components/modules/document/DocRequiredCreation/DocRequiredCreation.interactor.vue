@@ -23,7 +23,10 @@ export default {
     },
   },
 
-  beforeMount() {
+  async beforeMount() {
+    await this.gateway.clearSelectedDocuments();
+
+    // should not be called with await, because infinite loop
     this.gateway.subscribeToUpdateStatus();
   },
 

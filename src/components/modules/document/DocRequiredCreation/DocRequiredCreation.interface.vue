@@ -45,6 +45,10 @@ export default {
           await documentsRequiredStore.answerFinish();
         },
 
+        async clearSelectedDocuments() {
+          await documentsRequiredStore.clearSelectedDocuments();
+        },
+
         async subscribeToUpdateStatus() {
           await docRequiredController.subscribeToUpdateStatus();
         },
