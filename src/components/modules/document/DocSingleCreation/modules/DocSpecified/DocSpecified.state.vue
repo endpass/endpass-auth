@@ -1,26 +1,17 @@
 <template>
-  <doc-selected
-    :doc-types-list="docTypesList"
-    :selected-document-type.sync="selectedDocumentType"
-    :document-id.sync="documentId"
-    :status.sync="status"
-    @create="onCreate"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :status="status"
+      :documentId="documentId"
+      :selectedDocumentType="selectedDocumentType"
+      :updateState="updateState"
+    />
+  </div>
 </template>
 
 <script>
-import DocSelected from './DocSpecified.container';
-
 export default {
-  name: 'DocSpecifiedContainer',
-
-  props: {
-    docTypesList: {
-      type: Array,
-      required: true,
-    },
-  },
+  name: 'DocSpecifiedState',
 
   data: () => ({
     status: '',
@@ -29,19 +20,12 @@ export default {
   }),
 
   methods: {
-    onCreate() {
-      this.$emit('create', {
-        documentId: this.documentId,
+    updateState(payload) {
+      if (!payload) return;
+      Object.keys(payload).forEach(propName => {
+        this[propName] = payload[propName];
       });
     },
-
-    onCancel() {
-      this.$emit('cancel');
-    },
-  },
-
-  components: {
-    DocSelected,
   },
 };
 </script>

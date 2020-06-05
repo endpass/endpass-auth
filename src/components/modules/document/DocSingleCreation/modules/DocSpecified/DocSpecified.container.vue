@@ -1,7 +1,7 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    @close="onCancel"
+    @close="onCancelUploadSpecified"
   >
     <component
       :is="currentComponent"
@@ -73,19 +73,15 @@ export default {
     },
 
     onNext(payload) {
-      if (!payload) return;
-
-      Object.keys(payload).forEach(propName => {
-        this.$emit(`update:${propName}`, payload[propName]);
-      });
+      this.$emit('update', payload);
     },
 
-    onCancel() {
+    onCancelUploadSpecified() {
       this.$emit('cancel');
     },
 
     onBack() {
-      this.$emit('update:selectedDocumentType', '');
+      this.$emit('update', { selectedDocumentType: '' });
     },
   },
 
