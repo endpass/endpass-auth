@@ -13,10 +13,10 @@ const { ERRORS } = ConnectError;
  */
 
 /**
- * @typedef {
+ * @typedef {{
  * isNeedUploadDocument: boolean,
  * signedString: string,
- * filteredIdsList: string[]} AnswerResult
+ * filteredIdsList: string[]}} AnswerResult
  */
 
 @Module({ generateMutationSetters: true })
@@ -24,7 +24,7 @@ class DocumentsRequiredModule extends VuexModule {
   clientId = '';
 
   /**
-   * @type {<keyof typeof DOC_TYPES>[]}
+   * @type {Array<typeof DOC_TYPES[keyof typeof DOC_TYPES]>}
    */
   docRequiredTypes = [];
 
@@ -118,10 +118,9 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   /**
-   *
    * @param {object} params
-   * @param {keyof typeof DOC_TYPES} documentType
-   * @param {string} documentId
+   * @param {keyof typeof DOC_TYPES} params.documentType
+   * @param {string} params.documentId
    */
   @Action
   selectDocumentForType({ documentType, documentId }) {
@@ -193,9 +192,10 @@ class DocumentsRequiredModule extends VuexModule {
   }
 
   /**
-   *
    * @param {object} params
    * @param {string} params.clientId
+   * @param {UserDocument[]} params.documentsList
+   * @param {string} params.signedString
    * @returns {Promise<AnswerResult>}
    */
   @Action

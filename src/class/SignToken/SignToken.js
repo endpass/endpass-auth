@@ -3,6 +3,7 @@
 /* eslint-disable no-bitwise */
 export default class SignToken {
   /**
+   * Return hash number from string
    * @private
    * @param {string} str
    * @return {number}
@@ -23,6 +24,7 @@ export default class SignToken {
   }
 
   /**
+   * Return hash number from any data
    * @private
    * @param {*} data
    * @return {number}
@@ -33,6 +35,7 @@ export default class SignToken {
   }
 
   /**
+   * Return data from encrypted string
    * @param {string} rawStr
    * @return {*}
    */
@@ -49,7 +52,7 @@ export default class SignToken {
   }
 
   /**
-   *
+   * Encrypt data to string
    * @param {*} data
    * @returns {string}
    */
