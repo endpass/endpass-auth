@@ -69,7 +69,7 @@ export default {
 
   methods: {
     onCreate() {
-      this.$emit('create');
+      this.$emit('create', { documentId: this.documentId });
     },
 
     onNext(payload) {
