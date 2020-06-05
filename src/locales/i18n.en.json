@@ -46,11 +46,11 @@
       "title": "Requested Permissions",
       "urlError": "Please, add the 'consent_challenge' param in URL, and try again!",
       "tooltips": {
-        "user": "Add possibility to read user's data",
-        "proofOfAddress": "Add possibility to read user's proof of address data",
-        "passport": "Add possibility to read user's passport data",
-        "driverLicense": "Add possibility to read user's driver license data",
-        "idCard": "Add possibility to read user's ID card data"
+        "user": "Requests specific access related to your Endpass user profile.",
+        "proofOfAddress": "Requests specific access related to your Proof of Address documents.",
+        "passport": "Requests specific access related to your passport(s).",
+        "driverLicense": "Requests specific access related to your driver's license.",
+        "idCard": "Requests specific access related to your ID card(s)."
       }
     },
     "createPassword": {
