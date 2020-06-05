@@ -25,6 +25,10 @@ export default {
   }),
 
   methods: {
+    onStartUpload() {
+      this.$emit('start-upload');
+    },
+
     onConfirm(document) {
       this.$emit('confirm', document);
     },

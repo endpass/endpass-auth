@@ -8,13 +8,14 @@
       @confirm="onConfirm"
       @cancel="onCancel"
       @toggle="onToggle"
+      @start-upload="onStartUpload"
     />
   </div>
 </template>
 
 <script>
-import BackSide from '../../common/BackSide';
-import FrontSide from '../../common/FrontSide';
+import BackSide from './modules/BackSide';
+import FrontSide from './modules/FrontSide';
 import UploadHeader from '../../common/UploadHeader';
 
 export default {
@@ -35,6 +36,10 @@ export default {
   methods: {
     onToggle() {
       this.currentSide = BackSide;
+    },
+
+    onStartUpload() {
+      this.$emit('start-upload');
     },
 
     onConfirm(document) {

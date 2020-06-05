@@ -30,11 +30,11 @@
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
 import createBackSideController from './BackSideController';
-import DocumentUploadDescription from '../DocumentUploadDescription';
+import DocumentUploadDescription from '@/components/modules/document/common/Upload/common/DocumentUploadDescription';
 import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
-import FooterRepeatButtons from '../FooterButtons/FooterRepeatButtons';
-import FooterDoneButtons from '../FooterButtons/FooterDoneButtons';
-import DropArea from '../DropArea';
+import FooterRepeatButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterRepeatButtons';
+import FooterDoneButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterDoneButtons';
+import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 
 export default {
   name: 'BackSide',

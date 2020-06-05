@@ -25,9 +25,7 @@ export default {
       selectedDocumentType: ref(''),
     };
 
-    const isClosable = computed(
-      () => !data.documentId.value || !data.status.value,
-    );
+    const isClosable = computed(() => !data.documentId && !data.status);
 
     const updateState = payload => {
       if (!payload) return;

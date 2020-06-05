@@ -1,22 +1,32 @@
 <template>
   <doc-specified-state
-    #default="{ status, documentId, selectedDocumentType, updateState }"
+    #default="{ isClosable, isBack, status, documentId, selectedDocumentType, updateState }"
   >
     <doc-specified-interactor #default="{ onCancel, onCreate }">
-      <doc-specified-container
-        :doc-types-list="docTypesList"
-        :status="status"
-        :document-id="documentId"
-        :selected-document-type="selectedDocumentType"
-        @update="updateState"
-        @cancel="onCancel"
-        @create="onCreate"
-      />
+      <doc-layout
+        :is-closable="isClosable"
+        :is-returnable="isBack"
+        @close="onCancel"
+        @return="onReturn"
+      >
+        <doc-specified-container
+          :bus="bus"
+          :doc-types-list="docTypesList"
+          :status="status"
+          :document-id="documentId"
+          :selected-document-type="selectedDocumentType"
+          @update="updateState"
+          @create="onCreate"
+        />
+      </doc-layout>
     </doc-specified-interactor>
   </doc-specified-state>
 </template>
 
 <script>
+import Vue from 'vue';
+import DocLayout from '@/components/modules/document/DocLayout';
+
 import DocSpecifiedInteractor from './DocSpecified.interactor';
 import DocSpecifiedState from './DocSpecified.state';
 import DocSpecifiedContainer from './DocSpecified.container';
@@ -49,7 +59,18 @@ export default {
     },
   },
 
+  data: () => ({
+    bus: new Vue(),
+  }),
+
+  methods: {
+    onReturn() {
+      this.bus.$emit('return');
+    },
+  },
+
   components: {
+    DocLayout,
     DocSpecifiedContainer,
     DocSpecifiedState,
     DocSpecifiedInteractor,

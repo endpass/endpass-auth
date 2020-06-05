@@ -30,9 +30,9 @@
 <script>
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createFrontSideController from './FrontSideOnlyController';
-import FooterFrontButtons from '../../common/FooterButtons/FooterFrontButtons';
-import FooterRepeatButtons from '../../common/FooterButtons/FooterRepeatButtons';
-import DropArea from '../../common/DropArea';
+import FooterFrontButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterFrontButtons';
+import FooterRepeatButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterRepeatButtons';
+import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader/UploadHeader.view';
 
 export default {
@@ -77,6 +77,10 @@ export default {
   },
 
   methods: {
+    startUpload() {
+      this.$emit('start-upload');
+    },
+
     onFileRemove() {
       this.error = '';
       this.selectedFile = null;
@@ -112,6 +116,7 @@ export default {
       try {
         this.isLoading = true;
 
+        this.startUpload();
         this.documentId = await this.$options.frontSideController.startCreateDocument(
           {
             file: this.selectedFile,

@@ -1,23 +1,20 @@
 <template>
-  <doc-layout
-    :is-closable="isClosable"
-    @close="onCancelUploadSpecified"
+  <component
+    :is="currentComponent"
+    :doc-types-list="docTypesList"
+    :document-id="documentId"
+    :status="status"
+    :selected-document-type="selectedDocumentType"
+    @next="onNext"
+    @create="onCreate"
+    @cancel="onBack"
   >
-    <component
-      :is="currentComponent"
-      :doc-types-list="docTypesList"
-      :document-id="documentId"
-      :status="status"
-      :selected-document-type="selectedDocumentType"
-      @next="onNext"
-      @create="onCreate"
-      @cancel="onBack"
-    />
-  </doc-layout>
+    <slot />
+  </component>
 </template>
 
 <script>
-import DocLayout from '@/components/modules/document/DocLayout';
+import Vue from 'vue';
 
 import UploadStatus from '../UploadStatus';
 import UploadSingle from '../UploadSingle';
@@ -27,6 +24,11 @@ export default {
   name: 'DocSpecifiedContainer',
 
   props: {
+    bus: {
+      type: Vue,
+      default: () => new Vue(),
+    },
+
     docTypesList: {
       type: Array,
       required: true,
@@ -49,10 +51,6 @@ export default {
   },
 
   computed: {
-    isClosable() {
-      return !this.documentId && !this.status;
-    },
-
     currentComponent() {
       switch (true) {
         case !this.documentId && !this.selectedDocumentType:
@@ -67,6 +65,25 @@ export default {
     },
   },
 
+  watch: {
+    currentComponent(newComponent) {
+      switch (newComponent) {
+        case DocTypesList:
+          this.$emit('update', { isBack: false });
+          break;
+        case UploadStatus:
+          this.$emit('update', { isBack: false });
+          break;
+        case UploadSingle:
+          this.$emit('update', { isBack: true });
+          break;
+
+        default:
+          break;
+      }
+    },
+  },
+
   methods: {
     onCreate() {
       this.$emit('create', { documentId: this.documentId });
@@ -76,17 +93,13 @@ export default {
       this.$emit('update', payload);
     },
 
-    onCancelUploadSpecified() {
-      this.$emit('cancel');
-    },
-
     onBack() {
       this.$emit('update', { selectedDocumentType: '' });
     },
   },
 
-  components: {
-    DocLayout,
+  created() {
+    this.bus.$on('return', this.onBack);
   },
 };
 </script>

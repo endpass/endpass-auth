@@ -26,8 +26,8 @@
 <script>
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createFrontSideController from './FrontSideController';
-import FooterFrontButtons from '../FooterButtons/FooterFrontButtons';
-import DropArea from '../DropArea';
+import FooterFrontButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterFrontButtons';
+import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 
 export default {
   name: 'DocumentUpload',
@@ -67,6 +67,10 @@ export default {
   },
 
   methods: {
+    startUpload() {
+      this.$emit('start-upload');
+    },
+
     onFileRemove() {
       this.error = '';
       this.selectedFile = null;
@@ -84,6 +88,7 @@ export default {
     async onUploadClick() {
       try {
         this.isLoading = true;
+        this.startUpload();
         const documentId = await this.$options.frontSideController.createDocument(
           {
             file: this.selectedFile,

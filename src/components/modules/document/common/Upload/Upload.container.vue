@@ -2,6 +2,7 @@
   <component
     :is="currentSide"
     :document-type="selectedDocumentType"
+    @start-upload="onStartUpload"
     @confirm="onConfirm"
     @cancel="onCancel"
   />
@@ -41,6 +42,10 @@ export default {
   },
 
   methods: {
+    onStartUpload() {
+      this.$emit('start-upload');
+    },
+
     onConfirm(document) {
       this.$emit('confirm', document);
     },
