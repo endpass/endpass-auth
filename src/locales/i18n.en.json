@@ -207,14 +207,17 @@
       "recognition": "Recognition",
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "notUploaded": "Not uploaded yet",
+      "notAdded": "Not added yet",
       "upload": "Upload",
+      "uploadNewDoc": "Upload new document",
       "pending": "Pending",
       "pleaseWait": "Please do not close the app, your documents are being processed.",
       "comebackLater": "Please, come back later",
       "pendingInProgress": "Some of documents still in pending status.",
       "requestedInformation": "Requested Information",
+      "selectDocument": "Select document",
       "uploading": "Uploading",
+      "pleaseReupload": "Please reupload",
       "allUploaded": "All your documents have been successfully verified, you may continue."
     },
     "user": {
@@ -247,8 +250,8 @@
     },
     "documentStatus": {
       "draft": "Draft",
-      "notReadable": "Not Readable",
-      "notVerified": "Not Verified",
+      "notReadable": "Not readable",
+      "notVerified": "Not verified",
       "recognition": "Recognizing",
       "pendingReview": "Pending review",
       "verified": "Verified"

@@ -13,6 +13,7 @@
       <v-input
         v-model="code"
         v-validate="'required|digits:6'"
+        autocomplete="off"
         data-vv-as="code"
         data-vv-name="code"
         :error="errors.first('code')"

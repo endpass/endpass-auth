@@ -8,7 +8,7 @@
       @close="onClose"
     >
       <div
-        v-if="showLogo"
+        v-if="isShowLogo"
         slot="icon"
         data-test="logo"
         class="frame-logo"
@@ -25,18 +25,15 @@
       >
         {{ title }}
       </template>
-      <spinner
-        v-if="isLoading"
-        class="frame-spinner"
-      />
-      <slot v-else />
+      <slot />
     </v-modal-card>
+    <v-footer />
   </div>
 </template>
 
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import Spinner from '@/components/common/Spinner';
+import VFooter from '@/components/modules/VFooter';
 
 export default {
   name: 'VFrame',
@@ -47,7 +44,7 @@ export default {
       default: 'Connect',
     },
 
-    showLogo: {
+    isShowLogo: {
       type: Boolean,
       default: false,
     },
@@ -58,11 +55,6 @@ export default {
     },
 
     isReturnable: {
-      type: Boolean,
-      default: false,
-    },
-
-    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -79,8 +71,8 @@ export default {
   },
 
   components: {
-    Spinner,
     VModalCard,
+    VFooter,
   },
 };
 </script>
@@ -115,11 +107,6 @@ export default {
 
 .frame-modal-card {
   max-width: initial !important;
-}
-
-.frame-spinner {
-  position: relative;
-  margin: 0 auto;
 }
 
 @media (max-width: 768px) {

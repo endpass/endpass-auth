@@ -1,4 +1,3 @@
-
 declare namespace ENV {
   const VUE_APP_VERSION: string;
   const VUE_APP_IDENTITY_API_URL: string;

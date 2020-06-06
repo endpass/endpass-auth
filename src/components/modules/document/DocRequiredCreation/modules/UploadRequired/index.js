@@ -1,1 +1,1 @@
-export { default } from './UploadRequired.interactor';
+export { default } from './UploadRequired.interface';

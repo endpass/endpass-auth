@@ -2,12 +2,13 @@ import VeeValidate from 'vee-validate';
 import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
-import BackSide from '@/components/modules/document/common/Upload/Sides/BackSide/BackSide';
 import riskScoringService from '@/service/riskScoring';
 import documentsService from '@/service/documents';
-import { DOC_STATUSES } from '@/constants';
+
+import BackSide from '../BackSide';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -17,7 +18,7 @@ localVue.use(UIComponents);
 describe('UploadDocument > BackSide', () => {
   let wrapper;
 
-  const docId = 'docId';
+  const docId = document.id;
   const file = new File([''], 'filename');
 
   beforeEach(() => {
@@ -60,14 +61,7 @@ describe('UploadDocument > BackSide', () => {
 
       await emitDone();
 
-      expect(wrapper.emitted().confirm).toEqual([
-        [
-          {
-            documentId: docId,
-            status: DOC_STATUSES.PENDING_REVIEW,
-          },
-        ],
-      ]);
+      expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
 
     it('should show repeat buttons if have recognize errors', async () => {
@@ -113,14 +107,7 @@ describe('UploadDocument > BackSide', () => {
 
       await emitUpload();
 
-      expect(wrapper.emitted().confirm).toEqual([
-        [
-          {
-            documentId: docId,
-            status: DOC_STATUSES.PENDING_REVIEW,
-          },
-        ],
-      ]);
+      expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
 
     it('should send fingerprint after upload', async () => {

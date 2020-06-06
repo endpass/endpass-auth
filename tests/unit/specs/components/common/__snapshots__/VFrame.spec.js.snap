@@ -4,5 +4,6 @@ exports[`VFrame render render should correctly render VFrame component without l
 <div class="frame">
   <v-modal-card-stub isclosable="true" class="frame-modal-card">
     <!----> <template name="title"></template> </v-modal-card-stub>
+  <v-footer-stub></v-footer-stub>
 </div>
 `;

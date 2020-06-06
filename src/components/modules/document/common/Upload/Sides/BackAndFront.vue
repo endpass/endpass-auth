@@ -2,8 +2,9 @@
   <component
     :is="currentSide"
     :document-id.sync="documentId"
-    v-bind="$attrs"
-    v-on="$listeners"
+    :document-type="documentType"
+    @confirm="onConfirm"
+    @cancel="onCancel"
     @toggle="onToggle"
   />
 </template>
@@ -15,6 +16,13 @@ import FrontSide from './FrontSide';
 export default {
   name: 'BackAndFront',
 
+  props: {
+    documentType: {
+      type: String,
+      default: '',
+    },
+  },
+
   data: () => ({
     currentSide: FrontSide,
     documentId: '',
@@ -23,7 +31,14 @@ export default {
   methods: {
     onToggle() {
       this.currentSide = BackSide;
-      this.$emit('toggle');
+    },
+
+    onConfirm(document) {
+      this.$emit('confirm', document);
+    },
+
+    onCancel() {
+      this.$emit('cancel');
     },
   },
 };

@@ -116,16 +116,8 @@ class FrontSideOnlyController extends VuexModule {
 
   /**
    * @param {string} docId
-   * @return {Promise<*>}
-   */
-  @Action
-  async getDocumentStatus(docId) {
-    return documentsService.getDocumentStatus(docId);
-  }
-
-  /**
-   * @param {string} docId
-   * @return {Promise<string>}
+   * @return {Promise<UserDocument>}
+   * @throws
    */
   @Action
   async recognize(docId) {
@@ -135,8 +127,8 @@ class FrontSideOnlyController extends VuexModule {
 
       this.progressLabel = i18n.t('components.uploadDocument.recognition');
       await this.confirmAndWait(docId);
-      const status = this.getDocumentStatus(docId);
-      return status;
+      const document = await documentsService.getDocumentById(docId);
+      return document;
     } catch (e) {
       e.message = i18n.t('store.error.uploadDocument.confirm');
       throw e;
@@ -149,6 +141,7 @@ class FrontSideOnlyController extends VuexModule {
    * @param {object} fields UserDocument object for upload
    * @param {string} fields.type UserDocument type
    * @param {File} fields.file UserDocument file
+   * @throws
    */
   @Action
   async startCreateDocument({ file, type }) {
@@ -173,6 +166,8 @@ class FrontSideOnlyController extends VuexModule {
 
       timer.continueProgress(40, 50);
       await documentsService.waitDocumentUpload(this.docId);
+
+      riskScoringService.sendUserMetrics();
     } catch (e) {
       throw this.createError(e);
     } finally {
@@ -184,7 +179,7 @@ class FrontSideOnlyController extends VuexModule {
   /**
    *
    * @param {string} docId
-   * @return {Promise<void>}
+   * @return {Promise<UserDocument>}
    */
   @Action
   async continueCreateDocument(docId) {
@@ -192,21 +187,13 @@ class FrontSideOnlyController extends VuexModule {
     this.progressLabel = i18n.t('components.uploadDocument.recognition');
     timer.startProgress(50, 100);
     await this.confirmAndWait(docId);
-    const status = this.getDocumentStatus(docId);
-    return status;
+    const document = await documentsService.getDocumentById(docId);
+    return document;
   }
 
   @Action
   init() {
     this.docId = '';
-  }
-
-  /**
-   * @return {Promise<void>}
-   */
-  @Action
-  async sendUserMetrics() {
-    await riskScoringService.sendUserMetrics();
   }
 }
 

@@ -94,10 +94,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.frontSideController.recognize(
+        const document = await this.$options.frontSideController.recognize(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -116,8 +116,6 @@ export default {
             type: this.documentType,
           },
         );
-
-        await this.$options.frontSideController.sendUserMetrics();
       } catch (e) {
         this.error = e.message;
       } finally {
@@ -129,10 +127,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.frontSideController.continueCreateDocument(
+        const document = await this.$options.frontSideController.continueCreateDocument(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -141,11 +139,8 @@ export default {
       }
     },
 
-    handleConfirm(status) {
-      this.$emit('confirm', {
-        documentId: this.documentId,
-        status,
-      });
+    handleConfirm(document) {
+      this.$emit('confirm', document);
     },
 
     async onUploadClick() {

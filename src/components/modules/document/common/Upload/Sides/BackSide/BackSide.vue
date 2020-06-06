@@ -91,10 +91,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.backSideController.recognize(
+        const document = await this.$options.backSideController.recognize(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -112,8 +112,6 @@ export default {
           docId: this.documentId,
         });
 
-        await this.$options.backSideController.sendUserMetrics();
-
         this.isUploaded = true;
       } catch (e) {
         this.isUploaded = false;
@@ -127,10 +125,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.backSideController.continueUpload(
+        const document = await this.$options.backSideController.continueUpload(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -139,11 +137,8 @@ export default {
       }
     },
 
-    handleConfirm(status) {
-      this.$emit('confirm', {
-        documentId: this.documentId,
-        status,
-      });
+    handleConfirm(document) {
+      this.$emit('confirm', document);
     },
 
     async onUploadFile() {
