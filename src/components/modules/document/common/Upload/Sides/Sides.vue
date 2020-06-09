@@ -2,9 +2,8 @@
   <component
     :is="currentSide"
     :document-type="documentType"
-    v-bind="$attrs"
-    v-on="$listeners"
-    @toggle="onToggle"
+    @confirm="onConfirm"
+    @cancel="onCancel"
   />
 </template>
 
@@ -35,8 +34,12 @@ export default {
   },
 
   methods: {
-    onToggle() {
-      this.$emit('toggle');
+    onConfirm(document) {
+      this.$emit('confirm', document);
+    },
+
+    onCancel() {
+      this.$emit('cancel');
     },
   },
 };

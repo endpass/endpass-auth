@@ -8,6 +8,7 @@ import validation from './validation';
 import '@endpass/ui/kit/kit.theme-default.css';
 import i18n from '@/locales/i18n';
 import e2eSetup from '@/util/e2eSetup';
+import filters from './filters';
 
 (async () => {
   try {
@@ -22,6 +23,7 @@ import e2eSetup from '@/util/e2eSetup';
 
   Vue.use(VueCompositionApi);
   Vue.use(validation);
+  Vue.use(filters);
   Vue.use(VShowSlide);
   Vue.config.productionTip = false;
 

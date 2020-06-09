@@ -17,7 +17,6 @@ exports[`SignInView render should correctly render component 1`] = `
   <form-row-stub>
     <form-controls-stub>
       <google-auth-button-stub type="button"></google-auth-button-stub>
-      <git-auth-button-stub type="button"></git-auth-button-stub>
     </form-controls-stub>
   </form-row-stub>
   <v-divider-stub></v-divider-stub>
@@ -47,7 +46,6 @@ exports[`SignInView render should render pasword form 1`] = `
   <form-row-stub>
     <form-controls-stub>
       <google-auth-button-stub type="button"></google-auth-button-stub>
-      <git-auth-button-stub type="button"></git-auth-button-stub>
     </form-controls-stub>
   </form-row-stub>
   <v-divider-stub></v-divider-stub>

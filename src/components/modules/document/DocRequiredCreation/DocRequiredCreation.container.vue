@@ -1,51 +1,60 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    @close="handleCancel"
+    :is-returnable="isReturnable"
+    @return="onReturn"
+    @close="onCancelSelectionRequired"
   >
     <component
       :is="currentComponent"
-      :document-id="documentId"
-      :doc-type-to-status="docTypeToStatus"
-      :doc-types-list="docTypesList"
       :selected-document-type="selectedDocumentType"
-      :is-show-status="true"
+      :doc-required-types-list="docRequiredTypesList"
+      :is-available-to-finish="isAvailableToFinish"
+      :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
+      :selected-documents-by-type="selectedDocumentsByType"
+      :available-documents-list="availableDocumentsList"
       @next="onNext"
-      @create="onCreate"
-      @cancel="onBack"
+      @finish="handleFinishSelectionRequired"
+      @cancel="handleBack"
     />
   </doc-layout>
 </template>
 
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
-
-import UploadStatus from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus';
-import DocumentTypes from '@/components/modules/document/common/DocumentTypes';
 import LoadingScreen from '@/components/common/LoadingScreen';
+
 import Upload from './modules/UploadRequired';
+import UploadStatus from './modules/UploadStatus';
+import RequiredDocumentTypes from './modules/RequiredDocumentTypes';
+import SelectedDocumentByType from './modules/SelectedDocumentByType';
 
 export default {
   name: 'DocRequiredCreationContainer',
 
   props: {
-    docTypesList: {
+    docRequiredTypesList: {
       type: Array,
       required: true,
     },
 
-    docTypeToStatus: {
+    isAvailableToFinish: {
+      type: Boolean,
+      required: true,
+    },
+
+    isAllDocRequiredTypesVerified: {
+      type: Boolean,
+      required: true,
+    },
+
+    selectedDocumentsByType: {
       type: Object,
       required: true,
     },
 
-    isStatusesAppropriated: {
-      type: Boolean,
-      required: true,
-    },
-
-    isStatusesVerified: {
-      type: Boolean,
+    availableDocumentsList: {
+      type: Array,
       required: true,
     },
 
@@ -53,48 +62,64 @@ export default {
       type: String,
       required: true,
     },
-
-    status: {
-      type: String,
-      required: true,
-    },
-
-    documentId: {
-      type: String,
-      required: true,
-    },
   },
 
   data() {
     return {
-      currentComponent: 'document-types',
+      currentComponent: 'required-document-types',
     };
   },
 
   computed: {
     isClosable() {
-      return !this.documentId && !this.status;
+      return (
+        this.currentComponent === 'required-document-types' ||
+        this.currentComponent === 'selected-document-by-type'
+      );
     },
-  },
 
-  watch: {
-    isStatusesVerified: {
-      handler(isAllVerified) {
-        if (isAllVerified && this.currentComponent === 'document-types') {
-          this.currentComponent = 'upload-status';
-        }
-      },
-      immediate: true,
+    isDocumentsByTypeExists() {
+      const docBySelectedType = this.availableDocumentsList.find(
+        document => document.documentType === this.selectedDocumentType,
+      );
+
+      return !!docBySelectedType;
+    },
+
+    isPending() {
+      return this.isAvailableToFinish && !this.isAllDocRequiredTypesVerified;
+    },
+
+    isReturnable() {
+      return this.currentComponent === 'selected-document-by-type';
     },
   },
 
   methods: {
-    handleCancel() {
+    onReturn() {
+      if (!this.isReturnable) return;
+
+      this.handleBack();
+    },
+
+    onCancelSelectionRequired() {
       this.$emit('cancel');
     },
 
-    onCreate() {
-      this.$emit('create');
+    handleFinishSelectionRequired() {
+      switch (true) {
+        case this.currentComponent !== 'upload-status' && this.isPending:
+          this.currentComponent = 'upload-status';
+          return;
+
+        case this.currentComponent === 'upload-status' &&
+          !this.isAvailableToFinish:
+          this.currentComponent = 'required-document-types';
+          return;
+
+        default:
+          this.$emit('finish');
+      }
     },
 
     updateProps(payload) {
@@ -115,20 +140,26 @@ export default {
 
     openNextScreen() {
       switch (true) {
-        case this.currentComponent === 'document-types':
+        case this.currentComponent === 'required-document-types' &&
+          this.isDocumentsByTypeExists:
+          this.currentComponent = 'selected-document-by-type';
+          break;
+
+        case this.currentComponent === 'required-document-types' &&
+          !this.isDocumentsByTypeExists:
           this.currentComponent = 'upload';
           break;
 
-        case this.currentComponent === 'upload' && !this.isStatusesAppropriated:
-        case this.currentComponent === 'upload-status':
-          this.$emit('update:selectedDocumentType', '');
-          this.$emit('update:documentId', '');
-          this.$emit('update:status', '');
-          this.currentComponent = 'document-types';
+        case this.currentComponent === 'selected-document-by-type':
+          this.currentComponent = 'upload';
           break;
 
         case this.currentComponent === 'upload':
-          this.currentComponent = 'upload-status';
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'upload-status':
+          this.handleFinishSelectionRequired();
           break;
 
         default:
@@ -138,9 +169,23 @@ export default {
       }
     },
 
-    onBack() {
-      if (this.currentComponent === 'upload') {
-        this.currentComponent = 'document-types';
+    handleBack() {
+      switch (true) {
+        case this.currentComponent === 'selected-document-by-type':
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'upload' &&
+          !this.isDocumentsByTypeExists:
+          this.currentComponent = 'required-document-types';
+          break;
+
+        case this.currentComponent === 'upload' && this.isDocumentsByTypeExists:
+          this.currentComponent = 'selected-document-by-type';
+          break;
+
+        default:
+          break;
       }
     },
   },
@@ -148,7 +193,8 @@ export default {
   components: {
     LoadingScreen,
     DocLayout,
-    DocumentTypes,
+    RequiredDocumentTypes,
+    SelectedDocumentByType,
     Upload,
     UploadStatus,
   },

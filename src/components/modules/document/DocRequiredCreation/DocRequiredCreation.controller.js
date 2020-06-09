@@ -1,13 +1,8 @@
 import { VuexModule, Action, Module } from 'vuex-class-modules';
-import ConnectError from '@endpass/connect/error';
 import createController from '@/controllers/createController';
-import { documentChannel } from '@/class/singleton/channels';
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
-import Answer from '@/class/Answer';
 import eventsService from '@/service/events';
 import { SERVER_EVENT } from '@/constants';
-
-const { ERRORS } = ConnectError;
 
 @Module({ generateMutationSetters: true })
 class DocRequiredCreationController extends VuexModule {
@@ -35,33 +30,17 @@ class DocRequiredCreationController extends VuexModule {
       // eslint-disable-next-line no-continue
       if (!events.includes(eventType)) continue;
 
-      const { documentType, status } = payload;
-      await this.documentsRequiredStore.addDocTypeStatus({
-        documentType,
-        status,
-      });
+      await this.documentsRequiredStore.addDocTypeStatus(payload);
     }
   }
 
   @Action
-  unsubscribeFromUpdateStatus() {
+  async unsubscribeFromUpdateStatus() {
     if (!this.eventsIterator) {
       return;
     }
     this.eventsIterator.return();
     this.eventsIterator = null;
-  }
-
-  @Action
-  cancelCreate() {
-    const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
-    documentChannel.put(result);
-  }
-
-  @Action
-  finishCreate() {
-    const result = Answer.createOk();
-    documentChannel.put(result);
   }
 }
 

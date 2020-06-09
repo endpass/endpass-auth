@@ -6,7 +6,7 @@ exports[`WithPhone render should correctly render component 1`] = `
     Disable OTP setting via SMS
   </v-title-stub>
   <form-item-stub>
-    <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+    <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" autocomplete="off" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
   </form-item-stub>
   <form-item-stub class="v-mb-24">
     <form-controls-stub>
@@ -32,7 +32,7 @@ exports[`WithPhone render should render form 1`] = `
     Disable OTP setting via SMS
   </v-title-stub>
   <form-item-stub>
-    <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
+    <v-input-stub label="" tooltiplabel="" value="" error="" description="" skin="primary" autocomplete="off" data-vv-as="code" data-vv-name="code" name="code" placeholder="Enter received code..." data-test="code-input"></v-input-stub>
   </form-item-stub>
   <form-item-stub class="v-mb-24">
     <form-controls-stub>

@@ -7,6 +7,17 @@
       @return="onReturn"
       @close="onClose"
     >
+      <div
+        v-if="isShowLogo"
+        slot="icon"
+        data-test="logo"
+        class="frame-logo"
+      >
+        <img
+          src="../../assets/logo.png"
+          alt="Endpass Inc. - Logotype"
+        >
+      </div>
       <template
         v-if="title"
         slot="title"
@@ -14,18 +25,15 @@
       >
         {{ title }}
       </template>
-      <spinner
-        v-if="isLoading"
-        class="frame-spinner"
-      />
-      <slot v-else />
+      <slot />
     </v-modal-card>
+    <v-footer />
   </div>
 </template>
 
 <script>
 import VModalCard from '@endpass/ui/kit/VModalCard';
-import Spinner from '@/components/common/Spinner';
+import VFooter from '@/components/modules/VFooter';
 
 export default {
   name: 'VFrame',
@@ -36,17 +44,17 @@ export default {
       default: 'Connect',
     },
 
+    isShowLogo: {
+      type: Boolean,
+      default: false,
+    },
+
     isClosable: {
       type: Boolean,
       default: true,
     },
 
     isReturnable: {
-      type: Boolean,
-      default: false,
-    },
-
-    isLoading: {
       type: Boolean,
       default: false,
     },
@@ -63,8 +71,8 @@ export default {
   },
 
   components: {
-    Spinner,
     VModalCard,
+    VFooter,
   },
 };
 </script>
@@ -87,13 +95,18 @@ export default {
   animation: slideIn 0.75s;
 }
 
-.frame-modal-card {
-  max-width: initial !important;
+.frame-logo {
+  width: 100%;
+  text-align: left;
 }
 
-.frame-spinner {
-  position: relative;
-  margin: 0 auto;
+.frame-logo img {
+  width: 112px;
+  height: 32px;
+}
+
+.frame-modal-card {
+  max-width: initial !important;
 }
 
 @media (max-width: 768px) {

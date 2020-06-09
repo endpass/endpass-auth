@@ -1,64 +1,37 @@
 <template>
-  <doc-required-creation
-    :doc-types-list="docTypesList"
-    :doc-type-to-status="docTypeToStatus"
-    :is-statuses-appropriated="isStatusesAppropriated"
-    :is-statuses-verified="isStatusesVerified"
-    @create="onCreate"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :onCancel="onCancel"
+      :onFinish="onFinish"
+    />
+  </div>
 </template>
 
 <script>
-import DocRequiredCreation from './DocRequiredCreation.state';
-
 export default {
   name: 'DocRequiredCreationInteractor',
 
   inject: ['gateway'],
 
-  props: {
-    docTypesList: {
-      type: Array,
-      required: true,
-    },
-
-    docTypeToStatus: {
-      type: Object,
-      required: true,
-    },
-
-    isStatusesAppropriated: {
-      type: Boolean,
-      required: true,
-    },
-
-    isStatusesVerified: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
   methods: {
-    onCancel() {
-      this.gateway.cancelCreate();
+    async onCancel() {
+      await this.gateway.cancelCreate();
     },
 
-    onCreate() {
-      this.gateway.finishCreate();
+    async onFinish() {
+      await this.gateway.finishCreate();
     },
   },
 
-  beforeMount() {
+  async beforeMount() {
+    await this.gateway.clearSelectedDocuments();
+
+    // should not be called with await, because infinite loop
     this.gateway.subscribeToUpdateStatus();
   },
 
   beforeDestroy() {
     this.gateway.unsubscribeFromUpdateStatus();
-  },
-
-  components: {
-    DocRequiredCreation,
   },
 };
 </script>

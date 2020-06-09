@@ -1,16 +1,27 @@
 <template>
-  <doc-required-creation
-    :doc-types-list="$options.documentsRequiredStore.docRequiredTypes"
-    :doc-type-to-status="$options.documentsRequiredStore.docTypeToStatus"
-    :is-statuses-appropriated="
-      $options.documentsRequiredStore.isStatusesAppropriated
-    "
-    :is-statuses-verified="$options.documentsRequiredStore.isStatusesVerified"
-  />
+  <doc-required-creation-state
+    #default="{ selectedDocumentType, setDocumentType }"
+  >
+    <doc-required-creation-interactor #default="{ onCancel, onFinish }">
+      <doc-required-creation-container
+        :selected-document-type="selectedDocumentType"
+        :is-available-to-finish="isAvailableToFinish"
+        :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
+        :doc-required-types-list="docRequiredTypes"
+        :selected-documents-by-type="selectedDocumentsByType"
+        :available-documents-list="availableDocumentsList"
+        @update:selectedDocumentType="setDocumentType"
+        @cancel="onCancel"
+        @finish="onFinish"
+      />
+    </doc-required-creation-interactor>
+  </doc-required-creation-state>
 </template>
-
 <script>
-import DocRequiredCreation from './DocRequiredCreation.interactor';
+import DocRequiredCreationInteractor from './DocRequiredCreation.interactor';
+import DocRequiredCreationState from './DocRequiredCreation.state';
+import DocRequiredCreationContainer from './DocRequiredCreation.container';
+
 import createDocumentRequiredController from './DocRequiredCreation.controller';
 
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
@@ -19,33 +30,62 @@ export default {
   name: 'CreateRequiredInterface',
 
   docRequiredController: createDocumentRequiredController(),
+
   documentsRequiredStore: documentsRequiredStoreModule,
 
   provide() {
-    const { docRequiredController } = this.$options;
+    const { docRequiredController, documentsRequiredStore } = this.$options;
     return {
       gateway: {
-        cancelCreate() {
-          docRequiredController.cancelCreate();
+        async cancelCreate() {
+          await documentsRequiredStore.answerCancel();
         },
 
-        finishCreate() {
-          docRequiredController.finishCreate();
+        async finishCreate() {
+          await documentsRequiredStore.answerFinish();
         },
 
-        subscribeToUpdateStatus() {
-          docRequiredController.subscribeToUpdateStatus();
+        async clearSelectedDocuments() {
+          await documentsRequiredStore.clearSelectedDocuments();
         },
 
-        unsubscribeFromUpdateStatus() {
-          docRequiredController.unsubscribeFromUpdateStatus();
+        async subscribeToUpdateStatus() {
+          await docRequiredController.subscribeToUpdateStatus();
+        },
+
+        async unsubscribeFromUpdateStatus() {
+          await docRequiredController.unsubscribeFromUpdateStatus();
         },
       },
     };
   },
 
+  computed: {
+    availableDocumentsList() {
+      return this.$options.documentsRequiredStore.availableDocumentsList;
+    },
+
+    isAvailableToFinish() {
+      return this.$options.documentsRequiredStore.isAvailableToFinish;
+    },
+
+    isAllDocRequiredTypesVerified() {
+      return this.$options.documentsRequiredStore.isAllDocRequiredTypesVerified;
+    },
+
+    docRequiredTypes() {
+      return this.$options.documentsRequiredStore.docRequiredTypes;
+    },
+
+    selectedDocumentsByType() {
+      return this.$options.documentsRequiredStore.selectedDocumentsByType;
+    },
+  },
+
   components: {
-    DocRequiredCreation,
+    DocRequiredCreationInteractor,
+    DocRequiredCreationState,
+    DocRequiredCreationContainer,
   },
 };
 </script>

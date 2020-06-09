@@ -106,23 +106,6 @@ const authWithGoogle = async idToken => {
   return authAdapter(data);
 };
 
-/**
- * @param {string} code
- * @return {Promise<*>}
- */
-const authWithGitHub = async code => {
-  const data = await request
-    .post(`${identityBaseUrl}/auth/github`, {
-      code,
-    })
-    .then(res => {
-      if (!res.success) throw new Error(res.message);
-      return res;
-    });
-
-  return authAdapter(data);
-};
-
 const logout = () => request.post(`${identityBaseUrl}/logout`);
 
 /**
@@ -253,7 +236,6 @@ export default {
   getAuthChallenge,
   authWithCode,
   authWithGoogle,
-  authWithGitHub,
   sendEmailCode,
   logout,
   waitLogin,

@@ -2,11 +2,12 @@ import VeeValidate from 'vee-validate';
 import UIComponents from '@endpass/ui';
 
 import { shallowMount, createLocalVue } from '@vue/test-utils';
+import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
-import FrontSideOnly from '@/components/modules/document/common/Upload/Sides/FrontSideOnly';
+import FrontSideOnly from '../FrontSideOnly';
 import documentsService from '@/service/documents';
-import { DOC_STATUSES } from '@/constants';
+import riskScoringService from '@/service/riskScoring';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -16,7 +17,7 @@ localVue.use(UIComponents);
 describe('UploadDocument > FrontSideOnly', () => {
   let wrapper;
 
-  const docId = 'docId';
+  const docId = document.id;
   const file = new File([''], 'filename');
 
   beforeEach(() => {
@@ -47,18 +48,23 @@ describe('UploadDocument > FrontSideOnly', () => {
   });
 
   it('should upload front side of document and recognize', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
+
+    expect(wrapper.emitted().confirm).toBeUndefined();
 
     await emitUpload();
 
-    expect(wrapper.emitted().confirm).toEqual([
-      [
-        {
-          documentId: docId,
-          status: DOC_STATUSES.PENDING_REVIEW,
-        },
-      ],
-    ]);
+    expect(wrapper.emitted().confirm).toEqual([[document]]);
+  });
+
+  it('should send fingerprint after upload', async () => {
+    expect.assertions(2);
+
+    expect(riskScoringService.sendUserMetrics).not.toBeCalled();
+
+    await emitUpload();
+
+    expect(riskScoringService.sendUserMetrics).toBeCalledTimes(1);
   });
 
   it('should not emit confirm, if error in recognize', async () => {
@@ -110,22 +116,17 @@ describe('UploadDocument > FrontSideOnly', () => {
   });
 
   it('should emit confirm after recognize', async () => {
-    expect.assertions(1);
+    expect.assertions(2);
 
     documentsService.confirmDocument.mockRejectedValueOnce(new Error());
+
+    expect(wrapper.emitted().confirm).toBeUndefined();
 
     await emitUpload();
 
     wrapper.find('footerrepeatbuttons-stub').vm.$emit('done');
     await global.flushPromises();
 
-    expect(wrapper.emitted().confirm).toEqual([
-      [
-        {
-          documentId: docId,
-          status: DOC_STATUSES.PENDING_REVIEW,
-        },
-      ],
-    ]);
+    expect(wrapper.emitted().confirm).toEqual([[document]]);
   });
 });

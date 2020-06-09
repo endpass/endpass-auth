@@ -1,9 +1,9 @@
 <template>
   <upload-status-layout
     :is-pending="isPending"
-    :is-verified="isStatusesVerified"
-    @continue="onContinue"
-    @create="onCreate"
+    :is-verified="isAllDocRequiredTypesVerified"
+    @continue="onFinish"
+    @create="onFinish"
   />
 </template>
 
@@ -13,19 +13,18 @@ import UploadStatusLayout from '@/components/modules/document/common/UploadStatu
 
 const TIMEOUT_MS = 30 * 1000;
 const EXTRA_TIMEOUT_MS = 2 * 60 * 1000;
+const TIMER_NAME = 'pendingTimer';
 
 export default {
   name: 'UploadStatusInteractor',
 
-  inject: ['gateway'],
-
   props: {
-    isStatusesVerified: {
+    isAvailableToFinish: {
       type: Boolean,
       required: true,
     },
 
-    isStatusesAppropriated: {
+    isAllDocRequiredTypesVerified: {
       type: Boolean,
       required: true,
     },
@@ -50,51 +49,58 @@ export default {
     },
   },
 
+  watch: {
+    isAvailableToFinish(newValue) {
+      if (!newValue) {
+        this.stopTimer();
+      }
+    },
+
+    isAllDocRequiredTypesVerified(newValue) {
+      if (newValue) {
+        this.stopTimer();
+      }
+    },
+  },
+
   methods: {
-    onContinue() {
-      this.$emit('continue');
+    onFinish() {
+      this.$emit('finish');
     },
 
-    onCreate() {
-      this.$emit('create');
-    },
-
-    async updateUploadStatus() {
+    startTimer() {
       this.isPending = true;
 
-      if (!this.isStatusesAppropriated) {
-        await this.gateway.loadDocumentsTypesAndStatuses();
-        await this.$nextTick();
-      }
-
-      if (!this.isStatusesAppropriated) {
-        this.isPending = false;
-        return;
-      }
-
       this.timers.pendingTimer.time = this.pendingTimeout;
-      this.$timer.start('pendingTimer');
+      this.$timer.start(TIMER_NAME);
+    },
+
+    stopTimer() {
+      this.$timer.stop(TIMER_NAME);
+      this.isPending = false;
     },
   },
 
   async mounted() {
-    if (this.isStatusesVerified) {
+    if (this.isAllDocRequiredTypesVerified) return;
+
+    if (!this.isAvailableToFinish) {
       this.isPending = false;
       return;
     }
 
-    await this.updateUploadStatus();
+    this.startTimer();
   },
 
   mixins: [VueTimers],
 
   timers: {
-    pendingTimer: {
+    [TIMER_NAME]: {
       repeat: false,
       autostart: false,
       time: 1000,
       callback() {
-        this.isPending = false;
+        this.stopTimer();
       },
     },
   },

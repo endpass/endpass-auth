@@ -14,17 +14,19 @@ describe('VFrame', () => {
         expect(wrapper.name()).toBe('VFrame');
         expect(wrapper.html()).toMatchSnapshot();
       });
-    });
 
-    describe('props', () => {
-      it('should render loading screen if loading passed as true', () => {
+      it('should not render logo by default', () => {
+        expect(wrapper.find('[data-test=logo]').exists()).toBe(false);
+      });
+
+      it('should render logo if prop passed', () => {
         wrapper = shallowMount(VFrame, {
           propsData: {
-            isLoading: true,
+            isShowLogo: true,
           },
         });
 
-        expect(wrapper.find('spinner-stub').exists()).toBe(true);
+        expect(wrapper.find('[data-test=logo]').exists()).toBe(true);
       });
     });
 
