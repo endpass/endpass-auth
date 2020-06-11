@@ -1,6 +1,8 @@
 <template>
   <rate-limit-screen v-if="isRateLimit" />
-  <router-view v-else />
+  <div v-else>
+    <router-view />
+  </div>
 </template>
 
 <script>

@@ -1,50 +1,67 @@
+<template>
+  <full-screen>
+    <div class="recorder-view">
+      <div>
+        <button
+          class="recorder-view-button-back"
+          @click="onBack"
+        >
+          <v-svg-icon
+            name="arrow-left"
+            width="23px"
+            height="17px"
+          />
+        </button>
+      </div>
+      <div>
+        container record
+      </div>
+      <div>
+        buttons
+      </div>
+    </div>
+  </full-screen>
+</template>
+
 <script>
-const RECORDER_OVERLAY_CLASSNAME = 'recorder-overlay';
+import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
+import FullScreen from '@/components/modules/FullScreen';
 
 export default {
   name: 'RecorderView',
 
-  props: {
-    isFullScreen: {
-      type: Boolean,
-      required: true,
-    },
-  },
-
-  watch: {
-    isFullScreen(isFlag) {
-      this.toggleFullScreen(isFlag);
-    },
-  },
+  props: {},
 
   methods: {
-    toggleFullScreen(isFlag) {
-      const el = document.body;
-
-      if (isFlag) {
-        el.classList.add(RECORDER_OVERLAY_CLASSNAME);
-      } else {
-        el.classList.remove(RECORDER_OVERLAY_CLASSNAME);
-      }
+    onBack() {
+      this.$emit('cancel');
     },
   },
 
-  beforeMount() {
-    this.toggleFullScreen(this.isFullScreen);
-  },
-
-  beforeDestroy() {
-    this.toggleFullScreen(false);
-  },
-
-  render(createElement) {
-    return createElement('div', this.$slots.default);
+  components: {
+    FullScreen,
+    VSvgIcon,
   },
 };
 </script>
 
 <style lang="postcss">
-.recorder-overlay {
-  background: rgba(0, 0, 0, 0.7);
+.recorder-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.recorder-view-button-back,
+.recorder-view-button-close {
+  color: var(--endpass-ui-color-grey-5);
+  background: none;
+  border: 0;
+  cursor: pointer;
+  display: flex;
+  padding: 0;
+  outline: 0;
+  user-select: none;
 }
 </style>

@@ -220,6 +220,16 @@
       "pleaseReupload": "Please reupload",
       "allUploaded": "All your documents have been successfully verified, you may continue."
     },
+    "uploadVideo": {
+      "selfie": {
+        "recorded": "Selfie has been successfully recorded",
+        "retake": "Retake selfie",
+        "record": "Record selfie video"
+      },
+      "descriptions": {
+        "supportedFiles": "Only .avi, .mpeg, .gif files"
+      }
+    },
     "user": {
       "donationSuccess": "A donation request is successfully sent. In general, it takes some time before you will receive funds."
     },

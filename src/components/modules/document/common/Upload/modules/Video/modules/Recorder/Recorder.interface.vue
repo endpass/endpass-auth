@@ -1,12 +1,10 @@
 <template>
-  <recorder-state #default="{ isFullScreen, setFullScreen }">
-    <recorder-interactor @update:isFullScreen="setFullScreen">
-      <recorder-view :is-full-screen="isFullScreen">
-        <div @click="onCancel">
-          back
-        </div>
-        <recorder-container />
-      </recorder-view>
+  <recorder-state>
+    <recorder-interactor>
+      <recorder-view
+        @confirm="onConfirm"
+        @cancel="onCancel"
+      />
     </recorder-interactor>
   </recorder-state>
 </template>
@@ -16,7 +14,6 @@ import RecorderInteractor from './Recorder.interactor';
 import createRecorderController from './Recorder.controller';
 import RecorderState from './Recorder.state';
 import RecorderView from './Recorder.view';
-import RecorderContainer from './Recorder.container';
 
 export default {
   name: 'RecorderInterface',
@@ -24,18 +21,10 @@ export default {
   recorderController: createRecorderController(),
 
   provide() {
-    const { recorderController } = this.$options;
+    // const { recorderController } = this.$options;
 
     return {
-      gateway: {
-        setFullScreen() {
-          recorderController.setFullScreen();
-        },
-
-        setNormalScreen() {
-          recorderController.setNormalScreen();
-        },
-      },
+      gateway: {},
     };
   },
 
@@ -57,7 +46,6 @@ export default {
   },
 
   components: {
-    RecorderContainer,
     RecorderView,
     RecorderState,
     RecorderInteractor,
