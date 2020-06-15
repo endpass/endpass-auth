@@ -9,7 +9,6 @@
       :document-id="documentId"
       :status="status"
       :selected-document-type="selectedDocumentType"
-      :is-show-status="false"
       @next="onNext"
       @create="onCreate"
       @cancel="onBack"
@@ -20,8 +19,8 @@
 <script>
 import DocLayout from '@/components/modules/document/DocLayout';
 
-import UploadStatus from '@/components/modules/document/DocSingleCreation/modules/UploadStatus';
-import Upload from '@/components/modules/document/common/Upload';
+import UploadStatus from '../UploadStatus';
+import UploadSingle from '../UploadSingle';
 
 export default {
   name: 'DocSelectedContainer',
@@ -58,7 +57,7 @@ export default {
         return UploadStatus;
       }
 
-      return Upload;
+      return UploadSingle;
     },
   },
 

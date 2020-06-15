@@ -6,7 +6,7 @@
       </p>
 
       <v-hover
-        v-slot:default="{ isHover }"
+        #default="{ isHover }"
         class="permission-group-tooltip"
       >
         <v-tooltip

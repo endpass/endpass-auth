@@ -94,10 +94,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.frontSideController.recognize(
+        const document = await this.$options.frontSideController.recognize(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -109,6 +109,7 @@ export default {
     async startCreateDocument() {
       try {
         this.isLoading = true;
+
         this.documentId = await this.$options.frontSideController.startCreateDocument(
           {
             file: this.selectedFile,
@@ -126,10 +127,10 @@ export default {
       try {
         this.isLoading = true;
         this.isRecognitionError = false;
-        const status = await this.$options.frontSideController.continueCreateDocument(
+        const document = await this.$options.frontSideController.continueCreateDocument(
           this.documentId,
         );
-        this.handleConfirm(status);
+        this.handleConfirm(document);
       } catch (e) {
         this.isRecognitionError = true;
         this.error = e.message;
@@ -138,11 +139,8 @@ export default {
       }
     },
 
-    handleConfirm(status) {
-      this.$emit('confirm', {
-        documentId: this.documentId,
-        status,
-      });
+    handleConfirm(document) {
+      this.$emit('confirm', document);
     },
 
     async onUploadClick() {

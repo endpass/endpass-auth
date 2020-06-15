@@ -22,23 +22,11 @@ describe('VFrame', () => {
       it('should render logo if prop passed', () => {
         wrapper = shallowMount(VFrame, {
           propsData: {
-            showLogo: true,
+            isShowLogo: true,
           },
         });
 
         expect(wrapper.find('[data-test=logo]').exists()).toBe(true);
-      });
-    });
-
-    describe('props', () => {
-      it('should render loading screen if loading passed as true', () => {
-        wrapper = shallowMount(VFrame, {
-          propsData: {
-            isLoading: true,
-          },
-        });
-
-        expect(wrapper.find('spinner-stub').exists()).toBe(true);
       });
     });
 

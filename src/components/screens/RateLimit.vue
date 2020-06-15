@@ -2,7 +2,6 @@
   <screen>
     <v-frame
       :title="$t('components.rateLimit.title')"
-      :is-loading="false"
       :is-closable="false"
     >
       <div

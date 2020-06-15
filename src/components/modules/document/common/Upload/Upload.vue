@@ -6,7 +6,6 @@
     </v-title>
     <sides
       :document-type="selectedDocumentType"
-      v-on="$listeners"
       @confirm="onConfirm"
       @cancel="onCancel"
     />
@@ -35,12 +34,8 @@ export default {
       this.$emit('cancel');
     },
 
-    onConfirm({ documentId, status }) {
-      // TODO: add processing data from lower levels
-      this.$emit('next', {
-        documentId,
-        status,
-      });
+    onConfirm(document) {
+      this.$emit('confirm', document);
     },
   },
 

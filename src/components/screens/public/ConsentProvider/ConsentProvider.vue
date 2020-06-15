@@ -4,7 +4,7 @@
     v-else
     :title="$t('components.consentProvider.title')"
     :is-closable="isClosable"
-    :show-logo="true"
+    :is-show-logo="true"
     @close="onClose"
   >
     <v-error

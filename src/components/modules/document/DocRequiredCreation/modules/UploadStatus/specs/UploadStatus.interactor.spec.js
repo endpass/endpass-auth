@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import UploadStatusInteractor from '@/components/modules/document/DocRequiredCreation/modules/UploadStatus/UploadStatus.interactor';
+import UploadStatusInteractor from '../UploadStatus.interactor';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
 import setupI18n from '@/locales/i18nSetup';
 
@@ -10,24 +10,18 @@ const i18n = setupI18n(localVue);
 
 describe('UploadStatusInteractor', () => {
   let wrapper;
-  let gateway;
+
   const defaultProps = {
-    isStatusesVerified: false,
-    isStatusesAppropriated: false,
+    isAvailableToFinish: true,
+    isAllDocRequiredTypesVerified: false,
     clientId: 'clientId',
   };
 
   const createWrapper = options => {
-    gateway = {
-      loadDocumentsTypesAndStatuses: jest.fn(),
-    };
     return shallowMount(UploadStatusInteractor, {
       localVue,
-      propsData: defaultProps,
+      propsData: { ...defaultProps },
       i18n,
-      provide: {
-        gateway,
-      },
       ...options,
     });
   };
@@ -41,6 +35,8 @@ describe('UploadStatusInteractor', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
+      expect.assertions(2);
+
       expect(wrapper.name()).toBe('UploadStatusInteractor');
       expect(wrapper.html()).toMatchSnapshot();
     });
@@ -53,18 +49,11 @@ describe('UploadStatusInteractor', () => {
       await global.flushPromises();
 
       expect(wrapper.find(UploadStatusLayout).props().isVerified).toBe(false);
-      expect(wrapper.find(UploadStatusLayout).props().isPending).toBe(false);
+      expect(wrapper.find(UploadStatusLayout).props().isPending).toBe(true);
     });
 
     it('should switch pending after timeout', async () => {
       expect.assertions(2);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
 
       await global.flushPromises();
 
@@ -78,13 +67,6 @@ describe('UploadStatusInteractor', () => {
     it('should switch pending to true', async () => {
       expect.assertions(2);
 
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
-
       await global.flushPromises();
 
       expect(wrapper.find(UploadStatusLayout).props().isVerified).toBe(false);
@@ -96,6 +78,13 @@ describe('UploadStatusInteractor', () => {
     it('should not use timer', async () => {
       expect.assertions(1);
 
+      wrapper = createWrapper({
+        propsData: {
+          ...defaultProps,
+          isAllDocRequiredTypesVerified: true,
+        },
+      });
+
       await global.flushPromises();
 
       expect(wrapper.vm.timers.pendingTimer.isRunning).toBe(false);
@@ -104,12 +93,7 @@ describe('UploadStatusInteractor', () => {
     it('should use timer', async () => {
       expect.assertions(1);
 
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
+      wrapper = createWrapper();
 
       await global.flushPromises();
 
@@ -124,7 +108,6 @@ describe('UploadStatusInteractor', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isStatusesAppropriated: true,
           clientId,
         },
       });
@@ -138,12 +121,7 @@ describe('UploadStatusInteractor', () => {
       expect.assertions(1);
 
       const TIMEOUT_MS = 30 * 1000;
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
+      wrapper = createWrapper();
 
       await global.flushPromises();
 
@@ -152,76 +130,26 @@ describe('UploadStatusInteractor', () => {
   });
 
   describe('events', () => {
-    it('should emit continue', async () => {
-      expect.assertions(3);
+    it('should emit finish by continue', async () => {
+      expect.assertions(2);
 
-      expect(wrapper.emitted().continue).toBeUndefined();
+      expect(wrapper.emitted().finish).toBeUndefined();
 
       wrapper.find(UploadStatusLayout).vm.$emit('continue');
       await global.flushPromises();
 
-      expect(wrapper.emitted().continue).toHaveLength(1);
-      expect(wrapper.emitted().continue).toEqual([[]]);
+      expect(wrapper.emitted().finish).toEqual([[]]);
     });
 
-    it('should emit create', async () => {
-      expect.assertions(3);
+    it('should emit finish by create', async () => {
+      expect.assertions(2);
 
-      expect(wrapper.emitted().create).toBeUndefined();
+      expect(wrapper.emitted().finish).toBeUndefined();
 
       wrapper.find(UploadStatusLayout).vm.$emit('create');
       await global.flushPromises();
 
-      expect(wrapper.emitted().create).toHaveLength(1);
-      expect(wrapper.emitted().create).toEqual([[]]);
-    });
-  });
-
-  describe('load statuses', () => {
-    it('should load types and statuses', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesVerified: false,
-          isStatusesAppropriated: false,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).toBeCalledTimes(1);
-    });
-
-    it('should not load types and statuses if have appropriate statuses', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesAppropriated: true,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
-    });
-
-    it('should not load types and statuses if not have appropriate statuses but have verified', async () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          ...defaultProps,
-          isStatusesVerified: true,
-        },
-      });
-
-      await global.flushPromises();
-
-      expect(gateway.loadDocumentsTypesAndStatuses).not.toBeCalled();
+      expect(wrapper.emitted().finish).toEqual([[]]);
     });
   });
 });
