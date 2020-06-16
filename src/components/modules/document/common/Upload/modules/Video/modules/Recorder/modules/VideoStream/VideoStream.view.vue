@@ -6,6 +6,7 @@
       muted
       playsinline
       class="video-stream-place"
+      @ended="onPlayEnd"
     />
   </div>
 </template>
@@ -141,12 +142,10 @@ export default {
   async mounted() {
     await this.initStream();
     await this.initRecorder();
-    this.$refs.video.addEventListener('ended', this.onPlayEnd);
   },
 
   beforeDestroy() {
     this.dropStream();
-    this.$refs.video.removeEventListener('ended', this.onPlayEnd);
     if (!this.recorder) return;
     this.recorder.destroy();
   },

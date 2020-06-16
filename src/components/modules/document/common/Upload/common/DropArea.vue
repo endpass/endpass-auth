@@ -67,7 +67,8 @@ export default {
     },
 
     validateAccept() {
-      return this.$options.ACCEPT.split(',')
+      return this.accept
+        .split(',')
         .map(item => (item[0] === '.' ? item.substring(1) : item))
         .join(',');
     },

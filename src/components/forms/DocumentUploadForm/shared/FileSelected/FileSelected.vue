@@ -9,7 +9,7 @@
       v-else
       :title="$t('components.uploadDocument.frontIsSelected')"
       :image-content="imageContent"
-      :name="fileName"
+      :file-name="fileName"
       @file-remove="$listeners['file-remove']"
     />
   </div>
