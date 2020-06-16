@@ -140,10 +140,10 @@
         "image": "Passport image"
       },
       "driverLicense": {
-        "title": "Driver license",
-        "status": "Driver license status",
-        "data": "Driver license data",
-        "image": "Driver license image"
+        "title": "Driver's license",
+        "status": "Driver's license status",
+        "data": "Driver's license data",
+        "image": "Driver's license image"
       },
       "idCard": {
         "title": "ID card",
@@ -257,7 +257,7 @@
   },
   "constants": {
     "documentType": {
-      "driverLicense": "Driver Licence",
+      "driverLicense": "Driver's Licence",
       "idCard": "Id Card",
       "passport": "Passport",
       "proofOfAddress": "Proof of Address",
