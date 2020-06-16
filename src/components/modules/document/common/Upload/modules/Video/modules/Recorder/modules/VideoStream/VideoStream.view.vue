@@ -85,6 +85,7 @@ export default {
     async startRecording() {
       await this.initStream();
       await this.initRecorder();
+
       this.recorder.startRecording();
       this.recorder.camera = this.stream;
       this.$emit('update:is-timer-started', true);
@@ -120,9 +121,8 @@ export default {
         this.recorder.destroy();
       }
       this.recorder = new RecordRTC(this.stream, {
-        type: 'video/webm;codecs=h264',
+        type: 'video',
         disableLogs: true,
-        mimeType: 'video/webm',
       });
     },
 

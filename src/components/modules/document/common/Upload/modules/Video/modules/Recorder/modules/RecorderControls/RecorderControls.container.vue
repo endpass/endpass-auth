@@ -1,7 +1,7 @@
 <template>
   <component
     :is="currentComponent"
-    @continue="onConfirm"
+    @confirm="onConfirm"
     @retake="onRetake"
   >
     <slot />
@@ -48,10 +48,6 @@ export default {
         this.$emit('confirm');
       },
     };
-  },
-
-  components: {
-    MediaRecorder,
   },
 };
 </script>

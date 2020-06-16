@@ -13,7 +13,7 @@
           />
         </button>
         <div class="recorder-view-title">
-          {{ $t('components.uploadVideo.selfie.title') }}
+          {{ $t('components.uploadVideo.recorder.title') }}
         </div>
       </div>
       <div>

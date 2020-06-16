@@ -46,7 +46,7 @@ export default {
 
   computed: {
     timerTitle() {
-      return `${this.countDown}s`;
+      return this.countDown ? `${this.countDown}s` : '';
     },
   },
 

@@ -6,7 +6,7 @@
           is-inline
           @click="onRetake"
         >
-          retake
+          {{ $t('components.uploadVideo.recorder.retake') }}
         </v-button>
       </div>
     </div>
@@ -17,7 +17,7 @@
           is-inline
           @click="onConfirm"
         >
-          continue
+          {{ $t('global.continue') }}
         </v-button>
       </div>
     </div>

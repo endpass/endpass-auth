@@ -221,8 +221,11 @@
       "allUploaded": "All your documents have been successfully verified, you may continue."
     },
     "uploadVideo": {
-      "selfie": {
+      "recorder": {
         "title": "Record selfie video",
+        "retake": "Retake"
+      },
+      "choose": {
         "recorded": "Selfie has been successfully recorded",
         "retake": "Retake selfie",
         "record": "Record selfie video"

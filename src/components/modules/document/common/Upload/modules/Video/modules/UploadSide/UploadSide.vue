@@ -91,8 +91,8 @@ export default {
 
     recordButtonTitle() {
       return this.recordedFile
-        ? this.$t('components.uploadVideo.selfie.retake')
-        : this.$t('components.uploadVideo.selfie.record');
+        ? this.$t('components.uploadVideo.choose.retake')
+        : this.$t('components.uploadVideo.choose.record');
     },
 
     uploadFile() {
@@ -101,7 +101,7 @@ export default {
 
     recordStateTitle() {
       return this.recordedFile
-        ? this.$t('components.uploadVideo.selfie.recorded')
+        ? this.$t('components.uploadVideo.choose.recorded')
         : '';
     },
   },
