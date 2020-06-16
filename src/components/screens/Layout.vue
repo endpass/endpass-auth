@@ -4,8 +4,9 @@
     <portal-target
       name="portal-layout"
       class="layout-portal-target"
+      @change="onChange"
     />
-    <router-view />
+    <router-view v-show="!isPortalVisible" />
   </div>
 </template>
 
@@ -15,10 +16,22 @@ import { coreStore } from '@/store';
 
 export default {
   name: 'LayoutScreen',
+
   coreStore,
+
+  data: () => ({
+    isPortalVisible: false,
+  }),
+
   computed: {
     isRateLimit() {
       return this.$options.coreStore.isRateLimit;
+    },
+  },
+
+  methods: {
+    onChange(isVisible) {
+      this.isPortalVisible = isVisible;
     },
   },
 
@@ -27,10 +40,3 @@ export default {
   },
 };
 </script>
-
-<style lang="postcss">
-.layout-portal-target:not(:empty) + * {
-  display: none;
-  visibility: hidden;
-}
-</style>
