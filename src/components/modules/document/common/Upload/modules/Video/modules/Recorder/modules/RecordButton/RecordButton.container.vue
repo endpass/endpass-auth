@@ -72,6 +72,7 @@ export default {
 
     return {
       ...data,
+
       onRecord() {
         this.$emit('record');
       },

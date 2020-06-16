@@ -19,7 +19,7 @@
       <div>
         <video-stream
           :is-recording="isRecording"
-          :is-playing="isPlaying"
+          :is-playing.sync="isPlaying"
           :file.sync="file"
           :is-timer-started.sync="isTimerStarted"
           class="recorder-view-video"
@@ -38,7 +38,6 @@
             :count-down="countDown"
             :total-count="TOTAL_COUNTS"
             @record="onRecord"
-            @pause="onPause"
             @play="onPlay"
           />
         </recorder-controls>
@@ -94,6 +93,7 @@ export default {
         data.isPlaying.value = true;
       },
       onRecord() {
+        data.file.value = null;
         data.isPlaying.value = false;
         data.isRecording.value = true;
       },

@@ -1,5 +1,8 @@
 <template>
-  <v-circle-button @click="onPause">
+  <v-circle-button
+    class="media-pause-button"
+    @click="onPause"
+  >
     <v-svg-icon
       width="32px"
       height="32px"
@@ -33,5 +36,8 @@ export default {
 .media-recorder-done-icon {
   color: var(--endpass-ui-color-primary-7);
   margin-left: 4px;
+}
+.media-pause-button {
+  opacity: 0.2;
 }
 </style>

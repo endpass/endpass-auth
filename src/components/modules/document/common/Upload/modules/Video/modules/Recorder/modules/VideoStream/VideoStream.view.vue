@@ -5,7 +5,6 @@
       autoplay
       muted
       playsinline
-      loop
       class="recorder-view-video"
     />
   </div>
@@ -41,11 +40,15 @@ export default {
 
   data: () => ({
     stream: null,
-    mimeType: 'H264',
   }),
 
   watch: {
     file(newVal) {
+      if (!newVal) {
+        this.$refs.video.srcObject = null;
+        this.$refs.video.src = null;
+        return;
+      }
       const objectUrl = URL.createObjectURL(newVal);
       this.$refs.video.srcObject = null;
       this.$refs.video.src = objectUrl;
@@ -92,10 +95,11 @@ export default {
       await new Promise(resolve => {
         this.recorder.stopRecording(resolve);
       });
+
       const blob = await this.recorder.getBlob();
       const now = Date.now();
       const file = new File([blob], `selfie-${now}.avi`, {
-        type: this.mimeType,
+        type: blob.type,
       });
       this.dropStream();
 
@@ -116,7 +120,9 @@ export default {
         this.recorder.destroy();
       }
       this.recorder = new RecordRTC(this.stream, {
-        type: 'video',
+        type: 'video/webm;codecs=h264',
+        disableLogs: true,
+        mimeType: 'video/webm',
       });
     },
 
@@ -125,15 +131,21 @@ export default {
       this.stream.getTracks().forEach(track => track.stop());
       this.stream = null;
     },
+
+    onPlayEnd() {
+      this.$emit('update:is-playing', false);
+    },
   },
 
   async mounted() {
     await this.initStream();
     await this.initRecorder();
+    this.$refs.video.addEventListener('ended', this.onPlayEnd);
   },
 
   beforeDestroy() {
     this.dropStream();
+    this.$refs.video.removeEventListener('ended', this.onPlayEnd);
     if (!this.recorder) return;
     this.recorder.destroy();
   },
