@@ -1,6 +1,10 @@
 <template>
   <rate-limit-screen v-if="isRateLimit" />
   <div v-else>
+    <portal-target
+      name="portal-layout"
+      class="layout-portal-target"
+    />
     <router-view />
   </div>
 </template>
@@ -23,3 +27,10 @@ export default {
   },
 };
 </script>
+
+<style lang="postcss">
+.layout-portal-target:not(:empty) + * {
+  display: none;
+  visibility: hidden;
+}
+</style>

@@ -1,10 +1,12 @@
 <template>
-  <full-screen>
-    <recorder-view
-      @confirm="onConfirm"
-      @cancel="onCancel"
-    />
-  </full-screen>
+  <portal to="portal-layout">
+    <full-screen>
+      <recorder-view
+        @confirm="onConfirm"
+        @cancel="onCancel"
+      />
+    </full-screen>
+  </portal>
 </template>
 
 <script>

@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="video-stream">
     <video
       ref="video"
       autoplay
       muted
       playsinline
-      class="recorder-view-video"
+      class="video-stream-place"
     />
   </div>
 </template>
@@ -122,7 +122,8 @@ export default {
       }
       this.recorder = new RecordRTC(this.stream, {
         type: 'video',
-        disableLogs: true,
+        // disableLogs: true,
+        mimeType: 'video/webm;codecs=vp8',
       });
     },
 
@@ -152,4 +153,13 @@ export default {
 };
 </script>
 
-<style lang="postcss"></style>
+<style lang="postcss">
+.video-stream {
+  display: flex;
+  justify-content: center;
+}
+.video-stream-place {
+  flex: 1;
+  max-height: 100%;
+}
+</style>

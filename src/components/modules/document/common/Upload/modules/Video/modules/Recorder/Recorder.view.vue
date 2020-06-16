@@ -16,13 +16,13 @@
           {{ $t('components.uploadVideo.recorder.title') }}
         </div>
       </div>
-      <div>
+      <div class="recorder-view-video">
         <video-stream
           :is-recording="isRecording"
           :is-playing.sync="isPlaying"
           :file.sync="file"
           :is-timer-started.sync="isTimerStarted"
-          class="recorder-view-video"
+          class="recorder-video-stream"
         />
       </div>
       <div class="recorder-view-controls">
@@ -150,11 +150,18 @@ export default {
 }
 
 .recorder-view-video {
+  flex: 1;
   max-width: 853px;
-  max-height: 200px;
+  max-height: 480px;
   width: 100%;
   height: 100%;
   background-color: var(--endpass-ui-color-grey-9);
+  overflow: hidden;
+}
+
+.recorder-video-stream {
+  width: 100%;
+  height: 100%;
 }
 
 .recorder-view-controls {
