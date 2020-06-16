@@ -31,27 +31,47 @@ describe('UploadContainer', () => {
   });
 
   it('should match snapshot', () => {
+    expect.assertions(1);
+
     wrapper = createWrapper();
     expect(wrapper.html()).toMatchSnapshot();
   });
 
-  it('should define default doc type', () => {
+  it('should render front side only', () => {
+    expect.assertions(1);
+
     wrapper = createWrapper();
 
-    expect(wrapper.find('sides-stub').attributes().documenttype).toBe(
+    expect(wrapper.find('frontsideonly-stub').attributes().documenttype).toBe(
       DOC_TYPES.PASSPORT,
     );
   });
 
-  it('should show document type as driver license', () => {
+  it('should render back and front', () => {
+    expect.assertions(1);
+
     wrapper = createWrapper({
       propsData: {
-        selectedDocumentType: DOC_TYPES.DRIVER_LICENSE,
+        selectedDocumentType: DOC_TYPES.ID_CARD,
       },
     });
 
-    expect(wrapper.find('sides-stub').attributes().documenttype).toBe(
-      DOC_TYPES.DRIVER_LICENSE,
+    expect(wrapper.find('backandfront-stub').attributes().documenttype).toBe(
+      DOC_TYPES.ID_CARD,
+    );
+  });
+
+  it('should render selfie', () => {
+    expect.assertions(1);
+
+    wrapper = createWrapper({
+      propsData: {
+        selectedDocumentType: DOC_TYPES.SELFIE,
+      },
+    });
+
+    expect(wrapper.find('videocontainer-stub').attributes().documenttype).toBe(
+      DOC_TYPES.SELFIE,
     );
   });
 });
