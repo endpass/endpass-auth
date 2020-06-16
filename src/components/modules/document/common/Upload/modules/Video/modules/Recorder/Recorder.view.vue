@@ -1,6 +1,6 @@
 <template>
-  <full-screen>
-    <div class="recorder-view">
+  <div class="recorder-view">
+    <div class="recorder-view-container">
       <div>
         <button
           class="recorder-view-button-back"
@@ -12,35 +12,110 @@
             height="17px"
           />
         </button>
+        <div class="recorder-view-title">
+          {{ $t('components.uploadVideo.selfie.title') }}
+        </div>
       </div>
       <div>
-        container record
+        <video-stream
+          :is-recording="isRecording"
+          :is-playing="isPlaying"
+          :file.sync="file"
+          :is-timer-started.sync="isTimerStarted"
+          class="recorder-view-video"
+        />
       </div>
-      <div>
-        buttons
+      <div class="recorder-view-controls">
+        <recorder-controls
+          :is-play-available="isPlayAvailable"
+          @confirm="onConfirm"
+          @retake="onRecord"
+        >
+          <record-button
+            :is-recording="isRecording"
+            :is-playing="isPlaying"
+            :is-play-available="isPlayAvailable"
+            :count-down="countDown"
+            :total-count="TOTAL_COUNTS"
+            @record="onRecord"
+            @pause="onPause"
+            @play="onPlay"
+          />
+        </recorder-controls>
+        <count-down-timer
+          :duration="TOTAL_DURATION"
+          :is-locked="isTimerStarted"
+          :counter.sync="countDown"
+          @done="onRecordEnd"
+        />
       </div>
     </div>
-  </full-screen>
+  </div>
 </template>
 
 <script>
+import { ref, computed } from '@vue/composition-api';
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
-import FullScreen from '@/components/modules/FullScreen';
+import RecorderControls from './modules/RecorderControls';
+import CountDownTimer from '@/components/common/CountDownTimer';
+import VideoStream from './modules/VideoStream';
+import RecordButton from './modules/RecordButton';
+
+const TOTAL_COUNTS = 5;
+const TOTAL_DURATION = TOTAL_COUNTS * 1000;
 
 export default {
   name: 'RecorderView',
 
   props: {},
 
-  methods: {
-    onBack() {
-      this.$emit('cancel');
-    },
+  setup() {
+    const data = {
+      file: ref(null),
+      countDown: ref(0),
+      isTimerStarted: ref(false),
+      isRecording: ref(false),
+      isPlaying: ref(false),
+    };
+
+    const isPlayAvailable = computed(() => !!data.file.value);
+
+    return {
+      ...data,
+      isPlayAvailable,
+
+      TOTAL_DURATION,
+      TOTAL_COUNTS,
+
+      onPause() {
+        data.isPlaying.value = false;
+      },
+      onPlay() {
+        data.isPlaying.value = true;
+      },
+      onRecord() {
+        data.isPlaying.value = false;
+        data.isRecording.value = true;
+      },
+      onRecordEnd() {
+        data.isRecording.value = false;
+        data.isTimerStarted.value = false;
+      },
+      onConfirm() {
+        this.$emit('confirm', data.file.value);
+      },
+      onBack() {
+        this.$emit('cancel');
+      },
+    };
   },
 
   components: {
-    FullScreen,
+    VideoStream,
+    CountDownTimer,
+    RecorderControls,
     VSvgIcon,
+    RecordButton,
   },
 };
 </script>
@@ -52,9 +127,46 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.recorder-view-button-back,
-.recorder-view-button-close {
+
+.recorder-view-container {
+  display: flex;
+  flex-direction: column;
+  max-width: 853px;
+  max-height: 480px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.recorder-view-title {
+  text-align: center;
+  margin: 10px 100px;
+  font-size: 20px;
+  color: var(--endpass-ui-color-white);
+}
+
+.recorder-view-video {
+  max-width: 853px;
+  max-height: 200px;
+  width: 100%;
+  height: 100%;
+  background-color: var(--endpass-ui-color-grey-9);
+}
+
+.recorder-view-controls {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.recorder-view-button-back {
+  position: absolute;
+  top: 0;
+  left: 0;
   color: var(--endpass-ui-color-grey-5);
   background: none;
   border: 0;
@@ -63,5 +175,6 @@ export default {
   padding: 0;
   outline: 0;
   user-select: none;
+  margin: 10px;
 }
 </style>

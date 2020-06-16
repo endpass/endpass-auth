@@ -1867,10 +1867,10 @@
     axios "^0.19.0"
     vue "^2.6.10"
 
-"@endpass/ui@^0.18.25":
-  version "0.18.25"
-  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.25.tgz#0c6d980e96fa89c2fa3c34e8e0ae5e703bb5fa54"
-  integrity sha512-oB6FcMG6IveaLPvvQ/tsnYO0qKve61QKRCBmvsVQznTQ2kZy0H5GkqZX6BbFUXnGEJTVvl98P1ytpWl2wjIk2Q==
+"@endpass/ui@^0.18.28":
+  version "0.18.28"
+  resolved "https://registry.yarnpkg.com/@endpass/ui/-/ui-0.18.28.tgz#72507a65f456a73cce85b99adaf244fe7c500a0c"
+  integrity sha512-LchSaA+gOVN+03om0H4QRJCE5tamC32PB9UZQ/Rep9+5p/RWHtGFcdkSVntD0VcxXQzM/b7KQzkVu2xV0fpNIw==
   dependencies:
     dayjs "^1.8.27"
     lodash.chunk "^4.2.0"
@@ -12596,6 +12596,11 @@ rechoir@^0.6.2:
   integrity sha1-hSBLVNuoLVdC4oyWdW70OvUOM4Q=
   dependencies:
     resolve "^1.1.6"
+
+recordrtc@^5.6.1:
+  version "5.6.1"
+  resolved "https://registry.yarnpkg.com/recordrtc/-/recordrtc-5.6.1.tgz#da876700fa149bbb230df7591a020e2c43de01c8"
+  integrity sha512-UU7Fd9IIuz60TPq4GgL1qtgo2mzEZWzPxEraNe32eo4/ndjKmuj715HB7W1k63G09teM1dXJYubPEmLkQ/lq5Q==
 
 redent@^2.0.0:
   version "2.0.0"

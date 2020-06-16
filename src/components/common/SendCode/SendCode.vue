@@ -7,7 +7,7 @@
       @send-code="onSendCode"
     />
     <count-down-timer
-      :timeout="timeout"
+      :duration="duration"
       :is-locked.sync="isLocked"
       :counter.sync="counter"
     />
@@ -27,7 +27,8 @@ export default {
       type: Boolean,
       required: true,
     },
-    timeout: {
+
+    duration: {
       type: Number,
       default: 60000,
     },

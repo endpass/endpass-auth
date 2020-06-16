@@ -1,32 +1,18 @@
 <template>
-  <recorder-state>
-    <recorder-interactor>
-      <recorder-view
-        @confirm="onConfirm"
-        @cancel="onCancel"
-      />
-    </recorder-interactor>
-  </recorder-state>
+  <full-screen>
+    <recorder-view
+      @confirm="onConfirm"
+      @cancel="onCancel"
+    />
+  </full-screen>
 </template>
 
 <script>
-import RecorderInteractor from './Recorder.interactor';
-import createRecorderController from './Recorder.controller';
-import RecorderState from './Recorder.state';
 import RecorderView from './Recorder.view';
+import FullScreen from '@/components/modules/FullScreen';
 
 export default {
   name: 'RecorderInterface',
-
-  recorderController: createRecorderController(),
-
-  provide() {
-    // const { recorderController } = this.$options;
-
-    return {
-      gateway: {},
-    };
-  },
 
   props: {
     documentType: {
@@ -36,8 +22,10 @@ export default {
   },
 
   methods: {
-    onConfirm(document) {
-      this.$emit('confirm', document);
+    onConfirm(recordedFile) {
+      this.$emit('next', {
+        recordedFile,
+      });
     },
 
     onCancel() {
@@ -46,9 +34,8 @@ export default {
   },
 
   components: {
+    FullScreen,
     RecorderView,
-    RecorderState,
-    RecorderInteractor,
   },
 };
 </script>

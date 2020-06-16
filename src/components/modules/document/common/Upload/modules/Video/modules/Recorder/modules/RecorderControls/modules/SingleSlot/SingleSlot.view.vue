@@ -3,9 +3,8 @@
     <slot />
   </div>
 </template>
-
 <script>
 export default {
-  name: 'RecorderState',
+  name: 'SingleSlotView',
 };
 </script>

@@ -222,6 +222,7 @@
     },
     "uploadVideo": {
       "selfie": {
+        "title": "Record selfie video",
         "recorded": "Selfie has been successfully recorded",
         "retake": "Retake selfie",
         "record": "Record selfie video"

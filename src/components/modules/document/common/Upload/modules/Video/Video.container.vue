@@ -2,6 +2,7 @@
   <component
     :is="currentComponent"
     :document-type="documentType"
+    :recorded-file="recordedFile"
     @next="onNext"
     @close="onClose"
     @confirm="onConfirm"
@@ -25,13 +26,10 @@ export default {
 
   data: () => ({
     currentComponent: 'upload-side',
+    recordedFile: null,
   }),
 
   methods: {
-    onStartUpload() {
-      this.$emit('start-upload');
-    },
-
     updateProps(payload) {
       if (!payload) return;
 

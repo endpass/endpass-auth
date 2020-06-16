@@ -32,7 +32,7 @@
       </div>
       <v-button
         :disabled="!uploadFile"
-        skin="quaternary"
+        :skin="uploadButtonSkin"
         data-test="upload-button"
         @click="onUpload"
       >
@@ -64,35 +64,43 @@ export default {
       type: String,
       default: '',
     },
+
+    recordedFile: {
+      type: File,
+      default: null,
+    },
   },
 
   data: () => ({
     documentId: '',
     error: null,
     selectedFile: null,
-    recordedVideo: null,
     isLoading: false,
     isRecognitionError: false,
     isUploaded: false,
   }),
 
   computed: {
+    uploadButtonSkin() {
+      return this.uploadFile ? 'primary' : 'quaternary';
+    },
+
     isUploadReady() {
       return !this.isLoading && !!this.selectedFile && !this.error;
     },
 
     recordButtonTitle() {
-      return this.recordedVideo
+      return this.recordedFile
         ? this.$t('components.uploadVideo.selfie.retake')
         : this.$t('components.uploadVideo.selfie.record');
     },
 
     uploadFile() {
-      return this.recordedVideo || this.selectedFile;
+      return this.recordedFile || this.selectedFile;
     },
 
     recordStateTitle() {
-      return this.recordedVideo
+      return this.recordedFile
         ? this.$t('components.uploadVideo.selfie.recorded')
         : '';
     },
@@ -209,5 +217,8 @@ export default {
   height: 40px;
   font-size: 12px;
   color: var(--endpass-ui-color-green-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
