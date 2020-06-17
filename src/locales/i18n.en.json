@@ -213,7 +213,7 @@
       "recognition": "Recognition",
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "notAdded": "Not added yet",
+      "pleaseAdd": "Please add",
       "totalVerified": "{total} Verified -- please select",
       "upload": "Upload",
       "uploadNewDoc": "Upload new document",

@@ -95,7 +95,7 @@ export default {
   computed: {
     notSelectedTitle() {
       if (!this.totalDocuments) {
-        return this.$t('components.uploadDocument.notAdded');
+        return this.$t('components.uploadDocument.pleaseAdd');
       }
 
       return this.$t('components.uploadDocument.totalVerified', {
