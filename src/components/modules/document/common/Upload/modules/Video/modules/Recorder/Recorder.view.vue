@@ -35,8 +35,8 @@
             :is-recording="isRecording"
             :is-playing="isPlaying"
             :is-play-available="isPlayAvailable"
-            :count-down="countDown"
-            :total-count="TOTAL_COUNTS"
+            :seconds-left="secondsLeft"
+            :seconds-total="MAX_DURATION_SEC"
             @record="onRecord"
             @play="onPlay"
           />
@@ -44,7 +44,7 @@
         <count-down-timer
           :duration="TOTAL_DURATION"
           :is-locked="isTimerStarted"
-          :counter.sync="countDown"
+          :counter.sync="secondsLeft"
           @done="onRecordEnd"
         />
       </div>
@@ -60,18 +60,16 @@ import CountDownTimer from '@/components/common/CountDownTimer';
 import VideoStream from './modules/VideoStream';
 import RecordButton from './modules/RecordButton';
 
-const TOTAL_COUNTS = 5;
-const TOTAL_DURATION = TOTAL_COUNTS * 1000;
+const MAX_DURATION_SEC = 5;
+const TOTAL_DURATION = MAX_DURATION_SEC * 1000;
 
 export default {
   name: 'RecorderView',
 
-  props: {},
-
   setup() {
     const data = {
       file: ref(null),
-      countDown: ref(0),
+      secondsLeft: ref(0),
       isTimerStarted: ref(false),
       isRecording: ref(false),
       isPlaying: ref(false),
@@ -84,7 +82,7 @@ export default {
       isPlayAvailable,
 
       TOTAL_DURATION,
-      TOTAL_COUNTS,
+      MAX_DURATION_SEC,
 
       onPause() {
         data.isPlaying.value = false;

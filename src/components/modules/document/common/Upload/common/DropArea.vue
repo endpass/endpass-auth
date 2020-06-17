@@ -13,8 +13,8 @@
       <slot />
     </v-file-drop-area>
     <document-upload-description
-      :description-supported-files="descriptionSupportedFiles"
-      :description-file-size="descriptionFileSize"
+      :supported-files="descriptionSupportedFiles"
+      :file-size="descriptionFileSize"
     />
   </form-item>
 </template>

@@ -3,16 +3,14 @@
     <div class="media-timer-counter">
       <svg
         class="media-timer-svg"
-        :width="`${$options.TIMER_SIZE}px`"
-        :height="`${$options.TIMER_SIZE}px`"
-        :viewbox="`0 0 ${$options.TIMER_SIZE} ${$options.TIMER_SIZE}`"
+        :width="dimension"
+        :height="dimension"
+        :viewbox="viewBox"
       >
         <path
           ref="loader"
           class="media-timer-loader"
-          :transform="
-            `translate(${$options.TIMER_SIZE / 2}, ${$options.TIMER_SIZE / 2})`
-          "
+          :transform="translate"
         />
       </svg>
     </div>
@@ -30,15 +28,13 @@ const TIMER_SIZE = 52;
 export default {
   name: 'RecordTimerView',
 
-  TIMER_SIZE,
-
   props: {
-    countDown: {
+    secondsLeft: {
       type: Number,
       required: true,
     },
 
-    totalCount: {
+    secondsTotal: {
       type: Number,
       required: true,
     },
@@ -46,12 +42,24 @@ export default {
 
   computed: {
     timerTitle() {
-      return this.countDown ? `${this.countDown}s` : '';
+      return this.secondsLeft ? `${this.secondsLeft}s` : '';
+    },
+
+    viewBox() {
+      return `0 0 ${TIMER_SIZE} ${TIMER_SIZE}`;
+    },
+
+    dimension() {
+      return `${TIMER_SIZE}px`;
+    },
+
+    translate() {
+      return `translate(${TIMER_SIZE / 2}, ${TIMER_SIZE / 2})`;
     },
   },
 
   watch: {
-    countDown() {
+    secondsLeft() {
       this.drawPie();
     },
   },
@@ -61,7 +69,7 @@ export default {
       const { loader } = this.$refs;
 
       const seconds =
-        ((this.totalCount - this.countDown) * 360) / this.totalCount;
+        ((this.secondsTotal - this.secondsLeft) * 360) / this.secondsTotal;
 
       const a = seconds % 360;
       const r = a * HALF_PI;

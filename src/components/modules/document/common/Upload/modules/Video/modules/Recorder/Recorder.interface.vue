@@ -1,5 +1,5 @@
 <template>
-  <portal to="portal-layout">
+  <portal :to="$options.PORTAL_NAME">
     <full-screen>
       <recorder-view
         @confirm="onConfirm"
@@ -12,9 +12,12 @@
 <script>
 import RecorderView from './Recorder.view';
 import FullScreen from '@/components/modules/FullScreen';
+import { PORTAL_NAME } from '@/constants';
 
 export default {
   name: 'RecorderInterface',
+
+  PORTAL_NAME,
 
   props: {
     documentType: {

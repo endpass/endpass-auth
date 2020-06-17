@@ -2,7 +2,7 @@
   <rate-limit-screen v-if="isRateLimit" />
   <div v-else>
     <portal-target
-      name="portal-layout"
+      :name="$options.PORTAL_NAME"
       class="layout-portal-target"
       @change="onChange"
     />
@@ -13,9 +13,12 @@
 <script>
 import RateLimitScreen from '@/components/screens/RateLimit';
 import { coreStore } from '@/store';
+import { PORTAL_NAME } from '@/constants';
 
 export default {
   name: 'LayoutScreen',
+
+  PORTAL_NAME,
 
   coreStore,
 

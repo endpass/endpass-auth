@@ -15,8 +15,6 @@ import VCircleButton from '../VCircleButton';
 export default {
   name: 'MediaRecordView',
 
-  props: {},
-
   methods: {
     onRecord() {
       this.$emit('record');

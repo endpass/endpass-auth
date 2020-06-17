@@ -69,8 +69,6 @@ export default {
     currentComponent(newComponent) {
       switch (newComponent) {
         case DocTypesList:
-          this.$emit('update', { isBack: false });
-          break;
         case UploadStatus:
           this.$emit('update', { isBack: false });
           break;

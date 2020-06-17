@@ -1,8 +1,8 @@
 <template>
   <component
     :is="currentComponent"
-    :count-down="countDown"
-    :total-count="totalCount"
+    :seconds-left="secondsLeft"
+    :seconds-total="secondsTotal"
     @record="onRecord"
     @play="onPlay"
     @pause="onPause"
@@ -37,19 +37,19 @@ export default {
       required: true,
     },
 
-    countDown: {
+    secondsLeft: {
       type: Number,
       required: true,
     },
 
-    totalCount: {
+    secondsTotal: {
       type: Number,
       required: true,
     },
   },
 
   setup(props) {
-    const data = {
+    const computedData = {
       currentComponent: computed(() => {
         switch (true) {
           case !props.isRecording && !props.isPlayAvailable:
@@ -71,7 +71,7 @@ export default {
     };
 
     return {
-      ...data,
+      ...computedData,
 
       onRecord() {
         this.$emit('record');

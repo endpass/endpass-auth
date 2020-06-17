@@ -1,6 +1,8 @@
 <script>
 import VueTimers from 'vue-timers/mixin';
 
+const TIMER_NAME = 'durationTimer';
+
 export default {
   name: 'Timer',
 
@@ -24,7 +26,7 @@ export default {
     onRequestTick() {
       this.tickCount += this.tickStep;
       if (this.duration <= this.tickCount) {
-        this.$timer.stop('durationTimer');
+        this.$timer.stop(TIMER_NAME);
         this.$emit('done');
       }
 
@@ -33,17 +35,17 @@ export default {
   },
 
   mounted() {
-    this.timers.durationTimer.time = this.tickStep;
+    this.timers[TIMER_NAME].time = this.tickStep;
 
     if (this.duration) {
-      this.$timer.start('durationTimer');
+      this.$timer.start(TIMER_NAME);
     }
   },
 
   mixins: [VueTimers],
 
   timers: {
-    durationTimer: {
+    [TIMER_NAME]: {
       repeat: true,
       autostart: false,
       time: 1000,

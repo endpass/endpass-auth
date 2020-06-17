@@ -2,11 +2,11 @@
   <div class="document-upload-description">
     <v-description
       disabled
-      :description="supportedFiles"
+      :description="supportedFilesTitle"
     />
     <v-description
       disabled
-      :description="fileSize"
+      :description="fileSizeTitle"
     />
   </div>
 </template>
@@ -18,30 +18,26 @@ export default {
   name: 'DocumentUploadDescription',
 
   props: {
-    descriptionSupportedFiles: {
+    supportedFiles: {
       type: String,
       default: '',
     },
 
-    descriptionFileSize: {
+    fileSize: {
       type: String,
       default: '',
     },
   },
 
   computed: {
-    supportedFiles() {
+    supportedFilesTitle() {
       return (
-        this.descriptionSupportedFiles ||
-        this.$t('components.uploadDocument.supportFiles')
+        this.supportedFiles || this.$t('components.uploadDocument.supportFiles')
       );
     },
 
-    fileSize() {
-      return (
-        this.descriptionFileSize ||
-        this.$t('components.uploadDocument.fileSize')
-      );
+    fileSizeTitle() {
+      return this.fileSize || this.$t('components.uploadDocument.fileSize');
     },
   },
 

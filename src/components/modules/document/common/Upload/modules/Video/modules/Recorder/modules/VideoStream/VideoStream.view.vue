@@ -76,7 +76,7 @@ export default {
 
   methods: {
     async captureMedia() {
-      const stream = await navigator.mediaDevices.getUserMedia({
+      const stream = await window.navigator.mediaDevices.getUserMedia({
         video: true,
         audio: false,
       });
@@ -84,7 +84,7 @@ export default {
     },
 
     async startRecording() {
-      await this.initStream();
+      await this.openStream();
       await this.initRecorder();
 
       this.recorder.startRecording();
@@ -103,19 +103,19 @@ export default {
       const file = new File([blob], `selfie-${now}.avi`, {
         type: blob.type,
       });
-      this.dropStream(this.stream);
+      this.closeStream(this.stream);
       this.stream = null;
 
       this.$emit('update:file', file);
     },
 
-    async initStream() {
+    async openStream() {
       if (this.stream) {
         return;
       }
       const stream = await this.captureMedia();
       if (!this.$refs.video) {
-        this.dropStream(stream);
+        this.closeStream(stream);
         return;
       }
 
@@ -137,7 +137,7 @@ export default {
       });
     },
 
-    dropStream(stream) {
+    closeStream(stream) {
       if (!stream) return;
       stream.getTracks().forEach(track => track.stop());
     },
@@ -148,12 +148,12 @@ export default {
   },
 
   async mounted() {
-    await this.initStream();
+    await this.openStream();
     await this.initRecorder();
   },
 
   beforeDestroy() {
-    this.dropStream(this.stream);
+    this.closeStream(this.stream);
     this.stream = null;
     if (!this.recorder) return;
     this.recorder.destroy();

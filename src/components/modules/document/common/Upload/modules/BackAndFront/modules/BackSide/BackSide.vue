@@ -30,7 +30,6 @@
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
 import createBackSideController from './BackSideController';
-import DocumentUploadDescription from '@/components/modules/document/common/Upload/common/DocumentUploadDescription';
 import DocumentUploadBack from '@/components/forms/DocumentUploadForm/DocumentUploadBack';
 import FooterRepeatButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterRepeatButtons';
 import FooterDoneButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterDoneButtons';
@@ -153,7 +152,6 @@ export default {
   components: {
     DropArea,
     DocumentUploadBack,
-    DocumentUploadDescription,
     FormItem,
     VFileDropArea,
   },

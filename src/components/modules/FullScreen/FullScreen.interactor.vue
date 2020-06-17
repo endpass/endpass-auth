@@ -1,3 +1,9 @@
+<template>
+  <div>
+    <slot />
+  </div>
+</template>
+
 <script>
 export default {
   name: 'FullScreenInteractor',
@@ -12,10 +18,6 @@ export default {
   async beforeDestroy() {
     await this.gateway.setNormalScreen();
     this.$emit('update', { isFullScreen: false });
-  },
-
-  render(createElement) {
-    return createElement('div', this.$slots.default);
   },
 };
 </script>

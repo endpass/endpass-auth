@@ -1,5 +1,7 @@
 // @ts-check
 
+export const PORTAL_NAME = 'portal-layout';
+
 export const METHODS = {
   SIGN: 'SIGN',
   ACCOUNT: 'ACCOUNT',

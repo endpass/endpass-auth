@@ -10,7 +10,7 @@
 
 <script>
 import { computed } from '@vue/composition-api';
-import SingleSlot from './modules/SingleSlot';
+import WrapperSlot from './modules/WrapperSlot';
 import MediaRecordDone from './modules/MediaRecordDone';
 
 export default {
@@ -28,7 +28,7 @@ export default {
       currentComponent: computed(() => {
         switch (true) {
           case !props.isPlayAvailable:
-            return SingleSlot;
+            return WrapperSlot;
 
           case props.isPlayAvailable:
             return MediaRecordDone;
