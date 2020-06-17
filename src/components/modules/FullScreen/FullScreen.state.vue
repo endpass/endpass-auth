@@ -2,7 +2,7 @@
   <div>
     <slot
       :isFullScreen="isFullScreen"
-      :setFullScreen="setFullScreen"
+      :updateState="updateState"
     />
   </div>
 </template>
@@ -12,12 +12,12 @@ export default {
   name: 'FullScreenState',
 
   data: () => ({
-    isFullScreen: '',
+    isFullScreen: false,
   }),
 
   methods: {
-    setFullScreen(val) {
-      this.isFullScreen = val;
+    updateState({ isFullScreen }) {
+      this.isFullScreen = isFullScreen;
     },
   },
 };

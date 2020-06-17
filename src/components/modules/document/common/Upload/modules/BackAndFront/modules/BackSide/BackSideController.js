@@ -7,7 +7,7 @@ import i18n from '@/locales/i18n';
 import riskScoringService from '@/service/riskScoring';
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
-import { UPLOAD_CODE_ERRORS } from '../../../../upload.constants';
+import { UPLOAD_CODE_ERRORS } from '@/components/modules/document/common/Upload/upload.constants';
 import NonReactive from '@/class/NonReactive';
 
 @Module({ generateMutationSetters: true })

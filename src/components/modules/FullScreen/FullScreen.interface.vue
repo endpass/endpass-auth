@@ -1,6 +1,6 @@
 <template>
-  <full-screen-state #default="{ isFullScreen, setFullScreen }">
-    <full-screen-interactor @update:isFullScreen="setFullScreen">
+  <full-screen-state #default="{ isFullScreen, updateState }">
+    <full-screen-interactor @update="updateState">
       <full-screen-view :is-full-screen="isFullScreen">
         <slot />
       </full-screen-view>
@@ -33,16 +33,6 @@ export default {
         },
       },
     };
-  },
-
-  methods: {
-    onConfirm(document) {
-      this.$emit('confirm', document);
-    },
-
-    onCancel() {
-      this.$emit('cancel');
-    },
   },
 
   components: {

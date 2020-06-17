@@ -4,7 +4,6 @@
     :document-type="documentType"
     :recorded-file="recordedFile"
     @next="onNext"
-    @close="onClose"
     @confirm="onConfirm"
     @cancel="onBack"
   />
@@ -63,8 +62,6 @@ export default {
       }
     },
 
-    onClose() {},
-
     onConfirm(document) {
       this.$emit('confirm', document);
     },
@@ -84,10 +81,6 @@ export default {
             'Wrong next case with document upload video types upload',
           );
       }
-    },
-
-    onCancel() {
-      // this.$emit('cancel');
     },
   },
 

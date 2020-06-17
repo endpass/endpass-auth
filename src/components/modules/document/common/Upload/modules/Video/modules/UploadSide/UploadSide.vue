@@ -140,10 +140,6 @@ export default {
       this.selectedFile = file;
     },
 
-    onCancel() {
-      this.$emit('cancel');
-    },
-
     async onRecognize() {
       try {
         this.isLoading = true;

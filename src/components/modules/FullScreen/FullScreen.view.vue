@@ -24,10 +24,10 @@ export default {
   },
 
   methods: {
-    toggleFullScreen(isFlag) {
+    toggleFullScreen(isFullScreen) {
       const el = document.body;
 
-      if (isFlag) {
+      if (isFullScreen) {
         el.classList.add(OVERLAY_CLASSNAME);
       } else {
         el.classList.remove(OVERLAY_CLASSNAME);
