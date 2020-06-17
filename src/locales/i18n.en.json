@@ -214,6 +214,7 @@
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
       "notAdded": "Not added yet",
+      "totalVerified": "{total} Verified -- please select",
       "upload": "Upload",
       "uploadNewDoc": "Upload new document",
       "pending": "Pending",
@@ -222,6 +223,7 @@
       "pendingInProgress": "Some of documents still in pending status.",
       "requestedInformation": "Requested Information",
       "selectDocument": "Select document",
+      "selectDocumentDescription": "If you have a verified document you'd like to use for this application, please select it below to proceed. You can also upload a new document to be verified instead.",
       "uploading": "Uploading",
       "pleaseReupload": "Please reupload",
       "allUploaded": "All your documents have been successfully verified, you may continue."

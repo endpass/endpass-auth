@@ -27,7 +27,7 @@
           v-else
           class="document-not-added"
         >
-          {{ $t('components.uploadDocument.notAdded') }}
+          {{ notSelectedTitle }}
         </span>
       </div>
     </div>
@@ -85,9 +85,24 @@ export default {
       type: Object,
       default: () => ({}),
     },
+
+    totalDocuments: {
+      type: Number,
+      default: 0,
+    },
   },
 
   computed: {
+    notSelectedTitle() {
+      if (!this.totalDocuments) {
+        return this.$t('components.uploadDocument.notAdded');
+      }
+
+      return this.$t('components.uploadDocument.totalVerified', {
+        total: this.totalDocuments,
+      });
+    },
+
     docTypeIcon() {
       return DOC_ICONS_BY_TYPES[this.documentType];
     },
