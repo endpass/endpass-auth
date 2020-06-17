@@ -1,7 +1,7 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    :is-returnable="isReturnable"
+    :is-returnable="isReturnAvailable"
     @return="onReturn"
     @close="onCancelSelectionRequired"
   >
@@ -13,6 +13,7 @@
       :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
       :selected-documents-by-type="selectedDocumentsByType"
       :available-documents-list="availableDocumentsList"
+      @start-upload="onStartUpload"
       @next="onNext"
       @finish="handleFinishSelectionRequired"
       @cancel="handleBack"
@@ -33,6 +34,11 @@ export default {
   name: 'DocRequiredCreationContainer',
 
   props: {
+    isReturnable: {
+      type: Boolean,
+      required: true,
+    },
+
     docRequiredTypesList: {
       type: Array,
       required: true,
@@ -90,12 +96,21 @@ export default {
       return this.isAvailableToFinish && !this.isAllDocRequiredTypesVerified;
     },
 
-    isReturnable() {
-      return this.currentComponent === 'selected-document-by-type';
+    isReturnAvailable() {
+      if (this.currentComponent === 'required-document-types') {
+        return false;
+      }
+      return this.isReturnable;
     },
   },
 
   methods: {
+    onStartUpload() {
+      this.$emit('update', {
+        isReturnable: false,
+      });
+    },
+
     onReturn() {
       if (!this.isReturnable) return;
 
@@ -122,16 +137,11 @@ export default {
       }
     },
 
-    updateProps(payload) {
-      if (!payload) return;
-
-      Object.keys(payload).forEach(propName => {
-        this.$emit(`update:${propName}`, payload[propName]);
-      });
-    },
-
     async onNext(payload) {
-      this.updateProps(payload);
+      this.$emit('update', payload);
+      this.$emit('update', {
+        isReturnable: true,
+      });
 
       await this.$nextTick();
 

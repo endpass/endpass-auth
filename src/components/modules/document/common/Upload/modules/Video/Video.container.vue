@@ -3,6 +3,7 @@
     :is="currentComponent"
     :document-type="documentType"
     :recorded-file="recordedFile"
+    @start-upload="onStartUpload"
     @next="onNext"
     @confirm="onConfirm"
     @cancel="onBack"
@@ -35,6 +36,10 @@ export default {
       Object.keys(payload).forEach(propName => {
         this[propName] = payload[propName];
       });
+    },
+
+    onStartUpload() {
+      this.$emit('start-upload');
     },
 
     async onNext(payload) {

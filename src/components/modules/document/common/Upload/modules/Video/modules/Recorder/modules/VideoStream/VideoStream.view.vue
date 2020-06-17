@@ -103,7 +103,8 @@ export default {
       const file = new File([blob], `selfie-${now}.avi`, {
         type: blob.type,
       });
-      this.dropStream();
+      this.dropStream(this.stream);
+      this.stream = null;
 
       this.$emit('update:file', file);
     },
@@ -112,7 +113,13 @@ export default {
       if (this.stream) {
         return;
       }
-      this.stream = await this.captureMedia();
+      const stream = await this.captureMedia();
+      if (!this.$refs.video) {
+        this.dropStream(stream);
+        return;
+      }
+
+      this.stream = stream;
       this.$refs.video.src = null;
       this.$refs.video.srcObject = this.stream;
     },
@@ -121,6 +128,8 @@ export default {
       if (this.recorder) {
         this.recorder.destroy();
       }
+      if (!this.stream) return;
+
       this.recorder = new RecordRTC(this.stream, {
         type: 'video',
         // disableLogs: true,
@@ -128,10 +137,9 @@ export default {
       });
     },
 
-    dropStream() {
-      if (!this.stream) return;
-      this.stream.getTracks().forEach(track => track.stop());
-      this.stream = null;
+    dropStream(stream) {
+      if (!stream) return;
+      stream.getTracks().forEach(track => track.stop());
     },
 
     onPlayEnd() {
@@ -145,9 +153,11 @@ export default {
   },
 
   beforeDestroy() {
-    this.dropStream();
+    this.dropStream(this.stream);
+    this.stream = null;
     if (!this.recorder) return;
     this.recorder.destroy();
+    this.recorder = null;
   },
 };
 </script>

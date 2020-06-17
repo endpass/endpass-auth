@@ -2,23 +2,35 @@
   <div>
     <slot
       :selectedDocumentType="selectedDocumentType"
-      :setDocumentType="setDocumentType"
+      :isReturnable="isReturnable"
+      :updateState="updateState"
     />
   </div>
 </template>
 
 <script>
+import { ref } from '@vue/composition-api';
+
 export default {
-  name: 'DocSpecifiedContainer',
+  name: 'DocRequiredCreationState',
 
-  data: () => ({
-    selectedDocumentType: '',
-  }),
+  setup() {
+    const data = {
+      isReturnable: ref(false),
+      selectedDocumentType: ref(''),
+    };
 
-  methods: {
-    setDocumentType(val) {
-      this.selectedDocumentType = val;
-    },
+    const updateState = payload => {
+      if (!payload) return;
+      Object.keys(payload).forEach(propName => {
+        data[propName].value = payload[propName];
+      });
+    };
+
+    return {
+      ...data,
+      updateState,
+    };
   },
 };
 </script>
