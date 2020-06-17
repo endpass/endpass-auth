@@ -24,6 +24,7 @@ export const DOC_STATUSES_TRANSLATES = createGetters({
 export const SCOPES_TRANSLATES = createGetters({
   // User
   [PUBLIC_SCOPES.USER]: $t('components.scopes.user.title'),
+  [PUBLIC_SCOPES.USER_DATA_READ]: $t('components.scopes.user.data'),
   [PUBLIC_SCOPES.USER_EMAIL_READ]: $t('components.scopes.user.email'),
   [PUBLIC_SCOPES.USER_ADDRESS_READ]: $t('components.scopes.user.address'),
   [PUBLIC_SCOPES.USER_PHONE_READ]: $t('components.scopes.user.phone'),

@@ -132,7 +132,8 @@
         "title": "User information",
         "email": "Email",
         "phone": "Phone",
-        "address": "Address"
+        "address": "Address",
+        "data": "Name and birthday"
       },
       "passport": {
         "title": "Passport",
