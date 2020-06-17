@@ -30,6 +30,10 @@ export default {
   }),
 
   methods: {
+    /**
+     * @param {object} payload
+     * @param {keyof typeof DOC_TYPES} payload.documentType
+     */
     updateProps(payload) {
       if (!payload) return;
 
