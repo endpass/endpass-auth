@@ -50,7 +50,8 @@
         "proofOfAddress": "Requests specific access related to your Proof of Address documents.",
         "passport": "Requests specific access related to your passport(s).",
         "driverLicense": "Requests specific access related to your driver's license.",
-        "idCard": "Requests specific access related to your ID card(s)."
+        "idCard": "Requests specific access related to your ID card(s).",
+        "selfie": "Requests specific access related to your selfie(s)."
       }
     },
     "createPassword": {
@@ -156,6 +157,10 @@
         "status": "Proof of address status",
         "data": "Proof of address data",
         "image": "Proof of address image"
+      },
+      "selfie": {
+        "title": "Selfie",
+        "status": "Selfie status"
       }
     },
     "sendCode": {

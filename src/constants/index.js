@@ -236,6 +236,8 @@ export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
     DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
     DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
     DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+    DOCUMENTS_SELFIE: 'documents:selfie',
+    DOCUMENTS_SELFIE_STATUS_READ: 'documents:selfie:status:read',
   }}
  */
 export const PUBLIC_SCOPES = {
@@ -265,4 +267,6 @@ export const PUBLIC_SCOPES = {
   DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
   DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
   DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+  DOCUMENTS_SELFIE: 'documents:selfie',
+  DOCUMENTS_SELFIE_STATUS_READ: 'documents:selfie:status:read',
 };

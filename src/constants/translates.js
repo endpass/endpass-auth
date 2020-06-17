@@ -75,6 +75,10 @@ export const SCOPES_TRANSLATES = createGetters({
   [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_DATA_READ]: $t(
     'components.scopes.proofOfAddress.data',
   ),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE]: $t('components.scopes.selfie.title'),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE_STATUS_READ]: $t(
+    'components.scopes.selfie.status',
+  ),
 });
 
 export const SCOPES_TOOLTIPS_TRANSLATES = createGetters({
@@ -90,5 +94,8 @@ export const SCOPES_TOOLTIPS_TRANSLATES = createGetters({
   ),
   [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS]: $t(
     'components.consentProvider.tooltips.proofOfAddress',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE]: $t(
+    'components.consentProvider.tooltips.selfie',
   ),
 });
