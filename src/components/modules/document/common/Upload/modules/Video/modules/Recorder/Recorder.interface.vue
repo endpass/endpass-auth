@@ -19,13 +19,6 @@ export default {
 
   PORTAL_NAME,
 
-  props: {
-    documentType: {
-      type: String,
-      default: '',
-    },
-  },
-
   methods: {
     onConfirm(recordedFile) {
       this.$emit('next', {
