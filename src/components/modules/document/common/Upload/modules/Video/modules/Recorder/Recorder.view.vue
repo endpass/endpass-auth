@@ -4,6 +4,7 @@
       <div>
         <button
           class="recorder-view-button-back"
+          data-test="back-button"
           @click="onBack"
         >
           <v-svg-icon

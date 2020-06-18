@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecorderInterface render should be a correct component 1`] = `
+<portal-stub name="1" order="0" slotprops="[object Object]" tag="DIV" to="portal-layout">
+  <full-screen-stub>
+    <recorder-view-stub></recorder-view-stub>
+  </full-screen-stub>
+</portal-stub>
+`;
