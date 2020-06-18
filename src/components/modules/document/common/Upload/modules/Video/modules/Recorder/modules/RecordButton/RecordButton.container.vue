@@ -20,7 +20,7 @@ import MediaTimer from './modules/MediaTimer';
 import { RECORDER_STATE } from '../../Recorder.composable';
 
 export default {
-  name: 'RecorderControlsContainer',
+  name: 'RecordButtonContainer',
 
   props: {
     recorderState: {

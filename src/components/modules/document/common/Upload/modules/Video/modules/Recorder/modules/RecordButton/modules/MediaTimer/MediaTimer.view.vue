@@ -26,7 +26,7 @@ const HALF_PI = Math.PI / 180;
 const TIMER_SIZE = 52;
 
 export default {
-  name: 'RecordTimerView',
+  name: 'MediaTimerView',
 
   props: {
     secondsLeft: {
