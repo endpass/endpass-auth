@@ -30,7 +30,7 @@ import FooterFrontButtons from '@/components/modules/document/common/Upload/comm
 import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 
 export default {
-  name: 'DocumentUpload',
+  name: 'FrontSide',
 
   frontSideController: createFrontSideController(),
 
