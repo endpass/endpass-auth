@@ -150,6 +150,9 @@ export default {
   async mounted() {
     await this.openStream();
     await this.initRecorder();
+    if (!this.isTimerStarted && this.isRecording) {
+      await this.startRecording();
+    }
   },
 
   beforeDestroy() {

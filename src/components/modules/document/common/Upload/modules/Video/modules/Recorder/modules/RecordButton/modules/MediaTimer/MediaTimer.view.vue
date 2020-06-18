@@ -42,7 +42,7 @@ export default {
 
   computed: {
     timerTitle() {
-      return this.secondsLeft ? `${this.secondsLeft}s` : '';
+      return this.secondsLeft ? `${this.secondsLeft}s` : '...';
     },
 
     viewBox() {

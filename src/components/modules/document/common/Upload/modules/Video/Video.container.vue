@@ -25,7 +25,7 @@ export default {
   },
 
   data: () => ({
-    currentComponent: 'upload-side',
+    currentComponent: UploadSide,
     recordedFile: null,
   }),
 
@@ -56,12 +56,12 @@ export default {
 
     openNextScreen() {
       switch (true) {
-        case this.currentComponent === 'upload-side':
-          this.currentComponent = 'recorder';
+        case this.currentComponent === UploadSide:
+          this.currentComponent = Recorder;
           break;
 
-        case this.currentComponent === 'recorder':
-          this.currentComponent = 'upload-side';
+        case this.currentComponent === Recorder:
+          this.currentComponent = UploadSide;
           break;
 
         default:
@@ -77,12 +77,12 @@ export default {
 
     onBack() {
       switch (true) {
-        case this.currentComponent === 'upload-side':
-          this.currentComponent = 'recorder';
+        case this.currentComponent === UploadSide:
+          this.currentComponent = Recorder;
           break;
 
-        case this.currentComponent === 'recorder':
-          this.currentComponent = 'upload-side';
+        case this.currentComponent === Recorder:
+          this.currentComponent = UploadSide;
           break;
 
         default:
@@ -91,11 +91,6 @@ export default {
           );
       }
     },
-  },
-
-  components: {
-    UploadSide,
-    Recorder,
   },
 };
 </script>

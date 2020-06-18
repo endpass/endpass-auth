@@ -1,9 +1,9 @@
 <template>
   <form-item>
     <v-file-drop-area
-      v-validate="`ext:${validateAccept}|size:${$options.MAX_FILE_SIZE}`"
+      v-validate="`ext:${validateExtensions}|size:${$options.MAX_FILE_SIZE}`"
       required
-      :accept="accept"
+      :accept="acceptMimeTypes"
       :label="$t('components.uploadDocument.selectFile')"
       :disabled="isLoading"
       data-vv-as="File"
@@ -22,7 +22,11 @@
 <script>
 import VFileDropArea from '@endpass/ui/kit/VFileDropArea';
 import FormItem from '@/components/common/FormItem';
-import { ACCEPT, MAX_FILE_SIZE } from '../upload.constants';
+import {
+  VALIDATE_DEFAULT_EXT,
+  ACCEPT_DEFAULT_MIME_TYPES,
+  MAX_FILE_SIZE,
+} from '../upload.constants';
 import DocumentUploadDescription from './DocumentUploadDescription';
 
 export default {
@@ -51,30 +55,22 @@ export default {
       default: '',
     },
 
-    acceptFiles: {
+    validateExtensions: {
       type: String,
-      default: '',
+      default: VALIDATE_DEFAULT_EXT,
+    },
+
+    acceptMimeTypes: {
+      type: String,
+      default: ACCEPT_DEFAULT_MIME_TYPES,
     },
   },
-
-  ACCEPT,
 
   MAX_FILE_SIZE,
 
   computed: {
     fileErrors() {
       return this.errors.first('file');
-    },
-
-    validateAccept() {
-      return this.accept
-        .split(',')
-        .map(item => (item[0] === '.' ? item.substring(1) : item))
-        .join(',');
-    },
-
-    accept() {
-      return this.acceptFiles || this.$options.ACCEPT;
     },
   },
 

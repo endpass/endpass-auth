@@ -239,7 +239,7 @@
         "record": "Record selfie video"
       },
       "descriptions": {
-        "supportedFiles": "Only .avi, .mpeg, .gif files"
+        "supportedFiles": "Only .avi, .mpeg, .mp4 files"
       }
     },
     "user": {

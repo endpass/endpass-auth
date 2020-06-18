@@ -7,7 +7,8 @@
       :description-supported-files="
         $t('components.uploadVideo.descriptions.supportedFiles')
       "
-      :accept-files="$options.ACCEPT_VIDEO"
+      :accept-mime-types="$options.ACCEPT_VIDEO_MIME_TYPES"
+      :validate-extensions="$options.ACCEPT_VIDEO_EXT"
       @change="onFileChange"
     >
       <document-upload-front
@@ -48,12 +49,16 @@ import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentU
 import createUploadSideController from './UploadSide.controller';
 import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader';
-import { ACCEPT_VIDEO } from '@/components/modules/document/common/Upload/upload.constants';
+import {
+  VALIDATE_VIDEO_EXT,
+  ACCEPT_VIDEO_MIME_TYPES,
+} from '@/components/modules/document/common/Upload/upload.constants';
 
 export default {
   name: 'UploadSide',
 
-  ACCEPT_VIDEO,
+  ACCEPT_VIDEO_EXT: VALIDATE_VIDEO_EXT,
+  ACCEPT_VIDEO_MIME_TYPES,
 
   uploadSideController: createUploadSideController(),
 

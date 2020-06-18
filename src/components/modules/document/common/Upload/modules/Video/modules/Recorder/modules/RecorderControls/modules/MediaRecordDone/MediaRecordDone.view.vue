@@ -14,6 +14,7 @@
     <div class="media-record-done-right-place">
       <div>
         <v-button
+          skin="tertiary"
           is-inline
           @click="onConfirm"
         >
