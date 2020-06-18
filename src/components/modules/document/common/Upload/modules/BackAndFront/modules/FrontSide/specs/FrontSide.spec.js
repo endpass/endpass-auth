@@ -12,7 +12,7 @@ const i18n = setupI18n(localVue);
 localVue.use(VeeValidate);
 localVue.use(UIComponents);
 
-describe('UploadDocument > FrontSide', () => {
+describe('BackAndFront > FrontSide', () => {
   let wrapper;
 
   const docId = 'docId';
@@ -42,53 +42,62 @@ describe('UploadDocument > FrontSide', () => {
     wrapper = createWrapper();
   });
 
-  it('should upload front side of document', async () => {
-    expect.assertions(1);
+  describe('render', () => {
+    it('should correctly render component', () => {
+      expect(wrapper.name()).toBe('FrontSide');
+      expect(wrapper.html()).toMatchSnapshot();
+    });
 
-    documentsService.createDocument.mockResolvedValueOnce(docId);
+    it('should show error', async () => {
+      expect.assertions(2);
 
-    await emitUpload();
+      documentsService.createDocument.mockRejectedValueOnce(new Error());
 
-    expect(wrapper.emitted()['update:documentId']).toEqual([[docId]]);
+      expect(
+        wrapper.find('document-upload-front-stub').attributes().error,
+      ).toBeUndefined();
+
+      await emitUpload();
+
+      expect(
+        wrapper.find('document-upload-front-stub').attributes().error,
+      ).toBe(i18n.t('store.error.uploadDocument.default'));
+    });
+
+    it('should show other error by status code', async () => {
+      expect.assertions(1);
+
+      const err = new Error();
+      err.response = { status: 422 };
+      documentsService.checkFile.mockRejectedValueOnce(err);
+
+      await emitUpload();
+
+      expect(
+        wrapper.find('document-upload-front-stub').attributes().error,
+      ).toBe(i18n.t('store.error.uploadDocument.invalidFile'));
+    });
   });
 
-  it('should show error', async () => {
-    expect.assertions(2);
+  describe('behavior', () => {
+    it('should upload front side of document', async () => {
+      expect.assertions(1);
 
-    documentsService.createDocument.mockRejectedValueOnce(new Error());
+      documentsService.createDocument.mockResolvedValueOnce(docId);
 
-    expect(
-      wrapper.find('document-upload-front-stub').attributes().error,
-    ).toBeUndefined();
+      await emitUpload();
 
-    await emitUpload();
+      expect(wrapper.emitted()['update:documentId']).toEqual([[docId]]);
+    });
 
-    expect(wrapper.find('document-upload-front-stub').attributes().error).toBe(
-      i18n.t('store.error.uploadDocument.default'),
-    );
-  });
+    it('should not update document id', async () => {
+      expect.assertions(1);
 
-  it('should not update document id', async () => {
-    expect.assertions(1);
+      documentsService.createDocument.mockRejectedValueOnce(new Error());
 
-    documentsService.createDocument.mockRejectedValueOnce(new Error());
+      await emitUpload();
 
-    await emitUpload();
-
-    expect(wrapper.emitted()['update:documentId']).toBeUndefined();
-  });
-
-  it('should show other error by status code', async () => {
-    expect.assertions(1);
-
-    const err = new Error();
-    err.response = { status: 422 };
-    documentsService.checkFile.mockRejectedValueOnce(err);
-
-    await emitUpload();
-
-    expect(wrapper.find('document-upload-front-stub').attributes().error).toBe(
-      i18n.t('store.error.uploadDocument.invalidFile'),
-    );
+      expect(wrapper.emitted()['update:documentId']).toBeUndefined();
+    });
   });
 });
