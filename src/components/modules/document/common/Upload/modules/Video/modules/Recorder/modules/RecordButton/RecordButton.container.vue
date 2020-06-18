@@ -19,7 +19,7 @@ import MediaPause from './modules/MediaPause';
 import MediaTimer from './modules/MediaTimer';
 
 export default {
-  name: 'RecorderControlsContainer',
+  name: 'RecordButtonContainer',
 
   props: {
     isRecording: {
