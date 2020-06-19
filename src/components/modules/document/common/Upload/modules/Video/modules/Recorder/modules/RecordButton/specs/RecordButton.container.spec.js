@@ -5,6 +5,7 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VueCompositionApi from '@vue/composition-api';
 import setupI18n from '@/locales/i18nSetup';
 import RecordButtonContainer from '../RecordButton.container';
+import { RECORDER_STATE } from '@/components/modules/document/common/Upload/modules/Video/modules/Recorder/Recorder.composable';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -16,8 +17,7 @@ describe('RecordButtonContainer', () => {
   let wrapper;
 
   const defaultProps = {
-    isRecording: false,
-    isPlaying: false,
+    recorderState: RECORDER_STATE.IDLE,
     isPlayAvailable: false,
     secondsLeft: 0,
     secondsTotal: 5,
@@ -61,7 +61,7 @@ describe('RecordButtonContainer', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isRecording: true,
+          recorderState: RECORDER_STATE.RECORDING,
         },
       });
 
@@ -88,7 +88,7 @@ describe('RecordButtonContainer', () => {
         propsData: {
           ...defaultProps,
           isPlayAvailable: true,
-          isPlaying: true,
+          recorderState: RECORDER_STATE.PLAYING,
         },
       });
 
@@ -131,7 +131,7 @@ describe('RecordButtonContainer', () => {
         propsData: {
           ...defaultProps,
           isPlayAvailable: true,
-          isPlaying: true,
+          recorderState: RECORDER_STATE.PLAYING,
         },
       });
 
