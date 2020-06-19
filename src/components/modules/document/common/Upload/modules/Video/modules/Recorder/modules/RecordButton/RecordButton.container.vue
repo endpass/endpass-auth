@@ -44,7 +44,7 @@ export default {
     },
   },
 
-  setup(props) {
+  setup(props, context) {
     const computedData = {
       currentComponent: computed(() => {
         switch (true) {
@@ -73,13 +73,13 @@ export default {
       ...computedData,
 
       onRecord() {
-        this.$emit('record');
+        context.emit('record');
       },
       onPlay() {
-        this.$emit('play');
+        context.emit('play');
       },
       onPause() {
-        this.$emit('pause');
+        context.emit('pause');
       },
     };
   },

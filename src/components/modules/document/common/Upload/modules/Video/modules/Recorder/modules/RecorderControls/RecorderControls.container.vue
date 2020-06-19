@@ -23,7 +23,7 @@ export default {
     },
   },
 
-  setup(props) {
+  setup(props, context) {
     const data = {
       currentComponent: computed(() => {
         switch (true) {
@@ -42,10 +42,10 @@ export default {
     return {
       ...data,
       onRetake() {
-        this.$emit('retake');
+        context.emit('retake');
       },
       onConfirm() {
-        this.$emit('confirm');
+        context.emit('confirm');
       },
     };
   },
