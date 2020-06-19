@@ -22,6 +22,7 @@
     </drop-area>
     <div>
       <v-button
+        :disabled="isLoading"
         skin="quaternary"
         data-test="record-button"
         @click="onRecord"
@@ -32,7 +33,8 @@
         {{ recordStateTitle }}
       </div>
       <v-button
-        :disabled="!uploadFile"
+        :is-loading="isLoading"
+        :disabled="isUploadAvailable"
         :skin="uploadButtonSkin"
         data-test="upload-button"
         @click="onUpload"
@@ -86,6 +88,10 @@ export default {
   }),
 
   computed: {
+    isUploadAvailable() {
+      return !this.uploadFile || !!this.error || this.isLoading;
+    },
+
     uploadButtonSkin() {
       return this.uploadFile ? 'primary' : 'quaternary';
     },
