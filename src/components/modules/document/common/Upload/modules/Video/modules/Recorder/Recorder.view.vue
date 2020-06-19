@@ -32,7 +32,6 @@
         >
           <record-button
             :recorder-state="recorderState"
-            :is-play-available="isPlayAvailable"
             :seconds-left="secondsLeft"
             :seconds-total="MAX_DURATION_SEC"
             @record="onStartRecord"
@@ -43,7 +42,7 @@
           :duration="TOTAL_DURATION"
           :is-counting="isTimerCounting"
           :counter.sync="secondsLeft"
-          @done="onRecordEnd"
+          @done="stopRecording"
         />
       </div>
     </div>
@@ -60,6 +59,13 @@ import useRecorder from './Recorder.composable';
 
 export default {
   name: 'RecorderView',
+
+  props: {
+    temp: {
+      type: Boolean,
+      default: true,
+    },
+  },
 
   setup(props, context) {
     const { file, ...recorder } = useRecorder();

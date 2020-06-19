@@ -18,7 +18,6 @@ describe('RecordButtonContainer', () => {
 
   const defaultProps = {
     recorderState: RECORDER_STATE.IDLE,
-    isPlayAvailable: false,
     secondsLeft: 0,
     secondsTotal: 5,
   };
@@ -74,7 +73,7 @@ describe('RecordButtonContainer', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isPlayAvailable: true,
+          recorderState: RECORDER_STATE.IDLE_FOR_PLAY,
         },
       });
 
@@ -87,7 +86,6 @@ describe('RecordButtonContainer', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isPlayAvailable: true,
           recorderState: RECORDER_STATE.PLAYING,
         },
       });
@@ -113,7 +111,7 @@ describe('RecordButtonContainer', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isPlayAvailable: true,
+          recorderState: RECORDER_STATE.IDLE_FOR_PLAY,
         },
       });
 
@@ -130,7 +128,6 @@ describe('RecordButtonContainer', () => {
       wrapper = createWrapper({
         propsData: {
           ...defaultProps,
-          isPlayAvailable: true,
           recorderState: RECORDER_STATE.PLAYING,
         },
       });

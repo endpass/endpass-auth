@@ -28,11 +28,6 @@ export default {
       default: RECORDER_STATE.IDLE,
     },
 
-    isPlayAvailable: {
-      type: Boolean,
-      required: true,
-    },
-
     secondsLeft: {
       type: Number,
       required: true,
@@ -48,19 +43,17 @@ export default {
     const computedData = {
       currentComponent: computed(() => {
         switch (true) {
-          case props.recorderState === RECORDER_STATE.IDLE &&
-            !props.isPlayAvailable:
+          case props.recorderState === RECORDER_STATE.IDLE:
             return MediaRecorder;
 
-          case props.recorderState === RECORDER_STATE.START_RECORD:
+          case props.recorderState === RECORDER_STATE.INITIALIZING:
           case props.recorderState === RECORDER_STATE.RECORDING:
             return MediaTimer;
 
           case props.recorderState === RECORDER_STATE.PLAYING:
             return MediaPause;
 
-          case props.recorderState === RECORDER_STATE.IDLE &&
-            props.isPlayAvailable:
+          case props.recorderState === RECORDER_STATE.IDLE_FOR_PLAY:
             return MediaPlay;
 
           default:

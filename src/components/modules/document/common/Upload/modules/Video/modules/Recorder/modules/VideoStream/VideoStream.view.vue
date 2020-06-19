@@ -63,7 +63,7 @@ export default {
         case RECORDER_STATE.PLAYING:
           this.startPlay();
           break;
-        case RECORDER_STATE.START_RECORD:
+        case RECORDER_STATE.INITIALIZING:
           if (this.recorder) this.startRecording();
           break;
 
@@ -115,6 +115,7 @@ export default {
       this.stream = null;
 
       this.$emit('update:file', file);
+      this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
     },
 
     async openStream() {
@@ -151,14 +152,14 @@ export default {
     },
 
     onPlayEnd() {
-      this.$emit('update:recorder-state', RECORDER_STATE.IDLE);
+      this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
     },
   },
 
   async mounted() {
     await this.openStream();
     await this.initRecorder();
-    if (this.recorderState === RECORDER_STATE.START_RECORD) {
+    if (this.recorderState === RECORDER_STATE.INITIALIZING) {
       await this.startRecording();
     }
   },
