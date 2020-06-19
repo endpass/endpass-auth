@@ -18,10 +18,8 @@
       </div>
       <div class="recorder-view-video">
         <video-stream
-          :is-recording="isRecording"
-          :is-playing.sync="isPlaying"
+          :recorder-state.sync="recorderState"
           :file.sync="file"
-          :is-timer-started.sync="isTimerStarted"
           class="recorder-video-stream"
         />
       </div>
@@ -29,21 +27,20 @@
         <recorder-controls
           :is-play-available="isPlayAvailable"
           @confirm="onConfirm"
-          @retake="onRecord"
+          @retake="onStartRecord"
         >
           <record-button
-            :is-recording="isRecording"
-            :is-playing="isPlaying"
+            :recorder-state="recorderState"
             :is-play-available="isPlayAvailable"
             :seconds-left="secondsLeft"
             :seconds-total="MAX_DURATION_SEC"
-            @record="onRecord"
+            @record="onStartRecord"
             @play="onPlay"
           />
         </recorder-controls>
         <count-down-timer
           :duration="TOTAL_DURATION"
-          :is-locked="isTimerStarted"
+          :is-counting="isTimerCounting"
           :counter.sync="secondsLeft"
           @done="onRecordEnd"
         />
@@ -53,58 +50,28 @@
 </template>
 
 <script>
-import { ref, computed } from '@vue/composition-api';
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
 import RecorderControls from './modules/RecorderControls';
 import CountDownTimer from '@/components/common/CountDownTimer';
 import VideoStream from './modules/VideoStream';
 import RecordButton from './modules/RecordButton';
-
-const MAX_DURATION_SEC = 5;
-const TOTAL_DURATION = MAX_DURATION_SEC * 1000;
+import useRecorder from './Recorder.composable';
 
 export default {
   name: 'RecorderView',
 
-  setup() {
-    const data = {
-      file: ref(null),
-      secondsLeft: ref(0),
-      isTimerStarted: ref(false),
-      isRecording: ref(false),
-      isPlaying: ref(false),
-    };
+  setup(props, context) {
+    const { file, ...recorder } = useRecorder();
 
-    const isPlayAvailable = computed(() => !!data.file.value);
+    const onConfirm = () => context.emit('confirm', file.value);
+    const onBack = () => context.emit('cancel');
 
     return {
-      ...data,
-      isPlayAvailable,
+      ...recorder,
+      file,
 
-      TOTAL_DURATION,
-      MAX_DURATION_SEC,
-
-      onPause() {
-        data.isPlaying.value = false;
-      },
-      onPlay() {
-        data.isPlaying.value = true;
-      },
-      onRecord() {
-        data.file.value = null;
-        data.isPlaying.value = false;
-        data.isRecording.value = true;
-      },
-      onRecordEnd() {
-        data.isRecording.value = false;
-        data.isTimerStarted.value = false;
-      },
-      onConfirm() {
-        this.$emit('confirm', data.file.value);
-      },
-      onBack() {
-        this.$emit('cancel');
-      },
+      onConfirm,
+      onBack,
     };
   },
 

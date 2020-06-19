@@ -17,19 +17,15 @@ import MediaRecorder from './modules/MediaRecord';
 import MediaPlay from './modules/MediaPlay';
 import MediaPause from './modules/MediaPause';
 import MediaTimer from './modules/MediaTimer';
+import { RECORDER_STATE } from '../../Recorder.composable';
 
 export default {
   name: 'RecorderControlsContainer',
 
   props: {
-    isRecording: {
-      type: Boolean,
-      required: true,
-    },
-
-    isPlaying: {
-      type: Boolean,
-      required: true,
+    recorderState: {
+      type: String,
+      default: RECORDER_STATE.IDLE,
     },
 
     isPlayAvailable: {
@@ -52,16 +48,19 @@ export default {
     const computedData = {
       currentComponent: computed(() => {
         switch (true) {
-          case !props.isRecording && !props.isPlayAvailable:
+          case props.recorderState === RECORDER_STATE.IDLE &&
+            !props.isPlayAvailable:
             return MediaRecorder;
 
-          case props.isRecording:
+          case props.recorderState === RECORDER_STATE.START_RECORD:
+          case props.recorderState === RECORDER_STATE.RECORDING:
             return MediaTimer;
 
-          case props.isPlaying:
+          case props.recorderState === RECORDER_STATE.PLAYING:
             return MediaPause;
 
-          case !props.isPlaying && props.isPlayAvailable:
+          case props.recorderState === RECORDER_STATE.IDLE &&
+            props.isPlayAvailable:
             return MediaPlay;
 
           default:

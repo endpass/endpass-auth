@@ -13,6 +13,7 @@
 
 <script>
 import RecordRTC from 'recordrtc';
+import { RECORDER_STATE } from '../../Recorder.composable';
 
 export default {
   name: 'VideoRecorderView',
@@ -23,19 +24,9 @@ export default {
       default: null,
     },
 
-    isPlaying: {
-      type: Boolean,
-      required: true,
-    },
-
-    isRecording: {
-      type: Boolean,
-      required: true,
-    },
-
-    isTimerStarted: {
-      type: Boolean,
-      required: true,
+    recorderState: {
+      type: String,
+      default: RECORDER_STATE.IDLE,
     },
   },
 
@@ -56,21 +47,29 @@ export default {
       this.$refs.video.pause();
     },
 
-    isPlaying(newVal) {
-      if (!this.file) return;
-      if (newVal) {
-        this.$refs.video.play();
-        return;
+    recorderState(newState, oldState) {
+      switch (oldState) {
+        case RECORDER_STATE.PLAYING:
+          this.stopPlay();
+          break;
+        case RECORDER_STATE.RECORDING:
+          this.stopRecording();
+          break;
+        default:
+          break;
       }
-      this.$refs.video.pause();
-    },
 
-    isRecording(newVal) {
-      if (!this.recorder) return;
-      if (newVal) {
-        this.startRecording();
+      switch (newState) {
+        case RECORDER_STATE.PLAYING:
+          this.startPlay();
+          break;
+        case RECORDER_STATE.START_RECORD:
+          if (this.recorder) this.startRecording();
+          break;
+
+        default:
+          break;
       }
-      this.stopRecording();
     },
   },
 
@@ -83,13 +82,22 @@ export default {
       return stream;
     },
 
+    startPlay() {
+      if (!this.file) return;
+      this.$refs.video.play();
+    },
+
+    stopPlay() {
+      this.$refs.video.pause();
+    },
+
     async startRecording() {
       await this.openStream();
       await this.initRecorder();
 
       this.recorder.startRecording();
       this.recorder.camera = this.stream;
-      this.$emit('update:is-timer-started', true);
+      this.$emit('update:recorder-state', RECORDER_STATE.RECORDING);
     },
 
     async stopRecording() {
@@ -132,7 +140,7 @@ export default {
 
       this.recorder = new RecordRTC(this.stream, {
         type: 'video',
-        // disableLogs: true,
+        disableLogs: true,
         mimeType: 'video/webm;codecs=vp8',
       });
     },
@@ -143,14 +151,14 @@ export default {
     },
 
     onPlayEnd() {
-      this.$emit('update:is-playing', false);
+      this.$emit('update:recorder-state', RECORDER_STATE.IDLE);
     },
   },
 
   async mounted() {
     await this.openStream();
     await this.initRecorder();
-    if (!this.isTimerStarted && this.isRecording) {
+    if (this.recorderState === RECORDER_STATE.START_RECORD) {
       await this.startRecording();
     }
   },

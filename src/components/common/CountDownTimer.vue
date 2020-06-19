@@ -1,6 +1,6 @@
 <template>
   <timer
-    v-if="isLocked"
+    v-if="isCounting"
     :duration="duration"
     @tick="onTick"
     @done="onDone"
@@ -19,7 +19,7 @@ export default {
       default: 30000,
     },
 
-    isLocked: {
+    isCounting: {
       type: Boolean,
       default: false,
     },
@@ -31,7 +31,7 @@ export default {
   },
 
   watch: {
-    isLocked(newValue) {
+    isCounting(newValue) {
       if (!newValue) {
         return;
       }
@@ -46,13 +46,13 @@ export default {
     },
 
     startRequestTimer() {
-      this.$emit('update:is-locked', true);
+      this.$emit('update:is-counting', true);
       const initialCount = Math.floor(this.duration / 1000);
       this.$emit('update:counter', initialCount);
     },
 
     onDone() {
-      this.$emit('update:is-locked', false);
+      this.$emit('update:is-counting', false);
       this.$emit('done');
     },
   },

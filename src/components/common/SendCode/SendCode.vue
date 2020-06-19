@@ -8,7 +8,7 @@
     />
     <count-down-timer
       :duration="duration"
-      :is-locked.sync="isLocked"
+      :is-counting.sync="isLocked"
       :counter.sync="counter"
     />
   </div>
