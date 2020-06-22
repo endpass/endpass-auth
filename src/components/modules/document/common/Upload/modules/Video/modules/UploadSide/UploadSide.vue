@@ -85,6 +85,7 @@ export default {
     isLoading: false,
     isRecognitionError: false,
     isUploaded: false,
+    isUseRecordedFile: true,
   }),
 
   computed: {
@@ -100,18 +101,22 @@ export default {
       return !this.isLoading && !!this.selectedFile && !this.error;
     },
 
+    isRecordedFile() {
+      return this.isUseRecordedFile && this.recordedFile;
+    },
+
     recordButtonTitle() {
-      return this.recordedFile
+      return this.isRecordedFile
         ? this.$t('components.uploadVideo.choose.retake')
         : this.$t('components.uploadVideo.choose.record');
     },
 
     uploadFile() {
-      return this.recordedFile || this.selectedFile;
+      return this.isRecordedFile ? this.recordedFile : this.selectedFile;
     },
 
     recordStateTitle() {
-      return this.recordedFile
+      return this.isRecordedFile
         ? this.$t('components.uploadVideo.choose.recorded')
         : '';
     },
@@ -125,6 +130,8 @@ export default {
 
   methods: {
     onRecord() {
+      this.selectedFile = null;
+      this.isUseRecordedFile = true;
       this.$emit('next');
     },
 
@@ -143,11 +150,15 @@ export default {
     onFileRemove() {
       this.error = '';
       this.selectedFile = null;
+      if (this.recordedFile) {
+        this.isUseRecordedFile = true;
+      }
       this.isRecognitionError = false;
     },
 
     onFileChange(files) {
       const [file] = files;
+      this.isUseRecordedFile = false;
       this.selectedFile = file;
     },
 
