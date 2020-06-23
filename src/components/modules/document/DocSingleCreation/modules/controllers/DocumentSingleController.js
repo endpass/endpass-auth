@@ -10,7 +10,7 @@ const { ERRORS } = ConnectError;
 @Module({ generateMutationSetters: true })
 class DocumentSingleController extends VuexModule {
   @Action
-  cancelCreate() {
+  async cancelCreate() {
     const result = Answer.createFail(ERRORS.CREATE_DOCUMENT);
     documentChannel.put(result);
   }
@@ -20,7 +20,7 @@ class DocumentSingleController extends VuexModule {
    * @param {string?} params.documentId
    */
   @Action
-  finishCreate({ documentId }) {
+  async finishCreate({ documentId }) {
     if (!documentId) {
       // TODO: check error processing
       throw new Error('Not defined document Id');

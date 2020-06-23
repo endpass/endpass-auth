@@ -1,6 +1,7 @@
 <template>
   <upload
     :selected-document-type="selectedDocumentType"
+    @start-upload="onStartUpload"
     @confirm="onConfirm"
     @cancel="onCancel"
   />
@@ -22,6 +23,12 @@ export default {
   methods: {
     onCancel() {
       this.$emit('cancel');
+    },
+
+    onStartUpload() {
+      this.$emit('next', {
+        isBack: false,
+      });
     },
 
     async onConfirm(document) {

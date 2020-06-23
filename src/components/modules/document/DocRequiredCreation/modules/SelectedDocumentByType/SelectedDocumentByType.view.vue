@@ -3,6 +3,10 @@
     <v-title>
       {{ $t('components.uploadDocument.selectDocument') }}
     </v-title>
+    <v-description>
+      {{ $t('components.uploadDocument.selectDocumentDescription') }}
+    </v-description>
+
     <div class="selected-document-types-list">
       <document-type
         v-for="document in documentsListByType"
@@ -29,6 +33,7 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import VTitle from '@/components/common/VTitle';
+import VDescription from '@/components/common/VDescription';
 import DocumentType from '@/components/modules/document/common/DocumentType';
 
 export default {
@@ -81,6 +86,7 @@ export default {
   components: {
     DocumentType,
     VTitle,
+    VDescription,
     VButton,
   },
 };

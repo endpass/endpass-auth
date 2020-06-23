@@ -2,4 +2,9 @@
 
 exports[`Layout render should render rate limit 1`] = `<rate-limit-screen-stub></rate-limit-screen-stub>`;
 
-exports[`Layout render should render router 1`] = `<router-view-stub name="default"></router-view-stub>`;
+exports[`Layout render should render router 1`] = `
+<div>
+  <portal-target name="portal-layout" class="layout-portal-target"></portal-target>
+  <router-view-stub name="default"></router-view-stub>
+</div>
+`;

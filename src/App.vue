@@ -32,41 +32,7 @@ export default {
 </script>
 
 <style lang="postcss">
-@import '../node_modules/reset.css/reset.css';
-
-* {
-  box-sizing: border-box;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-rendering: optimizeLegibility;
-}
-
-html {
-  min-height: 100%;
-}
-
-body {
-  background: linear-gradient(to bottom, #6d2198 0%, #4b0873 100%);
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-
-  &.transparent {
-    background: none;
-  }
-}
-
-body,
-input,
-button,
-select {
-  font-family: 'Brutal Type', Helvetica, Arial, sans-serif;
-}
-
-@media (max-width: 768px) {
-  body {
-    background: #fff;
-  }
-}
+@import './css/main.scss';
 
 .form-controls a {
   font-size: 0.85rem;

@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecorderView render should be a correct component 1`] = `
+<div class="recorder-view">
+  <div class="recorder-view-container">
+    <div><button data-test="back-button" class="recorder-view-button-back">
+        <v-svg-icon-stub width="23px" height="17px" name="arrow-left"></v-svg-icon-stub>
+      </button>
+      <div class="recorder-view-title">
+        Record selfie video
+      </div>
+    </div>
+    <div class="recorder-view-video">
+      <video-stream-stub recorderstate="IDLE" class="recorder-video-stream"></video-stream-stub>
+    </div>
+    <div class="recorder-view-controls">
+      <recorder-controls-stub>
+        <record-button-stub recorderstate="IDLE" secondsleft="0" secondstotal="5"></record-button-stub>
+      </recorder-controls-stub>
+      <count-down-timer-stub duration="5000" counter="0"></count-down-timer-stub>
+    </div>
+  </div>
+</div>
+`;

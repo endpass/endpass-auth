@@ -10,6 +10,7 @@
         :document-type="type"
         :is-show-description="true"
         :is-selectable="false"
+        :total-documents="getTotalByDocumentType(type)"
         :document="getDocumentByType(type)"
         @select="onSelectDocumentType"
       />
@@ -40,6 +41,11 @@ export default {
       required: true,
     },
 
+    availableDocumentsList: {
+      type: Array,
+      required: true,
+    },
+
     docRequiredTypesList: {
       type: Array,
       required: true,
@@ -52,6 +58,14 @@ export default {
   },
 
   methods: {
+    getTotalByDocumentType(documentType) {
+      return this.availableDocumentsList.reduce(
+        (count, document) =>
+          (document.documentType === documentType ? count + 1 : count),
+        0,
+      );
+    },
+
     getDocumentByType(documentType) {
       const document = this.selectedDocumentsByType[documentType];
       if (!document) return null;

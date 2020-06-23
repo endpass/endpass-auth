@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VShowSlide from 'v-show-slide';
 import VueCompositionApi from '@vue/composition-api';
+import PortalVue from 'portal-vue';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
@@ -21,6 +22,7 @@ import filters from './filters';
     /* eslint-disable-next-line */
   } catch (e) {}
 
+  Vue.use(PortalVue);
   Vue.use(VueCompositionApi);
   Vue.use(validation);
   Vue.use(filters);

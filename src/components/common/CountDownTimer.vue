@@ -1,22 +1,29 @@
 <template>
-  <div />
+  <timer
+    v-if="isCounting"
+    :duration="duration"
+    @tick="onTick"
+    @done="onDone"
+  />
 </template>
 
 <script>
-import VueTimers from 'vue-timers/mixin';
+import Timer from '@/components/common/Timer';
 
 export default {
   name: 'CountDownTimer',
 
   props: {
-    timeout: {
+    duration: {
       type: Number,
       default: 30000,
     },
-    isLocked: {
+
+    isCounting: {
       type: Boolean,
       default: false,
     },
+
     counter: {
       type: Number,
       default: 0,
@@ -24,9 +31,8 @@ export default {
   },
 
   watch: {
-    isLocked(newValue) {
+    isCounting(newValue) {
       if (!newValue) {
-        this.stopRequestTimer();
         return;
       }
 
@@ -35,44 +41,22 @@ export default {
   },
 
   methods: {
+    onTick() {
+      this.$emit('update:counter', this.counter - 1);
+    },
+
     startRequestTimer() {
-      const initialCounter = this.timeout / 1000;
-
-      this.$emit('update:is-locked', true);
-      this.$emit('update:counter', initialCounter);
-      this.$timer.start('counter');
+      this.$emit('update:is-counting', true);
+      const initialCount = Math.floor(this.duration / 1000);
+      this.$emit('update:counter', initialCount);
     },
 
-    stopRequestTimer() {
-      if (!this.timers.counter.isRunning) {
-        return;
-      }
-
-      this.$emit('update:is-locked', false);
-      this.$timer.stop('counter');
-    },
-
-    onRequestTick() {
-      const nextCounterValue = this.counter - 1;
-
-      this.$emit('update:counter', nextCounterValue);
-
-      if (nextCounterValue === 0) {
-        this.stopRequestTimer();
-      }
+    onDone() {
+      this.$emit('update:is-counting', false);
+      this.$emit('done');
     },
   },
 
-  mixins: [VueTimers],
-
-  timers: {
-    counter: {
-      repeat: true,
-      time: 1000,
-      callback() {
-        this.onRequestTick();
-      },
-    },
-  },
+  components: { Timer },
 };
 </script>
