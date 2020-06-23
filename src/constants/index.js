@@ -87,11 +87,13 @@ export const ENCRYPT_OPTIONS = {
  * @type {{
  *   FRONT: 'front'
  *   BACK: 'back',
+ *   VIDEO: 'video',
  * }}
  */
 export const DOCUMENT_SIDES = {
   FRONT: 'front',
   BACK: 'back',
+  VIDEO: 'video',
 };
 
 /**

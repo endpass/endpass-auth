@@ -188,6 +188,14 @@ const documentsService = {
     );
     const frontSideStatus = get(data, `${DOCUMENT_SIDES.FRONT}.status`);
     const backSideStatus = get(data, `${DOCUMENT_SIDES.BACK}.status`);
+    const videoSideStatus = get(data, `${DOCUMENT_SIDES.VIDEO}.status`);
+
+    if (
+      backSideStatus === UPLOAD_STATUSES.NO_CONTENT &&
+      frontSideStatus === UPLOAD_STATUSES.NO_CONTENT
+    ) {
+      return videoSideStatus;
+    }
 
     if (backSideStatus === UPLOAD_STATUSES.NO_CONTENT) {
       return frontSideStatus;
