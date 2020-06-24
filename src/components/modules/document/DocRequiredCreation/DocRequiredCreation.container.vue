@@ -1,7 +1,7 @@
 <template>
   <doc-layout
     :is-closable="isClosable"
-    :is-returnable="isReturnable"
+    :is-returnable="isReturnAvailable"
     @return="onReturn"
     @close="onCancelSelectionRequired"
   >
@@ -13,6 +13,7 @@
       :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
       :selected-documents-by-type="selectedDocumentsByType"
       :available-documents-list="availableDocumentsList"
+      @start-upload="onStartUpload"
       @next="onNext"
       @finish="handleFinishSelectionRequired"
       @cancel="handleBack"
@@ -33,6 +34,11 @@ export default {
   name: 'DocRequiredCreationContainer',
 
   props: {
+    isReturnable: {
+      type: Boolean,
+      required: true,
+    },
+
     docRequiredTypesList: {
       type: Array,
       required: true,
@@ -66,15 +72,15 @@ export default {
 
   data() {
     return {
-      currentComponent: 'required-document-types',
+      currentComponent: RequiredDocumentTypes,
     };
   },
 
   computed: {
     isClosable() {
       return (
-        this.currentComponent === 'required-document-types' ||
-        this.currentComponent === 'selected-document-by-type'
+        this.currentComponent === RequiredDocumentTypes ||
+        this.currentComponent === SelectedDocumentByType
       );
     },
 
@@ -90,12 +96,21 @@ export default {
       return this.isAvailableToFinish && !this.isAllDocRequiredTypesVerified;
     },
 
-    isReturnable() {
-      return this.currentComponent === 'selected-document-by-type';
+    isReturnAvailable() {
+      if (this.currentComponent === RequiredDocumentTypes) {
+        return false;
+      }
+      return this.isReturnable;
     },
   },
 
   methods: {
+    onStartUpload() {
+      this.$emit('update', {
+        isReturnable: false,
+      });
+    },
+
     onReturn() {
       if (!this.isReturnable) return;
 
@@ -108,13 +123,13 @@ export default {
 
     handleFinishSelectionRequired() {
       switch (true) {
-        case this.currentComponent !== 'upload-status' && this.isPending:
-          this.currentComponent = 'upload-status';
+        case this.currentComponent !== UploadStatus && this.isPending:
+          this.currentComponent = UploadStatus;
           return;
 
-        case this.currentComponent === 'upload-status' &&
+        case this.currentComponent === UploadStatus &&
           !this.isAvailableToFinish:
-          this.currentComponent = 'required-document-types';
+          this.currentComponent = RequiredDocumentTypes;
           return;
 
         default:
@@ -122,16 +137,11 @@ export default {
       }
     },
 
-    updateProps(payload) {
-      if (!payload) return;
-
-      Object.keys(payload).forEach(propName => {
-        this.$emit(`update:${propName}`, payload[propName]);
-      });
-    },
-
     async onNext(payload) {
-      this.updateProps(payload);
+      this.$emit('update', payload);
+      this.$emit('update', {
+        isReturnable: true,
+      });
 
       await this.$nextTick();
 
@@ -140,25 +150,25 @@ export default {
 
     openNextScreen() {
       switch (true) {
-        case this.currentComponent === 'required-document-types' &&
+        case this.currentComponent === RequiredDocumentTypes &&
           this.isDocumentsByTypeExists:
-          this.currentComponent = 'selected-document-by-type';
+          this.currentComponent = SelectedDocumentByType;
           break;
 
-        case this.currentComponent === 'required-document-types' &&
+        case this.currentComponent === RequiredDocumentTypes &&
           !this.isDocumentsByTypeExists:
-          this.currentComponent = 'upload';
+          this.currentComponent = Upload;
           break;
 
-        case this.currentComponent === 'selected-document-by-type':
-          this.currentComponent = 'upload';
+        case this.currentComponent === SelectedDocumentByType:
+          this.currentComponent = Upload;
           break;
 
-        case this.currentComponent === 'upload':
-          this.currentComponent = 'required-document-types';
+        case this.currentComponent === Upload:
+          this.currentComponent = RequiredDocumentTypes;
           break;
 
-        case this.currentComponent === 'upload-status':
+        case this.currentComponent === UploadStatus:
           this.handleFinishSelectionRequired();
           break;
 
@@ -171,17 +181,16 @@ export default {
 
     handleBack() {
       switch (true) {
-        case this.currentComponent === 'selected-document-by-type':
-          this.currentComponent = 'required-document-types';
+        case this.currentComponent === SelectedDocumentByType:
+          this.currentComponent = RequiredDocumentTypes;
           break;
 
-        case this.currentComponent === 'upload' &&
-          !this.isDocumentsByTypeExists:
-          this.currentComponent = 'required-document-types';
+        case this.currentComponent === Upload && !this.isDocumentsByTypeExists:
+          this.currentComponent = RequiredDocumentTypes;
           break;
 
-        case this.currentComponent === 'upload' && this.isDocumentsByTypeExists:
-          this.currentComponent = 'selected-document-by-type';
+        case this.currentComponent === Upload && this.isDocumentsByTypeExists:
+          this.currentComponent = SelectedDocumentByType;
           break;
 
         default:
@@ -193,10 +202,6 @@ export default {
   components: {
     LoadingScreen,
     DocLayout,
-    RequiredDocumentTypes,
-    SelectedDocumentByType,
-    Upload,
-    UploadStatus,
   },
 };
 </script>

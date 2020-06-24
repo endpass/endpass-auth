@@ -1,13 +1,22 @@
 <template>
-  <upload-required
+  <upload-required-interactor
     :selected-document-type="selectedDocumentType"
+    #default="{ onConfirm, onCancel }"
     @next="onNext"
-    @cancel="onCancel"
-  />
+    @cancel="onCancelUpload"
+  >
+    <upload
+      :selected-document-type="selectedDocumentType"
+      @start-upload="onStartUpload"
+      @confirm="onConfirm"
+      @cancel="onCancel"
+    />
+  </upload-required-interactor>
 </template>
 
 <script>
-import UploadRequired from './UploadRequired.interactor';
+import Upload from '@/components/modules/document/common/Upload';
+import UploadRequiredInteractor from './UploadRequired.interactor';
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 
 export default {
@@ -41,17 +50,22 @@ export default {
   },
 
   methods: {
-    onCancel() {
+    onCancelUpload() {
       this.$emit('cancel');
     },
 
     onNext() {
       this.$emit('next');
     },
+
+    onStartUpload() {
+      this.$emit('start-upload');
+    },
   },
 
   components: {
-    UploadRequired,
+    UploadRequiredInteractor,
+    Upload,
   },
 };
 </script>

@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BackAndFront > FrontSide render should correctly render component 1`] = `
+<div>
+  <drop-area-stub descriptionsupportedfiles="" descriptionfilesize="" validateextensions="png,jpeg,jpg,pdf,tif,doc,docx" acceptmimetypes="image/png,image/jpg,image/jpeg,application/pdf,image/tif,image/tiff,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    <document-upload-front-stub progress-value="0" progress-label=""></document-upload-front-stub>
+  </drop-area-stub>
+  <footer-front-buttons-stub></footer-front-buttons-stub>
+</div>
+`;

@@ -1,47 +1,46 @@
 <template>
-  <doc-selected
-    :doc-types-list="docTypesList"
-    :selected-document-type.sync="selectedDocumentType"
-    :document-id.sync="documentId"
-    :status.sync="status"
-    @create="onCreate"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :status="status"
+      :documentId="documentId"
+      :isBack="isBack"
+      :selectedDocumentType="selectedDocumentType"
+      :isClosable="isClosable"
+      :updateState="updateState"
+    />
+  </div>
 </template>
 
 <script>
-import DocSelected from './DocSpecified.container';
+import { ref, computed } from '@vue/composition-api';
 
 export default {
-  name: 'DocSpecifiedContainer',
+  name: 'DocSpecifiedState',
 
-  props: {
-    docTypesList: {
-      type: Array,
-      required: true,
-    },
-  },
+  setup() {
+    const data = {
+      status: ref(''),
+      documentId: ref(''),
+      isBack: ref(false),
+      selectedDocumentType: ref(''),
+    };
 
-  data: () => ({
-    status: '',
-    documentId: '',
-    selectedDocumentType: '',
-  }),
+    const isClosable = computed(
+      () => !data.documentId.value || !data.status.value,
+    );
 
-  methods: {
-    onCreate() {
-      this.$emit('create', {
-        documentId: this.documentId,
+    const updateState = payload => {
+      if (!payload) return;
+      Object.keys(payload).forEach(propName => {
+        data[propName].value = payload[propName];
       });
-    },
+    };
 
-    onCancel() {
-      this.$emit('cancel');
-    },
-  },
-
-  components: {
-    DocSelected,
+    return {
+      ...data,
+      isClosable,
+      updateState,
+    };
   },
 };
 </script>

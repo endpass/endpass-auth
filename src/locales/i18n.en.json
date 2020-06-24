@@ -50,7 +50,8 @@
         "proofOfAddress": "Requests specific access related to your Proof of Address documents.",
         "passport": "Requests specific access related to your passport(s).",
         "driverLicense": "Requests specific access related to your driver's license.",
-        "idCard": "Requests specific access related to your ID card(s)."
+        "idCard": "Requests specific access related to your ID card(s).",
+        "selfie": "Requests specific access related to your selfie(s)."
       }
     },
     "createPassword": {
@@ -131,7 +132,8 @@
         "title": "User information",
         "email": "Email",
         "phone": "Phone",
-        "address": "Address"
+        "address": "Address",
+        "data": "Name and birthday"
       },
       "passport": {
         "title": "Passport",
@@ -156,6 +158,10 @@
         "status": "Proof of address status",
         "data": "Proof of address data",
         "image": "Proof of address image"
+      },
+      "selfie": {
+        "title": "Selfie",
+        "status": "Selfie status"
       }
     },
     "sendCode": {
@@ -207,7 +213,8 @@
       "recognition": "Recognition",
       "selectFile": "Select File",
       "supportFiles": "Only .jpg, .pdf, .png, .tiff, .doc files.",
-      "notAdded": "Not added yet",
+      "pleaseAdd": "Please add",
+      "totalVerified": "{total} Verified -- please select",
       "upload": "Upload",
       "uploadNewDoc": "Upload new document",
       "pending": "Pending",
@@ -216,9 +223,24 @@
       "pendingInProgress": "Some of documents still in pending status.",
       "requestedInformation": "Requested Information",
       "selectDocument": "Select document",
+      "selectDocumentDescription": "If you have a verified document you'd like to use for this application, please select it below to proceed. You can also upload a new document to be verified instead.",
       "uploading": "Uploading",
       "pleaseReupload": "Please reupload",
       "allUploaded": "All your documents have been successfully verified, you may continue."
+    },
+    "uploadVideo": {
+      "recorder": {
+        "title": "Record selfie video",
+        "retake": "Retake"
+      },
+      "choose": {
+        "recorded": "Selfie has been successfully recorded",
+        "retake": "Retake selfie",
+        "record": "Record selfie video"
+      },
+      "descriptions": {
+        "supportedFiles": "Only .avi, .mpeg, .mp4 files"
+      }
     },
     "user": {
       "donationSuccess": "A donation request is successfully sent. In general, it takes some time before you will receive funds."
@@ -246,7 +268,8 @@
       "driverLicense": "Driver's Licence",
       "idCard": "Id Card",
       "passport": "Passport",
-      "proofOfAddress": "Proof of Address"
+      "proofOfAddress": "Proof of Address",
+      "selfie": "Selfie video"
     },
     "documentStatus": {
       "draft": "Draft",

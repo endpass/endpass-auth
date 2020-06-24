@@ -1,5 +1,7 @@
 // @ts-check
 
+export const PORTAL_NAME = 'portal-layout';
+
 export const METHODS = {
   SIGN: 'SIGN',
   ACCOUNT: 'ACCOUNT',
@@ -71,8 +73,6 @@ export const WALLET_TYPES = Object.freeze({
   HD_MAIN: 'HDMainAccount',
 });
 
-export const WIDGET_RESIZE_DURATION = 300;
-
 export const LOCALES = ['en'];
 
 /**
@@ -87,11 +87,13 @@ export const ENCRYPT_OPTIONS = {
  * @type {{
  *   FRONT: 'front'
  *   BACK: 'back',
+ *   VIDEO: 'video',
  * }}
  */
 export const DOCUMENT_SIDES = {
   FRONT: 'front',
   BACK: 'back',
+  VIDEO: 'video',
 };
 
 /**
@@ -160,6 +162,7 @@ export const DOC_STATUSES = {
     DRIVER_LICENSE: 'DriverLicense',
     PROOF_OF_ADDRESS: 'ProofOfAddress',
     ID_CARD: 'IdCard',
+    SELFIE: 'Selfie',
   }}
  */
 export const DOC_TYPES = {
@@ -167,6 +170,7 @@ export const DOC_TYPES = {
   DRIVER_LICENSE: 'DriverLicense',
   PROOF_OF_ADDRESS: 'ProofOfAddress',
   ID_CARD: 'IdCard',
+  SELFIE: 'Selfie',
 };
 
 /**
@@ -177,6 +181,7 @@ export const DOC_TYPES_ORDER = [
   DOC_TYPES.DRIVER_LICENSE,
   DOC_TYPES.ID_CARD,
   DOC_TYPES.PROOF_OF_ADDRESS,
+  DOC_TYPES.SELFIE,
 ];
 
 /**
@@ -235,6 +240,8 @@ export const DEFAULT_RATE_LIMIT_TIMEOUT = 59; // 1 minute
     DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
     DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
     DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+    DOCUMENTS_SELFIE: 'documents:selfie',
+    DOCUMENTS_SELFIE_STATUS_READ: 'documents:selfie:status:read',
   }}
  */
 export const PUBLIC_SCOPES = {
@@ -264,4 +271,6 @@ export const PUBLIC_SCOPES = {
   DOCUMENTS_ID_CARD_STATUS_READ: 'documents:id_card:status:read',
   DOCUMENTS_ID_CARD_DATA_READ: 'documents:id_card:data:read',
   DOCUMENTS_ID_CARD_IMAGE_READ: 'documents:id_card:image:read',
+  DOCUMENTS_SELFIE: 'documents:selfie',
+  DOCUMENTS_SELFIE_STATUS_READ: 'documents:selfie:status:read',
 };

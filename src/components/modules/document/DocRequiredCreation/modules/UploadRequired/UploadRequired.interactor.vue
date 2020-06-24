@@ -1,14 +1,13 @@
 <template>
-  <upload
-    :selected-document-type="selectedDocumentType"
-    @confirm="onConfirm"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :onConfirm="onConfirm"
+      :onCancel="onCancel"
+    />
+  </div>
 </template>
 
 <script>
-import Upload from '@/components/modules/document/common/Upload';
-
 export default {
   name: 'UploadRequiredInteractor',
 
@@ -38,10 +37,6 @@ export default {
 
       this.$emit('next');
     },
-  },
-
-  components: {
-    Upload,
   },
 };
 </script>
