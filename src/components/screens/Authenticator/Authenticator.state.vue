@@ -7,6 +7,7 @@
     :is-device-remembered.sync="isDeviceRemembered"
     :is-password-exist.sync="isPasswordExist"
     :is-sign-up.sync="isSignUp"
+    :is-social.sync="isSocial"
     :challenge-type.sync="challengeType"
     @authorize="onAuth"
     @cancel="onCancel"
@@ -27,6 +28,7 @@ export default {
     isDeviceRemembered: false,
     isPasswordExist: false,
     isSignUp: false,
+    isSocial: false,
     challengeType: CHALLENGE_TYPES.EMAIL_OTP,
   }),
 

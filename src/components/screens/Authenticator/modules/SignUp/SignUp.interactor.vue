@@ -40,7 +40,12 @@ export default {
         this.error = '';
 
         await this.$options.authStore.loadAuthChallenge({ email });
-        this.$emit('sign-up', { email, password, isSignUp: true });
+        this.$emit('sign-up', {
+          email,
+          password,
+          isSignUp: true,
+          isSocial: false,
+        });
       } catch (e) {
         this.error = this.$i18n.t('components.compositeAuth.authFailed');
       } finally {
