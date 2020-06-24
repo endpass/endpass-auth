@@ -73,7 +73,7 @@ export const SCOPES_TRANSLATES = createGetters({
   [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_STATUS_READ]: $t(
     'components.scopes.proofOfAddress.status',
   ),
-  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_DATA_READ]: $t(
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_DATA_READ]: $t(
     'components.scopes.proofOfAddress.data',
   ),
   [PUBLIC_SCOPES.DOCUMENTS_SELFIE]: $t('components.scopes.selfie.title'),
