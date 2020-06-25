@@ -16,6 +16,7 @@
       v-if="scopesList.length > 0"
       :is-loading="isLoading"
       :scopes-list="scopesList"
+      :app-name="appName"
       @submit="handleScopesSubmit"
     />
   </v-frame>
@@ -38,6 +39,7 @@ export default {
   consentProviderController: createConsentProviderController(),
 
   data: () => ({
+    appName: '',
     consentChallenge: null,
     isLoading: true,
     isSkipped: false,
@@ -93,6 +95,7 @@ export default {
         this.isLoading = true;
 
         const {
+          appName,
           scopesList,
           isSkip,
         } = await this.$options.consentProviderController.loadScopes({
@@ -101,6 +104,7 @@ export default {
 
         this.isSkipped = isSkip;
         this.scopesList = scopesList;
+        this.appName = appName;
       } catch (e) {
         this.errorHint = e.message;
       } finally {

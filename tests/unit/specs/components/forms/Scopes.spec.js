@@ -7,12 +7,23 @@ const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
 
 describe('Scopes', () => {
+  const defaultProps = {
+    appName: 'Foo',
+  };
   let wrapper;
 
-  beforeEach(() => {
-    wrapper = shallowMount(ScopesForm, {
+  const wapperFactory = (options = {}) =>
+    shallowMount(ScopesForm, {
       localVue,
       i18n,
+      ...options,
+    });
+
+  beforeEach(() => {
+    wrapper = wapperFactory({
+      propsData: {
+        ...defaultProps,
+      },
     });
   });
 
@@ -23,19 +34,25 @@ describe('Scopes', () => {
     });
 
     it('should render given scopes', () => {
-      wrapper.setProps({
-        scopesList: ['foo', 'bar'],
+      wrapper = wapperFactory({
+        propsData: {
+          ...defaultProps,
+          scopesList: ['foo', 'bar'],
+        },
       });
 
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should correctly disable submit button', () => {
-      const submitButton = wrapper.find('[data-test=submit-button]');
-
-      wrapper.setProps({
-        isLoading: true,
+      wrapper = wapperFactory({
+        propsData: {
+          ...defaultProps,
+          isLoading: true,
+        },
       });
+
+      const submitButton = wrapper.find('[data-test=submit-button]');
 
       expect(submitButton.attributes().isloading).toBeTruthy();
       expect(submitButton.attributes().disabled).toBeTruthy();
@@ -44,9 +61,12 @@ describe('Scopes', () => {
 
   describe('behavior', () => {
     it('should submit form if all scopes are selected', () => {
-      wrapper.setProps({
-        isLoading: false,
-        scopesList: ['foo', 'bar'],
+      wrapper = wapperFactory({
+        propsData: {
+          ...defaultProps,
+          isLoading: false,
+          scopesList: ['foo', 'bar'],
+        },
       });
 
       expect(wrapper.emitted().submit).toBeUndefined();

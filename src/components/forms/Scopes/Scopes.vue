@@ -5,7 +5,7 @@
   >
     <form-field>
       <v-description>
-        {{ $t('components.scopes.allowScopes') }}
+        {{ formDescription }}
       </v-description>
     </form-field>
     <div class="form-field v-mb-24">
@@ -57,11 +57,22 @@ export default {
       type: Array,
       default: () => [],
     },
+
+    appName: {
+      type: String,
+      default: '',
+    },
   },
 
   computed: {
     isPopup() {
       return !!window.opener;
+    },
+
+    formDescription() {
+      return this.$t('components.scopes.allowScopes', {
+        appName: this.appName,
+      });
     },
 
     filteredScopes() {

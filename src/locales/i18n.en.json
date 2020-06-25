@@ -126,7 +126,7 @@
       "title": "Change password"
     },
     "scopes": {
-      "allowScopes": "This application is requesting permission to access the following details from you. Press \"Allow\" if you would like to grant access to this information.",
+      "allowScopes": "{appName} application is requesting permission to access the following details from you. Press \"Allow\" if you would like to grant access to this information.",
       "access": "Access",
       "user": {
         "title": "User information",
