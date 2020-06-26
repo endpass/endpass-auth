@@ -1,11 +1,12 @@
 <template>
   <form
     class="scopes-form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <form-field>
       <v-description>
-        {{ formDescription }}
+        <strong>{{ appName }}</strong>
+        {{ $t('components.scopes.allowScopes') }}
       </v-description>
     </form-field>
     <div class="form-field v-mb-24">
@@ -65,16 +66,6 @@ export default {
   },
 
   computed: {
-    isPopup() {
-      return !!window.opener;
-    },
-
-    formDescription() {
-      return this.$t('components.scopes.allowScopes', {
-        appName: this.appName,
-      });
-    },
-
     filteredScopes() {
       return this.scopesList.filter(
         scope => scope !== PUBLIC_SCOPES.OFFLINE_ACCESS,
@@ -108,7 +99,7 @@ export default {
   },
 
   methods: {
-    handleSubmit() {
+    onSubmit() {
       this.$emit('submit', this.scopesList);
     },
   },

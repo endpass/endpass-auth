@@ -3,8 +3,8 @@
 exports[`Scopes render should correctly render component 1`] = `
 <form class="scopes-form">
   <form-field-stub>
-    <v-description-stub>
-      Foo application is requesting permission to access the following details from you. Press "Allow" if you would like to grant access to this information.
+    <v-description-stub><strong>Foo</strong>
+      application is requesting permission to access the following details from you. Press "Allow" if you would like to grant access to this information.
     </v-description-stub>
   </form-field-stub>
   <div class="form-field v-mb-24">
@@ -21,8 +21,8 @@ exports[`Scopes render should correctly render component 1`] = `
 exports[`Scopes render should render given scopes 1`] = `
 <form class="scopes-form">
   <form-field-stub>
-    <v-description-stub>
-      Foo application is requesting permission to access the following details from you. Press "Allow" if you would like to grant access to this information.
+    <v-description-stub><strong>Foo</strong>
+      application is requesting permission to access the following details from you. Press "Allow" if you would like to grant access to this information.
     </v-description-stub>
   </form-field-stub>
   <div class="form-field v-mb-24">

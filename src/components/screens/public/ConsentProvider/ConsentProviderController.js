@@ -68,8 +68,9 @@ class ConsentProviderController extends VuexModule {
       requested_scope: scopesList,
       skip: isSkip,
       redirect_url: redirectUrl,
-      client_name: appName,
+      client = {},
     } = consentDetails;
+    const { client_name: appName } = client;
 
     if (isSkip) {
       await this.openRedirectUrl(redirectUrl);
