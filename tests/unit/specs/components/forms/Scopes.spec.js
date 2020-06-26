@@ -29,11 +29,15 @@ describe('Scopes', () => {
 
   describe('render', () => {
     it('should correctly render component', () => {
+      expect.assertions(2);
+
       expect(wrapper.name()).toBe('ScopesForm');
       expect(wrapper.html()).toMatchSnapshot();
     });
 
     it('should render given scopes', () => {
+      expect.assertions(1);
+
       wrapper = wapperFactory({
         propsData: {
           ...defaultProps,
@@ -45,6 +49,8 @@ describe('Scopes', () => {
     });
 
     it('should correctly disable submit button', () => {
+      expect.assertions(2);
+
       wrapper = wapperFactory({
         propsData: {
           ...defaultProps,
@@ -61,6 +67,8 @@ describe('Scopes', () => {
 
   describe('behavior', () => {
     it('should submit form if all scopes are selected', () => {
+      expect.assertions(2);
+
       wrapper = wapperFactory({
         propsData: {
           ...defaultProps,
