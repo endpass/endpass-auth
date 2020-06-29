@@ -1,10 +1,11 @@
 <template>
   <form
     class="scopes-form"
-    @submit.prevent="handleSubmit"
+    @submit.prevent="onSubmit"
   >
     <form-field>
       <v-description>
+        <strong>{{ appName }}</strong>
         {{ $t('components.scopes.allowScopes') }}
       </v-description>
     </form-field>
@@ -57,13 +58,14 @@ export default {
       type: Array,
       default: () => [],
     },
+
+    appName: {
+      type: String,
+      default: '',
+    },
   },
 
   computed: {
-    isPopup() {
-      return !!window.opener;
-    },
-
     filteredScopes() {
       return this.scopesList.filter(
         scope => scope !== PUBLIC_SCOPES.OFFLINE_ACCESS,
@@ -97,7 +99,7 @@ export default {
   },
 
   methods: {
-    handleSubmit() {
+    onSubmit() {
       this.$emit('submit', this.scopesList);
     },
   },
