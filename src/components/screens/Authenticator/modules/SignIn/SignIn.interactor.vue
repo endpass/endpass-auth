@@ -69,7 +69,7 @@ export default {
 
     async onSocial({ email }) {
       if (SING_IN_CHALLENGE_TYPES.includes(this.challengeType)) {
-        this.$emit('sign-in', { email });
+        this.$emit('sign-in', { email, isSocial: true });
         return;
       }
 

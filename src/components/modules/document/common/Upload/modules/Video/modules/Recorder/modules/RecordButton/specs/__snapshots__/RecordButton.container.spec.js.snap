@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RecordButtonContainer render should match snapshot 1`] = `<mediarecordview-stub seconds-left="0" seconds-total="5"></mediarecordview-stub>`;

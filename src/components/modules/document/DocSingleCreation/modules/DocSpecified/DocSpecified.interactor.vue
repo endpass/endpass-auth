@@ -1,39 +1,26 @@
 <template>
-  <doc-specified
-    :doc-types-list="docTypesList"
-    @create="onCreate"
-    @cancel="onCancel"
-  />
+  <div>
+    <slot
+      :onCancel="onCancel"
+      :onCreate="onCreate"
+    />
+  </div>
 </template>
 
 <script>
-import DocSpecified from './DocSpecified.state';
-import createDocSingleController from '../controllers/DocumentSingleController';
-
 export default {
   name: 'DocSpecifiedInteractor',
 
-  docSingleController: createDocSingleController(),
-
-  props: {
-    docTypesList: {
-      type: Array,
-      required: true,
-    },
-  },
+  inject: ['gateway'],
 
   methods: {
-    onCreate({ documentId }) {
-      this.$options.docSingleController.finishCreate({ documentId });
+    async onCreate({ documentId }) {
+      await this.gateway.finishCreate({ documentId });
     },
 
-    onCancel() {
-      this.$options.docSingleController.cancelCreate();
+    async onCancel() {
+      await this.gateway.cancelCreate();
     },
-  },
-
-  components: {
-    DocSpecified,
   },
 };
 </script>

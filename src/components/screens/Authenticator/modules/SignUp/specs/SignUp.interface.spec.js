@@ -48,6 +48,7 @@ describe('SignUpInterface', () => {
         },
         password,
         isSignUp: true,
+        isSocial: false,
       };
 
       wrapper.find(SignUpInteractor).vm.$emit('sign-up', params);

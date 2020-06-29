@@ -1,19 +1,26 @@
 <template>
-  <doc-layout
-    :is-closable="isClosable"
-    :is-returnable="isReturnable"
-    @return="onReturn"
-    @close="onClose"
-  >
-    <slot />
-  </doc-layout>
+  <screen @close="onClose">
+    <v-frame
+      :is-closable="isCanClose"
+      :is-returnable="isReturnable"
+      title=""
+      @close="onClose"
+      @return="onReturn"
+    >
+      <slot />
+    </v-frame>
+  </screen>
 </template>
 
 <script>
-import DocLayout from './DocLayout.interactor';
+import Screen from '@/components/common/Screen';
+import VFrame from '@/components/common/VFrame';
+import { coreStore } from '@/store';
 
 export default {
   name: 'DocLayoutInterface',
+
+  coreStore,
 
   props: {
     isReturnable: {
@@ -24,6 +31,12 @@ export default {
     isClosable: {
       type: Boolean,
       default: false,
+    },
+  },
+
+  computed: {
+    isCanClose() {
+      return this.isClosable && this.$options.coreStore.isDialog;
     },
   },
 
@@ -38,7 +51,8 @@ export default {
   },
 
   components: {
-    DocLayout,
+    Screen,
+    VFrame,
   },
 };
 </script>

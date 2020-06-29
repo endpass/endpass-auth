@@ -1,4 +1,5 @@
-import { METHODS, WIDGET_RESIZE_DURATION } from '@/constants';
+import { METHODS } from '@/constants';
+import { WIDGET_RESIZE_DURATION } from './constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
 
 const initWidget = async ({ commit }) => {

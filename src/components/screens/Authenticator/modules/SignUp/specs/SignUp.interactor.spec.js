@@ -106,6 +106,7 @@ describe('SignUpInteractor', () => {
       const defaultEventParams = {
         email,
         password,
+        isSocial: false,
       };
 
       describe('default auth mode', () => {

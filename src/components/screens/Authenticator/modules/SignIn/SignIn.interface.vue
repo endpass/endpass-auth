@@ -32,8 +32,8 @@ export default {
       this.$emit('switch', { to: 'sign-up' });
     },
 
-    onSignIn({ email, serverMode, isSignUp = false }) {
-      this.$emit('complete', { email, serverMode, isSignUp });
+    onSignIn({ email, serverMode, isSignUp = false, isSocial = false }) {
+      this.$emit('complete', { email, serverMode, isSignUp, isSocial });
     },
 
     onSocial() {

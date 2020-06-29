@@ -44,6 +44,7 @@ describe('SignInInterface', () => {
         email,
         serverMode: false,
         isSignUp: false,
+        isSocial: false,
       };
 
       wrapper.find(SignInInteractor).vm.$emit('sign-in', params);

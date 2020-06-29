@@ -1,16 +1,17 @@
 <template>
   <doc-required-creation-state
-    #default="{ selectedDocumentType, setDocumentType }"
+    #default="{ selectedDocumentType, isReturnable, updateState }"
   >
     <doc-required-creation-interactor #default="{ onCancel, onFinish }">
       <doc-required-creation-container
         :selected-document-type="selectedDocumentType"
+        :is-returnable="isReturnable"
         :is-available-to-finish="isAvailableToFinish"
         :is-all-doc-required-types-verified="isAllDocRequiredTypesVerified"
         :doc-required-types-list="docRequiredTypes"
         :selected-documents-by-type="selectedDocumentsByType"
         :available-documents-list="availableDocumentsList"
-        @update:selectedDocumentType="setDocumentType"
+        @update="updateState"
         @cancel="onCancel"
         @finish="onFinish"
       />

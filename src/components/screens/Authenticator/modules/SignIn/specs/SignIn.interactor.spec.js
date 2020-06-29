@@ -94,7 +94,7 @@ describe('SignInInteractor', () => {
           expect(wrapper.emitted().social).toBeUndefined();
         });
 
-        it('should emit sign-in', async () => {
+        it('should emit sign-in with social', async () => {
           expect.assertions(2);
 
           expect(wrapper.emitted()['sign-in']).toBeUndefined();
@@ -108,6 +108,7 @@ describe('SignInInteractor', () => {
             [
               {
                 email,
+                isSocial: true,
               },
             ],
           ]);

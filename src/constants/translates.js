@@ -9,6 +9,7 @@ export const DOC_TYPES_TRANSLATES = createGetters({
   [DOC_TYPES.DRIVER_LICENSE]: $t('constants.documentType.driverLicense'),
   [DOC_TYPES.PROOF_OF_ADDRESS]: $t('constants.documentType.proofOfAddress'),
   [DOC_TYPES.ID_CARD]: $t('constants.documentType.idCard'),
+  [DOC_TYPES.SELFIE]: $t('constants.documentType.selfie'),
 });
 
 export const DOC_STATUSES_TRANSLATES = createGetters({
@@ -23,6 +24,7 @@ export const DOC_STATUSES_TRANSLATES = createGetters({
 export const SCOPES_TRANSLATES = createGetters({
   // User
   [PUBLIC_SCOPES.USER]: $t('components.scopes.user.title'),
+  [PUBLIC_SCOPES.USER_DATA_READ]: $t('components.scopes.user.data'),
   [PUBLIC_SCOPES.USER_EMAIL_READ]: $t('components.scopes.user.email'),
   [PUBLIC_SCOPES.USER_ADDRESS_READ]: $t('components.scopes.user.address'),
   [PUBLIC_SCOPES.USER_PHONE_READ]: $t('components.scopes.user.phone'),
@@ -71,8 +73,12 @@ export const SCOPES_TRANSLATES = createGetters({
   [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_STATUS_READ]: $t(
     'components.scopes.proofOfAddress.status',
   ),
-  [PUBLIC_SCOPES.DOCUMENTS_DRIVER_LICENSE_DATA_READ]: $t(
+  [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS_DATA_READ]: $t(
     'components.scopes.proofOfAddress.data',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE]: $t('components.scopes.selfie.title'),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE_STATUS_READ]: $t(
+    'components.scopes.selfie.status',
   ),
 });
 
@@ -89,5 +95,8 @@ export const SCOPES_TOOLTIPS_TRANSLATES = createGetters({
   ),
   [PUBLIC_SCOPES.DOCUMENTS_PROOF_OF_ADDRESS]: $t(
     'components.consentProvider.tooltips.proofOfAddress',
+  ),
+  [PUBLIC_SCOPES.DOCUMENTS_SELFIE]: $t(
+    'components.consentProvider.tooltips.selfie',
   ),
 });
