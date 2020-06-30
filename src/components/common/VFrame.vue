@@ -27,7 +27,7 @@
       </template>
       <slot />
     </v-modal-card>
-    <v-footer />
+    <v-footer class="frame-footer" />
   </div>
 </template>
 
@@ -107,6 +107,14 @@ export default {
 
 .frame-modal-card {
   max-width: initial !important;
+  margin-bottom: 92px;
+}
+.frame-footer {
+  position: absolute;
+  overflow: hidden;
+  bottom: 0;
+  left: 0;
+  right: 0;
 }
 
 @media (max-width: 768px) {
