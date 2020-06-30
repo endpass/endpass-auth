@@ -3,5 +3,8 @@
 exports[`Bridge render should render "empty" markup 1`] = `
 <v-frame-stub title="Connect" isclosable="true">
   <v-description-stub>Endpass Auth bridge v1.4.0</v-description-stub>
+  <div class="bridge-loading-container">
+    <v-progress-circle-stub progress="25" linethickness="1"></v-progress-circle-stub>
+  </div>
 </v-frame-stub>
 `;
