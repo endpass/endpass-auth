@@ -1,0 +1,18 @@
+---
+environment: staging
+
+deployment:
+  replicaCount: 1
+  resources:
+    requests:
+      cpu: 50m
+      memory: 100Mi
+    limits:
+      cpu: 50m
+      memory: 100Mi
+
+service:
+  port: 80
+
+ingress:
+  host: auth-staging.endpass.com

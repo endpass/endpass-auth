@@ -1,0 +1,81 @@
+name: pull-request review deployment
+
+on:
+  pull_request:
+    types:
+    - labeled
+    - synchronize
+
+jobs:
+  deploy:
+    name: Deploying
+    runs-on: ubuntu-latest
+    if: contains( github.event.pull_request.labels.*.name, 'review' )
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+  
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Converge
+      uses: werf/actions/converge@master
+      with:
+        group: 1.1
+        channel: beta
+        env: review-${{ github.event.pull_request.number }}
+        kube-config-base64-data: ${{ secrets.BASE64_KUBECONFIG }}
+      env:
+        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+        WERF_STAGES_STORAGE: ${{ steps.login-ecr.outputs.registry }}/stages/endpass-auth
+        WERF_IMAGES_REPO: ${{ steps.login-ecr.outputs.registry }}/review
+        WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}
+        WERF_HELM_RELEASE_STORAGE_NAMESPACE: werf-releases
+        WERF_HELM_RELEASE_STORAGE_TYPE: secret
+        WERF_TAG_GIT_BRANCH: ${{ github.head_ref }}
+        WERF_NAMESPACE: endpass-auth-review-${{ github.event.pull_request.number }}
+        WERF_VALUES_AUTH: .helm/values-dev.yaml
+        WERF_SET_INGRESS_HOST: ingress.host=${{ github.event.pull_request.number }}-auth.review.endpass.com
+
+    - name: Create DNS records
+      env:
+        RESOURCE_RECORD_NAME_AUTH: ${{ github.event.pull_request.number }}-auth.review.endpass.com
+        RESOURCE_RECORD_VALUE: ${{ secrets.RESOURCE_RECORD_VALUE }}
+      run: |
+        aws route53 change-resource-record-sets --hosted-zone-id ${{ secrets.HOSTEDZONE_ID }} \
+        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "UPSERT", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME_IDENTITY"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }' && \
+
+    - name: Logout of Amazon ECR
+      run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+    - name: Slack notification on success
+      uses: rtCamp/action-slack-notify@v2.0.2
+      if: success()
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_USERNAME: GitHub Actions
+        SLACK_COLOR: '#2AD624'
+        SLACK_ICON_EMOJI: ':github:'
+        SLACK_TITLE: 'Review URLs'
+        SLACK_MESSAGE: "https://${{ github.event.pull_request.number }}-auth.review.endpass.com"
+
+    - name: Slack notification on failure
+      uses: rtCamp/action-slack-notify@v2.0.2
+      if: failure()
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_USERNAME: GitHub Actions
+        SLACK_COLOR: '#EC4926'
+        SLACK_ICON_EMOJI: ':github:'
+        SLACK_MESSAGE: 'Review environment build'
+        SLACK_TITLE: 'Build failed :fire:'
