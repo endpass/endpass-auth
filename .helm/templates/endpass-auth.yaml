@@ -36,7 +36,7 @@ spec:
             memory: {{ .Values.deployment.resources.limits.memory }}
         securityContext:
           allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: true
+          readOnlyRootFilesystem: false
           privileged: false
 
 ---
