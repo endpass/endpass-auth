@@ -53,7 +53,7 @@ jobs:
         RESOURCE_RECORD_VALUE: ${{ secrets.RESOURCE_RECORD_VALUE }}
       run: |
         aws route53 change-resource-record-sets --hosted-zone-id ${{ secrets.HOSTEDZONE_ID }} \
-        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "UPSERT", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME_AUTH"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }' && \
+        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "UPSERT", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME_AUTH"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }'
 
     - name: Logout of Amazon ECR
       run: docker logout ${{ steps.login-ecr.outputs.registry }}
