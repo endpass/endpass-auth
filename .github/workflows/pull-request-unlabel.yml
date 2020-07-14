@@ -1,4 +1,4 @@
-name: pull-pequest review undeployment
+name: pull request unlabeled
 
 on:
   pull_request:
@@ -31,14 +31,15 @@ jobs:
         WERF_HELM_RELEASE_STORAGE_NAMESPACE: werf-releases
         WERF_HELM_RELEASE_STORAGE_TYPE: secret
         WERF_NAMESPACE: endpass-auth-review-${{ github.event.pull_request.number }}
+        WERF_WITH_NAMESPACE: true
 
     - name: Delete DNS record
       env:
-        RESOURCE_RECORD_NAME_AUTH: ${{ github.event.pull_request.number }}-auth.review.endpass.com
+        RESOURCE_RECORD_NAME: ${{ github.event.pull_request.number }}-auth.review.endpass.com
         RESOURCE_RECORD_VALUE: ${{ secrets.RESOURCE_RECORD_VALUE }}
       run: |
         aws route53 change-resource-record-sets --hosted-zone-id ${{ secrets.HOSTEDZONE_ID }} \
-        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "DELETE", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME_AUTH"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }'
+        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "DELETE", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }'
 
     - name: Slack notification on success
       uses: rtCamp/action-slack-notify@v2.0.2

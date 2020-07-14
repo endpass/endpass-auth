@@ -1,4 +1,4 @@
-name: pull-request review deployment
+name: pull request label
 
 on:
   pull_request:
@@ -36,7 +36,6 @@ jobs:
         env: review-${{ github.event.pull_request.number }}
         kube-config-base64-data: ${{ secrets.BASE64_KUBECONFIG }}
       env:
-        GITHUB_ACCESS_TOKEN: ${{ secrets.GITHUB_ACCESS_TOKEN }}
         WERF_STAGES_STORAGE: ${{ steps.login-ecr.outputs.registry }}/stages/endpass-auth
         WERF_IMAGES_REPO: ${{ steps.login-ecr.outputs.registry }}/review/endpass-auth
         WERF_SECRET_KEY: ${{ secrets.WERF_SECRET_KEY }}
@@ -49,11 +48,11 @@ jobs:
 
     - name: Create DNS records
       env:
-        RESOURCE_RECORD_NAME_AUTH: ${{ github.event.pull_request.number }}-auth.review.endpass.com
+        RESOURCE_RECORD_NAME: ${{ github.event.pull_request.number }}-auth.review.endpass.com
         RESOURCE_RECORD_VALUE: ${{ secrets.RESOURCE_RECORD_VALUE }}
       run: |
         aws route53 change-resource-record-sets --hosted-zone-id ${{ secrets.HOSTEDZONE_ID }} \
-        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "UPSERT", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME_AUTH"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }'
+        --change-batch '{ "Comment": "Testing creating a record set", "Changes": [ { "Action": "UPSERT", "ResourceRecordSet": { "Name": "'"$RESOURCE_RECORD_NAME"'", "Type": "CNAME", "TTL": 120, "ResourceRecords": [ { "Value": "'"$RESOURCE_RECORD_VALUE"'" } ] } } ] }'
 
     - name: Logout of Amazon ECR
       run: docker logout ${{ steps.login-ecr.outputs.registry }}
