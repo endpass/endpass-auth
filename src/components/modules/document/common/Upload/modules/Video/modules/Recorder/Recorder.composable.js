@@ -17,6 +17,7 @@ export default function useRecorder() {
   const file = ref(/** @type {File|null} */ (null));
   const secondsLeft = ref(0);
   const recorderState = ref(RECORDER_STATE.IDLE);
+  const errorMessage = ref(/** @type {string|null} */ (null));
 
   const isPlayAvailable = computed(
     () => recorderState.value === RECORDER_STATE.IDLE_FOR_PLAY,
@@ -46,6 +47,8 @@ export default function useRecorder() {
     isPlayAvailable,
     secondsLeft,
     isTimerCounting,
+
+    errorMessage,
 
     TOTAL_DURATION,
     MAX_DURATION_SEC,

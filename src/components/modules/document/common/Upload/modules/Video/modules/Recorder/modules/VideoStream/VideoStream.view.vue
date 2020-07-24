@@ -157,10 +157,37 @@ export default {
   },
 
   async mounted() {
-    await this.openStream();
-    await this.initRecorder();
-    if (this.recorderState === RECORDER_STATE.INITIALIZING) {
-      await this.startRecording();
+    try {
+      await this.openStream();
+      await this.initRecorder();
+
+      if (this.recorderState === RECORDER_STATE.INITIALIZING) {
+        await this.startRecording();
+      }
+    } catch (err) {
+      let errorMessage;
+
+      switch (err.name) {
+        case 'NotAllowedError':
+          errorMessage = this.$t(
+            'components.uploadVideo.recorder.errors.cameraNotAllowed',
+          );
+          break;
+
+        case 'NotFoundError':
+          errorMessage = this.$t(
+            'components.uploadVideo.recorder.errors.cameraNotFound',
+          );
+          break;
+
+        default:
+          errorMessage = this.$t(
+            'components.uploadVideo.recorder.errors.default',
+          );
+          break;
+      }
+
+      this.$emit('error', errorMessage);
     }
   },
 

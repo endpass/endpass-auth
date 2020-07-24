@@ -3,6 +3,7 @@
     :is="currentComponent"
     :seconds-left="secondsLeft"
     :seconds-total="secondsTotal"
+    :is-disabled="isDisabled"
     @record="onRecord"
     @play="onPlay"
     @pause="onPause"
@@ -36,6 +37,11 @@ export default {
     secondsTotal: {
       type: Number,
       required: true,
+    },
+
+    isDisabled: {
+      type: Boolean,
+      default: false,
     },
   },
 
