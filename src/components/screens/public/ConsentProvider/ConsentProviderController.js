@@ -50,7 +50,7 @@ class ConsentProviderController extends VuexModule {
   /**
    * @param {object} params
    * @param {string} params.consentChallenge
-   * @return {Promise<{scopesList: string[], skip: boolean}>}
+   * @return {Promise<{scopesList: string[], skip: boolean, appName: string}>}
    */
   @Action
   async loadScopes({ consentChallenge }) {
@@ -68,7 +68,9 @@ class ConsentProviderController extends VuexModule {
       requested_scope: scopesList,
       skip: isSkip,
       redirect_url: redirectUrl,
+      client = {},
     } = consentDetails;
+    const { client_name: appName } = client;
 
     if (isSkip) {
       await this.openRedirectUrl(redirectUrl);
@@ -81,6 +83,7 @@ class ConsentProviderController extends VuexModule {
     return {
       isSkip,
       scopesList,
+      appName,
     };
   }
 }
