@@ -41,14 +41,19 @@ export default function useRecorder() {
     recorderState.value = RECORDER_STATE.IDLE;
   };
 
+  /**
+   * @param  {string} newErrorMessage
+   */
+  const setErrorMessage = newErrorMessage => {
+    errorMessage.value = newErrorMessage;
+  };
+
   return {
     file,
     recorderState,
     isPlayAvailable,
     secondsLeft,
     isTimerCounting,
-
-    errorMessage,
 
     TOTAL_DURATION,
     MAX_DURATION_SEC,
@@ -57,5 +62,8 @@ export default function useRecorder() {
     onPlay,
     onStartRecord,
     stopRecording,
+
+    errorMessage,
+    setErrorMessage,
   };
 }

@@ -27,6 +27,7 @@
         <div
           v-if="!!errorMessage"
           class="recorder-view-error"
+          data-test="recorder-view-error"
         >
           {{ errorMessage }}
         </div>
@@ -92,7 +93,7 @@ export default {
 
   methods: {
     onStreamError(errorMessage) {
-      this.errorMessage = errorMessage;
+      this.setErrorMessage(errorMessage);
     },
   },
 

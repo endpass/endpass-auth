@@ -12,6 +12,7 @@ exports[`RecorderView render should be a correct component 1`] = `
     </div>
     <div class="recorder-view-video">
       <video-stream-stub recorderstate="IDLE" class="recorder-video-stream"></video-stream-stub>
+      <!---->
     </div>
     <div class="recorder-view-controls">
       <recorder-controls-stub>
