@@ -70,16 +70,46 @@ export default {
         default:
           break;
       }
+
+      this.$emit('error', null);
     },
   },
 
   methods: {
+    // eslint-disable-next-line consistent-return
     async captureMedia() {
-      const stream = await window.navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      });
-      return stream;
+      try {
+        const stream = await window.navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        return stream;
+      } catch (err) {
+        let errorMessage;
+
+        switch (err.name) {
+          case 'NotAllowedError':
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.cameraNotAllowed',
+            );
+            break;
+
+          case 'NotFoundError':
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.cameraNotFound',
+            );
+            break;
+
+          default:
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.default',
+            );
+            break;
+        }
+
+        this.$emit('update:recorder-state', RECORDER_STATE.IDLE);
+        await this.$nextTick(() => this.$emit('error', errorMessage));
+      }
     },
 
     startPlay() {
@@ -103,7 +133,12 @@ export default {
     async stopRecording() {
       if (!this.recorder) return;
       await new Promise(resolve => {
-        this.recorder.stopRecording(resolve);
+        if (this.stream.active) {
+          this.recorder.stopRecording(resolve);
+          return;
+        }
+
+        resolve();
       });
 
       const blob = await this.recorder.getBlob();
@@ -119,7 +154,7 @@ export default {
     },
 
     async openStream() {
-      if (this.stream) {
+      if (this.stream && this.stream.active) {
         return;
       }
       const stream = await this.captureMedia();
@@ -151,43 +186,23 @@ export default {
       stream.getTracks().forEach(track => track.stop());
     },
 
-    onPlayEnd() {
-      this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
+    async onPlayEnd() {
+      if (this.stream && !this.stream.active) {
+        this.$emit('update:recorder-state', RECORDER_STATE.INITIALIZING);
+
+        await this.openStream();
+      } else {
+        this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
+      }
     },
   },
 
   async mounted() {
-    try {
-      await this.openStream();
-      await this.initRecorder();
+    await this.openStream();
+    await this.initRecorder();
 
-      if (this.recorderState === RECORDER_STATE.INITIALIZING) {
-        await this.startRecording();
-      }
-    } catch (err) {
-      let errorMessage;
-
-      switch (err.name) {
-        case 'NotAllowedError':
-          errorMessage = this.$t(
-            'components.uploadVideo.recorder.errors.cameraNotAllowed',
-          );
-          break;
-
-        case 'NotFoundError':
-          errorMessage = this.$t(
-            'components.uploadVideo.recorder.errors.cameraNotFound',
-          );
-          break;
-
-        default:
-          errorMessage = this.$t(
-            'components.uploadVideo.recorder.errors.default',
-          );
-          break;
-      }
-
-      this.$emit('error', errorMessage);
+    if (this.recorderState === RECORDER_STATE.INITIALIZING) {
+      await this.startRecording();
     }
   },
 
