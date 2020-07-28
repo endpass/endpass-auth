@@ -91,12 +91,6 @@ export default {
     };
   },
 
-  methods: {
-    onStreamError(errorMessage) {
-      this.setErrorMessage(errorMessage);
-    },
-  },
-
   components: {
     VideoStream,
     CountDownTimer,

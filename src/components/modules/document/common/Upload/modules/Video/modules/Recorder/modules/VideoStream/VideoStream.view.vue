@@ -70,14 +70,13 @@ export default {
         default:
           break;
       }
-
-      this.$emit('error', null);
     },
   },
 
   methods: {
-    // eslint-disable-next-line consistent-return
     async captureMedia() {
+      this.$emit('error', null);
+
       try {
         const stream = await window.navigator.mediaDevices.getUserMedia({
           video: true,
@@ -110,6 +109,8 @@ export default {
         this.$emit('update:recorder-state', RECORDER_STATE.IDLE);
         await this.$nextTick(() => this.$emit('error', errorMessage));
       }
+
+      return null;
     },
 
     startPlay() {

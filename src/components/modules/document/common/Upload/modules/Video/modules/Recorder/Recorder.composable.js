@@ -42,9 +42,9 @@ export default function useRecorder() {
   };
 
   /**
-   * @param  {string} newErrorMessage
+   * @param {string} newErrorMessage
    */
-  const setErrorMessage = newErrorMessage => {
+  const onStreamError = newErrorMessage => {
     errorMessage.value = newErrorMessage;
   };
 
@@ -64,6 +64,6 @@ export default function useRecorder() {
     stopRecording,
 
     errorMessage,
-    setErrorMessage,
+    onStreamError,
   };
 }
