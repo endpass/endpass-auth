@@ -106,8 +106,7 @@ export default {
             break;
         }
 
-        this.$emit('update:recorder-state', RECORDER_STATE.IDLE);
-        await this.$nextTick(() => this.$emit('error', errorMessage));
+        this.$emit('error', errorMessage);
       }
 
       return null;
@@ -188,13 +187,17 @@ export default {
     },
 
     async onPlayEnd() {
+      // If stream was ended unexpected (f.e. when camera was disconnected in runtime),
+      // we should catch that moment and start re-init process to allow user
+      // again allow his camera, or show error message.
       if (this.stream && !this.stream.active) {
         this.$emit('update:recorder-state', RECORDER_STATE.INITIALIZING);
-
         await this.openStream();
-      } else {
-        this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
+
+        return;
       }
+
+      this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
     },
   },
 

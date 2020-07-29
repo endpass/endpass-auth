@@ -45,6 +45,7 @@ export default function useRecorder() {
    * @param {string} newErrorMessage
    */
   const onStreamError = newErrorMessage => {
+    recorderState.value = RECORDER_STATE.IDLE;
     errorMessage.value = newErrorMessage;
   };
 
