@@ -22,7 +22,15 @@
           :recorder-state.sync="recorderState"
           :file.sync="file"
           class="recorder-video-stream"
+          @error="onStreamError"
         />
+        <div
+          v-if="!!errorMessage"
+          class="recorder-view-error"
+          data-test="recorder-view-error"
+        >
+          {{ errorMessage }}
+        </div>
       </div>
       <div class="recorder-view-controls">
         <recorder-controls
@@ -34,6 +42,7 @@
             :recorder-state="recorderState"
             :seconds-left="secondsLeft"
             :seconds-total="MAX_DURATION_SEC"
+            :is-disabled="!!errorMessage"
             @record="onStartRecord"
             @play="onPlay"
           />
@@ -129,6 +138,7 @@ export default {
   height: 100%;
   background-color: var(--endpass-ui-color-grey-9);
   overflow: hidden;
+  position: relative;
 }
 
 .recorder-video-stream {
@@ -155,5 +165,15 @@ export default {
   outline: 0;
   user-select: none;
   margin: 10px;
+}
+
+.recorder-view-error {
+  position: absolute;
+  font-size: 30px;
+  color: var(--endpass-ui-color-white);
+  top: 50%;
+  width: 100%;
+  transform: translateY(-50%);
+  text-align: center;
 }
 </style>

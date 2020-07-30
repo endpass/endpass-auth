@@ -1,5 +1,8 @@
 <template>
-  <v-circle-button @click="onRecord">
+  <v-circle-button
+    :is-disabled="isDisabled"
+    @click="onRecord"
+  >
     <v-svg-icon
       width="24px"
       height="24px"
@@ -14,6 +17,13 @@ import VCircleButton from '../VCircleButton';
 
 export default {
   name: 'MediaRecordView',
+
+  props: {
+    isDisabled: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   methods: {
     onRecord() {

@@ -17,6 +17,7 @@ export default function useRecorder() {
   const file = ref(/** @type {File|null} */ (null));
   const secondsLeft = ref(0);
   const recorderState = ref(RECORDER_STATE.IDLE);
+  const errorMessage = ref(/** @type {string|null} */ (null));
 
   const isPlayAvailable = computed(
     () => recorderState.value === RECORDER_STATE.IDLE_FOR_PLAY,
@@ -40,6 +41,14 @@ export default function useRecorder() {
     recorderState.value = RECORDER_STATE.IDLE;
   };
 
+  /**
+   * @param {string} newErrorMessage
+   */
+  const onStreamError = newErrorMessage => {
+    recorderState.value = RECORDER_STATE.IDLE;
+    errorMessage.value = newErrorMessage;
+  };
+
   return {
     file,
     recorderState,
@@ -54,5 +63,8 @@ export default function useRecorder() {
     onPlay,
     onStartRecord,
     stopRecording,
+
+    errorMessage,
+    onStreamError,
   };
 }

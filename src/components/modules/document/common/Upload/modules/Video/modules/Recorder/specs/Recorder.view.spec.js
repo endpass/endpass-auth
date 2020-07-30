@@ -2,6 +2,7 @@ import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VueCompositionApi from '@vue/composition-api';
 import setupI18n from '@/locales/i18nSetup';
 import RecorderView from '../Recorder.view';
+import VideoStream from '../modules/VideoStream';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);
@@ -54,6 +55,25 @@ describe('RecorderView', () => {
       wrapper.find('[data-test=back-button]').trigger('click');
 
       expect(wrapper.emitted().cancel).toEqual([[]]);
+    });
+
+    it('should show error message if recorder failed', async () => {
+      expect.assertions(3);
+
+      expect(wrapper.find('[data-test=recorder-view-error]').exists()).toBe(
+        false,
+      );
+
+      wrapper.find(VideoStream).vm.$emit('error', 'lorem ipsum');
+
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-test=recorder-view-error]').exists()).toBe(
+        true,
+      );
+      expect(wrapper.find('[data-test=recorder-view-error]').text()).toMatch(
+        'lorem ipsum',
+      );
     });
   });
 });

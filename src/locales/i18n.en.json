@@ -231,7 +231,12 @@
     "uploadVideo": {
       "recorder": {
         "title": "Record selfie video",
-        "retake": "Retake"
+        "retake": "Retake",
+        "errors": {
+          "cameraNotFound": "Camera is not available, please check connection",
+          "cameraNotAllowed": "Does not have access to the camera, please allow permissions for record video",
+          "default": "Camera initialization failed"
+        }
       },
       "choose": {
         "recorded": "Selfie has been successfully recorded",
