@@ -20,18 +20,13 @@ describe('UploadVideo > UploadSide', () => {
 
   const file = new File([''], 'filename');
 
-  beforeEach(() => {
-    jest.useFakeTimers();
-    jest.clearAllMocks();
-  });
-
   const createWrapper = options => {
     return shallowMount(UploadSide, {
       localVue,
       i18n,
       sync: false,
       propsData: {
-        documentType: DOC_TYPES.SELFIE,
+        documentType: DOC_TYPES.PASSPORT,
       },
       ...options,
     });
@@ -44,14 +39,43 @@ describe('UploadVideo > UploadSide', () => {
   };
 
   beforeEach(() => {
+    jest.useFakeTimers();
     jest.clearAllMocks();
     wrapper = createWrapper();
   });
 
   describe('render', () => {
     it('should correctly render component', () => {
+      expect.assertions(2);
+
       expect(wrapper.name()).toBe('UploadSide');
       expect(wrapper.html()).toMatchSnapshot();
+    });
+
+    it('should not be able to upload file from pc if selfie', () => {
+      expect.assertions(1);
+
+      wrapper = createWrapper({
+        propsData: {
+          documentType: DOC_TYPES.SELFIE,
+          recordedFile: file,
+        },
+      });
+
+      expect(wrapper.find('drop-area-stub').exists()).toBe(false);
+    });
+
+    it('should suggest to use mobile app if selfie', () => {
+      expect.assertions(1);
+
+      wrapper = createWrapper({
+        propsData: {
+          documentType: DOC_TYPES.SELFIE,
+          recordedFile: file,
+        },
+      });
+
+      expect(wrapper.find('mobile-suggestions-stub').exists()).toBe(true);
     });
   });
 
@@ -63,7 +87,7 @@ describe('UploadVideo > UploadSide', () => {
 
       wrapper = createWrapper({
         propsData: {
-          documentType: DOC_TYPES.SELFIE,
+          documentType: DOC_TYPES.PASSPORT,
           recordedFile: file,
         },
       });

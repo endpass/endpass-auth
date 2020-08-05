@@ -2,10 +2,11 @@
 
 exports[`UploadVideo > UploadSide render should correctly render component 1`] = `
 <div>
-  <upload-header-stub documenttype="Selfie"></upload-header-stub>
+  <upload-header-stub documenttype="Passport"></upload-header-stub>
   <drop-area-stub descriptionsupportedfiles="Only .avi, .mpeg, .mp4 files" descriptionfilesize="" validateextensions="avi,mp4,mpeg" acceptmimetypes="video/avi,video/mpeg,video/mp4">
     <document-upload-front-stub progress-value="0" progress-label=""></document-upload-front-stub>
   </drop-area-stub>
+  <!---->
   <div>
     <v-button-stub skin="quaternary" size="normal" data-test="record-button">
       Record selfie video

@@ -245,6 +245,12 @@
       },
       "descriptions": {
         "supportedFiles": "Only .avi, .mpeg, .mp4 files"
+      },
+      "mobileSuggestions": {
+        "title": "Or use our mobile app",
+        "downloadFromLabel": "Download from",
+        "apple": "App Store",
+        "googlePlay": "Google Play"
       }
     },
     "user": {
