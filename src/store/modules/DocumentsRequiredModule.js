@@ -2,7 +2,6 @@ import { VuexModule, Module, Action } from 'vuex-class-modules';
 import ConnectError from '@endpass/connect/error';
 import documentsService from '@/service/documents';
 import { DOC_STATUSES, DOC_TYPES_ORDER } from '@/constants';
-import SignToken from '@/class/SignToken';
 import Answer from '@/class/Answer';
 import { documentChannel } from '@/class/singleton/channels';
 
@@ -37,8 +36,6 @@ class DocumentsRequiredModule extends VuexModule {
    * @type {string[]}
    */
   selectedDocumentsIdList = [];
-
-  signToken = new SignToken();
 
   /**
    * @returns {boolean}
