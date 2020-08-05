@@ -46,9 +46,13 @@ export default {
   },
 
   mounted() {
-    const { error = '', error_description = '' } = this.$route.query;
+    const {
+      error = '',
+      error_description = '',
+      description = '',
+    } = this.$route.query;
     this.errorHint = error;
-    this.errorDescription = error_description;
+    this.errorDescription = error_description || description;
   },
 
   components: {
