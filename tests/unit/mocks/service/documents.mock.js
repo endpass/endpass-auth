@@ -9,6 +9,9 @@ jest.mock('@/service/documents', () => {
     waitDocumentVerified: jest.fn(),
     getDocumentById: jest.fn().mockResolvedValue(document),
     getRequiredDocumentsTypes: jest.fn().mockResolvedValue([]),
+    getSelectedDocuments: jest.fn().mockResolvedValue({}),
+    getDocumentsList: jest.fn().mockResolvedValue([]),
+    saveSelectedDocuments: jest.fn(),
     uploadFrontFile: jest.fn().mockResolvedValue({
       message: 'document uploaded',
       success: true,

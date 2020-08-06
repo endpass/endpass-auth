@@ -6,6 +6,7 @@ import UploadStatusInteractor from '../UploadStatus.interactor';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
+import documentsService from '@/service/documents';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -29,7 +30,6 @@ describe('UploadStatusInterface', () => {
     const documentsRequiredStore = documentsRequiredStoreModule;
     await documentsRequiredStore.checkRequired({
       clientId,
-      documentsList: [document],
     });
     const wrapper = shallowMount(UploadStatusInterface, {
       localVue,
@@ -91,12 +91,36 @@ describe('UploadStatusInterface', () => {
 
         await bootstrap.documentsRequiredStore.checkRequired({
           clientId: otherClientId,
-          documentsList: [],
         });
 
         expect(
           bootstrap.wrapper.find(UploadStatusInteractor).props().clientId,
         ).toBe(otherClientId);
+      });
+
+      it('should save selected documents', async () => {
+        expect.assertions(1);
+
+        documentsService.getDocumentsList.mockResolvedValueOnce([document]);
+        documentsService.getRequiredDocumentsTypes.mockResolvedValueOnce([
+          document.documentType,
+        ]);
+
+        bootstrap = await createBootstrap();
+
+        await bootstrap.documentsRequiredStore.selectDocumentForType({
+          documentId: document.id,
+          documentType: document.documentType,
+        });
+
+        await bootstrap.documentsRequiredStore.answerFinish();
+
+        expect(documentsService.saveSelectedDocuments).toBeCalledWith({
+          clientId,
+          selectedDocumentsMap: {
+            [document.documentType]: document.id,
+          },
+        });
       });
     });
   });
