@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click.prevent="onRemove">
     <upload-title :title="title" />
     <file-name :name="fileName" />
   </div>
@@ -21,6 +21,12 @@ export default {
     fileName: {
       type: String,
       default: '',
+    },
+  },
+
+  methods: {
+    onRemove(ev) {
+      this.$emit('file-remove', ev);
     },
   },
 
