@@ -144,6 +144,7 @@ export const UPLOAD_STATUSES = {
     NOT_READABLE: 'NotReadable',
     NOT_VERIFIED: 'NotVerified',
     VERIFIED: 'Verified',
+    CHECK:'CHECK'
   }}
  */
 export const DOC_STATUSES = {
@@ -153,6 +154,7 @@ export const DOC_STATUSES = {
   NOT_READABLE: 'NotReadable',
   NOT_VERIFIED: 'NotVerified',
   VERIFIED: 'Verified',
+  CHECK: 'CHECK',
 };
 
 /**
