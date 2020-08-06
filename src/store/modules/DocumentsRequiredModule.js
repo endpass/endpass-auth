@@ -115,7 +115,7 @@ class DocumentsRequiredModule extends VuexModule {
    * @param {string} params.documentId
    */
   @Action
-  selectDocumentForType({ documentType, documentId }) {
+  async selectDocumentForType({ documentType, documentId }) {
     const { selectedDocumentsByType, docRequiredTypes } = this;
 
     this.selectedDocumentsIdList = docRequiredTypes.reduce(
