@@ -23,15 +23,30 @@ export default class CookieExpireChecker {
    * @param {number} expireAt
    */
   setExpireAt(expireAt) {
+    this.setCookie({
+      expireAt,
+    });
+  }
+
+  dropCookie() {
+    this.setCookie({
+      expireAt: 0,
+    });
+  }
+
+  /**
+   * @param {object} params
+   * @param {number} params.expireAt
+   */
+  setCookie({ expireAt }) {
     const value = expireAt * 1000;
+    const expires = new Date(value).toUTCString();
 
     const domain = window.location.hostname
       .split('.')
       .slice(-2)
       .join('.');
     const domainStr = domain === 'localhost' ? '' : `domain=${domain};`;
-
-    const expires = new Date(value).toUTCString();
 
     document.cookie = `${EXPIRE_COOKIE_TIME_KEY}=${value};${domainStr}path=/;expires=${expires}`;
   }
@@ -40,17 +55,22 @@ export default class CookieExpireChecker {
     if (this.intervalId) {
       return;
     }
-    this.intervalId = window.setInterval(() => {
-      const storedValue = document.cookie.match(
-        `(^|;) ?${EXPIRE_COOKIE_TIME_KEY}=([^;]*)(;|$)`,
-      );
-      const storedExpireAt = storedValue ? Number(storedValue[2]) || 0 : null;
 
-      if (!storedExpireAt) {
-        this.stopChecking();
-        this.emitter.emit(EVENT_COOKIE_EXPIRED);
-      }
+    this.intervalId = window.setInterval(() => {
+      this.checkExpireHandler();
     }, EXPIRE_CHECK_TIMEOUT);
+  }
+
+  checkExpireHandler() {
+    const storedValue = document.cookie.match(
+      `(^|;) ?${EXPIRE_COOKIE_TIME_KEY}=([^;]*)(;|$)`,
+    );
+    const storedExpireAt = storedValue ? Number(storedValue[2]) || 0 : null;
+
+    if (!storedExpireAt) {
+      this.stopChecking();
+      this.emitter.emit(EVENT_COOKIE_EXPIRED);
+    }
   }
 
   stopChecking() {

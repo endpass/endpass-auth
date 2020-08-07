@@ -5,7 +5,6 @@
       name="close"
       height="8px"
       width="8px"
-      @click.prevent="onRemove"
     />
   </div>
 </template>
@@ -20,12 +19,6 @@ export default {
     name: {
       type: String,
       default: '',
-    },
-  },
-
-  methods: {
-    onRemove(ev) {
-      this.$emit('file-remove', ev);
     },
   },
 

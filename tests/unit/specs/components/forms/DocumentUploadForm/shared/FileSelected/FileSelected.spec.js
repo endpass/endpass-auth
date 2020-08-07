@@ -49,9 +49,6 @@ describe('DocumentUploadForm > shared > FileSelected', () => {
         file,
         ...propsData,
       },
-      listeners: {
-        'file-remove': jest.fn(),
-      },
     });
   };
 
