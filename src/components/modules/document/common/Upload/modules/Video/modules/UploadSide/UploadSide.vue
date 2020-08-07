@@ -1,27 +1,7 @@
 <template>
   <div>
     <upload-header :document-type="documentType" />
-    <drop-area
-      v-if="!isSelfie"
-      :is-loading="isLoading"
-      :error.sync="error"
-      :description-supported-files="
-        $t('components.uploadVideo.descriptions.supportedFiles')
-      "
-      :accept-mime-types="$options.ACCEPT_VIDEO_MIME_TYPES"
-      :validate-extensions="$options.ACCEPT_VIDEO_EXT"
-      @change="onFileChange"
-    >
-      <document-upload-front
-        :error="error"
-        :is-loading="isLoading"
-        :progress-value="$options.uploadSideController.progress"
-        :progress-label="$options.uploadSideController.progressLabel"
-        :file="selectedFile"
-        @file-remove="onFileRemove"
-      />
-    </drop-area>
-    <mobile-suggestions v-if="isSelfie" />
+    <mobile-suggestions />
     <div>
       <v-button
         :disabled="isLoading"
@@ -49,12 +29,9 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createUploadSideController from './UploadSide.controller';
-import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader';
 import MobileSuggestions from './modules/MobileSuggestions';
-import { DOC_TYPES } from '@/constants';
 import {
   VALIDATE_VIDEO_EXT,
   ACCEPT_VIDEO_MIME_TYPES,
@@ -93,10 +70,6 @@ export default {
   }),
 
   computed: {
-    isSelfie() {
-      return this.documentType === DOC_TYPES.SELFIE;
-    },
-
     isUploadAvailable() {
       return !this.uploadFile || !!this.error || this.isLoading;
     },
@@ -233,8 +206,6 @@ export default {
     VButton,
     MobileSuggestions,
     UploadHeader,
-    DropArea,
-    DocumentUploadFront,
   },
 };
 </script>
