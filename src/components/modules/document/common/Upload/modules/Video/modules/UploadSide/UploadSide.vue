@@ -62,11 +62,9 @@ export default {
   data: () => ({
     documentId: '',
     error: null,
-    selectedFile: null,
     isLoading: false,
     isRecognitionError: false,
     isUploaded: false,
-    isUseRecordedFile: true,
   }),
 
   computed: {
@@ -78,12 +76,8 @@ export default {
       return this.uploadFile ? 'primary' : 'quaternary';
     },
 
-    isUploadReady() {
-      return !this.isLoading && !!this.selectedFile && !this.error;
-    },
-
     isRecordedFile() {
-      return this.isUseRecordedFile && this.recordedFile;
+      return this.recordedFile;
     },
 
     recordButtonTitle() {
@@ -93,7 +87,7 @@ export default {
     },
 
     uploadFile() {
-      return this.isRecordedFile ? this.recordedFile : this.selectedFile;
+      return this.isRecordedFile ? this.recordedFile : null;
     },
 
     recordStateTitle() {
@@ -111,52 +105,19 @@ export default {
 
   methods: {
     onRecord() {
-      this.selectedFile = null;
-      this.isUseRecordedFile = true;
       this.$emit('next');
     },
 
     async onUpload() {
       await this.startCreateDocument();
-      if (!this.documentId) {
-        return;
+
+      if (this.documentId) {
+        await this.continueCreateDocument();
       }
-      await this.continueCreateDocument();
     },
 
     startUpload() {
       this.$emit('start-upload');
-    },
-
-    onFileRemove() {
-      this.error = '';
-      this.selectedFile = null;
-      if (this.recordedFile) {
-        this.isUseRecordedFile = true;
-      }
-      this.isRecognitionError = false;
-    },
-
-    onFileChange(files) {
-      const [file] = files;
-      this.isUseRecordedFile = false;
-      this.selectedFile = file;
-    },
-
-    async onRecognize() {
-      try {
-        this.isLoading = true;
-        this.isRecognitionError = false;
-        const document = await this.$options.uploadSideController.recognize(
-          this.documentId,
-        );
-        this.handleConfirm(document);
-      } catch (e) {
-        this.isRecognitionError = true;
-        this.error = e.message;
-      } finally {
-        this.isLoading = false;
-      }
     },
 
     async startCreateDocument() {

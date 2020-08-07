@@ -33,7 +33,13 @@ describe('UploadVideo > UploadSide', () => {
   };
 
   const emitUpload = async () => {
-    wrapper.find('drop-area-stub').vm.$emit('change', [file]);
+    wrapper = createWrapper({
+      propsData: {
+        documentType: DOC_TYPES.SELFIE,
+        recordedFile: file,
+      },
+    });
+
     wrapper.find('[data-test=upload-button]').vm.$emit('click');
     await global.flushPromises();
   };
@@ -141,29 +147,14 @@ describe('UploadVideo > UploadSide', () => {
       expect(wrapper.emitted().confirm).toBeUndefined();
     });
 
-    it('should show error when upload', async () => {
-      expect.assertions(2);
-
-      documentsService.uploadFrontFile.mockRejectedValueOnce(new Error());
-
-      expect(
-        wrapper.find('document-upload-front-stub').attributes().error,
-      ).toBeUndefined();
-
-      await emitUpload();
-
-      expect(
-        wrapper.find('document-upload-front-stub').attributes().error,
-      ).toBe(i18n.t('store.error.uploadDocument.default'));
-    });
-
     it('should emit confirm after recognize', async () => {
       expect.assertions(2);
 
       expect(wrapper.emitted().confirm).toBeUndefined();
 
       await emitUpload();
-      await global.flushPromises();
+
+      await wrapper.vm.$nextTick();
 
       expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
