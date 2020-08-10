@@ -26,22 +26,11 @@ describe('UploadVideo > UploadSide', () => {
       i18n,
       sync: false,
       propsData: {
-        documentType: DOC_TYPES.PASSPORT,
-      },
-      ...options,
-    });
-  };
-
-  const emitUpload = async () => {
-    wrapper = createWrapper({
-      propsData: {
         documentType: DOC_TYPES.SELFIE,
         recordedFile: file,
       },
+      ...options,
     });
-
-    wrapper.find('[data-test=upload-button]').vm.$emit('click');
-    await global.flushPromises();
   };
 
   beforeEach(() => {
@@ -58,28 +47,8 @@ describe('UploadVideo > UploadSide', () => {
       expect(wrapper.html()).toMatchSnapshot();
     });
 
-    it('should not be able to upload file from pc if selfie', () => {
+    it('should suggest to use mobile app if selfie', async () => {
       expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          documentType: DOC_TYPES.SELFIE,
-          recordedFile: file,
-        },
-      });
-
-      expect(wrapper.find('drop-area-stub').exists()).toBe(false);
-    });
-
-    it('should suggest to use mobile app if selfie', () => {
-      expect.assertions(1);
-
-      wrapper = createWrapper({
-        propsData: {
-          documentType: DOC_TYPES.SELFIE,
-          recordedFile: file,
-        },
-      });
 
       expect(wrapper.find('mobile-suggestions-stub').exists()).toBe(true);
     });
@@ -90,13 +59,6 @@ describe('UploadVideo > UploadSide', () => {
       expect.assertions(2);
 
       expect(wrapper.emitted().confirm).toBeUndefined();
-
-      wrapper = createWrapper({
-        propsData: {
-          documentType: DOC_TYPES.PASSPORT,
-          recordedFile: file,
-        },
-      });
 
       wrapper.find('[data-test=upload-button]').vm.$emit('click');
       await global.flushPromises();
@@ -109,7 +71,8 @@ describe('UploadVideo > UploadSide', () => {
 
       expect(wrapper.emitted().confirm).toBeUndefined();
 
-      await emitUpload();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
+      await global.flushPromises();
 
       expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
@@ -119,7 +82,8 @@ describe('UploadVideo > UploadSide', () => {
 
       expect(riskScoringService.sendUserMetrics).not.toBeCalled();
 
-      await emitUpload();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
+      await global.flushPromises();
 
       expect(riskScoringService.sendUserMetrics).toBeCalledTimes(1);
     });
@@ -131,20 +95,36 @@ describe('UploadVideo > UploadSide', () => {
 
       expect(wrapper.emitted().confirm).toBeUndefined();
 
-      await emitUpload();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
       await global.flushPromises();
 
       expect(wrapper.emitted().confirm).toBeUndefined();
     });
 
-    it('should not emit confirm, if error in upload', async () => {
+    it('should not emit confirm, if error when upload', async () => {
       expect.assertions(1);
 
       documentsService.uploadFrontFile.mockRejectedValueOnce(new Error());
 
-      await emitUpload();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
+      await global.flushPromises();
 
       expect(wrapper.emitted().confirm).toBeUndefined();
+    });
+
+    it('should show error, if error when upload', async () => {
+      expect.assertions(1);
+
+      documentsService.uploadFrontFile.mockRejectedValueOnce(new Error());
+
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
+
+      await global.flushPromises();
+      await wrapper.vm.$nextTick();
+
+      expect(wrapper.find('[data-test=upload-side-state]').text()).toMatch(
+        wrapper.vm.$t('store.error.uploadDocument.default'),
+      );
     });
 
     it('should emit confirm after recognize', async () => {
@@ -152,9 +132,8 @@ describe('UploadVideo > UploadSide', () => {
 
       expect(wrapper.emitted().confirm).toBeUndefined();
 
-      await emitUpload();
-
-      await wrapper.vm.$nextTick();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
+      await global.flushPromises();
 
       expect(wrapper.emitted().confirm).toEqual([[document]]);
     });
@@ -164,7 +143,7 @@ describe('UploadVideo > UploadSide', () => {
 
       expect(documentsService.confirmDocument).not.toBeCalled();
 
-      await emitUpload();
+      wrapper.find('[data-test=upload-button]').vm.$emit('click');
       await global.flushPromises();
 
       expect(documentsService.confirmDocument).toBeCalledTimes(1);

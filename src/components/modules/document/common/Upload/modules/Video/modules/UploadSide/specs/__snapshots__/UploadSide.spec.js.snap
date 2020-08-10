@@ -2,16 +2,16 @@
 
 exports[`UploadVideo > UploadSide render should correctly render component 1`] = `
 <div>
-  <upload-header-stub documenttype="Passport"></upload-header-stub>
+  <upload-header-stub documenttype="Selfie"></upload-header-stub>
   <mobile-suggestions-stub></mobile-suggestions-stub>
   <div>
     <v-button-stub skin="quaternary" size="normal" data-test="record-button">
-      Record selfie video
+      Retake selfie
     </v-button-stub>
-    <div class="upload-side-recorded-title">
-
+    <div data-test="upload-side-state" class="upload-side-state">
+      Selfie has been successfully recorded
     </div>
-    <v-button-stub skin="quaternary" size="normal" disabled="true" data-test="upload-button">
+    <v-button-stub skin="primary" size="normal" data-test="upload-button">
       Upload
     </v-button-stub>
   </div>
