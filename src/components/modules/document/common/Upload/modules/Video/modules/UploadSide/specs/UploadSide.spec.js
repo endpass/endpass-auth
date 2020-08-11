@@ -122,7 +122,7 @@ describe('UploadVideo > UploadSide', () => {
       await global.flushPromises();
       await wrapper.vm.$nextTick();
 
-      expect(wrapper.find('[data-test=upload-side-state]').text()).toMatch(
+      expect(wrapper.find('[data-test=upload-side-error]').text()).toMatch(
         wrapper.vm.$t('store.error.uploadDocument.default'),
       );
     });

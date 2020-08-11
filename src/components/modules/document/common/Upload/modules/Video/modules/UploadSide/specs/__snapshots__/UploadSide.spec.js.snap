@@ -8,7 +8,7 @@ exports[`UploadVideo > UploadSide render should correctly render component 1`] =
     <v-button-stub skin="quaternary" size="normal" data-test="record-button">
       Retake selfie
     </v-button-stub>
-    <div data-test="upload-side-state" class="upload-side-state">
+    <div class="upload-side-record-status">
       Selfie has been successfully recorded
     </div>
     <v-button-stub skin="primary" size="normal" data-test="upload-button">

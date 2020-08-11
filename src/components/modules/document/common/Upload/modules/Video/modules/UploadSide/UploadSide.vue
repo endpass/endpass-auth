@@ -12,10 +12,17 @@
         {{ recordButtonTitle }}
       </v-button>
       <div
-        class="upload-side-state"
-        data-test="upload-side-state"
+        v-if="error"
+        class="upload-side-error"
+        data-test="upload-side-error"
       >
-        {{ uploadSideState }}
+        {{ error }}
+      </div>
+      <div
+        v-else
+        class="upload-side-record-status"
+      >
+        {{ recordingStatus }}
       </div>
       <v-button
         :is-loading="isLoading"
@@ -93,16 +100,10 @@ export default {
       return this.isRecordedFile ? this.recordedFile : null;
     },
 
-    uploadSideState() {
-      if (this.error) {
-        return this.error;
-      }
-
-      if (this.isRecordedFile) {
-        return this.$t('components.uploadVideo.choose.recorded');
-      }
-
-      return null;
+    recordingStatus() {
+      return (
+        this.isRecordedFile && this.$t('components.uploadVideo.choose.recorded')
+      );
     },
   },
 
@@ -181,12 +182,16 @@ export default {
 </script>
 
 <style lang="postcss">
-.upload-side-state {
+.upload-side-record-status,
+.upload-side-error {
   height: 40px;
   font-size: 12px;
   color: var(--endpass-ui-color-green-2);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.upload-side-error {
+  color: var(--endpass-ui-color-red-2);
 }
 </style>
