@@ -1,25 +1,7 @@
 <template>
   <div>
     <upload-header :document-type="documentType" />
-    <drop-area
-      :is-loading="isLoading"
-      :error.sync="error"
-      :description-supported-files="
-        $t('components.uploadVideo.descriptions.supportedFiles')
-      "
-      :accept-mime-types="$options.ACCEPT_VIDEO_MIME_TYPES"
-      :validate-extensions="$options.ACCEPT_VIDEO_EXT"
-      @change="onFileChange"
-    >
-      <document-upload-front
-        :error="error"
-        :is-loading="isLoading"
-        :progress-value="$options.uploadSideController.progress"
-        :progress-label="$options.uploadSideController.progressLabel"
-        :file="selectedFile"
-        @file-remove="onFileRemove"
-      />
-    </drop-area>
+    <mobile-suggestions />
     <div>
       <v-button
         :disabled="isLoading"
@@ -29,8 +11,18 @@
       >
         {{ recordButtonTitle }}
       </v-button>
-      <div class="upload-side-recorded-title">
-        {{ recordStateTitle }}
+      <div
+        v-if="error"
+        class="upload-side-error"
+        data-test="upload-side-error"
+      >
+        {{ error }}
+      </div>
+      <div
+        v-else
+        class="upload-side-record-status"
+      >
+        {{ recordingStatus }}
       </div>
       <v-button
         :is-loading="isLoading"
@@ -47,10 +39,9 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
 import createUploadSideController from './UploadSide.controller';
-import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader';
+import MobileSuggestions from './modules/MobileSuggestions';
 import {
   VALIDATE_VIDEO_EXT,
   ACCEPT_VIDEO_MIME_TYPES,
@@ -81,11 +72,9 @@ export default {
   data: () => ({
     documentId: '',
     error: null,
-    selectedFile: null,
     isLoading: false,
     isRecognitionError: false,
     isUploaded: false,
-    isUseRecordedFile: true,
   }),
 
   computed: {
@@ -97,12 +86,8 @@ export default {
       return this.uploadFile ? 'primary' : 'quaternary';
     },
 
-    isUploadReady() {
-      return !this.isLoading && !!this.selectedFile && !this.error;
-    },
-
     isRecordedFile() {
-      return this.isUseRecordedFile && this.recordedFile;
+      return this.recordedFile;
     },
 
     recordButtonTitle() {
@@ -112,13 +97,13 @@ export default {
     },
 
     uploadFile() {
-      return this.isRecordedFile ? this.recordedFile : this.selectedFile;
+      return this.isRecordedFile ? this.recordedFile : null;
     },
 
-    recordStateTitle() {
-      return this.isRecordedFile
-        ? this.$t('components.uploadVideo.choose.recorded')
-        : '';
+    recordingStatus() {
+      return (
+        this.isRecordedFile && this.$t('components.uploadVideo.choose.recorded')
+      );
     },
   },
 
@@ -130,52 +115,19 @@ export default {
 
   methods: {
     onRecord() {
-      this.selectedFile = null;
-      this.isUseRecordedFile = true;
       this.$emit('next');
     },
 
     async onUpload() {
       await this.startCreateDocument();
-      if (!this.documentId) {
-        return;
+
+      if (this.documentId) {
+        await this.continueCreateDocument();
       }
-      await this.continueCreateDocument();
     },
 
     startUpload() {
       this.$emit('start-upload');
-    },
-
-    onFileRemove() {
-      this.error = '';
-      this.selectedFile = null;
-      if (this.recordedFile) {
-        this.isUseRecordedFile = true;
-      }
-      this.isRecognitionError = false;
-    },
-
-    onFileChange(files) {
-      const [file] = files;
-      this.isUseRecordedFile = false;
-      this.selectedFile = file;
-    },
-
-    async onRecognize() {
-      try {
-        this.isLoading = true;
-        this.isRecognitionError = false;
-        const document = await this.$options.uploadSideController.recognize(
-          this.documentId,
-        );
-        this.handleConfirm(document);
-      } catch (e) {
-        this.isRecognitionError = true;
-        this.error = e.message;
-      } finally {
-        this.isLoading = false;
-      }
     },
 
     async startCreateDocument() {
@@ -223,20 +175,23 @@ export default {
 
   components: {
     VButton,
+    MobileSuggestions,
     UploadHeader,
-    DropArea,
-    DocumentUploadFront,
   },
 };
 </script>
 
 <style lang="postcss">
-.upload-side-recorded-title {
+.upload-side-record-status,
+.upload-side-error {
   height: 40px;
   font-size: 12px;
   color: var(--endpass-ui-color-green-2);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.upload-side-error {
+  color: var(--endpass-ui-color-red-2);
 }
 </style>
