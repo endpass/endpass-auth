@@ -15,11 +15,9 @@ function initDialogRequestStream() {
     },
 
     [METHODS.CHECK_DOCUMENTS_REQUIRED]: {
-      async payloadHandler({ clientId, documentsList, signedString }) {
+      async payloadHandler({ clientId }) {
         const res = await documentsRequiredStore.checkRequired({
           clientId,
-          documentsList,
-          signedString,
         });
         return res;
       },

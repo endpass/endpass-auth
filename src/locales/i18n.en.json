@@ -231,15 +231,23 @@
     "uploadVideo": {
       "recorder": {
         "title": "Record selfie video",
-        "retake": "Retake"
+        "retake": "Retake",
+        "errors": {
+          "cameraNotFound": "Camera is not available, please check connection",
+          "cameraNotAllowed": "Does not have access to the camera, please allow permissions for record video",
+          "default": "Camera initialization failed"
+        }
       },
       "choose": {
         "recorded": "Selfie has been successfully recorded",
         "retake": "Retake selfie",
         "record": "Record selfie video"
       },
-      "descriptions": {
-        "supportedFiles": "Only .avi, .mpeg, .mp4 files"
+      "mobileSuggestions": {
+        "title": "Or use our mobile app",
+        "downloadFromLabel": "Download from",
+        "apple": "App Store",
+        "googlePlay": "Google Play"
       }
     },
     "user": {

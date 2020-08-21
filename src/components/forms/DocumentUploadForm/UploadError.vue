@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click.prevent="onRemove">
     <upload-title
       :title="$t('global.error')"
       :is-error="!!error"
@@ -7,7 +7,6 @@
     <file-name
       v-if="file"
       :name="file.name"
-      v-on="$listeners"
     />
     <v-description
       disabled
@@ -29,9 +28,16 @@ export default {
       type: File,
       default: null,
     },
+
     error: {
       type: String,
       default: '',
+    },
+  },
+
+  methods: {
+    onRemove(ev) {
+      this.$emit('file-remove', ev);
     },
   },
 

@@ -75,11 +75,41 @@ export default {
 
   methods: {
     async captureMedia() {
-      const stream = await window.navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-      });
-      return stream;
+      this.$emit('error', null);
+
+      try {
+        const stream = await window.navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: false,
+        });
+        return stream;
+      } catch (err) {
+        let errorMessage;
+
+        switch (err.name) {
+          case 'NotAllowedError':
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.cameraNotAllowed',
+            );
+            break;
+
+          case 'NotFoundError':
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.cameraNotFound',
+            );
+            break;
+
+          default:
+            errorMessage = this.$t(
+              'components.uploadVideo.recorder.errors.default',
+            );
+            break;
+        }
+
+        this.$emit('error', errorMessage);
+      }
+
+      return null;
     },
 
     startPlay() {
@@ -103,7 +133,12 @@ export default {
     async stopRecording() {
       if (!this.recorder) return;
       await new Promise(resolve => {
-        this.recorder.stopRecording(resolve);
+        if (this.stream.active) {
+          this.recorder.stopRecording(resolve);
+          return;
+        }
+
+        resolve();
       });
 
       const blob = await this.recorder.getBlob();
@@ -119,7 +154,7 @@ export default {
     },
 
     async openStream() {
-      if (this.stream) {
+      if (this.stream && this.stream.active) {
         return;
       }
       const stream = await this.captureMedia();
@@ -151,7 +186,17 @@ export default {
       stream.getTracks().forEach(track => track.stop());
     },
 
-    onPlayEnd() {
+    async onPlayEnd() {
+      // If stream was ended unexpected (f.e. when camera was disconnected in runtime),
+      // we should catch that moment and start re-init process to allow user
+      // again allow his camera, or show error message.
+      if (this.stream && !this.stream.active) {
+        this.$emit('update:recorder-state', RECORDER_STATE.INITIALIZING);
+        await this.openStream();
+
+        return;
+      }
+
       this.$emit('update:recorder-state', RECORDER_STATE.IDLE_FOR_PLAY);
     },
   },
@@ -159,6 +204,7 @@ export default {
   async mounted() {
     await this.openStream();
     await this.initRecorder();
+
     if (this.recorderState === RECORDER_STATE.INITIALIZING) {
       await this.startRecording();
     }

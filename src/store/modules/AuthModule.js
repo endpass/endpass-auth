@@ -168,7 +168,9 @@ class AuthModule extends VuexModule {
 
     await this.changeAuthByStatus({ status, hash });
 
-    if (this.isAuthorized && expiresAt) {
+    if (!this.isLogin) {
+      this.cookieExpireChecker.value.dropCookie();
+    } else if (expiresAt) {
       this.cookieExpireChecker.value.setExpireAt(expiresAt);
       this.cookieExpireChecker.value.startChecking();
     }

@@ -231,12 +231,49 @@ const documentsService = {
   },
 
   /**
+   *
+   * @param {object} params
+   * @param {keyof typeof DOC_STATUSES} params.status
+   * @returns {Promise<UserDocument[]>}
+   */
+  async getDocumentsList({ status }) {
+    const body = `status=${status}`;
+    const { items } = await requestSkipPermission.get(
+      `${ENV.VUE_APP_IDENTITY_API_URL}/documents?${body}`,
+    );
+    return items;
+  },
+
+  /**
    * @param {string} clientId
    * @return {Promise<any>}
    */
   async getRequiredDocumentsTypes(clientId) {
     return requestSkipPermission.get(
       `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/required`,
+    );
+  },
+
+  /**
+   * @param {string} clientId
+   * @return {Promise<any>}
+   */
+  async getSelectedDocuments(clientId) {
+    return requestSkipPermission.get(
+      `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/selected`,
+    );
+  },
+
+  /**
+   * @param {object} params
+   * @param {string} params.clientId
+   * @param {object} params.selectedDocumentsMap
+   * @return {Promise<any>}
+   */
+  async saveSelectedDocuments({ clientId, selectedDocumentsMap }) {
+    return requestSkipPermission.post(
+      `${ENV.VUE_APP_IDENTITY_API_URL}/apps/${clientId}/documents/selected`,
+      selectedDocumentsMap,
     );
   },
 };

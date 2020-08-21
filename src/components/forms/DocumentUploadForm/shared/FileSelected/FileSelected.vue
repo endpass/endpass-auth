@@ -10,7 +10,7 @@
       :title="$t('components.uploadDocument.frontIsSelected')"
       :image-content="imageContent"
       :file-name="fileName"
-      @file-remove="$listeners['file-remove']"
+      @file-remove="onFileRemove"
     />
   </div>
 </template>
@@ -74,6 +74,10 @@ export default {
   },
 
   methods: {
+    onFileRemove() {
+      this.$emit('file-remove');
+    },
+
     isImage(file) {
       if (!file) return false;
       return file.type.indexOf('image') === 0;
