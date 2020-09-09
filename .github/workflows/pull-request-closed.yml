@@ -25,7 +25,7 @@ jobs:
       uses: werf/actions/dismiss@master
       with:
         group: 1.1
-        channel: beta
+        channel: stable
         env: review-${{ github.event.pull_request.number }}
         kube-config-base64-data: ${{ secrets.BASE64_KUBECONFIG }}
       env:
