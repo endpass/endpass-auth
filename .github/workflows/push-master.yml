@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: Checkout repo
       uses: actions/checkout@v2
@@ -23,7 +23,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1
+        aws-region: ${{ secrets.AWS_REGION }}
 
     - name: Set auth version env
       run: echo ::set-env name=AUTH_VERSION::$(jq .version package.json | tr -d \" | cut -d . -f 1-2 | tr . -)
@@ -40,13 +40,24 @@ jobs:
     - name: Deploy to versioned S3 bucket
       run: aws s3 sync ./dist/app/ s3://auth${{env.AUTH_VERSION}}-dev.endpass.com --exclude ".git*" --delete
 
-    - name: Slack Notification
-      uses: homoluctus/slatify@master
-      if: always()
-      continue-on-error: true
-      with:
-        type: ${{ job.status }}
-        job_name: 'Auth (master) build and deploy'
-        username: 'GitHub Actions'
-        icon_emoji: ':github:'
-        url: ${{ secrets.SLACK_WEBHOOK_URL }}
+    - name: Slack notification
+      uses: rtCamp/action-slack-notify@v2.0.2
+      if: success()
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_USERNAME: GitHub Actions
+        SLACK_COLOR: '#2AD624'
+        SLACK_ICON_EMOJI: ':github:'
+        SLACK_MESSAGE: 'Auth (master) build and deploy'
+        SLACK_TITLE: 'Build succeeded :rocket:'
+
+    - name: Slack notification
+      uses: rtCamp/action-slack-notify@v2.0.2
+      if: failure()
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_USERNAME: GitHub Actions
+        SLACK_COLOR: '#EC4926'
+        SLACK_ICON_EMOJI: ':github:'
+        SLACK_MESSAGE: 'Auth (master) build and deploy'
+        SLACK_TITLE: 'Build failed :fire:'
