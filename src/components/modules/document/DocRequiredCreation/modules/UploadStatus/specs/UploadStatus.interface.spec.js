@@ -1,12 +1,15 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { document } from '@unitFixtures/documents';
-import UploadStatusInterface from '../UploadStatus.interface';
-import UploadStatusInteractor from '../UploadStatus.interactor';
 import setupI18n from '@/locales/i18nSetup';
+
+// TODO: fix dependency cycle
+// eslint-disable-next-line import/order
+import UploadStatusInterface from '../UploadStatus.interface';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import documentsService from '@/service/documents';
+import UploadStatusInteractor from '../UploadStatus.interactor';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

@@ -12,9 +12,9 @@
 </template>
 
 <script>
+import FormControls from '@/components/common/FormControls';
 import LeftButton from './LeftButton';
 import RightButton from './RightButton';
-import FormControls from '@/components/common/FormControls';
 
 export default {
   name: 'FooterButtons',

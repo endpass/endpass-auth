@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import WidgetInput from '@/components/widget/WidgetInput.vue';
+import WidgetInput from '@/components/widget/WidgetInput';
 
 describe('components > widget > WidgetInput', () => {
   let wrapper;

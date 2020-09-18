@@ -9,8 +9,8 @@
 
 <script>
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
-import createUploadStatusController from './UploadStatus.controller';
 import { DOC_STATUSES } from '@/constants';
+import createUploadStatusController from './UploadStatus.controller';
 
 export default {
   name: 'UploadStatusInteractor',

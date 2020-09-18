@@ -60,8 +60,8 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
-import RecorderControls from './modules/RecorderControls';
 import CountDownTimer from '@/components/common/CountDownTimer';
+import RecorderControls from './modules/RecorderControls';
 import VideoStream from './modules/VideoStream';
 import RecordButton from './modules/RecordButton';
 import useRecorder from './Recorder.composable';

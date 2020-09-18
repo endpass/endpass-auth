@@ -39,13 +39,13 @@
 
 <script>
 import VButton from '@endpass/ui/kit/VButton';
-import createUploadSideController from './UploadSide.controller';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader';
-import MobileSuggestions from './modules/MobileSuggestions';
 import {
   VALIDATE_VIDEO_EXT,
   ACCEPT_VIDEO_MIME_TYPES,
 } from '@/components/modules/document/common/Upload/upload.constants';
+import createUploadSideController from './UploadSide.controller';
+import MobileSuggestions from './modules/MobileSuggestions';
 
 export default {
   name: 'UploadSide',

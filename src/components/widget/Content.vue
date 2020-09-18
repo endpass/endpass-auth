@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Accordion from './Accordion.vue';
+import Accordion from './Accordion';
 
 export default {
   name: 'WidgetContent',

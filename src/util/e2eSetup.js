@@ -1,6 +1,6 @@
 import signer from '@/class/singleton/signer';
 
-export default async function() {
+export default async function () {
   // eslint-disable-next-line global-require
   const web3 = await signer.getWeb3Instance();
 

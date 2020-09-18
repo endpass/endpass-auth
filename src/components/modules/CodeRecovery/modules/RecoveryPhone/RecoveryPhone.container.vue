@@ -11,9 +11,9 @@
 </template>
 
 <script>
+import LoadingScreen from '@/components/common/LoadingScreen';
 import NoPhone from './modules/NoPhone';
 import WithPhone from './modules/WithPhone';
-import LoadingScreen from '@/components/common/LoadingScreen';
 
 export default {
   name: 'RecoveryPhoneContainer',

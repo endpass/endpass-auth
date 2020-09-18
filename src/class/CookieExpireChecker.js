@@ -42,10 +42,7 @@ export default class CookieExpireChecker {
     const value = expireAt * 1000;
     const expires = new Date(value).toUTCString();
 
-    const domain = window.location.hostname
-      .split('.')
-      .slice(-2)
-      .join('.');
+    const domain = window.location.hostname.split('.').slice(-2).join('.');
     const domainStr = domain === 'localhost' ? '' : `domain=${domain};`;
 
     document.cookie = `${EXPIRE_COOKIE_TIME_KEY}=${value};${domainStr}path=/;expires=${expires}`;

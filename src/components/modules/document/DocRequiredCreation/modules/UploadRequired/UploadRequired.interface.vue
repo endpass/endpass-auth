@@ -1,7 +1,7 @@
 <template>
   <upload-required-interactor
-    :selected-document-type="selectedDocumentType"
     #default="{ onConfirm, onCancel }"
+    :selected-document-type="selectedDocumentType"
     @next="onNext"
     @cancel="onCancelUpload"
   >
@@ -16,8 +16,8 @@
 
 <script>
 import Upload from '@/components/modules/document/common/Upload';
-import UploadRequiredInteractor from './UploadRequired.interactor';
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
+import UploadRequiredInteractor from './UploadRequired.interactor';
 
 export default {
   name: 'UploadRequiredInterface',

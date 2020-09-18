@@ -48,12 +48,12 @@
 
 <script>
 import VSvgIcon from '@endpass/ui/kit/VSvgIcon';
+import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 import {
   DOC_ICONS_BY_TYPES,
   DOC_STATUS_VALUES,
 } from './DocumentType.constants';
 import DocumentStatus from './modules/DocumentStatus';
-import { DOC_TYPES_TRANSLATES } from '@/constants/translates';
 
 export default {
   name: 'DocumentTypeView',

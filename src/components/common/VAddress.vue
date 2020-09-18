@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import Identicon from './Identicon.vue';
-import Message from './Message.vue';
+import Identicon from './Identicon';
+import Message from './Message';
 
 export default {
   name: 'VAddress',

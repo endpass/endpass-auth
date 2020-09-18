@@ -1,8 +1,8 @@
 // @ts-check
 import Request from '@endpass/class/Request';
-import http from './http';
 import defaultConfig from '@/class/singleton/request/defaultConfig';
 import host from '@/class/singleton/host';
+import http from './http';
 
 const request = new Request({ http, config: defaultConfig });
 

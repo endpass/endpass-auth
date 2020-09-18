@@ -40,8 +40,8 @@
 <script>
 import VButton from '@endpass/ui/kit/VButton';
 import { PUBLIC_SCOPES } from '@/constants';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import FormField from '@/components/common/FormField';
+import FormControls from '@/components/common/FormControls';
 import VDescription from '@/components/common/VDescription';
 import PermissionGroup from './modules/PermissionGroup';
 

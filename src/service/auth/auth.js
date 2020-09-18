@@ -143,7 +143,7 @@ const getAuthStatus = async () => {
 const waitLogin = () =>
   new Promise((resolve, reject) => {
     /* eslint-disable-next-line */
-    const handler = async function() {
+    const handler = async function () {
       try {
         const { status } = await getAuthStatus();
 

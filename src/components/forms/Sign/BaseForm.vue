@@ -68,10 +68,10 @@ import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VLink from '@endpass/ui/kit/VLink';
 import signer from '@/class/singleton/signer';
-import Message from '@/components/common/Message.vue';
-import VAddress from '@/components/common/VAddress.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import Message from '@/components/common/Message';
+import VAddress from '@/components/common/VAddress';
+import FormField from '@/components/common/FormField';
+import FormControls from '@/components/common/FormControls';
 import { accountsStore } from '@/store';
 
 export default {

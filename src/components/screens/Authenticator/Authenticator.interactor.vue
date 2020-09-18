@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import AuthFormContainer from './Authenticator.view';
 import { coreStore, authStore } from '@/store';
+import AuthFormContainer from './Authenticator.view';
 
 export default {
   name: 'AuthenticatorInteractor',

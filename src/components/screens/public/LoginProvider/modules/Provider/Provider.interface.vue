@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import Provider from './Provider.container';
 import { CHALLENGE_TYPES } from '@/constants';
+import Provider from './Provider.container';
 
 export default {
   name: 'ProviderInterface',

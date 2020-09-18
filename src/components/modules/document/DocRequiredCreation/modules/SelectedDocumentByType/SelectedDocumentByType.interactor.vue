@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import SelectedDocumentByType from './SelectedDocumentByType.view';
 import { documentsRequiredStore } from '@/store';
+import SelectedDocumentByType from './SelectedDocumentByType.view';
 
 export default {
   name: 'SelectedDocumentByTypeInteractor',

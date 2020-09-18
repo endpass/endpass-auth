@@ -56,12 +56,12 @@
 <script>
 import get from 'lodash/get';
 import { mapActions, mapState, mapGetters } from 'vuex';
+import { authStore, accountsStore, coreStore, balanceStore } from '@/store';
 import WidgetHeader from './Header';
 import WidgetContent from './Content';
 import WidgetAccounts from './Accounts';
 import WidgetNewAccountForm from './NewAccountForm';
 import TriggerButton from './TriggerButton';
-import { authStore, accountsStore, coreStore, balanceStore } from '@/store';
 
 export default {
   name: 'Widget',

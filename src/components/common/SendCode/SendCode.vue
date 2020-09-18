@@ -15,9 +15,9 @@
 </template>
 
 <script>
+import CountDownTimer from '@/components/common/CountDownTimer';
 import CountLabelLayout from './layouts/CountLabel';
 import RequestCodeLayout from './layouts/RequestCode';
-import CountDownTimer from '@/components/common/CountDownTimer';
 
 export default {
   name: 'SendCode',

@@ -10,9 +10,9 @@
 </template>
 
 <script>
-import RecorderView from './Recorder.view';
 import FullScreen from '@/components/modules/FullScreen';
 import { PORTAL_NAME } from '@/constants';
+import RecorderView from './Recorder.view';
 
 export default {
   name: 'RecorderInterface',

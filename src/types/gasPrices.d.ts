@@ -1,5 +1,5 @@
 type GasPrices = {
-  low: number,
-  medium: number,
-  high: number,
-}
+  low: number;
+  medium: number;
+  high: number;
+};

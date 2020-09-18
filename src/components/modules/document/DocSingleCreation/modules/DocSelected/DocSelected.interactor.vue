@@ -8,10 +8,9 @@
 </template>
 
 <script>
+import { channelStore } from '@/store';
 import DocSelected from './DocSelected.state';
 import createDocSingleController from '../controllers/DocumentSingleController';
-
-import { channelStore } from '@/store';
 
 export default {
   name: 'DocSelectedInteractor',

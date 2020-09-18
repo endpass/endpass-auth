@@ -44,10 +44,7 @@ export default {
         });
         await auth.signIn();
         const { email } = await this.$options.authStore.authWithGoogle({
-          email: auth.currentUser
-            .get()
-            .getBasicProfile()
-            .getEmail(),
+          email: auth.currentUser.get().getBasicProfile().getEmail(),
           idToken: auth.currentUser.get().getAuthResponse().id_token,
         });
         this.$emit('submit', { email });

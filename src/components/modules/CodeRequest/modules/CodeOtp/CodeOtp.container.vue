@@ -11,10 +11,10 @@
   />
 </template>
 <script>
+import { CHALLENGE_TYPES } from '@/constants';
 import AppCode from './modules/AppCode';
 import EmailCode from './modules/EmailCode';
 import SmsCode from './modules/SmsCode';
-import { CHALLENGE_TYPES } from '@/constants';
 
 const COMPONENT_BY_TYPE = {
   [CHALLENGE_TYPES.EMAIL_OTP]: EmailCode,

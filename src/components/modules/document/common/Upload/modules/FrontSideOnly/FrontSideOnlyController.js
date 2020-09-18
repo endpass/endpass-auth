@@ -6,9 +6,9 @@ import riskScoringService from '@/service/riskScoring';
 
 import documentsService from '@/service/documents';
 import ProgressTimer from '@/class/ProgressTimer';
-import { UPLOAD_CODE_ERRORS } from '../../upload.constants';
 import NonReactive from '@/class/NonReactive';
 import i18n from '@/locales/i18n';
+import { UPLOAD_CODE_ERRORS } from '../../upload.constants';
 
 @Module({ generateMutationSetters: true })
 class FrontSideOnlyController extends VuexModule {

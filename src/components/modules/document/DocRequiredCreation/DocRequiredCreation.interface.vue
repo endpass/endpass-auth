@@ -19,13 +19,12 @@
   </doc-required-creation-state>
 </template>
 <script>
+import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 import DocRequiredCreationInteractor from './DocRequiredCreation.interactor';
 import DocRequiredCreationState from './DocRequiredCreation.state';
 import DocRequiredCreationContainer from './DocRequiredCreation.container';
 
 import createDocumentRequiredController from './DocRequiredCreation.controller';
-
-import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
 
 export default {
   name: 'CreateRequiredInterface',

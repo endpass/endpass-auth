@@ -6,7 +6,7 @@ jest.mock('@endpass/web3/public-api', () => {
   p.getCode = jest.fn().mockResolvedValue('0x');
 
   const asyncIteratorMock = {};
-  asyncIteratorMock[Symbol.asyncIterator] = async function*() {
+  asyncIteratorMock[Symbol.asyncIterator] = async function* () {
     yield { result: '100000000000000' };
   };
   p.iterateBalance = jest.fn().mockImplementation(() => {

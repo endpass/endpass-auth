@@ -8,8 +8,8 @@ import {
 } from '@/class/singleton/channels';
 import { METHODS } from '@/constants';
 import Answer from '@/class/Answer';
-import middleware from './dialogMiddleware';
 import subscribe from '@/streams/subscribe';
+import middleware from './dialogMiddleware';
 
 function initDialogStream() {
   const methodToOptions = {

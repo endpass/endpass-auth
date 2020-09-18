@@ -23,8 +23,8 @@
 import get from 'lodash/get';
 import { hexToUtf8 } from 'web3-utils';
 import formMixin from '@/mixins/form';
-import FormField from '@/components/common/FormField.vue';
-import BaseForm from './BaseForm.vue';
+import FormField from '@/components/common/FormField';
+import BaseForm from './BaseForm';
 
 export default {
   name: 'SignMessageForm',

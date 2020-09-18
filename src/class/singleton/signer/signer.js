@@ -2,8 +2,8 @@ import { bytesToHex } from 'web3-utils';
 import keystoreHDWallet from '@endpass/utils/keystoreHDWallet';
 import Signer from '@endpass/class/Signer';
 import Wallet from '@/class/singleton/signer/Wallet';
-import web3, { setWeb3Network } from './web3';
 import i18n from '@/locales/i18n';
+import web3, { setWeb3Network } from './web3';
 
 export default {
   async validatePassword({ v3KeyStore, password }) {

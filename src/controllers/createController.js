@@ -16,7 +16,7 @@ import createStore from '@/store/createStore';
  * @param {ModulesMap | {}} [params]
  * @returns {T} Vuex class module registered in the store
  */
-export default function(Module, params = {}) {
+export default function (Module, params = {}) {
   // eslint-disable-next-line no-proto
   const { name = 'DefaultController' } = Module.prototype.__proto__.constructor;
   const store = createStore();

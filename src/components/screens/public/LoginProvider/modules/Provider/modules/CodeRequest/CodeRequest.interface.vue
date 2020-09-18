@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import CodeRequest from './CodeRequest.interactor';
 import { CHALLENGE_TYPES } from '@/constants';
+import CodeRequest from './CodeRequest.interactor';
 
 export default {
   name: 'CodeRequestInterface',

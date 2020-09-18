@@ -19,15 +19,15 @@
 </template>
 
 <script>
-import Provider from './Provider.view';
 import CodeRecovery from '@/components/modules/CodeRecovery';
-import CodeRequest from './modules/CodeRequest';
 import Error from '@/components/modules/Error';
-import NoChallenge from './modules/NoChallenge';
 
 import LoadingScreen from '@/components/common/LoadingScreen';
 import VFrame from '@/components/common/VFrame';
 import { CHALLENGE_TYPES } from '@/constants';
+import NoChallenge from './modules/NoChallenge';
+import CodeRequest from './modules/CodeRequest';
+import Provider from './Provider.view';
 
 export default {
   name: 'ProviderContainer',
