@@ -53,8 +53,8 @@ import VInput from '@endpass/ui/kit/VInput';
 import VButton from '@endpass/ui/kit/VButton';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import { IDENTITY_MODE } from '@/constants';
-import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
+import Message from '@/components/common/Message';
+import FormField from '@/components/common/FormField';
 import formMixin from '@/mixins/form';
 import { authStore, coreStore } from '@/store';
 
@@ -111,7 +111,7 @@ export default {
         return null;
       }
 
-      return this.$t('components.serverModeSelect.customIdentityServer');
+      return this.$i18n.t('components.serverModeSelect.customIdentityServer');
     },
 
     customServerInputDescription() {

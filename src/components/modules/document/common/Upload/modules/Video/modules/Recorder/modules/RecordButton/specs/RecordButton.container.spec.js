@@ -4,8 +4,8 @@ import UIComponents from '@endpass/ui';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import VueCompositionApi from '@vue/composition-api';
 import setupI18n from '@/locales/i18nSetup';
-import RecordButtonContainer from '../RecordButton.container';
 import { RECORDER_STATE } from '@/components/modules/document/common/Upload/modules/Video/modules/Recorder/Recorder.composable';
+import RecordButtonContainer from '../RecordButton.container';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);

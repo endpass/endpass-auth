@@ -94,9 +94,9 @@ import { VFaucetButton } from '@endpass/faucet';
 import Network from '@endpass/class/Network';
 import VButton from '@endpass/ui/kit/VButton';
 import VSelect from '@endpass/ui/kit/VSelect';
-import Message from '@/components/common/Message.vue';
-import FormField from '@/components/common/FormField.vue';
-import FormControls from '@/components/common/FormControls.vue';
+import Message from '@/components/common/Message';
+import FormField from '@/components/common/FormField';
+import FormControls from '@/components/common/FormControls';
 import FormItem from '@/components/common/FormItem';
 import Error from '@/components/modules/Error';
 

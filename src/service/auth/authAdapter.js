@@ -13,7 +13,7 @@ function getChallengeType(challenge) {
   return CHALLENGE_TYPES.EMAIL_OTP;
 }
 
-export default function(authData) {
+export default function (authData) {
   const res = {
     ...authData,
     challenge: {

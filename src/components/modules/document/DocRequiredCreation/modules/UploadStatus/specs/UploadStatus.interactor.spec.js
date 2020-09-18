@@ -1,8 +1,8 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
-import UploadStatusInteractor from '../UploadStatus.interactor';
 import UploadStatusLayout from '@/components/modules/document/common/UploadStatusLayout';
 import setupI18n from '@/locales/i18nSetup';
+import UploadStatusInteractor from '../UploadStatus.interactor';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

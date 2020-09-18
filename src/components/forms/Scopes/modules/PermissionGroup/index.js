@@ -1,1 +1,1 @@
-export { default } from './PermissionGroup.interface.vue';
+export { default } from './PermissionGroup.interface';

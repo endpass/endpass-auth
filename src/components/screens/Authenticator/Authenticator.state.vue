@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import Authenticator from './Authenticator.container';
 import { CHALLENGE_TYPES } from '@/constants';
+import Authenticator from './Authenticator.container';
 
 export default {
   name: 'AuthenticatorState',

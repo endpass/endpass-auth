@@ -1,6 +1,13 @@
 <template>
   <doc-specified-state
-    #default="{ isClosable, isBack, status, documentId, selectedDocumentType, updateState }"
+    #default="{
+      isClosable,
+      isBack,
+      status,
+      documentId,
+      selectedDocumentType,
+      updateState,
+    }"
   >
     <doc-specified-interactor #default="{ onCancel, onCreate }">
       <doc-layout

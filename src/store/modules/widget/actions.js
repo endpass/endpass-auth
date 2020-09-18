@@ -1,6 +1,6 @@
 import { METHODS } from '@/constants';
-import { WIDGET_RESIZE_DURATION } from './constants';
 import bridgeMessenger from '@/class/singleton/bridgeMessenger';
+import { WIDGET_RESIZE_DURATION } from './constants';
 
 const initWidget = async ({ commit }) => {
   const { position, isMobile } = await bridgeMessenger.sendAndWaitResponse(

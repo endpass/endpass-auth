@@ -11,8 +11,8 @@
 
 <script>
 import CodeRequest from '@/components/modules/CodeRequest';
-import createLoginController from './LoginController';
 import { CHALLENGE_TYPES } from '@/constants';
+import createLoginController from './LoginController';
 
 export default {
   name: 'CodeRequestInteractor',

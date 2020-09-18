@@ -21,8 +21,8 @@
 </template>
 
 <script>
-import AuthFormContainer from './Authenticator.interactor';
 import { CHALLENGE_TYPES } from '@/constants';
+import AuthFormContainer from './Authenticator.interactor';
 
 export default {
   name: 'AuthenticatorContainer',

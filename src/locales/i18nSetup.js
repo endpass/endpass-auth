@@ -20,8 +20,8 @@ export default function setupI18n(Vue) {
   function getPropesedLocale() {
     const proposedLocale =
       localStorage.getItem('locale') ||
-      ((navigator.language && navigator.language.slice(0, 2)) ||
-        (navigator.userLanguage && navigator.userLanguage.slice(0, 2)));
+      (navigator.language && navigator.language.slice(0, 2)) ||
+      (navigator.userLanguage && navigator.userLanguage.slice(0, 2));
     return LOCALES.includes(proposedLocale) ? proposedLocale : null;
   }
 

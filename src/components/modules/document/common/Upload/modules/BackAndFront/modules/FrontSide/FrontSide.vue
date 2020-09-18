@@ -25,9 +25,9 @@
 
 <script>
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
-import createFrontSideController from './FrontSideController';
 import FooterFrontButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterFrontButtons';
 import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
+import createFrontSideController from './FrontSideController';
 
 export default {
   name: 'FrontSide',

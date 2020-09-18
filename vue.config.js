@@ -105,10 +105,7 @@ module.exports = {
         name: '[name].[hash:8].[ext]',
       });
 
-    config.module
-      .rule('svg-sprite')
-      .use('svgo-loader')
-      .loader('svgo-loader');
+    config.module.rule('svg-sprite').use('svgo-loader').loader('svgo-loader');
 
     config.plugins.delete('prefetch');
     config.plugins.delete('prefetch-index');

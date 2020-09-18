@@ -124,10 +124,10 @@ import VInput from '@endpass/ui/kit/VInput';
 import VContentSwitcher from '@endpass/ui/kit/VContentSwitcher';
 import { fromWei, toWei, hexToNumberString } from 'web3-utils';
 import formMixin from '@/mixins/form';
-import FormField from '@/components/common/FormField.vue';
-import VAddress from '@/components/common/VAddress.vue';
-import BaseForm from './BaseForm.vue';
+import FormField from '@/components/common/FormField';
+import VAddress from '@/components/common/VAddress';
 import { accountsStore, gasPriceStore } from '@/store';
+import BaseForm from './BaseForm';
 
 export default {
   name: 'SignTransactionForm',
@@ -218,9 +218,7 @@ export default {
     },
 
     valueInFiat() {
-      return BigNumber(this.value)
-        .times(this.ethPrice)
-        .toFixed(2);
+      return BigNumber(this.value).times(this.ethPrice).toFixed(2);
     },
   },
 

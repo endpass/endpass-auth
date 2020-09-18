@@ -12,8 +12,8 @@
 </template>
 
 <script>
-import CodeOtp from './CodeOtp.container';
 import { CHALLENGE_TYPES } from '@/constants';
+import CodeOtp from './CodeOtp.container';
 
 export default {
   name: 'CodeOtpInterface',

@@ -40,7 +40,7 @@ const methods = {
   },
 };
 
-export default function(response = {}) {
+export default function (response = {}) {
   const { status: statusCode } = response;
 
   if (!methods[statusCode]) {

@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import RegularPasswordCreation from './RegularPasswordCreation.view';
 import { authStore } from '@/store';
+import RegularPasswordCreation from './RegularPasswordCreation.view';
 
 export default {
   name: 'RegularPasswordCreationInteractor',

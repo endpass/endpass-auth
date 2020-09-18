@@ -5,9 +5,9 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
-import FrontSideOnly from '../FrontSideOnly';
 import documentsService from '@/service/documents';
 import riskScoringService from '@/service/riskScoring';
+import FrontSideOnly from '../FrontSideOnly';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);

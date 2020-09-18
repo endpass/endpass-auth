@@ -23,5 +23,4 @@ declare global {
     imgPath: string;
     rejectReason?: string;
   };
-
 }

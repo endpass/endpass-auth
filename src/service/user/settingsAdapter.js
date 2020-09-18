@@ -12,7 +12,7 @@ function getChallengeType(settings) {
   return CHALLENGE_TYPES.EMAIL_OTP;
 }
 
-export default function(settings) {
+export default function (settings) {
   return {
     ...settings,
     challengeType: getChallengeType(settings),

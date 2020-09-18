@@ -9,10 +9,10 @@
 </template>
 
 <script>
+import { DOC_TYPES } from '@/constants';
 import BackAndFront from './modules/BackAndFront';
 import FrontSideOnly from './modules/FrontSideOnly';
 import Video from './modules/Video';
-import { DOC_TYPES } from '@/constants';
 
 const frontSideOnly = [DOC_TYPES.PASSPORT, DOC_TYPES.PROOF_OF_ADDRESS];
 

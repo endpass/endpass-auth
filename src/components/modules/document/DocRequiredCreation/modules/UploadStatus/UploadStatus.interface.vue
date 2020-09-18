@@ -8,8 +8,8 @@
 </template>
 
 <script>
-import UploadStatus from './UploadStatus.interactor';
 import { documentsRequiredStore as documentsRequiredStoreModule } from '@/store';
+import UploadStatus from './UploadStatus.interactor';
 
 export default {
   name: 'UploadStatusInterface',

@@ -29,11 +29,11 @@
 
 <script>
 import DocumentUploadFront from '@/components/forms/DocumentUploadForm/DocumentUploadFront';
-import createFrontSideController from './FrontSideOnlyController';
 import FooterFrontButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterFrontButtons';
 import FooterRepeatButtons from '@/components/modules/document/common/Upload/common/FooterButtons/FooterRepeatButtons';
 import DropArea from '@/components/modules/document/common/Upload/common/DropArea';
 import UploadHeader from '@/components/modules/document/common/Upload/common/UploadHeader/UploadHeader.view';
+import createFrontSideController from './FrontSideOnlyController';
 
 export default {
   name: 'FrontSideOnly',

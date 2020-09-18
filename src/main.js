@@ -5,10 +5,10 @@ import PortalVue from 'portal-vue';
 import store from '@/store';
 import router from '@/router';
 import App from '@/App';
-import validation from './validation';
 import '@endpass/ui/kit/kit.theme-default.css';
 import i18n from '@/locales/i18n';
 import e2eSetup from '@/util/e2eSetup';
+import validation from './validation';
 import filters from './filters';
 
 (async () => {

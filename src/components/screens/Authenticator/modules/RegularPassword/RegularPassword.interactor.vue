@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import RegularPassword from './RegularPassword.view';
 import { authStore } from '@/store';
+import RegularPassword from './RegularPassword.view';
 
 export default {
   name: 'RegularPasswordInteractor',

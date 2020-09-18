@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import RegularPasswordRecovery from './RegularPasswordRecovery.view';
 import { authStore } from '@/store';
+import RegularPasswordRecovery from './RegularPasswordRecovery.view';
 
 export default {
   name: 'RegularPasswordRecoveryInteractor',

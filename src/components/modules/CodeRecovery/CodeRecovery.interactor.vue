@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import RecoveryPhone from './modules/RecoveryPhone';
 import { authStore } from '@/store';
+import RecoveryPhone from './modules/RecoveryPhone';
 import createRecoverController from './RecoveryController';
 
 export default {

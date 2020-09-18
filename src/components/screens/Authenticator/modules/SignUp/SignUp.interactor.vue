@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import SignUp from './SignUp.view';
 import { authStore } from '@/store';
+import SignUp from './SignUp.view';
 
 export default {
   name: 'SignUpInteractor',

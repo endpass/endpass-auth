@@ -1,12 +1,12 @@
 import Vuex from 'vuex';
 import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { document } from '@unitFixtures/documents';
-import UploadStatusInterface from '../UploadStatus.interface';
-import UploadStatusInteractor from '../UploadStatus.interactor';
 import setupI18n from '@/locales/i18nSetup';
 import createStore from '@/store/createStore';
 import createStoreModules from '@/store/createStoreModules';
 import documentsService from '@/service/documents';
+import UploadStatusInteractor from '../UploadStatus.interactor';
+import UploadStatusInterface from '../UploadStatus.interface';
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

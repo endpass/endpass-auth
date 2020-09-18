@@ -1,1 +1,1 @@
-export { default } from './Scopes.vue';
+export { default } from './Scopes';

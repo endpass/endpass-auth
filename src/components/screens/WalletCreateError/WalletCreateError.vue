@@ -33,9 +33,9 @@ import VButton from '@endpass/ui/kit/VButton';
 import Screen from '@/components/common/Screen';
 import { coreStore } from '@/store';
 
-import createWalletExistController from './WalletExistController';
 import Message from '@/components/common/Message';
 import FormItem from '@/components/common/FormItem';
+import createWalletExistController from './WalletExistController';
 
 export default {
   name: 'WalletCreateError',

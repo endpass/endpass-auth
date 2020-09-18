@@ -22,7 +22,7 @@ class WalletController extends VuexModule {
    *
    * @param {import('vuex-class-modules').RegisterOptions} props
    * @param {object} params
-   * @param {{accountsStore?: AccountsModule}} params.accountsStore
+   * @param {AccountsModule} params.accountsStore
    */
   constructor(props, { accountsStore = accountsStoreModule }) {
     super(props);

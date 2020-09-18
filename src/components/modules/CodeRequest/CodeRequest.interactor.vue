@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import CodeOtp from './modules/CodeOtp';
 import { authStore } from '@/store';
 import { CHALLENGE_TYPES } from '@/constants';
+import CodeOtp from './modules/CodeOtp';
 
 export default {
   name: 'CodeRequestInteractor',

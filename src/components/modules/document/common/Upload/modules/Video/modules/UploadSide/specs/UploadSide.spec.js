@@ -5,10 +5,10 @@ import { shallowMount, createLocalVue } from '@vue/test-utils';
 import { document } from '@unitFixtures/documents';
 import setupI18n from '@/locales/i18nSetup';
 
-import UploadSide from '../UploadSide';
 import documentsService from '@/service/documents';
 import riskScoringService from '@/service/riskScoring';
 import { DOC_TYPES } from '@/constants';
+import UploadSide from '../UploadSide';
 
 const localVue = createLocalVue();
 const i18n = setupI18n(localVue);

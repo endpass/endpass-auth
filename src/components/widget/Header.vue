@@ -64,8 +64,8 @@ import BigNumber from 'bignumber.js';
 import VLink from '@endpass/ui/kit/VLink';
 import Spinner from '@/components/common/Spinner';
 import VSvgIcon from '@/components/common/VSvgIcon';
-import CurrencyToggler from './CurrencyToggler.vue';
 import { gasPriceStore, accountsStore } from '@/store';
+import CurrencyToggler from './CurrencyToggler';
 
 export default {
   name: 'WidgetHeader',
@@ -122,9 +122,7 @@ export default {
       }
 
       if (this.isBalanceInFiat) {
-        return BigNumber(balanceInEth)
-          .times(this.ethPriceInFiat)
-          .toFixed(2);
+        return BigNumber(balanceInEth).times(this.ethPriceInFiat).toFixed(2);
       }
 
       return BigNumber(balanceInEth).toFixed(6);
