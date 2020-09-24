@@ -274,7 +274,7 @@
   "constants": {
     "documentType": {
       "driverLicense": "Driver's Licence",
-      "idCard": "Id Card",
+      "idCard": "ID Card",
       "passport": "Passport",
       "proofOfAddress": "Proof of Address",
       "selfie": "Selfie video"
