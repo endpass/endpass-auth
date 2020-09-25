@@ -14,7 +14,7 @@
         class="frame-logo"
       >
         <img
-          src="../../assets/logo.png"
+          src="../../../assets/logo.png"
           alt="Endpass Inc. - Logotype"
         >
       </div>
