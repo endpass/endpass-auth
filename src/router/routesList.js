@@ -3,7 +3,7 @@ import authenticator from './routes/authenticator';
 import wallet from './routes/wallet';
 import document from './routes/document';
 
-const routes = [
+const routesList = [
   ...publicRoutes,
   ...authenticator,
   ...wallet,
@@ -97,4 +97,4 @@ const routes = [
   },
 ];
 
-export default routes;
+export default routesList;

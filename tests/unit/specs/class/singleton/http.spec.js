@@ -62,6 +62,28 @@ describe('http', () => {
     });
   });
 
+  describe('age restriction', () => {
+    it('should redirect to error page with age restrict', async () => {
+      expect.assertions(2);
+
+      axiosMock.onGet(url).reply(config => {
+        expect(config.url).toBe(url);
+
+        return [451, 'ok'];
+      });
+
+      try {
+        await http.get(url);
+      } catch (e) {}
+
+      jest.runOnlyPendingTimers();
+
+      expect(router.replace).toBeCalledWith(
+        "/public/error?error=Access%20denied&error_description=Sorry%2C%20but%20you%20don't%20meet%20the%20minimum%20age%20requirement%20for%20this%20app.",
+      );
+    });
+  });
+
   describe('rate limit check', () => {
     it('should not start rate limit', async () => {
       expect.assertions(2);
