@@ -1,5 +1,5 @@
 import { coreStore } from '@/store';
-import pkg from '../../../../package.json';
+import pkg from '@/../package.json';
 
 if (ENV.VUE_APP_SHOW_VERSION_INFO) {
   // eslint-disable-next-line no-console
