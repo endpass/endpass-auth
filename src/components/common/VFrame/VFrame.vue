@@ -14,7 +14,7 @@
         class="frame-logo"
       >
         <img
-          src="../../assets/logo.png"
+          src="@/assets/logo.png"
           alt="Endpass Inc. - Logotype"
         >
       </div>
@@ -60,14 +60,14 @@ export default {
     },
   },
 
-  methods: {
-    onClose() {
-      this.$emit('close');
-    },
+  setup(props, context) {
+    const onClose = () => context.emit('close');
+    const onReturn = () => context.emit('return');
 
-    onReturn() {
-      this.$emit('return');
-    },
+    return {
+      onClose,
+      onReturn,
+    };
   },
 
   components: {

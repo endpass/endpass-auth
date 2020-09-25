@@ -8,6 +8,7 @@ const CODES = {
   BAN: 423,
   DISABLED: 410,
   SUCCESS: 200,
+  AGE_RESTRICT: 451,
 };
 
 const methods = {
@@ -21,6 +22,17 @@ const methods = {
       error: encodeURIComponent('You are banned!'),
       error_description: encodeURIComponent(
         'You were banned by the administration',
+      ),
+    });
+    setTimeout(() => {
+      router.replace(path);
+    }, 100);
+  },
+  [CODES.AGE_RESTRICT]() {
+    const path = mapToQueryString('/public/error', {
+      error: encodeURIComponent('Access denied'),
+      error_description: encodeURIComponent(
+        "Sorry, but you don't meet the minimum age requirement for this app.",
       ),
     });
     setTimeout(() => {

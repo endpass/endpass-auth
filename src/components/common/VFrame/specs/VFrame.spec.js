@@ -1,12 +1,18 @@
-import { shallowMount } from '@vue/test-utils';
+import { createLocalVue, shallowMount } from '@vue/test-utils';
 import VFrame from '@/components/common/VFrame';
+import VueCompositionApi from '@vue/composition-api';
+
+const localVue = createLocalVue();
+localVue.use(VueCompositionApi);
 
 describe('VFrame', () => {
   describe('render', () => {
     let wrapper;
 
     beforeEach(() => {
-      wrapper = shallowMount(VFrame);
+      wrapper = shallowMount(VFrame, {
+        localVue,
+      });
     });
 
     describe('render', () => {

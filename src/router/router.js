@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import { coreStore } from '@/store';
-import routes from './routes';
+import routesList from './routesList';
 
 Vue.use(Router);
 
 const router = new Router({
   mode: 'history',
-  routes,
+  routes: routesList,
 });
 
 router.beforeEach(async (to, from, next) => {
@@ -26,7 +26,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   switch (true) {
-    // Github authentification handling and widget redirect preventing
+    // Github authentication handling and widget redirect preventing
     case to.query.code || isWidgetStream:
       return next();
 
